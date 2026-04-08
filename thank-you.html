@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>You're Booked — RR Golf | Ryan Rinneard</title>
+    <meta name="description" content="Your session is confirmed. Grab your free copy of Eight Weeks to Mastery while you're here.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="images/rr-logo.png" alt="RR Golf" class="nav-logo-img">
+            </a>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#coaching">Coaching</a></li>
+                <li><a href="coaching/season-starter.html">Programs</a></li>
+                <li><a href="index.html#testimonials">Testimonials</a></li>
+                <li><a href="Articles/index.html">Articles</a></li>
+                <li class="nav-book-dropdown">
+                    <a href="#" class="nav-cta">Book Now</a>
+                    <ul class="dropdown-menu dropdown-book">
+                        <li><a href="https://madriverpro.as.me" target="_blank" rel="noopener">Book at Mad River</a></li>
+                        <li><a href="https://clients.uschedule.com/acetrackgolf/booking" target="_blank" rel="noopener">Book at Ace Track</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Confirmation -->
+    <section class="section" style="padding-top: 160px; padding-bottom: 40px;">
+        <div class="container container-narrow" style="text-align: center;">
+            <div class="thankyou-check">&#10003;</div>
+            <h1 class="section-title" style="font-size: 40px;">You're booked.</h1>
+            <p style="font-size: 18px; color: var(--gray-400); max-width: 520px; margin: 16px auto 0; line-height: 1.7;">Your session is confirmed. Check your email for all the details — and get ready for a great session.</p>
+        </div>
+    </section>
+
+    <!-- Book Offer -->
+    <section class="section" style="padding-top: 20px;">
+        <div class="container">
+            <div class="thankyou-book-offer">
+                <div class="thankyou-book-content">
+                    <p class="section-eyebrow">Free for You</p>
+                    <h2 style="font-size: 28px; font-weight: 700; color: var(--navy); margin-bottom: 12px;">Grab your copy of <em>Eight Weeks to Mastery</em></h2>
+                    <p style="font-size: 16px; color: var(--gray-400); line-height: 1.7; margin-bottom: 24px;">You've just invested in your game — here's more fuel for the journey. Get the complete 8-week guide plus the companion journal, free.</p>
+                    <ul class="book-cta-includes">
+                        <li>The full Eight Weeks to Mastery book</li>
+                        <li>Companion journal & workbook</li>
+                        <li>Structured weekly practice plans</li>
+                    </ul>
+                    <form class="thankyou-form" id="thankyouBookForm">
+                        <input type="text" name="first_name" placeholder="First name" required class="popup-input">
+                        <input type="email" name="email" placeholder="Email address" required class="popup-input">
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Send Me the Book</button>
+                    </form>
+                    <p style="font-size: 12px; color: var(--gray-400); margin-top: 12px;">No spam, ever. Unsubscribe anytime.</p>
+                </div>
+                <div class="thankyou-book-image">
+                    <div class="book-mockup">
+                        <div class="book-spine"></div>
+                        <div class="book-cover">
+                            <span class="book-cover-eyebrow">Ryan Rinneard</span>
+                            <span class="book-cover-title">Eight Weeks to Mastery</span>
+                            <span class="book-cover-sub">Your Complete Golf Transformation Guide</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Explore More -->
+    <section class="section">
+        <div class="container container-narrow" style="text-align: center;">
+            <h3 style="font-size: 22px; font-weight: 600; color: var(--navy); margin-bottom: 16px;">While you wait for your session</h3>
+            <p style="font-size: 16px; color: var(--gray-400); margin-bottom: 32px;">Explore some articles to get the most out of your coaching experience.</p>
+            <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+                <a href="Articles/driver-optimization-trackman.html" class="btn btn-secondary">TrackMan Driver Guide</a>
+                <a href="Articles/short-game-scoring-zone.html" class="btn btn-secondary">Short Game Scoring</a>
+                <a href="Articles/on-course-strategy-decade.html" class="btn btn-secondary">On-Course Strategy</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <img src="images/rr-logo.png" alt="RR Golf" class="footer-logo">
+                    <p>Ryan Rinneard<br>PGA of Canada, Class A<br>Director of Instruction</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Coaching</h4>
+                    <ul>
+                        <li><a href="coaching/adults.html">Adults</a></li>
+                        <li><a href="coaching/juniors.html">Juniors</a></li>
+                        <li><a href="coaching/ladies.html">Ladies</a></li>
+                        <li><a href="coaching/groups.html">Groups & Clinics</a></li>
+                        <li><a href="coaching/experiences.html">Experiences</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Explore</h4>
+                    <ul>
+                        <li><a href="index.html#about">About Ryan</a></li>
+                        <li><a href="index.html#testimonials">Testimonials</a></li>
+                        <li><a href="Articles/index.html">Articles</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Book</h4>
+                    <ul>
+                        <li><a href="https://madriverpro.as.me" target="_blank" rel="noopener">Mad River Golf Club</a></li>
+                        <li><a href="https://clients.uschedule.com/acetrackgolf/booking" target="_blank" rel="noopener">Ace Track Golf</a></li>
+                        <li><a href="tel:7056074653">(705) 607-4653</a></li>
+                        <li><a href="mailto:rrinneard@madriver.ca">rrinneard@madriver.ca</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 RR Golf. All rights reserved.</p>
+                <p class="footer-locations">Mad River Golf Club, Creemore &middot; Ace Track Golf, Collingwood</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Thank-you page book form
+        const tyForm = document.getElementById('thankyouBookForm');
+        if (tyForm) {
+            tyForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                tyForm.innerHTML = '<div style="padding: 20px 0;"><h3 style="font-size: 22px; color: #1a2744; margin-bottom: 12px;">You\'re in!</h3><p style="font-size: 15px; color: #9ca3af;">Check your inbox for your free copy of Eight Weeks to Mastery and the companion journal.</p></div>';
+                // TODO: Connect to Mailchimp
+            });
+        }
+    </script>
+</body>
+</html>

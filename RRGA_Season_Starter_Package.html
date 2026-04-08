@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Season Starter — Full Package</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0D1F3C;
+    --navy-mid: #162E54;
+    --navy-light: #1E3A6E;
+    --white: #FFFFFF;
+    --off-white: #F7F8FA;
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --text: #2C3547;
+    --text-light: #6B7280;
+    --border: #E2E6ED;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--off-white);
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* NAV */
+  .nav {
+    background: var(--navy);
+    padding: 16px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 2px solid var(--gold);
+  }
+  .nav-brand {
+    font-family: 'Playfair Display', serif;
+    color: var(--white);
+    font-size: 15px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .nav-brand span { color: var(--gold); }
+  .nav-tabs {
+    display: flex;
+    gap: 6px;
+  }
+  .nav-tab {
+    background: none;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.7);
+    padding: 6px 14px;
+    border-radius: 4px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.04em;
+  }
+  .nav-tab:hover, .nav-tab.active {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--navy);
+    font-weight: 600;
+  }
+
+  /* SECTIONS */
+  .section { display: none; padding: 48px 40px; max-width: 960px; margin: 0 auto; }
+  .section.active { display: block; }
+
+  /* SECTION HEADER */
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    color: var(--navy);
+    font-weight: 700;
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+  .section-subtitle {
+    font-size: 15px;
+    color: var(--text-light);
+    margin-bottom: 36px;
+    max-width: 620px;
+  }
+
+  /* ONE-PAGER CARD */
+  .onepager {
+    background: var(--white);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(13,31,60,0.10);
+    margin-bottom: 40px;
+  }
+  .onepager-header {
+    background: var(--navy);
+    padding: 36px 40px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .onepager-header::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    border: 40px solid rgba(201,168,76,0.12);
+  }
+  .onepager-header::after {
+    content: '';
+    position: absolute;
+    bottom: -20px; left: 200px;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    border: 25px solid rgba(255,255,255,0.05);
+  }
+  .package-badge {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--navy);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 3px;
+    margin-bottom: 12px;
+  }
+  .onepager-header h2 {
+    font-family: 'Playfair Display', serif;
+    color: var(--white);
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .onepager-header p {
+    color: rgba(255,255,255,0.65);
+    font-size: 14px;
+    max-width: 480px;
+  }
+  .price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-top: 20px;
+  }
+  .price-main {
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+    color: var(--white);
+    font-weight: 700;
+  }
+  .price-cad {
+    font-size: 13px;
+    color: var(--gold-light);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+  }
+  .price-was {
+    font-size: 13px;
+    color: rgba(255,255,255,0.4);
+    text-decoration: line-through;
+  }
+  .price-save {
+    background: rgba(201,168,76,0.18);
+    color: var(--gold-light);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 3px;
+    letter-spacing: 0.06em;
+  }
+
+  .onepager-body { padding: 36px 40px; }
+
+  .what-included {
+    margin-bottom: 32px;
+  }
+  .included-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--navy);
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .included-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .included-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--off-white);
+    border-radius: 8px;
+    border-left: 3px solid var(--gold);
+  }
+  .included-icon {
+    width: 28px;
+    height: 28px;
+    background: var(--navy);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 13px;
+  }
+  .included-item-text strong {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 2px;
+  }
+  .included-item-text span {
+    font-size: 12px;
+    color: var(--text-light);
+  }
+
+  .flow-section {
+    margin-bottom: 32px;
+  }
+  .flow-steps {
+    display: flex;
+    gap: 0;
+    position: relative;
+    margin-top: 16px;
+  }
+  .flow-steps::before {
+    content: '';
+    position: absolute;
+    top: 20px; left: 20px; right: 20px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--gold) 0%, var(--navy-light) 100%);
+    z-index: 0;
+  }
+  .flow-step {
+    flex: 1;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+  .flow-dot {
+    width: 40px; height: 40px;
+    background: var(--navy);
+    border: 3px solid var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--gold);
+    font-family: 'Playfair Display', serif;
+  }
+  .flow-step-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--navy);
+    letter-spacing: 0.04em;
+  }
+  .flow-step-sub {
+    font-size: 10px;
+    color: var(--text-light);
+    margin-top: 2px;
+  }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 28px;
+  }
+  .info-box {
+    background: var(--off-white);
+    border-radius: 8px;
+    padding: 20px;
+  }
+  .info-box h4 {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--navy);
+    margin-bottom: 10px;
+  }
+  .info-box p, .info-box li {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .info-box ul { padding-left: 16px; }
+  .info-box li { margin-bottom: 4px; }
+
+  .cta-strip {
+    background: var(--navy);
+    border-radius: 8px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .cta-strip p {
+    color: rgba(255,255,255,0.75);
+    font-size: 13px;
+  }
+  .cta-strip strong {
+    color: var(--white);
+    display: block;
+    font-size: 15px;
+    margin-bottom: 2px;
+  }
+  .cta-btn {
+    background: var(--gold);
+    color: var(--navy);
+    border: none;
+    padding: 10px 22px;
+    border-radius: 6px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  /* ASSESSMENT OUTLINE */
+  .timeline {
+    position: relative;
+    padding-left: 32px;
+    margin-bottom: 32px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 10px; top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, var(--gold) 0%, var(--navy-light) 100%);
+  }
+  .timeline-block {
+    position: relative;
+    margin-bottom: 24px;
+    background: var(--white);
+    border-radius: 10px;
+    padding: 20px 24px;
+    box-shadow: 0 2px 8px rgba(13,31,60,0.06);
+  }
+  .timeline-block::before {
+    content: '';
+    position: absolute;
+    left: -27px; top: 22px;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--gold);
+    border: 2px solid var(--white);
+    box-shadow: 0 0 0 2px var(--gold);
+  }
+  .timeline-time {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+  .timeline-block h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+  .timeline-block p {
+    font-size: 13px;
+    color: var(--text-light);
+    margin-bottom: 8px;
+  }
+  .timeline-block ul {
+    padding-left: 16px;
+  }
+  .timeline-block li {
+    font-size: 13px;
+    color: var(--text);
+    margin-bottom: 3px;
+  }
+  .timeline-tag {
+    display: inline-block;
+    background: rgba(13,31,60,0.07);
+    color: var(--navy);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin-right: 4px;
+    letter-spacing: 0.06em;
+  }
+
+  /* EMAIL SECTION */
+  .email-card {
+    background: var(--white);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(13,31,60,0.10);
+    margin-bottom: 32px;
+  }
+  .email-meta {
+    background: var(--off-white);
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text-light);
+  }
+  .email-meta strong { color: var(--text); }
+  .email-meta div { margin-bottom: 4px; }
+  .email-body {
+    padding: 32px 40px;
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--text);
+  }
+  .email-body p { margin-bottom: 16px; }
+  .email-body .email-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 24px 0;
+  }
+  .email-body .checklist {
+    background: var(--off-white);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 20px 0;
+  }
+  .email-body .checklist h4 {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--navy);
+    margin-bottom: 12px;
+  }
+  .email-body .checklist-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+  .check-box {
+    width: 16px; height: 16px;
+    border: 2px solid var(--navy);
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+  .email-sig {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .email-sig strong {
+    display: block;
+    color: var(--navy);
+    font-size: 15px;
+    font-family: 'Playfair Display', serif;
+  }
+  .email-sig .sig-title { color: var(--text-light); margin-bottom: 4px; }
+  .email-sig .sig-links { color: var(--gold); margin-top: 6px; }
+
+  /* WEB COPY */
+  .web-copy-card {
+    background: var(--white);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(13,31,60,0.10);
+    margin-bottom: 32px;
+  }
+  .web-copy-label {
+    background: var(--navy);
+    color: var(--gold);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 8px 20px;
+  }
+  .web-copy-body { padding: 28px 32px; }
+  .web-copy-body h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .web-copy-body .tagline {
+    font-size: 14px;
+    color: var(--text-light);
+    margin-bottom: 16px;
+    font-style: italic;
+  }
+  .web-copy-body p {
+    font-size: 14px;
+    color: var(--text);
+    margin-bottom: 12px;
+    line-height: 1.7;
+  }
+  .web-feature-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin: 16px 0;
+  }
+  .web-feature-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text);
+  }
+  .web-feature-item::before {
+    content: '✓';
+    color: var(--gold);
+    font-weight: 700;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .web-price-block {
+    background: var(--navy);
+    border-radius: 8px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+    gap: 16px;
+  }
+  .web-price-left .amount {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    color: var(--white);
+    font-weight: 700;
+  }
+  .web-price-left .was {
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+    text-decoration: line-through;
+  }
+  .web-price-left .save {
+    font-size: 12px;
+    color: var(--gold-light);
+    font-weight: 600;
+  }
+  .web-price-right { text-align: right; }
+  .web-price-right p {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 10px;
+  }
+
+  /* PRINT BUTTON */
+  .print-bar {
+    background: var(--navy);
+    padding: 12px 40px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  .print-btn {
+    background: rgba(255,255,255,0.1);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 7px 16px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .print-btn:hover { background: rgba(255,255,255,0.2); }
+
+  /* DIVIDER */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 36px 0;
+  }
+
+  @media print {
+    .nav, .print-bar { display: none; }
+    .section { display: block !important; padding: 20px; }
+    .onepager { page-break-after: always; }
+  }
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="nav-brand">Ryan Rinneard · <span>Mad River Golf Club</span></div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showTab('onepagers')">One-Pagers</button>
+    <button class="nav-tab" onclick="showTab('assessment')">Assessment Outline</button>
+    <button class="nav-tab" onclick="showTab('emails')">Confirmation Emails</button>
+    <button class="nav-tab" onclick="showTab('webcopy')">Website Copy</button>
+  </div>
+</div>
+
+<!-- ========== ONE-PAGERS ========== -->
+<div class="section active" id="onepagers">
+  <div class="section-label">Product One-Pagers</div>
+  <div class="section-title">Season Starter Packages</div>
+  <div class="section-subtitle">Print-ready one-pagers for both the Adult and Junior packages. Use as leave-behinds, PDF attachments, or display at Mad River.</div>
+
+  <!-- ADULT ONE-PAGER -->
+  <div class="onepager">
+    <div class="onepager-header">
+      <div class="package-badge">Adult Program</div>
+      <h2>Season Starter</h2>
+      <p>A structured, data-driven entry into coaching at Ryan Rinneard Golf Academy — built for golfers who are serious about improving, not just taking lessons.</p>
+      <div class="price-row">
+        <div class="price-main">$649</div>
+        <div class="price-cad">CAD</div>
+        <div class="price-was">$800+ value</div>
+        <div class="price-save">Save $151</div>
+      </div>
+    </div>
+    <div class="onepager-body">
+      <div class="what-included">
+        <div class="included-title">What's Included</div>
+        <div class="included-grid">
+          <div class="included-item">
+            <div class="included-icon">📋</div>
+            <div class="included-item-text">
+              <strong>Performance Assessment</strong>
+              <span>90-min TrackMan + TPI diagnostic. Your baseline, your blueprint.</span>
+            </div>
+          </div>
+          <div class="included-item">
+            <div class="included-icon">🎯</div>
+            <div class="included-item-text">
+              <strong>Written Prescription</strong>
+              <span>3 prioritized focus areas with a custom practice plan.</span>
+            </div>
+          </div>
+          <div class="included-item">
+            <div class="included-icon">⛳</div>
+            <div class="included-item-text">
+              <strong>5 Private Lessons</strong>
+              <span>60 minutes each. Structured around your assessment findings.</span>
+            </div>
+          </div>
+          <div class="included-item">
+            <div class="included-icon">📊</div>
+            <div class="included-item-text">
+              <strong>TrackMan Every Session</strong>
+              <span>Data at every lesson. You'll see the change, not just feel it.</span>
+            </div>
+          </div>
+          <div class="included-item">
+            <div class="included-icon">📖</div>
+            <div class="included-item-text">
+              <strong>RR Golf Learning Guide</strong>
+              <span>Your coaching companion — philosophy, drills, mental game.</span>
+            </div>
+          </div>
+          <div class="included-item">
+            <div class="included-icon">🔄</div>
+            <div class="included-item-text">
+              <strong>Mid-Package Check-In</strong>
+              <span>After lesson 2, we reassess and adjust the plan.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flow-section">
+        <div class="included-title">How It Works</div>
+        <div class="flow-steps">
+          <div class="flow-step">
+            <div class="flow-dot">1</div>
+            <div class="flow-step-label">Assess</div>
+            <div class="flow-step-sub">90-min intake</div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-dot">2</div>
+            <div class="flow-step-label">Prescribe</div>
+            <div class="flow-step-sub">Written plan</div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-dot">3</div>
+            <div class="flow-step-label">Build</div>
+            <div class="flow-step-sub">Lessons 1–2</div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-dot">4</div>
+            <div class="flow-step-label">Refine</div>
+            <div class="flow-step-sub">Check-in & adjust</div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-dot">5</div>
+            <div class="flow-step-label">Transfer</div>
+            <div class="flow-step-sub">Lessons 3–5</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="info-box">
+          <h4>Who This Is For</h4>
+          <ul>
+            <li>New students starting with Ryan</li>
+            <li>Returning golfers starting fresh</li>
+            <li>Anyone tired of tips without a plan</li>
+            <li>Golfers ready to commit to a season</li>
+          </ul>
+        </div>
+        <div class="info-box">
+          <h4>Technology Used</h4>
+          <ul>
+            <li>TrackMan launch monitor</li>
+            <li>TPI physical screening (G3)</li>
+            <li>Video swing analysis</li>
+            <li>Strokes Gained framework</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="cta-strip">
+        <div>
+          <strong>Ready to start your season with a plan?</strong>
+          <p>Book at madriverpro.as.me — mention Season Starter when booking.</p>
+        </div>
+        <a href="https://madriverpro.as.me" class="cta-btn">Book Now</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- JUNIOR ONE-PAGER -->
+  <div class="onepager">
+    <div class="onepager-header">
+      <div class="package-badge">Junior Program · Ages 7–17</div>
+      <h2>Junior Season Starter</h2>
+      <p>A structured development pathway for young golfers — grounded in long-term athlete development, not shortcuts. Built for families who want their junior coached, not just entertained.</p>
+      <div class="price-row">
+        <div class="price-main">$549</div>
+        <div class="price-cad">CAD</div>
+        <div class="price-was">$800+ value</div>
+        <div class="price-save">Save $251</div>
+      </div>
+    </div>
+    <div class="onepager-body">
+      <div class="what-included">
+        <div class="included-title">What's Included</div>
+        <div class="included-grid">
+          <div class="included-item">
+            <div class="included-icon">📋</div>
+            <div class="included-item-text">
+              <strong>Junior Performance Assessment</strong>
+              <span>60-min age-appropriate diagnostic. Ball flight + movement screen + goal-setting with parents.</span>
+            </div>
+          </div>
+          <div class="included-item">
+            <div class="included-icon">🎯</div>
+            <div class="included-item-text">
+              <strong>Player Development Profile</strong>
+              <span>Written summary for parents — where they are, where we're going.</span>
+            </div>
+          </div>
+          <div class="included-item">
+            <div class="included-icon">⛳</div>
+            <div class="included-item-text">
+              <strong>5 Private Lessons</strong>
+              <span>50 minutes each. Structured around development stage, not just mechanics.</span>
+            </div>
+          </div>
+          <div class="included-item">
+            <div class="included-icon">🏌️</div>
+            <div class="included-item-text">
+              <strong>On-Course Session</strong>
+              <span>One of the 6 lessons played on-course. Decision-making, scoring, fun.</span>
+            </div>
+          </div>
+          <div class="included-item">
+            <div class="included-icon">📊</div>
+            <div class="included-item-text">
+              <strong>Parent Progress Report</strong>
+              <span>After lesson 3 — written update on development milestones.</span>
+            </div>
+          </div>
+          <div class="included-item">
+            <div class="included-icon">📖</div>
+            <div class="included-item-text">
+              <strong>RR Golf Junior Handbook</strong>
+              <span>Age-appropriate guide covering rules, etiquette, and practice games.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flow-section">
+        <div class="included-title">The Development Arc</div>
+        <div class="flow-steps">
+          <div class="flow-step">
+            <div class="flow-dot">1</div>
+            <div class="flow-step-label">Assess</div>
+            <div class="flow-step-sub">Player + parent</div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-dot">2</div>
+            <div class="flow-step-label">Profile</div>
+            <div class="flow-step-sub">Written plan</div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-dot">3</div>
+            <div class="flow-step-label">Foundations</div>
+            <div class="flow-step-sub">Lessons 1–2</div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-dot">4</div>
+            <div class="flow-step-label">Build</div>
+            <div class="flow-step-sub">Lessons 3–4</div>
+          </div>
+          <div class="flow-step">
+            <div class="flow-dot">5</div>
+            <div class="flow-step-label">Play</div>
+            <div class="flow-step-sub">On-course + next steps</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="info-box">
+          <h4>Our Approach</h4>
+          <ul>
+            <li>LTAD-grounded development stages</li>
+            <li>TPI-certified screening</li>
+            <li>Age-appropriate drills & games</li>
+            <li>Communication with parents throughout</li>
+          </ul>
+        </div>
+        <div class="info-box">
+          <h4>Next Steps After Package</h4>
+          <ul>
+            <li>Continue with individual lessons</li>
+            <li>Join a junior group clinic</li>
+            <li>Enter local junior events</li>
+            <li>Thursday Night Experiences (family)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="cta-strip">
+        <div>
+          <strong>Start your junior's season with a real plan.</strong>
+          <p>Book at madriverpro.as.me — select Junior Season Starter.</p>
+        </div>
+        <a href="https://madriverpro.as.me" class="cta-btn">Book Now</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== ASSESSMENT OUTLINE ========== -->
+<div class="section" id="assessment">
+  <div class="section-label">Internal Operating Document</div>
+  <div class="section-title">Performance Assessment Outline</div>
+  <div class="section-subtitle">The step-by-step structure for every Season Starter intake session. Consistent delivery, every time — whether it's your first or fiftieth.</div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 36px;">
+    <div class="info-box">
+      <h4>Adult Assessment</h4>
+      <p><strong>Duration:</strong> 90 minutes<br>
+      <strong>Location:</strong> Mad River lesson tee + putting green<br>
+      <strong>Tech:</strong> TrackMan, video, TPI screen<br>
+      <strong>Output:</strong> Written prescription, 3 priorities</p>
+    </div>
+    <div class="info-box">
+      <h4>Junior Assessment</h4>
+      <p><strong>Duration:</strong> 60 minutes<br>
+      <strong>Location:</strong> Mad River lesson tee + short game area<br>
+      <strong>Tech:</strong> TrackMan (where appropriate), video<br>
+      <strong>Output:</strong> Player Development Profile for parents</p>
+    </div>
+  </div>
+
+  <div class="section-label">Adult Assessment — 90 Minutes</div>
+  <div style="margin-bottom: 8px; font-size: 13px; color: var(--text-light); margin-bottom: 24px;">Follow this sequence for every adult Season Starter intake.</div>
+
+  <div class="timeline">
+    <div class="timeline-block">
+      <div class="timeline-time">Minutes 0–10 · Welcome & Goal Setting</div>
+      <h3>The Conversation First</h3>
+      <p>Before any club is swung. This is the most important part of the session.</p>
+      <ul>
+        <li>Ask: What brought you in? What have you tried before?</li>
+        <li>Ask: What does success look like for you this season?</li>
+        <li>Note injury history, physical limitations, time available to practice</li>
+        <li>Ask: What's the one thing that's costing you shots right now?</li>
+      </ul>
+      <div style="margin-top: 10px;">
+        <span class="timeline-tag">LISTEN</span>
+        <span class="timeline-tag">DON'T ADVISE YET</span>
+      </div>
+    </div>
+
+    <div class="timeline-block">
+      <div class="timeline-time">Minutes 10–20 · TPI Movement Screen</div>
+      <h3>Physical Baseline</h3>
+      <p>Quick G3 screen — identify limitations before prescribing swing changes.</p>
+      <ul>
+        <li>Overhead deep squat, toe touch, single-leg balance</li>
+        <li>Hip rotation (seated + standing), shoulder mobility</li>
+        <li>Note any red flags that affect swing capacity</li>
+        <li>This informs what you prescribe — and what you don't</li>
+      </ul>
+      <div style="margin-top: 10px;">
+        <span class="timeline-tag">TPI G3</span>
+      </div>
+    </div>
+
+    <div class="timeline-block">
+      <div class="timeline-time">Minutes 20–40 · Ball Flight Baseline</div>
+      <h3>TrackMan Diagnostic</h3>
+      <p>Let the data speak. Don't coach yet — just observe and collect.</p>
+      <ul>
+        <li>5 drives — observe pattern, note face-to-path relationship</li>
+        <li>5 mid-irons (7i) — check consistency, contact quality</li>
+        <li>5 wedge shots (PW, 50 yards) — observe technique under low-pressure conditions</li>
+        <li>Record: carry, ball speed, spin, launch angle, face angle, club path</li>
+        <li>Video: face-on and down-the-line of 2–3 swings each</li>
+      </ul>
+      <div style="margin-top: 10px;">
+        <span class="timeline-tag">TRACKMAN</span>
+        <span class="timeline-tag">VIDEO</span>
+        <span class="timeline-tag">NO COACHING YET</span>
+      </div>
+    </div>
+
+    <div class="timeline-block">
+      <div class="timeline-time">Minutes 40–55 · Short Game & Putting</div>
+      <h3>Scoring Zone Assessment</h3>
+      <p>Where most shots are won or lost. Don't skip this.</p>
+      <ul>
+        <li>5 chips from tight lie, 10 yards off green — observe contact and trajectory</li>
+        <li>5 pitch shots, 30–40 yards — observe technique and distance control awareness</li>
+        <li>Putting: 10 putts from 6 feet — observe alignment, face control, routine</li>
+        <li>Ask: How do you feel about your short game? What would you change?</li>
+      </ul>
+      <div style="margin-top: 10px;">
+        <span class="timeline-tag">SHORT GAME</span>
+        <span class="timeline-tag">PUTTING</span>
+      </div>
+    </div>
+
+    <div class="timeline-block">
+      <div class="timeline-time">Minutes 55–75 · Analysis & Prescription</div>
+      <h3>The Debrief</h3>
+      <p>This is where the assessment earns its value. Be clear, be direct, be human.</p>
+      <ul>
+        <li>Show 2–3 TrackMan data points that tell the story simply</li>
+        <li>Show the video — use it to confirm the data, not replace it</li>
+        <li>Identify no more than 3 priority areas (resist the urge to fix everything)</li>
+        <li>Explain: "Here's what your ball is doing. Here's why. Here's what we'll do about it."</li>
+        <li>Reference their stated goals from minute 0 — connect findings to outcomes they care about</li>
+      </ul>
+      <div style="margin-top: 10px;">
+        <span class="timeline-tag">VISION54 APPROACH</span>
+        <span class="timeline-tag">CONNECT DATA TO OUTCOMES</span>
+      </div>
+    </div>
+
+    <div class="timeline-block">
+      <div class="timeline-time">Minutes 75–90 · Written Prescription & Next Steps</div>
+      <h3>Leave With a Plan</h3>
+      <p>Every student walks away with something written. No exceptions.</p>
+      <ul>
+        <li>Hand them the written prescription (3 priorities, 1–2 drills each)</li>
+        <li>Walk through the 5-lesson arc — what each phase addresses</li>
+        <li>Set expectations: "Here's how we'll know it's working."</li>
+        <li>Book the first lesson before they leave the tee</li>
+        <li>Confirm email address for the welcome email (Acuity triggers Mailchimp)</li>
+      </ul>
+      <div style="margin-top: 10px;">
+        <span class="timeline-tag">WRITTEN PRESCRIPTION</span>
+        <span class="timeline-tag">BOOK LESSON 1</span>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section-label" style="margin-top: 0;">Junior Assessment — 60 Minutes</div>
+  <div style="font-size: 13px; color: var(--text-light); margin-bottom: 24px;">Adjusted pace, age-appropriate language. Parents present for first 10 and last 15 minutes.</div>
+
+  <div class="timeline">
+    <div class="timeline-block">
+      <div class="timeline-time">Minutes 0–10 · Parent + Junior Welcome</div>
+      <h3>Set Expectations With the Family</h3>
+      <ul>
+        <li>Ask parents: What are your goals for your junior this season?</li>
+        <li>Ask the junior directly: What do you love about golf? What do you find hard?</li>
+        <li>Briefly explain what you'll be doing today — demystify it</li>
+        <li>Parents step back for the session (reduces performance anxiety)</li>
+      </ul>
+    </div>
+    <div class="timeline-block">
+      <div class="timeline-time">Minutes 10–35 · Ball Flight & Basics</div>
+      <h3>Observe, Don't Judge</h3>
+      <ul>
+        <li>Free swing — let them show you what they've got, no instruction yet</li>
+        <li>Watch grip, setup, balance, contact quality</li>
+        <li>Use TrackMan if appropriate to age/stage — frame it as a "launch game"</li>
+        <li>Short game: a few chips and putts — watch naturally, ask how they feel</li>
+      </ul>
+      <div style="margin-top: 10px;"><span class="timeline-tag">OBSERVE FIRST</span><span class="timeline-tag">KEEP IT FUN</span></div>
+    </div>
+    <div class="timeline-block">
+      <div class="timeline-time">Minutes 35–45 · Quick Wins</div>
+      <h3>One Concept, Real Improvement</h3>
+      <ul>
+        <li>Pick one thing to address — something that will make the biggest immediate difference</li>
+        <li>Give it, see the improvement, celebrate it genuinely</li>
+        <li>This is what they'll remember — and what their parents will see</li>
+      </ul>
+      <div style="margin-top: 10px;"><span class="timeline-tag">ONE CHANGE ONLY</span></div>
+    </div>
+    <div class="timeline-block">
+      <div class="timeline-time">Minutes 45–60 · Parent Debrief + Development Profile</div>
+      <h3>Give Parents a Clear Picture</h3>
+      <ul>
+        <li>Bring parents back in — talk about their junior in front of the junior</li>
+        <li>Share 2–3 genuine strengths you observed</li>
+        <li>Explain the 5-lesson arc and what each phase will address</li>
+        <li>Hand them the written Player Development Profile</li>
+        <li>Book lesson 1 and confirm email for the welcome sequence</li>
+      </ul>
+      <div style="margin-top: 10px;"><span class="timeline-tag">WRITTEN PROFILE</span><span class="timeline-tag">BOOK LESSON 1</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== EMAILS ========== -->
+<div class="section" id="emails">
+  <div class="section-label">Automated Email Sequence</div>
+  <div class="section-title">Booking Confirmation Emails</div>
+  <div class="section-subtitle">These fire automatically through Acuity → Mailchimp after a Season Starter package is purchased. Two versions: Adult and Junior.</div>
+
+  <!-- ADULT EMAIL -->
+  <div style="font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--navy); margin-bottom: 12px;">Adult Version</div>
+  <div class="email-card">
+    <div class="email-meta">
+      <div><strong>From:</strong> Ryan Rinneard — Mad River Golf Club &lt;ryan@madriverpro.com&gt;</div>
+      <div><strong>Subject:</strong> You're in. Here's what happens next — Season Starter</div>
+      <div><strong>Trigger:</strong> Acuity booking confirmed (Season Starter — Adult)</div>
+    </div>
+    <div class="email-body">
+      <p>Hi [First Name],</p>
+      <p>You just made a real commitment to your game — and I want you to know I take that seriously.</p>
+      <p>Your Season Starter package is confirmed. Before we meet for your Performance Assessment, here's exactly what to expect so you can walk in ready.</p>
+
+      <div class="checklist">
+        <h4>Your Assessment Day — What To Bring</h4>
+        <div class="checklist-item"><div class="check-box"></div> Your full set of clubs (we'll test a range)</div>
+        <div class="checklist-item"><div class="check-box"></div> Golf shoes and comfortable athletic wear</div>
+        <div class="checklist-item"><div class="check-box"></div> A recent scorecard if you have one — even a rough one</div>
+        <div class="checklist-item"><div class="check-box"></div> 5 minutes of warming up before we start (range balls provided)</div>
+        <div class="checklist-item"><div class="check-box"></div> An open mind — we're going to see what's actually happening, not what you think is happening</div>
+      </div>
+
+      <p>We'll spend 90 minutes together. The first thing we'll do is talk — about your game, your goals, and what's been getting in the way. Then we'll get on the tee and let TrackMan tell the story your ball is already telling. By the end, you'll have a written prescription and a clear plan for your next six lessons.</p>
+      <p>No guesswork. No generic tips. A plan built around you.</p>
+      <p>If anything comes up before we meet — questions, changes, anything — just reply to this email or text me directly.</p>
+      <p>Looking forward to getting started.</p>
+
+      <hr class="email-divider">
+
+      <div class="email-sig">
+        <strong>Ryan Rinneard</strong>
+        <div class="sig-title">Director of Instruction — Mad River Golf Club<br>CPGA Class A · TPI Certified G3 · TrackMan · Vision54<br>Titleist Ambassador</div>
+        <div class="sig-links">madriverpro.com · madriverpro.as.me</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JUNIOR EMAIL -->
+  <div style="font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--navy); margin-bottom: 12px; margin-top: 32px;">Junior Version (Sent to Parent)</div>
+  <div class="email-card">
+    <div class="email-meta">
+      <div><strong>From:</strong> Ryan Rinneard — Mad River Golf Club &lt;ryan@madriverpro.com&gt;</div>
+      <div><strong>Subject:</strong> [Junior's name]'s Season Starter is confirmed — here's what to expect</div>
+      <div><strong>Trigger:</strong> Acuity booking confirmed (Season Starter — Junior)</div>
+    </div>
+    <div class="email-body">
+      <p>Hi [Parent First Name],</p>
+      <p>Thank you for enrolling [Junior's name] in the Junior Season Starter. I'm genuinely excited to work with them this season.</p>
+      <p>Before your first visit, I want to give you a clear picture of what the assessment looks like and how you can help make it a great experience for your junior.</p>
+
+      <div class="checklist">
+        <h4>Assessment Day — What To Know</h4>
+        <div class="checklist-item"><div class="check-box"></div> Bring [Junior's name]'s clubs — whatever they currently use is perfect</div>
+        <div class="checklist-item"><div class="check-box"></div> Arrive 5–10 minutes early so they can settle in</div>
+        <div class="checklist-item"><div class="check-box"></div> You'll be with us for the first 10 minutes and the last 15 — I'll bring you back in for the debrief</div>
+        <div class="checklist-item"><div class="check-box"></div> During the session, I'd ask that parents watch from a distance — it helps juniors perform more naturally and enjoy themselves more</div>
+        <div class="checklist-item"><div class="check-box"></div> No prior experience needed — this assessment works for beginners and competitive juniors alike</div>
+      </div>
+
+      <p>The session runs 60 minutes. I'll observe how [Junior's name] moves and swings, introduce them to one thing that will make an immediate difference, and then sit down with you both at the end to walk through their Player Development Profile — where they are, what we'll work on, and where they can go.</p>
+      <p>My goal is simple: I want them to leave session one feeling better about their game than when they arrived. Everything else builds from there.</p>
+      <p>If you have any questions in the meantime, reply here or reach out directly. I'm happy to chat.</p>
+      <p>See you soon.</p>
+
+      <hr class="email-divider">
+
+      <div class="email-sig">
+        <strong>Ryan Rinneard</strong>
+        <div class="sig-title">Director of Instruction — Mad River Golf Club<br>CPGA Class A · TPI Certified G3 · TrackMan · Vision54<br>Titleist Ambassador</div>
+        <div class="sig-links">madriverpro.com · madriverpro.as.me</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== WEB COPY ========== -->
+<div class="section" id="webcopy">
+  <div class="section-label">madriverpro.com</div>
+  <div class="section-title">Website Copy</div>
+  <div class="section-subtitle">Drop-in copy for both packages. Written for the web — scannable, benefit-led, direct. Designed to convert browsers into bookings.</div>
+
+  <!-- ADULT WEB COPY -->
+  <div class="web-copy-card">
+    <div class="web-copy-label">Adult Package Page Copy</div>
+    <div class="web-copy-body">
+      <h3>Season Starter — Adult</h3>
+      <div class="tagline">"Stop guessing. Start with a plan."</div>
+
+      <p>Most golfers take lessons when something goes wrong. They fix one thing, something else breaks, and the cycle repeats. The Season Starter is different — it starts with a proper diagnosis, builds a plan around your actual game, and gives you five structured lessons to execute it.</p>
+
+      <p>This is how coaching is supposed to work.</p>
+
+      <p><strong>Your Season Starter begins with a 90-minute Performance Assessment</strong> — a no-guesswork diagnostic using TrackMan launch monitor data, TPI physical screening, and video analysis. You'll see exactly what your ball is doing, understand why, and leave with a written prescription that guides every lesson that follows.</p>
+
+      <div class="web-feature-list">
+        <div class="web-feature-item">90-min Performance Assessment included</div>
+        <div class="web-feature-item">TrackMan data at every lesson</div>
+        <div class="web-feature-item">5 x 60-min private lessons</div>
+        <div class="web-feature-item">Written prescription & practice plan</div>
+        <div class="web-feature-item">TPI physical screening</div>
+        <div class="web-feature-item">RR Golf Learning Guide (yours to keep)</div>
+        <div class="web-feature-item">Mid-package check-in & plan adjustment</div>
+        <div class="web-feature-item">Structured around your goals — not a template</div>
+      </div>
+
+      <p>Ryan holds a CPGA Class A designation, TPI G3 certification, TrackMan certification, and Vision54 training — a combination found in very few coaches in Ontario. Your Season Starter is built on that foundation.</p>
+
+      <div class="web-price-block">
+        <div class="web-price-left">
+          <div class="amount">$649 CAD</div>
+          <div class="was">$800+ retail value</div>
+          <div class="save">Save $151 — package pricing only</div>
+        </div>
+        <div class="web-price-right">
+          <p>Limited spots available each season.<br>Assessment scheduled within 7 days of booking.</p>
+          <a href="https://madriverpro.as.me" class="cta-btn">Book Your Season Starter</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JUNIOR WEB COPY -->
+  <div class="web-copy-card">
+    <div class="web-copy-label">Junior Package Page Copy</div>
+    <div class="web-copy-body">
+      <h3>Junior Season Starter — Ages 7–17</h3>
+      <div class="tagline">"A real development plan. Not just lessons."</div>
+
+      <p>Junior golfers deserve more than repetition and range time. They deserve a coach who understands where they are in their development, what their body can actually do, and how to build a love of the game while building real skill.</p>
+
+      <p>The Junior Season Starter is a structured five-lesson program that begins the right way — with a proper assessment, a written development profile, and a plan that parents can understand and trust.</p>
+
+      <p><strong>Ryan is TPI Certified at the G3 level</strong>, meaning he screens young golfers physically before prescribing any technique. Junior programs are grounded in long-term athlete development principles — because what works for a 10-year-old is very different from what works for a 16-year-old.</p>
+
+      <div class="web-feature-list">
+        <div class="web-feature-item">60-min Junior Performance Assessment</div>
+        <div class="web-feature-item">Written Player Development Profile for parents</div>
+        <div class="web-feature-item">5 x 50-min private lessons</div>
+        <div class="web-feature-item">One on-course lesson included</div>
+        <div class="web-feature-item">TPI physical screening</div>
+        <div class="web-feature-item">Mid-package parent progress report</div>
+        <div class="web-feature-item">RR Golf Junior Handbook included</div>
+        <div class="web-feature-item">LTAD-grounded curriculum, all ages & stages</div>
+      </div>
+
+      <p>One on-course lesson is built into every Junior Season Starter — because the goal isn't a better range swing. It's a junior who loves competing, understands the game, and keeps coming back.</p>
+
+      <div class="web-price-block">
+        <div class="web-price-left">
+          <div class="amount">$549 CAD</div>
+          <div class="was">$800+ retail value</div>
+          <div class="save">Save $251 — package pricing only</div>
+        </div>
+        <div class="web-price-right">
+          <p>Assessment scheduled within 7 days.<br>Parents included in first & last session.</p>
+          <a href="https://madriverpro.as.me" class="cta-btn">Book Junior Season Starter</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function showTab(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.target.classList.add('active');
+  }
+</script>
+
+</body>
+</html>
