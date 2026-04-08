@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 120" fill="none">
+  <!-- Left horizontal line -->
+  <line x1="0" y1="60" x2="140" y2="60" stroke="#1a2744" stroke-width="1.5"/>
+  <!-- Right horizontal line -->
+  <line x1="260" y1="60" x2="400" y2="60" stroke="#1a2744" stroke-width="1.5"/>
+  <!-- Outer circle (thin ring) -->
+  <circle cx="200" cy="60" r="58" stroke="#1a2744" stroke-width="1.5" fill="none"/>
+  <!-- Inner filled circle -->
+  <circle cx="200" cy="60" r="50" fill="#1a2744"/>
+  <!-- Crossed clubs -->
+  <!-- Left club (bottom-left to top-right) -->
+  <line x1="172" y1="88" x2="218" y2="42" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <!-- Right club (bottom-right to top-left) -->
+  <line x1="228" y1="88" x2="182" y2="42" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  <!-- Club heads (small rectangles at bottom) -->
+  <rect x="166" y="84" width="12" height="8" rx="2" fill="white" transform="rotate(-10 172 88)"/>
+  <rect x="222" y="84" width="12" height="8" rx="2" fill="white" transform="rotate(10 228 88)"/>
+  <!-- RR Text -->
+  <text x="200" y="48" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="28" font-weight="bold" fill="white" letter-spacing="2">
+    <tspan>R</tspan><tspan style="direction:rtl;unicode-bidi:bidi-override">R</tspan>
+  </text>
+</svg>

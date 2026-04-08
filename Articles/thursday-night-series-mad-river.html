@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thursday Night Series at Mad River Golf Club | Ryan Rinneard Golf Academy</title>
+<meta name="description" content="Join us for Thursday Night Series at Mad River Golf Club — a fun, social, skill-building evening of golf with expert coaching from Ryan Rinneard. All levels welcome.">
+<meta name="keywords" content="Thursday Night Series, Mad River Golf Club, golf events Collingwood, social golf, golf clinics Ontario, Ryan Rinneard, Wasaga Beach golf, group golf lessons">
+<meta name="author" content="Ryan Rinneard">
+<meta property="og:title" content="Thursday Night Series at Mad River Golf Club">
+<meta property="og:description" content="Fun, social, skill-building Thursday evenings at one of Ontario's most beautiful courses. Coached by Ryan Rinneard, CPGA Class A.">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --navy-light: #142240;
+    --white: #ffffff;
+    --off-white: #f7f8fa;
+    --gray-100: #eef0f4;
+    --gray-300: #c8cdd6;
+    --gray-500: #6b7280;
+    --gray-700: #374151;
+    --accent: #3b82f6;
+    --green: #16a34a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--gray-700);
+    background: var(--white);
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .site-header {
+    background: var(--white);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid var(--gray-100);
+  }
+  .site-header .header-logo { height: 48px; width: 48px; flex-shrink: 0; }
+  .site-header .brand-name {
+    font-size: 15px; font-weight: 600; color: var(--navy);
+    margin-left: 12px; letter-spacing: 0.3px;
+  }
+  .hero {
+    background: linear-gradient(135deg, var(--navy) 0%, #1a3a5c 100%);
+    color: var(--white);
+    padding: 100px 24px 80px;
+    text-align: center;
+  }
+  .hero .label {
+    display: inline-block; font-size: 12px; font-weight: 600;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--green); margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-size: clamp(32px, 5vw, 52px); font-weight: 700;
+    line-height: 1.15; max-width: 720px; margin: 0 auto 20px;
+  }
+  .hero .subtitle {
+    font-size: 18px; color: var(--gray-300);
+    max-width: 560px; margin: 0 auto 28px; font-weight: 400;
+  }
+  .hero .meta { font-size: 14px; color: var(--gray-500); }
+  .hero .meta span { color: var(--gray-300); }
+  .hero-image {
+    max-width: 900px; margin: -40px auto 0;
+    padding: 0 24px; position: relative; z-index: 2;
+  }
+  .hero-image .placeholder {
+    width: 100%; height: 420px; border-radius: 12px;
+    background: var(--gray-100); display: flex; align-items: center;
+    justify-content: center; color: var(--gray-500); font-size: 14px;
+    border: 2px dashed var(--gray-300);
+  }
+  article {
+    max-width: 680px; margin: 0 auto; padding: 60px 24px 80px;
+  }
+  article h2 {
+    font-size: 26px; font-weight: 700; color: var(--navy);
+    margin: 48px 0 16px; line-height: 1.3;
+  }
+  article h3 {
+    font-size: 20px; font-weight: 600; color: var(--navy);
+    margin: 36px 0 12px;
+  }
+  article p { margin-bottom: 20px; font-size: 17px; }
+  article .lead {
+    font-size: 20px; color: var(--navy-light);
+    line-height: 1.7; margin-bottom: 32px;
+  }
+  .pullquote {
+    border-left: 3px solid var(--green);
+    padding: 20px 28px; margin: 36px 0;
+    background: var(--off-white); border-radius: 0 8px 8px 0;
+  }
+  .pullquote p {
+    font-size: 18px; font-weight: 500;
+    color: var(--navy); font-style: italic; margin-bottom: 0;
+  }
+  .inline-image { margin: 36px 0; }
+  .inline-image .placeholder {
+    width: 100%; height: 320px; border-radius: 10px;
+    background: var(--gray-100); display: flex; align-items: center;
+    justify-content: center; color: var(--gray-500); font-size: 14px;
+    border: 2px dashed var(--gray-300);
+  }
+  .inline-image figcaption {
+    font-size: 13px; color: var(--gray-500);
+    text-align: center; margin-top: 10px;
+  }
+
+  /* Schedule grid */
+  .schedule-grid {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 0;
+    margin: 32px 0;
+    background: var(--off-white);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .schedule-grid .time {
+    padding: 20px 16px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--navy);
+    border-bottom: 1px solid var(--gray-100);
+    display: flex;
+    align-items: center;
+  }
+  .schedule-grid .activity {
+    padding: 20px 20px;
+    border-bottom: 1px solid var(--gray-100);
+  }
+  .schedule-grid .activity h4 {
+    font-size: 16px;
+    color: var(--navy);
+    margin-bottom: 4px;
+  }
+  .schedule-grid .activity p {
+    font-size: 14px;
+    color: var(--gray-500);
+    margin-bottom: 0;
+  }
+  .schedule-grid .time:last-of-type,
+  .schedule-grid .activity:last-of-type { border-bottom: none; }
+
+  /* Feature cards */
+  .feature-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 28px 0;
+  }
+  .feature-card {
+    background: var(--off-white);
+    border-radius: 10px;
+    padding: 24px;
+    text-align: center;
+  }
+  .feature-card .emoji { font-size: 28px; margin-bottom: 10px; }
+  .feature-card h4 {
+    font-size: 15px; color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .feature-card p {
+    font-size: 14px; color: var(--gray-500); margin-bottom: 0;
+  }
+
+  .cta-section {
+    background: linear-gradient(135deg, var(--navy) 0%, #1a3a5c 100%);
+    color: var(--white);
+    text-align: center; padding: 60px 24px;
+    border-radius: 12px; margin: 48px 0 0;
+  }
+  .cta-section h2 { color: var(--white); margin-bottom: 12px; }
+  .cta-section p {
+    color: var(--gray-300); max-width: 480px;
+    margin: 0 auto 24px;
+  }
+  .cta-button {
+    display: inline-block; background: var(--white);
+    color: var(--navy); padding: 14px 32px; border-radius: 8px;
+    text-decoration: none; font-weight: 600; font-size: 16px;
+    transition: opacity 0.2s;
+  }
+  .cta-button:hover { opacity: 0.9; }
+  .author-box {
+    display: flex; gap: 20px; align-items: center;
+    padding: 28px; background: var(--off-white);
+    border-radius: 10px; margin-top: 48px;
+  }
+  .author-box .placeholder-avatar {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: var(--navy); color: var(--white);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 24px; flex-shrink: 0;
+  }
+  .author-box .info h4 { font-size: 16px; color: var(--navy); margin-bottom: 4px; }
+  .author-box .info p { font-size: 14px; color: var(--gray-500); margin-bottom: 0; }
+  @media (max-width: 480px) {
+    .feature-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <span class="label">Program Spotlight</span>
+  <h1>Thursday Night Series at Mad River Golf Club</h1>
+  <p class="subtitle">Good golf, good people, and the best Thursday evening plans in the Collingwood area.</p>
+  <p class="meta">By <span>Ryan Rinneard</span> · April 2026 · 5 min read</p>
+</section>
+
+<div class="hero-image">
+  <!-- REPLACE: Insert a wide group photo of Thursday Night Series participants on the Mad River practice area or patio, golden hour -->
+  <div class="placeholder">[Hero Image: Group of golfers laughing and warming up on the Mad River range during Thursday Night Series, golden hour light]</div>
+</div>
+
+<article>
+
+  <p class="lead">A few years ago, I had an idea. What if there was a Thursday evening at the club that felt less like a lesson and more like a night out — but you also happened to get better at golf while you were at it?</p>
+
+  <p>That idea became the Thursday Night Series at Mad River Golf Club, and it's quietly become one of my favourite things I do all season. It's part coaching clinic, part social hour, part on-course experience — and entirely unlike any other golf event in the area.</p>
+
+  <p>Whether you're a single-digit player looking to sharpen your short game or someone who picked up the sport last summer and still isn't sure which wedge is which, Thursday nights are for you. The vibe is welcoming, the instruction is real, and the sunsets over the Niagara Escarpment aren't bad either.</p>
+
+  <h2>What a Typical Thursday Night Looks Like</h2>
+
+  <p>Every session follows a loose structure that balances learning with playing. Here's how a typical evening flows:</p>
+
+  <div class="schedule-grid">
+    <div class="time">5:30</div>
+    <div class="activity">
+      <h4>Arrival & Warm-Up</h4>
+      <p>Grab a drink, say hello, and loosen up on the range. This is community time — meet new people, reconnect with regulars.</p>
+    </div>
+    <div class="time">6:00</div>
+    <div class="activity">
+      <h4>Guided Skill Session</h4>
+      <p>Each week focuses on a different theme — driving, iron play, short game, putting, or course management. I keep groups small so everyone gets hands-on attention.</p>
+    </div>
+    <div class="time">6:45</div>
+    <div class="activity">
+      <h4>On-Course Play</h4>
+      <p>We take what we've worked on and put it into action on a few holes. This is where the real learning happens — applying new skills in real playing conditions.</p>
+    </div>
+    <div class="time">8:00</div>
+    <div class="activity">
+      <h4>19th Hole</h4>
+      <p>Wind down on the patio. Share stories from the round, ask questions, and enjoy the Mad River atmosphere as the sun goes down.</p>
+    </div>
+  </div>
+
+  <div class="pullquote">
+    <p>"The best golf improvement happens when you're relaxed, laughing, and not trying to be perfect. That's what Thursday nights are about."</p>
+  </div>
+
+  <h2>Why This Format Works</h2>
+
+  <p>Traditional golf lessons can feel clinical. You stand in a bay, hit balls, get feedback, and go home. That's valuable — I teach private lessons every day and I believe in that process deeply. But there's a different kind of learning that happens in a social, low-pressure environment.</p>
+
+  <p>When you're surrounded by other golfers who are all working on their games, something shifts. The pressure to be perfect evaporates. You try things you wouldn't try in a formal lesson. You watch someone else make a breakthrough and think, "Maybe I can do that too." And because we take the skills onto the course immediately, the connection between practice and play becomes instant.</p>
+
+  <div class="inline-image">
+    <!-- REPLACE: Insert a photo of Ryan demonstrating a short game shot to a small group at Mad River -->
+    <div class="placeholder">[Inline Image: Ryan demonstrating a pitch shot to a small group near Mad River's practice green, casual and engaging]</div>
+    <figcaption>Small groups mean everyone gets personal attention — even in a social setting.</figcaption>
+  </div>
+
+  <h2>What Makes Thursday Nights Special</h2>
+
+  <div class="feature-row">
+    <div class="feature-card">
+      <div class="emoji">&#127947;</div>
+      <h4>Expert Coaching</h4>
+      <p>CPGA Class A instruction with TrackMan and TPI insights woven into every session.</p>
+    </div>
+    <div class="feature-card">
+      <div class="emoji">&#129309;</div>
+      <h4>Real Community</h4>
+      <p>Meet golfers from across the Collingwood area. Friendships forged here last well beyond the season.</p>
+    </div>
+    <div class="feature-card">
+      <div class="emoji">&#9971;</div>
+      <h4>Play Real Holes</h4>
+      <p>Practice is great, but playing is where it clicks. We get on the course every single week.</p>
+    </div>
+    <div class="feature-card">
+      <div class="emoji">&#127774;</div>
+      <h4>World-Class Setting</h4>
+      <p>Mad River is one of Ontario's most beautiful courses. Thursday evenings in the golden light are something else.</p>
+    </div>
+  </div>
+
+  <h2>Who Comes to Thursday Nights?</h2>
+
+  <p>Honestly? Everyone. I've had brand-new golfers show up alongside club champions, and both leave having learned something. The format is designed to be inclusive — during the skill session, I'll tailor the instruction to different levels within the group, and during on-course play, we mix things up so you're playing with different people each week.</p>
+
+  <p>A lot of our regulars are couples, which I love. It's become a proper date-night option in the area — a few hours outdoors, learning something together, finishing with a drink on the patio. But you'll also find groups of friends, solo golfers looking for community, and retirees who want to stay sharp.</p>
+
+  <p>There's no skill requirement. There's no dress code test. If you can swing a club — or want to learn how — you're in.</p>
+
+  <h2>What Past Participants Say</h2>
+
+  <div class="pullquote">
+    <p>"I signed up thinking I'd come once. I ended up coming every Thursday for the entire season. The community Ryan has built is something special."</p>
+  </div>
+
+  <div class="pullquote" style="margin-top: 16px;">
+    <p>"My wife and I were looking for something to do together that wasn't just dinner. Thursday nights became our thing. We've both dropped three strokes since we started."</p>
+  </div>
+
+  <h2>2026 Season Details</h2>
+
+  <p>The Thursday Night Series runs from mid-May through September, weather permitting. Sessions are available individually or as a season package (the package is better value and guarantees your spot — these do fill up).</p>
+
+  <p>Space is limited each week to keep the groups small and the instruction personal. If you're interested, I'd encourage you to get in touch sooner rather than later — last year we had a waitlist by mid-June.</p>
+
+  <div class="cta-section">
+    <h2>Save Your Thursday Nights</h2>
+    <p>Register for the 2026 Thursday Night Series at Mad River Golf Club. Spots are limited.</p>
+    <a href="/thursday-night-series" class="cta-button">Register Now</a>
+  </div>
+
+  <div class="author-box">
+    <div class="placeholder-avatar">RR</div>
+    <div class="info">
+      <h4>Ryan Rinneard</h4>
+      <p>CPGA Class A Professional · Director of Instruction, Mad River Golf Club<br>TPI · TrackMan · Vision54 Certified · Titleist Ambassador</p>
+    </div>
+  </div>
+
+</article>
+</body>
+</html>

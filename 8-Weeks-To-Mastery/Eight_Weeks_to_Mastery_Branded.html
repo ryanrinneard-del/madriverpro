@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eight Weeks to Mastery | Ryan Rinneard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,700;0,800;1,700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:        #0a1628;
+    --navy-light:  #142240;
+    --navy-mid:    #1e3a5f;
+    --white:       #ffffff;
+    --off-white:   #f7f8fa;
+    --gray-100:    #eef0f4;
+    --gray-300:    #c8cdd6;
+    --gray-500:    #6b7280;
+    --gray-700:    #374151;
+    --orange:      #c97c2e;
+    --orange-light:#e8943a;
+    --orange-pale: #fdf3e7;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    color: var(--gray-700);
+    background: var(--white);
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── SITE HEADER ─────────────────────────────────── */
+  .site-header {
+    background: var(--navy);
+    padding: 18px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid var(--navy-mid);
+  }
+  .site-header .brand {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--white);
+    letter-spacing: 0.5px;
+    text-decoration: none;
+  }
+  .site-header .brand span {
+    color: var(--orange);
+  }
+  .site-header .badge {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--gray-300);
+  }
+
+  /* ── BOOK COVER / HERO ───────────────────────────── */
+  .book-hero {
+    background: var(--navy);
+    padding: 100px 24px 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .book-hero::before {
+    content: '';
+    position: absolute;
+    top: -120px; right: -120px;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,124,46,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .book-hero::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: -80px;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(30,58,95,0.6) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .book-hero .eyebrow {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 24px;
+  }
+  .book-hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(42px, 7vw, 72px);
+    font-weight: 800;
+    color: var(--white);
+    line-height: 1.1;
+    max-width: 760px;
+    margin: 0 auto 16px;
+  }
+  .book-hero .subtitle {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(16px, 2vw, 20px);
+    color: var(--gray-300);
+    font-style: italic;
+    max-width: 520px;
+    margin: 0 auto 32px;
+    line-height: 1.6;
+  }
+  .book-hero .author-line {
+    font-size: 15px;
+    color: var(--gray-300);
+    font-weight: 500;
+  }
+  .book-hero .author-line strong {
+    color: var(--orange);
+  }
+  .hero-divider {
+    width: 60px;
+    height: 3px;
+    background: var(--orange);
+    margin: 28px auto;
+    border-radius: 2px;
+  }
+
+  /* ── TABLE OF CONTENTS ───────────────────────────── */
+  .toc-section {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 64px 24px 48px;
+    border-bottom: 1px solid var(--gray-100);
+  }
+  .toc-section .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 20px;
+  }
+  .toc-section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    color: var(--navy);
+    margin-bottom: 32px;
+  }
+  .toc-list {
+    list-style: none;
+  }
+  .toc-list li {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--gray-100);
+    cursor: pointer;
+    transition: color 0.15s;
+  }
+  .toc-list li:last-child { border-bottom: none; }
+  .toc-list li:hover .toc-title { color: var(--orange); }
+  .toc-num {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--orange);
+    min-width: 28px;
+    letter-spacing: 0.5px;
+  }
+  .toc-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--navy);
+    transition: color 0.15s;
+    flex: 1;
+  }
+  .toc-arrow {
+    font-size: 13px;
+    color: var(--gray-300);
+  }
+
+  /* ── FRONT MATTER PAGES ──────────────────────────── */
+  .front-matter {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 64px 24px;
+    border-bottom: 1px solid var(--gray-100);
+  }
+  .front-matter .fm-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 20px;
+  }
+  .front-matter h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    color: var(--navy);
+    margin-bottom: 28px;
+  }
+  .front-matter p {
+    font-size: 17px;
+    color: var(--gray-700);
+    margin-bottom: 20px;
+    line-height: 1.8;
+  }
+  .front-matter .sig {
+    font-style: italic;
+    color: var(--navy);
+    font-weight: 500;
+    margin-top: 32px;
+    font-size: 16px;
+  }
+
+  /* ── CHAPTER LAYOUT ──────────────────────────────── */
+  .chapter {
+    border-bottom: 1px solid var(--gray-100);
+    scroll-margin-top: 72px;
+  }
+  .chapter-hero {
+    background: var(--navy);
+    padding: 72px 24px 56px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .chapter-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(201,124,46,0.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .chapter-hero .ch-num {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 16px;
+  }
+  .chapter-hero h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.2;
+    max-width: 640px;
+    margin: 0 auto 16px;
+  }
+  .chapter-hero .ch-intro {
+    font-size: 17px;
+    color: var(--gray-300);
+    max-width: 520px;
+    margin: 0 auto;
+    font-style: italic;
+    line-height: 1.7;
+  }
+  .chapter-hero .ch-divider {
+    width: 40px;
+    height: 2px;
+    background: var(--orange);
+    margin: 24px auto 0;
+    border-radius: 2px;
+  }
+
+  /* ── CHAPTER BODY ────────────────────────────────── */
+  .chapter-body {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 56px 24px 64px;
+  }
+
+  /* Scene-setting paragraph */
+  .scene {
+    font-size: 17px;
+    color: var(--gray-700);
+    line-height: 1.85;
+    margin-bottom: 20px;
+    padding-left: 20px;
+    border-left: 3px solid var(--gray-100);
+  }
+
+  /* Section heading */
+  .chapter-body h3 {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin: 52px 0 16px;
+  }
+
+  /* Body text */
+  .chapter-body p {
+    font-size: 17px;
+    color: var(--gray-700);
+    margin-bottom: 20px;
+    line-height: 1.85;
+  }
+
+  /* Pull quote */
+  .pullquote {
+    border-left: 3px solid var(--orange);
+    padding: 20px 28px;
+    margin: 36px 0;
+    background: var(--orange-pale);
+    border-radius: 0 8px 8px 0;
+  }
+  .pullquote p {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--navy);
+    font-style: italic;
+    margin-bottom: 0 !important;
+    line-height: 1.65;
+  }
+  .pullquote .attribution {
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 600;
+    color: var(--orange);
+    margin-top: 10px;
+    display: block;
+  }
+
+  /* Drill box */
+  .drill-box {
+    background: var(--off-white);
+    border-radius: 12px;
+    padding: 32px 32px 24px;
+    margin: 36px 0;
+    border: 1px solid var(--gray-100);
+  }
+  .drill-box .drill-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 12px;
+  }
+  .drill-box .drill-label::before {
+    content: '';
+    display: inline-block;
+    width: 16px; height: 2px;
+    background: var(--orange);
+    border-radius: 1px;
+  }
+  .drill-box h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+  .drill-box .drill-goal {
+    font-size: 14px;
+    color: var(--gray-500);
+    margin-bottom: 20px;
+    font-style: italic;
+  }
+  .drill-box ol {
+    margin: 0;
+    padding-left: 0;
+    counter-reset: drill-counter;
+    list-style: none;
+  }
+  .drill-box ol li {
+    counter-increment: drill-counter;
+    display: flex;
+    gap: 14px;
+    margin-bottom: 14px;
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--gray-700);
+    align-items: flex-start;
+  }
+  .drill-box ol li::before {
+    content: counter(drill-counter);
+    background: var(--navy);
+    color: var(--white);
+    min-width: 26px; height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* Recap box */
+  .recap-box {
+    background: var(--navy);
+    border-radius: 12px;
+    padding: 32px 32px 24px;
+    margin: 40px 0 0;
+  }
+  .recap-box .recap-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 16px;
+  }
+  .recap-box ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .recap-box ul li {
+    display: flex;
+    gap: 12px;
+    font-size: 15px;
+    color: var(--gray-300);
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    align-items: flex-start;
+    line-height: 1.6;
+  }
+  .recap-box ul li:last-child { border-bottom: none; }
+  .recap-box ul li::before {
+    content: '→';
+    color: var(--orange);
+    font-weight: 600;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* Bullet list in body */
+  .chapter-body ul.body-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+  }
+  .chapter-body ul.body-list li {
+    display: flex;
+    gap: 12px;
+    font-size: 17px;
+    color: var(--gray-700);
+    margin-bottom: 12px;
+    align-items: flex-start;
+    line-height: 1.7;
+  }
+  .chapter-body ul.body-list li::before {
+    content: '·';
+    color: var(--orange);
+    font-size: 22px;
+    line-height: 1.4;
+    flex-shrink: 0;
+    font-weight: 700;
+  }
+
+  /* Numbered list in body */
+  .chapter-body ol.body-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+    counter-reset: body-counter;
+  }
+  .chapter-body ol.body-list li {
+    counter-increment: body-counter;
+    display: flex;
+    gap: 12px;
+    font-size: 17px;
+    color: var(--gray-700);
+    margin-bottom: 12px;
+    align-items: flex-start;
+    line-height: 1.7;
+  }
+  .chapter-body ol.body-list li::before {
+    content: counter(body-counter) '.';
+    color: var(--orange);
+    font-weight: 700;
+    font-size: 14px;
+    flex-shrink: 0;
+    min-width: 22px;
+    margin-top: 2px;
+  }
+
+  /* ── EPILOGUE ────────────────────────────────────── */
+  .epilogue {
+    background: var(--off-white);
+    border-bottom: 1px solid var(--gray-100);
+  }
+  .epilogue .chapter-hero {
+    background: var(--navy-mid);
+  }
+  .epilogue-body {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 56px 24px 72px;
+  }
+  .epilogue-body p {
+    font-size: 17px;
+    color: var(--gray-700);
+    margin-bottom: 20px;
+    line-height: 1.85;
+  }
+  .epilogue-body h3 {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin: 44px 0 14px;
+  }
+  .epilogue-sign {
+    font-style: italic;
+    font-size: 20px;
+    font-family: 'Playfair Display', serif;
+    color: var(--navy);
+    margin-top: 48px;
+    text-align: center;
+  }
+
+  /* ── AUTHOR BOX ──────────────────────────────────── */
+  .author-section {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 64px 24px;
+  }
+  .author-box {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    padding: 32px;
+    background: var(--off-white);
+    border-radius: 12px;
+    border: 1px solid var(--gray-100);
+  }
+  .author-box .avatar {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: var(--navy);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 26px;
+    flex-shrink: 0;
+    letter-spacing: -1px;
+    border: 3px solid var(--orange);
+  }
+  .author-box .info h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .author-box .info p {
+    font-size: 14px;
+    color: var(--gray-500);
+    line-height: 1.6;
+  }
+
+  /* ── FOOTER ──────────────────────────────────────── */
+  .site-footer {
+    background: var(--navy);
+    padding: 40px 24px;
+    text-align: center;
+    border-top: 1px solid var(--navy-mid);
+  }
+  .site-footer p {
+    font-size: 13px;
+    color: var(--gray-500);
+  }
+  .site-footer strong { color: var(--orange); }
+
+  @media (max-width: 600px) {
+    .site-header { padding: 16px 20px; }
+    .book-hero { padding: 72px 20px 60px; }
+    .chapter-body { padding: 40px 20px 48px; }
+    .drill-box { padding: 24px 20px 20px; }
+    .recap-box { padding: 24px 20px 20px; }
+    .author-box { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <a href="#" class="brand">Ryan Rinneard <span>Golf</span></a>
+  <span class="badge">Eight Weeks to Mastery</span>
+</header>
+
+<!-- BOOK HERO -->
+<section class="book-hero">
+  <span class="eyebrow">A Book by Ryan Rinneard</span>
+  <h1>Eight Weeks<br>to Mastery</h1>
+  <div class="hero-divider"></div>
+  <p class="subtitle">A Journey into the Inner and Outer Game of Golf</p>
+  <p class="author-line">by <strong>Ryan Rinneard</strong> &nbsp;·&nbsp; © 2025 All rights reserved.</p>
+</section>
+
+<!-- TABLE OF CONTENTS -->
+<section class="toc-section">
+  <p class="section-label">Contents</p>
+  <h2>What You'll Find Inside</h2>
+  <ul class="toc-list">
+    <li onclick="document.getElementById('dedication').scrollIntoView({behavior:'smooth'})">
+      <span class="toc-num">—</span><span class="toc-title">Dedication</span><span class="toc-arrow">↓</span>
+    </li>
+    <li onclick="document.getElementById('authors-note').scrollIntoView({behavior:'smooth'})">
+      <span class="toc-num">—</span><span class="toc-title">Author's Note</span><span class="toc-arrow">↓</span>
+    </li>
+    <li onclick="document.getElementById('ch1').scrollIntoView({behavior:'smooth'})">
+      <span class="toc-num">01</span><span class="toc-title">The Two Games</span><span class="toc-arrow">↓</span>
+    </li>
+    <li onclick="document.getElementById('ch2').scrollIntoView({behavior:'smooth'})">
+      <span class="toc-num">02</span><span class="toc-title">Awareness Over Anxiety</span><span class="toc-arrow">↓</span>
+    </li>
+    <li onclick="document.getElementById('ch3').scrollIntoView({behavior:'smooth'})">
+      <span class="toc-num">03</span><span class="toc-title">The Architecture of Trust</span><span class="toc-arrow">↓</span>
+    </li>
+    <li onclick="document.getElementById('ch4').scrollIntoView({behavior:'smooth'})">
+      <span class="toc-num">04</span><span class="toc-title">The Art of Decision</span><span class="toc-arrow">↓</span>
+    </li>
+    <li onclick="document.getElementById('ch5').scrollIntoView({behavior:'smooth'})">
+      <span class="toc-num">05</span><span class="toc-title">The Geometry of the Short Game</span><span class="toc-arrow">↓</span>
+    </li>
+    <li onclick="document.getElementById('ch6').scrollIntoView({behavior:'smooth'})">
+      <span class="toc-num">06</span><span class="toc-title">The Mind Beneath the Putter</span><span class="toc-arrow">↓</span>
+    </li>
+    <li onclick="document.getElementById('ch7').scrollIntoView({behavior:'smooth'})">
+      <span class="toc-num">07</span><span class="toc-title">The Course Within the Course</span><span class="toc-arrow">↓</span>
+    </li>
+    <li onclick="document.getElementById('ch8').scrollIntoView({behavior:'smooth'})">
+      <span class="toc-num">08</span><span class="toc-title">The Science of Practice</span><span class="toc-arrow">↓</span>
+    </li>
+    <li onclick="document.getElementById('ch9').scrollIntoView({behavior:'smooth'})">
+      <span class="toc-num">09</span><span class="toc-title">The Tournament Mind</span><span class="toc-arrow">↓</span>
+    </li>
+    <li onclick="document.getElementById('ch10').scrollIntoView({behavior:'smooth'})">
+      <span class="toc-num">10</span><span class="toc-title">The Golfer's Whole Game</span><span class="toc-arrow">↓</span>
+    </li>
+    <li onclick="document.getElementById('ch11').scrollIntoView({behavior:'smooth'})">
+      <span class="toc-num">11</span><span class="toc-title">The Eighth Week: Mastery and Maintenance</span><span class="toc-arrow">↓</span>
+    </li>
+    <li onclick="document.getElementById('ch12').scrollIntoView({behavior:'smooth'})">
+      <span class="toc-num">12</span><span class="toc-title">The Real Work</span><span class="toc-arrow">↓</span>
+    </li>
+    <li onclick="document.getElementById('epilogue').scrollIntoView({behavior:'smooth'})">
+      <span class="toc-num">—</span><span class="toc-title">Epilogue — What Comes Next</span><span class="toc-arrow">↓</span>
+    </li>
+  </ul>
+</section>
+
+<!-- DEDICATION -->
+<section class="front-matter" id="dedication">
+  <p class="fm-label">Dedication</p>
+  <h2>For Every Player Who Trusted Me With Their Game</h2>
+  <p>To every player who has ever handed me their game and trusted me to help them with it — this book is for you. Every conversation on the range, every lesson fought through wind and frustration, every moment where something finally clicked — those are the reasons I show up.</p>
+  <p>To Bob Hogarth of Royal Montreal — thank you for believing in me before I fully believed in myself. Your honesty pushed me toward a purpose I didn't know I was looking for yet.</p>
+  <p>And to Alexandra, Sophie, Arlo, and everyone at home — thank you for your patience through every long summer, every early morning, every season that pulls me away more than I'd like. You remind me that balance is the real game. The off-season is my favourite season because of you.</p>
+  <p class="sig">— Ryan Rinneard</p>
+</section>
+
+<!-- AUTHOR'S NOTE -->
+<section class="front-matter" id="authors-note" style="background: var(--off-white);">
+  <p class="fm-label">Author's Note</p>
+  <h2>Why I Wrote This Book</h2>
+  <p>I wrote this book because too many golfers are stuck in the wrong game.</p>
+  <p>They're out there every season chasing a new swing fix, a new drill, a new secret — and wondering why nothing seems to stick. They get better on the range and fall apart on the course. They hit it great in the warm-up and can't find it when it matters. And they can't figure out why.</p>
+  <p>Here's what I've learned after nearly two decades of coaching: the problem almost never lives in the swing. It lives in the approach.</p>
+  <p>Golf isn't a game of a thousand swing thoughts. It's a game of one thing you can genuinely trust. And the players who figure that out — who learn to quiet the noise, stay connected to what they feel, and trust the work they've done — those are the players who actually improve.</p>
+  <p>What I want more than anything is for you to understand that <strong>attention is the key to all of it.</strong> Not more information. Not more technique. Attention — to the way your body moves, to the feedback every shot gives you, to the feeling of what's actually happening rather than the outcome you're hoping for or dreading.</p>
+  <p>That's what this book is really about. Not tips. Not theory. Awareness — learning to notice what's happening without fighting it.</p>
+  <p>When you strip it back to your rhythm, your feel, and your trust in what you've built — that's when golf gets simple again. That's when it gets fun again.</p>
+  <p>So if you take one thing from these pages, let it be this: you don't need to chase perfect. You just need to get honest — with your habits, your awareness, and where your attention actually goes when it matters.</p>
+  <p>Keep learning. Keep trusting. Get one percent better every day.</p>
+  <p class="sig">— Ryan Rinneard</p>
+</section>
+
+<!-- ───────────────────────────────────── CHAPTER 1 -->
+<section class="chapter" id="ch1">
+  <div class="chapter-hero">
+    <p class="ch-num">Chapter One</p>
+    <h2>The Two Games</h2>
+    <p class="ch-intro">The outer game teaches you how to swing. The inner game teaches you when to stop thinking and let it happen.</p>
+    <div class="ch-divider"></div>
+  </div>
+  <div class="chapter-body">
+    <p class="scene">Mark stepped onto the first tee just after sunrise. His breath hung in the cool morning air. He'd put in the work all week — grip, stance, setup, tempo. He knew the mechanics. He'd watched the footage. But the second he stood over the ball, something shifted. His mind went loud. He pulled the club back, hesitated just a beat too long, then swung anyway. Thin contact. The ball leaked right into the rough.</p>
+    <p>It wasn't a disaster. But it felt like one. As he walked toward his ball, he heard his coach's voice in the back of his mind — something he'd said on the range earlier that week:</p>
+    <div class="pullquote"><p>"Are you playing the outer game, Mark... or the inner one?"</p></div>
+    <p>That question would change everything.</p>
+
+    <h3>The Outer Game — Skill, Mechanics, and Measurables</h3>
+    <p>Golf loves numbers. Club speed. Face angle. Spin rate. We're drawn to data because it feels controllable — like if we just track the right things, we'll figure it out. That's the outer game. Your swing, your stats, your score. Everything you can measure and see.</p>
+    <p>Mark lived in that world. He tracked everything, analyzed every swing, chased every new tip that came across his feed. And yes — he improved. But only to a point. The more he focused on control, the tighter he got.</p>
+    <p>Here's the thing I've told players for years: you can't outthink tension. You can't measure trust. Even Ben Hogan — the most meticulous technician the game has ever seen — said the secret is in the dirt. He didn't mean just hit more balls. He meant that real learning comes from experience — from <em>paying attention</em> to what actually happens, not just analyzing it afterward.</p>
+    <p>The outer game teaches you how to swing. The inner game teaches you when to stop thinking and let it happen.</p>
+
+    <h3>The Inner Game — Awareness, Trust, and Presence</h3>
+    <p>The inner game is everything that happens between your ears while you're standing over the ball. Timothy Gallwey wrote about this in <em>The Inner Game of Golf</em> — one of the most important books ever written about this sport. His core idea was simple: there are two versions of you on the course.</p>
+    <p><strong>Self 1</strong> is the thinker. The critic. The voice that says, don't mess this up, don't top it, don't go right.</p>
+    <p><strong>Self 2</strong> is the player. The one who already knows how to swing — who has felt it a thousand times in practice and knows exactly what it feels like when it's right.</p>
+    <p>When Self 1 gets too loud, Self 2 can't do its job. That was Mark's real problem. His swing wasn't broken. His trust was. Every time he tried to steer the shot, he lost his rhythm. Every time he cared more about the outcome than the process, he tightened up.</p>
+    <p>Dr. Bob Rotella has a line I love: golf is not a game of perfect. He's right. It's a game of presence — of noticing what's happening inside you and staying calm enough to let your training show up.</p>
+
+    <h3>The Bridge Between Games</h3>
+    <p>The outer game builds your swing. The inner game helps that swing show up when it matters most. They're not in competition — they work together. One trains your hands. The other trains your head.</p>
+    <p>When you bring both sides together — mechanics and mindset — the game gets quieter. Simpler. And that's when it starts to feel like something you actually enjoy again.</p>
+
+    <h3>Integration & Reflection</h3>
+    <p>By the end of that first week, Mark's slice was still there. But something else had changed — his relationship to it. He was starting to notice what was actually happening: when he was judging himself, when he was relaxed, when he was reacting instead of responding. That awareness alone shifted things.</p>
+    <p>Mastery isn't about never missing. It's about never wasting a miss — because every shot, good or bad, has something to tell you. If you're paying attention, golf becomes less about control and more about discovery.</p>
+
+    <div class="drill-box">
+      <span class="drill-label">Reflection Drill</span>
+      <h4>Find the Quiet Shot</h4>
+      <p class="drill-goal">Goal: Start noticing when you're thinking too much — and how to get quiet before you swing.</p>
+      <ol>
+        <li>Before each shot, take one slow breath. Not a forced breath — a real one.</li>
+        <li>Set a single simple intention. Something like: commit to rhythm. See the target. Finish the swing. Just one.</li>
+        <li>After the shot, pause for three seconds. Don't react. Notice: were you tight or relaxed? Focused or scattered?</li>
+        <li>After your round, write one short note — not about score, but about how you felt standing over the ball.</li>
+      </ol>
+    </div>
+
+    <div class="pullquote">
+      <p>"The mind messes up more shots than the body."</p>
+      <span class="attribution">— Tommy Bolt</span>
+    </div>
+
+    <div class="recap-box">
+      <p class="recap-label">Chapter Recap</p>
+      <ul>
+        <li>Golf is played twice: once on the course, and once in the mind.</li>
+        <li>The outer game builds your skill. The inner game builds your confidence.</li>
+        <li>You can't outthink tension — you have to learn to trust.</li>
+        <li>Every shot — good or bad — is feedback, not a verdict.</li>
+        <li>Mastery isn't about never missing. It's about learning from every miss.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────────────────── CHAPTER 2 -->
+<section class="chapter" id="ch2">
+  <div class="chapter-hero">
+    <p class="ch-num">Chapter Two</p>
+    <h2>Awareness Over Anxiety</h2>
+    <p class="ch-intro">Anxiety isn't the enemy. Resistance to it is. The sooner you stop fighting what's there, the sooner it stops controlling you.</p>
+    <div class="ch-divider"></div>
+  </div>
+  <div class="chapter-body">
+    <p class="scene">Mark stood behind his ball, and he could feel it happening again. That familiar tightness in his chest. That urge to control every variable before he pulled the trigger. His coach watched quietly, then said, "You're not tense because you're nervous, Mark. You're tense because you're fighting what's already there."</p>
+    <p>He wasn't playing golf anymore. He was battling himself.</p>
+
+    <h3>Lesson 1: What Anxiety Really Is</h3>
+    <p>Here's something I want you to really hear: anxiety isn't weakness. It's energy. It's your body saying <em>this matters to me.</em> The problem isn't that it shows up. The problem is that we resist it. We try to make it go away, and fighting it only feeds it.</p>
+    <p>When Mark started observing his nerves instead of fighting them — noticing how his breathing changed, how his grip got tighter, how his tempo crept up — he could spot tension before it took over. And once you can spot it, you can do something about it.</p>
+    <p>You can't fix what you don't notice. Awareness always comes first.</p>
+
+    <h3>Lesson 2: The Body's Built-In Feedback</h3>
+    <p>Your body is smarter than you give it credit for. It has tiny sensors — proprioceptors — that are constantly giving you information about where you are in space, how your weight is distributed, whether your tempo is rushed or settled. Your body knows how to find balance long before your mind does. You just have to give it room to show you.</p>
+    <p>Golfers don't lose their swing. They lose their connection to it. The more you listen, the faster you find your way back.</p>
+
+    <h3>Lesson 3: Releasing Tension</h3>
+    <p>Tension adds tension. Every time. When you tighten one part of your body, everything else braces to match it. Mark learned that awareness — not effort — is what releases tension. Instead of trying to force a smooth swing, he started checking in: where am I holding on right now? Where can I let go a little?</p>
+    <p>The change in his swing was immediate. Not because he did anything mechanical. Because he got out of his own way.</p>
+
+    <div class="drill-box">
+      <span class="drill-label">Reflection Drill</span>
+      <h4>The Body Check</h4>
+      <p class="drill-goal">Goal: Learn to use your body as an awareness tool before every shot.</p>
+      <ol>
+        <li>Before you swing, take a quick scan from the ground up: feet, legs, hands, shoulders, jaw.</li>
+        <li>Notice where you're holding tension. Don't try to fix it yet — just be honest about where it is.</li>
+        <li>Take one calm breath. On the exhale, let go of just one area.</li>
+        <li>Hit the shot. Afterward, note what changed — even slightly.</li>
+      </ol>
+    </div>
+
+    <div class="pullquote">
+      <p>"The first step toward change is awareness. The second is acceptance."</p>
+      <span class="attribution">— Nathaniel Branden</span>
+    </div>
+
+    <div class="recap-box">
+      <p class="recap-label">Chapter Recap</p>
+      <ul>
+        <li>Anxiety isn't the problem — resistance to it is.</li>
+        <li>Awareness always comes before improvement.</li>
+        <li>Your body's sensors know balance better than your thoughts do.</li>
+        <li>Tension feeds on itself — awareness is how you interrupt it.</li>
+        <li>Calm doesn't mean control. It means connection.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────────────────── CHAPTER 3 -->
+<section class="chapter" id="ch3">
+  <div class="chapter-hero">
+    <p class="ch-num">Chapter Three</p>
+    <h2>The Architecture of Trust</h2>
+    <p class="ch-intro">Trust isn't a feeling. It's a choice — and it's built one small, committed rep at a time.</p>
+    <div class="ch-divider"></div>
+  </div>
+  <div class="chapter-body">
+    <p class="scene">Mark showed up to the range early one morning, same routine, same swing thoughts, same tight shoulders. He wanted so badly to trust his swing. He just didn't know how to get there. His coach watched for a while, then said quietly, "Trust doesn't show up in comfort, Mark. It shows up when you're uncomfortable. Now hit one — no excuses." The swing wasn't perfect. But it was free.</p>
+
+    <h3>Lesson 1: What Trust Really Is</h3>
+    <p>Most players think trust means confidence — that feeling when the ball is flying pure and everything clicks. But that's not trust. That's momentum. Real trust isn't a feeling. It's a decision. It's what you choose to do when you don't feel confident. When your mind is loud, your last three shots were ugly, and the scorecard is not your friend.</p>
+    <p>You can't think your way into trust. You have to act your way into it. When you commit to the shot anyway — even when doubt is loud — that's trust in action.</p>
+
+    <h3>Lesson 2: Trust Through Repetition</h3>
+    <p>Trust isn't built in the big moments. It's built in the quiet ones. Every time you follow your process — every time you take your breath, pick your target, commit, and swing without pulling back — you're adding to something. You're building a track record your nervous system can rely on.</p>
+    <p>Mark started every session with a simple ritual: target, breath, commit, swing, accept. Five words. Repeatable. Honest. And the more he repeated it, the more automatic it became. Trust is built through rhythm, not results.</p>
+
+    <h3>Lesson 3: Trust Under Pressure</h3>
+    <p>Pressure doesn't create new habits. It shows you the ones you already have. That's why your routine matters more than almost anything else. When everything speeds up — when the moment feels too big and your thoughts start to race — your process is what keeps you steady.</p>
+    <p>Mark's pre-shot routine became his anchor. The rhythm of breath, focus, and motion kept his mind in the present tense instead of jumping ahead to the outcome. That's what trust looks like under stress: doing what you've trained, not what your nerves are telling you to do.</p>
+
+    <div class="drill-box">
+      <span class="drill-label">Reflection Drill</span>
+      <h4>The Trust Reps</h4>
+      <p class="drill-goal">Goal: Build trust through simple, repeatable actions under pressure.</p>
+      <ol>
+        <li>Pick one small part of your game — short putts, wedges, or tempo swings.</li>
+        <li>Do 10 reps with full focus and a complete routine on every single one.</li>
+        <li>Don't judge the result. Just notice the feel.</li>
+        <li>After each one, ask yourself: did I commit? Did I trust it?</li>
+        <li>Keep track — not of makes and misses, but of trust reps.</li>
+      </ol>
+    </div>
+
+    <div class="pullquote">
+      <p>"Don't practice until you get it right. Practice until you can't get it wrong."</p>
+      <span class="attribution">— Unknown</span>
+    </div>
+
+    <div class="recap-box">
+      <p class="recap-label">Chapter Recap</p>
+      <ul>
+        <li>Trust isn't a feeling. It's a choice.</li>
+        <li>Repetition with intention builds the kind of trust that holds under pressure.</li>
+        <li>Pressure exposes your habits — good or bad.</li>
+        <li>Your routine is your anchor. Use it every single time.</li>
+        <li>Trust is the bridge between practice and performance.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────────────────── CHAPTER 4 -->
+<section class="chapter" id="ch4">
+  <div class="chapter-hero">
+    <p class="ch-num">Chapter Four</p>
+    <h2>The Art of Decision</h2>
+    <p class="ch-intro">There's no perfect decision in golf. There's only a clear one.</p>
+    <div class="ch-divider"></div>
+  </div>
+  <div class="chapter-body">
+    <p class="scene">Mark stood in the fairway, 185 yards from a pin tucked behind a bunker. Wind in his face. His heart said 6-iron. His ego said 5. He looked over at his coach. "What's the right shot here?" His coach didn't hesitate. "The one you can trust."</p>
+
+    <h3>Lesson 1: The Truth About Choices</h3>
+    <p>Most golfers think good decision-making is about math — distance, wind, elevation, club selection. And those things matter. But the best decisions in golf start with self-awareness. Knowing your strengths. Knowing your tendencies. Being honest about where you actually are that day, not where you want to be.</p>
+    <p>A wrong shot isn't always a badly executed swing. Sometimes it's a shot you were never fully committed to in the first place. Indecision is what creates tension. Commitment is what frees the swing.</p>
+
+    <h3>Lesson 2: Think Clearly, Then Swing Freely</h3>
+    <p>A decision isn't complete until you've accepted the outcome before you swing. That means actually letting go of "what if." No second-guessing once the club is in your hands. The thinking phase is over. Now it's just motion.</p>
+    <ol class="body-list">
+      <li>Gather the information — wind, lie, distance, shot shape.</li>
+      <li>Choose the shot that fits how you actually feel right now, not just what the yardage book says.</li>
+      <li>Commit — all the way. Not 80 percent. Not "I think so." All the way.</li>
+    </ol>
+    <p>Thinking clearly allows you to swing freely. You can't do both at once.</p>
+
+    <h3>Lesson 3: Playing Smart vs. Playing Safe</h3>
+    <p>Smart golf isn't cautious. It's honest. Playing safe means avoiding mistakes. Playing smart means choosing the shot that fits you — right now, on this hole, with the game you actually brought today.</p>
+    <p>Mark used to play based on who he wanted to be. Now he plays based on who he is that day. Some rounds he feels sharp and goes for it. Other rounds he plays conservative and stays patient. That's not playing scared. That's playing aware.</p>
+
+    <div class="drill-box">
+      <span class="drill-label">Reflection Drill</span>
+      <h4>The Commitment Test</h4>
+      <p class="drill-goal">Goal: Learn to feel the difference between thinking and trusting.</p>
+      <ol>
+        <li>Before each shot, rate your commitment on a scale from 1 to 10.</li>
+        <li>If it's below 8, step away. Start your process over.</li>
+        <li>Only swing when your commitment feels solid — not forced, but genuine.</li>
+        <li>After the shot, don't judge the result. Judge the quality of your decision.</li>
+      </ol>
+    </div>
+
+    <div class="pullquote">
+      <p>"Once you make a decision, the universe conspires to make it happen."</p>
+      <span class="attribution">— Ralph Waldo Emerson</span>
+    </div>
+
+    <div class="recap-box">
+      <p class="recap-label">Chapter Recap</p>
+      <ul>
+        <li>The best decision is the one you can fully trust.</li>
+        <li>Indecision creates tension. Commitment creates freedom.</li>
+        <li>Smart golf isn't cautious — it's honest about where you are today.</li>
+        <li>You can't control outcomes. You can control the quality of your choices.</li>
+        <li>Clarity leads to confidence. Always.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────────────────── CHAPTER 5 -->
+<section class="chapter" id="ch5">
+  <div class="chapter-hero">
+    <p class="ch-num">Chapter Five</p>
+    <h2>The Geometry of the Short Game</h2>
+    <p class="ch-intro">Feel comes from attention, not talent. You can't feel what you're not focused on.</p>
+    <div class="ch-divider"></div>
+  </div>
+  <div class="chapter-body">
+    <p class="scene">Mark stood greenside on a quiet morning, thirty yards out with a perfect lie. Three obvious options in front of him. And absolutely no idea which one to trust. His coach walked up, took a quick look, and said: "The short game is just geometry in motion. Line, angle, speed. That's all it is." Mark laughed. "Geometry? I barely passed that class." "You'll get this one," his coach said. "This is the kind that lowers scores."</p>
+
+    <h3>Lesson 1: The Math You Can Feel</h3>
+    <p>The short game really is simple — it just doesn't always feel that way because we make it emotional instead of practical. Lower loft means lower flight and more rollout. Higher loft means softer landing and less roll. That's the whole equation.</p>
+    <p>Great short game players don't guess. They calculate by feel — they see the trajectory, pick the landing point, and commit to what the geometry is telling them.</p>
+
+    <h3>Lesson 2: Your Clubs Are Tools, Not Heroes</h3>
+    <p>Every club in your bag has a specific job. The short game isn't about being clever with technique — it's about having the discipline to pick the right tool and trust it.</p>
+    <ul class="body-list">
+      <li>Pitching wedge for low runners with plenty of green to work with.</li>
+      <li>52° for standard chips where you need some height but mostly rollout.</li>
+      <li>56° for softer landings on tighter pins.</li>
+      <li>60° only when you genuinely need to get the ball up fast and stop it quickly.</li>
+    </ul>
+
+    <h3>Lesson 3: Speed and Landing Points</h3>
+    <p>Here's the thing most players get wrong around the greens: the error isn't usually contact. It's <em>focus.</em> They're looking at the hole instead of picking a precise landing spot. And when you don't have a specific target for where you want the ball to land, your brain has no way to program the right speed.</p>
+    <p>Mark learned to aim small — a landing zone the size of a coin — and then let his feel match the speed to that spot. "Feel" in the short game isn't some mysterious gift. It's just awareness. You can't feel what you're not focused on.</p>
+
+    <div class="drill-box">
+      <span class="drill-label">Reflection Drill</span>
+      <h4>The Landing Zone Test</h4>
+      <p class="drill-goal">Goal: Build trajectory and rollout awareness through specific landing spots.</p>
+      <ol>
+        <li>Lay three towels on the green, 3 to 4 feet apart from each other.</li>
+        <li>Grab three clubs — pitching wedge, 52°, and 56°.</li>
+        <li>Try to land each ball on the same towel with each club.</li>
+        <li>Watch carefully how each club reacts differently off the same landing point.</li>
+        <li>Adjust your feel until you can predict the rollout for each club consistently.</li>
+      </ol>
+    </div>
+
+    <div class="pullquote">
+      <p>"The more I practice my short game, the luckier I get."</p>
+      <span class="attribution">— Gary Player</span>
+    </div>
+
+    <div class="recap-box">
+      <p class="recap-label">Chapter Recap</p>
+      <ul>
+        <li>The short game is angles and speed — geometry in motion.</li>
+        <li>Pick the right tool for the job. Simplicity builds consistency.</li>
+        <li>Focus on your landing point, not the hole.</li>
+        <li>Feel comes from attention, not talent.</li>
+        <li>When the geometry is clear, the shot becomes easy.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────────────────── CHAPTER 6 -->
+<section class="chapter" id="ch6">
+  <div class="chapter-hero">
+    <p class="ch-num">Chapter Six</p>
+    <h2>The Mind Beneath the Putter</h2>
+    <p class="ch-intro">The putter doesn't lie. It reveals what you actually believe about yourself on the course.</p>
+    <div class="ch-divider"></div>
+  </div>
+  <div class="chapter-body">
+    <p class="scene">Mark stood over a six-foot putt that mattered. Not for prize money or a trophy — just for proof to himself that he could finally trust his stroke under pressure. His hands were calm. His mind was not. He'd made this exact putt hundreds of times in practice. But right now, standing over it with something at stake, it felt entirely different. His coach spoke quietly: "The stroke's fine. It's the story in your head that's getting in the way."</p>
+
+    <h3>Lesson 1: Why Putting Feels Different</h3>
+    <p>Putting is golf's truth-teller. There's nowhere to hide. No power, no distance, no noise to distract you from what's happening inside. It's just you, a short stick, and a quiet green — and whatever you genuinely believe about yourself in that moment.</p>
+    <p>Mark eventually realized he wasn't afraid of missing the putt. He was afraid of confirming something he already suspected — that maybe he didn't have it when it counted. When he started treating every putt as just another motion — not a moment of judgment — the heaviness lifted.</p>
+
+    <h3>Lesson 2: Routine Creates Rhythm</h3>
+    <p>A good putting routine is a portable comfort zone. It keeps your focus narrow, your pace consistent, and your head quiet. Mark's coach helped him build something simple enough to actually use under pressure:</p>
+    <ol class="body-list">
+      <li>Read it.</li>
+      <li>Feel it.</li>
+      <li>Commit.</li>
+      <li>Roll it.</li>
+    </ol>
+    <p>By simplifying those four steps, his focus moved from "make it" to "roll it" — and that's a completely different mental state to putt from.</p>
+
+    <h3>Lesson 3: Trusting the Roll</h3>
+    <p>When Mark quit trying to guide the putter and just let it swing, his stroke looked smoother — because it was smoother. You can't force a putt into the hole. You roll it there. Trust in putting isn't mechanical. It's mental. You're not controlling the roll. You're allowing it.</p>
+
+    <div class="drill-box">
+      <span class="drill-label">Reflection Drill</span>
+      <h4>The Three-Ball Reset</h4>
+      <p class="drill-goal">Goal: Build a feel for rhythm and tempo through repetition without pressure.</p>
+      <ol>
+        <li>Drop three balls at random distances — nothing needs to be measured.</li>
+        <li>Use the exact same routine for every single putt.</li>
+        <li>Don't change your stroke or adjust your speed between putts — just let each one happen.</li>
+        <li>After each roll, ask yourself: did I roll it, or did I force it?</li>
+        <li>When it starts feeling natural, that's the feeling you're looking for.</li>
+      </ol>
+    </div>
+
+    <div class="pullquote">
+      <p>"Putting is 10% technique and 90% nerve."</p>
+      <span class="attribution">— Ben Crenshaw</span>
+    </div>
+
+    <div class="recap-box">
+      <p class="recap-label">Chapter Recap</p>
+      <ul>
+        <li>The putter reveals what you actually believe about your game.</li>
+        <li>Confidence on the greens comes from rhythm, not control.</li>
+        <li>Simplify your routine and commit to it completely, every time.</li>
+        <li>Trust the roll. Don't steer it.</li>
+        <li>Awareness turns tension into touch.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────────────────── CHAPTER 7 -->
+<section class="chapter" id="ch7">
+  <div class="chapter-hero">
+    <p class="ch-num">Chapter Seven</p>
+    <h2>The Course Within the Course</h2>
+    <p class="ch-intro">You're always playing two games — one against the layout, one against yourself. The second one matters more.</p>
+    <div class="ch-divider"></div>
+  </div>
+  <div class="chapter-body">
+    <p class="scene">Mark used to walk onto the first tee thinking about score. Every round was a quiet battle with numbers — fairways, greens, putts, totals. His coach kept saying something that didn't fully land at first: "You're not just playing this course, Mark. You're playing yourself out here." It took him a few weeks to understand what that actually meant.</p>
+
+    <h3>Lesson 1: The Outer Course vs. The Inner Course</h3>
+    <p>The outer course is what everyone can see — the layout, the hazards, the distances, the conditions. The inner course is everything happening inside you — your focus, your patience, your composure when things go sideways.</p>
+    <p>When you lose your temper after a bad bounce, or rush a shot because you're frustrated — it's not the course beating you. It's you beating yourself. The wind and the lies and the rough aren't punishments. They're feedback. They're showing you something about your attention, your patience, and your ability to stay grounded.</p>
+
+    <h3>Lesson 2: Accept, Adapt, Adjust</h3>
+    <p>Golf doesn't reward stubbornness. It rewards awareness. The best players don't fight conditions — they adjust to them. Mark learned to stop blaming circumstances and start working with them. Wind left to right? Aim left and trust the shot shape. Bad lie? Play for solid contact, not the perfect shot. Bad break? Move on. That's the game.</p>
+
+    <h3>Lesson 3: The Power of Patience</h3>
+    <p>Patience in golf isn't passive. It's a strategy. It's what keeps your emotions from taking over when the round gets hard. Mark stopped trying to win every hole. He started playing the long game — steady decisions, honest targets, small smart wins.</p>
+    <p>He learned that one bad shot doesn't ruin a round, and one mistake doesn't erase a good process. Patience is what allows your improvement to actually show up.</p>
+
+    <div class="drill-box">
+      <span class="drill-label">Reflection Drill</span>
+      <h4>The Feedback Round</h4>
+      <p class="drill-goal">Goal: Turn frustration into feedback and start reading your inner game.</p>
+      <ol>
+        <li>On your next round, track your reactions — not your results. Write down moments when you felt frustrated, impatient, or distracted.</li>
+        <li>After each one, ask: what was the course showing me? Patience? Focus? Composure?</li>
+        <li>Turn every rough moment into a note about awareness, not judgment.</li>
+      </ol>
+    </div>
+
+    <div class="pullquote">
+      <p>"The greatest victory is over oneself."</p>
+      <span class="attribution">— Aristotle</span>
+    </div>
+
+    <div class="recap-box">
+      <p class="recap-label">Chapter Recap</p>
+      <ul>
+        <li>You're always playing two games — one against the course, one against yourself.</li>
+        <li>The course gives you feedback. What you do with it is the game.</li>
+        <li>Accept what's in front of you and adjust intelligently.</li>
+        <li>Patience isn't weakness — it's strategic awareness under pressure.</li>
+        <li>Golf gets easier when you stop fighting what's real.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────────────────── CHAPTER 8 -->
+<section class="chapter" id="ch8">
+  <div class="chapter-hero">
+    <p class="ch-num">Chapter Eight</p>
+    <h2>The Science of Practice</h2>
+    <p class="ch-intro">One focused half-hour beats two hours of going through the motions. Every time.</p>
+    <div class="ch-divider"></div>
+  </div>
+  <div class="chapter-body">
+    <p class="scene">Mark used to show up to the range with a full bucket and no real plan. Wedges first, then irons, then driver — the usual circuit. Some days he'd stripe it. Other days he'd leave more frustrated than when he arrived. His coach walked up one afternoon and said simply: "You're not practicing. You're exercising."</p>
+
+    <h3>Lesson 1: Practice vs. Performance</h3>
+    <p>Most golfers practice to feel good — not to get better. They chase the shot that sounds pure off the face, groove the swing that's already working, and avoid the stuff that exposes their weaknesses. That's comfortable, but it's not progress.</p>
+    <p>Real practice is about training the skills that transfer to the course. Here's something I tell players all the time: you don't learn from the shots that go right. You learn from the ones that don't — as long as you're paying attention to why.</p>
+
+    <h3>Lesson 2: Blocked vs. Random Practice</h3>
+    <p>There are two fundamentally different ways to practice, and both have a place in your routine:</p>
+    <ul class="body-list">
+      <li><strong>Blocked practice:</strong> same club, same target, same motion — repeated until a feel is established.</li>
+      <li><strong>Random practice:</strong> different shots, different clubs, different targets — simulating the variety of what actually happens on the course.</li>
+    </ul>
+    <p>Mark started combining them deliberately: a few focused reps with one club to groove a feel, then immediately switching to different targets and clubs. At first it felt messy. That discomfort is exactly the point. Golf isn't clean repetition. It's controlled chaos. The range should sometimes feel that way too.</p>
+
+    <h3>Lesson 3: Measuring What Matters</h3>
+    <p>Data without context is distraction. Mark started tracking start lines and dispersion patterns, solid contact percentage, and consistency of routine commitment. Not just shots that looked good, but the numbers that show up in scoring situations.</p>
+    <p>He started training the shots that actually cost him strokes — the 90-to-110 yard wedges, the in-between distances, the awkward lies, the recovery shots. That's where rounds are saved or lost.</p>
+
+    <div class="drill-box">
+      <span class="drill-label">Reflection Drill</span>
+      <h4>The 30-Minute Practice Plan</h4>
+      <p class="drill-goal">Goal: Train your awareness, not just your technique.</p>
+      <ol>
+        <li><strong>Block 1 (10 min) — Groove:</strong> one club, one target, build the feel.</li>
+        <li><strong>Block 2 (10 min) — Challenge:</strong> different clubs, random targets, simulate the course.</li>
+        <li><strong>Block 3 (10 min) — Transfer:</strong> pick specific course scenarios and play them out.</li>
+        <li>Track just one metric throughout: your commitment level on each shot.</li>
+        <li>End with one honest note — what improved, what still needs work, and what you learned.</li>
+      </ol>
+    </div>
+
+    <div class="pullquote">
+      <p>"It's not the hours you put in, but what you put into the hours."</p>
+      <span class="attribution">— Unknown</span>
+    </div>
+
+    <div class="recap-box">
+      <p class="recap-label">Chapter Recap</p>
+      <ul>
+        <li>Practice to improve, not to feel good in the moment.</li>
+        <li>Mix blocked and random training — both have a role.</li>
+        <li>Track what actually matters: contact, direction, and commitment.</li>
+        <li>Train with intention, not ego.</li>
+        <li>Smart practice builds performance that holds up when it counts.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────────────────── CHAPTER 9 -->
+<section class="chapter" id="ch9">
+  <div class="chapter-hero">
+    <p class="ch-num">Chapter Nine</p>
+    <h2>The Tournament Mind</h2>
+    <p class="ch-intro">Pressure doesn't create new problems. It shows you the ones that were already there.</p>
+    <div class="ch-divider"></div>
+  </div>
+  <div class="chapter-body">
+    <p class="scene">Mark showed up to his first club championship feeling ready. He'd played well in his practice rounds, hit it clean on the range that morning, and convinced himself the nerves were under control. Two holes in, they weren't. His tempo sped up. His breathing got short. His swing got tight. His coach had warned him about this: "Tournaments don't test your swing. They test your discipline."</p>
+
+    <h3>Lesson 1: Pressure Exposes, It Doesn't Create</h3>
+    <p>Pressure doesn't build new problems. It shows you the ones that were already there — the habits, the tension patterns, the places where your process isn't as solid as you thought.</p>
+    <p>Mark used to believe nerves were a sign that something was wrong. Now he understood them differently. Nerves are a sign that something matters. Instead of fighting that energy, he started using it — reminding himself: if I'm feeling this, I'm exactly where I should be. Now let's see what my process can do.</p>
+
+    <h3>Lesson 2: Routine Is Your Best Defense</h3>
+    <p>Tournament golf is unpredictable. Conditions shift. Emotions spike. Focus fades at the worst possible moments. What you can control is your routine. Mark committed to the same pre-shot process on every single shot: breathe, commit, swing, accept. It didn't matter if it was a tap-in or a tee shot on 18 with a crowd watching. Same process. Every time. The routine became his anchor.</p>
+
+    <h3>Lesson 3: Emotional Tempo</h3>
+    <p>Every player has a physical swing tempo. But they also have an emotional one — and most players have never thought about it. When your emotions speed up, your swing almost always follows.</p>
+    <p>Mark learned to manage this by checking in on himself every few holes: how's my breathing? How's my pace between shots? If either one felt rushed, he consciously slowed both down. You can't play your best golf when your mind is racing.</p>
+
+    <div class="drill-box">
+      <span class="drill-label">Reflection Drill</span>
+      <h4>The Pressure Replay</h4>
+      <p class="drill-goal">Goal: Learn from pressure so you stop being surprised by it.</p>
+      <ol>
+        <li>After your next competitive round, write down three moments where you felt real stress.</li>
+        <li>For each one, describe how your body reacted — faster breathing, tighter grip, rushed thoughts.</li>
+        <li>Then write one thing you could have done to slow that moment down.</li>
+      </ol>
+    </div>
+
+    <div class="pullquote">
+      <p>"You don't lose under pressure — you reveal."</p>
+      <span class="attribution">— Unknown</span>
+    </div>
+
+    <div class="recap-box">
+      <p class="recap-label">Chapter Recap</p>
+      <ul>
+        <li>Pressure exposes existing habits — it doesn't create new ones.</li>
+        <li>Your routine is your anchor. Use it on every shot, especially in competition.</li>
+        <li>Manage your emotional tempo the way you manage your swing tempo.</li>
+        <li>Learn from pressure instead of dreading it.</li>
+        <li>Calm isn't something you're born with. It's something you train.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────────────────── CHAPTER 10 -->
+<section class="chapter" id="ch10">
+  <div class="chapter-hero">
+    <p class="ch-num">Chapter Ten</p>
+    <h2>The Golfer's Whole Game</h2>
+    <p class="ch-intro">Mastery isn't about fixing parts. It's about connecting them.</p>
+    <div class="ch-divider"></div>
+  </div>
+  <div class="chapter-body">
+    <p class="scene">Mark once believed that golf was just a collection of parts to be fixed. His swing. His putting. His short game. His attitude. Each week he'd focus on one thing, only to watch something else fall apart in its place. One afternoon after a frustrating round, his coach said: "You're not broken, Mark. You're just disconnected." That reframing changed everything.</p>
+
+    <h3>Lesson 1: Everything Is Connected</h3>
+    <p>Golf is a chain reaction. Your setup affects your swing path. Your thoughts affect your tempo. Your patience affects your decision-making. Your breathing affects all of it. When one part of that chain gets out of sync, everything downstream shifts.</p>
+    <p>Your body, your mind, and your emotional state are all playing the same round together. When they move in the same direction, the results follow naturally.</p>
+
+    <h3>Lesson 2: Awareness Is the Glue</h3>
+    <p>You can't control everything that happens in golf. But you can stay aware of what's actually happening — and that awareness is more powerful than most players realize. It turns frustration into information.</p>
+    <p>When Mark hit a bad shot, he stopped asking what went wrong and started asking what happened. That small shift kept his attention in the present instead of in judgment. Awareness doesn't fix problems instantly. But it keeps you from repeating them.</p>
+
+    <h3>Lesson 3: Learn from Everything</h3>
+    <p>Mark started keeping a simple journal after his rounds. Not about scores or statistics. About patterns: when was his focus sharp? When did tension creep in? What triggered patience, and what triggered frustration? Golf became less about success and more about learning. And here's the irony: that's exactly when his scores started to drop.</p>
+
+    <div class="drill-box">
+      <span class="drill-label">Reflection Drill</span>
+      <h4>The Round Review</h4>
+      <p class="drill-goal">Goal: Build the habit of learning from every round without judgment.</p>
+      <ol>
+        <li>After each round, answer three questions as simply as you can: What went well? What felt off? What did I learn?</li>
+        <li>Keep your answers short — one honest sentence each.</li>
+        <li>Read your previous answers before your next round.</li>
+      </ol>
+    </div>
+
+    <div class="pullquote">
+      <p>"The minute you get away from fundamentals — the bottom can fall out of your game."</p>
+      <span class="attribution">— Michael Jordan</span>
+    </div>
+
+    <div class="recap-box">
+      <p class="recap-label">Chapter Recap</p>
+      <ul>
+        <li>Everything is connected — swing, thoughts, and emotions.</li>
+        <li>Awareness is the glue that holds your game together.</li>
+        <li>Learn from everything — good rounds and bad ones equally.</li>
+        <li>Growth comes from recognizing patterns, not chasing perfection.</li>
+        <li>Connection builds the kind of confidence that actually lasts.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────────────────── CHAPTER 11 -->
+<section class="chapter" id="ch11">
+  <div class="chapter-hero">
+    <p class="ch-num">Chapter Eleven</p>
+    <h2>The Eighth Week: Mastery and Maintenance</h2>
+    <p class="ch-intro">You don't arrive at mastery. You maintain it — one consistent, honest rep at a time.</p>
+    <div class="ch-divider"></div>
+  </div>
+  <div class="chapter-body">
+    <p class="scene">Mark arrived at the end of his eight-week journey expecting to find a finish line. What he found instead was a new starting point. His coach smiled when he said that. "Good," he said. "That's exactly what mastery feels like — not an ending. A deeper beginning."</p>
+
+    <h3>Lesson 1: Consistency Over Perfection</h3>
+    <p>Golfers chase perfection. The game rewards consistency. Those are not the same thing. Nobody hits every shot flush. The best players in the world miss shots every single round. What separates them isn't that they miss less — it's that they respond better when they do.</p>
+    <p>Mark made that shift. He let go of the idea that a perfect round is the goal, and replaced it with something more honest and more durable: consistency of process, consistency of attention, consistency of response.</p>
+
+    <h3>Lesson 2: Trust the Work</h3>
+    <p>Everything you've built — the awareness, the routines, the repetition, the honest reflection — only pays off if you trust it when the moment arrives. Trust isn't built on results. It's built on repetition. After a bad swing, the right response isn't to rebuild — it's to return. Return to the process. Return to the feel.</p>
+
+    <h3>Lesson 3: Maintenance Is Mastery</h3>
+    <p>Mark's coach gave him a line he's carried ever since: "Mastery isn't constant improvement. It's steady maintenance." That means checking in on your routines regularly. Staying honest about your body. Just like you'd service your equipment, you have to service the habits and awareness that make your game work.</p>
+    <p>Mark stopped hunting for new tips every week. He focused on keeping what was already working strong — refining instead of reinventing. Small, consistent effort. That's the real grind. And the real reward.</p>
+
+    <div class="drill-box">
+      <span class="drill-label">Reflection Drill</span>
+      <h4>The Maintenance Check</h4>
+      <p class="drill-goal">Goal: Build a simple weekly habit of honest self-review.</p>
+      <ol>
+        <li>Once a week, take ten minutes and ask: Am I sticking to my routines? Is my mindset steady or searching? Is my effort consistent or forced?</li>
+        <li>Make small adjustments before they become larger problems.</li>
+        <li>End each check-in by noting one area that actually feels solid.</li>
+      </ol>
+    </div>
+
+    <div class="recap-box">
+      <p class="recap-label">Chapter Recap</p>
+      <ul>
+        <li>Consistency beats perfection every single time.</li>
+        <li>Trust comes from repetition, not results.</li>
+        <li>Maintenance is mastery in motion.</li>
+        <li>Self-awareness is what keeps growth steady and sustainable.</li>
+        <li>One percent better every day — that's the only goal that matters.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────────────────── CHAPTER 12 -->
+<section class="chapter" id="ch12">
+  <div class="chapter-hero">
+    <p class="ch-num">Chapter Twelve</p>
+    <h2>The Real Work</h2>
+    <p class="ch-intro">The real work never stops. And that's what makes this game worth playing.</p>
+    <div class="ch-divider"></div>
+  </div>
+  <div class="chapter-body">
+    <p class="scene">Mark stood on the same range where it had all started eight weeks earlier. Same grass, same bag, same ball. But something was unmistakably different. Him. He wasn't swinging harder. He wasn't chasing anything. He was just — present. He hit one smooth shot after another without thinking about any of them too hard. His coach watched quietly for a while, then said: "That's what mastery looks like. Steady, simple, repeatable." Mark smiled. "Feels like I'm just getting started." "Good," his coach said. "That means you're doing it right."</p>
+
+    <h3>Lesson 1: The Myth of Arrival</h3>
+    <p>Most golfers imagine mastery as a destination — some future version of themselves who finally has it figured out. No bad shots. No nerves. No frustration. That version doesn't exist. You don't arrive at mastery. You maintain it. It's not a finish line — it's a relationship you tend to every time you step onto the course.</p>
+
+    <h3>Lesson 2: The One Percent Rule</h3>
+    <p>Big leaps in golf are rare. The breakthroughs that feel sudden are almost always the result of a hundred quiet improvements that finally stacked up. Mark learned to stop waiting for the breakthrough and start building it. One percent better every single day. A little more awareness. A little more patience. A little more trust in the process.</p>
+    <p>When you orient yourself around steady, honest progress, frustration loses most of its grip on you. Freedom takes its place.</p>
+
+    <h3>Lesson 3: The Continued Practice</h3>
+    <p>Golf mirrors life in this way: you don't get done. You keep showing up. The work never stops, and that's not a discouraging thought — it's actually a liberating one. There's no pressure to arrive somewhere. There's only the next round, the next shot, the next small moment where you get to practice being your best.</p>
+
+    <div class="drill-box">
+      <span class="drill-label">Reflection Drill</span>
+      <h4>The Master's Mindset</h4>
+      <p class="drill-goal">Goal: Stay connected to the habits and awareness that keep you grounded.</p>
+      <ol>
+        <li>Before each round, write one sentence: "Today I'm focusing on ___."</li>
+        <li>After the round, write one more: "Today I learned ___."</li>
+        <li>Keep the notebook simple — no stats, no judgment, just honest awareness.</li>
+      </ol>
+    </div>
+
+    <div class="pullquote">
+      <p>"Success isn't owned. It's leased — and rent is due every day."</p>
+      <span class="attribution">— J.J. Watt</span>
+    </div>
+
+    <div class="recap-box">
+      <p class="recap-label">Chapter Recap</p>
+      <ul>
+        <li>Mastery isn't an arrival. It's a relationship.</li>
+        <li>Small, steady gains create growth that actually lasts.</li>
+        <li>One percent better every day — simple, honest, sustainable.</li>
+        <li>Discipline and patience together build freedom.</li>
+        <li>The real work never stops. And that's what makes this game worth playing.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────────────────── EPILOGUE -->
+<section class="epilogue" id="epilogue">
+  <div class="chapter-hero" style="background: var(--navy-mid);">
+    <p class="ch-num">Epilogue</p>
+    <h2>What Comes Next</h2>
+    <p class="ch-intro">The journey doesn't end after eight weeks. If anything, this is where it really starts.</p>
+    <div class="ch-divider"></div>
+  </div>
+  <div class="epilogue-body">
+    <p>You've spent this time learning to move better, think more clearly, and handle pressure differently. You've built awareness — not just of your swing, but of yourself. How you respond under stress. Where your attention goes when it matters. What happens when things don't go the way you planned.</p>
+    <p>That awareness is your real advantage. And it doesn't stay at the range when you leave. It follows you — into the next round, the next challenge, the next moment that asks for patience instead of panic.</p>
+
+    <h3>Keep It Simple</h3>
+    <p>Don't overcomplicate what comes next. Stick with what's working. A clear routine. A calm breath before each shot. Honest awareness of what's actually happening inside you.</p>
+    <p>You don't need to reinvent your game every season. You need to keep refining it. Trust what you've trained. Let your swing breathe. Mastery isn't found in one great round. It's built in a hundred small moments where you stay patient, stay disciplined, and stay curious.</p>
+
+    <h3>One Percent Better</h3>
+    <p>You don't need to be perfect. You just need to keep improving — slowly, steadily, deliberately. One percent better every single day. That's how you build trust. That's how you build confidence. That's how you build a game — and a mindset — that holds up over time.</p>
+
+    <h3>The Real Win</h3>
+    <p>Scores will come and go. Conditions will change. Some rounds will feel like everything clicked, and some will feel like nothing did. That's golf. What stays with you is the awareness you've built — that calm, clear space between thought and action, where your best golf happens.</p>
+    <p>Mark found that space. So can you.</p>
+    <p>Take a deep breath. Tee it up. Play your next round with a little more freedom, a little more trust, and a little more patience than the one before.</p>
+    <p>Because mastery isn't about shooting the lowest score. It's about learning how to be your best — no matter what the game throws at you.</p>
+    <p>Keep going. Keep learning. Keep getting one percent better.</p>
+    <p class="epilogue-sign">— Ryan Rinneard</p>
+  </div>
+</section>
+
+<!-- AUTHOR BOX -->
+<div class="author-section">
+  <div class="author-box">
+    <div class="avatar">RR</div>
+    <div class="info">
+      <h4>Ryan Rinneard</h4>
+      <p>CPGA Class A Professional · Director of Instruction, Mad River Golf Club<br>TPI · TrackMan · Vision54 Certified · Titleist Ambassador<br>madriverpro.com &nbsp;·&nbsp; Ryan Rinneard Golf Academy</p>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <p>© 2025 <strong>Ryan Rinneard</strong>. All rights reserved. &nbsp;·&nbsp; madriverpro.com</p>
+</footer>
+
+</body>
+</html>

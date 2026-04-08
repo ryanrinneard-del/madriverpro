@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Improve Your Putting Under Pressure | Ryan Rinneard Golf Academy</title>
+<meta name="description" content="Learn how to putt with confidence when it matters most. Ryan Rinneard shares proven strategies for staying calm over the ball, building a repeatable routine, and sinking more putts in clutch moments.">
+<meta name="keywords" content="putting under pressure, golf putting tips, clutch putting, SAM PuttLab, putting routine, golf mental game, golf instruction Collingwood, Ryan Rinneard">
+<meta name="author" content="Ryan Rinneard">
+<meta property="og:title" content="Improve Your Putting Under Pressure">
+<meta property="og:description" content="Proven strategies for staying calm over the ball and sinking more putts when it counts. From Ryan Rinneard, Director of Instruction at Mad River Golf Club.">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a1628;
+    --navy-light: #142240;
+    --white: #ffffff;
+    --off-white: #f7f8fa;
+    --gray-100: #eef0f4;
+    --gray-300: #c8cdd6;
+    --gray-500: #6b7280;
+    --gray-700: #374151;
+    --accent: #3b82f6;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--gray-700);
+    background: var(--white);
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .hero {
+    background: var(--navy);
+    color: var(--white);
+    padding: 100px 24px 80px;
+    text-align: center;
+  }
+  .hero .label {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 700;
+    line-height: 1.15;
+    max-width: 720px;
+    margin: 0 auto 20px;
+  }
+  .hero .subtitle {
+    font-size: 18px;
+    color: var(--gray-300);
+    max-width: 560px;
+    margin: 0 auto 28px;
+    font-weight: 400;
+  }
+  .hero .meta {
+    font-size: 14px;
+    color: var(--gray-500);
+  }
+  .hero .meta span { color: var(--gray-300); }
+  .hero-image {
+    max-width: 900px;
+    margin: -40px auto 0;
+    padding: 0 24px;
+    position: relative;
+    z-index: 2;
+  }
+  .hero-image .placeholder {
+    width: 100%;
+    height: 420px;
+    border-radius: 12px;
+    background: var(--gray-100);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gray-500);
+    font-size: 14px;
+    border: 2px dashed var(--gray-300);
+  }
+  article {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 60px 24px 80px;
+  }
+  article h2 {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 48px 0 16px;
+    line-height: 1.3;
+  }
+  article h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--navy);
+    margin: 36px 0 12px;
+  }
+  article p {
+    margin-bottom: 20px;
+    font-size: 17px;
+  }
+  article .lead {
+    font-size: 20px;
+    color: var(--navy-light);
+    line-height: 1.7;
+    margin-bottom: 32px;
+  }
+  .pullquote {
+    border-left: 3px solid var(--accent);
+    padding: 20px 28px;
+    margin: 36px 0;
+    background: var(--off-white);
+    border-radius: 0 8px 8px 0;
+  }
+  .pullquote p {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--navy);
+    font-style: italic;
+    margin-bottom: 0;
+  }
+  .inline-image {
+    margin: 36px 0;
+  }
+  .inline-image .placeholder {
+    width: 100%;
+    height: 320px;
+    border-radius: 10px;
+    background: var(--gray-100);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gray-500);
+    font-size: 14px;
+    border: 2px dashed var(--gray-300);
+  }
+  .inline-image figcaption {
+    font-size: 13px;
+    color: var(--gray-500);
+    text-align: center;
+    margin-top: 10px;
+  }
+  .step-card {
+    background: var(--off-white);
+    border-radius: 10px;
+    padding: 28px;
+    margin: 24px 0;
+  }
+  .step-card .step-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .step-card h3 { margin-top: 0; }
+  .cta-section {
+    background: var(--navy);
+    color: var(--white);
+    text-align: center;
+    padding: 60px 24px;
+    border-radius: 12px;
+    margin: 48px 0 0;
+  }
+  .cta-section h2 {
+    color: var(--white);
+    margin-bottom: 12px;
+  }
+  .cta-section p {
+    color: var(--gray-300);
+    max-width: 480px;
+    margin: 0 auto 24px;
+  }
+  .cta-button {
+    display: inline-block;
+    background: var(--white);
+    color: var(--navy);
+    padding: 14px 32px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+    transition: opacity 0.2s;
+  }
+  .cta-button:hover { opacity: 0.9; }
+  .site-header {
+    background: var(--white);
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid var(--gray-100);
+  }
+  .site-header .header-logo {
+    height: 48px;
+    width: 48px;
+    flex-shrink: 0;
+  }
+  .site-header .brand-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-left: 12px;
+    letter-spacing: 0.3px;
+  }
+  .author-box {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    padding: 28px;
+    background: var(--off-white);
+    border-radius: 10px;
+    margin-top: 48px;
+  }
+  .author-box .placeholder-avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: var(--navy);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 24px;
+    flex-shrink: 0;
+  }
+  .author-box .info h4 {
+    font-size: 16px;
+    color: var(--navy);
+    margin-bottom: 4px;
+  }
+  .author-box .info p {
+    font-size: 14px;
+    color: var(--gray-500);
+    margin-bottom: 0;
+  }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <span class="label">Instruction · Putting</span>
+  <h1>How to Putt With Confidence When It Matters Most</h1>
+  <p class="subtitle">Pressure putts aren't about mechanics — they're about trust. Here's how to build it.</p>
+  <p class="meta">By <span>Ryan Rinneard</span> · April 2026 · 7 min read</p>
+</section>
+
+<div class="hero-image">
+  <!-- REPLACE: Insert a photo of Ryan coaching a student on the putting green at Mad River -->
+  <div class="placeholder">[Hero Image: Ryan Rinneard working with a student on the Mad River putting green, late afternoon light]</div>
+</div>
+
+<article>
+
+  <p class="lead">You've read the green perfectly. You know the line. You set up, take the putter back, and — nothing feels right. Your hands tighten, your stroke gets quick, and the ball slides past the hole. You knew how to make that putt. So what happened?</p>
+
+  <p>What happened is pressure. And pressure doesn't break your putting stroke — it reveals where your trust is thin. After years of working with golfers of every level at Mad River, I've come to believe that putting under pressure is less about technique and more about preparation. When you've built genuine trust in your read, your routine, and your stroke, pressure doesn't disappear — it just stops mattering as much.</p>
+
+  <p>Let me share the framework I use with my students. It's built on three pillars, and none of them involve hitting a thousand putts on the practice green (though that doesn't hurt either).</p>
+
+  <h2>Pillar One: Commit to the Read</h2>
+
+  <p>Here's something I notice with nearly every golfer who struggles under pressure: they don't fully commit to their read. They pick a line, then second-guess it over the ball. That doubt is the single biggest killer of good putting.</p>
+
+  <p>The fix isn't reading greens better — it's making a decision and honouring it. I teach my students what I call the "one-look rule." You read the putt from behind the ball. You pick your line and your speed. You walk in, set up, and go. You don't look at the hole three more times. You don't reconsider the break. You trust what you saw.</p>
+
+  <div class="pullquote">
+    <p>"Indecision is the enemy. A committed stroke on the wrong line will always outperform a hesitant stroke on the right one."</p>
+  </div>
+
+  <p>This isn't about being reckless — it's about understanding that your first read is almost always your best read. Your subconscious processes slope, grain, and speed faster than your analytical mind does. The more time you give yourself to overthink, the further you drift from your instinct.</p>
+
+  <div class="inline-image">
+    <!-- REPLACE: Insert a photo of a golfer reading a putt from behind the ball on Mad River's green -->
+    <div class="placeholder">[Inline Image: Reading a putt from behind the ball — one committed look before stepping in]</div>
+    <figcaption>The best read happens in the first few seconds. Trust it.</figcaption>
+  </div>
+
+  <h2>Pillar Two: Build a Routine You Can Lean On</h2>
+
+  <p>A pre-putt routine isn't just something the pros do because it looks good on TV. It's a psychological anchor. When everything else feels chaotic — the match is tight, the group behind is watching, your playing partner just drained a long one — your routine is the one thing that stays the same.</p>
+
+  <p>I work with every student to build a routine that's uniquely theirs, but here's the general framework I recommend:</p>
+
+  <div class="step-card">
+    <div class="step-label">Step 1 — Read</div>
+    <h3>Stand behind the ball and pick your line</h3>
+    <p>Take 10–15 seconds. Visualize the ball rolling along your chosen line and falling in the hole. This isn't wishful thinking — it's priming your motor system for the stroke you want to make.</p>
+  </div>
+
+  <div class="step-card">
+    <div class="step-label">Step 2 — Approach</div>
+    <h3>Walk in from behind and set your putter face first</h3>
+    <p>Set the putter face to your target line before you set your feet. This is critical — your body should organize itself around the putter's aim, not the other way around.</p>
+  </div>
+
+  <div class="step-card">
+    <div class="step-label">Step 3 — Settle</div>
+    <h3>One look at the hole, then go</h3>
+    <p>Take one look at your target to calibrate speed, then bring your eyes back to the ball and stroke within two seconds. That timing matters. Anything longer than three seconds and your muscles start to tighten.</p>
+  </div>
+
+  <p>The magic of a consistent routine is that it occupies your conscious mind with a process, which frees your subconscious to execute the stroke. Under pressure, your routine becomes your safe harbour. When your brain is screaming "don't miss this," your routine quietly says, "we've done this a thousand times. Just do it again."</p>
+
+  <h2>Pillar Three: Practice Pressure, Don't Avoid It</h2>
+
+  <p>Here's where most practice sessions fall short. You roll putt after putt from the same spot, grooving your stroke in a zero-consequence environment. Then you get on the course and wonder why those four-footers feel completely different.</p>
+
+  <p>They feel different because they are different. On the course, every putt has a consequence. So your practice needs to simulate that consequence.</p>
+
+  <h3>The "21" Game</h3>
+
+  <p>This is my favourite pressure putting drill, and I use it with students at every level. Place three tees at 3 feet, 5 feet, and 7 feet from the hole. Start at 3 feet. Make it — that's 1 point. Move to 5 feet. Make it — that's 2 points. Move to 7 feet — 3 points. Here's the catch: if you miss from 3 or 5 feet, you go back to zero. Miss from 7 feet and you lose your last made putt's points. First to 21 wins.</p>
+
+  <p>Play this against a friend, or just against yourself. The game creates genuine nervousness — especially as you approach 21 — and that's exactly the point. You're training your routine and your stroke to perform when the feeling in your stomach says "please don't miss."</p>
+
+  <h3>The Gate Drill</h3>
+
+  <p>Set two tees just wider than your putter head about six inches in front of your ball. Your only job is to stroke the ball through the gate. This isn't about making the putt — it's about trusting your start line. Under pressure, the first 12 inches of the putt are everything. If you can start it on line, the rest takes care of itself.</p>
+
+  <div class="inline-image">
+    <!-- REPLACE: Insert a photo of the gate drill setup on the practice green -->
+    <div class="placeholder">[Inline Image: The gate drill — two tees creating a narrow channel for the putter to pass through]</div>
+    <figcaption>The gate drill builds trust in your start line — the most important part of any pressure putt.</figcaption>
+  </div>
+
+  <h2>A Word on Technology</h2>
+
+  <p>I use SAM PuttLab and other putting analysis tools in my teaching because they give us objective truth. When a student tells me they "always pull their pressure putts," the data often tells a different story — maybe the face is actually square but the path is off, or the speed is the real issue, not the direction.</p>
+
+  <p>Technology doesn't replace feel. But it removes the guesswork so we can focus our practice time on what actually needs work. And that efficiency builds confidence, because you're no longer wondering if you're working on the right thing — you know you are.</p>
+
+  <h2>The Takeaway</h2>
+
+  <p>Putting under pressure will never feel easy. The butterflies don't go away — not for you, not for the best players in the world. The difference is in how you respond to them. When you have a read you trust, a routine you've rehearsed, and practice reps with real consequences behind them, those butterflies start working for you instead of against you.</p>
+
+  <p>Commit to the read. Lean on the routine. And remember: the putt doesn't know the score. Only you do.</p>
+
+  <div class="cta-section">
+    <h2>Let's Work on Your Putting</h2>
+    <p>Book a putting-focused lesson at Mad River and let's build a routine that holds up when it counts.</p>
+    <a href="/book" class="cta-button">Book a Lesson</a>
+  </div>
+
+  <div class="author-box">
+    <div class="placeholder-avatar">RR</div>
+    <div class="info">
+      <h4>Ryan Rinneard</h4>
+      <p>CPGA Class A Professional · Director of Instruction, Mad River Golf Club<br>TPI · TrackMan · Vision54 Certified · Titleist Ambassador</p>
+    </div>
+  </div>
+
+</article>
+</body>
+</html>

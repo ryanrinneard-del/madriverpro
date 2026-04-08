@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eight Weeks to Mastery — Journal & Workbook | Ryan Rinneard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,700;0,800;1,700&display=swap" rel="stylesheet">
+<style>
+/* ── TOKENS ─────────────────────────────────────────────── */
+:root {
+  --navy:        #0a1628;
+  --navy-light:  #142240;
+  --navy-mid:    #1e3a5f;
+  --white:       #ffffff;
+  --off-white:   #f7f8fa;
+  --gray-100:    #eef0f4;
+  --gray-200:    #dde1e9;
+  --gray-300:    #c8cdd6;
+  --gray-500:    #6b7280;
+  --gray-700:    #374151;
+  --orange:      #c97c2e;
+  --orange-light:#e8943a;
+  --orange-pale: #fdf3e7;
+  --green:       #2e7d52;
+  --green-pale:  #edf7f1;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: var(--off-white);
+  color: var(--gray-700);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── HEADER ─────────────────────────────────────────────── */
+.site-header {
+  background: var(--navy);
+  padding: 16px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  border-bottom: 1px solid var(--navy-mid);
+}
+.brand { font-size:14px; font-weight:600; color:var(--white); letter-spacing:.4px; }
+.brand span { color:var(--orange); }
+.header-badge {
+  font-size:11px; font-weight:600; letter-spacing:1.5px;
+  text-transform:uppercase; color:var(--gray-300);
+}
+
+/* ── COVER ──────────────────────────────────────────────── */
+.cover {
+  background: var(--navy);
+  padding: 80px 24px 72px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.cover::before {
+  content:'';
+  position:absolute; top:-100px; right:-100px;
+  width:500px; height:500px; border-radius:50%;
+  background: radial-gradient(circle, rgba(201,124,46,.14) 0%, transparent 70%);
+  pointer-events:none;
+}
+.cover .eyebrow {
+  font-size:11px; font-weight:700; letter-spacing:2.5px;
+  text-transform:uppercase; color:var(--orange); margin-bottom:20px;
+  display:block;
+}
+.cover h1 {
+  font-family:'Playfair Display', serif;
+  font-size: clamp(38px,7vw,68px);
+  font-weight:800; color:var(--white);
+  line-height:1.1; max-width:700px; margin:0 auto 12px;
+}
+.cover .sub {
+  font-family:'Playfair Display', serif;
+  font-size:clamp(15px,2vw,19px);
+  color:var(--gray-300); font-style:italic;
+  max-width:480px; margin:0 auto 28px; line-height:1.6;
+}
+.cover-divider {
+  width:48px; height:3px; background:var(--orange);
+  margin:0 auto 24px; border-radius:2px;
+}
+.cover .byline { font-size:14px; color:var(--gray-300); }
+.cover .byline strong { color:var(--orange); }
+
+/* ── HOW TO USE ─────────────────────────────────────────── */
+.how-to-use {
+  max-width:720px; margin:0 auto;
+  padding:56px 24px 48px;
+  border-bottom:1px solid var(--gray-200);
+}
+.how-to-use .section-label {
+  font-size:11px; font-weight:700; letter-spacing:2px;
+  text-transform:uppercase; color:var(--orange); margin-bottom:16px;
+}
+.how-to-use h2 {
+  font-family:'Playfair Display', serif;
+  font-size:28px; color:var(--navy); margin-bottom:20px;
+}
+.how-to-use p { font-size:16px; margin-bottom:16px; line-height:1.8; }
+.session-types {
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(180px,1fr));
+  gap:12px; margin-top:28px;
+}
+.session-type-card {
+  background:var(--white); border-radius:10px;
+  padding:20px 16px; border:1px solid var(--gray-200);
+  text-align:center;
+}
+.session-type-card .icon { font-size:24px; margin-bottom:8px; }
+.session-type-card h4 { font-size:13px; font-weight:700; color:var(--navy); margin-bottom:4px; letter-spacing:.3px; }
+.session-type-card p { font-size:12px; color:var(--gray-500); margin:0; }
+
+/* ── WEEK NAV ────────────────────────────────────────────── */
+.week-nav-wrap {
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-200);
+  position: sticky;
+  top: 53px;
+  z-index: 100;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.week-nav {
+  display:flex; gap:0;
+  max-width:960px; margin:0 auto;
+  min-width:max-content;
+}
+.week-tab {
+  padding:14px 20px;
+  font-size:13px; font-weight:600;
+  color:var(--gray-500);
+  cursor:pointer; border:none; background:none;
+  border-bottom:3px solid transparent;
+  transition:color .2s, border-color .2s;
+  white-space:nowrap; letter-spacing:.2px;
+}
+.week-tab:hover { color:var(--navy); }
+.week-tab.active { color:var(--navy); border-bottom-color:var(--orange); }
+
+/* ── WEEK CONTENT ───────────────────────────────────────── */
+.week-content { display:none; }
+.week-content.active { display:block; }
+
+/* ── WEEK HERO ──────────────────────────────────────────── */
+.week-hero {
+  background: var(--navy);
+  padding:56px 24px 48px; text-align:center;
+  border-bottom:3px solid var(--orange);
+}
+.week-hero .wk-num {
+  font-size:11px; font-weight:700; letter-spacing:2.5px;
+  text-transform:uppercase; color:var(--orange); margin-bottom:12px;
+}
+.week-hero h2 {
+  font-family:'Playfair Display', serif;
+  font-size:clamp(26px,4vw,40px); color:var(--white);
+  font-weight:700; line-height:1.2; max-width:580px; margin:0 auto 12px;
+}
+.week-hero .wk-focus {
+  font-size:15px; color:var(--gray-300); font-style:italic;
+  max-width:440px; margin:0 auto;
+}
+.week-hero .wk-divider {
+  width:36px; height:2px; background:var(--orange);
+  margin:20px auto 0; border-radius:2px;
+}
+
+/* ── WEEK BODY ──────────────────────────────────────────── */
+.week-body {
+  max-width:720px; margin:0 auto; padding:0 24px 64px;
+}
+
+/* ── SESSION BLOCK ──────────────────────────────────────── */
+.session-block {
+  margin-top:40px;
+  background:var(--white);
+  border-radius:14px;
+  border:1px solid var(--gray-200);
+  overflow:hidden;
+}
+.session-header {
+  display:flex; align-items:center; gap:12px;
+  padding:18px 24px;
+  border-bottom:1px solid var(--gray-100);
+}
+.session-icon {
+  width:36px; height:36px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:16px; flex-shrink:0;
+}
+.session-icon.before { background:var(--orange-pale); }
+.session-icon.during { background:#e8f0fd; }
+.session-icon.after  { background:var(--green-pale); }
+.session-icon.practice { background:var(--gray-100); }
+
+.session-header-text h3 {
+  font-size:15px; font-weight:700; color:var(--navy); letter-spacing:.2px;
+}
+.session-header-text span {
+  font-size:12px; color:var(--gray-500);
+}
+.session-body { padding:24px; }
+
+/* ── FORM ELEMENTS ──────────────────────────────────────── */
+.field-group { margin-bottom:24px; }
+.field-label {
+  display:block; font-size:12px; font-weight:700;
+  color:var(--navy); letter-spacing:.8px;
+  text-transform:uppercase; margin-bottom:8px;
+}
+.field-hint {
+  display:block; font-size:13px; color:var(--gray-500);
+  font-style:italic; margin-bottom:10px; margin-top:-4px;
+}
+
+/* Text areas */
+.note-area {
+  width:100%; min-height:80px;
+  border:1.5px solid var(--gray-200);
+  border-radius:8px; padding:12px 14px;
+  font-family:'Inter', sans-serif;
+  font-size:15px; color:var(--gray-700);
+  background:var(--off-white);
+  resize:vertical; outline:none;
+  transition:border-color .2s;
+  line-height:1.7;
+}
+.note-area:focus { border-color:var(--orange); background:var(--white); }
+.note-area.small { min-height:56px; }
+.note-area.large { min-height:120px; }
+
+/* Single-line input */
+.note-input {
+  width:100%; height:44px;
+  border:1.5px solid var(--gray-200);
+  border-radius:8px; padding:0 14px;
+  font-family:'Inter', sans-serif;
+  font-size:15px; color:var(--gray-700);
+  background:var(--off-white); outline:none;
+  transition:border-color .2s;
+}
+.note-input:focus { border-color:var(--orange); background:var(--white); }
+
+/* ── SLIDER ─────────────────────────────────────────────── */
+.slider-field { margin-bottom:24px; }
+.slider-labels {
+  display:flex; justify-content:space-between;
+  font-size:12px; color:var(--gray-500); margin-bottom:6px;
+}
+.slider-labels .left-label { font-weight:600; color:var(--green); }
+.slider-labels .right-label { font-weight:600; color:#c0392b; }
+.slider-track { position:relative; padding:4px 0; }
+input[type=range] {
+  width:100%; -webkit-appearance:none;
+  height:6px; border-radius:3px;
+  background: linear-gradient(to right,
+    var(--green) 0%,
+    var(--orange) 50%,
+    #c0392b 100%
+  );
+  outline:none; cursor:pointer;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance:none;
+  width:22px; height:22px; border-radius:50%;
+  background:var(--white);
+  border:3px solid var(--navy);
+  box-shadow:0 2px 6px rgba(0,0,0,.2);
+  transition:transform .15s;
+}
+input[type=range]::-webkit-slider-thumb:active { transform:scale(1.2); }
+input[type=range]::-moz-range-thumb {
+  width:22px; height:22px; border-radius:50%;
+  background:var(--white); border:3px solid var(--navy);
+  box-shadow:0 2px 6px rgba(0,0,0,.2);
+}
+.slider-value-display {
+  text-align:center; margin-top:8px;
+  font-size:13px; font-weight:600; color:var(--navy);
+}
+
+/* ── CHECKLIST ──────────────────────────────────────────── */
+.checklist { list-style:none; }
+.checklist li {
+  display:flex; align-items:flex-start; gap:12px;
+  padding:10px 0; border-bottom:1px solid var(--gray-100);
+  font-size:15px; color:var(--gray-700);
+  cursor:pointer; transition:color .15s;
+  line-height:1.5;
+}
+.checklist li:last-child { border-bottom:none; }
+.checklist li.checked { color:var(--gray-500); text-decoration:line-through; }
+.check-box {
+  width:20px; height:20px; border-radius:5px;
+  border:2px solid var(--gray-300);
+  flex-shrink:0; display:flex; align-items:center;
+  justify-content:center; transition:all .15s;
+  margin-top:1px;
+}
+.checklist li.checked .check-box {
+  background:var(--green); border-color:var(--green);
+  color:var(--white);
+}
+.check-box::after { content:''; }
+.checklist li.checked .check-box::after { content:'✓'; font-size:12px; font-weight:700; }
+
+/* ── RATING ROW ─────────────────────────────────────────── */
+.rating-row {
+  display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;
+}
+.rating-btn {
+  padding:7px 16px; border-radius:6px;
+  border:1.5px solid var(--gray-200);
+  font-size:13px; font-weight:600; cursor:pointer;
+  background:var(--off-white); color:var(--gray-500);
+  transition:all .15s;
+}
+.rating-btn:hover { border-color:var(--orange); color:var(--orange); }
+.rating-btn.selected { background:var(--navy); border-color:var(--navy); color:var(--white); }
+
+/* ── PULL QUOTE ─────────────────────────────────────────── */
+.week-quote {
+  border-left:3px solid var(--orange);
+  padding:16px 20px; margin:24px 0;
+  background:var(--orange-pale);
+  border-radius:0 8px 8px 0;
+}
+.week-quote p {
+  font-size:16px; font-weight:500; color:var(--navy);
+  font-style:italic; margin:0; line-height:1.6;
+}
+.week-quote .attr {
+  font-size:12px; font-style:normal; font-weight:700;
+  color:var(--orange); display:block; margin-top:8px;
+}
+
+/* ── FOCUS CARD ─────────────────────────────────────────── */
+.focus-card {
+  background:var(--navy);
+  border-radius:10px; padding:20px 22px;
+  margin-bottom:24px;
+}
+.focus-card .fc-label {
+  font-size:10px; font-weight:700; letter-spacing:2px;
+  text-transform:uppercase; color:var(--orange); margin-bottom:10px;
+}
+.focus-card p {
+  font-size:15px; color:var(--gray-300); line-height:1.7; margin:0;
+}
+
+/* ── DIVIDER ────────────────────────────────────────────── */
+.section-divider {
+  height:1px; background:var(--gray-100);
+  margin:28px 0;
+}
+
+/* ── SCORE ROW ──────────────────────────────────────────── */
+.score-row {
+  display:grid; grid-template-columns:1fr 1fr 1fr;
+  gap:12px; margin-top:8px;
+}
+.score-cell { display:flex; flex-direction:column; gap:4px; }
+.score-cell label { font-size:12px; color:var(--gray-500); font-weight:600; }
+.score-cell input {
+  height:42px; border:1.5px solid var(--gray-200);
+  border-radius:8px; padding:0 12px; font-size:16px;
+  font-weight:600; color:var(--navy);
+  background:var(--off-white); text-align:center; outline:none;
+  transition:border-color .2s;
+}
+.score-cell input:focus { border-color:var(--orange); background:var(--white); }
+
+/* ── PRACTICE PLAN GRID ─────────────────────────────────── */
+.practice-blocks {
+  display:grid; grid-template-columns:1fr 1fr 1fr;
+  gap:12px; margin-top:8px;
+}
+.practice-block {
+  background:var(--off-white); border-radius:8px;
+  border:1px solid var(--gray-200); padding:14px;
+}
+.practice-block .pb-num {
+  display:inline-flex; width:24px; height:24px;
+  background:var(--navy); color:var(--white);
+  border-radius:50%; align-items:center; justify-content:center;
+  font-size:11px; font-weight:700; margin-bottom:8px;
+}
+.practice-block .pb-title {
+  font-size:12px; font-weight:700; color:var(--navy);
+  text-transform:uppercase; letter-spacing:.5px; margin-bottom:6px;
+}
+.practice-block textarea {
+  width:100%; min-height:70px; border:1.5px solid var(--gray-200);
+  border-radius:6px; padding:8px; font-size:13px;
+  font-family:'Inter', sans-serif; color:var(--gray-700);
+  background:var(--white); resize:none; outline:none;
+  transition:border-color .2s;
+}
+.practice-block textarea:focus { border-color:var(--orange); }
+
+/* ── SAVE BANNER ────────────────────────────────────────── */
+.save-banner {
+  position:fixed; bottom:20px; right:20px;
+  background:var(--navy); color:var(--white);
+  padding:10px 18px; border-radius:8px;
+  font-size:13px; font-weight:600;
+  opacity:0; transform:translateY(8px);
+  transition:opacity .3s, transform .3s;
+  pointer-events:none; z-index:300;
+}
+.save-banner.show { opacity:1; transform:translateY(0); }
+
+/* ── FOOTER ─────────────────────────────────────────────── */
+.site-footer {
+  background:var(--navy); padding:36px 24px;
+  text-align:center; margin-top:60px;
+}
+.site-footer p { font-size:13px; color:var(--gray-500); }
+.site-footer strong { color:var(--orange); }
+
+/* ── RESPONSIVE ─────────────────────────────────────────── */
+@media(max-width:600px){
+  .session-body { padding:16px; }
+  .practice-blocks { grid-template-columns:1fr; }
+  .score-row { grid-template-columns:1fr 1fr 1fr; }
+  .session-types { grid-template-columns:1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <span class="brand">Ryan Rinneard <span>Golf</span></span>
+  <span class="header-badge">Player Journal</span>
+</header>
+
+<!-- COVER -->
+<section class="cover">
+  <span class="eyebrow">Companion Workbook</span>
+  <h1>Eight Weeks<br>to Mastery</h1>
+  <div class="cover-divider"></div>
+  <p class="sub">Your personal journal for the inner and outer game — on the course, at the range, and after every round.</p>
+  <p class="byline">Designed by <strong>Ryan Rinneard</strong> &nbsp;·&nbsp; Ryan Rinneard Golf Academy</p>
+</section>
+
+<!-- HOW TO USE -->
+<section class="how-to-use">
+  <p class="section-label">How to Use This Journal</p>
+  <h2>One Book. Eight Weeks. Three Sessions.</h2>
+  <p>This journal mirrors the book chapter for chapter. Each week has three short sessions — before you play, during your round, and after you're done. There's also a reusable practice page for range work.</p>
+  <p>You don't need to fill out everything every time. The goal is honest, consistent awareness — not more pressure. Even one note per round makes a difference.</p>
+  <div class="session-types">
+    <div class="session-type-card">
+      <div class="icon">🌅</div>
+      <h4>Before You Play</h4>
+      <p>Set your intention. Check in before it matters.</p>
+    </div>
+    <div class="session-type-card">
+      <div class="icon">⛳</div>
+      <h4>On the Course</h4>
+      <p>Quick check-ins. Notice what's happening.</p>
+    </div>
+    <div class="session-type-card">
+      <div class="icon">📖</div>
+      <h4>After the Round</h4>
+      <p>Reflect without judgment. Find the pattern.</p>
+    </div>
+    <div class="session-type-card">
+      <div class="icon">🎯</div>
+      <h4>Practice Session</h4>
+      <p>Train with a plan. Track what matters.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WEEK NAV -->
+<div class="week-nav-wrap">
+  <nav class="week-nav" id="weekNav">
+    <button class="week-tab active" onclick="showWeek(1,this)">Week 1</button>
+    <button class="week-tab" onclick="showWeek(2,this)">Week 2</button>
+    <button class="week-tab" onclick="showWeek(3,this)">Week 3</button>
+    <button class="week-tab" onclick="showWeek(4,this)">Week 4</button>
+    <button class="week-tab" onclick="showWeek(5,this)">Week 5</button>
+    <button class="week-tab" onclick="showWeek(6,this)">Week 6</button>
+    <button class="week-tab" onclick="showWeek(7,this)">Week 7</button>
+    <button class="week-tab" onclick="showWeek(8,this)">Week 8</button>
+  </nav>
+</div>
+
+<!-- ═══════════════════════ WEEK 1 ═══════════════════════ -->
+<div class="week-content active" id="week-1">
+  <div class="week-hero">
+    <p class="wk-num">Week One · Chapter 1</p>
+    <h2>The Two Games</h2>
+    <p class="wk-focus">This week you're learning to notice the difference between thinking and trusting.</p>
+    <div class="wk-divider"></div>
+  </div>
+  <div class="week-body">
+
+    <div class="week-quote">
+      <p>"The mind messes up more shots than the body."</p>
+      <span class="attr">— Tommy Bolt</span>
+    </div>
+
+    <!-- BEFORE -->
+    <div class="session-block">
+      <div class="session-header">
+        <div class="session-icon before">🌅</div>
+        <div class="session-header-text">
+          <h3>Before You Play</h3>
+          <span>Complete this before your round or practice — takes 3 minutes</span>
+        </div>
+      </div>
+      <div class="session-body">
+        <div class="focus-card">
+          <p class="fc-label">This Week's Focus</p>
+          <p>Notice which game you're playing. When you hit a shot, ask: was that the outer game (mechanics, control) or the inner game (feel, trust)? You don't need to fix anything yet. Just notice.</p>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Today's Intention</label>
+          <span class="field-hint">One word or phrase — what are you committing to today?</span>
+          <input type="text" class="note-input" placeholder="e.g. Stay curious. Trust the feel." id="w1-intention">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">How I'm arriving today</label>
+          <span class="field-hint">Mind, body, energy — a quick honest check-in</span>
+          <textarea class="note-area small" placeholder="e.g. Tired but focused. Mind is a bit busy from work. Body feels loose." id="w1-arriving"></textarea>
+        </div>
+
+        <div class="slider-field">
+          <label class="field-label">Mental State Right Now</label>
+          <div class="slider-labels">
+            <span class="left-label">😌 Calm & Present</span>
+            <span class="right-label">😤 Tight & Controlling</span>
+          </div>
+          <div class="slider-track">
+            <input type="range" min="0" max="100" value="50" id="w1-pre-slider"
+              oninput="updateSlider('w1-pre-slider','w1-pre-val')">
+          </div>
+          <div class="slider-value-display" id="w1-pre-val">Balanced (50)</div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">One Thing I Want to Notice Today</label>
+          <input type="text" class="note-input" placeholder="e.g. When I start steering vs. swinging freely" id="w1-notice">
+        </div>
+      </div>
+    </div>
+
+    <!-- DURING -->
+    <div class="session-block">
+      <div class="session-header">
+        <div class="session-icon during">⛳</div>
+        <div class="session-header-text">
+          <h3>On the Course</h3>
+          <span>Quick check-in mid-round — even just one entry is valuable</span>
+        </div>
+      </div>
+      <div class="session-body">
+        <div class="field-group">
+          <label class="field-label">Hole / Moment I Want to Remember</label>
+          <textarea class="note-area small" placeholder="e.g. Hole 7 — stood over the shot and caught myself overthinking. Took a breath. Swung freely. Best contact of the day." id="w1-moment"></textarea>
+        </div>
+
+        <div class="slider-field">
+          <label class="field-label">Current Tension Level (Check in anytime)</label>
+          <div class="slider-labels">
+            <span class="left-label">💚 Free & Flowing</span>
+            <span class="right-label">❤️ Heart Ready to Jump Out</span>
+          </div>
+          <div class="slider-track">
+            <input type="range" min="0" max="100" value="40" id="w1-tension"
+              oninput="updateSlider('w1-tension','w1-tension-val')">
+          </div>
+          <div class="slider-value-display" id="w1-tension-val">Slightly loose (40)</div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">What Did I Notice?</label>
+          <span class="field-hint">Inner game or outer game — which one showed up most?</span>
+          <textarea class="note-area" placeholder="What was really happening between your ears today?" id="w1-during-notice"></textarea>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Quiet Shot Checklist</label>
+          <span class="field-hint">Tap each one you actually used today</span>
+          <ul class="checklist" id="w1-checklist">
+            <li onclick="toggleCheck(this)"><span class="check-box"></span>Took one slow breath before the shot</li>
+            <li onclick="toggleCheck(this)"><span class="check-box"></span>Set a single, simple intention</li>
+            <li onclick="toggleCheck(this)"><span class="check-box"></span>Paused after the shot — didn't react immediately</li>
+            <li onclick="toggleCheck(this)"><span class="check-box"></span>Noticed when Self 1 got loud</li>
+            <li onclick="toggleCheck(this)"><span class="check-box"></span>Let Self 2 take over at least once</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- AFTER -->
+    <div class="session-block">
+      <div class="session-header">
+        <div class="session-icon after">📖</div>
+        <div class="session-header-text">
+          <h3>After the Round</h3>
+          <span>Best done within an hour — while it's still fresh</span>
+        </div>
+      </div>
+      <div class="session-body">
+        <div class="score-row">
+          <div class="score-cell"><label>Score</label><input type="text" placeholder="82" id="w1-score"></div>
+          <div class="score-cell"><label>Course</label><input type="text" placeholder="Mad River" id="w1-course"></div>
+          <div class="score-cell"><label>Date</label><input type="date" id="w1-date"></div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <div class="field-group">
+          <label class="field-label">What Went Well?</label>
+          <textarea class="note-area small" placeholder="Be specific — one moment, one shot, one decision you're proud of." id="w1-well"></textarea>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">What Felt Off?</label>
+          <textarea class="note-area small" placeholder="Not a list of faults — just one honest observation." id="w1-off"></textarea>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">What Did I Learn?</label>
+          <textarea class="note-area small" placeholder="One sentence. Inner game or outer game — doesn't matter." id="w1-learned"></textarea>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Was I Playing the Outer Game or the Inner Game Today?</label>
+          <div class="rating-row" id="w1-game-type">
+            <button class="rating-btn" onclick="selectRating(this,'w1-game-type')">Mostly Outer</button>
+            <button class="rating-btn" onclick="selectRating(this,'w1-game-type')">Both — Connected</button>
+            <button class="rating-btn" onclick="selectRating(this,'w1-game-type')">Mostly Inner</button>
+            <button class="rating-btn" onclick="selectRating(this,'w1-game-type')">Disconnected</button>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">One Thing I'm Carrying Into Next Round</label>
+          <input type="text" class="note-input" placeholder="e.g. Breathe before every shot — not just the hard ones." id="w1-carry">
+        </div>
+      </div>
+    </div>
+
+    <!-- PRACTICE -->
+    <div class="session-block">
+      <div class="session-header">
+        <div class="session-icon practice">🎯</div>
+        <div class="session-header-text">
+          <h3>Practice Session</h3>
+          <span>30-minute structured range plan — Week 1 focus: awareness over mechanics</span>
+        </div>
+      </div>
+      <div class="session-body">
+        <div class="practice-blocks">
+          <div class="practice-block">
+            <span class="pb-num">1</span>
+            <p class="pb-title">Groove (10 min)</p>
+            <textarea placeholder="Club & target. Build the feel. No judgment." id="w1-groove"></textarea>
+          </div>
+          <div class="practice-block">
+            <span class="pb-num">2</span>
+            <p class="pb-title">Challenge (10 min)</p>
+            <textarea placeholder="Random targets. Different clubs. Simulate the course." id="w1-challenge"></textarea>
+          </div>
+          <div class="practice-block">
+            <span class="pb-num">3</span>
+            <p class="pb-title">Transfer (10 min)</p>
+            <textarea placeholder="Real course scenarios. Full routine every time." id="w1-transfer"></textarea>
+          </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <div class="field-group">
+          <label class="field-label">One Metric I'm Tracking Today</label>
+          <span class="field-hint">Pick just one — commitment level, contact quality, or start line</span>
+          <input type="text" class="note-input" placeholder="e.g. Did I commit to every shot before swinging?" id="w1-metric">
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Session Notes</label>
+          <textarea class="note-area large" placeholder="What improved? What still needs work? What did you notice about the way you practice?" id="w1-session-notes"></textarea>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════ WEEK 2 ═══════════════════════ -->
+<div class="week-content" id="week-2">
+  <div class="week-hero">
+    <p class="wk-num">Week Two · Chapter 2</p>
+    <h2>Awareness Over Anxiety</h2>
+    <p class="wk-focus">This week you're learning to observe tension instead of fighting it.</p>
+    <div class="wk-divider"></div>
+  </div>
+  <div class="week-body">
+
+    <div class="week-quote">
+      <p>"The first step toward change is awareness. The second is acceptance."</p>
+      <span class="attr">— Nathaniel Branden</span>
+    </div>
+
+    <div class="session-block">
+      <div class="session-header">
+        <div class="session-icon before">🌅</div>
+        <div class="session-header-text"><h3>Before You Play</h3><span>3 minutes before you start</span></div>
+      </div>
+      <div class="session-body">
+        <div class="focus-card">
+          <p class="fc-label">This Week's Focus</p>
+          <p>Anxiety isn't the enemy — resistance is. This week, when nerves show up, don't fight them. Just name what you feel. "I'm tight in my shoulders." "My grip is getting stronger." That's all. Observe, don't fix.</p>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Today's Intention</label>
+          <input type="text" class="note-input" placeholder="e.g. Notice tension before it controls me." id="w2-intention">
+        </div>
+        <div class="slider-field">
+          <label class="field-label">Body Scan — Overall Tension Right Now</label>
+          <div class="slider-labels">
+            <span class="left-label">😌 Loose & Easy</span>
+            <span class="right-label">😬 Braced & Tight</span>
+          </div>
+          <div class="slider-track">
+            <input type="range" min="0" max="100" value="50" id="w2-pre-slider"
+              oninput="updateSlider('w2-pre-slider','w2-pre-val')">
+          </div>
+          <div class="slider-value-display" id="w2-pre-val">Balanced (50)</div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Where Am I Holding Tension Right Now?</label>
+          <span class="field-hint">Scan: jaw, shoulders, hands, chest, legs</span>
+          <input type="text" class="note-input" placeholder="e.g. Shoulders are up. Hands feel a bit tight." id="w2-tension-location">
+        </div>
+        <div class="field-group">
+          <label class="field-label">What's My Body Telling Me Today?</label>
+          <textarea class="note-area small" placeholder="Energy level, stiffness, balance, rhythm — what do you feel?" id="w2-body"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="session-block">
+      <div class="session-header">
+        <div class="session-icon during">⛳</div>
+        <div class="session-header-text"><h3>On the Course</h3><span>The Body Check — use between holes</span></div>
+      </div>
+      <div class="session-body">
+        <div class="field-group">
+          <label class="field-label">Body Check Results (Mid-Round)</label>
+          <span class="field-hint">Feet → Legs → Hands → Shoulders → Jaw. What did you find?</span>
+          <textarea class="note-area" placeholder="e.g. By hole 9, noticed my jaw was clenched every time I faced a tight tee shot. Released it on the next three and tempo improved immediately." id="w2-body-check"></textarea>
+        </div>
+        <div class="slider-field">
+          <label class="field-label">Anxiety Level — Mid Round</label>
+          <div class="slider-labels">
+            <span class="left-label">💚 Calm & Connected</span>
+            <span class="right-label">❤️ Chest Tight, Mind Racing</span>
+          </div>
+          <div class="slider-track">
+            <input type="range" min="0" max="100" value="50" id="w2-anxiety"
+              oninput="updateSlider('w2-anxiety','w2-anxiety-val')">
+          </div>
+          <div class="slider-value-display" id="w2-anxiety-val">Balanced (50)</div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Awareness Checklist</label>
+          <ul class="checklist">
+            <li onclick="toggleCheck(this)"><span class="check-box"></span>Did the body scan before at least one shot</li>
+            <li onclick="toggleCheck(this)"><span class="check-box"></span>Noticed anxiety arriving before it took over</li>
+            <li onclick="toggleCheck(this)"><span class="check-box"></span>Released one area of tension on an exhale</li>
+            <li onclick="toggleCheck(this)"><span class="check-box"></span>Listened to my body instead of fighting it</li>
+            <li onclick="toggleCheck(this)"><span class="check-box"></span>Found at least one moment of genuine calm</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="session-block">
+      <div class="session-header">
+        <div class="session-icon after">📖</div>
+        <div class="session-header-text"><h3>After the Round</h3><span>Reflect without judgment</span></div>
+      </div>
+      <div class="session-body">
+        <div class="score-row">
+          <div class="score-cell"><label>Score</label><input type="text" placeholder="82" id="w2-score"></div>
+          <div class="score-cell"><label>Course</label><input type="text" placeholder="Mad River" id="w2-course"></div>
+          <div class="score-cell"><label>Date</label><input type="date" id="w2-date"></div>
+        </div>
+        <div class="section-divider"></div>
+        <div class="field-group">
+          <label class="field-label">When Did Anxiety Show Up?</label>
+          <textarea class="note-area small" placeholder="Specific hole, situation, or shot — describe the moment." id="w2-anxiety-moment"></textarea>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Did You Fight It or Observe It?</label>
+          <div class="rating-row" id="w2-response">
+            <button class="rating-btn" onclick="selectRating(this,'w2-response')">Fought It</button>
+            <button class="rating-btn" onclick="selectRating(this,'w2-response')">Somewhere Between</button>
+            <button class="rating-btn" onclick="selectRating(this,'w2-response')">Observed It</button>
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">What I Learned About My Body This Week</label>
+          <textarea class="note-area small" placeholder="One honest observation about your tension patterns." id="w2-body-learned"></textarea>
+        </div>
+        <div class="field-group">
+          <label class="field-label">One Thing I'm Carrying Into Next Round</label>
+          <input type="text" class="note-input" placeholder="e.g. Check my jaw before every putt." id="w2-carry">
+        </div>
+      </div>
+    </div>
+
+    <div class="session-block">
+      <div class="session-header">
+        <div class="session-icon practice">🎯</div>
+        <div class="session-header-text"><h3>Practice Session</h3><span>Week 2 focus: feel over mechanics</span></div>
+      </div>
+      <div class="session-body">
+        <div class="practice-blocks">
+          <div class="practice-block">
+            <span class="pb-num">1</span>
+            <p class="pb-title">Groove (10 min)</p>
+            <textarea placeholder="Slow swings. Focus on feel, not result." id="w2-groove"></textarea>
+          </div>
+          <div class="practice-block">
+            <span class="pb-num">2</span>
+            <p class="pb-title">Challenge (10 min)</p>
+            <textarea placeholder="Alternate clubs each shot. Stay loose." id="w2-challenge"></textarea>
+          </div>
+          <div class="practice-block">
+            <span class="pb-num">3</span>
+            <p class="pb-title">Transfer (10 min)</p>
+            <textarea placeholder="Full routine. Body check before each shot." id="w2-transfer"></textarea>
+          </div>
+        </div>
+        <div class="section-divider"></div>
+        <div class="field-group">
+          <label class="field-label">Session Notes</label>
+          <textarea class="note-area large" placeholder="What did your body feel vs. what your mind was telling you? Where did awareness help?" id="w2-session-notes"></textarea>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════ WEEKS 3–8 (condensed but complete) ═══════════════════════ -->
+
+<script>
+// Generate weeks 3–8 dynamically with their chapter content
+const weekData = [
+  {
+    num: 3, chapter: 3,
+    title: "The Architecture of Trust",
+    focus: "This week you're building trust through repetition — not waiting to feel confident.",
+    quote: "Don't practice until you get it right. Practice until you can't get it wrong.",
+    quoteAttr: "— Unknown",
+    focusText: "Trust isn't a feeling — it's a decision. Every time you follow your process this week, even when it's uncomfortable, you're adding to something real. Target, breath, commit, swing, accept. Say it before every shot.",
+    beforeLabel: "Today's Trust Intention",
+    beforePlaceholder: "e.g. I commit to my process regardless of the outcome.",
+    sliderLeft: "😌 Trusting the Process",
+    sliderRight: "😤 Controlling Everything",
+    checklist: [
+      "Used my full pre-shot routine on every shot",
+      "Committed before every swing — not halfway",
+      "Accepted the outcome without changing my process",
+      "Relied on repetition, not feelings",
+      "Found my routine when pressure showed up"
+    ],
+    afterQ1: "When Did Trust Break Down?",
+    afterQ1p: "Specific hole or moment — what triggered doubt?",
+    afterQ2: "Did I commit or control?",
+    afterQ2opts: ["Controlled It", "Mixed", "Committed Fully"],
+    afterQ3: "What My Routine Did For Me Today",
+    afterQ3p: "Even one moment where it helped.",
+    practiceGroove: "10 trust reps. Same club, same target. Full routine every time.",
+    practiceChallenge: "Switch targets. Stay committed even when you miss.",
+    practiceTransfer: "Simulate pressure shots. Rate commitment 1–10 after each."
+  },
+  {
+    num: 4, chapter: 4,
+    title: "The Art of Decision",
+    focus: "This week you're practicing decisiveness — pick it, commit to it, live with it.",
+    quote: "Once you make a decision, the universe conspires to make it happen.",
+    quoteAttr: "— Ralph Waldo Emerson",
+    focusText: "Before every shot this week, rate your commitment from 1–10. If it's below 8, step away and restart. Only swing when you genuinely mean it. That's the whole drill.",
+    beforeLabel: "Today's Decision Focus",
+    beforePlaceholder: "e.g. Play smart, not impressive. Trust what I know.",
+    sliderLeft: "😌 Clear & Decided",
+    sliderRight: "😤 Indecisive & Second-Guessing",
+    checklist: [
+      "Rated commitment before every shot",
+      "Stepped away at least once when below 8",
+      "Chose the shot I could trust, not the hero shot",
+      "Let go of 'what if' before swinging",
+      "Played smart golf, not safe golf"
+    ],
+    afterQ1: "Where Did Indecision Cost Me?",
+    afterQ1p: "A specific shot or hole where doubt showed up.",
+    afterQ2: "How was my decision quality today?",
+    afterQ2opts: ["Mostly Indecisive", "Hit and Miss", "Clear & Committed"],
+    afterQ3: "Smartest Decision I Made Today",
+    afterQ3p: "The shot or moment where you played your game honestly.",
+    practiceGroove: "Commitment test on every rep. Rate before you swing.",
+    practiceChallenge: "Random lies and targets. Decide fast and commit.",
+    practiceTransfer: "Simulate course scenarios with water, bunkers. Play the smart shot."
+  },
+  {
+    num: 5, chapter: 5,
+    title: "The Geometry of the Short Game",
+    focus: "This week the short game becomes a math problem you can feel.",
+    quote: "The more I practice my short game, the luckier I get.",
+    quoteAttr: "— Gary Player",
+    focusText: "For every chip or pitch this week, name your landing spot before you swing. Not the hole — the landing zone. The size of a coin. Then match your feel to that spot. That's the whole game around the greens.",
+    beforeLabel: "Short Game Focus Today",
+    beforePlaceholder: "e.g. Land zone first. Let the geometry do the work.",
+    sliderLeft: "🎯 Locked on Landing Zone",
+    sliderRight: "😬 Staring at the Hole",
+    checklist: [
+      "Named a specific landing spot before every chip",
+      "Chose the right club for the geometry, not habit",
+      "Focused on landing zone, not the hole",
+      "Matched speed to the spot, not the distance",
+      "Stopped guessing — committed to the read"
+    ],
+    afterQ1: "Where Did the Short Game Cost Me?",
+    afterQ1p: "Wrong club? Wrong focus? Wrong landing zone?",
+    afterQ2: "How did my short game feel today?",
+    afterQ2opts: ["Guessing", "Getting There", "Calculated & Clear"],
+    afterQ3: "Best Short Game Decision Today",
+    afterQ3p: "The shot where the geometry clicked.",
+    practiceGroove: "Landing zone drill: towels at 3-4ft intervals. Land on target.",
+    practiceChallenge: "Alternate PW, 52°, 56° to the same landing zone. Feel the difference.",
+    practiceTransfer: "Play shots from real course lies. Name the zone, commit."
+  },
+  {
+    num: 6, chapter: 6,
+    title: "The Mind Beneath the Putter",
+    focus: "This week you're learning that confidence on the greens comes from rhythm, not results.",
+    quote: "Putting is 10% technique and 90% nerve.",
+    quoteAttr: "— Ben Crenshaw",
+    focusText: "Putting reveals what you believe. This week, simplify your routine to four steps: read it, feel it, commit, roll it. No extra strokes. No re-reads. Trust the read you made and roll it. Notice when you steer vs. when you allow.",
+    beforeLabel: "Putting Focus Today",
+    beforePlaceholder: "e.g. Roll it. Don't force it. Trust the read.",
+    sliderLeft: "😌 Rolling Freely",
+    sliderRight: "😬 Steering & Forcing",
+    checklist: [
+      "Used the 4-step routine on every putt",
+      "Committed to the read without second-guessing",
+      "Let the putter swing — didn't steer",
+      "Didn't change my routine after a miss",
+      "Found moments where it felt truly free"
+    ],
+    afterQ1: "When Did Putting Feel Heaviest?",
+    afterQ1p: "Distance, situation, or mental state — what was happening?",
+    afterQ2: "Was I rolling or forcing today?",
+    afterQ2opts: ["Forcing", "Somewhere Between", "Rolling Freely"],
+    afterQ3: "A Putt That Felt Right",
+    afterQ3p: "Even if it didn't go in — describe the feeling.",
+    practiceGroove: "3-ball reset. Random distances. Same routine every time.",
+    practiceChallenge: "Tempo-only drills. No target — just feel the pendulum.",
+    practiceTransfer: "Pressure putts. Count routine reps, not makes."
+  },
+  {
+    num: 7, chapter: 7,
+    title: "The Course Within the Course",
+    focus: "This week you're learning to respond to the course instead of reacting to it.",
+    quote: "The greatest victory is over oneself.",
+    quoteAttr: "— Aristotle",
+    focusText: "The course is giving you feedback all day, not punishment. This week, when something goes sideways — bad lie, bad bounce, bad break — pause before you react. Ask: what is this showing me? Patience? Focus? Composure? That's the real game.",
+    beforeLabel: "Course Management Intention",
+    beforePlaceholder: "e.g. Play the course in front of me, not the one in my head.",
+    sliderLeft: "😌 Responding Calmly",
+    sliderRight: "😤 Reacting Emotionally",
+    checklist: [
+      "Treated bad breaks as feedback, not punishment",
+      "Accepted the lie and adjusted — didn't force it",
+      "Stayed patient after a mistake",
+      "Played the smart shot, not the angry one",
+      "Kept emotional tempo steady throughout"
+    ],
+    afterQ1: "When Did the Course Win?",
+    afterQ1p: "Moment you reacted instead of responded — what triggered it?",
+    afterQ2: "How was my patience today?",
+    afterQ2opts: ["Lost It Early", "Held On Mostly", "Steady All Day"],
+    afterQ3: "Best Course Management Decision",
+    afterQ3p: "The moment you played smart and it paid off.",
+    practiceGroove: "Hit from awkward lies. Accept the result. Move on.",
+    practiceChallenge: "Random targets with one 'trouble' shot in each set. Respond.",
+    practiceTransfer: "Play complete holes in your head. What's the smart target off every tee?"
+  },
+  {
+    num: 8, chapter: 8,
+    title: "The Science of Practice",
+    focus: "This week you're training with purpose — not just exercising.",
+    quote: "It's not the hours you put in, but what you put into the hours.",
+    quoteAttr: "— Unknown",
+    focusText: "For every session this week, arrive with a plan. One metric. Three blocks. A note at the end. If you can't say what you trained and why, it wasn't practice — it was exercise. That gap is where most golfers live. Not you. Not this week.",
+    beforeLabel: "Today's Practice Intention",
+    beforePlaceholder: "e.g. Train the 90-110 yard shot. Full routine. Track start lines.",
+    sliderLeft: "🎯 Training with Purpose",
+    sliderRight: "🤷 Just Hitting Balls",
+    checklist: [
+      "Arrived with a specific plan",
+      "Used blocked practice to groove a feel",
+      "Used random practice to build adaptability",
+      "Tracked one meaningful metric",
+      "Left knowing what improved and why"
+    ],
+    afterQ1: "What Did I Actually Train Today?",
+    afterQ1p: "Be specific — not 'worked on irons.' What exactly?",
+    afterQ2: "Practice quality today?",
+    afterQ2opts: ["Just Exercise", "Decent But Unfocused", "Purposeful & Honest"],
+    afterQ3: "What Transferred From Practice",
+    afterQ3p: "One thing that showed up on the course from your range work.",
+    practiceGroove: "5 focused reps, one club. Lock in the feeling.",
+    practiceChallenge: "New target every shot. Simulate real course variety.",
+    practiceTransfer: "Full holes from memory. Real scenarios. Full routine."
+  }
+];
+
+function buildWeek(w) {
+  const container = document.createElement('div');
+  container.className = 'week-content';
+  container.id = `week-${w.num}`;
+  const pre = `w${w.num}`;
+
+  container.innerHTML = `
+    <div class="week-hero">
+      <p class="wk-num">Week ${w.num} · Chapter ${w.chapter}</p>
+      <h2>${w.title}</h2>
+      <p class="wk-focus">${w.focus}</p>
+      <div class="wk-divider"></div>
+    </div>
+    <div class="week-body">
+
+      <div class="week-quote">
+        <p>${w.quote}</p>
+        <span class="attr">${w.quoteAttr}</span>
+      </div>
+
+      <!-- BEFORE -->
+      <div class="session-block">
+        <div class="session-header">
+          <div class="session-icon before">🌅</div>
+          <div class="session-header-text"><h3>Before You Play</h3><span>3 minutes before you start</span></div>
+        </div>
+        <div class="session-body">
+          <div class="focus-card">
+            <p class="fc-label">Week ${w.num} Focus</p>
+            <p>${w.focusText}</p>
+          </div>
+          <div class="field-group">
+            <label class="field-label">${w.beforeLabel}</label>
+            <input type="text" class="note-input" placeholder="${w.beforePlaceholder}" id="${pre}-intention">
+          </div>
+          <div class="slider-field">
+            <label class="field-label">Mental State Right Now</label>
+            <div class="slider-labels">
+              <span class="left-label">${w.sliderLeft}</span>
+              <span class="right-label">${w.sliderRight}</span>
+            </div>
+            <div class="slider-track">
+              <input type="range" min="0" max="100" value="50" id="${pre}-pre-slider"
+                oninput="updateSlider('${pre}-pre-slider','${pre}-pre-val')">
+            </div>
+            <div class="slider-value-display" id="${pre}-pre-val">Balanced (50)</div>
+          </div>
+          <div class="field-group">
+            <label class="field-label">How I'm Arriving Today</label>
+            <textarea class="note-area small" placeholder="Mind, body, energy — quick honest check-in." id="${pre}-arriving"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- DURING -->
+      <div class="session-block">
+        <div class="session-header">
+          <div class="session-icon during">⛳</div>
+          <div class="session-header-text"><h3>On the Course</h3><span>Quick mid-round check-in</span></div>
+        </div>
+        <div class="session-body">
+          <div class="field-group">
+            <label class="field-label">Hole / Moment I Want to Remember</label>
+            <textarea class="note-area small" placeholder="One specific moment — what happened, what did you notice?" id="${pre}-moment"></textarea>
+          </div>
+          <div class="slider-field">
+            <label class="field-label">Tension / Awareness Level</label>
+            <div class="slider-labels">
+              <span class="left-label">💚 Free & Present</span>
+              <span class="right-label">❤️ Heart Ready to Jump Out</span>
+            </div>
+            <div class="slider-track">
+              <input type="range" min="0" max="100" value="40" id="${pre}-tension"
+                oninput="updateSlider('${pre}-tension','${pre}-tension-val')">
+            </div>
+            <div class="slider-value-display" id="${pre}-tension-val">Slightly loose (40)</div>
+          </div>
+          <div class="field-group">
+            <label class="field-label">Week ${w.num} Checklist</label>
+            <ul class="checklist" id="${pre}-checklist">
+              ${w.checklist.map(item => `<li onclick="toggleCheck(this)"><span class="check-box"></span>${item}</li>`).join('')}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- AFTER -->
+      <div class="session-block">
+        <div class="session-header">
+          <div class="session-icon after">📖</div>
+          <div class="session-header-text"><h3>After the Round</h3><span>Reflect without judgment</span></div>
+        </div>
+        <div class="session-body">
+          <div class="score-row">
+            <div class="score-cell"><label>Score</label><input type="text" placeholder="82" id="${pre}-score"></div>
+            <div class="score-cell"><label>Course</label><input type="text" placeholder="Mad River" id="${pre}-course"></div>
+            <div class="score-cell"><label>Date</label><input type="date" id="${pre}-date"></div>
+          </div>
+          <div class="section-divider"></div>
+          <div class="field-group">
+            <label class="field-label">${w.afterQ1}</label>
+            <span class="field-hint">${w.afterQ1p}</span>
+            <textarea class="note-area small" id="${pre}-q1"></textarea>
+          </div>
+          <div class="field-group">
+            <label class="field-label">${w.afterQ2}</label>
+            <div class="rating-row" id="${pre}-rating">
+              ${w.afterQ2opts.map(o => `<button class="rating-btn" onclick="selectRating(this,'${pre}-rating')">${o}</button>`).join('')}
+            </div>
+          </div>
+          <div class="field-group">
+            <label class="field-label">${w.afterQ3}</label>
+            <span class="field-hint">${w.afterQ3p}</span>
+            <textarea class="note-area small" id="${pre}-q3"></textarea>
+          </div>
+          <div class="field-group">
+            <label class="field-label">One Thing I'm Carrying Into Next Round</label>
+            <input type="text" class="note-input" placeholder="One sentence. Make it honest." id="${pre}-carry">
+          </div>
+        </div>
+      </div>
+
+      <!-- PRACTICE -->
+      <div class="session-block">
+        <div class="session-header">
+          <div class="session-icon practice">🎯</div>
+          <div class="session-header-text"><h3>Practice Session</h3><span>Week ${w.num} range plan</span></div>
+        </div>
+        <div class="session-body">
+          <div class="practice-blocks">
+            <div class="practice-block">
+              <span class="pb-num">1</span>
+              <p class="pb-title">Groove (10 min)</p>
+              <textarea placeholder="${w.practiceGroove}" id="${pre}-groove"></textarea>
+            </div>
+            <div class="practice-block">
+              <span class="pb-num">2</span>
+              <p class="pb-title">Challenge (10 min)</p>
+              <textarea placeholder="${w.practiceChallenge}" id="${pre}-challenge"></textarea>
+            </div>
+            <div class="practice-block">
+              <span class="pb-num">3</span>
+              <p class="pb-title">Transfer (10 min)</p>
+              <textarea placeholder="${w.practiceTransfer}" id="${pre}-transfer"></textarea>
+            </div>
+          </div>
+          <div class="section-divider"></div>
+          <div class="field-group">
+            <label class="field-label">Session Notes</label>
+            <textarea class="note-area large" placeholder="What improved? What did you learn? What carries forward?" id="${pre}-session-notes"></textarea>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  `;
+  return container;
+}
+
+// Inject weeks 3–8
+weekData.forEach(w => {
+  document.body.insertBefore(buildWeek(w), document.querySelector('.site-footer'));
+});
+</script>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <p>© 2025 <strong>Ryan Rinneard</strong> · Eight Weeks to Mastery Journal · madriverpro.com</p>
+  <p style="margin-top:8px; font-size:12px; color:var(--navy-mid);">Your notes are stored in this browser session. Export coming in the app version.</p>
+</footer>
+
+<div class="save-banner" id="saveBanner">✓ Noted</div>
+
+<script>
+// ── WEEK SWITCHING ──────────────────────────────────────
+function showWeek(num, btn) {
+  document.querySelectorAll('.week-content').forEach(w => w.classList.remove('active'));
+  document.querySelectorAll('.week-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('week-' + num).classList.add('active');
+  btn.classList.add('active');
+  // Scroll to week hero
+  setTimeout(() => {
+    const el = document.getElementById('week-' + num);
+    const top = el.getBoundingClientRect().top + window.scrollY - 120;
+    window.scrollTo({ top, behavior: 'smooth' });
+  }, 50);
+}
+
+// ── SLIDER LABELS ───────────────────────────────────────
+const sliderLabels = [
+  [0,  10,  "Deeply calm"],
+  [11, 25,  "Very relaxed"],
+  [26, 40,  "Slightly loose"],
+  [41, 59,  "Balanced"],
+  [60, 70,  "Getting tight"],
+  [71, 82,  "Noticeably tense"],
+  [83, 92,  "Quite anxious"],
+  [93, 100, "Heart ready to jump out 🔴"]
+];
+
+function updateSlider(sliderId, displayId) {
+  const val = parseInt(document.getElementById(sliderId).value);
+  const label = sliderLabels.find(([min,max]) => val >= min && val <= max)?.[2] || 'Balanced';
+  document.getElementById(displayId).textContent = `${label} (${val})`;
+}
+
+// ── CHECKLISTS ──────────────────────────────────────────
+function toggleCheck(li) {
+  li.classList.toggle('checked');
+  flashSave();
+}
+
+// ── RATING BUTTONS ──────────────────────────────────────
+function selectRating(btn, groupId) {
+  document.querySelectorAll(`#${groupId} .rating-btn`).forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  flashSave();
+}
+
+// ── SAVE FLASH ──────────────────────────────────────────
+let saveTimer;
+function flashSave() {
+  const banner = document.getElementById('saveBanner');
+  banner.classList.add('show');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => banner.classList.remove('show'), 1800);
+}
+
+// Flash on any input
+document.addEventListener('input', e => {
+  if (e.target.matches('input, textarea')) flashSave();
+});
+
+// ── INIT SLIDERS ─────────────────────────────────────────
+document.querySelectorAll('input[type=range]').forEach(slider => {
+  const displayId = slider.id.replace('-slider', '-val').replace('tension', 'tension-val').replace('anxiety', 'anxiety-val');
+  // Find sibling display
+  const display = slider.closest('.slider-field, .session-body')?.querySelector('.slider-value-display');
+  if (display) {
+    const val = parseInt(slider.value);
+    const label = sliderLabels.find(([min,max]) => val >= min && val <= max)?.[2] || 'Balanced';
+    display.textContent = `${label} (${val})`;
+    slider.addEventListener('input', () => {
+      const v = parseInt(slider.value);
+      const l = sliderLabels.find(([min,max]) => v >= min && v <= max)?.[2] || 'Balanced';
+      display.textContent = `${l} (${v})`;
+    });
+  }
+});
+</script>
+
+</body>
+</html>
