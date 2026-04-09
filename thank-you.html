@@ -65,6 +65,7 @@
                     <form class="thankyou-form" id="thankyouBookForm">
                         <input type="text" name="first_name" placeholder="First name" required class="popup-input">
                         <input type="email" name="email" placeholder="Email address" required class="popup-input">
+                        <input type="text" name="website" autocomplete="off" tabindex="-1" style="position:absolute;left:-9999px;opacity:0;height:0;width:0;" aria-hidden="true">
                         <button type="submit" class="btn btn-primary" style="width: 100%;">Send Me the Book</button>
                     </form>
                     <p style="font-size: 12px; color: var(--gray-400); margin-top: 12px;">No spam, ever. Unsubscribe anytime.</p>
@@ -158,6 +159,7 @@
                         body: JSON.stringify({
                             first_name: tyForm.first_name.value,
                             email: tyForm.email.value,
+                            website: tyForm.website?.value || '',
                         }),
                     });
 
