@@ -119,14 +119,37 @@ if (bookPopup && !sessionStorage.getItem('bookPopupShown')) {
     }, 30000);
 }
 
-// Form submission (placeholder — swap with real email service)
+// Form submission — sends to /api/subscribe (Kit)
 if (bookForm) {
-    bookForm.addEventListener('submit', (e) => {
+    bookForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const formContent = bookForm.innerHTML;
-        bookForm.innerHTML = '<div style="padding: 20px 0;"><h3 style="font-size: 22px; color: #1a2744; margin-bottom: 12px;">You\'re in!</h3><p style="font-size: 15px; color: #9ca3af;">Check your inbox for your free copy of Eight Weeks to Mastery and the companion journal.</p></div>';
-        // TODO: Connect to email service (Mailchimp, ConvertKit, etc.)
-        // Send form data: name = e.target.first_name.value, email = e.target.email.value
+        const submitBtn = bookForm.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Sending...';
+        submitBtn.disabled = true;
+
+        try {
+            const res = await fetch('/api/subscribe', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    first_name: bookForm.first_name.value,
+                    email: bookForm.email.value,
+                }),
+            });
+
+            if (res.ok) {
+                bookForm.innerHTML = '<div style="padding: 20px 0;"><h3 style="font-size: 22px; color: #1a2744; margin-bottom: 12px;">You\'re in!</h3><p style="font-size: 15px; color: #9ca3af;">Check your inbox for your free copy of Eight Weeks to Mastery and the companion journal.</p></div>';
+            } else {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+                alert('Something went wrong — please try again.');
+            }
+        } catch {
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+            alert('Something went wrong — please try again.');
+        }
     });
 }
 
