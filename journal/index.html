@@ -1,0 +1,1867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eight Weeks to Mastery — Journal | Ryan Rinneard Golf</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,700;0,800;1,700&display=swap" rel="stylesheet">
+<style>
+/* ── TOKENS ─────────────────────────────────────────────── */
+:root {
+  --navy:        #0a1628;
+  --navy-light:  #142240;
+  --navy-mid:    #1e3a5f;
+  --white:       #ffffff;
+  --off-white:   #f7f8fa;
+  --gray-100:    #eef0f4;
+  --gray-200:    #dde1e9;
+  --gray-300:    #c8cdd6;
+  --gray-500:    #6b7280;
+  --gray-700:    #374151;
+  --orange:      #c97c2e;
+  --orange-light:#e8943a;
+  --orange-pale: #fdf3e7;
+  --green:       #2e7d52;
+  --green-pale:  #edf7f1;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: var(--off-white);
+  color: var(--gray-700);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── AUTH SCREEN ────────────────────────────────────────── */
+.auth-screen {
+  min-height: 100vh;
+  background: var(--navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.auth-screen::before {
+  content:'';
+  position:absolute; top:-200px; right:-200px;
+  width:600px; height:600px; border-radius:50%;
+  background: radial-gradient(circle, rgba(201,124,46,.12) 0%, transparent 70%);
+  pointer-events:none;
+}
+.auth-screen::after {
+  content:'';
+  position:absolute; bottom:-150px; left:-150px;
+  width:500px; height:500px; border-radius:50%;
+  background: radial-gradient(circle, rgba(46,125,82,.08) 0%, transparent 70%);
+  pointer-events:none;
+}
+.auth-card {
+  background: var(--navy-light);
+  border: 1px solid var(--navy-mid);
+  border-radius: 16px;
+  padding: 48px 40px;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+.auth-card .eyebrow {
+  font-size: 11px; font-weight: 700; letter-spacing: 2.5px;
+  text-transform: uppercase; color: var(--orange); margin-bottom: 20px;
+}
+.auth-card h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 32px; font-weight: 800; color: var(--white);
+  line-height: 1.2; margin-bottom: 8px;
+}
+.auth-card .subtitle {
+  font-size: 15px; color: var(--gray-300); margin-bottom: 32px;
+  line-height: 1.6;
+}
+.auth-input {
+  width: 100%; height: 48px;
+  border: 1.5px solid var(--navy-mid);
+  border-radius: 10px; padding: 0 16px;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px; color: var(--white);
+  background: var(--navy); outline: none;
+  transition: border-color .2s;
+  margin-bottom: 16px;
+}
+.auth-input::placeholder { color: var(--gray-500); }
+.auth-input:focus { border-color: var(--orange); }
+.auth-btn {
+  width: 100%; height: 48px;
+  border: none; border-radius: 10px;
+  background: var(--orange);
+  color: var(--white); font-size: 15px;
+  font-weight: 700; cursor: pointer;
+  transition: background .2s, transform .1s;
+  letter-spacing: .3px;
+}
+.auth-btn:hover { background: var(--orange-light); }
+.auth-btn:active { transform: scale(0.98); }
+.auth-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.auth-divider {
+  width: 36px; height: 2px; background: var(--navy-mid);
+  margin: 24px auto; border-radius: 2px;
+}
+.auth-footer {
+  font-size: 13px; color: var(--gray-500); line-height: 1.6;
+}
+.auth-link {
+  color: var(--orange); cursor: pointer;
+  text-decoration: underline; font-weight: 600;
+}
+.auth-error {
+  color: #e74c3c; font-size: 13px; margin-bottom: 12px;
+  display: none;
+}
+.magic-link-sent {
+  display: none;
+}
+.magic-link-sent .check-circle {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: var(--green); display: flex;
+  align-items: center; justify-content: center;
+  margin: 0 auto 20px; font-size: 28px; color: white;
+}
+.magic-link-sent h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px; color: var(--white); margin-bottom: 12px;
+}
+.magic-link-sent p {
+  font-size: 15px; color: var(--gray-300); line-height: 1.6;
+}
+
+/* ── HEADER ─────────────────────────────────────────────── */
+.site-header {
+  background: var(--navy);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  border-bottom: 1px solid var(--navy-mid);
+}
+.brand { font-size: 14px; font-weight: 600; color: var(--white); letter-spacing: .4px; }
+.brand span { color: var(--orange); }
+.header-right { display: flex; align-items: center; gap: 16px; }
+.header-badge {
+  font-size: 11px; font-weight: 600; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--gray-300);
+}
+.user-pill {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--navy-light); border: 1px solid var(--navy-mid);
+  border-radius: 20px; padding: 6px 14px 6px 10px;
+  font-size: 12px; color: var(--gray-300); cursor: pointer;
+  transition: border-color .2s;
+}
+.user-pill:hover { border-color: var(--orange); }
+.user-avatar {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--orange); display: flex;
+  align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: white;
+}
+.logout-btn {
+  background: none; border: none; color: var(--gray-500);
+  font-size: 12px; cursor: pointer; padding: 4px 8px;
+  border-radius: 4px; transition: color .2s;
+}
+.logout-btn:hover { color: var(--orange); }
+
+/* ── DASHBOARD ─────────────────────────────────────────── */
+.dashboard {
+  max-width: 960px; margin: 0 auto;
+  padding: 40px 24px 20px;
+}
+.dash-greeting {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px; color: var(--navy);
+  margin-bottom: 4px;
+}
+.dash-sub {
+  font-size: 15px; color: var(--gray-500);
+  margin-bottom: 32px;
+}
+.progress-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.progress-card {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: 12px;
+  padding: 20px;
+}
+.progress-card .pc-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--gray-500);
+  margin-bottom: 8px;
+}
+.progress-card .pc-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 32px; font-weight: 700; color: var(--navy);
+  line-height: 1;
+}
+.progress-card .pc-detail {
+  font-size: 13px; color: var(--gray-500); margin-top: 6px;
+}
+.progress-card.highlight {
+  background: var(--navy);
+  border-color: var(--navy);
+}
+.progress-card.highlight .pc-label { color: var(--orange); }
+.progress-card.highlight .pc-value { color: var(--white); }
+.progress-card.highlight .pc-detail { color: var(--gray-300); }
+
+/* Week progress bars */
+.week-progress-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 40px;
+}
+@media(max-width:700px){
+  .week-progress-grid { grid-template-columns: repeat(2, 1fr); }
+}
+.week-prog-card {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: 10px;
+  padding: 16px;
+  cursor: pointer;
+  transition: border-color .2s, transform .1s;
+}
+.week-prog-card:hover { border-color: var(--orange); transform: translateY(-1px); }
+.week-prog-card.current { border-color: var(--orange); border-width: 2px; }
+.week-prog-card .wp-num {
+  font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--orange); margin-bottom: 4px;
+}
+.week-prog-card .wp-title {
+  font-size: 14px; font-weight: 700; color: var(--navy);
+  margin-bottom: 10px; line-height: 1.3;
+}
+.wp-bar-track {
+  height: 6px; background: var(--gray-100);
+  border-radius: 3px; overflow: hidden;
+}
+.wp-bar-fill {
+  height: 100%; border-radius: 3px;
+  background: linear-gradient(90deg, var(--green), var(--orange));
+  transition: width .5s ease;
+}
+.wp-pct {
+  font-size: 12px; color: var(--gray-500);
+  margin-top: 6px; font-weight: 600;
+}
+
+/* ── SCORE CHART ─────────────────────────────────────────── */
+.score-chart-wrap {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 40px;
+}
+.score-chart-wrap h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px; color: var(--navy); margin-bottom: 16px;
+}
+.score-chart {
+  display: flex; align-items: flex-end; gap: 8px;
+  height: 120px; padding-top: 8px;
+}
+.score-bar-wrap {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; height: 100%;
+  justify-content: flex-end;
+}
+.score-bar {
+  width: 100%; max-width: 48px;
+  background: linear-gradient(180deg, var(--orange), var(--orange-light));
+  border-radius: 4px 4px 0 0;
+  transition: height .5s ease;
+  min-height: 2px;
+  position: relative;
+}
+.score-bar .score-val {
+  position: absolute; top: -20px; left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px; font-weight: 700; color: var(--navy);
+  white-space: nowrap;
+}
+.score-bar-label {
+  font-size: 11px; color: var(--gray-500);
+  margin-top: 8px; font-weight: 600;
+}
+.no-scores {
+  text-align: center; padding: 32px;
+  color: var(--gray-500); font-size: 14px;
+}
+
+/* ── WEEK NAV ────────────────────────────────────────────── */
+.week-nav-wrap {
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-200);
+  position: sticky;
+  top: 53px;
+  z-index: 100;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.week-nav {
+  display: flex; gap: 0;
+  max-width: 960px; margin: 0 auto;
+  min-width: max-content;
+}
+.week-tab {
+  padding: 14px 20px;
+  font-size: 13px; font-weight: 600;
+  color: var(--gray-500);
+  cursor: pointer; border: none; background: none;
+  border-bottom: 3px solid transparent;
+  transition: color .2s, border-color .2s;
+  white-space: nowrap; letter-spacing: .2px;
+}
+.week-tab:hover { color: var(--navy); }
+.week-tab.active { color: var(--navy); border-bottom-color: var(--orange); }
+
+/* ── WEEK CONTENT ───────────────────────────────────────── */
+.week-content { display: none; }
+.week-content.active { display: block; }
+
+/* ── WEEK HERO ──────────────────────────────────────────── */
+.week-hero {
+  background: var(--navy);
+  padding: 56px 24px 48px; text-align: center;
+  border-bottom: 3px solid var(--orange);
+}
+.week-hero .wk-num {
+  font-size: 11px; font-weight: 700; letter-spacing: 2.5px;
+  text-transform: uppercase; color: var(--orange); margin-bottom: 12px;
+}
+.week-hero h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(26px,4vw,40px); color: var(--white);
+  font-weight: 700; line-height: 1.2; max-width: 580px; margin: 0 auto 12px;
+}
+.week-hero .wk-focus {
+  font-size: 15px; color: var(--gray-300); font-style: italic;
+  max-width: 440px; margin: 0 auto;
+}
+.week-hero .wk-divider {
+  width: 36px; height: 2px; background: var(--orange);
+  margin: 20px auto 0; border-radius: 2px;
+}
+
+/* ── WEEK BODY ──────────────────────────────────────────── */
+.week-body {
+  max-width: 720px; margin: 0 auto; padding: 0 24px 64px;
+}
+
+/* ── SESSION BLOCK ──────────────────────────────────────── */
+.session-block {
+  margin-top: 40px;
+  background: var(--white);
+  border-radius: 14px;
+  border: 1px solid var(--gray-200);
+  overflow: hidden;
+}
+.session-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--gray-100);
+}
+.session-icon {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+.session-icon.before { background: var(--orange-pale); }
+.session-icon.during { background: #e8f0fd; }
+.session-icon.after  { background: var(--green-pale); }
+.session-icon.practice { background: var(--gray-100); }
+
+.session-header-text h3 {
+  font-size: 15px; font-weight: 700; color: var(--navy); letter-spacing: .2px;
+}
+.session-header-text span {
+  font-size: 12px; color: var(--gray-500);
+}
+.session-body { padding: 24px; }
+
+/* ── FORM ELEMENTS ──────────────────────────────────────── */
+.field-group { margin-bottom: 24px; }
+.field-label {
+  display: block; font-size: 12px; font-weight: 700;
+  color: var(--navy); letter-spacing: .8px;
+  text-transform: uppercase; margin-bottom: 8px;
+}
+.field-hint {
+  display: block; font-size: 13px; color: var(--gray-500);
+  font-style: italic; margin-bottom: 10px; margin-top: -4px;
+}
+
+.note-area {
+  width: 100%; min-height: 80px;
+  border: 1.5px solid var(--gray-200);
+  border-radius: 8px; padding: 12px 14px;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px; color: var(--gray-700);
+  background: var(--off-white);
+  resize: vertical; outline: none;
+  transition: border-color .2s;
+  line-height: 1.7;
+}
+.note-area:focus { border-color: var(--orange); background: var(--white); }
+.note-area.small { min-height: 56px; }
+.note-area.large { min-height: 120px; }
+
+.note-input {
+  width: 100%; height: 44px;
+  border: 1.5px solid var(--gray-200);
+  border-radius: 8px; padding: 0 14px;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px; color: var(--gray-700);
+  background: var(--off-white); outline: none;
+  transition: border-color .2s;
+}
+.note-input:focus { border-color: var(--orange); background: var(--white); }
+
+/* ── SLIDER ─────────────────────────────────────────────── */
+.slider-field { margin-bottom: 24px; }
+.slider-labels {
+  display: flex; justify-content: space-between;
+  font-size: 12px; color: var(--gray-500); margin-bottom: 6px;
+}
+.slider-labels .left-label { font-weight: 600; color: var(--green); }
+.slider-labels .right-label { font-weight: 600; color: #c0392b; }
+.slider-track { position: relative; padding: 4px 0; }
+input[type=range] {
+  width: 100%; -webkit-appearance: none;
+  height: 6px; border-radius: 3px;
+  background: linear-gradient(to right,
+    var(--green) 0%, var(--orange) 50%, #c0392b 100%
+  );
+  outline: none; cursor: pointer;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--white);
+  border: 3px solid var(--navy);
+  box-shadow: 0 2px 6px rgba(0,0,0,.2);
+  transition: transform .15s;
+}
+input[type=range]::-webkit-slider-thumb:active { transform: scale(1.2); }
+input[type=range]::-moz-range-thumb {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--white); border: 3px solid var(--navy);
+  box-shadow: 0 2px 6px rgba(0,0,0,.2);
+}
+.slider-value-display {
+  text-align: center; margin-top: 8px;
+  font-size: 13px; font-weight: 600; color: var(--navy);
+}
+
+/* ── CHECKLIST ──────────────────────────────────────────── */
+.checklist { list-style: none; }
+.checklist li {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 10px 0; border-bottom: 1px solid var(--gray-100);
+  font-size: 15px; color: var(--gray-700);
+  cursor: pointer; transition: color .15s;
+  line-height: 1.5;
+}
+.checklist li:last-child { border-bottom: none; }
+.checklist li.checked { color: var(--gray-500); text-decoration: line-through; }
+.check-box {
+  width: 20px; height: 20px; border-radius: 5px;
+  border: 2px solid var(--gray-300);
+  flex-shrink: 0; display: flex; align-items: center;
+  justify-content: center; transition: all .15s;
+  margin-top: 1px;
+}
+.checklist li.checked .check-box {
+  background: var(--green); border-color: var(--green);
+  color: var(--white);
+}
+.check-box::after { content: ''; }
+.checklist li.checked .check-box::after { content: '✓'; font-size: 12px; font-weight: 700; }
+
+/* ── RATING ROW ─────────────────────────────────────────── */
+.rating-row {
+  display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;
+}
+.rating-btn {
+  padding: 7px 16px; border-radius: 6px;
+  border: 1.5px solid var(--gray-200);
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  background: var(--off-white); color: var(--gray-500);
+  transition: all .15s;
+}
+.rating-btn:hover { border-color: var(--orange); color: var(--orange); }
+.rating-btn.selected { background: var(--navy); border-color: var(--navy); color: var(--white); }
+
+/* ── PULL QUOTE ─────────────────────────────────────────── */
+.week-quote {
+  border-left: 3px solid var(--orange);
+  padding: 16px 20px; margin: 24px 0;
+  background: var(--orange-pale);
+  border-radius: 0 8px 8px 0;
+}
+.week-quote p {
+  font-size: 16px; font-weight: 500; color: var(--navy);
+  font-style: italic; margin: 0; line-height: 1.6;
+}
+.week-quote .attr {
+  font-size: 12px; font-style: normal; font-weight: 700;
+  color: var(--orange); display: block; margin-top: 8px;
+}
+
+/* ── FOCUS CARD ─────────────────────────────────────────── */
+.focus-card {
+  background: var(--navy);
+  border-radius: 10px; padding: 20px 22px;
+  margin-bottom: 24px;
+}
+.focus-card .fc-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--orange); margin-bottom: 10px;
+}
+.focus-card p {
+  font-size: 15px; color: var(--gray-300); line-height: 1.7; margin: 0;
+}
+
+/* ── DIVIDER ────────────────────────────────────────────── */
+.section-divider {
+  height: 1px; background: var(--gray-100);
+  margin: 28px 0;
+}
+
+/* ── SCORE ROW ──────────────────────────────────────────── */
+.score-row {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px; margin-top: 8px;
+}
+.score-cell { display: flex; flex-direction: column; gap: 4px; }
+.score-cell label { font-size: 12px; color: var(--gray-500); font-weight: 600; }
+.score-cell input {
+  height: 42px; border: 1.5px solid var(--gray-200);
+  border-radius: 8px; padding: 0 12px; font-size: 16px;
+  font-weight: 600; color: var(--navy);
+  background: var(--off-white); text-align: center; outline: none;
+  transition: border-color .2s;
+}
+.score-cell input:focus { border-color: var(--orange); background: var(--white); }
+
+/* ── PRACTICE PLAN GRID ─────────────────────────────────── */
+.practice-blocks {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px; margin-top: 8px;
+}
+.practice-block {
+  background: var(--off-white); border-radius: 8px;
+  border: 1px solid var(--gray-200); padding: 14px;
+}
+.practice-block .pb-num {
+  display: inline-flex; width: 24px; height: 24px;
+  background: var(--navy); color: var(--white);
+  border-radius: 50%; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; margin-bottom: 8px;
+}
+.practice-block .pb-title {
+  font-size: 12px; font-weight: 700; color: var(--navy);
+  text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px;
+}
+.practice-block textarea {
+  width: 100%; min-height: 70px; border: 1.5px solid var(--gray-200);
+  border-radius: 6px; padding: 8px; font-size: 13px;
+  font-family: 'Inter', sans-serif; color: var(--gray-700);
+  background: var(--white); resize: none; outline: none;
+  transition: border-color .2s;
+}
+.practice-block textarea:focus { border-color: var(--orange); }
+
+/* ── SAVE BANNER ────────────────────────────────────────── */
+.save-banner {
+  position: fixed; bottom: 20px; right: 20px;
+  background: var(--navy); color: var(--white);
+  padding: 10px 18px; border-radius: 8px;
+  font-size: 13px; font-weight: 600;
+  opacity: 0; transform: translateY(8px);
+  transition: opacity .3s, transform .3s;
+  pointer-events: none; z-index: 300;
+  box-shadow: 0 4px 12px rgba(0,0,0,.3);
+}
+.save-banner.show { opacity: 1; transform: translateY(0); }
+
+/* ── BACK TO DASHBOARD ─────────────────────────────────── */
+.back-to-dash {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 13px; font-weight: 600; color: var(--orange);
+  cursor: pointer; padding: 12px 24px;
+  background: none; border: none;
+  transition: opacity .2s;
+}
+.back-to-dash:hover { opacity: .8; }
+
+/* ── FOOTER ─────────────────────────────────────────────── */
+.site-footer {
+  background: var(--navy); padding: 36px 24px;
+  text-align: center; margin-top: 60px;
+}
+.site-footer p { font-size: 13px; color: var(--gray-500); }
+.site-footer strong { color: var(--orange); }
+
+/* ── VIEW TOGGLES ──────────────────────────────────────── */
+.view { display: none; }
+.view.active { display: block; }
+
+/* ── RESPONSIVE ─────────────────────────────────────────── */
+@media(max-width:600px){
+  .session-body { padding: 16px; }
+  .practice-blocks { grid-template-columns: 1fr; }
+  .score-row { grid-template-columns: 1fr 1fr 1fr; }
+  .auth-card { padding: 32px 24px; }
+  .progress-grid { grid-template-columns: 1fr 1fr; }
+  .dashboard { padding: 24px 16px 16px; }
+}
+
+/* ── SESSION SELECTOR ──────────────────────────────────── */
+.session-selector {
+  max-width: 720px; margin: 24px auto 0;
+  padding: 0 24px;
+  display: flex; align-items: center; gap: 12px;
+}
+.session-selector select {
+  height: 38px; border: 1.5px solid var(--gray-200);
+  border-radius: 8px; padding: 0 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px; color: var(--navy);
+  background: var(--white); outline: none;
+  cursor: pointer; font-weight: 600;
+}
+.session-selector select:focus { border-color: var(--orange); }
+.new-session-btn {
+  height: 38px; padding: 0 16px;
+  border: 1.5px solid var(--orange);
+  border-radius: 8px; background: none;
+  color: var(--orange); font-size: 13px;
+  font-weight: 700; cursor: pointer;
+  transition: all .2s;
+}
+.new-session-btn:hover {
+  background: var(--orange); color: white;
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ AUTH SCREEN ═══════════ -->
+<div class="view active" id="authView">
+  <div class="auth-screen">
+    <div class="auth-card">
+      <div id="authForm">
+        <p class="eyebrow">Player Journal</p>
+        <h1>Eight Weeks<br>to Mastery</h1>
+        <p class="subtitle">Track your progress, build awareness, and master the inner game — week by week.</p>
+        <div class="auth-divider"></div>
+        <p id="authError" class="auth-error"></p>
+        <input type="email" class="auth-input" id="authEmail" placeholder="Your email address" autocomplete="email">
+        <button class="auth-btn" id="authBtn" onclick="handleAuth()">Open My Journal</button>
+        <div class="auth-divider"></div>
+        <p class="auth-footer">Your journal saves automatically.<br>Use the same email to access it on any device.</p>
+      </div>
+      <div class="magic-link-sent" id="magicLinkSent">
+        <div class="check-circle">✓</div>
+        <h2>Welcome Back</h2>
+        <p>Loading your journal...</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ MAIN APP ═══════════ -->
+<div class="view" id="appView">
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <span class="brand">Ryan Rinneard <span>Golf</span></span>
+    <div class="header-right">
+      <span class="header-badge">Player Journal</span>
+      <div class="user-pill" id="userPill">
+        <div class="user-avatar" id="userAvatar">R</div>
+        <span id="userEmail">player@email.com</span>
+      </div>
+      <button class="logout-btn" onclick="handleLogout()">Sign out</button>
+    </div>
+  </header>
+
+  <!-- DASHBOARD VIEW -->
+  <div class="view active" id="dashView">
+    <div class="dashboard">
+      <h2 class="dash-greeting" id="dashGreeting">Welcome back</h2>
+      <p class="dash-sub">Your 8-week journey at a glance. Tap any week to continue.</p>
+
+      <div class="progress-grid" id="progressGrid">
+        <div class="progress-card highlight">
+          <p class="pc-label">Current Week</p>
+          <p class="pc-value" id="statCurrentWeek">1</p>
+          <p class="pc-detail" id="statCurrentTitle">The Two Games</p>
+        </div>
+        <div class="progress-card">
+          <p class="pc-label">Rounds Logged</p>
+          <p class="pc-value" id="statRounds">0</p>
+          <p class="pc-detail">across all weeks</p>
+        </div>
+        <div class="progress-card">
+          <p class="pc-label">Journal Entries</p>
+          <p class="pc-value" id="statEntries">0</p>
+          <p class="pc-detail">fields filled in</p>
+        </div>
+        <div class="progress-card">
+          <p class="pc-label">Best Score</p>
+          <p class="pc-value" id="statBestScore">—</p>
+          <p class="pc-detail" id="statBestCourse"></p>
+        </div>
+      </div>
+
+      <!-- Score trend chart -->
+      <div class="score-chart-wrap" id="scoreChartWrap">
+        <h3>Score Trend</h3>
+        <div id="scoreChart"></div>
+      </div>
+
+      <!-- Week cards -->
+      <div class="week-progress-grid" id="weekProgressGrid"></div>
+    </div>
+  </div>
+
+  <!-- JOURNAL VIEW -->
+  <div class="view" id="journalView">
+    <button class="back-to-dash" onclick="showDashboard()">← Back to Dashboard</button>
+
+    <!-- WEEK NAV -->
+    <div class="week-nav-wrap">
+      <nav class="week-nav" id="weekNav"></nav>
+    </div>
+
+    <!-- Session selector -->
+    <div class="session-selector" id="sessionSelector">
+      <span style="font-size:13px;font-weight:600;color:var(--navy);">Round:</span>
+      <select id="sessionSelect" onchange="switchSession()"></select>
+      <button class="new-session-btn" onclick="addNewSession()">+ New Round</button>
+    </div>
+
+    <!-- Week content containers injected by JS -->
+    <div id="weekContainer"></div>
+
+    <footer class="site-footer">
+      <p>&copy; 2025 <strong>Ryan Rinneard</strong> &middot; Eight Weeks to Mastery Journal &middot; madriverpro.com</p>
+      <p style="margin-top:8px; font-size:12px; color:var(--navy-mid);">Your data saves automatically and syncs across devices.</p>
+    </footer>
+  </div>
+
+</div>
+
+<div class="save-banner" id="saveBanner">✓ Saved</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// DATA LAYER — localStorage now, ready for Supabase later
+// ═══════════════════════════════════════════════════════════
+
+const Storage = {
+  _prefix: 'rrga_journal_',
+
+  getUser() {
+    const raw = localStorage.getItem(this._prefix + 'user');
+    return raw ? JSON.parse(raw) : null;
+  },
+
+  setUser(user) {
+    localStorage.setItem(this._prefix + 'user', JSON.stringify(user));
+  },
+
+  clearUser() {
+    localStorage.removeItem(this._prefix + 'user');
+  },
+
+  // Journal data keyed by email
+  getData(email) {
+    const raw = localStorage.getItem(this._prefix + 'data_' + email);
+    return raw ? JSON.parse(raw) : this._defaultData();
+  },
+
+  saveData(email, data) {
+    localStorage.setItem(this._prefix + 'data_' + email, JSON.stringify(data));
+  },
+
+  _defaultData() {
+    const data = { sessions: {}, meta: { created: new Date().toISOString() } };
+    // Each week gets a default session
+    for (let w = 1; w <= 8; w++) {
+      data.sessions[`w${w}`] = [{ id: 1, label: 'Round 1', fields: {} }];
+    }
+    return data;
+  }
+};
+
+
+// ═══════════════════════════════════════════════════════════
+// WEEK DATA — all 8 weeks of content
+// ═══════════════════════════════════════════════════════════
+
+const allWeekData = [
+  {
+    num: 1, chapter: 1,
+    title: "The Two Games",
+    focus: "This week you're learning to notice the difference between thinking and trusting.",
+    quote: "\u201CThe mind messes up more shots than the body.\u201D",
+    quoteAttr: "\u2014 Tommy Bolt",
+    focusText: "Notice which game you're playing. When you hit a shot, ask: was that the outer game (mechanics, control) or the inner game (feel, trust)? You don't need to fix anything yet. Just notice.",
+    beforeLabel: "Today's Intention",
+    beforeHint: "One word or phrase \u2014 what are you committing to today?",
+    beforePlaceholder: "e.g. Stay curious. Trust the feel.",
+    sliderLeft: "\uD83D\uDE0C Calm & Present",
+    sliderRight: "\uD83D\uDE24 Tight & Controlling",
+    extraBefore: [
+      { type: "textarea", id: "arriving", label: "How I'm Arriving Today", hint: "Mind, body, energy \u2014 a quick honest check-in", placeholder: "e.g. Tired but focused. Mind is a bit busy from work. Body feels loose.", cls: "small" },
+      { type: "input", id: "notice", label: "One Thing I Want to Notice Today", placeholder: "e.g. When I start steering vs. swinging freely" }
+    ],
+    duringMomentPlaceholder: "e.g. Hole 7 \u2014 stood over the shot and caught myself overthinking. Took a breath. Swung freely. Best contact of the day.",
+    duringSliderLeft: "\uD83D\uDC9A Free & Flowing",
+    duringSliderRight: "\u2764\uFE0F Heart Ready to Jump Out",
+    duringExtra: [
+      { type: "textarea", id: "during-notice", label: "What Did I Notice?", hint: "Inner game or outer game \u2014 which one showed up most?", placeholder: "What was really happening between your ears today?" }
+    ],
+    checklist: [
+      "Took one slow breath before the shot",
+      "Set a single, simple intention",
+      "Paused after the shot \u2014 didn't react immediately",
+      "Noticed when Self 1 got loud",
+      "Let Self 2 take over at least once"
+    ],
+    afterQ1: "What Went Well?",
+    afterQ1h: "Be specific \u2014 one moment, one shot, one decision you're proud of.",
+    afterQ2label: "Was I Playing the Outer Game or the Inner Game Today?",
+    afterQ2opts: ["Mostly Outer", "Both \u2014 Connected", "Mostly Inner", "Disconnected"],
+    afterExtra: [
+      { type: "textarea", id: "off", label: "What Felt Off?", placeholder: "Not a list of faults \u2014 just one honest observation.", cls: "small" },
+      { type: "textarea", id: "learned", label: "What Did I Learn?", placeholder: "One sentence. Inner game or outer game \u2014 doesn't matter.", cls: "small" }
+    ],
+    practiceGroove: "Club & target. Build the feel. No judgment.",
+    practiceChallenge: "Random targets. Different clubs. Simulate the course.",
+    practiceTransfer: "Real course scenarios. Full routine every time.",
+    practiceLabel: "Week 1 focus: awareness over mechanics",
+    practiceExtra: [
+      { type: "input", id: "metric", label: "One Metric I'm Tracking Today", hint: "Pick just one \u2014 commitment level, contact quality, or start line", placeholder: "e.g. Did I commit to every shot before swinging?" }
+    ]
+  },
+  {
+    num: 2, chapter: 2,
+    title: "Awareness Over Anxiety",
+    focus: "This week you're learning to observe tension instead of fighting it.",
+    quote: "\u201CThe first step toward change is awareness. The second is acceptance.\u201D",
+    quoteAttr: "\u2014 Nathaniel Branden",
+    focusText: "Anxiety isn't the enemy \u2014 resistance is. This week, when nerves show up, don't fight them. Just name what you feel. \"I'm tight in my shoulders.\" \"My grip is getting stronger.\" That's all. Observe, don't fix.",
+    beforeLabel: "Today's Intention",
+    beforeHint: "",
+    beforePlaceholder: "e.g. Notice tension before it controls me.",
+    sliderLeft: "\uD83D\uDE0C Loose & Easy",
+    sliderRight: "\uD83D\uDE2C Braced & Tight",
+    extraBefore: [
+      { type: "input", id: "tension-location", label: "Where Am I Holding Tension Right Now?", hint: "Scan: jaw, shoulders, hands, chest, legs", placeholder: "e.g. Shoulders are up. Hands feel a bit tight." },
+      { type: "textarea", id: "body", label: "What's My Body Telling Me Today?", placeholder: "Energy level, stiffness, balance, rhythm \u2014 what do you feel?", cls: "small" }
+    ],
+    duringMomentPlaceholder: "e.g. By hole 9, noticed my jaw was clenched every time I faced a tight tee shot.",
+    duringSliderLeft: "\uD83D\uDC9A Calm & Connected",
+    duringSliderRight: "\u2764\uFE0F Chest Tight, Mind Racing",
+    duringExtra: [],
+    checklist: [
+      "Did the body scan before at least one shot",
+      "Noticed anxiety arriving before it took over",
+      "Released one area of tension on an exhale",
+      "Listened to my body instead of fighting it",
+      "Found at least one moment of genuine calm"
+    ],
+    afterQ1: "When Did Anxiety Show Up?",
+    afterQ1h: "Specific hole, situation, or shot \u2014 describe the moment.",
+    afterQ2label: "Did You Fight It or Observe It?",
+    afterQ2opts: ["Fought It", "Somewhere Between", "Observed It"],
+    afterExtra: [
+      { type: "textarea", id: "body-learned", label: "What I Learned About My Body This Week", placeholder: "One honest observation about your tension patterns.", cls: "small" }
+    ],
+    practiceGroove: "Slow swings. Focus on feel, not result.",
+    practiceChallenge: "Alternate clubs each shot. Stay loose.",
+    practiceTransfer: "Full routine. Body check before each shot.",
+    practiceLabel: "Week 2 focus: feel over mechanics",
+    practiceExtra: []
+  },
+  {
+    num: 3, chapter: 3,
+    title: "The Architecture of Trust",
+    focus: "This week you're building trust through repetition \u2014 not waiting to feel confident.",
+    quote: "\u201CDon't practice until you get it right. Practice until you can't get it wrong.\u201D",
+    quoteAttr: "\u2014 Unknown",
+    focusText: "Trust isn't a feeling \u2014 it's a decision. Every time you follow your process this week, even when it's uncomfortable, you're adding to something real. Target, breath, commit, swing, accept. Say it before every shot.",
+    beforeLabel: "Today's Trust Intention",
+    beforeHint: "",
+    beforePlaceholder: "e.g. I commit to my process regardless of the outcome.",
+    sliderLeft: "\uD83D\uDE0C Trusting the Process",
+    sliderRight: "\uD83D\uDE24 Controlling Everything",
+    extraBefore: [],
+    duringMomentPlaceholder: "One specific moment \u2014 what happened, what did you notice?",
+    duringSliderLeft: "\uD83D\uDC9A Free & Present",
+    duringSliderRight: "\u2764\uFE0F Heart Ready to Jump Out",
+    duringExtra: [],
+    checklist: [
+      "Used my full pre-shot routine on every shot",
+      "Committed before every swing \u2014 not halfway",
+      "Accepted the outcome without changing my process",
+      "Relied on repetition, not feelings",
+      "Found my routine when pressure showed up"
+    ],
+    afterQ1: "When Did Trust Break Down?",
+    afterQ1h: "Specific hole or moment \u2014 what triggered doubt?",
+    afterQ2label: "Did I commit or control?",
+    afterQ2opts: ["Controlled It", "Mixed", "Committed Fully"],
+    afterExtra: [
+      { type: "textarea", id: "q3", label: "What My Routine Did For Me Today", hint: "Even one moment where it helped.", placeholder: "", cls: "small" }
+    ],
+    practiceGroove: "10 trust reps. Same club, same target. Full routine every time.",
+    practiceChallenge: "Switch targets. Stay committed even when you miss.",
+    practiceTransfer: "Simulate pressure shots. Rate commitment 1\u201310 after each.",
+    practiceLabel: "Week 3 range plan",
+    practiceExtra: []
+  },
+  {
+    num: 4, chapter: 4,
+    title: "The Art of Decision",
+    focus: "This week you're practicing decisiveness \u2014 pick it, commit to it, live with it.",
+    quote: "\u201COnce you make a decision, the universe conspires to make it happen.\u201D",
+    quoteAttr: "\u2014 Ralph Waldo Emerson",
+    focusText: "Before every shot this week, rate your commitment from 1\u201310. If it's below 8, step away and restart. Only swing when you genuinely mean it. That's the whole drill.",
+    beforeLabel: "Today's Decision Focus",
+    beforeHint: "",
+    beforePlaceholder: "e.g. Play smart, not impressive. Trust what I know.",
+    sliderLeft: "\uD83D\uDE0C Clear & Decided",
+    sliderRight: "\uD83D\uDE24 Indecisive & Second-Guessing",
+    extraBefore: [],
+    duringMomentPlaceholder: "One specific moment \u2014 what happened, what did you notice?",
+    duringSliderLeft: "\uD83D\uDC9A Free & Present",
+    duringSliderRight: "\u2764\uFE0F Heart Ready to Jump Out",
+    duringExtra: [],
+    checklist: [
+      "Rated commitment before every shot",
+      "Stepped away at least once when below 8",
+      "Chose the shot I could trust, not the hero shot",
+      "Let go of 'what if' before swinging",
+      "Played smart golf, not safe golf"
+    ],
+    afterQ1: "Where Did Indecision Cost Me?",
+    afterQ1h: "A specific shot or hole where doubt showed up.",
+    afterQ2label: "How was my decision quality today?",
+    afterQ2opts: ["Mostly Indecisive", "Hit and Miss", "Clear & Committed"],
+    afterExtra: [
+      { type: "textarea", id: "q3", label: "Smartest Decision I Made Today", hint: "The shot or moment where you played your game honestly.", placeholder: "", cls: "small" }
+    ],
+    practiceGroove: "Commitment test on every rep. Rate before you swing.",
+    practiceChallenge: "Random lies and targets. Decide fast and commit.",
+    practiceTransfer: "Simulate course scenarios with water, bunkers. Play the smart shot.",
+    practiceLabel: "Week 4 range plan",
+    practiceExtra: []
+  },
+  {
+    num: 5, chapter: 5,
+    title: "The Geometry of the Short Game",
+    focus: "This week the short game becomes a math problem you can feel.",
+    quote: "\u201CThe more I practice my short game, the luckier I get.\u201D",
+    quoteAttr: "\u2014 Gary Player",
+    focusText: "For every chip or pitch this week, name your landing spot before you swing. Not the hole \u2014 the landing zone. The size of a coin. Then match your feel to that spot. That's the whole game around the greens.",
+    beforeLabel: "Short Game Focus Today",
+    beforeHint: "",
+    beforePlaceholder: "e.g. Land zone first. Let the geometry do the work.",
+    sliderLeft: "\uD83C\uDFAF Locked on Landing Zone",
+    sliderRight: "\uD83D\uDE2C Staring at the Hole",
+    extraBefore: [],
+    duringMomentPlaceholder: "One specific moment \u2014 what happened, what did you notice?",
+    duringSliderLeft: "\uD83D\uDC9A Free & Present",
+    duringSliderRight: "\u2764\uFE0F Heart Ready to Jump Out",
+    duringExtra: [],
+    checklist: [
+      "Named a specific landing spot before every chip",
+      "Chose the right club for the geometry, not habit",
+      "Focused on landing zone, not the hole",
+      "Matched speed to the spot, not the distance",
+      "Stopped guessing \u2014 committed to the read"
+    ],
+    afterQ1: "Where Did the Short Game Cost Me?",
+    afterQ1h: "Wrong club? Wrong focus? Wrong landing zone?",
+    afterQ2label: "How did my short game feel today?",
+    afterQ2opts: ["Guessing", "Getting There", "Calculated & Clear"],
+    afterExtra: [
+      { type: "textarea", id: "q3", label: "Best Short Game Decision Today", hint: "The shot where the geometry clicked.", placeholder: "", cls: "small" }
+    ],
+    practiceGroove: "Landing zone drill: towels at 3-4ft intervals. Land on target.",
+    practiceChallenge: "Alternate PW, 52\u00B0, 56\u00B0 to the same landing zone. Feel the difference.",
+    practiceTransfer: "Play shots from real course lies. Name the zone, commit.",
+    practiceLabel: "Week 5 range plan",
+    practiceExtra: []
+  },
+  {
+    num: 6, chapter: 6,
+    title: "The Mind Beneath the Putter",
+    focus: "This week you're learning that confidence on the greens comes from rhythm, not results.",
+    quote: "\u201CPutting is 10% technique and 90% nerve.\u201D",
+    quoteAttr: "\u2014 Ben Crenshaw",
+    focusText: "Putting reveals what you believe. This week, simplify your routine to four steps: read it, feel it, commit, roll it. No extra strokes. No re-reads. Trust the read you made and roll it. Notice when you steer vs. when you allow.",
+    beforeLabel: "Putting Focus Today",
+    beforeHint: "",
+    beforePlaceholder: "e.g. Roll it. Don't force it. Trust the read.",
+    sliderLeft: "\uD83D\uDE0C Rolling Freely",
+    sliderRight: "\uD83D\uDE2C Steering & Forcing",
+    extraBefore: [],
+    duringMomentPlaceholder: "One specific moment \u2014 what happened, what did you notice?",
+    duringSliderLeft: "\uD83D\uDC9A Free & Present",
+    duringSliderRight: "\u2764\uFE0F Heart Ready to Jump Out",
+    duringExtra: [],
+    checklist: [
+      "Used the 4-step routine on every putt",
+      "Committed to the read without second-guessing",
+      "Let the putter swing \u2014 didn't steer",
+      "Didn't change my routine after a miss",
+      "Found moments where it felt truly free"
+    ],
+    afterQ1: "When Did Putting Feel Heaviest?",
+    afterQ1h: "Distance, situation, or mental state \u2014 what was happening?",
+    afterQ2label: "Was I rolling or forcing today?",
+    afterQ2opts: ["Forcing", "Somewhere Between", "Rolling Freely"],
+    afterExtra: [
+      { type: "textarea", id: "q3", label: "A Putt That Felt Right", hint: "Even if it didn't go in \u2014 describe the feeling.", placeholder: "", cls: "small" }
+    ],
+    practiceGroove: "3-ball reset. Random distances. Same routine every time.",
+    practiceChallenge: "Tempo-only drills. No target \u2014 just feel the pendulum.",
+    practiceTransfer: "Pressure putts. Count routine reps, not makes.",
+    practiceLabel: "Week 6 range plan",
+    practiceExtra: []
+  },
+  {
+    num: 7, chapter: 7,
+    title: "The Course Within the Course",
+    focus: "This week you're learning to respond to the course instead of reacting to it.",
+    quote: "\u201CThe greatest victory is over oneself.\u201D",
+    quoteAttr: "\u2014 Aristotle",
+    focusText: "The course is giving you feedback all day, not punishment. This week, when something goes sideways \u2014 bad lie, bad bounce, bad break \u2014 pause before you react. Ask: what is this showing me? Patience? Focus? Composure? That's the real game.",
+    beforeLabel: "Course Management Intention",
+    beforeHint: "",
+    beforePlaceholder: "e.g. Play the course in front of me, not the one in my head.",
+    sliderLeft: "\uD83D\uDE0C Responding Calmly",
+    sliderRight: "\uD83D\uDE24 Reacting Emotionally",
+    extraBefore: [],
+    duringMomentPlaceholder: "One specific moment \u2014 what happened, what did you notice?",
+    duringSliderLeft: "\uD83D\uDC9A Free & Present",
+    duringSliderRight: "\u2764\uFE0F Heart Ready to Jump Out",
+    duringExtra: [],
+    checklist: [
+      "Treated bad breaks as feedback, not punishment",
+      "Accepted the lie and adjusted \u2014 didn't force it",
+      "Stayed patient after a mistake",
+      "Played the smart shot, not the angry one",
+      "Kept emotional tempo steady throughout"
+    ],
+    afterQ1: "When Did the Course Win?",
+    afterQ1h: "Moment you reacted instead of responded \u2014 what triggered it?",
+    afterQ2label: "How was my patience today?",
+    afterQ2opts: ["Lost It Early", "Held On Mostly", "Steady All Day"],
+    afterExtra: [
+      { type: "textarea", id: "q3", label: "Best Course Management Decision", hint: "The moment you played smart and it paid off.", placeholder: "", cls: "small" }
+    ],
+    practiceGroove: "Hit from awkward lies. Accept the result. Move on.",
+    practiceChallenge: "Random targets with one 'trouble' shot in each set. Respond.",
+    practiceTransfer: "Play complete holes in your head. What's the smart target off every tee?",
+    practiceLabel: "Week 7 range plan",
+    practiceExtra: []
+  },
+  {
+    num: 8, chapter: 8,
+    title: "The Science of Practice",
+    focus: "This week you're training with purpose \u2014 not just exercising.",
+    quote: "\u201CIt's not the hours you put in, but what you put into the hours.\u201D",
+    quoteAttr: "\u2014 Unknown",
+    focusText: "For every session this week, arrive with a plan. One metric. Three blocks. A note at the end. If you can't say what you trained and why, it wasn't practice \u2014 it was exercise. That gap is where most golfers live. Not you. Not this week.",
+    beforeLabel: "Today's Practice Intention",
+    beforeHint: "",
+    beforePlaceholder: "e.g. Train the 90-110 yard shot. Full routine. Track start lines.",
+    sliderLeft: "\uD83C\uDFAF Training with Purpose",
+    sliderRight: "\uD83E\uDD37 Just Hitting Balls",
+    extraBefore: [],
+    duringMomentPlaceholder: "One specific moment \u2014 what happened, what did you notice?",
+    duringSliderLeft: "\uD83D\uDC9A Free & Present",
+    duringSliderRight: "\u2764\uFE0F Heart Ready to Jump Out",
+    duringExtra: [],
+    checklist: [
+      "Arrived with a specific plan",
+      "Used blocked practice to groove a feel",
+      "Used random practice to build adaptability",
+      "Tracked one meaningful metric",
+      "Left knowing what improved and why"
+    ],
+    afterQ1: "What Did I Actually Train Today?",
+    afterQ1h: "Be specific \u2014 not 'worked on irons.' What exactly?",
+    afterQ2label: "Practice quality today?",
+    afterQ2opts: ["Just Exercise", "Decent But Unfocused", "Purposeful & Honest"],
+    afterExtra: [
+      { type: "textarea", id: "q3", label: "What Transferred From Practice", hint: "One thing that showed up on the course from your range work.", placeholder: "", cls: "small" }
+    ],
+    practiceGroove: "5 focused reps, one club. Lock in the feeling.",
+    practiceChallenge: "New target every shot. Simulate real course variety.",
+    practiceTransfer: "Full holes from memory. Real scenarios. Full routine.",
+    practiceLabel: "Week 8 range plan",
+    practiceExtra: []
+  }
+];
+
+
+// ═══════════════════════════════════════════════════════════
+// SLIDER LABELS
+// ═══════════════════════════════════════════════════════════
+
+const sliderLabels = [
+  [0,  10,  "Deeply calm"],
+  [11, 25,  "Very relaxed"],
+  [26, 40,  "Slightly loose"],
+  [41, 59,  "Balanced"],
+  [60, 70,  "Getting tight"],
+  [71, 82,  "Noticeably tense"],
+  [83, 92,  "Quite anxious"],
+  [93, 100, "Heart ready to jump out"]
+];
+
+function getSliderLabel(val) {
+  return sliderLabels.find(([min,max]) => val >= min && val <= max)?.[2] || 'Balanced';
+}
+
+
+// ═══════════════════════════════════════════════════════════
+// APP STATE
+// ═══════════════════════════════════════════════════════════
+
+let currentUser = null;
+let journalData = null;
+let currentWeek = 1;
+let currentSessionIdx = 0;
+let saveTimeout = null;
+
+
+// ═══════════════════════════════════════════════════════════
+// AUTH
+// ═══════════════════════════════════════════════════════════
+
+function handleAuth() {
+  const email = document.getElementById('authEmail').value.trim().toLowerCase();
+  if (!email || !email.includes('@')) {
+    const err = document.getElementById('authError');
+    err.textContent = 'Please enter a valid email address.';
+    err.style.display = 'block';
+    return;
+  }
+
+  document.getElementById('authBtn').disabled = true;
+
+  // Show success animation
+  document.getElementById('authForm').style.display = 'none';
+  const sent = document.getElementById('magicLinkSent');
+  sent.style.display = 'block';
+
+  currentUser = { email };
+  Storage.setUser(currentUser);
+  journalData = Storage.getData(email);
+
+  setTimeout(() => {
+    showApp();
+  }, 800);
+}
+
+function handleLogout() {
+  Storage.clearUser();
+  currentUser = null;
+  journalData = null;
+  document.getElementById('authForm').style.display = 'block';
+  document.getElementById('magicLinkSent').style.display = 'none';
+  document.getElementById('authBtn').disabled = false;
+  document.getElementById('authEmail').value = '';
+  document.getElementById('authError').style.display = 'none';
+  document.getElementById('authView').classList.add('active');
+  document.getElementById('appView').classList.remove('active');
+}
+
+// Check if already logged in
+function checkAuth() {
+  const user = Storage.getUser();
+  if (user) {
+    currentUser = user;
+    journalData = Storage.getData(user.email);
+    showApp();
+  }
+}
+
+// Listen for Enter key on auth
+document.getElementById('authEmail').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') handleAuth();
+});
+
+
+// ═══════════════════════════════════════════════════════════
+// SHOW APP
+// ═══════════════════════════════════════════════════════════
+
+function showApp() {
+  document.getElementById('authView').classList.remove('active');
+  document.getElementById('appView').classList.add('active');
+
+  // Update user display
+  const name = currentUser.email.split('@')[0];
+  document.getElementById('userAvatar').textContent = name.charAt(0).toUpperCase();
+  document.getElementById('userEmail').textContent = currentUser.email;
+
+  // Set greeting
+  const hour = new Date().getHours();
+  let greeting = 'Good evening';
+  if (hour < 12) greeting = 'Good morning';
+  else if (hour < 17) greeting = 'Good afternoon';
+  document.getElementById('dashGreeting').textContent = greeting + ', ' + name.charAt(0).toUpperCase() + name.slice(1);
+
+  buildWeekNav();
+  buildAllWeeks();
+  showDashboard();
+}
+
+
+// ═══════════════════════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════════════════════
+
+function showDashboard() {
+  document.getElementById('dashView').classList.add('active');
+  document.getElementById('journalView').classList.remove('active');
+  updateDashboard();
+}
+
+function updateDashboard() {
+  if (!journalData) return;
+
+  let totalEntries = 0;
+  let totalRounds = 0;
+  let scores = [];
+  let furthestWeek = 1;
+
+  for (let w = 1; w <= 8; w++) {
+    const sessions = journalData.sessions[`w${w}`] || [];
+    sessions.forEach(s => {
+      const fields = s.fields || {};
+      const fieldCount = Object.values(fields).filter(v => v && v !== '50').length;
+      if (fieldCount > 0) {
+        totalEntries += fieldCount;
+        if (w > furthestWeek) furthestWeek = w;
+      }
+      if (fields.score) {
+        totalRounds++;
+        const sc = parseInt(fields.score);
+        if (!isNaN(sc)) scores.push({ week: w, score: sc, course: fields.course || '', date: fields.date || '' });
+      }
+    });
+  }
+
+  document.getElementById('statCurrentWeek').textContent = furthestWeek;
+  document.getElementById('statCurrentTitle').textContent = allWeekData[furthestWeek - 1].title;
+  document.getElementById('statRounds').textContent = totalRounds;
+  document.getElementById('statEntries').textContent = totalEntries;
+
+  if (scores.length > 0) {
+    const best = scores.reduce((a, b) => a.score < b.score ? a : b);
+    document.getElementById('statBestScore').textContent = best.score;
+    document.getElementById('statBestCourse').textContent = best.course ? `at ${best.course}` : '';
+  } else {
+    document.getElementById('statBestScore').textContent = '\u2014';
+    document.getElementById('statBestCourse').textContent = '';
+  }
+
+  // Score chart
+  buildScoreChart(scores);
+
+  // Week progress cards
+  buildWeekProgressCards(furthestWeek);
+}
+
+function buildScoreChart(scores) {
+  const wrap = document.getElementById('scoreChart');
+  if (scores.length === 0) {
+    wrap.innerHTML = '<div class="no-scores">No scores logged yet. Play your first round and record it!</div>';
+    return;
+  }
+
+  const maxScore = Math.max(...scores.map(s => s.score));
+  const minScore = Math.min(...scores.map(s => s.score));
+  const range = Math.max(maxScore - minScore, 10);
+
+  let html = '<div class="score-chart">';
+  scores.forEach((s, i) => {
+    const height = Math.max(20, ((s.score - minScore + 5) / (range + 10)) * 100);
+    html += `
+      <div class="score-bar-wrap">
+        <div class="score-bar" style="height:${height}%">
+          <span class="score-val">${s.score}</span>
+        </div>
+        <span class="score-bar-label">Wk ${s.week}</span>
+      </div>`;
+  });
+  html += '</div>';
+  wrap.innerHTML = html;
+}
+
+function buildWeekProgressCards(furthestWeek) {
+  const grid = document.getElementById('weekProgressGrid');
+  let html = '';
+
+  allWeekData.forEach(w => {
+    const sessions = journalData.sessions[`w${w.num}`] || [];
+    let filledFields = 0;
+    let totalFields = 20; // approximate fields per week
+
+    sessions.forEach(s => {
+      const fields = s.fields || {};
+      filledFields += Object.values(fields).filter(v => v && v !== '50').length;
+    });
+
+    const pct = Math.min(100, Math.round((filledFields / totalFields) * 100));
+    const isCurrent = w.num === furthestWeek;
+
+    html += `
+      <div class="week-prog-card ${isCurrent ? 'current' : ''}" onclick="openWeek(${w.num})">
+        <p class="wp-num">Week ${w.num}</p>
+        <p class="wp-title">${w.title}</p>
+        <div class="wp-bar-track">
+          <div class="wp-bar-fill" style="width:${pct}%"></div>
+        </div>
+        <p class="wp-pct">${pct}% complete</p>
+      </div>`;
+  });
+
+  grid.innerHTML = html;
+}
+
+
+// ═══════════════════════════════════════════════════════════
+// WEEK NAVIGATION
+// ═══════════════════════════════════════════════════════════
+
+function buildWeekNav() {
+  const nav = document.getElementById('weekNav');
+  let html = '';
+  for (let i = 1; i <= 8; i++) {
+    html += `<button class="week-tab ${i === 1 ? 'active' : ''}" data-week="${i}" onclick="switchWeek(${i}, this)">Week ${i}</button>`;
+  }
+  nav.innerHTML = html;
+}
+
+function switchWeek(num, btn) {
+  // Save current before switching
+  saveCurrentFields();
+
+  currentWeek = num;
+  currentSessionIdx = 0;
+
+  document.querySelectorAll('.week-tab').forEach(t => t.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  else document.querySelector(`.week-tab[data-week="${num}"]`)?.classList.add('active');
+
+  document.querySelectorAll('.week-content').forEach(w => w.classList.remove('active'));
+  document.getElementById('week-' + num)?.classList.add('active');
+
+  updateSessionSelector();
+  loadFieldsForSession();
+
+  setTimeout(() => {
+    const el = document.getElementById('week-' + num);
+    if (el) {
+      const top = el.getBoundingClientRect().top + window.scrollY - 120;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  }, 50);
+}
+
+function openWeek(num) {
+  document.getElementById('dashView').classList.remove('active');
+  document.getElementById('journalView').classList.add('active');
+  switchWeek(num);
+}
+
+
+// ═══════════════════════════════════════════════════════════
+// SESSION MANAGEMENT (multiple rounds per week)
+// ═══════════════════════════════════════════════════════════
+
+function updateSessionSelector() {
+  const select = document.getElementById('sessionSelect');
+  const sessions = journalData.sessions[`w${currentWeek}`] || [];
+  let html = '';
+  sessions.forEach((s, i) => {
+    html += `<option value="${i}" ${i === currentSessionIdx ? 'selected' : ''}>${s.label}</option>`;
+  });
+  select.innerHTML = html;
+}
+
+function switchSession() {
+  saveCurrentFields();
+  currentSessionIdx = parseInt(document.getElementById('sessionSelect').value);
+  loadFieldsForSession();
+}
+
+function addNewSession() {
+  saveCurrentFields();
+  const sessions = journalData.sessions[`w${currentWeek}`];
+  const newId = sessions.length + 1;
+  sessions.push({ id: newId, label: `Round ${newId}`, fields: {} });
+  currentSessionIdx = sessions.length - 1;
+  updateSessionSelector();
+  loadFieldsForSession();
+  saveData();
+  flashSave();
+}
+
+
+// ═══════════════════════════════════════════════════════════
+// BUILD ALL WEEKS HTML
+// ═══════════════════════════════════════════════════════════
+
+function buildAllWeeks() {
+  const container = document.getElementById('weekContainer');
+  container.innerHTML = '';
+
+  allWeekData.forEach(w => {
+    const div = document.createElement('div');
+    div.className = 'week-content' + (w.num === 1 ? ' active' : '');
+    div.id = `week-${w.num}`;
+    div.innerHTML = buildWeekHTML(w);
+    container.appendChild(div);
+  });
+
+  // Initialize slider displays
+  initSliders();
+
+  // Update session selector
+  updateSessionSelector();
+  loadFieldsForSession();
+}
+
+function buildWeekHTML(w) {
+  const pre = `w${w.num}`;
+
+  let extraBeforeHTML = '';
+  if (w.extraBefore) {
+    w.extraBefore.forEach(f => {
+      if (f.type === 'textarea') {
+        extraBeforeHTML += `
+          <div class="field-group">
+            <label class="field-label">${f.label}</label>
+            ${f.hint ? `<span class="field-hint">${f.hint}</span>` : ''}
+            <textarea class="note-area ${f.cls || ''}" placeholder="${f.placeholder || ''}" data-field="${f.id}"></textarea>
+          </div>`;
+      } else {
+        extraBeforeHTML += `
+          <div class="field-group">
+            <label class="field-label">${f.label}</label>
+            ${f.hint ? `<span class="field-hint">${f.hint}</span>` : ''}
+            <input type="text" class="note-input" placeholder="${f.placeholder || ''}" data-field="${f.id}">
+          </div>`;
+      }
+    });
+  }
+
+  let duringExtraHTML = '';
+  if (w.duringExtra) {
+    w.duringExtra.forEach(f => {
+      duringExtraHTML += `
+        <div class="field-group">
+          <label class="field-label">${f.label}</label>
+          ${f.hint ? `<span class="field-hint">${f.hint}</span>` : ''}
+          <textarea class="note-area ${f.cls || ''}" placeholder="${f.placeholder || ''}" data-field="${f.id}"></textarea>
+        </div>`;
+    });
+  }
+
+  let afterExtraHTML = '';
+  if (w.afterExtra) {
+    w.afterExtra.forEach(f => {
+      if (f.type === 'textarea') {
+        afterExtraHTML += `
+          <div class="field-group">
+            <label class="field-label">${f.label}</label>
+            ${f.hint ? `<span class="field-hint">${f.hint}</span>` : ''}
+            <textarea class="note-area ${f.cls || ''}" placeholder="${f.placeholder || ''}" data-field="${f.id}"></textarea>
+          </div>`;
+      } else {
+        afterExtraHTML += `
+          <div class="field-group">
+            <label class="field-label">${f.label}</label>
+            ${f.hint ? `<span class="field-hint">${f.hint}</span>` : ''}
+            <input type="text" class="note-input" placeholder="${f.placeholder || ''}" data-field="${f.id}">
+          </div>`;
+      }
+    });
+  }
+
+  let practiceExtraHTML = '';
+  if (w.practiceExtra) {
+    w.practiceExtra.forEach(f => {
+      if (f.type === 'textarea') {
+        practiceExtraHTML += `
+          <div class="field-group">
+            <label class="field-label">${f.label}</label>
+            ${f.hint ? `<span class="field-hint">${f.hint}</span>` : ''}
+            <textarea class="note-area ${f.cls || ''}" placeholder="${f.placeholder || ''}" data-field="${f.id}"></textarea>
+          </div>`;
+      } else {
+        practiceExtraHTML += `
+          <div class="field-group">
+            <label class="field-label">${f.label}</label>
+            ${f.hint ? `<span class="field-hint">${f.hint}</span>` : ''}
+            <input type="text" class="note-input" placeholder="${f.placeholder || ''}" data-field="${f.id}">
+          </div>`;
+      }
+    });
+  }
+
+  return `
+    <div class="week-hero">
+      <p class="wk-num">Week ${w.num} &middot; Chapter ${w.chapter}</p>
+      <h2>${w.title}</h2>
+      <p class="wk-focus">${w.focus}</p>
+      <div class="wk-divider"></div>
+    </div>
+    <div class="week-body">
+
+      <div class="week-quote">
+        <p>${w.quote}</p>
+        <span class="attr">${w.quoteAttr}</span>
+      </div>
+
+      <!-- BEFORE YOU PLAY -->
+      <div class="session-block">
+        <div class="session-header">
+          <div class="session-icon before">\uD83C\uDF05</div>
+          <div class="session-header-text">
+            <h3>Before You Play</h3>
+            <span>Complete this before your round or practice \u2014 takes 3 minutes</span>
+          </div>
+        </div>
+        <div class="session-body">
+          <div class="focus-card">
+            <p class="fc-label">Week ${w.num} Focus</p>
+            <p>${w.focusText}</p>
+          </div>
+          <div class="field-group">
+            <label class="field-label">${w.beforeLabel}</label>
+            ${w.beforeHint ? `<span class="field-hint">${w.beforeHint}</span>` : ''}
+            <input type="text" class="note-input" placeholder="${w.beforePlaceholder}" data-field="intention">
+          </div>
+          <div class="slider-field">
+            <label class="field-label">Mental State Right Now</label>
+            <div class="slider-labels">
+              <span class="left-label">${w.sliderLeft}</span>
+              <span class="right-label">${w.sliderRight}</span>
+            </div>
+            <div class="slider-track">
+              <input type="range" min="0" max="100" value="50" data-field="pre-slider">
+            </div>
+            <div class="slider-value-display">Balanced (50)</div>
+          </div>
+          ${extraBeforeHTML}
+        </div>
+      </div>
+
+      <!-- ON THE COURSE -->
+      <div class="session-block">
+        <div class="session-header">
+          <div class="session-icon during">\u26F3</div>
+          <div class="session-header-text">
+            <h3>On the Course</h3>
+            <span>Quick check-in mid-round \u2014 even just one entry is valuable</span>
+          </div>
+        </div>
+        <div class="session-body">
+          <div class="field-group">
+            <label class="field-label">Hole / Moment I Want to Remember</label>
+            <textarea class="note-area small" placeholder="${w.duringMomentPlaceholder}" data-field="moment"></textarea>
+          </div>
+          <div class="slider-field">
+            <label class="field-label">Tension / Awareness Level</label>
+            <div class="slider-labels">
+              <span class="left-label">${w.duringSliderLeft || '\uD83D\uDC9A Free & Present'}</span>
+              <span class="right-label">${w.duringSliderRight || '\u2764\uFE0F Heart Ready to Jump Out'}</span>
+            </div>
+            <div class="slider-track">
+              <input type="range" min="0" max="100" value="40" data-field="tension">
+            </div>
+            <div class="slider-value-display">Slightly loose (40)</div>
+          </div>
+          ${duringExtraHTML}
+          <div class="field-group">
+            <label class="field-label">Week ${w.num} Checklist</label>
+            <span class="field-hint">Tap each one you actually used today</span>
+            <ul class="checklist" data-field="checklist">
+              ${w.checklist.map((item, i) => `<li onclick="toggleCheck(this)" data-idx="${i}"><span class="check-box"></span>${item}</li>`).join('')}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- AFTER THE ROUND -->
+      <div class="session-block">
+        <div class="session-header">
+          <div class="session-icon after">\uD83D\uDCD6</div>
+          <div class="session-header-text">
+            <h3>After the Round</h3>
+            <span>Best done within an hour \u2014 while it's still fresh</span>
+          </div>
+        </div>
+        <div class="session-body">
+          <div class="score-row">
+            <div class="score-cell"><label>Score</label><input type="text" placeholder="82" data-field="score"></div>
+            <div class="score-cell"><label>Course</label><input type="text" placeholder="Mad River" data-field="course"></div>
+            <div class="score-cell"><label>Date</label><input type="date" data-field="date"></div>
+          </div>
+          <div class="section-divider"></div>
+          <div class="field-group">
+            <label class="field-label">${w.afterQ1}</label>
+            <span class="field-hint">${w.afterQ1h}</span>
+            <textarea class="note-area small" data-field="q1"></textarea>
+          </div>
+          <div class="field-group">
+            <label class="field-label">${w.afterQ2label}</label>
+            <div class="rating-row" data-field="rating">
+              ${w.afterQ2opts.map(o => `<button class="rating-btn" onclick="selectRating(this)">${o}</button>`).join('')}
+            </div>
+          </div>
+          ${afterExtraHTML}
+          <div class="field-group">
+            <label class="field-label">One Thing I'm Carrying Into Next Round</label>
+            <input type="text" class="note-input" placeholder="One sentence. Make it honest." data-field="carry">
+          </div>
+        </div>
+      </div>
+
+      <!-- PRACTICE SESSION -->
+      <div class="session-block">
+        <div class="session-header">
+          <div class="session-icon practice">\uD83C\uDFAF</div>
+          <div class="session-header-text">
+            <h3>Practice Session</h3>
+            <span>${w.practiceLabel}</span>
+          </div>
+        </div>
+        <div class="session-body">
+          <div class="practice-blocks">
+            <div class="practice-block">
+              <span class="pb-num">1</span>
+              <p class="pb-title">Groove (10 min)</p>
+              <textarea placeholder="${w.practiceGroove}" data-field="groove"></textarea>
+            </div>
+            <div class="practice-block">
+              <span class="pb-num">2</span>
+              <p class="pb-title">Challenge (10 min)</p>
+              <textarea placeholder="${w.practiceChallenge}" data-field="challenge"></textarea>
+            </div>
+            <div class="practice-block">
+              <span class="pb-num">3</span>
+              <p class="pb-title">Transfer (10 min)</p>
+              <textarea placeholder="${w.practiceTransfer}" data-field="transfer"></textarea>
+            </div>
+          </div>
+          <div class="section-divider"></div>
+          ${practiceExtraHTML}
+          <div class="field-group">
+            <label class="field-label">Session Notes</label>
+            <textarea class="note-area large" placeholder="What improved? What did you learn? What carries forward?" data-field="session-notes"></textarea>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  `;
+}
+
+
+// ═══════════════════════════════════════════════════════════
+// AUTO-SAVE & FIELD MANAGEMENT
+// ═══════════════════════════════════════════════════════════
+
+function getWeekContainer() {
+  return document.getElementById(`week-${currentWeek}`);
+}
+
+function saveCurrentFields() {
+  const container = getWeekContainer();
+  if (!container || !journalData) return;
+
+  const sessions = journalData.sessions[`w${currentWeek}`];
+  if (!sessions || !sessions[currentSessionIdx]) return;
+
+  const fields = {};
+
+  // Text inputs and textareas
+  container.querySelectorAll('[data-field]').forEach(el => {
+    const key = el.dataset.field;
+    if (el.tagName === 'INPUT' && el.type !== 'range') {
+      fields[key] = el.value;
+    } else if (el.tagName === 'TEXTAREA') {
+      fields[key] = el.value;
+    } else if (el.tagName === 'INPUT' && el.type === 'range') {
+      fields[key] = el.value;
+    } else if (el.tagName === 'UL' && key === 'checklist') {
+      const checked = [];
+      el.querySelectorAll('li').forEach((li, i) => {
+        if (li.classList.contains('checked')) checked.push(i);
+      });
+      fields[key] = JSON.stringify(checked);
+    } else if (el.tagName === 'DIV' && key === 'rating') {
+      const selected = el.querySelector('.rating-btn.selected');
+      fields[key] = selected ? selected.textContent : '';
+    }
+  });
+
+  sessions[currentSessionIdx].fields = fields;
+}
+
+function loadFieldsForSession() {
+  const container = getWeekContainer();
+  if (!container || !journalData) return;
+
+  const sessions = journalData.sessions[`w${currentWeek}`];
+  if (!sessions || !sessions[currentSessionIdx]) return;
+
+  const fields = sessions[currentSessionIdx].fields || {};
+
+  container.querySelectorAll('[data-field]').forEach(el => {
+    const key = el.dataset.field;
+    const val = fields[key];
+
+    if (el.tagName === 'INPUT' && el.type === 'range') {
+      el.value = val || el.defaultValue || '50';
+      // Update display
+      const display = el.closest('.slider-field')?.querySelector('.slider-value-display');
+      if (display) {
+        const v = parseInt(el.value);
+        display.textContent = `${getSliderLabel(v)} (${v})`;
+      }
+    } else if (el.tagName === 'INPUT') {
+      el.value = val || '';
+    } else if (el.tagName === 'TEXTAREA') {
+      el.value = val || '';
+    } else if (el.tagName === 'UL' && key === 'checklist') {
+      const checked = val ? JSON.parse(val) : [];
+      el.querySelectorAll('li').forEach((li, i) => {
+        li.classList.toggle('checked', checked.includes(i));
+      });
+    } else if (el.tagName === 'DIV' && key === 'rating') {
+      el.querySelectorAll('.rating-btn').forEach(btn => {
+        btn.classList.toggle('selected', btn.textContent === val);
+      });
+    }
+  });
+}
+
+function saveData() {
+  if (currentUser && journalData) {
+    Storage.saveData(currentUser.email, journalData);
+  }
+}
+
+function debouncedSave() {
+  clearTimeout(saveTimeout);
+  saveTimeout = setTimeout(() => {
+    saveCurrentFields();
+    saveData();
+  }, 500);
+}
+
+// Auto-save on any input
+document.addEventListener('input', e => {
+  if (e.target.matches('input, textarea')) {
+    // Update slider display if needed
+    if (e.target.type === 'range') {
+      const display = e.target.closest('.slider-field')?.querySelector('.slider-value-display');
+      if (display) {
+        const v = parseInt(e.target.value);
+        display.textContent = `${getSliderLabel(v)} (${v})`;
+      }
+    }
+    debouncedSave();
+    flashSave();
+  }
+});
+
+
+// ═══════════════════════════════════════════════════════════
+// INTERACTIVE ELEMENTS
+// ═══════════════════════════════════════════════════════════
+
+function toggleCheck(li) {
+  li.classList.toggle('checked');
+  debouncedSave();
+  flashSave();
+}
+
+function selectRating(btn) {
+  const row = btn.closest('.rating-row');
+  row.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  debouncedSave();
+  flashSave();
+}
+
+function initSliders() {
+  document.querySelectorAll('input[type=range]').forEach(slider => {
+    const display = slider.closest('.slider-field')?.querySelector('.slider-value-display');
+    if (display) {
+      const val = parseInt(slider.value);
+      display.textContent = `${getSliderLabel(val)} (${val})`;
+    }
+  });
+}
+
+let saveTimer;
+function flashSave() {
+  const banner = document.getElementById('saveBanner');
+  banner.classList.add('show');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => banner.classList.remove('show'), 1800);
+}
+
+
+// ═══════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════
+
+checkAuth();
+</script>
+
+</body>
+</html>
