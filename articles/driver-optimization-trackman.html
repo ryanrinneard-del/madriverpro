@@ -66,15 +66,15 @@
   }
   .hero .meta { font-size: 14px; color: var(--gray-500); }
   .hero .meta span { color: var(--gray-300); }
-  .hero-image { display: none; /*
+  .hero-image {
     max-width: 900px; margin: -40px auto 0;
     padding: 0 24px; position: relative; z-index: 2;
   }
-  */ .hero-image-hidden img {
+  .hero-image img {
     width: 100%; height: 420px; object-fit: cover;
     border-radius: 12px; display: block; background: var(--gray-100);
   }
-  .hero-image-hidden .placeholder {
+  .hero-image .placeholder {
     width: 100%; height: 420px; border-radius: 12px;
     background: var(--gray-100); display: flex; align-items: center;
     justify-content: center; color: var(--gray-500); font-size: 14px;
@@ -198,7 +198,10 @@
   <p class="meta">By <span>Ryan Rinneard</span> · April 2026 · 10 min read</p>
 </section>
 
-
+<!-- HERO IMAGE -->
+<div class="hero-image">
+  <div class="placeholder">[Hero Image: Ryan and a student reviewing TrackMan data on the launch monitor screen at the Mad River driving range]</div>
+</div>
 
 <!-- ARTICLE -->
 <article>
@@ -222,7 +225,7 @@
   </div>
 
   <div class="inline-image">
-    
+    <div class="placeholder">[TrackMan Screenshot: Attack angle comparison — negative (hitting down, high spin, low launch) vs. positive (hitting up, optimal spin, higher launch). Use a TrackMan "Trajectory Optimizer" or "Combine" screen showing the difference in carry distance.]</div>
     <figcaption>Same swing speed, different attack angle. The upward strike launches higher with less spin — and carries significantly further.</figcaption>
   </div>
 
@@ -243,7 +246,7 @@
   </div>
 
   <div class="inline-image">
-    
+    <div class="placeholder">[TrackMan Screenshot: Spin rate comparison showing two shots — one at 3,500 RPM (shorter carry, higher peak) and one at 2,200 RPM (longer carry, optimal peak). A "Shot Analysis" or "Dispersion" view works well here.]</div>
     <figcaption>Two drives with identical swing speeds. The lower-spin shot carries 22 yards further — the only difference is spin rate.</figcaption>
   </div>
 
@@ -273,7 +276,7 @@
   </div>
 
   <div class="inline-image">
-    
+    <div class="placeholder">[TrackMan Screenshot: Face-to-path diagram showing the D-Plane concept — face angle, club path, and resulting ball flight. The "2D Top View" from TrackMan works perfectly here, showing path direction, face direction, and ball start line with curvature.]</div>
     <figcaption>The ball starts where the face points and curves based on the difference between face and path. This single relationship explains every ball flight.</figcaption>
   </div>
 
@@ -295,7 +298,7 @@
   </div>
 
   <div class="inline-image">
-    
+    <div class="placeholder">[TrackMan Screenshot: Impact location heat map showing strike pattern on the driver face. Ideally show a "before" pattern (scattered, heel-heavy) and an "after" pattern (tight, centred). The TrackMan "Impact" or face mapping view is ideal.]</div>
     <figcaption>Strike pattern tells the real story. A tight, centred pattern produces consistently longer, straighter drives — regardless of swing speed.</figcaption>
   </div>
 

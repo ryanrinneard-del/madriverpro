@@ -67,11 +67,11 @@
   }
   .hero .meta { font-size: 14px; color: var(--gray-500); }
   .hero .meta span { color: var(--gray-300); }
-  .hero-image { display: none; /*
+  .hero-image {
     max-width: 900px; margin: -40px auto 0;
     padding: 0 24px; position: relative; z-index: 2;
   }
-  .hero-image-hidden .placeholder {
+  .hero-image .placeholder {
     width: 100%; height: 420px; border-radius: 12px;
     background: var(--gray-100); display: flex; align-items: center;
     justify-content: center; color: var(--gray-500); font-size: 14px;
@@ -188,9 +188,9 @@
   <p class="meta">By <span>Ryan Rinneard</span> · April 2026 · 7 min read</p>
 </section>
 
-<!-- hero image removed -->
+<div class="hero-image">
   <!-- REPLACE: Insert a beautiful spring photo of Mad River Golf Club — early morning mist, green fairways emerging, Niagara Escarpment in background -->
-  
+  <div class="placeholder">[Hero Image: Spring morning at Mad River Golf Club — dewy fairways, emerging green, Niagara Escarpment in the distance]</div>
 </div>
 
 <article>
@@ -243,7 +243,7 @@
 
   <div class="inline-image">
     <!-- REPLACE: Insert a photo of a golfer walking a fairway in spring conditions — jacket weather, early green, beautiful light -->
-    
+    <div class="placeholder">[Inline Image: A golfer walking up a fairway in early spring — light jacket, soft morning light, course just greening up]</div>
     <figcaption>Spring golf in the Collingwood area — there's nothing quite like those first rounds of the year.</figcaption>
   </div>
 
