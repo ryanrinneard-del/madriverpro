@@ -34,5 +34,7 @@
   <url><loc>https://madriverpro.com/articles/putting-under-pressure.html</loc><priority>0.7</priority></url>
   <url><loc>https://madriverpro.com/articles/spring-golf-collingwood.html</loc><priority>0.7</priority></url>
   <url><loc>https://madriverpro.com/articles/thursday-night-series-mad-river.html</loc><priority>0.7</priority></url>
+  <url><loc>https://madriverpro.com/8-weeks-to-short-game-mastery.html</loc><priority>0.9</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://madriverpro.com/short-game-journal/</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
   <url><loc>https://madriverpro.com/thank-you.html</loc><priority>0.3</priority></url>
 </urlset>

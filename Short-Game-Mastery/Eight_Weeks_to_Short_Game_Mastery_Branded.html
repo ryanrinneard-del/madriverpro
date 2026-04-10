@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eight Weeks to Short Game Mastery | Ryan Rinneard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,700;0,800;1,700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:        #0a1628;
+    --navy-light:  #142240;
+    --navy-mid:    #1e3a5f;
+    --white:       #ffffff;
+    --off-white:   #f7f8fa;
+    --gray-100:    #eef0f4;
+    --gray-300:    #c8cdd6;
+    --gray-500:    #6b7280;
+    --gray-700:    #374151;
+    --orange:      #c97c2e;
+    --orange-light:#e8943a;
+    --orange-pale: #fdf3e7;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    color: var(--gray-700);
+    background: var(--white);
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── SITE HEADER ─────────────────────────────────── */
+  .site-header {
+    background: var(--navy);
+    padding: 18px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid var(--navy-mid);
+  }
+  .site-header .brand {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--white);
+    letter-spacing: 0.5px;
+    text-decoration: none;
+  }
+  .site-header .brand span {
+    color: var(--orange);
+  }
+  .site-header .badge {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--gray-300);
+  }
+
+  /* ── BOOK COVER / HERO ───────────────────────────── */
+  .book-hero {
+    background: var(--navy);
+    padding: 100px 24px 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .book-hero::before {
+    content: '';
+    position: absolute;
+    top: -120px; right: -120px;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,124,46,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .book-hero::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: -80px;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(30,58,95,0.6) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .book-hero .eyebrow {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 24px;
+  }
+  .book-hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(38px, 6vw, 66px);
+    font-weight: 800;
+    color: var(--white);
+    line-height: 1.1;
+    max-width: 760px;
+    margin: 0 auto 16px;
+  }
+  .book-hero .subtitle {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(16px, 2vw, 20px);
+    color: var(--gray-300);
+    font-style: italic;
+    max-width: 520px;
+    margin: 0 auto 32px;
+    line-height: 1.6;
+  }
+  .book-hero .author-line {
+    font-size: 15px;
+    color: var(--gray-300);
+    font-weight: 500;
+  }
+  .book-hero .author-line strong {
+    color: var(--orange);
+  }
+  .hero-divider {
+    width: 60px;
+    height: 3px;
+    background: var(--orange);
+    margin: 28px auto;
+    border-radius: 2px;
+  }
+
+  /* ── TABLE OF CONTENTS ───────────────────────────── */
+  .toc-section {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 64px 24px 48px;
+    border-bottom: 1px solid var(--gray-100);
+  }
+  .toc-section .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 20px;
+  }
+  .toc-section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    color: var(--navy);
+    margin-bottom: 32px;
+  }
+  .toc-list {
+    list-style: none;
+  }
+  .toc-list li {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--gray-100);
+    cursor: pointer;
+    transition: color 0.15s;
+  }
+  .toc-list li:last-child { border-bottom: none; }
+  .toc-list li:hover .toc-title { color: var(--orange); }
+  .toc-num {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--orange);
+    min-width: 28px;
+    letter-spacing: 0.5px;
+  }
+  .toc-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--navy);
+    transition: color 0.15s;
+    flex: 1;
+  }
+  .toc-arrow {
+    font-size: 13px;
+    color: var(--gray-300);
+  }
+
+  /* ── FRONT MATTER PAGES ──────────────────────────── */
+  .front-matter {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 64px 24px;
+    border-bottom: 1px solid var(--gray-100);
+  }
+  .front-matter .fm-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 20px;
+  }
+  .front-matter h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    color: var(--navy);
+    margin-bottom: 28px;
+  }
+  .front-matter p {
+    font-size: 17px;
+    color: var(--gray-700);
+    margin-bottom: 20px;
+    line-height: 1.8;
+  }
+  .front-matter .sig {
+    font-style: italic;
+    color: var(--navy);
+    font-weight: 500;
+    margin-top: 32px;
+    font-size: 16px;
+  }
+
+  /* ── CHAPTER LAYOUT ──────────────────────────────── */
+  .chapter {
+    border-bottom: 1px solid var(--gray-100);
+    scroll-margin-top: 72px;
+  }
+  .chapter-hero {
+    background: var(--navy);
+    padding: 72px 24px 56px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .chapter-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(201,124,46,0.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .chapter-hero .ch-num {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 16px;
+  }
+  .chapter-hero h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.2;
+    max-width: 640px;
+    margin: 0 auto 16px;
+  }
+  .chapter-hero .ch-intro {
+    font-size: 17px;
+    color: var(--gray-300);
+    max-width: 520px;
+    margin: 0 auto;
+    font-style: italic;
+    line-height: 1.7;
+  }
+  .chapter-hero .ch-divider {
+    width: 40px;
+    height: 2px;
+    background: var(--orange);
+    margin: 24px auto 0;
+    border-radius: 2px;
+  }
+
+  /* ── CHAPTER BODY ────────────────────────────────── */
+  .chapter-body {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 56px 24px 64px;
+  }
+
+  .scene {
+    font-size: 17px;
+    color: var(--gray-700);
+    line-height: 1.85;
+    margin-bottom: 20px;
+    padding-left: 20px;
+    border-left: 3px solid var(--gray-100);
+  }
+
+  .chapter-body h3 {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin: 52px 0 16px;
+  }
+
+  .chapter-body p {
+    font-size: 17px;
+    color: var(--gray-700);
+    margin-bottom: 20px;
+    line-height: 1.85;
+  }
+
+  /* Pull quote */
+  .pullquote {
+    border-left: 3px solid var(--orange);
+    padding: 20px 28px;
+    margin: 36px 0;
+    background: var(--orange-pale);
+    border-radius: 0 8px 8px 0;
+  }
+  .pullquote p {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--navy);
+    font-style: italic;
+    margin-bottom: 0 !important;
+    line-height: 1.65;
+  }
+  .pullquote .attribution {
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 600;
+    color: var(--orange);
+    margin-top: 10px;
+    display: block;
+  }
+
+  /* Drill box */
+  .drill-box {
+    background: var(--off-white);
+    border-radius: 12px;
+    padding: 32px 32px 24px;
+    margin: 36px 0;
+    border: 1px solid var(--gray-100);
+  }
+  .drill-box .drill-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 12px;
+  }
+  .drill-box .drill-label::before {
+    content: '';
+    display: inline-block;
+    width: 16px; height: 2px;
+    background: var(--orange);
+    border-radius: 1px;
+  }
+  .drill-box h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+  .drill-box .drill-goal {
+    font-size: 14px;
+    color: var(--gray-500);
+    margin-bottom: 20px;
+    font-style: italic;
+  }
+  .drill-box ol {
+    margin: 0;
+    padding-left: 0;
+    counter-reset: drill-counter;
+    list-style: none;
+  }
+  .drill-box ol li {
+    counter-increment: drill-counter;
+    display: flex;
+    gap: 14px;
+    margin-bottom: 14px;
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--gray-700);
+    align-items: flex-start;
+  }
+  .drill-box ol li::before {
+    content: counter(drill-counter);
+    background: var(--navy);
+    color: var(--white);
+    min-width: 26px; height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* Recap box */
+  .recap-box {
+    background: var(--navy);
+    border-radius: 12px;
+    padding: 32px 32px 24px;
+    margin: 40px 0 0;
+  }
+  .recap-box .recap-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 16px;
+  }
+  .recap-box ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .recap-box ul li {
+    display: flex;
+    gap: 12px;
+    font-size: 15px;
+    color: var(--gray-300);
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    align-items: flex-start;
+    line-height: 1.6;
+  }
+  .recap-box ul li:last-child { border-bottom: none; }
+  .recap-box ul li::before {
+    content: '\2192';
+    color: var(--orange);
+    font-weight: 600;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* Bullet list in body */
+  .chapter-body ul.body-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+  }
+  .chapter-body ul.body-list li {
+    display: flex;
+    gap: 12px;
+    font-size: 17px;
+    color: var(--gray-700);
+    margin-bottom: 12px;
+    align-items: flex-start;
+    line-height: 1.7;
+  }
+  .chapter-body ul.body-list li::before {
+    content: '\00B7';
+    color: var(--orange);
+    font-size: 22px;
+    line-height: 1.4;
+    flex-shrink: 0;
+    font-weight: 700;
+  }
+
+  /* ── AUTHOR BOX ──────────────────────────────────── */
+  .author-section {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 64px 24px;
+  }
+  .author-box {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    padding: 32px;
+    background: var(--off-white);
+    border-radius: 12px;
+    border: 1px solid var(--gray-100);
+  }
+  .author-box .avatar {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: var(--navy);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 26px;
+    flex-shrink: 0;
+    letter-spacing: -1px;
+    border: 3px solid var(--orange);
+  }
+  .author-box .info h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .author-box .info p {
+    font-size: 14px;
+    color: var(--gray-500);
+    line-height: 1.6;
+  }
+
+  /* ── FOOTER ──────────────────────────────────────── */
+  .site-footer {
+    background: var(--navy);
+    padding: 40px 24px;
+    text-align: center;
+    border-top: 1px solid var(--navy-mid);
+  }
+  .site-footer p {
+    font-size: 13px;
+    color: var(--gray-500);
+  }
+  .site-footer strong { color: var(--orange); }
+
+  @media (max-width: 600px) {
+    .site-header { padding: 16px 20px; }
+    .book-hero { padding: 72px 20px 60px; }
+    .chapter-body { padding: 40px 20px 48px; }
+    .drill-box { padding: 24px 20px 20px; }
+    .recap-box { padding: 24px 20px 20px; }
+    .author-box { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <a href="https://madriverpro.com" class="brand">Ryan Rinneard <span>Golf</span></a>
+  <span class="badge">Eight Weeks to Short Game Mastery</span>
+</header>
+
+<!-- BOOK HERO -->
+<section class="book-hero">
+  <span class="eyebrow">A Book by Ryan Rinneard</span>
+  <h1>Eight Weeks to<br>Short Game Mastery</h1>
+  <div class="hero-divider"></div>
+  <p class="subtitle">A Complete System for Scoring from 100 Yards and In</p>
+  <p class="author-line">by <strong>Ryan Rinneard</strong> &nbsp;&middot;&nbsp; &copy; 2025 All rights reserved.</p>
+</section>
+
+<!-- TABLE OF CONTENTS -->
+<section class="toc-section">
+  <p class="section-label">Contents</p>
+  <h2>What You'll Find Inside</h2>
+  <ul class="toc-list">
+    <li onclick="document.getElementById('authors-note').scrollIntoView({behavior:'smooth'})">
+      <span class="toc-num">&mdash;</span><span class="toc-title">Author's Note</span><span class="toc-arrow">&darr;</span>
+    </li>
+    <li onclick="document.getElementById('ch1').scrollIntoView({behavior:'smooth'})">
+      <span class="toc-num">01</span><span class="toc-title">Understanding Your Tools</span><span class="toc-arrow">&darr;</span>
+    </li>
+    <li onclick="document.getElementById('ch2').scrollIntoView({behavior:'smooth'})">
+      <span class="toc-num">02</span><span class="toc-title">The Chip Shot System</span><span class="toc-arrow">&darr;</span>
+    </li>
+    <li onclick="document.getElementById('ch3').scrollIntoView({behavior:'smooth'})">
+      <span class="toc-num">03</span><span class="toc-title">Pitching with Precision</span><span class="toc-arrow">&darr;</span>
+    </li>
+    <li onclick="document.getElementById('ch4').scrollIntoView({behavior:'smooth'})">
+      <span class="toc-num">04</span><span class="toc-title">The Full Wedge Game</span><span class="toc-arrow">&darr;</span>
+    </li>
+    <li onclick="document.getElementById('ch5').scrollIntoView({behavior:'smooth'})">
+      <span class="toc-num">05</span><span class="toc-title">Bunker Confidence</span><span class="toc-arrow">&darr;</span>
+    </li>
+    <li onclick="document.getElementById('ch6').scrollIntoView({behavior:'smooth'})">
+      <span class="toc-num">06</span><span class="toc-title">Specialty Shots</span><span class="toc-arrow">&darr;</span>
+    </li>
+    <li onclick="document.getElementById('ch7').scrollIntoView({behavior:'smooth'})">
+      <span class="toc-num">07</span><span class="toc-title">The Mental Short Game</span><span class="toc-arrow">&darr;</span>
+    </li>
+    <li onclick="document.getElementById('ch8').scrollIntoView({behavior:'smooth'})">
+      <span class="toc-num">08</span><span class="toc-title">Integration &amp; Course Play</span><span class="toc-arrow">&darr;</span>
+    </li>
+    <li onclick="document.getElementById('epilogue').scrollIntoView({behavior:'smooth'})">
+      <span class="toc-num">&mdash;</span><span class="toc-title">Epilogue &mdash; What Comes Next</span><span class="toc-arrow">&darr;</span>
+    </li>
+  </ul>
+</section>
+
+<!-- AUTHOR'S NOTE -->
+<section class="front-matter" id="authors-note">
+  <p class="fm-label">Author's Note</p>
+  <h2>Why I Wrote This Book</h2>
+  <p>This book exists because of a simple truth I've observed across thousands of lessons: most golfers practice their short game wrong, or they don't practice it at all.</p>
+  <p>They spend hours on the range hammering drivers and irons, chasing that perfect full swing. Then they get to the course, miss a green, and have no idea what to do. They chunk a chip. Blade a pitch. Leave it in the bunker. And they walk off the green frustrated, wondering why they can't score.</p>
+  <p>The answer is almost always the same: they've never been given a real system for the short game.</p>
+  <p>That's what this book is. It's the system I teach my students at Mad River Golf Club &mdash; the same progression I use with beginners, competitive amateurs, and low-handicap players alike. It's built around eight weeks of focused, purposeful practice. Not random tips. Not YouTube quick fixes. A real plan.</p>
+  <p>Your wedges are precision instruments, not afterthoughts. Once you understand how loft and bounce work together, everything changes. Every short game shot is built on a few reliable fundamentals &mdash; how the club meets the ground, how your body moves through the ball, how you control distance with rhythm rather than force. Feel can be taught. It comes from deliberate practice with clear intent. And the mental side of the short game &mdash; commitment, routine, trust &mdash; is just as important as technique.</p>
+  <p>This isn't a book you read once and put on a shelf. It's a book you work through. Bring it to the practice green. Write in the margins. Be honest with yourself about what's working and what isn't. That's how real improvement happens.</p>
+  <p>I'm honoured you've chosen to invest this time in your game. Let's get to work.</p>
+  <p class="sig">&mdash; Ryan Rinneard</p>
+</section>
+
+<!-- ───────────────────────────────────── CHAPTER 1 -->
+<section class="chapter" id="ch1">
+  <div class="chapter-hero">
+    <p class="ch-num">Chapter One</p>
+    <h2>Understanding Your Tools</h2>
+    <p class="ch-intro">The wedges in your bag are precision instruments &mdash; learn how they work before you try to use them.</p>
+    <div class="ch-divider"></div>
+  </div>
+  <div class="chapter-body">
+    <p class="scene">Before we hit a single shot, we need to talk about what's in your hands. Most golfers carry three or four wedges and can't tell you the difference between them beyond "this one goes higher." That's like a carpenter who doesn't know the difference between a finishing hammer and a framing hammer. You might get the nail in eventually, but you're making the job ten times harder than it needs to be.</p>
+    <p>This week is about understanding. We're going to look at loft, bounce, and grind &mdash; the three characteristics that define how each wedge behaves. We're going to examine your set makeup to ensure you have the right tools for the shots you'll need. And we're going to start building a relationship with each club in your short game arsenal.</p>
+
+    <h3>Loft: Your Launch Angle</h3>
+    <p>Loft is the angle of the clubface relative to the shaft. A pitching wedge typically has 44&ndash;48 degrees of loft. A gap wedge sits around 50&ndash;52. A sand wedge is usually 54&ndash;56. And a lob wedge runs 58&ndash;60 degrees or more. The higher the loft number, the higher and shorter the ball flies &mdash; all else being equal.</p>
+    <p>Understanding your loft gaps is critical. You want roughly 4 degrees between each wedge. If you're carrying a 46-degree pitching wedge and a 56-degree sand wedge, you've got a 10-degree gap in the middle. That's a distance no club in your bag is designed to cover. Fill the gaps.</p>
+
+    <h3>Bounce: Your Best Friend</h3>
+    <p>Bounce is the angle between the leading edge and the lowest point of the sole. It's what prevents the club from digging into the turf or sand. High bounce (12&ndash;14 degrees) is your friend in soft conditions, fluffy sand, and thick rough. Low bounce (4&ndash;8 degrees) excels on tight lies, firm turf, and hardpan. Mid bounce (8&ndash;12 degrees) is the versatile option.</p>
+    <p>Here's the key insight most golfers miss: bounce is designed to work <em>for</em> you. When you deliver the club correctly &mdash; with the bounce contacting the ground first &mdash; the club glides rather than digs. This single concept will transform your chipping and bunker play.</p>
+
+    <div class="pullquote">
+      <p>"Once you understand how your wedges actually work, the short game stops being a mystery and starts being a system."</p>
+      <span class="attribution">&mdash; Ryan Rinneard</span>
+    </div>
+
+    <h3>Grind: Shaping Versatility</h3>
+    <p>The grind is how the sole of the wedge has been shaped &mdash; heel relief, toe relief, trailing edge modifications. A full sole offers maximum forgiveness. Grinds with heel and toe relief let you open the face for specialty shots without the leading edge lifting off the ground. Your highest-lofted wedge benefits from some grind so you can open it up around the greens. Your gap wedge and sand wedge can be more standard.</p>
+
+    <h3>Your Set Makeup</h3>
+    <p>Take your wedges out of the bag right now. What lofts are you carrying? What are the gaps? Is there a distance between 40 and 80 yards where you feel lost? That's your sign. A good short game set for most amateurs: pitching wedge (46), gap wedge (50), sand wedge (54&ndash;56), lob wedge (58&ndash;60). Four clubs, four degrees apart, covering every distance from 100 yards to the fringe.</p>
+
+    <div class="drill-box">
+      <span class="drill-label">Practice Drill</span>
+      <h4>The Lineup Drill</h4>
+      <p class="drill-goal">Goal: Build your internal map of how each club behaves &mdash; launch, spin, and roll-out.</p>
+      <ol>
+        <li>Place a ball 10 feet from the fringe on the practice green.</li>
+        <li>Hit five chips with each wedge using an identical stroke. Don't change anything except the club.</li>
+        <li>Watch the ball flight and note where each finishes. The pitching wedge runs. The sand wedge checks. The lob wedge barely rolls.</li>
+        <li>Now do the same from a bunker. Notice how the high-bounce sand wedge slides through while a low-bounce club wants to dig.</li>
+        <li>Write down what you observed. These are the facts your feel will be built on.</li>
+      </ol>
+    </div>
+
+    <div class="recap-box">
+      <p class="recap-label">Chapter Recap</p>
+      <ul>
+        <li>Loft controls launch and distance. Fill your gaps &mdash; roughly 4 degrees between each wedge.</li>
+        <li>Bounce prevents digging. When delivered correctly, the club glides through turf and sand.</li>
+        <li>Grind adds versatility. Your lob wedge benefits from sole relief for open-face shots.</li>
+        <li>Know your set makeup. If there's a gap in your distances, there's a gap in your bag.</li>
+        <li>Feel starts with observation. Hit the same shot with every wedge and pay attention to what happens.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────────────────── CHAPTER 2 -->
+<section class="chapter" id="ch2">
+  <div class="chapter-hero">
+    <p class="ch-num">Chapter Two</p>
+    <h2>The Chip Shot System</h2>
+    <p class="ch-intro">If I could only teach one short game shot for the rest of my career, it would be the chip.</p>
+    <div class="ch-divider"></div>
+  </div>
+  <div class="chapter-body">
+    <p class="scene">The chip shot is the foundation of everything. It's a small motion with enormous impact on your scores. A good chipper turns bogeys into pars and pars into birdie chances. A poor chipper turns pars into doubles and takes all the pressure off their putting &mdash; because they're never close enough to make anything.</p>
+    <p>This week, we build your chip shot system from the ground up. I'm going to give you a setup, a motion, and a framework that works on every chip you'll face.</p>
+
+    <h3>The Chip Is a Putt with Loft</h3>
+    <p>Reframe how you think about chipping. You're not "hitting" the ball &mdash; you're rolling it to the hole with a club that happens to get it airborne for a portion of the journey. The best chippers in the world think about where the ball will <em>land</em> and how it will <em>roll</em>, just like a putt. The air time is just a means to clear the fringe.</p>
+
+    <h3>Landing Spot Golf</h3>
+    <p>Every chip shot starts with a landing spot. Before you even take your stance, pick the exact spot where you want the ball to land. Then let the club's loft determine how far it rolls from there. Lower-lofted clubs mean more roll. Higher-lofted clubs mean less. Your job isn't to manufacture spin or trajectory &mdash; it's to pick the right club and land it on the spot.</p>
+
+    <div class="pullquote">
+      <p>"The moment your wrists get active in a chip, consistency disappears. Think of your arms and the club as one unit, rocking like a pendulum from your sternum."</p>
+      <span class="attribution">&mdash; Ryan Rinneard</span>
+    </div>
+
+    <h3>Bounce-First Delivery</h3>
+    <p>The single most important concept in chipping: the bounce of the club contacts the ground first, not the leading edge. When the leading edge hits first, you get chunks and skulls. When the bounce hits first, the club glides and the ball pops up cleanly every time. Your hands must be slightly ahead of the clubhead at impact, with a touch of forward lean. Not excessive &mdash; just enough to present the bounce to the turf.</p>
+
+    <h3>Setup &amp; Motion</h3>
+    <p>Feet close together, slightly open to the target. Ball just back of centre. Weight favouring your lead side &mdash; about 60/40. Hands slightly ahead of the ball. Grip down an inch or two for control. Rock your shoulders to take the club back. The length of the backswing determines distance &mdash; not speed. Let your body rotate gently through, keeping hands ahead of the clubhead through impact. The club should brush the grass. Follow through to a mirror image of your backswing.</p>
+
+    <div class="drill-box">
+      <span class="drill-label">Practice Drill</span>
+      <h4>The Towel Drill</h4>
+      <p class="drill-goal">Goal: Train your eyes and your feel to focus on the landing spot, not the hole.</p>
+      <ol>
+        <li>Lay a towel on the green at your chosen landing spot.</li>
+        <li>Hit 20 chips, trying to land each one on the towel.</li>
+        <li>Don't look at the hole &mdash; focus entirely on the towel.</li>
+        <li>Once you can land 15 out of 20 on the towel, move it to different distances.</li>
+        <li>Then play "Par 2" &mdash; drop a ball in 18 spots around the green. Chip and putt from each. Par is 36. Track your score.</li>
+      </ol>
+    </div>
+
+    <div class="recap-box">
+      <p class="recap-label">Chapter Recap</p>
+      <ul>
+        <li>The chip is a putt with loft. Think landing spot and roll-out, not ball flight.</li>
+        <li>Every chip starts with picking your landing spot. Then choose the club to match.</li>
+        <li>Bounce-first delivery is the key. Hands ahead, bounce glides, ball pops up clean.</li>
+        <li>Quiet hands, connected body. Rock the shoulders &mdash; don't flip the wrists.</li>
+        <li>The Par 2 game is your scoring baseline. Track it and revisit it in Week 8.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────────────────── CHAPTER 3 -->
+<section class="chapter" id="ch3">
+  <div class="chapter-hero">
+    <p class="ch-num">Chapter Three</p>
+    <h2>Pitching with Precision</h2>
+    <p class="ch-intro">The 30-to-80-yard zone is where scoring happens &mdash; and where most golfers have the least practice.</p>
+    <div class="ch-divider"></div>
+  </div>
+  <div class="chapter-body">
+    <p class="scene">Think about how often you face this shot during a round. You've missed a green with your approach. You've laid up on a par five. You've pulled your tee shot on a short par four. Every single time, you're standing over a pitch shot that could set up a birdie or save a par &mdash; or cost you two shots if you get it wrong.</p>
+    <p>This week, we build a pitching system that gives you distance control, trajectory control, and &mdash; most importantly &mdash; confidence from 30 to 80 yards.</p>
+
+    <h3>The Clock System</h3>
+    <p>Distance control in pitching comes from the length of your backswing, not the force of your downswing. Imagine your lead arm is the hand of a clock. A backswing to 7 o'clock (just past your trail leg) produces your shortest pitch. Nine o'clock (arm parallel to the ground) produces a medium pitch. Ten-thirty (three-quarter) produces your longest pitch before a full swing. Each position, with each wedge, produces a specific distance. Your job this week is to map those distances.</p>
+
+    <h3>Acceleration, Not Deceleration</h3>
+    <p>The number one fault I see in pitching is deceleration. Golfers make a big backswing, then slow down through impact because they're scared of hitting it too far. This produces fat shots, thin shots, and no consistency. The fix is simple: shorter backswing, accelerate through. Always. A committed, accelerating half-swing is infinitely more reliable than a tentative full swing.</p>
+
+    <div class="pullquote">
+      <p>"Distance is controlled by rhythm and length of swing, not by muscular effort. When you control distance with rhythm instead of force, your dispersion tightens dramatically."</p>
+      <span class="attribution">&mdash; Ryan Rinneard</span>
+    </div>
+
+    <h3>Trajectory Control</h3>
+    <p>You have three trajectories available with the same club: low, medium, and high. Low: ball back in stance, hands well ahead, shaft leaning forward. Medium: standard setup &mdash; your bread-and-butter trajectory. High: ball slightly forward, face slightly open, softer grip pressure. Same club, three different shots. That's versatility.</p>
+
+    <div class="drill-box">
+      <span class="drill-label">Practice Drill</span>
+      <h4>The Clock Mapping Drill</h4>
+      <p class="drill-goal">Goal: Build your personal distance chart &mdash; three swing lengths times three wedges = nine reliable numbers.</p>
+      <ol>
+        <li>Take your sand wedge to the range. Hit 10 shots at each clock position: 7 o'clock, 9 o'clock, and 10:30.</li>
+        <li>Note the average carry distance for each position.</li>
+        <li>Repeat with your gap wedge and pitching wedge.</li>
+        <li>You now have 9 distances mapped. Write them on a card and keep it in your bag.</li>
+        <li>Test them on the course this week. Adjust as needed based on real-world results.</li>
+      </ol>
+    </div>
+
+    <div class="recap-box">
+      <p class="recap-label">Chapter Recap</p>
+      <ul>
+        <li>The clock system gives you repeatable distance control: 7, 9, and 10:30 positions.</li>
+        <li>Shorter backswing + acceleration beats long backswing + deceleration. Every time.</li>
+        <li>Rhythm is distance. Same tempo, different swing lengths. That's the whole system.</li>
+        <li>Three trajectories per club: low, medium, high. Adjust ball position, not effort.</li>
+        <li>Your distance chart is your scoring bible. Build it this week and carry it with you.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────────────────── CHAPTER 4 -->
+<section class="chapter" id="ch4">
+  <div class="chapter-hero">
+    <p class="ch-num">Chapter Four</p>
+    <h2>The Full Wedge Game</h2>
+    <p class="ch-intro">100 yards and in &mdash; where birdies are made and rounds are shaped.</p>
+    <div class="ch-divider"></div>
+  </div>
+  <div class="chapter-body">
+    <p class="scene">You've built your chipping foundation. You've mapped your pitching distances. Now we sharpen the weapon that puts you in birdie range from 100 yards and in. Tour professionals expect to hit it inside 15 feet from this distance. For a well-trained amateur, inside 25 feet is very achievable &mdash; and that changes every approach shot from "hit the green" to "give yourself a real look at birdie."</p>
+
+    <h3>Full Swing, Controlled Effort</h3>
+    <p>A full wedge shot is not a full-effort swing. Your wedge swing should never be more than 85% effort. Why? Because effort creates variables. The harder you swing, the more your body compensates in unpredictable ways &mdash; grip pressure changes, tempo rushes, balance shifts. An 85% wedge swing is smooth, balanced, and repeatable. That's what produces tight distance control.</p>
+
+    <h3>Spin Is a Byproduct</h3>
+    <p>Stop trying to spin the ball. Spin is a byproduct of clean contact, proper angle of attack, and quality grooves. When you try to "put spin on it," you manipulate the club through impact and lose consistency. Focus on hitting the centre of the face with a slightly descending blow, and the spin will take care of itself.</p>
+
+    <div class="pullquote">
+      <p>"A fully committed shot to the wrong number is still better than a half-hearted shot to the right number. Commit first. Refine second."</p>
+      <span class="attribution">&mdash; Ryan Rinneard</span>
+    </div>
+
+    <h3>Wind and Elevation</h3>
+    <p>Into a 10 mph wind, a wedge shot loses roughly one club of distance (about 8&ndash;10 yards). Downwind, it gains about half a club. Uphill? Add 5%. Downhill? Subtract 5%. These are approximations &mdash; your personal numbers will vary. But the awareness matters. A lot of "bad wedge shots" are actually good swings with bad math.</p>
+
+    <div class="drill-box">
+      <span class="drill-label">Practice Drill</span>
+      <h4>The Wedge Test</h4>
+      <p class="drill-goal">Goal: Simulate course pressure with random distances and one-shot-only stakes.</p>
+      <ol>
+        <li>Pick random distances between 40 and 100 yards (use a rangefinder or marked targets).</li>
+        <li>Hit one shot to each distance &mdash; no warm-up swings, no mulligans.</li>
+        <li>Score yourself: inside 10 feet = 3 points, inside 20 feet = 2 points, on the green = 1 point, miss = 0.</li>
+        <li>Play 10 "holes." A score of 15+ is solid. 20+ is elite.</li>
+        <li>Track this score weekly. It's the clearest measure of your wedge game improvement.</li>
+      </ol>
+    </div>
+
+    <div class="recap-box">
+      <p class="recap-label">Chapter Recap</p>
+      <ul>
+        <li>85% effort, maximum control. Smooth power beats maximum power in wedge play.</li>
+        <li>Spin is a byproduct of clean contact, not manipulation. Trust the grooves.</li>
+        <li>Factor in wind and elevation. Good swings with bad math produce bad results.</li>
+        <li>Commitment over perfection. Pick the number, pick the club, and swing with conviction.</li>
+        <li>The Wedge Test measures what matters. Track it &mdash; it's your scoring benchmark.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────────────────── CHAPTER 5 -->
+<section class="chapter" id="ch5">
+  <div class="chapter-hero">
+    <p class="ch-num">Chapter Five</p>
+    <h2>Bunker Confidence</h2>
+    <p class="ch-intro">The greenside bunker shot is the only shot in golf where you don't have to hit the ball. Read that again.</p>
+    <div class="ch-divider"></div>
+  </div>
+  <div class="chapter-body">
+    <p class="scene">You don't hit the ball. You hit the sand behind the ball, and the sand carries the ball out. That's why it's actually one of the most forgiving shots in the game &mdash; when you understand the technique. Most golfers are terrified of bunkers. They tense up, decelerate, and either leave it in the sand or blade it over the green. The fear comes from not understanding what the club is supposed to do.</p>
+    <p>By the end of this week, you'll be the golfer who says, "I'd rather be in the bunker than in the rough." And you'll mean it.</p>
+
+    <h3>The Explosion Principle</h3>
+    <p>The clubhead enters the sand 1&ndash;2 inches behind the ball and exits 4&ndash;6 inches past it. The cushion of sand between the clubface and the ball is what launches it out. Think of it as an explosion of sand that happens to carry the ball with it. This is why the sand wedge was invented &mdash; its bounce prevents the club from digging too deep.</p>
+
+    <h3>Open Face, Open Stance</h3>
+    <p>Open the clubface first (rotate it clockwise so it points right of target), then take your grip. Then open your stance (aim your feet left of the target). Swing along your foot line &mdash; which means you're cutting across the ball. The open face adds loft and activates the bounce. The open stance creates the out-to-in path that produces that beautiful, soft, high bunker shot.</p>
+
+    <div class="pullquote">
+      <p>"Sand is heavy. It slows the club down significantly. That means you need a full, aggressive swing &mdash; even for a short bunker shot. This is counterintuitive, and it's exactly why most golfers leave it in the bunker."</p>
+      <span class="attribution">&mdash; Ryan Rinneard</span>
+    </div>
+
+    <h3>Acceleration Through Sand</h3>
+    <p>The ball is only 20 feet from you, but you need a swing that feels like a 50-yard pitch. The sand absorbs the energy. Trust the process: big swing, hit the sand, let the sand do the work. Complete to a full finish &mdash; chest facing the target. If you decelerate or quit on the shot, the club digs and the ball stays in the bunker. Commit to a full, aggressive finish every single time.</p>
+
+    <div class="drill-box">
+      <span class="drill-label">Practice Drill</span>
+      <h4>The Circle Drill</h4>
+      <p class="drill-goal">Goal: Train the proper entry and exit points and build confidence that you're taking the right amount of sand.</p>
+      <ol>
+        <li>Draw a circle around the ball with a 3-inch radius in the sand.</li>
+        <li>Your goal: remove the entire circle of sand with your swing. Not just the back half &mdash; the whole circle.</li>
+        <li>Start without a ball. Just practice removing circles of sand with your splash.</li>
+        <li>Add a ball. The ball should ride out on the cushion of sand you removed.</li>
+        <li>Do 20 reps. Once you can consistently remove the full circle, distance control becomes a matter of face angle and entry point.</li>
+      </ol>
+    </div>
+
+    <div class="recap-box">
+      <p class="recap-label">Chapter Recap</p>
+      <ul>
+        <li>You don't hit the ball in a bunker. You hit the sand, and the sand carries the ball out.</li>
+        <li>Open the face first, then grip. Open your stance. Swing along your foot line.</li>
+        <li>Bounce is your lifeline in sand. The open face activates it &mdash; the club skips, not digs.</li>
+        <li>Big swing, full finish, total commitment. The sand absorbs the energy for you.</li>
+        <li>Fear comes from misunderstanding. Once you feel the bounce glide through sand, everything changes.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────────────────── CHAPTER 6 -->
+<section class="chapter" id="ch6">
+  <div class="chapter-hero">
+    <p class="ch-num">Chapter Six</p>
+    <h2>Specialty Shots</h2>
+    <p class="ch-intro">The flop, the bump, the awkward lie &mdash; expand your shotmaking vocabulary.</p>
+    <div class="ch-divider"></div>
+  </div>
+  <div class="chapter-body">
+    <p class="scene">You now have a chip shot, a pitch shot, a full wedge game, and bunker confidence. That covers about 85% of the short game situations you'll face on the course. This week, we go after the other 15%. These aren't trick shots. They're practical solutions to real situations you'll encounter every round &mdash; all built on the fundamentals you've already learned.</p>
+
+    <h3>The Flop Shot Philosophy</h3>
+    <p>The flop shot is a high-risk, high-reward play. Use it only when there's no other option &mdash; when you need the ball to go up fast and stop immediately, with no green to work with. Open the clubface of your lob wedge as far as it will go. Ball position forward, off your lead instep. Wide stance. Swing hard along your foot line. The club slides under the ball, and the extreme loft sends it almost straight up. You must accelerate &mdash; deceleration on a flop is catastrophic. Commit fully.</p>
+
+    <h3>The Bump-and-Run Advantage</h3>
+    <p>The bump-and-run is the most underused shot in amateur golf. It's a low, running shot played with a less-lofted club &mdash; an 8-iron or 9-iron, sometimes even a hybrid. The ball barely gets airborne, lands on the green quickly, and rolls to the hole like a putt. It's incredibly reliable because there's less air time and less that can go wrong. Whenever the situation allows it, keep the ball on the ground.</p>
+
+    <div class="pullquote">
+      <p>"If you can bump-and-run instead, bump-and-run. The flop is your last resort, not your first choice. The simplest shot that gets the job done is always the right shot."</p>
+      <span class="attribution">&mdash; Ryan Rinneard</span>
+    </div>
+
+    <h3>Reading Awkward Lies</h3>
+    <p>Uphill lies make the ball go higher and shorter. Downhill lies make it go lower and run more. Sidehill above your feet pulls left. Sidehill below your feet pushes right. The key adjustment: set your shoulders parallel to the slope. On an uphill lie, your lead shoulder is higher. On a downhill lie, your trail shoulder is higher. Let the slope dictate the ball flight rather than fighting it.</p>
+
+    <h3>Deep Rough Strategy</h3>
+    <p>When the ball is buried in deep rough, everything changes. The grass grabs the hosel and shuts the face. Open the face dramatically, make a steep, aggressive swing, and expect the ball to come out lower and hotter than normal with very little spin. The goal from deep rough is simple: get the ball on the putting surface. That's a win.</p>
+
+    <div class="drill-box">
+      <span class="drill-label">Practice Drill</span>
+      <h4>The 8-Iron Around the Green</h4>
+      <p class="drill-goal">Goal: Build trust in the bump-and-run as a reliable go-to option.</p>
+      <ol>
+        <li>Take only your 8-iron to the practice green.</li>
+        <li>Play to 10 different holes using only bump-and-run shots.</li>
+        <li>Set up like a putt: ball back of centre, hands ahead, minimal wrist action.</li>
+        <li>Pick your landing spot on the green and let the ball roll from there.</li>
+        <li>You'll be amazed at how effective this shot is &mdash; and how much easier it is than chipping with a wedge in many situations.</li>
+      </ol>
+    </div>
+
+    <div class="recap-box">
+      <p class="recap-label">Chapter Recap</p>
+      <ul>
+        <li>The flop is your last resort. Full commitment required &mdash; half-hearted flops are disasters.</li>
+        <li>The bump-and-run should be your first choice. Less air time means less that can go wrong.</li>
+        <li>Set your shoulders to the slope on awkward lies. Work with the terrain, not against it.</li>
+        <li>From deep rough, the goal is the green. That's a win. Don't get greedy.</li>
+        <li>Specialty shots are variations on your fundamentals, not entirely new techniques.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────────────────── CHAPTER 7 -->
+<section class="chapter" id="ch7">
+  <div class="chapter-hero">
+    <p class="ch-num">Chapter Seven</p>
+    <h2>The Mental Short Game</h2>
+    <p class="ch-intro">Pressure, routine, commitment &mdash; the invisible skills that matter most.</p>
+    <div class="ch-divider"></div>
+  </div>
+  <div class="chapter-body">
+    <p class="scene">You have the technique. You have the shots. You have the distance control. Now let's talk about the part of the short game that nobody practices &mdash; and the part that costs you the most shots. I've watched golfers with beautiful technique on the practice green fall apart on the course because they couldn't commit to a shot under pressure. I've seen players chunk a chip on the first hole and let it ruin the next three holes.</p>
+    <p>This week isn't about new swing mechanics. It's about building the mental habits that let your technique show up when it matters.</p>
+
+    <h3>The Pre-Shot Routine Is Non-Negotiable</h3>
+    <p>Every great short game player has a pre-shot routine, and they do it before every single shot. Not just the important ones. Every one. Your routine is your anchor &mdash; it puts you in the same mental state regardless of the situation. It blocks out pressure, doubt, and distraction. Without a routine, every shot is a fresh negotiation with your nerves. With a routine, every shot is the same process.</p>
+
+    <h3>Commitment Over Outcome</h3>
+    <p>Here is the most powerful mental shift you can make: stop caring about outcomes and start caring about commitment. A fully committed shot that goes 10 feet past the hole is a better mental rep than a half-hearted shot that happens to go in. Commitment is repeatable. Luck isn't. When you commit to every shot &mdash; to the club, the landing spot, the trajectory, the speed &mdash; you build a pattern of trust that pays dividends for years.</p>
+
+    <div class="pullquote">
+      <p>"Indecision is the death of the short game. Assess the situation, choose the shot, commit to it, execute. If you change your mind after you've started your routine, step away and start over. Never hit a shot you're not committed to."</p>
+      <span class="attribution">&mdash; Ryan Rinneard</span>
+    </div>
+
+    <h3>Your Routine: The Four Steps</h3>
+    <p><strong>Step 1 &mdash; Assess:</strong> Stand behind the ball and read the situation. What's the lie? Where's the pin? What's the safe miss? Pick your shot &mdash; club, trajectory, landing spot.</p>
+    <p><strong>Step 2 &mdash; Visualize:</strong> See the shot in your mind. Watch the ball leave the clubface, fly through the air, land on your spot, and roll to the hole. Make it vivid.</p>
+    <p><strong>Step 3 &mdash; Set Up:</strong> Walk in from behind, set your clubface to the target line first, then build your stance around it. One or two practice swings. No more than two.</p>
+    <p><strong>Step 4 &mdash; Execute:</strong> One last look at the target. Then go. No more than 3&ndash;4 seconds between your last look and the start of your swing. Look, trust, swing.</p>
+
+    <div class="drill-box">
+      <span class="drill-label">Practice Drill</span>
+      <h4>The Pressure Drill</h4>
+      <p class="drill-goal">Goal: Simulate the pressure of a real up-and-down with no safety net.</p>
+      <ol>
+        <li>Set up a chip to a tight pin location.</li>
+        <li>Give yourself one ball. One chance. Full routine.</li>
+        <li>Execute the shot with complete commitment.</li>
+        <li>Do this from 10 different locations around the green.</li>
+        <li>Notice what changes in your body and mind when there's no mulligan. That's the pressure you're training for.</li>
+      </ol>
+    </div>
+
+    <div class="recap-box">
+      <p class="recap-label">Chapter Recap</p>
+      <ul>
+        <li>The pre-shot routine is your anchor. Use it before every short game shot, not just the hard ones.</li>
+        <li>Commitment over outcome. A committed miss teaches more than a lucky make.</li>
+        <li>Four steps: assess, visualize, set up, execute. 20&ndash;30 seconds. No exceptions.</li>
+        <li>Indecision creates tension. Clear decisions create freedom in the swing.</li>
+        <li>Practice under pressure. One ball, one chance, full routine. That's how trust is built.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────────────────── CHAPTER 8 -->
+<section class="chapter" id="ch8">
+  <div class="chapter-hero">
+    <p class="ch-num">Chapter Eight</p>
+    <h2>Integration &amp; Course Play</h2>
+    <p class="ch-intro">Everything comes together. Take your skills off the practice green and onto the golf course.</p>
+    <div class="ch-divider"></div>
+  </div>
+  <div class="chapter-body">
+    <p class="scene">Seven weeks ago, you might not have known the bounce angle on your sand wedge. Today, you have a complete short game system &mdash; technique, distance control, specialty shots, and mental skills. This final week is about one thing: integration. Practice is where you build skills. The course is where you use them. And they're not the same environment.</p>
+    <p>The course gives you uneven lies, pressure, consequences, and situations you've never seen before. Your job isn't to be perfect out there &mdash; it's to trust what you've built, commit to your process, and let your skills show up.</p>
+
+    <h3>Practice Makes Permanent</h3>
+    <p>Everything you've grooved over the past seven weeks is now part of your game. But skills are perishable. If you stop practising your short game after this program, the sharpness will fade within weeks. My recommendation: 30 minutes of dedicated short game practice for every hour you spend on the range. That ratio will keep your skills sharp and your scores low. Make it a non-negotiable part of your golf routine.</p>
+
+    <h3>Course Management from 100 Yards In</h3>
+    <p>Smart golfers think backwards from the hole. Before you hit an approach, ask: where's the best place to miss? If the pin is tucked left behind a bunker, aim for the centre or right side of the green. If you miss, you'll have a straightforward chip rather than a nightmare bunker shot. The best short game players don't just have great technique &mdash; they rarely put themselves in positions where they need it.</p>
+
+    <div class="pullquote">
+      <p>"You don't have to go at every pin. From a tough angle, chip to the fat part of the green and take your two-putt par. Heroic short game shots make highlight reels. Smart short game shots make low scores."</p>
+      <span class="attribution">&mdash; Ryan Rinneard</span>
+    </div>
+
+    <h3>Trust Your System</h3>
+    <p>You have a chip shot system. A pitching clock system. A bunker technique. Specialty shots. A pre-shot routine. On the course, your only job is to trust these systems and execute. Don't reinvent your technique on the 7th hole because you chunked a chip on the 5th. Don't try a shot you haven't practised because the situation looks cool. Play the shots you own. Play the percentages. Trust the process.</p>
+
+    <h3>Your Shot Selection Framework</h3>
+    <p><strong>Step 1 &mdash; Assess the situation:</strong> Lie, distance to landing area, pin position, risk, safe play. Take 10 seconds to read everything.</p>
+    <p><strong>Step 2 &mdash; Choose your shot type:</strong> Can you bump-and-run? Do it. Standard chip? Use your go-to club. Need to pitch? Use your clock system. Bunker? Open face, hit the sand. Only reach for a specialty shot when the standard options don't fit.</p>
+    <p><strong>Step 3 &mdash; Pick your numbers:</strong> Club, landing spot, carry distance, expected roll. Be specific. "I'm hitting my 54-degree to that brown spot on the fringe, carrying it 8 yards, and it'll roll 15 feet to the hole."</p>
+    <p><strong>Step 4 &mdash; Execute your routine:</strong> Assess, visualize, set up, commit, go. Same routine, every time.</p>
+
+    <div class="drill-box">
+      <span class="drill-label">Practice Drill</span>
+      <h4>The Full Short Game Circuit</h4>
+      <p class="drill-goal">Goal: A comprehensive final exam testing every skill you've built over 8 weeks.</p>
+      <ol>
+        <li>Set up a circuit: 2 chips (one uphill, one downhill), 2 pitches (one 30-yard, one 60-yard), 1 bunker shot, and 1 specialty shot of your choice.</li>
+        <li>Play the circuit three times through. Full routine every shot.</li>
+        <li>Track your total score (chip + putts for each station).</li>
+        <li>Replay the Par 2 test from Week 2. Compare your score to your original baseline.</li>
+        <li>Write down your final numbers: up-and-down %, sand save %, average proximity from 50&ndash;100 yards. These are your new starting point.</li>
+      </ol>
+    </div>
+
+    <div class="recap-box">
+      <p class="recap-label">Chapter Recap</p>
+      <ul>
+        <li>30 minutes of short game practice for every hour on the range. Non-negotiable.</li>
+        <li>Think backwards from the hole. The best position to miss from is the smart play.</li>
+        <li>Trust your system on the course. Don't reinvent mid-round &mdash; play the shots you own.</li>
+        <li>Specificity breeds confidence. Name the club, the spot, the carry, the roll.</li>
+        <li>Retest your Par 2 score. That number tells you how far you've come &mdash; and where to go next.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────────────────── EPILOGUE -->
+<section class="chapter" id="epilogue" style="background: var(--off-white);">
+  <div class="chapter-hero" style="background: var(--navy-mid);">
+    <p class="ch-num">Epilogue</p>
+    <h2>What Comes Next</h2>
+    <p class="ch-intro">The program is over. The practice never stops.</p>
+    <div class="ch-divider"></div>
+  </div>
+  <div class="chapter-body">
+    <p>You've done the work. Eight weeks of deliberate, focused short game practice. You understand your tools. You have a chipping system, a pitching system, bunker confidence, specialty shots, a mental routine, and a course management framework. That's a complete scoring system from 100 yards and in.</p>
+    <p>But here's what I want you to remember: this isn't a finish line. It's a foundation.</p>
+    <p>The golfers who keep improving are the ones who keep showing up to the practice green. Not with random tips or half-hearted sessions &mdash; but with the same intentional, systematic approach you've been using for the past eight weeks. Revisit your distance chart. Retest your Par 2 score. Play the Wedge Test. Run the drills that challenged you most. Keep the routine sharp.</p>
+    <p>The short game is where scoring lives. It's where bogeys become pars, where pars become birdies, and where confidence is built one committed shot at a time. You have the system now. Trust it. Use it. Keep building on it.</p>
+    <p>I'm proud of the work you've put in. Now go play your best golf.</p>
+    <p style="font-style:italic; font-size:20px; font-family:'Playfair Display',serif; color:var(--navy); margin-top:48px; text-align:center;">&mdash; Ryan Rinneard</p>
+  </div>
+</section>
+
+<!-- AUTHOR BOX -->
+<div class="author-section">
+  <div class="author-box">
+    <div class="avatar">RR</div>
+    <div class="info">
+      <h4>Ryan Rinneard</h4>
+      <p>PGA of Canada &middot; Class A Professional &middot; Director of Instruction at Mad River Golf Club. Ryan founded the Ryan Rinneard Golf Academy to deliver structured, results-driven coaching programs. His "Eight Weeks to Mastery" series represents years of coaching experience distilled into focused, practical training. <strong>madriverpro.com</strong></p>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <p>&copy; 2025 <strong>Ryan Rinneard</strong> &middot; Eight Weeks to Short Game Mastery &middot; <a href="https://madriverpro.com" style="color:var(--gray-500);text-decoration:none;">madriverpro.com</a></p>
+</footer>
+
+<script>
+// Smooth scroll for TOC
+document.querySelectorAll('.toc-list li').forEach(li => {
+  li.style.cursor = 'pointer';
+});
+</script>
+
+</body>
+</html>

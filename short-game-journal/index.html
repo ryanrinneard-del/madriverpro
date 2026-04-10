@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eight Weeks to Short Game Mastery — Journal & Workbook | Ryan Rinneard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Playfair+Display:ital,wght@0,700;0,800;1,700&display=swap" rel="stylesheet">
+<style>
+/* ── TOKENS ─────────────────────────────────────────────── */
+:root {
+  --navy:        #0a1628;
+  --navy-light:  #142240;
+  --navy-mid:    #1e3a5f;
+  --white:       #ffffff;
+  --off-white:   #f7f8fa;
+  --gray-100:    #eef0f4;
+  --gray-200:    #dde1e9;
+  --gray-300:    #c8cdd6;
+  --gray-500:    #6b7280;
+  --gray-700:    #374151;
+  --orange:      #c97c2e;
+  --orange-light:#e8943a;
+  --orange-pale: #fdf3e7;
+  --green:       #2e7d52;
+  --green-pale:  #edf7f1;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Inter', -apple-system, sans-serif;
+  background: var(--off-white);
+  color: var(--gray-700);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── HEADER ─────────────────────────────────────────────── */
+.site-header {
+  background: var(--navy);
+  padding: 16px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  border-bottom: 1px solid var(--navy-mid);
+}
+.brand { font-size:14px; font-weight:600; color:var(--white); letter-spacing:.4px; text-decoration:none; }
+.brand span { color:var(--orange); }
+.header-badge {
+  font-size:11px; font-weight:600; letter-spacing:1.5px;
+  text-transform:uppercase; color:var(--gray-300);
+}
+
+/* ── COVER ──────────────────────────────────────────────── */
+.cover {
+  background: var(--navy);
+  padding: 80px 24px 72px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.cover::before {
+  content:'';
+  position:absolute; top:-100px; right:-100px;
+  width:500px; height:500px; border-radius:50%;
+  background: radial-gradient(circle, rgba(201,124,46,.14) 0%, transparent 70%);
+  pointer-events:none;
+}
+.cover .eyebrow {
+  font-size:11px; font-weight:700; letter-spacing:2.5px;
+  text-transform:uppercase; color:var(--orange); margin-bottom:20px;
+  display:block;
+}
+.cover h1 {
+  font-family:'Playfair Display', serif;
+  font-size: clamp(34px,6vw,62px);
+  font-weight:800; color:var(--white);
+  line-height:1.1; max-width:720px; margin:0 auto 12px;
+}
+.cover .sub {
+  font-family:'Playfair Display', serif;
+  font-size:clamp(15px,2vw,19px);
+  color:var(--gray-300); font-style:italic;
+  max-width:500px; margin:0 auto 28px; line-height:1.6;
+}
+.cover-divider {
+  width:48px; height:3px; background:var(--orange);
+  margin:0 auto 24px; border-radius:2px;
+}
+.cover .byline { font-size:14px; color:var(--gray-300); }
+.cover .byline strong { color:var(--orange); }
+
+/* ── HOW TO USE ─────────────────────────────────────────── */
+.how-to-use {
+  max-width:720px; margin:0 auto;
+  padding:56px 24px 48px;
+  border-bottom:1px solid var(--gray-200);
+}
+.how-to-use .section-label {
+  font-size:11px; font-weight:700; letter-spacing:2px;
+  text-transform:uppercase; color:var(--orange); margin-bottom:16px;
+}
+.how-to-use h2 {
+  font-family:'Playfair Display', serif;
+  font-size:28px; color:var(--navy); margin-bottom:20px;
+}
+.how-to-use p { font-size:16px; margin-bottom:16px; line-height:1.8; }
+.session-types {
+  display:grid; grid-template-columns:repeat(auto-fit, minmax(180px,1fr));
+  gap:12px; margin-top:28px;
+}
+.session-type-card {
+  background:var(--white); border-radius:10px;
+  padding:20px 16px; border:1px solid var(--gray-200);
+  text-align:center;
+}
+.session-type-card .icon { font-size:24px; margin-bottom:8px; }
+.session-type-card h4 { font-size:13px; font-weight:700; color:var(--navy); margin-bottom:4px; letter-spacing:.3px; }
+.session-type-card p { font-size:12px; color:var(--gray-500); margin:0; }
+
+/* ── WEEK NAV ────────────────────────────────────────────── */
+.week-nav-wrap {
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-200);
+  position: sticky;
+  top: 53px;
+  z-index: 100;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.week-nav {
+  display:flex; gap:0;
+  max-width:960px; margin:0 auto;
+  min-width:max-content;
+}
+.week-tab {
+  padding:14px 20px;
+  font-size:13px; font-weight:600;
+  color:var(--gray-500);
+  cursor:pointer; border:none; background:none;
+  border-bottom:3px solid transparent;
+  transition:color .2s, border-color .2s;
+  white-space:nowrap; letter-spacing:.2px;
+  font-family:'Inter', sans-serif;
+}
+.week-tab:hover { color:var(--navy); }
+.week-tab.active { color:var(--navy); border-bottom-color:var(--orange); }
+
+/* ── WEEK CONTENT ───────────────────────────────────────── */
+.week-content { display:none; }
+.week-content.active { display:block; }
+
+/* ── WEEK HERO ──────────────────────────────────────────── */
+.week-hero {
+  background: var(--navy);
+  padding:56px 24px 48px; text-align:center;
+  border-bottom:3px solid var(--orange);
+}
+.week-hero .wk-num {
+  font-size:11px; font-weight:700; letter-spacing:2.5px;
+  text-transform:uppercase; color:var(--orange); margin-bottom:12px;
+}
+.week-hero h2 {
+  font-family:'Playfair Display', serif;
+  font-size:clamp(26px,4vw,40px); color:var(--white);
+  font-weight:700; line-height:1.2; max-width:580px; margin:0 auto 12px;
+}
+.week-hero .wk-focus {
+  font-size:15px; color:var(--gray-300); font-style:italic;
+  max-width:460px; margin:0 auto;
+}
+.week-hero .wk-divider {
+  width:36px; height:2px; background:var(--orange);
+  margin:20px auto 0; border-radius:2px;
+}
+
+/* ── WEEK BODY ──────────────────────────────────────────── */
+.week-body {
+  max-width:720px; margin:0 auto; padding:0 24px 64px;
+}
+
+/* ── SESSION BLOCK ──────────────────────────────────────── */
+.session-block {
+  margin-top:40px;
+  background:var(--white);
+  border-radius:14px;
+  border:1px solid var(--gray-200);
+  overflow:hidden;
+}
+.session-header {
+  display:flex; align-items:center; gap:12px;
+  padding:18px 24px;
+  border-bottom:1px solid var(--gray-100);
+}
+.session-icon {
+  width:36px; height:36px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:16px; flex-shrink:0;
+}
+.session-icon.before { background:var(--orange-pale); }
+.session-icon.during { background:#e8f0fd; }
+.session-icon.after  { background:var(--green-pale); }
+.session-icon.practice { background:var(--gray-100); }
+
+.session-header-text h3 {
+  font-size:15px; font-weight:700; color:var(--navy); letter-spacing:.2px;
+}
+.session-header-text span {
+  font-size:12px; color:var(--gray-500);
+}
+.session-body { padding:24px; }
+
+/* ── FORM ELEMENTS ──────────────────────────────────────── */
+.field-group { margin-bottom:24px; }
+.field-label {
+  display:block; font-size:12px; font-weight:700;
+  color:var(--navy); letter-spacing:.8px;
+  text-transform:uppercase; margin-bottom:8px;
+}
+.field-hint {
+  display:block; font-size:13px; color:var(--gray-500);
+  font-style:italic; margin-bottom:10px; margin-top:-4px;
+}
+
+.note-area {
+  width:100%; min-height:80px;
+  border:1.5px solid var(--gray-200);
+  border-radius:8px; padding:12px 14px;
+  font-family:'Inter', sans-serif;
+  font-size:15px; color:var(--gray-700);
+  background:var(--off-white);
+  resize:vertical; outline:none;
+  transition:border-color .2s;
+  line-height:1.7;
+}
+.note-area:focus { border-color:var(--orange); background:var(--white); }
+.note-area.small { min-height:56px; }
+.note-area.large { min-height:120px; }
+
+.note-input {
+  width:100%; height:44px;
+  border:1.5px solid var(--gray-200);
+  border-radius:8px; padding:0 14px;
+  font-family:'Inter', sans-serif;
+  font-size:15px; color:var(--gray-700);
+  background:var(--off-white); outline:none;
+  transition:border-color .2s;
+}
+.note-input:focus { border-color:var(--orange); background:var(--white); }
+
+/* ── SLIDER ─────────────────────────────────────────────── */
+.slider-field { margin-bottom:24px; }
+.slider-labels {
+  display:flex; justify-content:space-between;
+  font-size:12px; color:var(--gray-500); margin-bottom:6px;
+}
+.slider-labels .left-label { font-weight:600; color:var(--green); }
+.slider-labels .right-label { font-weight:600; color:#c0392b; }
+.slider-track { position:relative; padding:4px 0; }
+input[type=range] {
+  width:100%; -webkit-appearance:none;
+  height:6px; border-radius:3px;
+  background: linear-gradient(to right, var(--green) 0%, var(--orange) 50%, #c0392b 100%);
+  outline:none; cursor:pointer;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance:none;
+  width:22px; height:22px; border-radius:50%;
+  background:var(--white);
+  border:3px solid var(--navy);
+  box-shadow:0 2px 6px rgba(0,0,0,.2);
+  transition:transform .15s;
+}
+input[type=range]::-webkit-slider-thumb:active { transform:scale(1.2); }
+input[type=range]::-moz-range-thumb {
+  width:22px; height:22px; border-radius:50%;
+  background:var(--white); border:3px solid var(--navy);
+  box-shadow:0 2px 6px rgba(0,0,0,.2);
+}
+
+/* ── CHECKLIST ──────────────────────────────────────────── */
+.checklist { list-style:none; }
+.checklist li {
+  display:flex; align-items:flex-start; gap:12px;
+  padding:10px 0; border-bottom:1px solid var(--gray-100);
+  font-size:15px; color:var(--gray-700);
+  cursor:pointer; transition:color .15s;
+  line-height:1.5;
+}
+.checklist li:last-child { border-bottom:none; }
+.checklist li.checked { color:var(--gray-500); text-decoration:line-through; }
+.check-box {
+  width:20px; height:20px; border-radius:5px;
+  border:2px solid var(--gray-300);
+  flex-shrink:0; display:flex; align-items:center;
+  justify-content:center; transition:all .15s;
+  margin-top:1px;
+}
+.checklist li.checked .check-box {
+  background:var(--green); border-color:var(--green);
+  color:var(--white);
+}
+.check-box::after { content:''; }
+.checklist li.checked .check-box::after { content:'\2713'; font-size:12px; font-weight:700; }
+
+/* ── RATING ROW ─────────────────────────────────────────── */
+.rating-row {
+  display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;
+}
+.rating-btn {
+  padding:7px 16px; border-radius:6px;
+  border:1.5px solid var(--gray-200);
+  font-size:13px; font-weight:600; cursor:pointer;
+  background:var(--off-white); color:var(--gray-500);
+  transition:all .15s;
+  font-family:'Inter', sans-serif;
+}
+.rating-btn:hover { border-color:var(--orange); color:var(--orange); }
+.rating-btn.selected { background:var(--navy); border-color:var(--navy); color:var(--white); }
+
+/* ── PULL QUOTE ─────────────────────────────────────────── */
+.week-quote {
+  border-left:3px solid var(--orange);
+  padding:16px 20px; margin:24px 0;
+  background:var(--orange-pale);
+  border-radius:0 8px 8px 0;
+}
+.week-quote p {
+  font-size:16px; font-weight:500; color:var(--navy);
+  font-style:italic; margin:0; line-height:1.6;
+}
+.week-quote .attr {
+  font-size:12px; font-style:normal; font-weight:700;
+  color:var(--orange); display:block; margin-top:8px;
+}
+
+/* ── FOCUS CARD ─────────────────────────────────────────── */
+.focus-card {
+  background:var(--navy);
+  border-radius:10px; padding:20px 22px;
+  margin-bottom:24px;
+}
+.focus-card .fc-label {
+  font-size:10px; font-weight:700; letter-spacing:2px;
+  text-transform:uppercase; color:var(--orange); margin-bottom:10px;
+}
+.focus-card p {
+  font-size:15px; color:var(--gray-300); line-height:1.7; margin:0;
+}
+
+/* ── DIVIDER ────────────────────────────────────────────── */
+.section-divider {
+  height:1px; background:var(--gray-100);
+  margin:28px 0;
+}
+
+/* ── SCORE ROW ──────────────────────────────────────────── */
+.score-row {
+  display:grid; grid-template-columns:1fr 1fr 1fr;
+  gap:12px; margin-top:8px;
+}
+.score-cell { display:flex; flex-direction:column; gap:4px; }
+.score-cell label { font-size:12px; color:var(--gray-500); font-weight:600; }
+.score-cell input {
+  height:42px; border:1.5px solid var(--gray-200);
+  border-radius:8px; padding:0 12px; font-size:16px;
+  font-weight:600; color:var(--navy);
+  background:var(--off-white); text-align:center; outline:none;
+  transition:border-color .2s;
+  font-family:'Inter', sans-serif;
+}
+.score-cell input:focus { border-color:var(--orange); background:var(--white); }
+
+/* ── PRACTICE PLAN GRID ─────────────────────────────────── */
+.practice-blocks {
+  display:grid; grid-template-columns:1fr 1fr 1fr;
+  gap:12px; margin-top:8px;
+}
+.practice-block {
+  background:var(--off-white); border-radius:8px;
+  border:1px solid var(--gray-200); padding:14px;
+}
+.practice-block .pb-num {
+  display:inline-flex; width:24px; height:24px;
+  background:var(--navy); color:var(--white);
+  border-radius:50%; align-items:center; justify-content:center;
+  font-size:11px; font-weight:700; margin-bottom:8px;
+}
+.practice-block .pb-title {
+  font-size:12px; font-weight:700; color:var(--navy);
+  text-transform:uppercase; letter-spacing:.5px; margin-bottom:6px;
+}
+.practice-block textarea {
+  width:100%; min-height:70px; border:1.5px solid var(--gray-200);
+  border-radius:6px; padding:8px; font-size:13px;
+  font-family:'Inter', sans-serif; color:var(--gray-700);
+  background:var(--white); resize:none; outline:none;
+  transition:border-color .2s;
+}
+.practice-block textarea:focus { border-color:var(--orange); }
+
+/* ── SAVE BANNER ────────────────────────────────────────── */
+.save-banner {
+  position:fixed; bottom:20px; right:20px;
+  background:var(--navy); color:var(--white);
+  padding:10px 18px; border-radius:8px;
+  font-size:13px; font-weight:600;
+  opacity:0; transform:translateY(8px);
+  transition:opacity .3s, transform .3s;
+  pointer-events:none; z-index:300;
+}
+.save-banner.show { opacity:1; transform:translateY(0); }
+
+/* ── FOOTER ─────────────────────────────────────────────── */
+.site-footer {
+  background:var(--navy); padding:36px 24px;
+  text-align:center; margin-top:60px;
+}
+.site-footer p { font-size:13px; color:var(--gray-500); }
+.site-footer strong { color:var(--orange); }
+
+/* ── PRINT ──────────────────────────────────────────────── */
+@media print {
+  .site-header, .week-nav-wrap, .save-banner { display:none; }
+  .week-content { display:block !important; page-break-before:always; }
+  .session-block { break-inside:avoid; }
+  body { background:white; }
+}
+
+/* ── RESPONSIVE ─────────────────────────────────────────── */
+@media(max-width:600px){
+  .site-header { padding:14px 16px; }
+  .session-body { padding:16px; }
+  .practice-blocks { grid-template-columns:1fr; }
+  .score-row { grid-template-columns:1fr 1fr 1fr; }
+  .session-types { grid-template-columns:1fr 1fr; }
+  .cover { padding:60px 20px 56px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <a href="https://madriverpro.com" class="brand">Ryan Rinneard <span>Golf</span></a>
+  <span class="header-badge">Short Game Journal</span>
+</header>
+
+<!-- COVER -->
+<section class="cover">
+  <span class="eyebrow">Companion Workbook</span>
+  <h1>Eight Weeks to<br>Short Game Mastery</h1>
+  <div class="cover-divider"></div>
+  <p class="sub">Journal &amp; Workbook — your personal companion for building a complete scoring game from 100 yards and in.</p>
+  <p class="byline">Designed by <strong>Ryan Rinneard</strong> &nbsp;&middot;&nbsp; Ryan Rinneard Golf Academy</p>
+</section>
+
+<!-- HOW TO USE -->
+<section class="how-to-use">
+  <p class="section-label">How to Use This Journal</p>
+  <h2>One Book. Eight Weeks. Four Sessions.</h2>
+  <p>This journal mirrors the Short Game Mastery book chapter for chapter. Each week has four session types — before you practice, during your session, after you're done, and a structured drill tracker to keep you honest.</p>
+  <p>You don't need to fill out everything every time. The goal is honest, consistent attention to what's actually happening in your short game — not more pressure. Even one note per session makes a difference. Your entries save automatically in this browser.</p>
+  <div class="session-types">
+    <div class="session-type-card">
+      <div class="icon">&#x1F305;</div>
+      <h4>Before You Practice</h4>
+      <p>Set your focus. Know what you're working on today.</p>
+    </div>
+    <div class="session-type-card">
+      <div class="icon">&#x26F3;</div>
+      <h4>On the Course</h4>
+      <p>Track your short game decisions in real time.</p>
+    </div>
+    <div class="session-type-card">
+      <div class="icon">&#x1F4D6;</div>
+      <h4>After the Session</h4>
+      <p>Reflect on feel, contact, and what clicked.</p>
+    </div>
+    <div class="session-type-card">
+      <div class="icon">&#x1F3AF;</div>
+      <h4>Drill Tracker</h4>
+      <p>Log your drills. Track the numbers that matter.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WEEK NAV -->
+<div class="week-nav-wrap">
+  <nav class="week-nav" id="weekNav"></nav>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <p>&copy; 2025 <strong>Ryan Rinneard</strong> &middot; Eight Weeks to Short Game Mastery &middot; <a href="https://madriverpro.com" style="color:var(--gray-500);text-decoration:none;">madriverpro.com</a></p>
+  <p style="margin-top:8px; font-size:12px; color:var(--navy-mid);">Your notes are saved automatically in this browser.</p>
+</footer>
+
+<div class="save-banner" id="saveBanner">&#x2713; Saved</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+// SHORT GAME WEEK DATA — all 8 weeks
+// ══════════════════════════════════════════════════════════════
+const WEEKS = [
+  {
+    num: 1,
+    title: "Understanding Your Tools",
+    focus: "This week you're learning what's actually in your hands — loft, bounce, and how each wedge behaves differently.",
+    quote: "\u201CThe more you know about your equipment, the less your equipment gets in the way.\u201D",
+    quoteAttr: "\u2014 Ryan Rinneard",
+    focusText: "Before you change anything about your technique, understand your tools. Hit chips with every wedge from the same spot, same stroke. Watch what loft does. Feel what bounce does. Your only job this week: observe and absorb.",
+    beforeFields: [
+      { type:"input", id:"intention", label:"Today's Focus", hint:"One thing you're paying attention to with your wedges today.", placeholder:"e.g. Feel the difference between my 52\u00B0 and 56\u00B0 on chips." },
+      { type:"textarea", id:"wedge-setup", label:"My Wedge Setup", hint:"List your wedges: lofts, bounces if you know them, and any gaps you suspect.", placeholder:"e.g. PW 46\u00B0, GW 50\u00B0, SW 56\u00B0 (12\u00B0 bounce), LW 60\u00B0 (8\u00B0 bounce)", cls:"small" },
+      { type:"slider", id:"pre-slider", label:"How Well Do I Know My Wedges?", left:"\uD83C\uDFAF I know exactly what each one does", right:"\uD83E\uDD37 They all feel the same to me", val:60 }
+    ],
+    duringFields: [
+      { type:"textarea", id:"moment", label:"What I Noticed About Each Club", placeholder:"e.g. My 56\u00B0 bounces off firm lies but the 60\u00B0 digs. The PW rolls out way more than I expected.", cls:"small" },
+      { type:"slider", id:"tension", label:"Confidence With My Wedge Selection", left:"\uD83D\uDC9A Clear \u2014 I know which club to grab", right:"\u2764\uFE0F Guessing every time", val:50 }
+    ],
+    checklist: [
+      "Hit chips with every wedge from the same spot using the same stroke",
+      "Noted the carry distance difference between each wedge",
+      "Noted the rollout difference between each wedge",
+      "Tested my sand wedge bounce on a firm lie vs. soft lie",
+      "Wrote down my loft gaps \u2014 identified any missing distances"
+    ],
+    afterFields: [
+      { type:"textarea", id:"q1", label:"Biggest Surprise About My Wedges?", hint:"What did you learn that you didn't expect?", cls:"small" },
+      { type:"textarea", id:"q3", label:"Which Club Felt Most Natural?", hint:"And which felt like a stranger in your hands?", cls:"small" }
+    ],
+    afterRating: { label:"Do I Have the Right Wedge Setup?", opts:["Definitely Missing a Club","Probably Fine","Dialled In"] },
+    afterCarry: "e.g. I need to test a 50\u00B0 to fill my gap between PW and SW.",
+    practiceDesc: "Week 1 focus: know your tools",
+    practiceGroove: "The Lineup Drill: 5 chips per wedge, same spot, same stroke. Note differences.",
+    practiceChallenge: "The Bounce Test: firm lie vs. soft lie with your SW. Feel the difference.",
+    practiceTransfer: "The Loft Gap Challenge: full wedge shots to one target. Note carry distances for each club.",
+    practiceMetric: { label:"Distance Chart Notes", hint:"Write down the carry distances you discovered today", placeholder:"PW: ___yd  |  GW: ___yd  |  SW: ___yd  |  LW: ___yd" }
+  },
+  {
+    num: 2,
+    title: "The Chip Shot System",
+    focus: "This week you're building the most reliable shot in golf \u2014 the chip.",
+    quote: "\u201CThe chip is a putt with loft. Think landing spot, not hole.\u201D",
+    quoteAttr: "\u2014 Ryan Rinneard",
+    focusText: "Every chip starts with a landing spot. Pick it before you take your stance. Then choose the club whose loft-to-roll ratio gets the ball from that spot to the hole. Bounce-first delivery, quiet hands, connected body. That's the whole system.",
+    beforeFields: [
+      { type:"input", id:"intention", label:"Today's Chipping Focus", placeholder:"e.g. Land it on the spot. Let the club do the work." },
+      { type:"slider", id:"pre-slider", label:"Chipping Confidence Right Now", left:"\uD83D\uDE0C Comfortable \u2014 I trust my technique", right:"\uD83D\uDE2C Scared of chunking it", val:55 },
+      { type:"textarea", id:"arriving", label:"What's My Usual Chipping Miss?", hint:"Be honest \u2014 chunks, skulls, distance control, club selection?", placeholder:"e.g. I tend to scoop and blade it low. Never trust the loft.", cls:"small" }
+    ],
+    duringFields: [
+      { type:"textarea", id:"moment", label:"A Chip I Want to Remember", placeholder:"e.g. Chipped with PW from 15 yards \u2014 landed it 3 feet on and it rolled right to the pin. Felt like a putt.", cls:"small" },
+      { type:"slider", id:"tension", label:"Am I Trusting the Loft or Trying to Help It?", left:"\uD83D\uDC9A Trusting \u2014 let the club work", right:"\u2764\uFE0F Scooping \u2014 trying to lift it", val:45 }
+    ],
+    checklist: [
+      "Picked a specific landing spot before every chip",
+      "Kept hands ahead of the clubhead through impact",
+      "Felt the bounce brush the ground \u2014 not the leading edge dig",
+      "Used a body rotation, not a wrist flip",
+      "Tried chips with at least 2 different clubs to the same target"
+    ],
+    afterFields: [
+      { type:"textarea", id:"q1", label:"Did I Trust the Loft or Try to Help the Ball Up?", hint:"Honest answer \u2014 when did you scoop, and when did you let it go?", cls:"small" },
+      { type:"textarea", id:"q3", label:"What Does a Good Chip Feel Like?", hint:"Describe the sensation in your hands when you made clean contact.", cls:"small" }
+    ],
+    afterRating: { label:"Landing Spot Focus Today?", opts:["Kept Looking at the Hole","Mixed","Locked on the Spot Every Time"] },
+    afterCarry: "e.g. Always pick the landing spot first \u2014 before I even choose a club.",
+    practiceDesc: "Week 2 focus: ground game fundamentals",
+    practiceGroove: "The Towel Drill: towel on the green, 20 chips landing on it. Build the landing spot habit.",
+    practiceChallenge: "One-Club Challenge: PW only, 20 chips to 5 different holes. Adjust landing spot, not technique.",
+    practiceTransfer: "Up-and-Down Roulette: 5 balls, 5 spots around the green. Chip + putt. Track your score.",
+    practiceMetric: { label:"Par 2 Score", hint:"Drop a ball in 18 spots, chip + putt from each. Par = 36.", placeholder:"Today's Par 2 score: ___  (This is your baseline \u2014 we'll retest in Week 8)" }
+  },
+  {
+    num: 3,
+    title: "Pitching with Precision",
+    focus: "This week you're mapping the 30-to-80-yard zone \u2014 where scoring really happens.",
+    quote: "\u201CDistance is controlled by rhythm and swing length, not muscular effort.\u201D",
+    quoteAttr: "\u2014 Ryan Rinneard",
+    focusText: "The clock system: 7 o'clock = short pitch, 9 o'clock = medium, 10:30 = long. Same tempo every time. The only variable is how far back you take it. Map your distances this week \u2014 three swing lengths times three wedges = nine reliable numbers.",
+    beforeFields: [
+      { type:"input", id:"intention", label:"Today's Pitching Focus", placeholder:"e.g. Map my 9 o'clock distances with all three wedges." },
+      { type:"slider", id:"pre-slider", label:"Pitch Shot Confidence Right Now", left:"\uD83C\uDFAF I know my distances", right:"\uD83E\uDD37 I'm guessing every time", val:55 },
+      { type:"textarea", id:"arriving", label:"What's My Biggest Pitching Problem?", hint:"Distance control? Deceleration? Trajectory? Fat contact?", placeholder:"e.g. I decelerate on anything under 50 yards. Big backswing, then I quit on it.", cls:"small" }
+    ],
+    duringFields: [
+      { type:"textarea", id:"moment", label:"A Pitch I Want to Remember", placeholder:"e.g. 55 yards, SW at 9 o'clock. Smooth acceleration. Landed 3 feet short and checked. Best pitch of the day.", cls:"small" },
+      { type:"slider", id:"tension", label:"Am I Accelerating or Decelerating?", left:"\uD83D\uDC9A Smooth acceleration through impact", right:"\u2764\uFE0F Quitting on the downswing", val:45 }
+    ],
+    checklist: [
+      "Used the clock system to control distance",
+      "Accelerated through every pitch \u2014 no deceleration",
+      "Matched finish to backswing length",
+      "Hit pitches with at least 2 clock positions",
+      "Started building my personal distance chart"
+    ],
+    afterFields: [
+      { type:"textarea", id:"q1", label:"Where Did I Feel the Urge to Decelerate?", hint:"What distance or situation triggered the flinch?", cls:"small" },
+      { type:"textarea", id:"q3", label:"Which Clock Position Felt Most Natural?", hint:"And which felt least controlled?", cls:"small" }
+    ],
+    afterRating: { label:"How Did It Feel to Control Distance with Swing Length?", opts:["Awkward \u2014 Kept Adding Force","Getting There","Natural \u2014 Rhythm Controlled Everything"] },
+    afterCarry: "e.g. Shorter backswing, commit through. Stop making big swings and quitting.",
+    practiceDesc: "Week 3 focus: distance mapping",
+    practiceGroove: "Clock Mapping: 10 shots at 7, 9, and 10:30 with your SW. Note average carry for each.",
+    practiceChallenge: "The Ladder Drill: targets at 30, 40, 50, 60, 70 yards. 3 balls each, up and back.",
+    practiceTransfer: "Towel Landing: towels at 40, 50, 60 yards. 10 pitches to each. Goal: 7/10 within a club-length.",
+    practiceMetric: { label:"Distance Chart", hint:"Fill in your numbers as you discover them", placeholder:"SW: 7 o'clock = ___yd | 9 o'clock = ___yd | 10:30 = ___yd\nGW: 7 o'clock = ___yd | 9 o'clock = ___yd | 10:30 = ___yd\nPW: 7 o'clock = ___yd | 9 o'clock = ___yd | 10:30 = ___yd" }
+  },
+  {
+    num: 4,
+    title: "The Full Wedge Game",
+    focus: "This week you're sharpening 100 yards and in \u2014 where birdies are made.",
+    quote: "\u201CAn 85% wedge swing is smooth, balanced, and repeatable. That's what produces tight distance control.\u201D",
+    quoteAttr: "\u2014 Ryan Rinneard",
+    focusText: "Your full wedge swing should never be more than 85% effort. Effort creates variables. This week: controlled aggression. Smooth power. Pick a number, pick a club, commit fully. A committed shot to the wrong number beats a half-hearted shot to the right one.",
+    beforeFields: [
+      { type:"input", id:"intention", label:"Today's Wedge Focus", placeholder:"e.g. 85% effort on every full wedge. Smooth and balanced." },
+      { type:"slider", id:"pre-slider", label:"Full Wedge Confidence Right Now", left:"\uD83C\uDFAF Dialled in \u2014 I know my numbers", right:"\uD83E\uDD37 Guessing between clubs", val:50 },
+      { type:"textarea", id:"arriving", label:"Where Are the Gaps in My Game Right Now?", hint:"Is there a distance between 50 and 100 where you feel lost?", placeholder:"e.g. I don't have a comfortable shot for 70-80 yards. Too far for a 9 o'clock SW, too short for a full SW.", cls:"small" }
+    ],
+    duringFields: [
+      { type:"textarea", id:"moment", label:"A Wedge Shot I Want to Remember", placeholder:"e.g. 88 yards, GW at 85%. Smooth tempo, full finish. 12 feet from the pin. That's the feel I want.", cls:"small" },
+      { type:"slider", id:"tension", label:"Effort Level Today", left:"\uD83D\uDC9A Controlled 85% \u2014 smooth power", right:"\u2764\uFE0F Swinging out of my shoes", val:40 }
+    ],
+    checklist: [
+      "Swung at 85% effort on every full wedge",
+      "Gripped down for in-between distances",
+      "Made a balanced, held finish on every shot",
+      "Committed fully to club selection before swinging",
+      "Noted divot location \u2014 at or just ahead of ball position"
+    ],
+    afterFields: [
+      { type:"textarea", id:"q1", label:"What Did 85% Feel Like vs. 100%?", hint:"Did you trust it? Was the distance loss worth the consistency gain?", cls:"small" },
+      { type:"textarea", id:"q3", label:"Where Are the Remaining Gaps?", hint:"Which distances still need a reliable shot?", cls:"small" }
+    ],
+    afterRating: { label:"Commitment Level on Full Wedges Today?", opts:["Half-Hearted Most Shots","Hit and Miss","Fully Committed Every Time"] },
+    afterCarry: "e.g. 85% is the max. Period. Stop swinging harder when the number feels big.",
+    practiceDesc: "Week 4 focus: controlled power",
+    practiceGroove: "The 85% Drill: 20 shots at 85%. Note distance. Then 10 at 100%. Compare.",
+    practiceChallenge: "Three-Ball Routine: pick a target, hit 3. If all 3 land in a 10-yard circle, move targets. If not, stay.",
+    practiceTransfer: "The Wedge Test: random distances 40-100yd, 1 shot each, no warm-up. Inside 10ft = 3pts, 20ft = 2pts, green = 1pt.",
+    practiceMetric: { label:"Full Distance Chart", hint:"Add your full-swing distances to complete the chart", placeholder:"SW: full = ___yd  |  GW: full = ___yd  |  PW: full = ___yd\nTotal calibrated distances: ___ out of 12-16" }
+  },
+  {
+    num: 5,
+    title: "Bunker Confidence",
+    focus: "This week you're learning that sand is the most forgiving surface in golf \u2014 when you understand the technique.",
+    quote: "\u201CThe greenside bunker shot is the only shot in golf where you don't have to hit the ball.\u201D",
+    quoteAttr: "\u2014 Ryan Rinneard",
+    focusText: "You don't hit the ball. You hit the sand behind the ball, and the sand carries the ball out. Open the face, open your stance, swing along your foot line, and accelerate through. The bounce does the work. That's the whole secret.",
+    beforeFields: [
+      { type:"input", id:"intention", label:"Today's Bunker Focus", placeholder:"e.g. Feel the bounce glide through the sand. Trust the splash." },
+      { type:"slider", id:"pre-slider", label:"Bunker Confidence Right Now", left:"\uD83D\uDE0C I'd rather be in the sand than the rough", right:"\uD83D\uDE31 I'd rather be anywhere else", val:65 },
+      { type:"textarea", id:"arriving", label:"What's My Bunker History?", hint:"Honest assessment \u2014 what usually happens?", placeholder:"e.g. I leave it in the bunker about half the time. I decelerate because I'm scared of blading it over the green.", cls:"small" }
+    ],
+    duringFields: [
+      { type:"textarea", id:"moment", label:"A Bunker Shot I Want to Remember", placeholder:"e.g. Opened the face wide, full aggressive swing, and it popped out soft and landed 4 feet from the pin. First time I've ever trusted it.", cls:"small" },
+      { type:"slider", id:"tension", label:"Did I Accelerate Through the Sand?", left:"\uD83D\uDC9A Full commit \u2014 the club splashed through", right:"\u2764\uFE0F Quit on it \u2014 the club dug and stuck", val:50 }
+    ],
+    checklist: [
+      "Opened the clubface before gripping the club",
+      "Entered the sand 1-2 inches behind the ball",
+      "Made a full, aggressive swing even for short shots",
+      "Felt the bounce glide through \u2014 not the leading edge dig",
+      "Completed to a full finish on every bunker shot"
+    ],
+    afterFields: [
+      { type:"textarea", id:"q1", label:"Did I Feel the Bounce Glide or the Club Dig?", hint:"What's the difference in sensation? When did each happen?", cls:"small" },
+      { type:"textarea", id:"q3", label:"What Changed in My Mindset About Bunkers?", hint:"Even a small shift counts.", cls:"small" }
+    ],
+    afterRating: { label:"Bunker Aggression Level Today?", opts:["Tentative \u2014 Quit on Most","Getting Braver","Full Commit Every Time"] },
+    afterCarry: "e.g. Big swing, hit the sand, trust the bounce. That's it.",
+    practiceDesc: "Week 5 focus: sand confidence",
+    practiceGroove: "The Line Drill: draw a line in the sand. 20 splashes along it. No ball. Feel the bounce.",
+    practiceChallenge: "The Circle Drill: draw a circle around the ball (3-inch radius). Remove the entire circle of sand.",
+    practiceTransfer: "Distance Ladder: targets at 10ft, 20ft, 30ft. 5 shots each. Adjust face angle and entry point.",
+    practiceMetric: { label:"Bunker Confidence Score", hint:"30 bunker shots. Inside 6ft = 2pts, on green = 1pt, still in bunker or over green = 0pts.", placeholder:"Today's score: ___ / 60  (30+ = real confidence)" }
+  },
+  {
+    num: 6,
+    title: "Specialty Shots",
+    focus: "This week you're expanding your arsenal \u2014 the flop, the bump, the awkward lie.",
+    quote: "\u201CThe bump-and-run is the most underused shot in amateur golf. Keep it on the ground whenever you can.\u201D",
+    quoteAttr: "\u2014 Ryan Rinneard",
+    focusText: "These aren't trick shots \u2014 they're practical solutions. The flop is your last resort when there's no green to work with. The bump-and-run is your first choice whenever the path is clear. Slopes affect everything: uphill = higher and shorter, downhill = lower and faster. Work with the terrain, not against it.",
+    beforeFields: [
+      { type:"input", id:"intention", label:"Today's Specialty Focus", placeholder:"e.g. Play 10 bump-and-runs with my 8-iron. Build the trust." },
+      { type:"slider", id:"pre-slider", label:"Comfort With Non-Standard Shots", left:"\uD83D\uDE0C I have options around the greens", right:"\uD83D\uDE2C I only have one shot and hope for the best", val:60 },
+      { type:"textarea", id:"arriving", label:"Which Specialty Shot Do I Need Most?", hint:"Flop? Bump-and-run? Downhill chip? Deep rough escape?", placeholder:"e.g. I never use the bump-and-run even when it's the obvious play. I default to lob wedge for everything.", cls:"small" }
+    ],
+    duringFields: [
+      { type:"textarea", id:"moment", label:"A Specialty Shot I Want to Remember", placeholder:"e.g. Used 8-iron bump-and-run from 20 yards. Ball barely left the ground, ran up to 3 feet. Easiest up-and-down of the day.", cls:"small" },
+      { type:"slider", id:"tension", label:"Did I Choose the Right Shot for the Situation?", left:"\uD83D\uDC9A Smart selection \u2014 matched shot to lie", right:"\u2764\uFE0F Forced a shot that didn't fit", val:45 }
+    ],
+    checklist: [
+      "Hit at least 5 bump-and-runs with a less-lofted club",
+      "Attempted a flop shot with full commitment",
+      "Adjusted my shoulders to match the slope on an uneven lie",
+      "Got a ball out of deep rough onto the green",
+      "Chose the bump-and-run when the situation allowed it"
+    ],
+    afterFields: [
+      { type:"textarea", id:"q1", label:"Which Specialty Shot Felt Most Natural?", hint:"And which felt most foreign?", cls:"small" },
+      { type:"textarea", id:"q3", label:"Did I Reach for the Bump-and-Run More Than Expected?", hint:"How did it compare to your usual lob wedge default?", cls:"small" }
+    ],
+    afterRating: { label:"Shot Selection Quality Today?", opts:["Forced the Wrong Shot Often","Mixed \u2014 Some Good Reads","Smart Choices All Day"] },
+    afterCarry: "e.g. When in doubt, keep it on the ground. Save the flop for when there's truly no other option.",
+    practiceDesc: "Week 6 focus: expanding the arsenal",
+    practiceGroove: "8-Iron Around the Green: 10 holes, bump-and-run only. Build the trust.",
+    practiceChallenge: "Flop Shot Gauntlet: towel 5yd in front of you. Carry it and stop the ball within 10yd past.",
+    practiceTransfer: "Slope Challenge: uphill, downhill, sidehill lies. 5 chips from each. Set shoulders to the slope.",
+    practiceMetric: { label:"Specialty Shot Round Score", hint:"9 scenarios: 2 flops, 3 bump-and-runs, 2 awkward lies, 2 rough escapes. Score as up-and-downs.", placeholder:"Up-and-downs converted: ___ / 9  (5+ is solid)" }
+  },
+  {
+    num: 7,
+    title: "The Mental Short Game",
+    focus: "This week you're building the pre-shot routine and mental habits that let your technique actually show up when it matters.",
+    quote: "\u201CA fully committed shot that goes 10 feet past the hole is a better mental rep than a half-hearted shot that happens to go in.\u201D",
+    quoteAttr: "\u2014 Ryan Rinneard",
+    focusText: "Build your pre-shot routine this week and use it before every single short game shot: assess (behind the ball), visualize (see the shot), set up (clubface first, then stance), execute (look, trust, swing). 20-30 seconds. No exceptions. This is your anchor under pressure.",
+    beforeFields: [
+      { type:"input", id:"intention", label:"Today's Mental Focus", placeholder:"e.g. Full routine before every short game shot. No shortcuts." },
+      { type:"slider", id:"pre-slider", label:"Commitment Level Right Now", left:"\uD83D\uDE0C I trust my short game under pressure", right:"\uD83D\uDE24 I freeze over short shots when it matters", val:55 },
+      { type:"textarea", id:"arriving", label:"When Does My Short Game Fall Apart?", hint:"What situations, holes, or moments trigger doubt?", placeholder:"e.g. Tight pin over a bunker. I get tentative and decelerate. The harder I try to be precise, the worse it gets.", cls:"small" }
+    ],
+    duringFields: [
+      { type:"textarea", id:"moment", label:"A Moment Where Commitment Changed the Outcome", placeholder:"e.g. Had a tricky downhill chip on 14. Did my full routine, committed to the landing spot, and executed. It wasn't perfect but I accepted it immediately.", cls:"small" },
+      { type:"slider", id:"tension", label:"Did I Execute My Routine Every Time?", left:"\uD83D\uDC9A Every shot \u2014 no shortcuts", right:"\u2764\uFE0F Skipped it when I got careless", val:40 }
+    ],
+    checklist: [
+      "Completed the full 4-step pre-shot routine before every short game shot",
+      "Stepped away and restarted when commitment dropped below 8/10",
+      "Recovered well from a bad short game shot \u2014 reset immediately",
+      "Chose the shot I trusted, not the impressive one",
+      "Stayed in the present \u2014 didn't replay the last miss or preview the next hole"
+    ],
+    afterFields: [
+      { type:"textarea", id:"q1", label:"When I Committed Fully, How Did It Feel Different?", hint:"Compare a committed shot vs. one where you were uncertain.", cls:"small" },
+      { type:"textarea", id:"q3", label:"A Moment Where I Recovered Well From a Bad Shot", hint:"And a moment where I let a mistake carry forward.", cls:"small" }
+    ],
+    afterRating: { label:"Pre-Shot Routine Compliance Today?", opts:["Skipped It Often","Used It Sometimes","100% Compliance"] },
+    afterCarry: "e.g. The routine isn't optional. Every shot. No exceptions.",
+    practiceDesc: "Week 7 focus: routine and commitment",
+    practiceGroove: "The Routine Drill: 30 short game shots. Full routine every time. If you skip a step, it doesn't count.",
+    practiceChallenge: "The Pressure Drill: 1 ball, 1 chance, tight pin. Full routine. 10 different locations.",
+    practiceTransfer: "The Comeback Drill: intentionally hit a bad shot. Then reset immediately and play the next with full commitment.",
+    practiceMetric: { label:"Routine Compliance", hint:"How many of your short game shots today had the full routine?", placeholder:"Shots with full routine: ___ / ___  |  Goal: 100%" }
+  },
+  {
+    num: 8,
+    title: "Integration & Course Play",
+    focus: "Everything comes together \u2014 take your short game system to the course and trust it.",
+    quote: "\u201CThe golfer who follows a system will out-score a more talented golfer who plays on instinct and hope. Every time.\u201D",
+    quoteAttr: "\u2014 Ryan Rinneard",
+    focusText: "You have a chip system, a pitch clock system, bunker technique, specialty shots, and a pre-shot routine. On the course, your only job is to trust these systems and execute. Don't reinvent your technique mid-round. Play the shots you own. Play the percentages. Trust the process.",
+    beforeFields: [
+      { type:"input", id:"intention", label:"Today's Course Focus", placeholder:"e.g. Trust my system. Play the smart shot every time. Full routine." },
+      { type:"slider", id:"pre-slider", label:"Short Game Confidence Right Now", left:"\uD83D\uDE0C I trust what I've built", right:"\uD83D\uDE24 Still second-guessing everything", val:40 },
+      { type:"textarea", id:"arriving", label:"Biggest Short Game Improvement Over 8 Weeks?", hint:"What's genuinely different about your game around the greens?", placeholder:"e.g. I actually have a system now. I pick a shot, pick a landing spot, and commit. That didn't exist 8 weeks ago.", cls:"small" }
+    ],
+    duringFields: [
+      { type:"textarea", id:"moment", label:"Best Short Game Shot of the Round", placeholder:"e.g. 65 yards, GW at 9 o'clock. Landed on the spot, rolled to 8 feet. Made the putt for birdie. The whole system worked.", cls:"small" },
+      { type:"slider", id:"tension", label:"Did I Trust My System or Revert to Old Habits?", left:"\uD83D\uDC9A Trusted the system all day", right:"\u2764\uFE0F Abandoned it under pressure", val:35 }
+    ],
+    checklist: [
+      "Used my shot selection framework on every approach: assess, choose, pick numbers, routine, execute",
+      "Played the smart shot, not the hero shot",
+      "Aimed for the centre of the green when the pin was tucked",
+      "Trusted my distance chart on every wedge shot",
+      "Completed the full pre-shot routine on every short game shot"
+    ],
+    afterFields: [
+      { type:"textarea", id:"q1", label:"Compare My Confidence Now to 8 Weeks Ago", hint:"What's genuinely different? Be specific.", cls:"small" },
+      { type:"textarea", id:"q3", label:"What Was the Single Biggest Insight From This Program?", hint:"The one thing that changed how you approach the short game.", cls:"small" }
+    ],
+    afterRating: { label:"How Did My Short Game System Perform on the Course?", opts:["Fell Apart Under Pressure","Held Up Mostly","Trusted It All Day"] },
+    afterCarry: "e.g. 30 minutes of short game for every hour on the range. Non-negotiable.",
+    practiceDesc: "Week 8 focus: the final exam",
+    practiceGroove: "Par-2 Retest: 18 spots around the green. Chip + putt from each. Compare to your Week 2 score.",
+    practiceChallenge: "Full Short Game Circuit: 2 chips, 2 pitches, 1 bunker shot, 1 specialty shot. 3 rounds. Total score.",
+    practiceTransfer: "The 18-Hole Short Game Scorecard: track every shot from 100yd in during a full round. Up-and-down %, sand save %, avg proximity.",
+    practiceMetric: { label:"Final Numbers", hint:"Your short game scorecard for the program", placeholder:"Par-2 Retest: ___ (Week 2 was: ___)\nUp-and-down %: ___\nSand save %: ___\nAvg proximity 50-100yd: ___ft\n\nOngoing plan: ___" }
+  }
+];
+
+const WORD_NUMS = ['One','Two','Three','Four','Five','Six','Seven','Eight'];
+
+// ── SLIDER LABELS ─────────────────────────────────────────
+const sliderLabels = [
+  [0,  10,  "Deeply calm"],
+  [11, 25,  "Very relaxed"],
+  [26, 40,  "Slightly loose"],
+  [41, 59,  "Balanced"],
+  [60, 70,  "Getting tight"],
+  [71, 82,  "Noticeably tense"],
+  [83, 92,  "Quite anxious"],
+  [93, 100, "Fully locked up"]
+];
+
+function sliderText(val) {
+  const v = parseInt(val);
+  const match = sliderLabels.find(([min,max]) => v >= min && v <= max);
+  return (match ? match[2] : 'Balanced') + ' (' + v + ')';
+}
+
+// ── BUILD HELPERS ─────────────────────────────────────────
+
+function buildField(f, prefix) {
+  const fid = prefix + '-' + f.id;
+  let h = '';
+  if (f.type === 'input') {
+    h += '<div class="field-group"><label class="field-label">' + f.label + '</label>';
+    if (f.hint) h += '<span class="field-hint">' + f.hint + '</span>';
+    h += '<input type="text" class="note-input" placeholder="' + (f.placeholder||'') + '" data-field="' + fid + '"></div>';
+  } else if (f.type === 'textarea') {
+    h += '<div class="field-group"><label class="field-label">' + f.label + '</label>';
+    if (f.hint) h += '<span class="field-hint">' + f.hint + '</span>';
+    h += '<textarea class="note-area' + (f.cls ? ' '+f.cls : '') + '" placeholder="' + (f.placeholder||'') + '" data-field="' + fid + '"></textarea></div>';
+  } else if (f.type === 'slider') {
+    h += '<div class="slider-field"><label class="field-label">' + f.label + '</label>';
+    h += '<div class="slider-labels"><span class="left-label">' + f.left + '</span><span class="right-label">' + f.right + '</span></div>';
+    h += '<div class="slider-track"><input type="range" min="0" max="100" value="' + f.val + '" data-field="' + fid + '"></div>';
+    h += '<div class="slider-value-display" data-slider-display="' + fid + '">' + sliderText(f.val) + '</div></div>';
+  }
+  return h;
+}
+
+function buildWeek(w) {
+  const pre = 'sg' + w.num;
+  let h = '';
+
+  h += '<div class="week-hero">';
+  h += '<p class="wk-num">Week ' + WORD_NUMS[w.num-1] + ' \u00B7 Chapter ' + w.num + '</p>';
+  h += '<h2>' + w.title + '</h2>';
+  h += '<p class="wk-focus">' + w.focus + '</p>';
+  h += '<div class="wk-divider"></div></div>';
+  h += '<div class="week-body">';
+
+  h += '<div class="week-quote"><p>' + w.quote + '</p><span class="attr">' + w.quoteAttr + '</span></div>';
+
+  // BEFORE
+  h += '<div class="session-block"><div class="session-header"><div class="session-icon before">\uD83C\uDF05</div>';
+  h += '<div class="session-header-text"><h3>Before You Practice</h3><span>Set your focus before you hit a single ball \u2014 takes 3 minutes</span></div>';
+  h += '</div><div class="session-body">';
+  h += '<div class="focus-card"><p class="fc-label">This Week\u2019s Focus</p><p>' + w.focusText + '</p></div>';
+  w.beforeFields.forEach(f => { h += buildField(f, pre); });
+  h += '</div></div>';
+
+  // DURING
+  h += '<div class="session-block"><div class="session-header"><div class="session-icon during">\u26F3</div>';
+  h += '<div class="session-header-text"><h3>On the Course</h3><span>Quick check-in during your round or practice session</span></div>';
+  h += '</div><div class="session-body">';
+  w.duringFields.forEach(f => { h += buildField(f, pre); });
+  h += '<div class="field-group"><label class="field-label">Week ' + w.num + ' Checklist</label>';
+  h += '<span class="field-hint">Tap each one you actually did today</span>';
+  h += '<ul class="checklist" data-checklist="' + pre + '-checklist">';
+  w.checklist.forEach((item, i) => {
+    h += '<li data-check-idx="' + i + '"><span class="check-box"></span>' + item + '</li>';
+  });
+  h += '</ul></div></div></div>';
+
+  // AFTER
+  h += '<div class="session-block"><div class="session-header"><div class="session-icon after">\uD83D\uDCD6</div>';
+  h += '<div class="session-header-text"><h3>After the Session</h3><span>Best done within an hour \u2014 while the feel is still in your hands</span></div>';
+  h += '</div><div class="session-body">';
+  h += '<div class="score-row">';
+  h += '<div class="score-cell"><label>Score</label><input type="text" placeholder="82" data-field="' + pre + '-score"></div>';
+  h += '<div class="score-cell"><label>Course</label><input type="text" placeholder="Mad River" data-field="' + pre + '-course"></div>';
+  h += '<div class="score-cell"><label>Date</label><input type="date" data-field="' + pre + '-date"></div>';
+  h += '</div><div class="section-divider"></div>';
+  w.afterFields.forEach(f => { h += buildField(f, pre); });
+  h += '<div class="field-group"><label class="field-label">' + w.afterRating.label + '</label>';
+  h += '<div class="rating-row" data-rating="' + pre + '-rating">';
+  w.afterRating.opts.forEach(o => { h += '<button class="rating-btn">' + o + '</button>'; });
+  h += '</div></div>';
+  h += '<div class="field-group"><label class="field-label">One Thing I\u2019m Carrying Into Next Session</label>';
+  h += '<input type="text" class="note-input" placeholder="' + w.afterCarry + '" data-field="' + pre + '-carry"></div>';
+  h += '</div></div>';
+
+  // PRACTICE / DRILL TRACKER
+  h += '<div class="session-block"><div class="session-header"><div class="session-icon practice">\uD83C\uDFAF</div>';
+  h += '<div class="session-header-text"><h3>Drill Tracker</h3><span>' + w.practiceDesc + '</span></div>';
+  h += '</div><div class="session-body">';
+  h += '<div class="practice-blocks">';
+  h += '<div class="practice-block"><span class="pb-num">1</span><p class="pb-title">Groove (10 min)</p><textarea placeholder="' + w.practiceGroove + '" data-field="' + pre + '-groove"></textarea></div>';
+  h += '<div class="practice-block"><span class="pb-num">2</span><p class="pb-title">Challenge (10 min)</p><textarea placeholder="' + w.practiceChallenge + '" data-field="' + pre + '-challenge"></textarea></div>';
+  h += '<div class="practice-block"><span class="pb-num">3</span><p class="pb-title">Transfer (10 min)</p><textarea placeholder="' + w.practiceTransfer + '" data-field="' + pre + '-transfer"></textarea></div>';
+  h += '</div><div class="section-divider"></div>';
+  if (w.practiceMetric) {
+    h += '<div class="field-group"><label class="field-label">' + w.practiceMetric.label + '</label>';
+    if (w.practiceMetric.hint) h += '<span class="field-hint">' + w.practiceMetric.hint + '</span>';
+    h += '<textarea class="note-area large" placeholder="' + w.practiceMetric.placeholder + '" data-field="' + pre + '-session-notes"></textarea></div>';
+  }
+  h += '</div></div>';
+
+  h += '</div>'; // week-body
+  return h;
+}
+
+// ── RENDER ──────────────────────────────────────────────
+
+const nav = document.getElementById('weekNav');
+WEEKS.forEach((w, i) => {
+  const btn = document.createElement('button');
+  btn.className = 'week-tab' + (i === 0 ? ' active' : '');
+  btn.textContent = 'Week ' + w.num;
+  btn.addEventListener('click', () => showWeek(w.num, btn));
+  nav.appendChild(btn);
+});
+
+const footer = document.querySelector('.site-footer');
+WEEKS.forEach((w, i) => {
+  const div = document.createElement('div');
+  div.className = 'week-content' + (i === 0 ? ' active' : '');
+  div.id = 'week-' + w.num;
+  div.innerHTML = buildWeek(w);
+  document.body.insertBefore(div, footer);
+});
+
+// ── INTERACTIONS ────────────────────────────────────────
+
+function showWeek(num, btn) {
+  document.querySelectorAll('.week-content').forEach(w => w.classList.remove('active'));
+  document.querySelectorAll('.week-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('week-' + num).classList.add('active');
+  if (btn) btn.classList.add('active');
+  setTimeout(() => {
+    const el = document.getElementById('week-' + num);
+    const top = el.getBoundingClientRect().top + window.scrollY - 120;
+    window.scrollTo({ top, behavior: 'smooth' });
+  }, 50);
+}
+
+document.addEventListener('click', function(e) {
+  const li = e.target.closest('.checklist li');
+  if (li) { li.classList.toggle('checked'); saveState(); flashSave(); }
+  const btn = e.target.closest('.rating-btn');
+  if (btn) {
+    btn.closest('.rating-row').querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected'); saveState(); flashSave();
+  }
+});
+
+document.addEventListener('input', function(e) {
+  if (e.target.type === 'range') {
+    const key = e.target.getAttribute('data-field');
+    const display = document.querySelector('[data-slider-display="' + key + '"]');
+    if (display) display.textContent = sliderText(e.target.value);
+  }
+});
+
+let saveTimer;
+function flashSave() {
+  const banner = document.getElementById('saveBanner');
+  banner.classList.add('show');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => banner.classList.remove('show'), 1800);
+}
+
+let debounceTimer;
+document.addEventListener('input', function(e) {
+  if (e.target.matches('input, textarea')) {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => { saveState(); flashSave(); }, 800);
+  }
+});
+
+// ── LOCALSTORAGE ────────────────────────────────────────
+const STORAGE_KEY = 'ewtsgm-journal-v1';
+
+function saveState() {
+  const state = {};
+  document.querySelectorAll('[data-field]').forEach(el => {
+    state[el.getAttribute('data-field')] = el.value;
+  });
+  document.querySelectorAll('[data-checklist]').forEach(ul => {
+    const key = ul.getAttribute('data-checklist');
+    const checks = [];
+    ul.querySelectorAll('li').forEach(li => checks.push(li.classList.contains('checked')));
+    state[key] = checks;
+  });
+  document.querySelectorAll('[data-rating]').forEach(row => {
+    const key = row.getAttribute('data-rating');
+    let sel = -1;
+    row.querySelectorAll('.rating-btn').forEach((b, i) => { if (b.classList.contains('selected')) sel = i; });
+    state[key] = sel;
+  });
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
+}
+
+function loadState() {
+  let state;
+  try { state = JSON.parse(localStorage.getItem(STORAGE_KEY)); } catch(e) { return; }
+  if (!state) return;
+  document.querySelectorAll('[data-field]').forEach(el => {
+    const key = el.getAttribute('data-field');
+    if (state[key] !== undefined && state[key] !== null) {
+      el.value = state[key];
+      if (el.type === 'range') {
+        const display = document.querySelector('[data-slider-display="' + key + '"]');
+        if (display) display.textContent = sliderText(el.value);
+      }
+    }
+  });
+  document.querySelectorAll('[data-checklist]').forEach(ul => {
+    const key = ul.getAttribute('data-checklist');
+    if (state[key]) ul.querySelectorAll('li').forEach((li, i) => { if (state[key][i]) li.classList.add('checked'); });
+  });
+  document.querySelectorAll('[data-rating]').forEach(row => {
+    const key = row.getAttribute('data-rating');
+    if (state[key] !== undefined && state[key] >= 0) {
+      const btns = row.querySelectorAll('.rating-btn');
+      if (btns[state[key]]) btns[state[key]].classList.add('selected');
+    }
+  });
+}
+
+loadState();
+</script>
+</body>
+</html>
