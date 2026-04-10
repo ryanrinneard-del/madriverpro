@@ -109,14 +109,22 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closePopup();
 });
 
-// Timed popup — show after 30 seconds on first visit
+// Timed popup — show after 15 seconds on first visit
 if (bookPopup && !sessionStorage.getItem('bookPopupShown')) {
     setTimeout(() => {
         if (!bookPopup.classList.contains('active')) {
             openPopup();
             sessionStorage.setItem('bookPopupShown', 'true');
         }
-    }, 30000);
+    }, 15000);
+
+    // Exit-intent popup — triggers when mouse leaves the viewport (desktop)
+    document.addEventListener('mouseleave', (e) => {
+        if (e.clientY <= 0 && !sessionStorage.getItem('bookPopupShown')) {
+            openPopup();
+            sessionStorage.setItem('bookPopupShown', 'true');
+        }
+    });
 }
 
 // Form submission — sends to /api/subscribe (Kit)
