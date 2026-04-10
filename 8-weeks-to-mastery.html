@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eight Weeks to Mastery — Your Complete Golf Transformation | Ryan Rinneard</title>
+    <meta name="description" content="Eight Weeks to Mastery — a complete 8-week golf improvement program by Ryan Rinneard. Includes the full book, interactive journal, and structured practice plans.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://madriverpro.com/8-weeks-to-mastery.html">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .program-hero {
+            background: var(--navy);
+            padding: 120px 24px 80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .program-hero::before {
+            content: '';
+            position: absolute;
+            top: -120px; right: -120px;
+            width: 500px; height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(201,124,46,0.12) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .program-hero .section-eyebrow {
+            color: rgba(255,255,255,0.6);
+        }
+        .program-hero h1 {
+            font-size: clamp(36px, 5vw, 56px);
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 16px;
+            line-height: 1.1;
+        }
+        .program-hero h1 em {
+            font-style: italic;
+            color: #c97c2e;
+        }
+        .program-hero .hero-sub {
+            font-size: 18px;
+            color: rgba(255,255,255,0.7);
+            max-width: 600px;
+            margin: 0 auto 40px;
+            line-height: 1.7;
+        }
+        .program-hero .btn {
+            font-size: 16px;
+            padding: 16px 40px;
+        }
+
+        .program-what {
+            padding: 80px 24px;
+        }
+        .program-what .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .program-pillars {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 32px;
+            margin-top: 48px;
+        }
+        .pillar {
+            background: var(--off-white, #f7f8fa);
+            border-radius: 12px;
+            padding: 32px 24px;
+            text-align: center;
+        }
+        .pillar-icon {
+            font-size: 36px;
+            margin-bottom: 16px;
+            display: block;
+        }
+        .pillar h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 8px;
+        }
+        .pillar p {
+            font-size: 15px;
+            color: var(--gray-400, #6b7280);
+            line-height: 1.6;
+        }
+
+        .program-includes {
+            background: var(--off-white, #f7f8fa);
+            padding: 80px 24px;
+        }
+        .program-includes .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .include-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 32px;
+        }
+        .include-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--gray-100, #eee);
+        }
+        .include-list li:last-child {
+            border-bottom: none;
+        }
+        .include-check {
+            flex-shrink: 0;
+            width: 28px;
+            height: 28px;
+            background: var(--navy);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            margin-top: 2px;
+        }
+        .include-text h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 4px;
+        }
+        .include-text p {
+            font-size: 14px;
+            color: var(--gray-400, #6b7280);
+            line-height: 1.6;
+        }
+        .include-text .badge-coming-soon {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            background: var(--navy);
+            color: #fff;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        .program-cta-section {
+            padding: 80px 24px;
+            text-align: center;
+        }
+        .program-cta-section .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .program-cta-section h2 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 12px;
+        }
+        .program-cta-section p {
+            font-size: 16px;
+            color: var(--gray-400, #6b7280);
+            margin-bottom: 32px;
+            line-height: 1.7;
+        }
+        .program-cta-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        .program-cta-form .popup-input {
+            width: 100%;
+        }
+        .program-cta-form .btn {
+            width: 100%;
+        }
+        .program-cta-privacy {
+            font-size: 12px;
+            color: var(--gray-400, #9ca3af);
+            margin-top: 12px;
+        }
+
+        .program-journal-preview {
+            background: var(--navy);
+            padding: 80px 24px;
+            text-align: center;
+        }
+        .program-journal-preview .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .program-journal-preview h2 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+        .program-journal-preview p {
+            font-size: 16px;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 32px;
+            line-height: 1.7;
+        }
+        .program-journal-preview .btn-outline-white {
+            border: 2px solid rgba(255,255,255,0.4);
+            color: #fff;
+            background: transparent;
+            padding: 14px 32px;
+            border-radius: 6px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.2s;
+        }
+        .program-journal-preview .btn-outline-white:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.7);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="images/rr-logo.png" alt="RR Golf" class="nav-logo-img">
+            </a>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="index.html#coaching">Coaching</a></li>
+                <li><a href="index.html#testimonials">Testimonials</a></li>
+                <li><a href="articles/index.html">Articles</a></li>
+                <li class="nav-book-dropdown">
+                    <a href="#" class="nav-cta">Book Now</a>
+                    <ul class="dropdown-menu dropdown-book">
+                        <li><a href="https://madriverpro.as.me" target="_blank" rel="noopener">Book at Mad River</a></li>
+                        <li><a href="https://clients.uschedule.com/acetrackgolf/booking" target="_blank" rel="noopener">Book at Ace Track</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="program-hero">
+        <p class="section-eyebrow">A Complete Golf Improvement Program</p>
+        <h1>Eight Weeks to <em>Mastery</em></h1>
+        <p class="hero-sub">A structured 8-week program to transform your golf game — built from 20+ years of coaching by Ryan Rinneard, PGA of Canada.</p>
+        <a href="#get-started" class="btn btn-primary">Get Your Copy</a>
+    </section>
+
+    <!-- What It Is -->
+    <section class="program-what">
+        <div class="container">
+            <h2 class="section-title" style="text-align: center;">What is Eight Weeks to Mastery?</h2>
+            <p style="text-align: center; font-size: 16px; color: var(--gray-400, #6b7280); max-width: 650px; margin: 16px auto 0; line-height: 1.7;">Not another tips book. This is a complete, week-by-week system designed to help you build real, lasting improvement — the same approach Ryan uses with his students at Mad River Golf Club.</p>
+
+            <div class="program-pillars">
+                <div class="pillar">
+                    <span class="pillar-icon">&#9971;</span>
+                    <h3>Technical</h3>
+                    <p>Fundamentals, swing mechanics, and short game — built progressively so each week layers on the last.</p>
+                </div>
+                <div class="pillar">
+                    <span class="pillar-icon">&#129504;</span>
+                    <h3>Mental</h3>
+                    <p>Pre-shot routines, on-course confidence, and the mindset shifts that separate practice from performance.</p>
+                </div>
+                <div class="pillar">
+                    <span class="pillar-icon">&#128203;</span>
+                    <h3>Strategic</h3>
+                    <p>Course management, decision-making, and structured practice plans so every session has a purpose.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- What's Included -->
+    <section class="program-includes">
+        <div class="container">
+            <h2 class="section-title" style="text-align: center;">What's Included</h2>
+            <ul class="include-list">
+                <li>
+                    <span class="include-check">1</span>
+                    <div class="include-text">
+                        <h4>The Full Eight Weeks to Mastery Book</h4>
+                        <p>The complete 8-week guide — delivered to your inbox. Read it on any device, at your own pace.</p>
+                    </div>
+                </li>
+                <li>
+                    <span class="include-check">2</span>
+                    <div class="include-text">
+                        <h4>Interactive Digital Journal</h4>
+                        <p>Track your progress week by week with the companion journal app. Log sessions, set goals, and reflect on your development.</p>
+                    </div>
+                </li>
+                <li>
+                    <span class="include-check">3</span>
+                    <div class="include-text">
+                        <h4>Structured Weekly Practice Plans</h4>
+                        <p>Each week comes with clear, actionable practice plans so you know exactly what to work on and when.</p>
+                    </div>
+                </li>
+                <li>
+                    <span class="include-check">4</span>
+                    <div class="include-text">
+                        <h4>Audio Edition <span class="badge-coming-soon">Coming Soon</span></h4>
+                        <p>Listen to the full program read by Ryan — on the range, in the car, or wherever you learn best.</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Journal Preview -->
+    <section class="program-journal-preview">
+        <div class="container">
+            <h2>Your Digital Journal</h2>
+            <p>The companion journal is where the book becomes action. Track your weekly progress, log what's working, and build the self-awareness that drives lasting improvement.</p>
+            <a href="journal/" class="btn-outline-white">Open the Journal</a>
+        </div>
+    </section>
+
+    <!-- CTA / Signup -->
+    <section class="program-cta-section" id="get-started">
+        <div class="container">
+            <h2>Start Your Eight Weeks</h2>
+            <p>Enter your details below and we'll send you the complete book, journal access, and practice plans.</p>
+            <form class="program-cta-form" id="programForm">
+                <input type="text" name="first_name" placeholder="First name" required class="popup-input">
+                <input type="email" name="email" placeholder="Email address" required class="popup-input">
+                <input type="text" name="website" autocomplete="off" tabindex="-1" style="position:absolute;left:-9999px;opacity:0;height:0;width:0;" aria-hidden="true">
+                <button type="submit" class="btn btn-primary">Get Your Copy</button>
+            </form>
+            <p class="program-cta-privacy">No spam, ever. Unsubscribe anytime.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <img src="images/rr-logo.png" alt="RR Golf" class="footer-logo">
+                    <p>Ryan Rinneard<br>PGA of Canada, Class A<br>Director of Instruction</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Coaching</h4>
+                    <ul>
+                        <li><a href="coaching/adults.html">Adults</a></li>
+                        <li><a href="coaching/juniors.html">Juniors</a></li>
+                        <li><a href="coaching/ladies.html">Ladies</a></li>
+                        <li><a href="coaching/groups.html">Groups & Clinics</a></li>
+                        <li><a href="coaching/experiences.html">Experiences</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Explore</h4>
+                    <ul>
+                        <li><a href="index.html#about">About Ryan</a></li>
+                        <li><a href="index.html#testimonials">Testimonials</a></li>
+                        <li><a href="articles/index.html">Articles</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Book</h4>
+                    <ul>
+                        <li><a href="https://madriverpro.as.me" target="_blank" rel="noopener">Mad River Golf Club</a></li>
+                        <li><a href="https://clients.uschedule.com/acetrackgolf/booking" target="_blank" rel="noopener">Ace Track Golf</a></li>
+                        <li><a href="tel:7056074653">(705) 607-4653</a></li>
+                        <li><a href="mailto:rrinneard@madriver.ca">rrinneard@madriver.ca</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 RR Golf. All rights reserved.</p>
+                <p class="footer-locations">Mad River Golf Club, Creemore &middot; Ace Track Golf, Collingwood</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Program page form — sends to /api/subscribe (Mailchimp)
+        const programForm = document.getElementById('programForm');
+        if (programForm) {
+            programForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const submitBtn = programForm.querySelector('button[type="submit"]');
+                const originalText = submitBtn.textContent;
+                submitBtn.textContent = 'Sending...';
+                submitBtn.disabled = true;
+
+                try {
+                    const res = await fetch('/api/subscribe', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            first_name: programForm.first_name.value,
+                            email: programForm.email.value,
+                            website: programForm.website?.value || '',
+                        }),
+                    });
+
+                    if (res.ok) {
+                        programForm.innerHTML = '<div style="padding: 20px 0;"><h3 style="font-size: 22px; color: #1a2744; margin-bottom: 12px;">You\'re in!</h3><p style="font-size: 15px; color: #9ca3af;">Check your inbox for your copy of Eight Weeks to Mastery and journal access.</p></div>';
+                    } else {
+                        submitBtn.textContent = originalText;
+                        submitBtn.disabled = false;
+                        alert('Something went wrong — please try again.');
+                    }
+                } catch {
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                    alert('Something went wrong — please try again.');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
