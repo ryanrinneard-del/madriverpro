@@ -118,9 +118,9 @@ if (bookPopup && !sessionStorage.getItem('bookPopupShown')) {
         }
     }, 15000);
 
-    // Exit-intent popup — triggers when mouse leaves the viewport (desktop)
-    document.addEventListener('mouseleave', (e) => {
-        if (e.clientY <= 0 && !sessionStorage.getItem('bookPopupShown')) {
+    // Exit-intent popup — triggers when mouse moves toward top of viewport (desktop)
+    document.addEventListener('mouseout', (e) => {
+        if (!e.relatedTarget && e.clientY < 10 && !sessionStorage.getItem('bookPopupShown')) {
             openPopup();
             sessionStorage.setItem('bookPopupShown', 'true');
         }
