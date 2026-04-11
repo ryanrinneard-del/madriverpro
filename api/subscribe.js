@@ -34,7 +34,7 @@ export default async function handler(req, res) {
         return res.status(429).json({ error: 'Too many requests. Please try again later.' });
     }
 
-    const { email, first_name, website } = req.body;
+    const { email, first_name, website, tag } = req.body;
 
     // Honeypot — bots fill hidden fields, real users don't
     if (website) {
@@ -96,7 +96,7 @@ export default async function handler(req, res) {
                     'Authorization': `Basic ${auth}`,
                 },
                 body: JSON.stringify({
-                    tags: [{ name: 'ebook-download', status: 'active' }],
+                    tags: [{ name: tag || 'ebook-download', status: 'active' }],
                 }),
             }
         );
