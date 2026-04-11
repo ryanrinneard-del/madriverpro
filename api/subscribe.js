@@ -81,12 +81,15 @@ export default async function handler(req, res) {
         );
 
         if (!response.ok) {
-            const error = await response.text();
-            console.error('Mailchimp API error:', error);
-            return res.status(502).json({ error: 'Failed to subscribe' });
+            const errorText = await response.text();
+            // If member already exists (unsubscribed/cleaned), still add the tag
+            if (!errorText.includes('Member Exists') && !errorText.includes('Forgotten')) {
+                console.error('Mailchimp API error:', errorText);
+                return res.status(502).json({ error: 'Failed to subscribe' });
+            }
         }
 
-        // Add the ebook-download tag
+        // Add the tag
         const tagRes = await fetch(
             `https://${SERVER}.api.mailchimp.com/3.0/lists/${LIST_ID}/members/${subscriberHash}/tags`,
             {
