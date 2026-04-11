@@ -82,11 +82,9 @@ export default async function handler(req, res) {
 
         if (!response.ok) {
             const errorText = await response.text();
-            // If member already exists (unsubscribed/cleaned), still add the tag
-            if (!errorText.includes('Member Exists') && !errorText.includes('Forgotten')) {
-                console.error('Mailchimp API error:', errorText);
-                return res.status(502).json({ error: 'Failed to subscribe' });
-            }
+            console.error('Mailchimp API error:', errorText);
+            // DEBUG: temporarily return the actual error so we can diagnose
+            return res.status(502).json({ error: 'Failed to subscribe', debug: errorText });
         }
 
         // Add the tag
