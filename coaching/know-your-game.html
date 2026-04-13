@@ -9,7 +9,7 @@
 body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f8f9fa; color: #333; }
 
 /* Hero */
-.gp-hero { background: linear-gradient(135deg, #1a1a2e 0%, #363E99 100%); color: #fff; text-align: center; padding: 48px 24px 40px; }
+.gp-hero { background: linear-gradient(135deg, #1a1a2e 0%, #363E99 100%); color: #fff; text-align: center; padding: 120px 24px 40px; }
 .gp-hero-brand { font-size: 13px; letter-spacing: 2px; text-transform: uppercase; opacity: 0.7; margin-bottom: 16px; }
 .gp-hero h1 { font-size: 32px; font-weight: 700; letter-spacing: -0.5px; margin: 0 0 12px; color: #fff; }
 .gp-hero p { font-size: 16px; opacity: 0.85; max-width: 540px; margin: 0 auto; line-height: 1.7; }
@@ -91,9 +91,39 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-
   .gp-hero h1 { font-size: 26px; }
   .gp-nav-btn { padding: 12px 20px; font-size: 14px; }
 }
+<link rel="stylesheet" href="../styles.css">
 </style>
 </head>
 <body>
+
+<!-- Navigation -->
+<nav class="nav" id="nav">
+    <div class="nav-container">
+        <a href="../index.html" class="nav-logo">
+            <img src="../images/rr-logo.png" alt="RR Golf" class="nav-logo-img">
+        </a>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="../index.html#about">About</a></li>
+            <li><a href="../index.html#coaching">Coaching</a></li>
+            <li><a href="../index.html#testimonials">Testimonials</a></li>
+            <li><a href="../articles/index.html">Articles</a></li>
+            <li><a href="../8-weeks-to-mastery.html">8 Weeks to Mastery</a></li>
+            <li><a href="../8-weeks-to-short-game-mastery.html" style="color:#c97c2e;">Short Game Mastery</a></li>
+            <li class="nav-book-dropdown">
+                <a href="#" class="nav-cta">Book Now</a>
+                <ul class="dropdown-menu dropdown-book">
+                    <li><a href="https://madriverpro.as.me" target="_blank" rel="noopener">Book at Mad River</a></li>
+                    <li><a href="https://clients.uschedule.com/acetrackgolf/booking" target="_blank" rel="noopener">Book at Ace Track</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>
 
 <!-- HERO -->
 <div class="gp-hero">
@@ -441,5 +471,6 @@ function gpSubmit() {
 
 gpUpdateProgress();
 </script>
+<script src="../script.js"></script>
 </body>
 </html>
