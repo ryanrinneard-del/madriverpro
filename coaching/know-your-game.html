@@ -3,477 +3,1195 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Know Your Game | RR Golf</title>
+<title>Know Your Game | Ryan Rinneard Golf</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f8f9fa; color: #333; padding-top: 72px; }
-
-/* Hero */
-.gp-hero { background: linear-gradient(135deg, #1a1a2e 0%, #363E99 100%); color: #fff; text-align: center; padding: 48px 24px 40px; }
-.gp-hero-brand { font-size: 13px; letter-spacing: 2px; text-transform: uppercase; opacity: 0.7; margin-bottom: 16px; }
-.gp-hero h1 { font-size: 32px; font-weight: 700; letter-spacing: -0.5px; margin: 0 0 12px; color: #fff; }
-.gp-hero p { font-size: 16px; opacity: 0.85; max-width: 540px; margin: 0 auto; line-height: 1.7; }
-
-/* Progress */
-.gp-progress-wrap { background: #fff; border-bottom: 1px solid #e2e5eb; padding: 16px 24px; position: sticky; top: 0; z-index: 100; }
-.gp-progress-inner { max-width: 680px; margin: 0 auto; display: flex; align-items: center; }
-.gp-progress-bar { flex: 1; height: 6px; background: #e8eaf0; border-radius: 3px; overflow: hidden; }
-.gp-progress-fill { height: 100%; background: linear-gradient(90deg, #363E99, #0F6194); border-radius: 3px; transition: width 0.4s ease; width: 14%; }
-.gp-progress-label { font-size: 13px; color: #777; white-space: nowrap; padding-left: 12px; }
-
-/* Form */
-.gp-form-container { max-width: 680px; margin: 0 auto; padding: 0 24px 60px; }
-
-/* Sections */
-.gp-section { display: none; }
-.gp-section.gp-active { display: block; }
-.gp-section-header { text-align: center; padding: 40px 0 32px; }
-.gp-section-num { display: inline-block; background: #363E99; color: #fff; font-size: 12px; font-weight: 700; letter-spacing: 1px; padding: 4px 14px; border-radius: 20px; margin-bottom: 16px; }
-.gp-section-header h2 { font-size: 26px; color: #1a1a2e; font-weight: 700; margin: 0 0 8px; }
-.gp-section-header p { font-size: 15px; color: #777; max-width: 480px; margin: 0 auto; }
-
-/* Fields */
-.gp-field { margin-bottom: 28px; }
-.gp-field label.gp-label { display: block; font-size: 14px; font-weight: 600; color: #1a1a2e; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
-.gp-field .gp-hint { font-size: 13px; color: #777; font-style: italic; margin-bottom: 8px; font-weight: 400; text-transform: none; letter-spacing: 0; }
-.gp-field input[type="text"], .gp-field input[type="email"], .gp-field textarea {
-  width: 100%; padding: 14px 16px; font-size: 15px; border: 1px solid #e2e5eb; border-radius: 8px; background: #fff; color: #333; font-family: inherit;
-}
-.gp-field input:focus, .gp-field textarea:focus { outline: none; border-color: #363E99; box-shadow: 0 0 0 3px rgba(54,62,153,0.1); }
-.gp-field textarea { min-height: 100px; resize: vertical; }
-
-/* Sliders */
-.gp-slider-field { margin-bottom: 32px; }
-.gp-slider-field label.gp-label { display: block; font-size: 14px; font-weight: 600; color: #1a1a2e; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
-.gp-slider-labels { display: flex; justify-content: space-between; margin-bottom: 8px; }
-.gp-slider-low { font-size: 13px; color: #e74c3c; }
-.gp-slider-high { font-size: 13px; color: #2ecc71; }
-.gp-slider-field input[type="range"] { -webkit-appearance: none; width: 100%; height: 8px; border-radius: 4px; background: linear-gradient(90deg, #e74c3c, #f39c12, #2ecc71); outline: none; }
-.gp-slider-field input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; border-radius: 50%; background: #fff; border: 3px solid #363E99; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
-.gp-slider-value { text-align: center; font-size: 14px; color: #777; margin-top: 8px; }
-
-/* Choice Buttons */
-.gp-btn-group { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
-.gp-choice-btn { padding: 12px 16px; border: 2px solid #e2e5eb; border-radius: 8px; background: #fff; color: #333; font-size: 14px; font-weight: 500; cursor: pointer; font-family: inherit; transition: all 0.2s; }
-.gp-choice-btn:hover { border-color: #363E99; background: #f0f1ff; }
-.gp-choice-btn.gp-selected { background: #363E99; color: #fff; border-color: #363E99; }
-
-/* Checkboxes */
-.gp-check-group { margin-top: 8px; }
-.gp-check-item { display: flex; align-items: center; padding: 12px 16px; border: 1px solid #e2e5eb; border-radius: 8px; background: #fff; cursor: pointer; margin-bottom: 10px; transition: all 0.2s; }
-.gp-check-item:hover { border-color: #363E99; }
-.gp-check-item.gp-checked { border-color: #363E99; background: #f0f1ff; }
-.gp-check-item input[type="checkbox"] { display: none; }
-.gp-check-box { width: 22px; height: 22px; min-width: 22px; border: 2px solid #e2e5eb; border-radius: 4px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; font-size: 14px; }
-.gp-check-item.gp-checked .gp-check-box { background: #363E99; border-color: #363E99; color: #fff; }
-.gp-check-label { padding-left: 12px; font-size: 15px; color: #333; }
-
-/* Navigation */
-.gp-nav-row { display: flex; justify-content: space-between; padding: 32px 0; border-top: 1px solid #e2e5eb; margin-top: 16px; }
-.gp-nav-btn { padding: 14px 32px; border-radius: 8px; font-size: 15px; font-weight: 600; font-family: inherit; cursor: pointer; border: none; transition: all 0.2s; }
-.gp-nav-prev { background: transparent; color: #777; border: 1px solid #e2e5eb; }
-.gp-nav-prev:hover { color: #1a1a2e; border-color: #1a1a2e; }
-.gp-nav-next, .gp-nav-submit { background: #363E99; color: #fff; }
-.gp-nav-next:hover, .gp-nav-submit:hover { background: #2c3380; }
-
-/* Success */
-.gp-success { display: none; text-align: center; padding: 80px 24px; max-width: 500px; margin: 0 auto; }
-.gp-success.gp-active { display: block; }
-.gp-success-icon { width: 72px; height: 72px; border-radius: 50%; background: #2ecc71; color: white; font-size: 36px; line-height: 72px; margin: 0 auto 24px; text-align: center; }
-.gp-success h2 { font-size: 28px; color: #1a1a2e; margin: 0 0 12px; }
-.gp-success p { font-size: 16px; color: #777; line-height: 1.7; }
-
-/* Footer */
-.gp-footer { text-align: center; padding: 32px 24px; font-size: 13px; color: #777; border-top: 1px solid #e2e5eb; }
-.gp-footer a { color: #363E99; text-decoration: none; }
-
-@media (max-width: 600px) {
-  .gp-hero h1 { font-size: 26px; }
-  .gp-nav-btn { padding: 12px 20px; font-size: 14px; }
-}
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #0D1B2A;
+    --navy-mid: #1a2e42;
+    --navy-light: #243d54;
+    --white: #ffffff;
+    --off-white: #f8f7f4;
+    --cream: #f2efe8;
+    --gold: #c9a84c;
+    --gold-light: #e8d49a;
+    --text-primary: #0D1B2A;
+    --text-secondary: #4a5568;
+    --text-muted: #8a9bb0;
+    --border: #e2e0da;
+    --border-focus: #c9a84c;
+    --success: #2d6a4f;
+    --radius: 4px;
+    --radius-lg: 8px;
+    --transition: 0.2s ease;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(13,27,42,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding: 0 2rem;
+    height: 60px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px; font-weight: 500;
+    color: var(--white);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { color: rgba(255,255,255,0.65); text-decoration: none; font-size: 13px; font-weight: 400; letter-spacing: 0.04em; transition: color var(--transition); }
+  .nav-links a:hover { color: var(--white); }
+  .hero {
+    padding: 120px 2rem 60px;
+    max-width: 680px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .hero-eyebrow {
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.25rem;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 500;
+    line-height: 1.15;
+    color: var(--white);
+    margin-bottom: 1rem;
+  }
+  .hero p {
+    font-size: 16px; font-weight: 300;
+    color: rgba(255,255,255,0.65);
+    max-width: 480px; margin: 0 auto 2rem;
+    line-height: 1.7;
+  }
+  .hero-meta {
+    display: flex; align-items: center; justify-content: center;
+    gap: 1.5rem; flex-wrap: wrap;
+    font-size: 12px; color: rgba(255,255,255,0.4);
+    letter-spacing: 0.04em;
+  }
+  .hero-meta span { display: flex; align-items: center; gap: 5px; }
+  .progress-container {
+    max-width: 680px; margin: 0 auto;
+    padding: 0 2rem 2rem;
+  }
+  .progress-track {
+    display: flex; align-items: center;
+    margin-bottom: 8px;
+  }
+  .progress-step {
+    flex: 1; height: 2px;
+    background: rgba(255,255,255,0.12);
+    transition: background 0.4s ease;
+  }
+  .progress-step.active { background: var(--gold); }
+  .progress-step.complete { background: var(--gold); }
+  .progress-labels {
+    display: flex; justify-content: space-between;
+    font-size: 10px; color: rgba(255,255,255,0.3);
+    letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .progress-label-current { color: var(--gold); font-weight: 500; }
+  .form-wrapper {
+    max-width: 680px;
+    margin: 0 auto 4rem;
+    padding: 0 2rem;
+  }
+  .form-section {
+    display: none;
+    animation: fadeUp 0.35s ease both;
+  }
+  .form-section.active { display: block; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .section-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  .section-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .section-number {
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem; font-weight: 500;
+    color: var(--white);
+    margin-bottom: 0.4rem;
+  }
+  .section-desc {
+    font-size: 14px; font-weight: 300;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.6;
+  }
+  .field-group { margin-bottom: 1.75rem; }
+  .field-group:last-child { margin-bottom: 0; }
+  label, .field-label {
+    display: block;
+    font-size: 13px; font-weight: 500;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.01em;
+  }
+  .field-hint {
+    font-size: 12px; font-weight: 300;
+    color: rgba(255,255,255,0.35);
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+  input[type="text"],
+  input[type="email"],
+  textarea,
+  select {
+    width: 100%;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: var(--radius);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px; font-weight: 300;
+    padding: 10px 14px;
+    transition: border-color var(--transition), background var(--transition);
+    outline: none;
+    -webkit-appearance: none;
+  }
+  input[type="text"]:focus,
+  input[type="email"]:focus,
+  textarea:focus,
+  select:focus {
+    border-color: var(--gold);
+    background: rgba(201,168,76,0.06);
+  }
+  input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.25); }
+  textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
+  select { cursor: pointer; }
+  select option { background: var(--navy-mid); color: var(--white); }
+  .option-grid { display: grid; gap: 8px; }
+  .option-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .option-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .option-grid.cols-auto { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+  .option-card input[type="radio"],
+  .option-card input[type="checkbox"] {
+    position: absolute; opacity: 0; width: 0; height: 0;
+  }
+  .option-card label {
+    display: flex; align-items: center; justify-content: center;
+    text-align: center;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: var(--radius);
+    padding: 10px 14px;
+    font-size: 13px; font-weight: 400;
+    color: rgba(255,255,255,0.65);
+    cursor: pointer;
+    transition: all var(--transition);
+    margin-bottom: 0;
+    line-height: 1.3;
+    min-height: 42px;
+  }
+  .option-card input[type="radio"]:checked + label,
+  .option-card input[type="checkbox"]:checked + label {
+    background: rgba(201,168,76,0.15);
+    border-color: var(--gold);
+    color: var(--white);
+  }
+  .option-card label:hover {
+    background: rgba(255,255,255,0.07);
+    border-color: rgba(255,255,255,0.25);
+    color: var(--white);
+  }
+  .slider-wrapper { padding: 4px 0 8px; }
+  input[type="range"] {
+    width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 3px;
+    border-radius: 2px;
+    background: rgba(255,255,255,0.15);
+    outline: none;
+    cursor: pointer;
+    border: none;
+    padding: 0;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--gold);
+    border: 2px solid var(--navy);
+    cursor: pointer;
+    box-shadow: 0 0 0 3px rgba(201,168,76,0.2);
+    transition: box-shadow var(--transition);
+  }
+  input[type="range"]::-webkit-slider-thumb:hover {
+    box-shadow: 0 0 0 5px rgba(201,168,76,0.3);
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--gold);
+    border: 2px solid var(--navy);
+    cursor: pointer;
+  }
+  .slider-labels {
+    display: flex; justify-content: space-between;
+    margin-top: 6px;
+    font-size: 11px; color: rgba(255,255,255,0.3);
+  }
+  .slider-value {
+    text-align: center;
+    font-size: 18px; font-weight: 500;
+    color: var(--gold);
+    margin-bottom: 4px;
+    min-height: 28px;
+  }
+  .slider-descriptor {
+    text-align: center;
+    font-size: 12px; font-weight: 300;
+    color: rgba(255,255,255,0.4);
+    min-height: 18px;
+    margin-bottom: 4px;
+  }
+  .field-divider {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    margin: 1.75rem 0;
+  }
+  .subsection-label {
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .form-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 1.5rem;
+    gap: 1rem;
+  }
+  .btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px; font-weight: 500;
+    letter-spacing: 0.06em;
+    padding: 12px 28px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all var(--transition);
+    border: none;
+    outline: none;
+    display: flex; align-items: center; gap: 8px;
+    text-transform: uppercase;
+  }
+  .btn-primary {
+    background: var(--gold);
+    color: var(--navy);
+    flex: 1;
+    justify-content: center;
+  }
+  .btn-primary:hover { background: #d4b060; }
+  .btn-primary:active { transform: scale(0.99); }
+  .btn-back {
+    background: transparent;
+    color: rgba(255,255,255,0.45);
+    border: 1px solid rgba(255,255,255,0.12);
+    min-width: 100px;
+    justify-content: center;
+  }
+  .btn-back:hover {
+    background: rgba(255,255,255,0.05);
+    color: rgba(255,255,255,0.75);
+  }
+  .btn-submit {
+    background: var(--gold);
+    color: var(--navy);
+    flex: 1;
+    justify-content: center;
+    font-size: 14px;
+    padding: 14px 32px;
+  }
+  .btn-submit:hover { background: #d4b060; }
+  .section-step-info {
+    font-size: 12px; color: rgba(255,255,255,0.3);
+    text-align: center;
+    margin-top: 1rem;
+  }
+  .success-screen {
+    display: none;
+    text-align: center;
+    padding: 4rem 2rem;
+    max-width: 520px;
+    margin: 0 auto;
+    animation: fadeUp 0.5s ease both;
+  }
+  .success-screen.active { display: block; }
+  .success-icon {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: rgba(201,168,76,0.15);
+    border: 1px solid rgba(201,168,76,0.3);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 2rem;
+  }
+  .success-screen h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem; font-weight: 500;
+    color: var(--white);
+    margin-bottom: 1rem;
+  }
+  .success-screen p {
+    font-size: 15px; font-weight: 300;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.7;
+    margin-bottom: 0.75rem;
+  }
+  .success-detail {
+    font-size: 13px; color: rgba(255,255,255,0.35);
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  @media (max-width: 600px) {
+    .nav-links { display: none; }
+    .section-card { padding: 1.75rem 1.25rem; }
+    .option-grid.cols-3 { grid-template-columns: 1fr 1fr; }
+    .hero { padding-top: 90px; }
+  }
 </style>
 </head>
 <body>
-
-<!-- Navigation -->
-<nav class="nav" id="nav">
-    <div class="nav-container">
-        <a href="../index.html" class="nav-logo">
-            <img src="../images/rr-logo.png" alt="RR Golf" class="nav-logo-img">
-        </a>
-        <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-        <ul class="nav-links" id="navLinks">
-            <li><a href="../index.html#about">About</a></li>
-            <li><a href="../index.html#coaching">Coaching</a></li>
-            <li><a href="../index.html#testimonials">Testimonials</a></li>
-            <li><a href="../articles/index.html">Articles</a></li>
-            <li><a href="../8-weeks-to-mastery.html">8 Weeks to Mastery</a></li>
-            <li><a href="../8-weeks-to-short-game-mastery.html" style="color:#c97c2e;">Short Game Mastery</a></li>
-            <li class="nav-book-dropdown">
-                <a href="#" class="nav-cta">Book Now</a>
-                <ul class="dropdown-menu dropdown-book">
-                    <li><a href="https://madriverpro.as.me" target="_blank" rel="noopener">Book at Mad River</a></li>
-                    <li><a href="https://clients.uschedule.com/acetrackgolf/booking" target="_blank" rel="noopener">Book at Ace Track</a></li>
-                </ul>
-            </li>
-        </ul>
-    </div>
+<nav class="nav">
+  <a href="https://www.madriverpro.com" class="nav-logo">RR <span>Golf</span></a>
+  <ul class="nav-links">
+    <li><a href="https://www.madriverpro.com/index.html#about">About</a></li>
+    <li><a href="https://www.madriverpro.com/index.html#coaching">Coaching</a></li>
+    <li><a href="https://www.madriverpro.com/8-weeks-to-mastery.html">8 Weeks</a></li>
+    <li><a href="https://madriverpro.as.me">Book Now</a></li>
+  </ul>
 </nav>
-
-<!-- HERO -->
-<div class="gp-hero">
-  <div class="gp-hero-brand">RR GOLF</div>
-  <h1>Golfer Profile &amp; Game Analysis</h1>
-  <p>Help me understand your game so I can build a coaching plan tailored to you. Takes about 5 minutes.</p>
-</div>
-
-<!-- PROGRESS -->
-<div class="gp-progress-wrap">
-  <div class="gp-progress-inner">
-    <div class="gp-progress-bar"><div class="gp-progress-fill" id="gpProgressFill"></div></div>
-    <div class="gp-progress-label" id="gpProgressLabel">Section 1 of 7</div>
+<div class="hero">
+  <p class="hero-eyebrow">Ryan Rinneard · Director of Instruction</p>
+  <h1>Know Your Game</h1>
+  <p>A few minutes with this form gives me everything I need to build a coaching plan that's genuinely tailored to your game — before we ever step on the range.</p>
+  <div class="hero-meta">
+    <span>5–7 minutes</span>
+    <span>8 sections</span>
+    <span>Mad River · Collingwood</span>
   </div>
 </div>
-
-<!-- FORM -->
-<div class="gp-form-container" id="gpForm">
-
-  <!-- ===== SECTION 1: ABOUT YOU ===== -->
-  <div class="gp-section gp-active" data-gp-section="1">
-    <div class="gp-section-header">
-      <div class="gp-section-num">SECTION 1 OF 7</div>
-      <h2>About You</h2>
-      <p>Let's start with the basics.</p>
-    </div>
-    <div class="gp-field"><label class="gp-label">Full Name</label><input type="text" data-gp-name="Full Name" placeholder="Your name"></div>
-    <div class="gp-field"><label class="gp-label">Email Address</label><input type="email" data-gp-name="Email" placeholder="you@email.com"></div>
-    <div class="gp-field"><label class="gp-label">Age</label>
-      <div class="gp-btn-group" data-gp-name="Age">
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">Under 30</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">30–45</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">46–60</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">60+</button>
-      </div>
-    </div>
-    <div class="gp-field"><label class="gp-label">Gender</label>
-      <div class="gp-btn-group" data-gp-name="Gender">
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">Male</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">Female</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">Prefer not to say</button>
-      </div>
-    </div>
-    <div class="gp-field"><label class="gp-label">Years Playing Golf</label>
-      <div class="gp-btn-group" data-gp-name="Years Playing">
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">0–2</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">3–5</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">6–10</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">11–20</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">20+</button>
-      </div>
-    </div>
-    <div class="gp-field"><label class="gp-label">Current Handicap (or average score)</label><input type="text" data-gp-name="Handicap" placeholder="e.g. 18 or ~95"></div>
-    <div class="gp-field"><label class="gp-label">What are your golf goals?</label><div class="gp-hint">What do you want to get out of coaching?</div><textarea data-gp-name="Goals" placeholder="e.g. Break 90, more consistency, enjoy the game more..."></textarea></div>
-    <div class="gp-nav-row"><div></div><button class="gp-nav-btn gp-nav-next" onclick="gpNext()">Next &rarr;</button></div>
+<div class="progress-container" id="progressContainer">
+  <div class="progress-track" id="progressTrack"></div>
+  <div class="progress-labels">
+    <span id="progressLabel" class="progress-label-current">Why You're Here</span>
+    <span id="progressFraction">1 of 8</span>
   </div>
-
-  <!-- ===== SECTION 2: LONG GAME ===== -->
-  <div class="gp-section" data-gp-section="2">
-    <div class="gp-section-header">
-      <div class="gp-section-num">SECTION 2 OF 7</div>
-      <h2>Long Game</h2>
-      <p>Driver, fairway woods, and long irons.</p>
-    </div>
-    <div class="gp-field"><label class="gp-label">What club do you typically use off the tee?</label><input type="text" data-gp-name="Tee Club" placeholder="e.g. Driver, 3-wood"></div>
-    <div class="gp-field"><label class="gp-label">Average driving distance (carry + roll)</label>
-      <div class="gp-btn-group" data-gp-name="Drive Distance">
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">Under 180</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">180–210</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">210–240</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">240–270</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">270+</button>
-      </div>
-    </div>
-    <div class="gp-field"><label class="gp-label">Fairway hit percentage</label>
-      <div class="gp-btn-group" data-gp-name="Fairway Pct">
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">Under 30%</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">30–50%</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">50–70%</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">70%+</button>
-      </div>
-    </div>
-    <div class="gp-field"><label class="gp-label">Typical miss with driver</label>
-      <div class="gp-btn-group" data-gp-name="Driver Miss">
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">Slice / Fade</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">Hook / Draw</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">Top / Thin</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">Fat / Heavy</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">No pattern</button>
-      </div>
-    </div>
-    <div class="gp-slider-field"><label class="gp-label">Confidence with fairway woods</label>
-      <div class="gp-slider-labels"><span class="gp-slider-low">Not confident</span><span class="gp-slider-high">Very confident</span></div>
-      <input type="range" min="1" max="10" value="5" data-gp-name="Fairway Woods Confidence" oninput="gpUpdateSlider(this)"><div class="gp-slider-value">5 / 10</div>
-    </div>
-    <div class="gp-slider-field"><label class="gp-label">Long irons (3–5) confidence</label>
-      <div class="gp-slider-labels"><span class="gp-slider-low">Not confident</span><span class="gp-slider-high">Very confident</span></div>
-      <input type="range" min="1" max="10" value="5" data-gp-name="Long Irons Confidence" oninput="gpUpdateSlider(this)"><div class="gp-slider-value">5 / 10</div>
-    </div>
-    <div class="gp-field"><label class="gp-label">Biggest challenges in the long game</label><textarea data-gp-name="Long Game Challenges" placeholder="What frustrates you most off the tee or with long clubs?"></textarea></div>
-    <div class="gp-nav-row"><button class="gp-nav-btn gp-nav-prev" onclick="gpPrev()">&larr; Back</button><button class="gp-nav-btn gp-nav-next" onclick="gpNext()">Next &rarr;</button></div>
-  </div>
-
-  <!-- ===== SECTION 3: APPROACH GAME ===== -->
-  <div class="gp-section" data-gp-section="3">
-    <div class="gp-section-header">
-      <div class="gp-section-num">SECTION 3 OF 7</div>
-      <h2>Approach Game</h2>
-      <p>Mid irons, short irons, and wedge shots.</p>
-    </div>
-    <div class="gp-slider-field"><label class="gp-label">Confidence with 6–8 irons</label>
-      <div class="gp-slider-labels"><span class="gp-slider-low">Not confident</span><span class="gp-slider-high">Very confident</span></div>
-      <input type="range" min="1" max="10" value="5" data-gp-name="Mid Irons Confidence" oninput="gpUpdateSlider(this)"><div class="gp-slider-value">5 / 10</div>
-    </div>
-    <div class="gp-slider-field"><label class="gp-label">Confidence with 9 iron – PW</label>
-      <div class="gp-slider-labels"><span class="gp-slider-low">Not confident</span><span class="gp-slider-high">Very confident</span></div>
-      <input type="range" min="1" max="10" value="5" data-gp-name="Short Irons Confidence" oninput="gpUpdateSlider(this)"><div class="gp-slider-value">5 / 10</div>
-    </div>
-    <div class="gp-slider-field"><label class="gp-label">Confidence with full wedge shots</label>
-      <div class="gp-slider-labels"><span class="gp-slider-low">Not confident</span><span class="gp-slider-high">Very confident</span></div>
-      <input type="range" min="1" max="10" value="5" data-gp-name="Wedge Confidence" oninput="gpUpdateSlider(this)"><div class="gp-slider-value">5 / 10</div>
-    </div>
-    <div class="gp-field"><label class="gp-label">Do you know your carry distances for these clubs?</label>
-      <div class="gp-btn-group" data-gp-name="Know Distances">
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">Not really</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">Rough idea</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">Yes, dialed in</button>
-      </div>
-    </div>
-    <div class="gp-field"><label class="gp-label">Average greens in regulation per round</label>
-      <div class="gp-btn-group" data-gp-name="GIR">
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">0–3</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">4–6</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">7–9</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">10–12</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">13+</button>
-      </div>
-    </div>
-    <div class="gp-field"><label class="gp-label">Challenges on approach shots</label><textarea data-gp-name="Approach Challenges" placeholder="What trips you up on approach?"></textarea></div>
-    <div class="gp-nav-row"><button class="gp-nav-btn gp-nav-prev" onclick="gpPrev()">&larr; Back</button><button class="gp-nav-btn gp-nav-next" onclick="gpNext()">Next &rarr;</button></div>
-  </div>
-
-  <!-- ===== SECTION 4: SHORT GAME ===== -->
-  <div class="gp-section" data-gp-section="4">
-    <div class="gp-section-header">
-      <div class="gp-section-num">SECTION 4 OF 7</div>
-      <h2>Short Game</h2>
-      <p>Chipping, pitching, and bunker play.</p>
-    </div>
-    <div class="gp-slider-field"><label class="gp-label">Comfort with bump &amp; runs</label>
-      <div class="gp-slider-labels"><span class="gp-slider-low">Not comfortable</span><span class="gp-slider-high">Very comfortable</span></div>
-      <input type="range" min="1" max="10" value="5" data-gp-name="Bump Run Comfort" oninput="gpUpdateSlider(this)"><div class="gp-slider-value">5 / 10</div>
-    </div>
-    <div class="gp-slider-field"><label class="gp-label">Comfort with high lofted chips</label>
-      <div class="gp-slider-labels"><span class="gp-slider-low">Not comfortable</span><span class="gp-slider-high">Very comfortable</span></div>
-      <input type="range" min="1" max="10" value="5" data-gp-name="High Loft Comfort" oninput="gpUpdateSlider(this)"><div class="gp-slider-value">5 / 10</div>
-    </div>
-    <div class="gp-slider-field"><label class="gp-label">Comfort with pitch shots (20–50 yards)</label>
-      <div class="gp-slider-labels"><span class="gp-slider-low">Not comfortable</span><span class="gp-slider-high">Very comfortable</span></div>
-      <input type="range" min="1" max="10" value="5" data-gp-name="Pitch Comfort" oninput="gpUpdateSlider(this)"><div class="gp-slider-value">5 / 10</div>
-    </div>
-    <div class="gp-slider-field"><label class="gp-label">Comfort with greenside bunker shots</label>
-      <div class="gp-slider-labels"><span class="gp-slider-low">Not comfortable</span><span class="gp-slider-high">Very comfortable</span></div>
-      <input type="range" min="1" max="10" value="5" data-gp-name="Bunker Comfort" oninput="gpUpdateSlider(this)"><div class="gp-slider-value">5 / 10</div>
-    </div>
-    <div class="gp-field"><label class="gp-label">Go-to club around the green</label><input type="text" data-gp-name="Go-To Chip Club" placeholder="e.g. 56-degree, 52-degree, 8-iron"></div>
-    <div class="gp-field"><label class="gp-label">Judge distance well around the green?</label>
-      <div class="gp-btn-group" data-gp-name="Distance Judgment">
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">Rarely</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">Sometimes</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">Usually</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">Always</button>
-      </div>
-    </div>
-    <div class="gp-field"><label class="gp-label">Typical short game mistakes (select all that apply)</label>
-      <div class="gp-check-group" data-gp-name="Short Game Mistakes">
-        <div class="gp-check-item" onclick="gpToggleCheck(this)"><input type="checkbox" value="Chunk / fat shots"><div class="gp-check-box"></div><div class="gp-check-label">Chunk / fat shots</div></div>
-        <div class="gp-check-item" onclick="gpToggleCheck(this)"><input type="checkbox" value="Blade / thin shots"><div class="gp-check-box"></div><div class="gp-check-label">Blade / thin shots</div></div>
-        <div class="gp-check-item" onclick="gpToggleCheck(this)"><input type="checkbox" value="Poor distance control"><div class="gp-check-box"></div><div class="gp-check-label">Poor distance control</div></div>
-        <div class="gp-check-item" onclick="gpToggleCheck(this)"><input type="checkbox" value="Wrong club selection"><div class="gp-check-box"></div><div class="gp-check-label">Wrong club selection</div></div>
-        <div class="gp-check-item" onclick="gpToggleCheck(this)"><input type="checkbox" value="Deceleration through impact"><div class="gp-check-box"></div><div class="gp-check-label">Deceleration through impact</div></div>
-        <div class="gp-check-item" onclick="gpToggleCheck(this)"><input type="checkbox" value="Leave it in the bunker"><div class="gp-check-box"></div><div class="gp-check-label">Leave it in the bunker</div></div>
-      </div>
-    </div>
-    <div class="gp-field"><label class="gp-label">Biggest struggles in the short game</label><textarea data-gp-name="Short Game Struggles" placeholder="What costs you the most strokes around the green?"></textarea></div>
-    <div class="gp-nav-row"><button class="gp-nav-btn gp-nav-prev" onclick="gpPrev()">&larr; Back</button><button class="gp-nav-btn gp-nav-next" onclick="gpNext()">Next &rarr;</button></div>
-  </div>
-
-  <!-- ===== SECTION 5: PUTTING ===== -->
-  <div class="gp-section" data-gp-section="5">
-    <div class="gp-section-header">
-      <div class="gp-section-num">SECTION 5 OF 7</div>
-      <h2>Putting</h2>
-      <p>The scoring game.</p>
-    </div>
-    <div class="gp-field"><label class="gp-label">Use a line or aim tool to line up putts?</label>
-      <div class="gp-btn-group" data-gp-name="Putt Aim Tool">
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">Never</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">Sometimes</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">Always</button>
-      </div>
-    </div>
-    <div class="gp-slider-field"><label class="gp-label">Confidence in putts under 5 feet</label>
-      <div class="gp-slider-labels"><span class="gp-slider-low">Miss a lot</span><span class="gp-slider-high">Automatic</span></div>
-      <input type="range" min="1" max="10" value="5" data-gp-name="Short Putt Confidence" oninput="gpUpdateSlider(this)"><div class="gp-slider-value">5 / 10</div>
-    </div>
-    <div class="gp-slider-field"><label class="gp-label">Confidence in 6–15 foot range</label>
-      <div class="gp-slider-labels"><span class="gp-slider-low">Rarely close</span><span class="gp-slider-high">Make my share</span></div>
-      <input type="range" min="1" max="10" value="5" data-gp-name="Mid Putt Confidence" oninput="gpUpdateSlider(this)"><div class="gp-slider-value">5 / 10</div>
-    </div>
-    <div class="gp-slider-field"><label class="gp-label">Confidence in long lag putts (25+ feet)</label>
-      <div class="gp-slider-labels"><span class="gp-slider-low">Three-putt zone</span><span class="gp-slider-high">Great distance control</span></div>
-      <input type="range" min="1" max="10" value="5" data-gp-name="Lag Putt Confidence" oninput="gpUpdateSlider(this)"><div class="gp-slider-value">5 / 10</div>
-    </div>
-    <div class="gp-field"><label class="gp-label">Typical miss on putts</label>
-      <div class="gp-btn-group" data-gp-name="Putt Miss">
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">Left</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">Right</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">Short</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">Long</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">No pattern</button>
-      </div>
-    </div>
-    <div class="gp-field"><label class="gp-label">Struggle more with...</label>
-      <div class="gp-btn-group" data-gp-name="Putt Struggle">
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">Green reading</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">Distance control</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">Both equally</button>
-      </div>
-    </div>
-    <div class="gp-field"><label class="gp-label">Strongest part of your putting</label><textarea data-gp-name="Putting Strength" placeholder="What do you feel good about on the greens?"></textarea></div>
-    <div class="gp-nav-row"><button class="gp-nav-btn gp-nav-prev" onclick="gpPrev()">&larr; Back</button><button class="gp-nav-btn gp-nav-next" onclick="gpNext()">Next &rarr;</button></div>
-  </div>
-
-  <!-- ===== SECTION 6: ON-COURSE ===== -->
-  <div class="gp-section" data-gp-section="6">
-    <div class="gp-section-header">
-      <div class="gp-section-num">SECTION 6 OF 7</div>
-      <h2>On-Course Behavior &amp; Strategy</h2>
-      <p>How you manage yourself and the course.</p>
-    </div>
-    <div class="gp-field"><label class="gp-label">Manage risk/reward situations well?</label>
-      <div class="gp-btn-group" data-gp-name="Risk Management">
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">Rarely</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">Sometimes</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">Usually</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">Always</button>
-      </div>
-    </div>
-    <div class="gp-field"><label class="gp-label">Have a course strategy before each round?</label>
-      <div class="gp-btn-group" data-gp-name="Course Strategy">
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">Never</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">Sometimes</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">Usually</button>
-        <button class="gp-choice-btn" onclick="gpSelectChoice(this)">Always</button>
-      </div>
-    </div>
-    <div class="gp-field"><label class="gp-label">Part of your game that shows up best under pressure</label><textarea data-gp-name="Pressure Strength" placeholder="What do you trust when it counts?"></textarea></div>
-    <div class="gp-field"><label class="gp-label">Most frequent mistakes on the course</label><textarea data-gp-name="Frequent Mistakes" placeholder="What patterns do you notice?"></textarea></div>
-    <div class="gp-field"><label class="gp-label">Shots or situations that make you most uncomfortable</label><textarea data-gp-name="Uncomfortable Shots" placeholder="e.g. Downhill lies, long bunker shots, tight fairways..."></textarea></div>
-    <div class="gp-nav-row"><button class="gp-nav-btn gp-nav-prev" onclick="gpPrev()">&larr; Back</button><button class="gp-nav-btn gp-nav-next" onclick="gpNext()">Next &rarr;</button></div>
-  </div>
-
-  <!-- ===== SECTION 7: STRENGTHS & GOALS ===== -->
-  <div class="gp-section" data-gp-section="7">
-    <div class="gp-section-header">
-      <div class="gp-section-num">SECTION 7 OF 7</div>
-      <h2>Strengths &amp; Goals</h2>
-      <p>The big picture. Almost done.</p>
-    </div>
-    <div class="gp-field"><label class="gp-label">Top 3 strengths in your game</label><textarea data-gp-name="Top Strengths" placeholder="What are you most proud of in your game?"></textarea></div>
-    <div class="gp-field"><label class="gp-label">Top 3 weaknesses</label><textarea data-gp-name="Top Weaknesses" placeholder="What holds you back the most?"></textarea></div>
-    <div class="gp-field"><label class="gp-label">Specific goals or skills you want to focus on</label><textarea data-gp-name="Focus Goals" placeholder="What would make the biggest difference for you this season?"></textarea></div>
-    <div class="gp-nav-row"><button class="gp-nav-btn gp-nav-prev" onclick="gpPrev()">&larr; Back</button><button class="gp-nav-btn gp-nav-submit" onclick="gpSubmit()">Submit Profile &rarr;</button></div>
-  </div>
-
 </div>
-
-<!-- SUCCESS -->
-<div class="gp-success" id="gpSuccess">
-  <div class="gp-success-icon">&#10003;</div>
-  <h2>Profile Submitted</h2>
-  <p>Thanks for taking the time. Your profile will be reviewed and used to tailor your coaching experience. You'll hear from Ryan soon.</p>
+<div class="form-wrapper">
+  <div class="form-section active" id="section-0">
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-number">Section 1 of 8</div>
+        <div class="section-title">Why You're Here</div>
+        <div class="section-desc">Before the details — what brought you to this page?</div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">What brought you here today?</div>
+        <div class="option-grid cols-2">
+          <div class="option-card"><input type="radio" name="why_here" id="why1" value="plateau"><label for="why1">I've hit a plateau and can't break through</label></div>
+          <div class="option-card"><input type="radio" name="why_here" id="why2" value="consistent"><label for="why2">My game is inconsistent and I want to fix it</label></div>
+          <div class="option-card"><input type="radio" name="why_here" id="why3" value="new"><label for="why3">I'm newer to the game and want a real foundation</label></div>
+          <div class="option-card"><input type="radio" name="why_here" id="why4" value="event"><label for="why4">I have a specific event or goal I'm preparing for</label></div>
+          <div class="option-card"><input type="radio" name="why_here" id="why5" value="referral"><label for="why5">Someone referred me or I saw your content</label></div>
+          <div class="option-card"><input type="radio" name="why_here" id="why6" value="curious"><label for="why6">Just curious — exploring my options</label></div>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Have you had professional lessons before?</div>
+        <div class="option-grid cols-3">
+          <div class="option-card"><input type="radio" name="coaching_before" id="cb1" value="never"><label for="cb1">Never</label></div>
+          <div class="option-card"><input type="radio" name="coaching_before" id="cb2" value="some"><label for="cb2">A few lessons</label></div>
+          <div class="option-card"><input type="radio" name="coaching_before" id="cb3" value="regular"><label for="cb3">Regularly</label></div>
+        </div>
+      </div>
+      <div class="field-group" id="prevCoachingGroup" style="display:none">
+        <label for="prev_coaching">What were you working on? Any carry-over issues?</label>
+        <textarea id="prev_coaching" name="prev_coaching" placeholder="e.g. Been working on my over the top move for two years but it keeps coming back..."></textarea>
+        <div class="field-hint">This helps me not retread old ground — or understand what hasn't been working.</div>
+      </div>
+    </div>
+    <div class="form-nav">
+      <button class="btn btn-primary" onclick="nextSection(0)">Continue →</button>
+    </div>
+    <div class="section-step-info">Section 1 of 8</div>
+  </div>
+  <div class="form-section" id="section-1">
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-number">Section 2 of 8</div>
+        <div class="section-title">About You</div>
+        <div class="section-desc">The basics — who am I coaching?</div>
+      </div>
+      <div class="field-group">
+        <label for="full_name">Full Name</label>
+        <input type="text" id="full_name" name="full_name" placeholder="Your name">
+      </div>
+      <div class="field-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="you@email.com">
+      </div>
+      <div class="field-group">
+        <div class="field-label">Age</div>
+        <div class="option-grid cols-auto">
+          <div class="option-card"><input type="radio" name="age" id="age1" value="under30"><label for="age1">Under 30</label></div>
+          <div class="option-card"><input type="radio" name="age" id="age2" value="30-45"><label for="age2">30–45</label></div>
+          <div class="option-card"><input type="radio" name="age" id="age3" value="46-60"><label for="age3">46–60</label></div>
+          <div class="option-card"><input type="radio" name="age" id="age4" value="60+"><label for="age4">60+</label></div>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Gender</div>
+        <div class="option-grid cols-3">
+          <div class="option-card"><input type="radio" name="gender" id="g1" value="male"><label for="g1">Male</label></div>
+          <div class="option-card"><input type="radio" name="gender" id="g2" value="female"><label for="g2">Female</label></div>
+          <div class="option-card"><input type="radio" name="gender" id="g3" value="prefer_not"><label for="g3">Prefer not to say</label></div>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Years playing golf</div>
+        <div class="option-grid cols-auto">
+          <div class="option-card"><input type="radio" name="years" id="y1" value="0-2"><label for="y1">0–2</label></div>
+          <div class="option-card"><input type="radio" name="years" id="y2" value="3-5"><label for="y2">3–5</label></div>
+          <div class="option-card"><input type="radio" name="years" id="y3" value="6-10"><label for="y3">6–10</label></div>
+          <div class="option-card"><input type="radio" name="years" id="y4" value="11-20"><label for="y4">11–20</label></div>
+          <div class="option-card"><input type="radio" name="years" id="y5" value="20+"><label for="y5">20+</label></div>
+        </div>
+      </div>
+      <div class="field-group">
+        <label for="handicap">Current handicap (or typical score)</label>
+        <input type="text" id="handicap" name="handicap" placeholder="e.g. 12 hdcp, or shoot around 90">
+      </div>
+      <div class="field-group">
+        <label for="goals">What are your golf goals?</label>
+        <textarea id="goals" name="goals" placeholder="e.g. Break 80, play more consistently, stop dreading par 3s..."></textarea>
+      </div>
+      <div class="field-group">
+        <label for="ideal_round">What does playing your best feel like? Describe an ideal round.</label>
+        <textarea id="ideal_round" name="ideal_round" placeholder="e.g. I'm in the moment on every shot, not thinking about mechanics, just playing..."></textarea>
+        <div class="field-hint">This helps me understand how you experience the game — not just the scorecard.</div>
+      </div>
+    </div>
+    <div class="form-nav">
+      <button class="btn btn-back" onclick="prevSection(1)">← Back</button>
+      <button class="btn btn-primary" onclick="nextSection(1)">Continue →</button>
+    </div>
+    <div class="section-step-info">Section 2 of 8</div>
+  </div>
+  <div class="form-section" id="section-2">
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-number">Section 3 of 8</div>
+        <div class="section-title">Long Game</div>
+        <div class="section-desc">Driver, fairway woods, hybrids, and long irons.</div>
+      </div>
+      <div class="field-group">
+        <label for="tee_club">What club do you typically use off the tee?</label>
+        <input type="text" id="tee_club" name="tee_club" placeholder="e.g. Driver, 3 wood, hybrid">
+      </div>
+      <div class="field-group">
+        <div class="field-label">Average driving distance (carry + roll)</div>
+        <div class="option-grid cols-auto">
+          <div class="option-card"><input type="radio" name="drive_dist" id="dd1" value="under180"><label for="dd1">Under 180</label></div>
+          <div class="option-card"><input type="radio" name="drive_dist" id="dd2" value="180-210"><label for="dd2">180–210</label></div>
+          <div class="option-card"><input type="radio" name="drive_dist" id="dd3" value="210-240"><label for="dd3">210–240</label></div>
+          <div class="option-card"><input type="radio" name="drive_dist" id="dd4" value="240-270"><label for="dd4">240–270</label></div>
+          <div class="option-card"><input type="radio" name="drive_dist" id="dd5" value="270+"><label for="dd5">270+</label></div>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Fairway hit percentage (estimated)</div>
+        <div class="option-grid cols-auto">
+          <div class="option-card"><input type="radio" name="fairway_pct" id="fp1" value="under30"><label for="fp1">Under 30%</label></div>
+          <div class="option-card"><input type="radio" name="fairway_pct" id="fp2" value="30-50"><label for="fp2">30–50%</label></div>
+          <div class="option-card"><input type="radio" name="fairway_pct" id="fp3" value="50-70"><label for="fp3">50–70%</label></div>
+          <div class="option-card"><input type="radio" name="fairway_pct" id="fp4" value="70+"><label for="fp4">70%+</label></div>
+        </div>
+      </div>
+      <hr class="field-divider">
+      <div class="subsection-label">Driver miss pattern</div>
+      <div class="field-group">
+        <div class="field-label">Typical miss direction with driver</div>
+        <div class="option-grid cols-auto">
+          <div class="option-card"><input type="radio" name="driver_miss_dir" id="dm1" value="slice_fade"><label for="dm1">Slice / Fade</label></div>
+          <div class="option-card"><input type="radio" name="driver_miss_dir" id="dm2" value="hook_draw"><label for="dm2">Hook / Draw</label></div>
+          <div class="option-card"><input type="radio" name="driver_miss_dir" id="dm3" value="top_thin"><label for="dm3">Top / Thin</label></div>
+          <div class="option-card"><input type="radio" name="driver_miss_dir" id="dm4" value="fat"><label for="dm4">Fat / Heavy</label></div>
+          <div class="option-card"><input type="radio" name="driver_miss_dir" id="dm5" value="no_pattern"><label for="dm5">No pattern</label></div>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Where do you typically make contact on the face?</div>
+        <div class="option-grid cols-auto">
+          <div class="option-card"><input type="radio" name="face_contact" id="fc1" value="toe"><label for="fc1">Toe</label></div>
+          <div class="option-card"><input type="radio" name="face_contact" id="fc2" value="heel"><label for="fc2">Heel</label></div>
+          <div class="option-card"><input type="radio" name="face_contact" id="fc3" value="centre"><label for="fc3">Centre / Sweet spot</label></div>
+          <div class="option-card"><input type="radio" name="face_contact" id="fc4" value="high"><label for="fc4">High on face</label></div>
+          <div class="option-card"><input type="radio" name="face_contact" id="fc5" value="varies"><label for="fc5">Varies</label></div>
+        </div>
+        <div class="field-hint">Face contact location is one of the most diagnostic data points in coaching — even a rough sense helps enormously.</div>
+      </div>
+      <hr class="field-divider">
+      <div class="subsection-label">Confidence ratings</div>
+      <div class="field-group">
+        <div class="field-label">Fairway woods / hybrids</div>
+        <div class="slider-value" id="fw_val">5/10</div>
+        <div class="slider-descriptor" id="fw_desc">Neutral</div>
+        <div class="slider-wrapper">
+          <input type="range" min="1" max="10" value="5" id="fw_conf" name="fw_conf" oninput="updateSlider('fw_conf','fw_val','fw_desc',confDescriptors)">
+          <div class="slider-labels"><span>Not confident</span><span>Very confident</span></div>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Fairway wood / hybrid typical miss</div>
+        <div class="option-grid cols-auto">
+          <div class="option-card"><input type="radio" name="fw_miss" id="fwm1" value="slice_fade"><label for="fwm1">Slice / Fade</label></div>
+          <div class="option-card"><input type="radio" name="fw_miss" id="fwm2" value="hook_draw"><label for="fwm2">Hook / Draw</label></div>
+          <div class="option-card"><input type="radio" name="fw_miss" id="fwm3" value="top_thin"><label for="fwm3">Top / Thin</label></div>
+          <div class="option-card"><input type="radio" name="fw_miss" id="fwm4" value="fat"><label for="fwm4">Fat / Heavy</label></div>
+          <div class="option-card"><input type="radio" name="fw_miss" id="fwm5" value="rarely_miss"><label for="fwm5">Rarely miss</label></div>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Long irons (3–5) or driving iron</div>
+        <div class="slider-value" id="li_val">5/10</div>
+        <div class="slider-descriptor" id="li_desc">Neutral</div>
+        <div class="slider-wrapper">
+          <input type="range" min="1" max="10" value="5" id="li_conf" name="li_conf" oninput="updateSlider('li_conf','li_val','li_desc',confDescriptors)">
+          <div class="slider-labels"><span>Not confident</span><span>Very confident</span></div>
+        </div>
+      </div>
+      <div class="field-group">
+        <label for="long_game_challenges">Biggest challenges with the long game</label>
+        <textarea id="long_game_challenges" name="long_game_challenges" placeholder="e.g. Inconsistent contact, can't trust my driver on tight holes, fairway woods are a mystery to me..."></textarea>
+      </div>
+    </div>
+    <div class="form-nav">
+      <button class="btn btn-back" onclick="prevSection(2)">← Back</button>
+      <button class="btn btn-primary" onclick="nextSection(2)">Continue →</button>
+    </div>
+    <div class="section-step-info">Section 3 of 8</div>
+  </div>
+  <div class="form-section" id="section-3">
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-number">Section 4 of 8</div>
+        <div class="section-title">Approach Game</div>
+        <div class="section-desc">Mid irons, short irons, wedges, and par 3s.</div>
+      </div>
+      <div class="subsection-label">Confidence ratings</div>
+      <div class="field-group">
+        <div class="field-label">6–8 irons</div>
+        <div class="slider-value" id="mi_val">5/10</div>
+        <div class="slider-descriptor" id="mi_desc">Neutral</div>
+        <div class="slider-wrapper">
+          <input type="range" min="1" max="10" value="5" id="mi_conf" name="mi_conf" oninput="updateSlider('mi_conf','mi_val','mi_desc',confDescriptors)">
+          <div class="slider-labels"><span>Not confident</span><span>Very confident</span></div>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">9 iron – pitching wedge</div>
+        <div class="slider-value" id="si_val">5/10</div>
+        <div class="slider-descriptor" id="si_desc">Neutral</div>
+        <div class="slider-wrapper">
+          <input type="range" min="1" max="10" value="5" id="si_conf" name="si_conf" oninput="updateSlider('si_conf','si_val','si_desc',confDescriptors)">
+          <div class="slider-labels"><span>Not confident</span><span>Very confident</span></div>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Full wedge shots (gap, sand, lob)</div>
+        <div class="slider-value" id="wedge_val">5/10</div>
+        <div class="slider-descriptor" id="wedge_desc">Neutral</div>
+        <div class="slider-wrapper">
+          <input type="range" min="1" max="10" value="5" id="wedge_conf" name="wedge_conf" oninput="updateSlider('wedge_conf','wedge_val','wedge_desc',confDescriptors)">
+          <div class="slider-labels"><span>Not confident</span><span>Very confident</span></div>
+        </div>
+      </div>
+      <hr class="field-divider">
+      <div class="subsection-label">Distance and contact</div>
+      <div class="field-group">
+        <div class="field-label">Do you know your carry distances for each club?</div>
+        <div class="option-grid cols-3">
+          <div class="option-card"><input type="radio" name="know_distances" id="kd1" value="not_really"><label for="kd1">Not really</label></div>
+          <div class="option-card"><input type="radio" name="know_distances" id="kd2" value="rough_idea"><label for="kd2">Rough idea</label></div>
+          <div class="option-card"><input type="radio" name="know_distances" id="kd3" value="dialed_in"><label for="kd3">Yes, dialed in</label></div>
+        </div>
+        <div class="field-hint">Knowing exact carry distances is one of the highest-ROI things any golfer can do. We'll address this if needed.</div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Where do most of your approach shots come from?</div>
+        <div class="option-grid cols-auto">
+          <div class="option-card"><input type="radio" name="approach_dist" id="ad1" value="50-100"><label for="ad1">50–100 yds</label></div>
+          <div class="option-card"><input type="radio" name="approach_dist" id="ad2" value="100-150"><label for="ad2">100–150 yds</label></div>
+          <div class="option-card"><input type="radio" name="approach_dist" id="ad3" value="150-200"><label for="ad3">150–200 yds</label></div>
+          <div class="option-card"><input type="radio" name="approach_dist" id="ad4" value="200+"><label for="ad4">200+ yds</label></div>
+          <div class="option-card"><input type="radio" name="approach_dist" id="ad5" value="varies"><label for="ad5">Varies a lot</label></div>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Typical miss on approach shots</div>
+        <div class="option-grid cols-auto">
+          <div class="option-card"><input type="radio" name="approach_miss" id="am1" value="left"><label for="am1">Left of target</label></div>
+          <div class="option-card"><input type="radio" name="approach_miss" id="am2" value="right"><label for="am2">Right of target</label></div>
+          <div class="option-card"><input type="radio" name="approach_miss" id="am3" value="short"><label for="am3">Short</label></div>
+          <div class="option-card"><input type="radio" name="approach_miss" id="am4" value="long"><label for="am4">Long / over</label></div>
+          <div class="option-card"><input type="radio" name="approach_miss" id="am5" value="no_pattern"><label for="am5">No clear pattern</label></div>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Where do you typically make contact on the iron face?</div>
+        <div class="option-grid cols-auto">
+          <div class="option-card"><input type="radio" name="iron_contact" id="ic1" value="toe"><label for="ic1">Toe</label></div>
+          <div class="option-card"><input type="radio" name="iron_contact" id="ic2" value="heel"><label for="ic2">Heel</label></div>
+          <div class="option-card"><input type="radio" name="iron_contact" id="ic3" value="centre"><label for="ic3">Centre</label></div>
+          <div class="option-card"><input type="radio" name="iron_contact" id="ic4" value="thin_top"><label for="ic4">Thin / Top</label></div>
+          <div class="option-card"><input type="radio" name="iron_contact" id="ic5" value="varies"><label for="ic5">Varies</label></div>
+        </div>
+      </div>
+      <hr class="field-divider">
+      <div class="subsection-label">Par 3s and GIR</div>
+      <div class="field-group">
+        <div class="field-label">How comfortable are you on par 3s?</div>
+        <div class="option-grid cols-auto">
+          <div class="option-card"><input type="radio" name="par3_comfort" id="p3c1" value="love_them"><label for="p3c1">Love them</label></div>
+          <div class="option-card"><input type="radio" name="par3_comfort" id="p3c2" value="fine_short"><label for="p3c2">Fine under 150</label></div>
+          <div class="option-card"><input type="radio" name="par3_comfort" id="p3c3" value="uneasy_long"><label for="p3c3">Uneasy over 150</label></div>
+          <div class="option-card"><input type="radio" name="par3_comfort" id="p3c4" value="uneasy_all"><label for="p3c4">Uneasy on all of them</label></div>
+          <div class="option-card"><input type="radio" name="par3_comfort" id="p3c5" value="water_trouble"><label for="p3c5">Only when there's trouble</label></div>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Average greens in regulation per round</div>
+        <div class="option-grid cols-auto">
+          <div class="option-card"><input type="radio" name="gir" id="gir1" value="0-3"><label for="gir1">0–3</label></div>
+          <div class="option-card"><input type="radio" name="gir" id="gir2" value="4-6"><label for="gir2">4–6</label></div>
+          <div class="option-card"><input type="radio" name="gir" id="gir3" value="7-9"><label for="gir3">7–9</label></div>
+          <div class="option-card"><input type="radio" name="gir" id="gir4" value="10-12"><label for="gir4">10–12</label></div>
+          <div class="option-card"><input type="radio" name="gir" id="gir5" value="13+"><label for="gir5">13+</label></div>
+        </div>
+      </div>
+      <div class="field-group">
+        <label for="approach_challenges">Biggest challenges with approach shots</label>
+        <textarea id="approach_challenges" name="approach_challenges" placeholder="e.g. Can't trust my yardages, always come up short, lose the ball right on tight pins..."></textarea>
+      </div>
+    </div>
+    <div class="form-nav">
+      <button class="btn btn-back" onclick="prevSection(3)">← Back</button>
+      <button class="btn btn-primary" onclick="nextSection(3)">Continue →</button>
+    </div>
+    <div class="section-step-info">Section 4 of 8</div>
+  </div>
+  <div class="form-section" id="section-4">
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-number">Section 5 of 8</div>
+        <div class="section-title">Short Game</div>
+        <div class="section-desc">Chipping, pitching, and bunker play — the scoring zone.</div>
+      </div>
+      <div class="subsection-label">Comfort ratings</div>
+      <div class="field-group">
+        <div class="field-label">Bump and run / low chip</div>
+        <div class="slider-value" id="br_val">5/10</div>
+        <div class="slider-descriptor" id="br_desc">Neutral</div>
+        <div class="slider-wrapper">
+          <input type="range" min="1" max="10" value="5" id="br_conf" name="br_conf" oninput="updateSlider('br_conf','br_val','br_desc',confDescriptors)">
+          <div class="slider-labels"><span>Not comfortable</span><span>Very comfortable</span></div>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">High lofted chip / flop</div>
+        <div class="slider-value" id="hlc_val">5/10</div>
+        <div class="slider-descriptor" id="hlc_desc">Neutral</div>
+        <div class="slider-wrapper">
+          <input type="range" min="1" max="10" value="5" id="hlc_conf" name="hlc_conf" oninput="updateSlider('hlc_conf','hlc_val','hlc_desc',confDescriptors)">
+          <div class="slider-labels"><span>Not comfortable</span><span>Very comfortable</span></div>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Pitch shots (20–60 yards)</div>
+        <div class="slider-value" id="pitch_val">5/10</div>
+        <div class="slider-descriptor" id="pitch_desc">Neutral</div>
+        <div class="slider-wrapper">
+          <input type="range" min="1" max="10" value="5" id="pitch_conf" name="pitch_conf" oninput="updateSlider('pitch_conf','pitch_val','pitch_desc',confDescriptors)">
+          <div class="slider-labels"><span>Not comfortable</span><span>Very comfortable</span></div>
+        </div>
+      </div>
+      <hr class="field-divider">
+      <div class="subsection-label">Bunkers</div>
+      <div class="field-group">
+        <div class="field-label">Greenside bunker shots</div>
+        <div class="slider-value" id="gsb_val">5/10</div>
+        <div class="slider-descriptor" id="gsb_desc">Neutral</div>
+        <div class="slider-wrapper">
+          <input type="range" min="1" max="10" value="5" id="gsb_conf" name="gsb_conf" oninput="updateSlider('gsb_conf','gsb_val','gsb_desc',confDescriptors)">
+          <div class="slider-labels"><span>Not comfortable</span><span>Very comfortable</span></div>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Fairway / long bunker shots</div>
+        <div class="slider-value" id="fb_val">5/10</div>
+        <div class="slider-descriptor" id="fb_desc">Neutral</div>
+        <div class="slider-wrapper">
+          <input type="range" min="1" max="10" value="5" id="fb_conf" name="fb_conf" oninput="updateSlider('fb_conf','fb_val','fb_desc',confDescriptors)">
+          <div class="slider-labels"><span>Not comfortable</span><span>Very comfortable</span></div>
+        </div>
+      </div>
+      <hr class="field-divider">
+      <div class="field-group">
+        <label for="goto_chip">Go-to club around the green</label>
+        <input type="text" id="goto_chip" name="goto_chip" placeholder="e.g. 52° wedge, PW for bump and run, varies by shot">
+      </div>
+      <div class="field-group">
+        <div class="field-label">How well do you judge distance around the green?</div>
+        <div class="option-grid cols-auto">
+          <div class="option-card"><input type="radio" name="sg_distance" id="sgd1" value="rarely"><label for="sgd1">Rarely right</label></div>
+          <div class="option-card"><input type="radio" name="sg_distance" id="sgd2" value="sometimes"><label for="sgd2">Sometimes</label></div>
+          <div class="option-card"><input type="radio" name="sg_distance" id="sgd3" value="usually"><label for="sgd3">Usually</label></div>
+          <div class="option-card"><input type="radio" name="sg_distance" id="sgd4" value="always"><label for="sgd4">Almost always</label></div>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Typical short game mistakes (select all that apply)</div>
+        <div class="option-grid cols-2">
+          <div class="option-card"><input type="checkbox" name="sg_mistakes" id="sgm1" value="chunk_fat"><label for="sgm1">Chunk / fat shots</label></div>
+          <div class="option-card"><input type="checkbox" name="sg_mistakes" id="sgm2" value="blade_thin"><label for="sgm2">Blade / thin shots</label></div>
+          <div class="option-card"><input type="checkbox" name="sg_mistakes" id="sgm3" value="distance_control"><label for="sgm3">Poor distance control</label></div>
+          <div class="option-card"><input type="checkbox" name="sg_mistakes" id="sgm4" value="wrong_club"><label for="sgm4">Wrong club selection</label></div>
+          <div class="option-card"><input type="checkbox" name="sg_mistakes" id="sgm5" value="decel"><label for="sgm5">Deceleration through impact</label></div>
+          <div class="option-card"><input type="checkbox" name="sg_mistakes" id="sgm6" value="bunker_leave"><label for="sgm6">Leave it in the bunker</label></div>
+          <div class="option-card"><input type="checkbox" name="sg_mistakes" id="sgm7" value="club_doubt"><label for="sgm7">Don't trust my club choice</label></div>
+          <div class="option-card"><input type="checkbox" name="sg_mistakes" id="sgm8" value="inconsistent_contact"><label for="sgm8">Inconsistent contact</label></div>
+        </div>
+      </div>
+      <div class="field-group">
+        <label for="sg_struggles">Biggest struggles around the green</label>
+        <textarea id="sg_struggles" name="sg_struggles" placeholder="e.g. Fine when I have room but tighten up when there's not much green to work with..."></textarea>
+      </div>
+    </div>
+    <div class="form-nav">
+      <button class="btn btn-back" onclick="prevSection(4)">← Back</button>
+      <button class="btn btn-primary" onclick="nextSection(4)">Continue →</button>
+    </div>
+    <div class="section-step-info">Section 5 of 8</div>
+  </div>
+  <div class="form-section" id="section-5">
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-number">Section 6 of 8</div>
+        <div class="section-title">Putting</div>
+        <div class="section-desc">The scoring game. More strokes are won and lost on the greens than anywhere else.</div>
+      </div>
+      <div class="subsection-label">Confidence ratings</div>
+      <div class="field-group">
+        <div class="field-label">Putts under 5 feet</div>
+        <div class="slider-value" id="sp_val">5/10</div>
+        <div class="slider-descriptor" id="sp_desc">Neutral</div>
+        <div class="slider-wrapper">
+          <input type="range" min="1" max="10" value="5" id="sp_conf" name="sp_conf" oninput="updateSlider('sp_conf','sp_val','sp_desc',puttDescriptors)">
+          <div class="slider-labels"><span>Miss a lot</span><span>Automatic</span></div>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">6–15 foot range</div>
+        <div class="slider-value" id="mp_val">5/10</div>
+        <div class="slider-descriptor" id="mp_desc">Neutral</div>
+        <div class="slider-wrapper">
+          <input type="range" min="1" max="10" value="5" id="mp_conf" name="mp_conf" oninput="updateSlider('mp_conf','mp_val','mp_desc',puttDescriptors)">
+          <div class="slider-labels"><span>Rarely close</span><span>Make my share</span></div>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Lag putts (25+ feet)</div>
+        <div class="slider-value" id="lag_val">5/10</div>
+        <div class="slider-descriptor" id="lag_desc">Neutral</div>
+        <div class="slider-wrapper">
+          <input type="range" min="1" max="10" value="5" id="lag_conf" name="lag_conf" oninput="updateSlider('lag_conf','lag_val','lag_desc',puttDescriptors)">
+          <div class="slider-labels"><span>3-putt zone</span><span>Great distance control</span></div>
+        </div>
+      </div>
+      <hr class="field-divider">
+      <div class="field-group">
+        <div class="field-label">Typical miss direction on putts</div>
+        <div class="option-grid cols-auto">
+          <div class="option-card"><input type="radio" name="putt_miss" id="pm1" value="left"><label for="pm1">Left</label></div>
+          <div class="option-card"><input type="radio" name="putt_miss" id="pm2" value="right"><label for="pm2">Right</label></div>
+          <div class="option-card"><input type="radio" name="putt_miss" id="pm3" value="short"><label for="pm3">Short</label></div>
+          <div class="option-card"><input type="radio" name="putt_miss" id="pm4" value="long"><label for="pm4">Long / past</label></div>
+          <div class="option-card"><input type="radio" name="putt_miss" id="pm5" value="no_pattern"><label for="pm5">No pattern</label></div>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Struggle more with...</div>
+        <div class="option-grid cols-3">
+          <div class="option-card"><input type="radio" name="putt_struggle" id="ps1" value="green_reading"><label for="ps1">Green reading</label></div>
+          <div class="option-card"><input type="radio" name="putt_struggle" id="ps2" value="distance_control"><label for="ps2">Distance control</label></div>
+          <div class="option-card"><input type="radio" name="putt_struggle" id="ps3" value="both"><label for="ps3">Both equally</label></div>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">How do you handle downhill putts?</div>
+        <div class="option-grid cols-2">
+          <div class="option-card"><input type="radio" name="downhill_putts" id="dp1" value="comfortable"><label for="dp1">Comfortable — no issue</label></div>
+          <div class="option-card"><input type="radio" name="downhill_putts" id="dp2" value="slightly_uneasy"><label for="dp2">Slightly uneasy</label></div>
+          <div class="option-card"><input type="radio" name="downhill_putts" id="dp3" value="struggle"><label for="dp3">Struggle with speed</label></div>
+          <div class="option-card"><input type="radio" name="downhill_putts" id="dp4" value="avoid"><label for="dp4">Try to avoid them!</label></div>
+        </div>
+      </div>
+      <hr class="field-divider">
+      <div class="subsection-label">Routine and setup</div>
+      <div class="field-group">
+        <div class="field-label">Do you use a consistent pre-putt routine?</div>
+        <div class="option-grid cols-3">
+          <div class="option-card"><input type="radio" name="putt_routine" id="pr1" value="never"><label for="pr1">Not really</label></div>
+          <div class="option-card"><input type="radio" name="putt_routine" id="pr2" value="sometimes"><label for="pr2">Sometimes</label></div>
+          <div class="option-card"><input type="radio" name="putt_routine" id="pr3" value="always"><label for="pr3">Yes, consistently</label></div>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Do you use an alignment line or aim tool on your ball?</div>
+        <div class="option-grid cols-3">
+          <div class="option-card"><input type="radio" name="putt_align" id="pa1" value="never"><label for="pa1">Never</label></div>
+          <div class="option-card"><input type="radio" name="putt_align" id="pa2" value="sometimes"><label for="pa2">Sometimes</label></div>
+          <div class="option-card"><input type="radio" name="putt_align" id="pa3" value="always"><label for="pa3">Always</label></div>
+        </div>
+      </div>
+      <div class="field-group">
+        <label for="putting_strength">Strongest part of your putting</label>
+        <textarea id="putting_strength" name="putting_strength" rows="2" placeholder="e.g. Tempo, distance on long putts, reading subtle breaks..."></textarea>
+      </div>
+    </div>
+    <div class="form-nav">
+      <button class="btn btn-back" onclick="prevSection(5)">← Back</button>
+      <button class="btn btn-primary" onclick="nextSection(5)">Continue →</button>
+    </div>
+    <div class="section-step-info">Section 6 of 8</div>
+  </div>
+  <div class="form-section" id="section-6">
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-number">Section 7 of 8</div>
+        <div class="section-title">On the Course</div>
+        <div class="section-desc">How you manage yourself and the course. This is where scores are really made.</div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Do you warm up before a round?</div>
+        <div class="option-grid cols-3">
+          <div class="option-card"><input type="radio" name="warmup" id="wu1" value="never"><label for="wu1">Never — straight to the tee</label></div>
+          <div class="option-card"><input type="radio" name="warmup" id="wu2" value="short"><label for="wu2">Short warm-up (10 min)</label></div>
+          <div class="option-card"><input type="radio" name="warmup" id="wu3" value="full"><label for="wu3">Full warm-up (30+ min)</label></div>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Do you have a pre-shot routine you use consistently?</div>
+        <div class="option-grid cols-3">
+          <div class="option-card"><input type="radio" name="preshot_routine" id="psr1" value="no"><label for="psr1">Not really</label></div>
+          <div class="option-card"><input type="radio" name="preshot_routine" id="psr2" value="sometimes"><label for="psr2">Sometimes</label></div>
+          <div class="option-card"><input type="radio" name="preshot_routine" id="psr3" value="yes"><label for="psr3">Yes, every shot</label></div>
+        </div>
+        <div class="field-hint">This is one of the most important questions on this form. Consistency of routine is the #1 separator between handicap levels.</div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">How do you respond after a bad shot?</div>
+        <div class="option-grid cols-2">
+          <div class="option-card"><input type="radio" name="bad_shot_response" id="bsr1" value="move_on"><label for="bsr1">Move on quickly — next shot</label></div>
+          <div class="option-card"><input type="radio" name="bad_shot_response" id="bsr2" value="brief_frustration"><label for="bsr2">Brief frustration, then reset</label></div>
+          <div class="option-card"><input type="radio" name="bad_shot_response" id="bsr3" value="dwells"><label for="bsr3">Dwell on it for a few holes</label></div>
+          <div class="option-card"><input type="radio" name="bad_shot_response" id="bsr4" value="snowball"><label for="bsr4">One bad hole can snowball</label></div>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">How well do you manage risk / reward decisions?</div>
+        <div class="option-grid cols-auto">
+          <div class="option-card"><input type="radio" name="risk_reward" id="rr1" value="rarely"><label for="rr1">Rarely — too aggressive</label></div>
+          <div class="option-card"><input type="radio" name="risk_reward" id="rr2" value="sometimes"><label for="rr2">Sometimes</label></div>
+          <div class="option-card"><input type="radio" name="risk_reward" id="rr3" value="usually"><label for="rr3">Usually</label></div>
+          <div class="option-card"><input type="radio" name="risk_reward" id="rr4" value="always"><label for="rr4">Always — very strategic</label></div>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-label">Do you have a course strategy before each round?</div>
+        <div class="option-grid cols-auto">
+          <div class="option-card"><input type="radio" name="course_strategy" id="cs1" value="never"><label for="cs1">Never</label></div>
+          <div class="option-card"><input type="radio" name="course_strategy" id="cs2" value="sometimes"><label for="cs2">Sometimes</label></div>
+          <div class="option-card"><input type="radio" name="course_strategy" id="cs3" value="usually"><label for="cs3">Usually</label></div>
+          <div class="option-card"><input type="radio" name="course_strategy" id="cs4" value="always"><label for="cs4">Always</label></div>
+        </div>
+      </div>
+      <div class="field-group">
+        <label for="pressure_strength">What part of your game shows up best under pressure?</label>
+        <textarea id="pressure_strength" name="pressure_strength" rows="2" placeholder="e.g. Short game, putting, driving — what do you trust when it counts?"></textarea>
+      </div>
+      <div class="field-group">
+        <label for="frequent_mistakes">Most frequent mistakes on the course</label>
+        <textarea id="frequent_mistakes" name="frequent_mistakes" rows="2" placeholder="e.g. Rushing when behind, taking on shots over water I shouldn't, losing focus after a birdie..."></textarea>
+      </div>
+      <div class="field-group">
+        <label for="uncomfortable_shots">Shots or situations that make you most uncomfortable</label>
+        <textarea id="uncomfortable_shots" name="uncomfortable_shots" rows="2" placeholder="e.g. Anything over water, tight driving holes, downhill chip shots with no green to work with..."></textarea>
+      </div>
+    </div>
+    <div class="form-nav">
+      <button class="btn btn-back" onclick="prevSection(6)">← Back</button>
+      <button class="btn btn-primary" onclick="nextSection(6)">Continue →</button>
+    </div>
+    <div class="section-step-info">Section 7 of 8</div>
+  </div>
+  <div class="form-section" id="section-7">
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-number">Section 8 of 8</div>
+        <div class="section-title">The Big Picture</div>
+        <div class="section-desc">Almost done. This is where it all comes together.</div>
+      </div>
+      <div class="field-group">
+        <label for="strengths">Top 3 strengths in your game</label>
+        <textarea id="strengths" name="strengths" rows="2" placeholder="e.g. Short game, driving accuracy, staying calm under pressure..."></textarea>
+      </div>
+      <div class="field-group">
+        <label for="weaknesses">Top 3 weaknesses (be honest — this is where the work happens)</label>
+        <textarea id="weaknesses" name="weaknesses" rows="2" placeholder="e.g. Bunkers, reading greens, losing focus after a bad hole..."></textarea>
+      </div>
+      <div class="field-group">
+        <label for="focus_goals">Specific goals or skills you want to focus on</label>
+        <textarea id="focus_goals" name="focus_goals" placeholder="e.g. Break 80 consistently, finally fix my slice, stop leaving birdie putts short..."></textarea>
+      </div>
+      <div class="field-group">
+        <label for="anything_else">Anything else I should know about your game?</label>
+        <textarea id="anything_else" name="anything_else" placeholder="Physical limitations, time constraints, equipment questions, anything on your mind — this is your space."></textarea>
+        <div class="field-hint">No detail is too small. The more context you give me, the better I can help.</div>
+      </div>
+      <hr class="field-divider">
+      <div style="background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.2); border-radius: var(--radius-lg); padding: 1.25rem 1.5rem;">
+        <div style="font-size: 13px; font-weight: 500; color: var(--gold); margin-bottom: 0.5rem; letter-spacing: 0.04em;">What happens next</div>
+        <div style="font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.6); line-height: 1.7;">I review every submission personally. Within 20 minutes you'll receive a tailored gameplan — your scoring gaps, priority areas, and a suggested lesson schedule — delivered directly to your inbox. No generic advice. No waiting.</div>
+      </div>
+    </div>
+    <div class="form-nav">
+      <button class="btn btn-back" onclick="prevSection(7)">← Back</button>
+      <button class="btn btn-submit" onclick="submitForm()">Submit My Profile →</button>
+    </div>
+    <div class="section-step-info">Section 8 of 8</div>
+  </div>
+  <div class="success-screen" id="successScreen">
+    <div class="success-icon">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M5 14l6 6L23 8" stroke="#c9a84c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <h2>Profile Submitted</h2>
+    <p>Thanks for taking the time to do this properly. It makes a real difference.</p>
+    <p>I'll review your profile and have a personalized gameplan in your inbox within 20 minutes.</p>
+    <div class="success-detail">
+      <p style="font-size:13px; color:rgba(255,255,255,0.35)">Ryan Rinneard · Director of Instruction · Mad River Golf Club<br>CPGA Class A · TPI · TrackMan · Vision54</p>
+    </div>
+  </div>
 </div>
-
-<!-- FOOTER -->
-<div class="gp-footer">&copy; 2026 RR Golf &middot; <a href="https://madriverpro.com">madriverpro.com</a></div>
-
 <script>
-var gpCurrentSection = 1;
-var gpTotalSections = 7;
-
-function gpUpdateProgress() {
-  var pct = Math.round((gpCurrentSection / gpTotalSections) * 100);
-  document.getElementById('gpProgressFill').style.width = pct + '%';
-  document.getElementById('gpProgressLabel').textContent = 'Section ' + gpCurrentSection + ' of ' + gpTotalSections;
-}
-
-function gpShowSection(num) {
-  var sections = document.querySelectorAll('.gp-section');
-  for (var i = 0; i < sections.length; i++) sections[i].classList.remove('gp-active');
-  var target = document.querySelector('[data-gp-section="' + num + '"]');
-  if (target) { target.classList.add('gp-active'); window.scrollTo({ top: 0, behavior: 'smooth' }); }
-  gpUpdateProgress();
-}
-
-function gpNext() { if (gpCurrentSection < gpTotalSections) { gpCurrentSection++; gpShowSection(gpCurrentSection); } }
-function gpPrev() { if (gpCurrentSection > 1) { gpCurrentSection--; gpShowSection(gpCurrentSection); } }
-function gpSelectChoice(el) { var s = el.parentElement.querySelectorAll('.gp-choice-btn'); for (var i = 0; i < s.length; i++) s[i].classList.remove('gp-selected'); el.classList.add('gp-selected'); }
-function gpToggleCheck(el) { el.classList.toggle('gp-checked'); var cb = el.querySelector('input[type="checkbox"]'); if (cb) cb.checked = !cb.checked; }
-function gpUpdateSlider(el) { var v = el.value; var d = el.parentElement.querySelector('.gp-slider-value'); if (d) d.textContent = v + ' / 10'; }
-
-function gpCollectData() {
-  var data = {};
-  var texts = document.querySelectorAll('#gpForm input[type="text"], #gpForm input[type="email"], #gpForm textarea');
-  for (var i = 0; i < texts.length; i++) { var n = texts[i].getAttribute('data-gp-name'); if (n && texts[i].value) data[n] = texts[i].value; }
-  var sliders = document.querySelectorAll('#gpForm input[type="range"]');
-  for (var i = 0; i < sliders.length; i++) { var n = sliders[i].getAttribute('data-gp-name'); if (n) data[n] = sliders[i].value + '/10'; }
-  var groups = document.querySelectorAll('.gp-btn-group');
-  for (var i = 0; i < groups.length; i++) { var n = groups[i].getAttribute('data-gp-name'); var sel = groups[i].querySelector('.gp-selected'); if (n && sel) data[n] = sel.textContent; }
-  var checks = document.querySelectorAll('.gp-check-group');
-  for (var i = 0; i < checks.length; i++) { var n = checks[i].getAttribute('data-gp-name'); var c = []; var cbs = checks[i].querySelectorAll('input[type="checkbox"]:checked'); for (var j = 0; j < cbs.length; j++) c.push(cbs[j].value); if (n && c.length) data[n] = c.join(', '); }
-  return data;
-}
-
-function gpSubmit() {
-  var data = gpCollectData();
-  var emailBody = '=== GOLFER PROFILE SUBMISSION ===\n\n';
-  for (var key in data) emailBody += key + ': ' + data[key] + '\n\n';
-
-  var btn = document.querySelector('.gp-nav-submit');
-  btn.textContent = 'Submitting...'; btn.style.pointerEvents = 'none'; btn.style.opacity = '0.6';
-
-  var payload = { access_key: 'e8454555-5132-4ce0-b73d-0102cc9f30eb', subject: 'RR Golf - Golfer Profile: ' + (data['Full Name'] || 'Unknown'), from_name: 'RR Golf - Golfer Profile', message: emailBody };
-  for (var key in data) payload[key] = data[key];
-
-  fetch('https://api.web3forms.com/submit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
-  .then(function(r) { return r.json(); })
-  .then(function(result) {
-    if (result.success) { document.getElementById('gpForm').style.display = 'none'; document.querySelector('.gp-progress-wrap').style.display = 'none'; document.getElementById('gpSuccess').classList.add('gp-active'); }
-    else { alert('Something went wrong. Please try again.'); btn.textContent = 'Submit Profile →'; btn.style.pointerEvents = 'auto'; btn.style.opacity = '1'; }
-  })
-  .catch(function() { alert('Connection error. Please try again.'); btn.textContent = 'Submit Profile →'; btn.style.pointerEvents = 'auto'; btn.style.opacity = '1'; });
-}
-
-gpUpdateProgress();
+  const TOTAL_SECTIONS = 8;
+  const sectionLabels = ["Why You're Here","About You","Long Game","Approach Game","Short Game","Putting","On the Course","The Big Picture"];
+  let currentSection = 0;
+  const confDescriptors = [
+    "Avoid this club entirely","Very low confidence","Shaky — sometimes OK","Below average","Getting there",
+    "Neutral — hit or miss","Fairly confident","Solid most of the time","Very reliable","Elite — love this club"
+  ];
+  const puttDescriptors = [
+    "Really struggle here","Low confidence","A work in progress","Below average","Getting there",
+    "Neutral — hit or miss","Fairly confident","Reliable most of the time","Very strong","This is a weapon"
+  ];
+  function updateSlider(inputId, valId, descId, descriptors) {
+    const val = parseInt(document.getElementById(inputId).value);
+    document.getElementById(valId).textContent = val + '/10';
+    document.getElementById(descId).textContent = descriptors[val - 1];
+    const input = document.getElementById(inputId);
+    const pct = (val - 1) / 9 * 100;
+    input.style.background = 'linear-gradient(to right, #c9a84c ' + pct + '%, rgba(255,255,255,0.15) ' + pct + '%)';
+  }
+  function initSliders() {
+    document.querySelectorAll('input[type="range"]').forEach(function(input) {
+      const val = parseInt(input.value);
+      const pct = (val - 1) / 9 * 100;
+      input.style.background = 'linear-gradient(to right, #c9a84c ' + pct + '%, rgba(255,255,255,0.15) ' + pct + '%)';
+    });
+  }
+  function buildProgress() {
+    const track = document.getElementById('progressTrack');
+    track.innerHTML = '';
+    for (let i = 0; i < TOTAL_SECTIONS; i++) {
+      const step = document.createElement('div');
+      step.className = 'progress-step';
+      if (i < currentSection) step.classList.add('complete');
+      if (i === currentSection) step.classList.add('active');
+      track.appendChild(step);
+    }
+    document.getElementById('progressLabel').textContent = sectionLabels[currentSection];
+    document.getElementById('progressFraction').textContent = (currentSection + 1) + ' of ' + TOTAL_SECTIONS;
+  }
+  function showSection(n) {
+    document.querySelectorAll('.form-section').forEach(function(s) { s.classList.remove('active'); });
+    const target = document.getElementById('section-' + n);
+    if (target) { target.classList.add('active'); }
+    currentSection = n;
+    buildProgress();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  function nextSection(from) { showSection(from + 1); }
+  function prevSection(from) { showSection(from - 1); }
+  function submitForm() {
+    const data = collectFormData();
+    const subject = encodeURIComponent('=== GOLFER PROFILE SUBMISSION === ' + (data.full_name || 'New Submission'));
+    const body = encodeURIComponent(formatEmailBody(data));
+    window.location.href = 'mailto:ryan@madriverpro.com?subject=' + subject + '&body=' + body;
+    document.getElementById('progressContainer').style.display = 'none';
+    document.querySelectorAll('.form-section').forEach(function(s) { s.classList.remove('active'); });
+    document.getElementById('successScreen').classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  function collectFormData() {
+    const data = {};
+    document.querySelectorAll('input[type="text"], input[type="email"], textarea').forEach(function(el) {
+      if (el.id) data[el.id] = el.value;
+    });
+    document.querySelectorAll('input[type="radio"]:checked').forEach(function(el) {
+      data[el.name] = el.value;
+    });
+    const cbGroups = {};
+    document.querySelectorAll('input[type="checkbox"]:checked').forEach(function(el) {
+      if (!cbGroups[el.name]) cbGroups[el.name] = [];
+      cbGroups[el.name].push(el.value);
+    });
+    Object.assign(data, cbGroups);
+    document.querySelectorAll('input[type="range"]').forEach(function(el) {
+      data[el.name] = el.value + '/10';
+    });
+    return data;
+  }
+  function formatEmailBody(d) {
+    const lines = ['=== GOLFER PROFILE SUBMISSION ===', ''];
+    const add = function(label, key) {
+      const val = Array.isArray(d[key]) ? d[key].join(', ') : (d[key] || '—');
+      lines.push(label + ': ' + val);
+    };
+    lines.push('--- WHY THEY ARE HERE ---');
+    add('What brought them', 'why_here');
+    add('Previous coaching', 'coaching_before');
+    add('Previous work', 'prev_coaching');
+    lines.push('');
+    lines.push('--- ABOUT ---');
+    add('Full Name', 'full_name');
+    add('Email', 'email');
+    add('Age', 'age');
+    add('Gender', 'gender');
+    add('Years Playing', 'years');
+    add('Handicap', 'handicap');
+    add('Goals', 'goals');
+    add('Ideal Round', 'ideal_round');
+    lines.push('');
+    lines.push('--- LONG GAME ---');
+    add('Tee Club', 'tee_club');
+    add('Drive Distance', 'drive_dist');
+    add('Fairway Pct', 'fairway_pct');
+    add('Driver Miss Direction', 'driver_miss_dir');
+    add('Face Contact Driver', 'face_contact');
+    add('Fairway Wood Confidence', 'fw_conf');
+    add('Fairway Wood Miss', 'fw_miss');
+    add('Long Iron Confidence', 'li_conf');
+    add('Long Game Challenges', 'long_game_challenges');
+    lines.push('');
+    lines.push('--- APPROACH GAME ---');
+    add('6-8 Iron Confidence', 'mi_conf');
+    add('9 Iron-PW Confidence', 'si_conf');
+    add('Wedge Confidence', 'wedge_conf');
+    add('Know Distances', 'know_distances');
+    add('Approach Distance', 'approach_dist');
+    add('Approach Miss', 'approach_miss');
+    add('Iron Face Contact', 'iron_contact');
+    add('Par 3 Comfort', 'par3_comfort');
+    add('GIR Average', 'gir');
+    add('Approach Challenges', 'approach_challenges');
+    lines.push('');
+    lines.push('--- SHORT GAME ---');
+    add('Bump and Run', 'br_conf');
+    add('High Lofted Chip', 'hlc_conf');
+    add('Pitch Shots', 'pitch_conf');
+    add('Greenside Bunker', 'gsb_conf');
+    add('Fairway Bunker', 'fb_conf');
+    add('Go-To Chip Club', 'goto_chip');
+    add('Distance Judgment', 'sg_distance');
+    add('Short Game Mistakes', 'sg_mistakes');
+    add('Short Game Struggles', 'sg_struggles');
+    lines.push('');
+    lines.push('--- PUTTING ---');
+    add('Putts Under 5ft', 'sp_conf');
+    add('6-15ft Putts', 'mp_conf');
+    add('Lag Putts', 'lag_conf');
+    add('Putt Miss Direction', 'putt_miss');
+    add('Putting Struggle', 'putt_struggle');
+    add('Downhill Putts', 'downhill_putts');
+    add('Pre-Putt Routine', 'putt_routine');
+    add('Alignment Tool', 'putt_align');
+    add('Putting Strength', 'putting_strength');
+    lines.push('');
+    lines.push('--- ON COURSE ---');
+    add('Warm-Up Habit', 'warmup');
+    add('Pre-Shot Routine', 'preshot_routine');
+    add('Response to Bad Shots', 'bad_shot_response');
+    add('Risk Reward Management', 'risk_reward');
+    add('Course Strategy', 'course_strategy');
+    add('Pressure Strength', 'pressure_strength');
+    add('Frequent Mistakes', 'frequent_mistakes');
+    add('Uncomfortable Shots', 'uncomfortable_shots');
+    lines.push('');
+    lines.push('--- BIG PICTURE ---');
+    add('Top Strengths', 'strengths');
+    add('Top Weaknesses', 'weaknesses');
+    add('Focus Goals', 'focus_goals');
+    add('Anything Else', 'anything_else');
+    return lines.join('\n');
+  }
+  document.querySelectorAll('input[name="coaching_before"]').forEach(function(el) {
+    el.addEventListener('change', function() {
+      const group = document.getElementById('prevCoachingGroup');
+      group.style.display = el.value !== 'never' ? 'block' : 'none';
+    });
+  });
+  initSliders();
+  buildProgress();
 </script>
-<script src="../script.js"></script>
 </body>
 </html>
