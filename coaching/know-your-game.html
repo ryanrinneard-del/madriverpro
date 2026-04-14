@@ -1072,15 +1072,36 @@
   }
   function nextSection(from) { showSection(from + 1); }
   function prevSection(from) { showSection(from - 1); }
-  function submitForm() {
+  const WEB3FORMS_ACCESS_KEY = 'e8454555-5132-4ce0-b73d-0102cc9f30eb';
+  async function submitForm() {
     const data = collectFormData();
-    const subject = encodeURIComponent('=== GOLFER PROFILE SUBMISSION === ' + (data.full_name || 'New Submission'));
-    const body = encodeURIComponent(formatEmailBody(data));
-    window.location.href = 'mailto:ryan@madriverpro.com?subject=' + subject + '&body=' + body;
-    document.getElementById('progressContainer').style.display = 'none';
-    document.querySelectorAll('.form-section').forEach(function(s) { s.classList.remove('active'); });
-    document.getElementById('successScreen').classList.add('active');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const submitBtn = document.querySelector('.btn-submit');
+    const originalText = submitBtn ? submitBtn.textContent : '';
+    if (submitBtn) { submitBtn.textContent = 'Sending...'; submitBtn.disabled = true; }
+    const payload = {
+      access_key: WEB3FORMS_ACCESS_KEY,
+      subject: '=== GOLFER PROFILE SUBMISSION === ' + (data.full_name || 'New Submission'),
+      from_name: data.full_name || 'Golfer Profile',
+      replyto: data.email || '',
+      email: data.email || '',
+      message: formatEmailBody(data)
+    };
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) { throw new Error(json.message || 'Submission failed'); }
+      document.getElementById('progressContainer').style.display = 'none';
+      document.querySelectorAll('.form-section').forEach(function(s) { s.classList.remove('active'); });
+      document.getElementById('successScreen').classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (err) {
+      if (submitBtn) { submitBtn.textContent = originalText; submitBtn.disabled = false; }
+      alert('Sorry — there was a problem submitting your profile. Please try again, or email ryan@madriverpro.com directly.\n\n(' + err.message + ')');
+    }
   }
   function collectFormData() {
     const data = {};
