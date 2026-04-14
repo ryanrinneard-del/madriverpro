@@ -150,7 +150,7 @@ function renderList(submissions) {
 }
 
 async function approve(id, btn) {
-  if (!confirm('Send the three PDFs to the student and ryan@madriverpro.com?')) return;
+  if (!confirm('Send the three PDFs to the student and ryan@rrgolfperformance.com?')) return;
   btn.disabled = true; btn.textContent = 'Sending…';
   const errEl = document.querySelector(`[data-err="${CSS.escape(id)}"]`);
   errEl.textContent = '';

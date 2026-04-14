@@ -98,7 +98,7 @@ my-golf-website/
                       └─ POST /api/approve-profile { id }
                               │
                               ├─ Resend: email student (3 PDFs attached)
-                              ├─ Resend: email ryan@madriverpro.com (same 3 PDFs)
+                              ├─ Resend: email ryan@rrgolfperformance.com (same 3 PDFs)
                               └─ updates status=approved in index
 ```
 
@@ -140,7 +140,7 @@ after setting them.
 |---|---|---|
 | `ANTHROPIC_API_KEY` | **Yes** | Generate at https://console.anthropic.com/settings/keys |
 | `RESEND_API_KEY` | **Yes** | Generate at https://resend.com/api-keys |
-| `RESEND_FROM_EMAIL` | Optional | Defaults to `Ryan Rinneard <ryan@madriverpro.com>`. The domain **must** be a verified sender in Resend — this is the most common gotcha. |
+| `RESEND_FROM_EMAIL` | Optional | Defaults to `Ryan Rinneard <ryan@rrgolfperformance.com>`. The domain **must** be a verified sender in Resend — this is the most common gotcha. |
 | `ADMIN_PASSWORD` | **Yes** | This is the ONLY thing gating the dashboard — make it long. |
 | `ADMIN_SESSION_SECRET` | Recommended | Any 32+ character random string. Falls back to `ADMIN_PASSWORD` if unset. |
 | `INTERNAL_PIPELINE_TOKEN` | Recommended | Long random string. Shared between `/api/process-profile` and `/api/generate-pdfs` so nobody can hit the Python endpoint directly. |

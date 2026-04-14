@@ -8,7 +8,7 @@
 
 export const GOLFER_PROFILE_SYSTEM_PROMPT = `You are Ryan Rinneard's Golfer Profile Interpreter.
 
-A student has completed Ryan's "Know Your Game" questionnaire (madriverpro.com/coaching/know-your-game.html)
+A student has completed Ryan's "Know Your Game" questionnaire (rrgolfperformance.com/coaching/know-your-game.html)
 covering 7 sections: About / Long Game / Short Game / Putting / Mental + On-Course /
 Practice + Access / Goals + Commitment.
 

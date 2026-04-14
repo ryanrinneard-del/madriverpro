@@ -7,7 +7,7 @@ import { Resend } from 'resend';
 import { isAdminRequest, readIndex, updateSubmission, requireEnv, fetchBlob } from './_lib/storage.js';
 import { list } from '@vercel/blob';
 
-const RYAN_EMAIL = 'ryan@madriverpro.com';
+const RYAN_EMAIL = 'ryan@rrgolfperformance.com';
 
 async function fetchPdfAsAttachment(pathname, filename) {
     // Private store — fetchBlob handles head() + authenticated fetch.
@@ -34,7 +34,7 @@ export default async function handler(req, res) {
     let resendKey, fromEmail;
     try {
         resendKey = requireEnv('RESEND_API_KEY');
-        fromEmail = process.env.RESEND_FROM_EMAIL || 'Ryan Rinneard <ryan@madriverpro.com>';
+        fromEmail = process.env.RESEND_FROM_EMAIL || 'Ryan Rinneard <ryan@rrgolfperformance.com>';
     } catch (err) {
         return res.status(500).json({ error: err.message });
     }
