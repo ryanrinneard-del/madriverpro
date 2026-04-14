@@ -4,13 +4,14 @@
 // Resend, then marks the submission as "approved".
 
 import { Resend } from 'resend';
-import { isAdminRequest, readIndex, updateSubmission, requireEnv } from './_lib/storage.js';
+import { isAdminRequest, readIndex, updateSubmission, requireEnv, fetchBlob } from './_lib/storage.js';
 import { list } from '@vercel/blob';
 
 const RYAN_EMAIL = 'ryan@madriverpro.com';
 
-async function fetchPdfAsAttachment(url, filename) {
-    const r = await fetch(url, { cache: 'no-store' });
+async function fetchPdfAsAttachment(pathname, filename) {
+    // Private store — fetchBlob handles head() + authenticated fetch.
+    const r = await fetchBlob(pathname);
     if (!r.ok) throw new Error(`Failed to fetch ${filename}: ${r.status}`);
     const ab = await r.arrayBuffer();
     return {
@@ -44,14 +45,14 @@ export default async function handler(req, res) {
     if (!submission) return res.status(404).json({ error: 'Submission not found.' });
     if (!submission.studentEmail) return res.status(400).json({ error: 'Submission has no student email.' });
 
-    // Locate the three PDF blob URLs
+    // Confirm the three PDFs exist under profiles/{id}/ before emailing.
     const token = process.env.BLOB_READ_WRITE_TOKEN;
     const blobs = await list({ prefix: `profiles/${id}/`, token });
-    const byName = Object.fromEntries(
-        blobs.blobs.map((b) => [b.pathname.split('/').pop(), b.url])
+    const present = new Set(
+        blobs.blobs.map((b) => b.pathname.split('/').pop())
     );
     const required = ['session1_plan.pdf', 'arc.pdf', 'dossier.pdf'];
-    const missing = required.filter((n) => !byName[n]);
+    const missing = required.filter((n) => !present.has(n));
     if (missing.length) {
         return res.status(409).json({
             error: `PDFs not ready: missing ${missing.join(', ')}`,
@@ -61,7 +62,7 @@ export default async function handler(req, res) {
     let attachments;
     try {
         attachments = await Promise.all(
-            required.map((n) => fetchPdfAsAttachment(byName[n], n))
+            required.map((n) => fetchPdfAsAttachment(`profiles/${id}/${n}`, n))
         );
     } catch (err) {
         console.error('Attachment fetch error:', err);

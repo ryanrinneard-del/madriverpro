@@ -1,0 +1,31 @@
+Switch profile pipeline to Private Vercel Blob store
+
+The KYG review pipeline originally assumed a Public blob store, which
+would have exposed profiles/_index.json and every submission.json at a
+guessable path. Switched to Private and updated the read paths
+accordingly.
+
+Changes:
+- api/get-asset.js (new): admin-auth gated proxy endpoint. Verifies the
+  rr_admin cookie, resolves the target blob with head(pathname, {token}),
+  and streams the bytes back with the correct Content-Type. Maps kind ->
+  profiles/{id}/{file} with an allowlist so callers can't traverse.
+- api/list-submissions.js: returns /api/get-asset?id=...&kind=... proxy
+  URLs in assets.* instead of raw blob URLs. Reads pdfs.json via
+  fetchBlob(pathname) so the token travels with the request.
+- api/approve-profile.js: fetches PDF attachments via fetchBlob(pathname)
+  instead of fetching raw blob URLs directly, so it works against a
+  Private store.
+- api/generate-pdfs.py: dropped the x-access-public header from the Blob
+  REST PUTs so new uploads inherit the store's Private ACL.
+- api/_lib/storage.js: documented that the store is Private and that
+  @vercel/blob's access: 'public' put() param is an SDK flag (URL shape),
+  not a store ACL override.
+- admin/profile-review.html: no changes required - it already consumes
+  assets.analysis / assets.session1_plan / assets.arc / assets.dossier /
+  assets.submission, which now resolve to proxy URLs transparently.
+
+Net effect: artifact URLs are no longer publicly fetchable; every read
+goes through an admin-cookie check server-side.
+
+Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>

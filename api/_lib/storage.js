@@ -4,6 +4,11 @@
 //   - Vercel Blob is used for all persisted artifacts (submissions, analyses, PDFs).
 //   - Requires the env var BLOB_READ_WRITE_TOKEN (auto-provisioned when you add
 //     Vercel Blob to the project in the Vercel dashboard).
+//   - The blob store is configured as **Private** in the Vercel dashboard.
+//     Reads are mediated by /api/get-asset.js which verifies the admin cookie
+//     before streaming content; uploads happen server-side via this helper.
+//     The `access: 'public'` option below is the @vercel/blob SDK flag — it
+//     controls the shape of the returned URL, not the store's ACL.
 //   - A single JSON "index" file tracks submissions so the admin dashboard can
 //     list them without scanning the blob store.
 //

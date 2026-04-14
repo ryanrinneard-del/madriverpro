@@ -44,7 +44,6 @@ def _blob_put(pathname: str, data: bytes, content_type: str) -> str:
             'x-api-version': '7',
             'x-add-random-suffix': '0',
             'x-allow-overwrite': '1',
-            'access': 'public',
         },
     )
     with urllib_request.urlopen(req, timeout=30) as resp:
