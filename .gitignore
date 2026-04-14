@@ -2,3 +2,14 @@
 .env
 .env.*
 .env.local
+!.env.example
+
+# macOS
+.DS_Store
+
+# Editor / local tooling
+.claude/
+
+# Python
+__pycache__/
+*.pyc
