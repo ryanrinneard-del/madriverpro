@@ -3,9 +3,9 @@
 // Accepts a submitted Know Your Game profile, calls Anthropic's Claude API
 // (claude-sonnet-4-20250514) with the Golfer Profile Interpreter prompt bound
 // to a structured-output tool, and persists:
-//   profiles/{id}/submission.json   — the raw form data
-//   profiles/{id}/analysis.json     — Claude's structured payload
-//   profiles/{id}/analysis.md       — markdown derived from analysis.json
+//   profiles/{id}/submission.json   â the raw form data
+//   profiles/{id}/analysis.json     â Claude's structured payload
+//   profiles/{id}/analysis.md       â markdown derived from analysis.json
 // Then fires an internal call to /api/generate-pdfs.
 
 import Anthropic from '@anthropic-ai/sdk';
@@ -49,7 +49,7 @@ function formatProfileForClaude(data) {
     for (const [key, value] of Object.entries(data)) {
         if (key === 'website') continue;
         const pretty = key.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
-        const val = Array.isArray(value) ? value.join(', ') : (value || '—');
+        const val = Array.isArray(value) ? value.join(', ') : (value || 'â');
         lines.push(`${pretty}: ${val}`);
     }
     return lines.join('\n');
@@ -58,7 +58,7 @@ function formatProfileForClaude(data) {
 async function notifyRyan(submissionId, studentName, studentEmail, formData, host, proto) {
     const resendKey = process.env.RESEND_API_KEY;
     if (!resendKey) {
-        console.warn('RESEND_API_KEY not set — skipping Ryan notification email.');
+        console.warn('RESEND_API_KEY not set â skipping Ryan notification email.');
         return;
     }
 
@@ -70,7 +70,7 @@ async function notifyRyan(submissionId, studentName, studentEmail, formData, hos
     for (const [key, value] of Object.entries(formData)) {
         if (key === 'website') continue;
         const pretty = key.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
-        const val = Array.isArray(value) ? value.join(', ') : (value || '—');
+        const val = Array.isArray(value) ? value.join(', ') : (value || 'â');
         summaryLines.push(`<tr><td style="padding:4px 12px 4px 0;font-weight:600;vertical-align:top;white-space:nowrap;">${pretty}</td><td style="padding:4px 0;vertical-align:top;">${val}</td></tr>`);
     }
 
@@ -122,8 +122,6 @@ async function triggerPdfGeneration(submissionId, host, proto) {
     }
 }
 
-export const config = { maxDuration: 60 };
-
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method not allowed' });
@@ -136,7 +134,7 @@ export default async function handler(req, res) {
 
     const data = req.body || {};
     if (data.website) {
-        // Honeypot — pretend success.
+        // Honeypot â pretend success.
         return res.status(200).json({ success: true });
     }
     if (!data.full_name || !data.email) {
