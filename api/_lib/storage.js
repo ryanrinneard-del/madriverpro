@@ -7,8 +7,7 @@
 //   - The blob store is configured as **Private** in the Vercel dashboard.
 //     Reads are mediated by /api/get-asset.js which verifies the admin cookie
 //     before streaming content; uploads happen server-side via this helper.
-//     The `access: 'public'` option below is the @vercel/blob SDK flag — it
-//     controls the shape of the returned URL, not the store's ACL.
+//     The `access: 'private'` option below matches the store's ACL setting.
 //   - A single JSON "index" file tracks submissions so the admin dashboard can
 //     list them without scanning the blob store.
 //
@@ -52,7 +51,7 @@ export async function readIndex() {
 export async function writeIndex(index) {
     const token = requireEnv('BLOB_READ_WRITE_TOKEN');
     await put(INDEX_KEY, JSON.stringify(index, null, 2), {
-        access: 'public',
+        access: 'private',
         token,
         contentType: 'application/json',
         addRandomSuffix: false,
@@ -80,7 +79,7 @@ export async function updateSubmission(id, patch) {
 export async function putJson(key, obj) {
     const token = requireEnv('BLOB_READ_WRITE_TOKEN');
     const blob = await put(key, JSON.stringify(obj, null, 2), {
-        access: 'public',
+        access: 'private',
         token,
         contentType: 'application/json',
         addRandomSuffix: false,
@@ -92,7 +91,7 @@ export async function putJson(key, obj) {
 export async function putText(key, text, contentType = 'text/plain; charset=utf-8') {
     const token = requireEnv('BLOB_READ_WRITE_TOKEN');
     const blob = await put(key, text, {
-        access: 'public',
+        access: 'private',
         token,
         contentType,
         addRandomSuffix: false,
@@ -104,7 +103,7 @@ export async function putText(key, text, contentType = 'text/plain; charset=utf-
 export async function putBinary(key, buffer, contentType) {
     const token = requireEnv('BLOB_READ_WRITE_TOKEN');
     const blob = await put(key, buffer, {
-        access: 'public',
+        access: 'private',
         token,
         contentType,
         addRandomSuffix: false,
@@ -149,7 +148,7 @@ function sessionSecret() {
 
 export function issueAdminCookie() {
     const secret = sessionSecret();
-    if (!secret) throw new Error('Cannot issue admin cookie — no secret configured');
+    if (!secret) throw new Error('Cannot issue admin cookie \u2014 no secret configured');
     const exp = Math.floor(Date.now() / 1000) + COOKIE_MAX_AGE;
     const payload = `admin.${exp}`;
     const sig = createHmac('sha256', secret).update(payload).digest('hex');
