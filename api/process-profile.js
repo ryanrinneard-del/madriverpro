@@ -26,6 +26,8 @@ const RYAN_EMAIL = 'ryan@rrgolfperformance.com';
 const MODEL = 'claude-sonnet-4-20250514';
 const MAX_TOKENS = 8192;
 
+export const config = { maxDuration: 60 };
+
 // Simple per-instance rate limiter.
 const rateLimit = new Map();
 const RATE_LIMIT_WINDOW = 60 * 1000;
@@ -79,7 +81,7 @@ async function notifyRyan(submissionId, studentName, studentEmail, formData, hos
 ${summaryLines.join('\n')}
 </table>
 <p style="margin-top:20px;">
-  The AI analysis and PDFs are being generated now. Once they\u2019re ready you can
+  The AI analysis and PDFs are being generated now. Once they're ready you can
   review and approve them here:<br/>
   <a href="${dashboardUrl}" style="font-weight:600;">${dashboardUrl}</a>
 </p>
@@ -173,16 +175,6 @@ export default async function handler(req, res) {
         return res.status(500).json({ error: 'Failed to save submission.' });
     }
 
-    // ---- Respond immediately so the student is not waiting on the AI ----
-    const host = req.headers['x-forwarded-host'] || req.headers.host;
-    const proto = (req.headers['x-forwarded-proto'] || 'https').split(',')[0];
-    res.status(200).json({ success: true, id });
-
-    // ---- Everything below runs after the response, in remaining function time ----
-
-    // Notify Ryan via email (fire-and-forget).
-    notifyRyan(id, studentName, studentEmail, data, host, proto).catch(() => {});
-
     // --- Anthropic call with forced tool use for structured output ---
     try {
         const anthropic = new Anthropic({ apiKey: anthropicKey });
@@ -211,11 +203,18 @@ export default async function handler(req, res) {
         await putText(`profiles/${id}/analysis.md`, md, 'text/markdown; charset=utf-8');
 
         await updateSubmission(id, { status: 'pdf-pending' });
-
-        // Kick off PDF generation now that analysis is saved.
-        triggerPdfGeneration(id, host, proto).catch(() => {});
     } catch (err) {
-        console.error('Anthropic/analysis error:', err);
-        await updateSubmission(id, { status: 'error', error: String(err.message || err) }).catch(() => {});
+        console.error('Anthropic error:', err);
+        await updateSubmission(id, { status: 'error', error: String(err.message || err) });
+        return res.status(502).json({ error: 'Analysis failed. Ryan has been notified.' });
     }
+
+    // Notify Ryan via email and kick off PDF generation.
+    // Neither blocks the student's response.
+    const host = req.headers['x-forwarded-host'] || req.headers.host;
+    const proto = (req.headers['x-forwarded-proto'] || 'https').split(',')[0];
+    notifyRyan(id, studentName, studentEmail, data, host, proto).catch(() => {});
+    triggerPdfGeneration(id, host, proto).catch(() => {});
+
+    return res.status(200).json({ success: true, id });
 }
