@@ -47,7 +47,7 @@ function formatProfileForClaude(data) {
     for (const [key, value] of Object.entries(data)) {
         if (key === 'website') continue;
         const pretty = key.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
-        const val = Array.isArray(value) ? value.join(', ') : (value || '\u2014');
+        const val = Array.isArray(value) ? value.join(', ') : (value || '—');
         lines.push(`${pretty}: ${val}`);
     }
     return lines.join('\n');
@@ -56,7 +56,7 @@ function formatProfileForClaude(data) {
 async function notifyRyan(submissionId, studentName, studentEmail, formData, host, proto) {
     const resendKey = process.env.RESEND_API_KEY;
     if (!resendKey) {
-        console.warn('RESEND_API_KEY not set \u2014 skipping Ryan notification email.');
+        console.warn('RESEND_API_KEY not set — skipping Ryan notification email.');
         return;
     }
 
@@ -68,7 +68,7 @@ async function notifyRyan(submissionId, studentName, studentEmail, formData, hos
     for (const [key, value] of Object.entries(formData)) {
         if (key === 'website') continue;
         const pretty = key.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
-        const val = Array.isArray(value) ? value.join(', ') : (value || '\u2014');
+        const val = Array.isArray(value) ? value.join(', ') : (value || '—');
         summaryLines.push(`<tr><td style="padding:4px 12px 4px 0;font-weight:600;vertical-align:top;white-space:nowrap;">${pretty}</td><td style="padding:4px 0;vertical-align:top;">${val}</td></tr>`);
     }
 
@@ -79,7 +79,7 @@ async function notifyRyan(submissionId, studentName, studentEmail, formData, hos
 ${summaryLines.join('\n')}
 </table>
 <p style="margin-top:20px;">
-  The AI analysis and PDFs are being generated now. Once they're ready you can
+  The AI analysis and PDFs are being generated now. Once they\u2019re ready you can
   review and approve them here:<br/>
   <a href="${dashboardUrl}" style="font-weight:600;">${dashboardUrl}</a>
 </p>
@@ -134,13 +134,13 @@ export default async function handler(req, res) {
 
     const data = req.body || {};
     if (data.website) {
-        // Honeypot \u2014 pretend success.
+        // Honeypot — pretend success.
         return res.status(200).json({ success: true });
     }
     if (!data.full_name || !data.email) {
         return res.status(400).json({ error: 'Name and email are required.' });
     }
-    if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/.test(data.email)) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(data.email)) {
         return res.status(400).json({ error: 'A valid email is required.' });
     }
 
@@ -172,16 +172,6 @@ export default async function handler(req, res) {
         console.error('Persist submission error:', err);
         return res.status(500).json({ error: 'Failed to save submission.' });
     }
-
-    // ---- Respond immediately so the student is not waiting on the AI ----
-    const host = req.headers['x-forwarded-host'] || req.headers.host;
-    const proto = (req.headers['x-forwarded-proto'] || 'https').split(',')[0];
-    res.status(200).json({ success: true, id });
-
-    // ---- Everything below runs after the response, in remaining function time ----
-
-    // Notify Ryan via email (fire-and-forget).
-    notifyRyan(id, studentName, studentEmail, data, host, proto).catch(() => {});
 
     // ---- Respond immediately so the student is not waiting on the AI ----
     const host = req.headers['x-forwarded-host'] || req.headers.host;
