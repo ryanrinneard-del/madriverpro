@@ -148,7 +148,7 @@ function sessionSecret() {
 
 export function issueAdminCookie() {
     const secret = sessionSecret();
-    if (!secret) throw new Error('Cannot issue admin cookie \u2014 no secret configured');
+    if (!secret) throw new Error('Cannot issue admin cookie — no secret configured');
     const exp = Math.floor(Date.now() / 1000) + COOKIE_MAX_AGE;
     const payload = `admin.${exp}`;
     const sig = createHmac('sha256', secret).update(payload).digest('hex');
