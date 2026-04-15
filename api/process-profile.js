@@ -1,4 +1,4 @@
-// POST /api/process-profile  
+// POST /api/process-profile   
 //
 // Accepts a submitted Know Your Game profile, calls Anthropic's Claude API
 // (claude-sonnet-4-20250514) with the Golfer Profile Interpreter prompt bound
@@ -8,7 +8,7 @@
 //   profiles/{id}/analysis.md       — markdown derived from analysis.json
 // Then fires an internal call to /api/generate-pdfs.
 
-import Anthropic from '@anthropic-ai/sdk';
+import Anthropic from '@anthropic-ai/sdk'; 
 import { Resend } from 'resend';
 import { GOLFER_PROFILE_SYSTEM_PROMPT } from './_lib/systemPrompt.js';
 import { PDF_DATA_SCHEMA, renderMarkdown } from './_lib/schema.js';
