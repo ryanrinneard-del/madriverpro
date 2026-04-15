@@ -183,6 +183,16 @@ export default async function handler(req, res) {
     // Notify Ryan via email (fire-and-forget).
     notifyRyan(id, studentName, studentEmail, data, host, proto).catch(() => {});
 
+    // ---- Respond immediately so the student is not waiting on the AI ----
+    const host = req.headers['x-forwarded-host'] || req.headers.host;
+    const proto = (req.headers['x-forwarded-proto'] || 'https').split(',')[0];
+    res.status(200).json({ success: true, id });
+
+    // ---- Everything below runs after the response, in remaining function time ----
+
+    // Notify Ryan via email (fire-and-forget).
+    notifyRyan(id, studentName, studentEmail, data, host, proto).catch(() => {});
+
     // --- Anthropic call with forced tool use for structured output ---
     try {
         const anthropic = new Anthropic({ apiKey: anthropicKey });
