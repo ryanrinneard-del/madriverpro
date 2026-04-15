@@ -9,6 +9,7 @@
 // Then fires an internal call to /api/generate-pdfs.
 
 import Anthropic from '@anthropic-ai/sdk';
+import { Resend } from 'resend';
 import { GOLFER_PROFILE_SYSTEM_PROMPT } from './_lib/systemPrompt.js';
 import { PDF_DATA_SCHEMA, renderMarkdown } from './_lib/schema.js';
 import {
@@ -19,6 +20,8 @@ import {
     putText,
     requireEnv,
 } from './_lib/storage.js';
+
+const RYAN_EMAIL = 'ryan@rrgolfperformance.com';
 
 const MODEL = 'claude-sonnet-4-20250514';
 const MAX_TOKENS = 8192;
@@ -48,6 +51,54 @@ function formatProfileForClaude(data) {
         lines.push(`${pretty}: ${val}`);
     }
     return lines.join('\n');
+}
+
+async function notifyRyan(submissionId, studentName, studentEmail, formData, host, proto) {
+    const resendKey = process.env.RESEND_API_KEY;
+    if (!resendKey) {
+        console.warn('RESEND_API_KEY not set — skipping Ryan notification email.');
+        return;
+    }
+
+    const fromEmail = process.env.RESEND_FROM_EMAIL || 'Ryan Rinneard <ryan@rrgolfperformance.com>';
+    const dashboardUrl = `${proto}://${host}/admin/profile-review`;
+
+    // Build a readable summary of the student's answers.
+    const summaryLines = [];
+    for (const [key, value] of Object.entries(formData)) {
+        if (key === 'website') continue;
+        const pretty = key.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+        const val = Array.isArray(value) ? value.join(', ') : (value || '—');
+        summaryLines.push(`<tr><td style="padding:4px 12px 4px 0;font-weight:600;vertical-align:top;white-space:nowrap;">${pretty}</td><td style="padding:4px 0;vertical-align:top;">${val}</td></tr>`);
+    }
+
+    const html = `
+<p>New Know Your Game profile submitted.</p>
+<h3 style="margin:16px 0 8px;">${studentName} &lt;${studentEmail}&gt;</h3>
+<table style="border-collapse:collapse;font-size:14px;">
+${summaryLines.join('\n')}
+</table>
+<p style="margin-top:20px;">
+  The AI analysis and PDFs are being generated now. Once they're ready you can
+  review and approve them here:<br/>
+  <a href="${dashboardUrl}" style="font-weight:600;">${dashboardUrl}</a>
+</p>
+<p style="color:#888;font-size:12px;">Submission ID: ${submissionId}</p>`;
+
+    try {
+        const resend = new Resend(resendKey);
+        const result = await resend.emails.send({
+            from: fromEmail,
+            to: RYAN_EMAIL,
+            subject: `[New Profile] ${studentName}`,
+            html,
+        });
+        if (result.error) {
+            console.error('Ryan notification email error:', result.error);
+        }
+    } catch (err) {
+        console.error('Ryan notification email failed:', err);
+    }
 }
 
 async function triggerPdfGeneration(submissionId, host, proto) {
@@ -154,9 +205,11 @@ export default async function handler(req, res) {
         return res.status(502).json({ error: 'Analysis failed. Ryan has been notified.' });
     }
 
-    // Kick off PDF generation. Do NOT block the student's response on it.
+    // Notify Ryan via email and kick off PDF generation.
+    // Neither blocks the student's response.
     const host = req.headers['x-forwarded-host'] || req.headers.host;
     const proto = (req.headers['x-forwarded-proto'] || 'https').split(',')[0];
+    notifyRyan(id, studentName, studentEmail, data, host, proto).catch(() => {});
     triggerPdfGeneration(id, host, proto).catch(() => {});
 
     return res.status(200).json({ success: true, id });
