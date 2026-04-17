@@ -499,23 +499,34 @@
     }
   });
 
-  // ===== Load player video =====
-  left.video.src = videoRecord.blobUrl || '';
+  // ===== Load player video from IndexedDB =====
   left.video.addEventListener('loadedmetadata', () => {
     resizeCanvas(left);
     redraw(left);
     updateTime(left);
     updateAnnCount();
   });
-  left.video.addEventListener('error', () => {
+  left.video.addEventListener('error', showStaleMessage);
+
+  function showStaleMessage() {
     document.getElementById('left-wrap').innerHTML = `
-      <div style="padding:40px; color:#B0BEC5; text-align:center; max-width:420px;">
-        <b style="color:#E6EAF0;">This video can't be opened.</b><br><br>
-        In the prototype, uploads are stored in the browser tab that created them.
-        Ask the player to re-upload from their portal, or wire the production
-        Vercel Blob pipeline described in <code>README.md</code>.
+      <div style="padding:40px; color:#B0BEC5; text-align:center; max-width:460px;">
+        <b style="color:#E6EAF0;">This video isn\u2019t on this device.</b><br><br>
+        Prototype uploads live in the player\u2019s browser (IndexedDB). You can either
+        view it on the browser where the player uploaded, or wire the production
+        Vercel Blob pipeline described in <code>README.md</code> so every upload
+        syncs to the cloud.
       </div>`;
-  });
+  }
+
+  (async () => {
+    const url = await RRG.idb.blobUrlFor(videoRecord.id);
+    if (url) {
+      left.video.src = url;
+    } else {
+      showStaleMessage();
+    }
+  })();
   left.video.addEventListener('timeupdate', () => {
     updateTime(left);
     redraw(left);

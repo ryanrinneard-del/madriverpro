@@ -248,14 +248,85 @@ RRG.subs = {
 };
 
 /* ============================================================
-   VIDEOS — swing video uploads
+   IDB — IndexedDB store for video blobs (persistent across
+   page navigations and reloads, unlike URL.createObjectURL).
+   Metadata still lives in localStorage via RRG.videos.
+   Production swap: Vercel Blob (see README).
+   ============================================================ */
+RRG.idb = {
+  DB_NAME: 'rrgA_video_store',
+  STORE: 'videos',
+  _dbPromise: null,
 
-   PROTOTYPE: stores only metadata (no file movement). Production
-   swap-in uses Vercel Blob (already in Ryan's CSP allow-list):
+  _open() {
+    if (this._dbPromise) return this._dbPromise;
+    this._dbPromise = new Promise((resolve, reject) => {
+      if (!window.indexedDB) { reject(new Error('IndexedDB not supported in this browser.')); return; }
+      const req = indexedDB.open(this.DB_NAME, 1);
+      req.onerror = () => reject(req.error);
+      req.onupgradeneeded = (e) => {
+        const db = e.target.result;
+        if (!db.objectStoreNames.contains(this.STORE)) db.createObjectStore(this.STORE);
+      };
+      req.onsuccess = () => resolve(req.result);
+    });
+    return this._dbPromise;
+  },
+
+  async putVideo(id, blob) {
+    const db = await this._open();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(this.STORE, 'readwrite');
+      tx.objectStore(this.STORE).put(blob, id);
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+      tx.onabort = () => reject(tx.error || new Error('Transaction aborted — likely storage quota exceeded.'));
+    });
+  },
+
+  async getVideo(id) {
+    const db = await this._open();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(this.STORE, 'readonly');
+      const req = tx.objectStore(this.STORE).get(id);
+      req.onsuccess = () => resolve(req.result || null);
+      req.onerror = () => reject(req.error);
+    });
+  },
+
+  async deleteVideo(id) {
+    const db = await this._open();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(this.STORE, 'readwrite');
+      tx.objectStore(this.STORE).delete(id);
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  },
+
+  // Returns a fresh blob URL for the given video ID (or null if not stored).
+  // Caller should revoke the URL when done to avoid memory leaks.
+  async blobUrlFor(id) {
+    try {
+      const blob = await this.getVideo(id);
+      return blob ? URL.createObjectURL(blob) : null;
+    } catch (e) {
+      console.warn('[RRG.idb] blobUrlFor failed', id, e);
+      return null;
+    }
+  },
+};
+
+/* ============================================================
+   VIDEOS — swing video uploads (metadata only; file in IDB)
+
+   PROTOTYPE: metadata in localStorage, actual video file in
+   IndexedDB under the same id. Production swap-in uses Vercel
+   Blob (already in Ryan's CSP allow-list):
      import { put } from '@vercel/blob';
      const { url } = await put(`videos/${userId}/${id}-${filename}`, file,
-       { access: 'public', handleBlobStore: true });
-   Then save `url` on the video record instead of a blob URL.
+       { access: 'public' });
+   Then save `url` on the record and remove the IDB step.
    ============================================================ */
 RRG.videos = {
   KEY: 'rrgA_videos_v1',
@@ -274,12 +345,11 @@ RRG.videos = {
     this.save(list);
     return list[i];
   },
-  remove(id) {
-    // revoke any blob URL we created in the prototype
-    const v = this.all().find(x => x.id === id);
-    if (v?.blobUrl) { try { URL.revokeObjectURL(v.blobUrl); } catch {} }
+  async remove(id) {
+    // Remove metadata AND the actual blob from IDB
     const list = this.all().filter(x => x.id !== id);
     this.save(list);
+    try { await RRG.idb.deleteVideo(id); } catch {}
   },
   forUser(userId) {
     return this.all().filter(v => v.userId === userId)

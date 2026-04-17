@@ -102,9 +102,10 @@
     vidWrap.innerHTML = `<div class="history-empty"><h3 class="navy">Inbox zero.</h3><p class="muted mt-2">No videos awaiting review.</p></div>`;
   } else {
     vidWrap.innerHTML = pendingVideos.map(v => `
-      <div class="vid-queue">
-        ${v.blobUrl ? `<video controls src="${v.blobUrl}"></video>`
-                    : '<div style="background:var(--light-bg); border-radius:4px; padding:20px; text-align:center; color:var(--mid-grey);">Preview not available</div>'}
+      <div class="vid-queue" data-vid="${v.id}">
+        <div class="vid-thumb" data-vid="${v.id}">
+          <video controls data-vid="${v.id}"></video>
+        </div>
         <div>
           <div class="flex-between">
             <div>
@@ -120,14 +121,43 @@
           </div>
           <div class="flex gap-2 mt-3">
             <a class="btn btn-primary btn-sm" href="video-review.html?v=${v.id}">Review + Annotate</a>
-            ${v.blobUrl ? `<a class="btn btn-ghost btn-sm" href="${v.blobUrl}" download="${RRG.esc(v.filename)}">Download for OnForm</a>` : ''}
+            <a class="btn btn-ghost btn-sm" href="#" onclick="downloadForOnForm(event, '${v.id}', '${RRG.esc(v.filename).replace(/'/g,"\\'")}')">Download for OnForm</a>
             <button class="btn btn-ghost btn-sm" onclick="leaveFeedback('${v.id}')">Note only</button>
             <button class="btn btn-ghost btn-sm" onclick="markReviewed('${v.id}')">Mark Reviewed</button>
           </div>
         </div>
       </div>
     `).join('');
+
+    // Async: hydrate each preview video from IndexedDB
+    (async () => {
+      for (const v of pendingVideos) {
+        const url = await RRG.idb.blobUrlFor(v.id);
+        const vid = document.querySelector(`video[data-vid="${v.id}"]`);
+        if (!vid) continue;
+        if (url) {
+          vid.src = url;
+        } else {
+          // Replace thumb with "not on this device" message
+          const thumb = document.querySelector(`.vid-thumb[data-vid="${v.id}"]`);
+          if (thumb) thumb.innerHTML =
+            '<div style="background:var(--light-bg); border-radius:4px; padding:20px; text-align:center; color:var(--mid-grey); font-size:12px;">' +
+            '<b>Not on this device.</b><br>Video is stored in the browser where it was uploaded.</div>';
+        }
+      }
+    })();
   }
+
+  window.downloadForOnForm = async (ev, id, filename) => {
+    ev.preventDefault();
+    const blob = await RRG.idb.getVideo(id);
+    if (!blob) { RRG.toast('Video not on this device.'); return; }
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = filename || 'video.mp4';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 10000);
+  };
 
   window.markReviewed = (id) => {
     RRG.videos.update(id, { status: 'reviewed', reviewedAt: new Date().toISOString() });

@@ -112,23 +112,19 @@
             </div>
             <div>${statusBadge}</div>
           </div>
-          ${v.blobUrl ? `
-            <div class="video-holder">
-              <video controls src="${v.blobUrl}" data-vid="${v.id}" onerror="markStale('${v.id}')"></video>
-              <canvas data-vid="${v.id}"></canvas>
-            </div>
-            <div class="stale-notice" data-vid="${v.id}" style="display:none; padding:20px; background:#FFF8EC; color:var(--navy-mid); text-align:center; font-size:13px; border-top:1px solid var(--rule);">
-              <b>This video needs to be re-uploaded.</b> In the prototype, video files only live in the browser tab where they were uploaded. Production (with Vercel Blob) persists them permanently.
-            </div>
-            ${annCount ? `<div class="ann-timeline" data-vid="${v.id}"></div>
-              <div class="body" style="padding-top:0; color:var(--mid-grey); font-size:12px;">
-                Gold marks = frames where Ryan left annotations. Click one to jump; pause playback to see the drawings.
-              </div>` : ''}
-          ` : `
-            <div style="padding:32px; text-align:center; color:var(--mid-grey);">
-              Video preview unavailable in this session.
-            </div>
-          `}
+          <div class="video-holder" data-vid="${v.id}">
+            <video controls data-vid="${v.id}" onerror="markStale('${v.id}')"></video>
+            <canvas data-vid="${v.id}"></canvas>
+          </div>
+          <div class="stale-notice" data-vid="${v.id}" style="display:none; padding:20px; background:#FFF8EC; color:var(--navy-mid); text-align:center; font-size:13px; border-top:1px solid var(--rule);">
+            <b>This video file isn\u2019t on this device.</b> You\u2019ll need to re-upload it
+            from the browser where it was originally sent. Production (Vercel Blob) syncs
+            uploads to the cloud so this stops happening.
+          </div>
+          ${annCount ? `<div class="ann-timeline" data-vid="${v.id}"></div>
+            <div class="body" style="padding-top:0; color:var(--mid-grey); font-size:12px;">
+              Gold marks = frames where Ryan left annotations. Click one to jump; pause playback to see the drawings.
+            </div>` : ''}
           ${v.note ? `<div class="body"><div class="page-label">MY NOTE TO RYAN</div><p class="mt-2">${RRG.esc(v.note)}</p></div>` : ''}
           ${v.coachFeedback ? `
             <div class="body" style="border-top:1px solid var(--rule); background:var(--cream);">
@@ -137,15 +133,29 @@
             </div>
           ` : ''}
           <div class="actions">
-            ${v.blobUrl ? `<a class="btn btn-ghost btn-sm" href="${v.blobUrl}" download="${RRG.esc(v.filename)}">Download</a>` : ''}
+            <a class="btn btn-ghost btn-sm" href="#" data-dl="${v.id}" data-filename="${RRG.esc(v.filename)}" onclick="downloadVid(event, '${v.id}', '${RRG.esc(v.filename).replace(/'/g,"\\'")}')">Download</a>
             <button class="btn btn-ghost btn-sm" style="color:var(--red-risk);" onclick="removeVid('${v.id}')">Delete</button>
           </div>
         </div>
       `;
     }).join('');
 
-    // Wire up annotation overlays on each video
-    videos.filter(v => v.blobUrl && (v.annotations || []).length).forEach(v => {
+    // Async: hydrate every <video> with a fresh blob URL from IndexedDB
+    (async () => {
+      for (const v of videos) {
+        const url = await RRG.idb.blobUrlFor(v.id);
+        const vid = document.querySelector(`video[data-vid="${v.id}"]`);
+        if (!vid) continue;
+        if (url) {
+          vid.src = url;
+        } else {
+          markStale(v.id);
+        }
+      }
+    })();
+
+    // Wire up annotation overlays on each video (IDB-loaded URL is hydrated above)
+    videos.filter(v => (v.annotations || []).length).forEach(v => {
       const video = document.querySelector(`video[data-vid="${v.id}"]`);
       const canvas = document.querySelector(`canvas[data-vid="${v.id}"]`);
       const timeline = document.querySelector(`.ann-timeline[data-vid="${v.id}"]`);
@@ -236,10 +246,22 @@
     });
   }
 
-  window.removeVid = (id) => {
+  window.removeVid = async (id) => {
     if (!confirm('Delete this video? This cannot be undone.')) return;
-    RRG.videos.remove(id);
+    await RRG.videos.remove(id);
     location.reload();
+  };
+
+  // Async download: fetch the blob from IDB and trigger a local download
+  window.downloadVid = async (ev, id, filename) => {
+    ev.preventDefault();
+    const blob = await RRG.idb.getVideo(id);
+    if (!blob) { RRG.toast('This video isn\u2019t on this device.'); return; }
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = filename || 'video.mp4';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 10000);
   };
 
   // Show friendly message if a video's blob URL is stale (cross-session)

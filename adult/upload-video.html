@@ -40,10 +40,10 @@
   </div>
 
   <div class="callout mb-4" style="border-left-color: var(--amber); background:#FFF8EC;">
-    <b>Prototype note.</b> Video files stay in <i>this browser tab</i> only — they don't
-    persist across tabs or reloads yet. The production build wires this to Vercel Blob so
-    uploads live forever (see README). Fine for testing the flow; don't rely on it for
-    actual session-to-session review yet.
+    <b>Prototype note.</b> Video files are saved to your browser's local storage
+    (IndexedDB) and persist across reloads, but only on this device/browser. The production
+    build wires this to Vercel Blob so uploads sync to the cloud (see README). Large files
+    (&gt; ~500 MB) may hit browser storage limits.
   </div>
 
   <form id="upload-form">
@@ -157,21 +157,26 @@
   // Submit
   const form = document.getElementById('upload-form');
   const errBox = document.getElementById('form-error');
-  form.addEventListener('submit', (e) => {
+  const submitBtn = form.querySelector('button[type=submit]');
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     errBox.style.display = 'none';
     if (!file) { errBox.textContent = 'Pick a video first.'; errBox.style.display = 'block'; return; }
 
     const fd = Object.fromEntries(new FormData(form).entries());
 
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Saving…';
+
     // ===== PRODUCTION SWAP POINT =====
     // In production: POST the file to `/api/upload-video` which uses Vercel Blob:
     //   import { put } from '@vercel/blob';
     //   const { url } = await put(`videos/${user.id}/${id}-${file.name}`, file,
     //     { access: 'public', contentType: file.type });
-    // Then save `url` on the video record below.
-    // In this prototype we keep a blob URL in memory; it persists only while the tab is open.
-    const blobUrl = URL.createObjectURL(file);
+    // Save the returned `url` on the record; skip the IDB step below.
+    // PROTOTYPE: we persist the actual file to IndexedDB so it survives page
+    // navigations and reloads (unlike blob: URLs).
 
     const video = RRG.videos.create({
       userId: user.id,
@@ -179,15 +184,30 @@
       filename: file.name,
       size: file.size,
       contentType: file.type,
-      blobUrl,                        // prototype only — replace with Vercel Blob URL in prod
       lessonId: fd.lessonId || null,
       club: fd.club || '',
       angle: fd.angle || '',
       note: fd.note || '',
       status: 'pending-review',       // pending-review | reviewed
+      hasBlob: true,                  // marker: blob lives in IDB under this video's id
     });
+
+    try {
+      await RRG.idb.putVideo(video.id, file);
+    } catch (err) {
+      // Roll back the metadata entry if the blob didn't save
+      await RRG.videos.remove(video.id);
+      errBox.innerHTML = '<b>Couldn\u2019t save the video.</b> ' +
+        (err.message || 'Your browser may be out of storage or blocking IndexedDB.') +
+        ' Try a smaller file or a different browser.';
+      errBox.style.display = 'block';
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send to Ryan';
+      return;
+    }
+
     RRG.toast('Video sent — Ryan has been notified.');
-    setTimeout(() => { location.href = 'videos.html?new=' + video.id; }, 1200);
+    setTimeout(() => { location.href = 'videos.html?new=' + video.id; }, 900);
   });
 </script>
 </body>
