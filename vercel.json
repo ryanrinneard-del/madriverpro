@@ -37,6 +37,11 @@
       "source": "/Articles/:path*",
       "destination": "/articles/:path*",
       "permanent": true
+    },
+    {
+      "source": "/portal",
+      "destination": "/portal/",
+      "permanent": true
     }
   ]
 }
