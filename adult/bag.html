@@ -72,12 +72,33 @@
   .bag-row.dragging { opacity: 0.4; }
 
   @media print {
-    body { background: white; }
-    .container { padding: 0; }
-    .bag-card input.yard, .bag-card input.name {
-      border: none; background: transparent; font-size: 15px;
+    @page { size: 6in 4in; margin: 0.15in; }
+    html, body { background: white; margin: 0; padding: 0; }
+    .container { padding: 0; max-width: 100%; }
+    .page-header, .callout, .flex-between, .no-print { display: none !important; }
+    .remove-btn, .add-row, .drag-handle { display: none !important; }
+    .bag-card {
+      border: 1px solid var(--navy);
+      border-radius: 4px;
+      padding: 5px 8px;
+      max-width: 100%; width: 100%;
+      page-break-inside: avoid;
     }
-    .remove-btn, .add-row, .drag-handle, .no-print { display: none !important; }
+    .bag-card .bc-hdr { padding-bottom: 3px; margin-bottom: 3px; }
+    .bag-card .bc-hdr > div:first-child > div:first-child { font-size: 9.5px; }
+    .bag-card .bc-hdr > div:first-child > div:nth-child(2) { font-size: 7px; }
+    .bag-card .bc-hdr > div:last-child { font-size: 7px; letter-spacing: 1px; }
+    .bag-card > div[style*="grid-template-columns"] { margin-top: 2px !important; gap: 6px !important; }
+    .bag-card > div[style*="grid-template-columns"] > div > div { font-size: 7px !important; }
+    .bag-card > div[style*="grid-template-columns"] input { font-size: 9px !important; padding: 1px 0 !important; }
+    .bag-card table { margin-top: 3px; }
+    .bag-card th { padding: 2px 3px; font-size: 7.5px; letter-spacing: 0.3px; }
+    .bag-card th:first-child { padding-left: 5px; }
+    .bag-card td { padding: 1px 3px; font-size: 8.5px; border-bottom: 0.5px solid var(--rule); }
+    .bag-card td.club { padding-left: 5px; }
+    .bag-card input.name { font-size: 9px; padding: 0 2px; border: none; background: transparent; width: 100% !important; }
+    .bag-card input.yard { width: 40px; font-size: 9px; padding: 0 2px; border: none; background: transparent; text-align: center; }
+    .bag-card > div:last-child { display: none; }  /* hide the 'Why this matters' footer \u2014 no room */
   }
 </style>
 </head>

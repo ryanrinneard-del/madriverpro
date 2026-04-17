@@ -39,12 +39,6 @@
     </p>
   </div>
 
-  <div class="callout mb-4" style="border-left-color: var(--amber); background:#FFF8EC;">
-    <b>Prototype note.</b> Video files are saved to your browser's local storage
-    (IndexedDB) and persist across reloads, but only on this device/browser. The production
-    build wires this to Vercel Blob so uploads sync to the cloud (see README). Large files
-    (&gt; ~500 MB) may hit browser storage limits.
-  </div>
 
   <form id="upload-form">
 
@@ -178,7 +172,28 @@
     // PROTOTYPE: we persist the actual file to IndexedDB so it survives page
     // navigations and reloads (unlike blob: URLs).
 
+    // Save the blob FIRST, verify it landed, THEN save metadata.
+    // This prevents orphaned records when IDB silently fails (quota, Safari
+    // storage pressure, etc).
+    const id = 'v_' + Date.now().toString(36);
+    try {
+      await RRG.idb.putVideo(id, file);
+      const verify = await RRG.idb.getVideo(id);
+      if (!verify) throw new Error('Save didn\u2019t complete \u2014 browser storage may be full or blocked.');
+    } catch (err) {
+      try { await RRG.idb.deleteVideo(id); } catch {}
+      errBox.innerHTML = '<b>Couldn\u2019t save the video.</b> ' +
+        (err.message || 'Your browser may be out of storage or blocking IndexedDB.') +
+        ' Try a smaller file or a different browser.';
+      errBox.style.display = 'block';
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send to Ryan';
+      return;
+    }
+
+    // Blob is safely stored. Save metadata with the matching id.
     const video = RRG.videos.create({
+      id,
       userId: user.id,
       userName: user.name,
       filename: file.name,
@@ -188,23 +203,9 @@
       club: fd.club || '',
       angle: fd.angle || '',
       note: fd.note || '',
-      status: 'pending-review',       // pending-review | reviewed
-      hasBlob: true,                  // marker: blob lives in IDB under this video's id
+      status: 'pending-review',
+      hasBlob: true,
     });
-
-    try {
-      await RRG.idb.putVideo(video.id, file);
-    } catch (err) {
-      // Roll back the metadata entry if the blob didn't save
-      await RRG.videos.remove(video.id);
-      errBox.innerHTML = '<b>Couldn\u2019t save the video.</b> ' +
-        (err.message || 'Your browser may be out of storage or blocking IndexedDB.') +
-        ' Try a smaller file or a different browser.';
-      errBox.style.display = 'block';
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Send to Ryan';
-      return;
-    }
 
     RRG.toast('Video sent — Ryan has been notified.');
     setTimeout(() => { location.href = 'videos.html?new=' + video.id; }, 900);

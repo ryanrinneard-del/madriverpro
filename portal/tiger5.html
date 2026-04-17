@@ -61,9 +61,32 @@
     border: none; border-bottom: 1px solid var(--rule); padding: 4px 0; width: 100%; font-size: 12px;
   }
   @media print {
-    body { background: white; }
-    .container { padding: 0; }
+    @page { size: 6in 4in; margin: 0.14in; }
+    html, body { background: white; margin: 0; padding: 0; }
+    .container { padding: 0; max-width: 100%; }
+    .page-header, .no-print, .nav, .site-footer { display: none !important; }
     .print-page { page-break-after: always; }
+    .t5-card {
+      border: 1px solid var(--navy);
+      padding: 6px 8px;
+      max-width: 100%;
+      margin: 0;
+      page-break-inside: avoid;
+    }
+    .t5-card .t5-hdr { padding-bottom: 3px; margin-bottom: 4px; }
+    .t5-card .t5-hdr .brand { font-size: 9px; letter-spacing: 1px; }
+    .t5-card .t5-hdr .muted { font-size: 7px; }
+    .t5-card .t5-hdr .sub { font-size: 7px; letter-spacing: 1px; }
+    .t5-card .meta-row { margin-top: 3px !important; gap: 6px !important; }
+    .t5-card .meta-row .lbl { font-size: 6.5px !important; }
+    .t5-card .meta-row input { font-size: 8px !important; padding: 1px 0 !important; }
+    .t5-card table { margin-top: 4px; }
+    .t5-card th, .t5-card td { padding: 2px 2px; font-size: 7.5px; }
+    .t5-card th { font-size: 6.5px; letter-spacing: 0.3px; }
+    .t5-card th.hole, .t5-card td.hole { width: 14px; font-size: 6.5px; }
+    .t5-card td.error-type { font-size: 6.5px; letter-spacing: 0.2px; }
+    .t5-card td.box { width: 14px; height: 14px; }
+    .t5-card > div:last-child { font-size: 7px !important; margin-top: 4px !important; line-height: 1.3 !important; }
   }
 </style>
 </head>

@@ -65,12 +65,32 @@
   }
   .add-row button:hover { background: var(--gold); color: var(--navy); }
   @media print {
-    body { background: white; }
-    .container { padding: 0; }
-    .matrix-card input.yard, .matrix-card input.name {
-      border: none; background: transparent; font-size: 15px;
+    @page { size: 6in 4in; margin: 0.18in; }
+    html, body { background: white; margin: 0; padding: 0; }
+    .container { padding: 0; max-width: 100%; }
+    .page-header, .callout, .flex-between, .no-print { display: none !important; }
+    .remove-btn, .add-row { display: none !important; }
+    .matrix-card {
+      border: 1px solid var(--navy);
+      border-radius: 4px;
+      padding: 6px 8px;
+      max-width: 100%; width: 100%;
+      page-break-inside: avoid;
     }
-    .remove-btn, .add-row, .no-print { display: none !important; }
+    .matrix-card .mc-hdr { padding-bottom: 4px; margin-bottom: 4px; }
+    .matrix-card .mc-hdr > div:first-child > div:first-child { font-size: 10px; }
+    .matrix-card .mc-hdr > div:first-child > div:nth-child(2) { font-size: 7.5px; }
+    .matrix-card .mc-hdr > div:last-child { font-size: 7px; letter-spacing: 1px; }
+    .matrix-card > div[style*="grid-template-columns"] { margin-top: 3px !important; gap: 6px !important; }
+    .matrix-card > div[style*="grid-template-columns"] > div > div { font-size: 7px !important; }
+    .matrix-card > div[style*="grid-template-columns"] input { font-size: 9.5px !important; padding: 2px 0 !important; }
+    .matrix-card table { margin-top: 5px; }
+    .matrix-card th { padding: 3px 3px; font-size: 8px; letter-spacing: 0.3px; }
+    .matrix-card td { padding: 2px 3px; font-size: 9.5px; }
+    .matrix-card td.club { padding-left: 6px; }
+    .matrix-card input.name { font-size: 9.5px; padding: 1px 2px; border: none; background: transparent; }
+    .matrix-card input.yard { width: 48px; font-size: 9.5px; padding: 1px 2px; border: none; background: transparent; text-align: center; }
+    .matrix-card > div:last-child { font-size: 7.5px !important; margin-top: 4px !important; line-height: 1.3 !important; }
   }
 </style>
 </head>
