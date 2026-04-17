@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<base href="/adult/">
+<title>Dashboard — RR Golf Performance Adult Coaching</title>
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  .progress-bar { background: var(--rule); border-radius: 999px; height: 8px; overflow: hidden; }
+  .progress-bar > div { height: 100%; background: var(--gold); transition: width 0.3s ease; }
+  .lesson-row {
+    background: var(--white); border-radius: 8px; padding: 14px 18px;
+    border-left: 3px solid var(--rule); margin-bottom: 10px;
+    display: grid; grid-template-columns: 60px 1fr 120px auto; gap: 14px; align-items: center;
+  }
+  .lesson-row.complete { border-left-color: var(--green-ok); background: var(--green-light); }
+  .lesson-row.scheduled { border-left-color: var(--gold); }
+  .lesson-row.pending { opacity: 0.75; }
+  .lesson-row .lnum { font-weight:800; color:var(--gold); font-size:16px; letter-spacing:1px; text-align:center; }
+  .lesson-row .lfocus { color:var(--dark-text); font-size:13px; }
+  .lesson-row .ldate { color:var(--mid-grey); font-size:12px; }
+</style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container">
+
+  <div id="welcome-banner" style="display:none;" class="card-cream mb-5">
+    <div class="page-label">WELCOME</div>
+    <h2 style="color:var(--navy); font-size:20px;">You're in. Let's start with honesty.</h2>
+    <p style="margin-top:6px; color:var(--navy-mid);">
+      The first thing Ryan needs from you is a completed Know Your Game profile. It's confidential — only Ryan sees it — and it is the frame for every lesson. Fill it out with <b>absolute honesty</b>.
+    </p>
+    <div class="mt-4">
+      <a href="profile.html" class="btn btn-primary">Complete My Profile &rarr;</a>
+    </div>
+  </div>
+
+  <div class="page-header">
+    <div class="page-label">MY COACHING</div>
+    <h1 class="page-title" id="greeting">Dashboard</h1>
+    <hr class="gold-rule">
+  </div>
+
+  <!-- Package progress card -->
+  <div class="card mb-5" id="pkg-card"></div>
+
+  <!-- Quick tools -->
+  <div class="grid mb-5" style="grid-template-columns: repeat(4, 1fr); gap: 16px;">
+    <a class="card" href="upload-video.html" style="text-decoration:none;">
+      <div class="page-label">UPLOAD</div>
+      <h3 style="color:var(--navy); margin-top:4px;">Swing Video &uarr;</h3>
+      <p class="muted small mt-2">Send Ryan a video. He reviews inline or downloads to OnForm on his iPad.</p>
+    </a>
+    <a class="card" href="bag.html" style="text-decoration:none;">
+      <div class="page-label">QUICK TOOL</div>
+      <h3 style="color:var(--navy); margin-top:4px;">Map My Bag</h3>
+      <p class="muted small mt-2">Every club, carry &amp; total. Customize, save, print.</p>
+    </a>
+    <a class="card" href="wedge-matrix.html" style="text-decoration:none;">
+      <div class="page-label">QUICK TOOL</div>
+      <h3 style="color:var(--navy); margin-top:4px;">Wedge Matrix</h3>
+      <p class="muted small mt-2">Full / ¾ / ½ / knockdown for your exact wedges.</p>
+    </a>
+    <a class="card" href="tiger5.html" style="text-decoration:none;">
+      <div class="page-label">QUICK TOOL</div>
+      <h3 style="color:var(--navy); margin-top:4px;">Tiger 5 Scorecard</h3>
+      <p class="muted small mt-2">Live-tally your 5 avoidable errors on course.</p>
+    </a>
+  </div>
+
+  <!-- Lessons list -->
+  <div class="page-header">
+    <div class="page-label">MY LESSONS</div>
+    <h2 class="page-title" style="font-size:22px;">Every Session, Logged</h2>
+    <hr class="gold-rule">
+  </div>
+  <div id="lessons-list"></div>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  const user = RRG.mount('dashboard');
+  if (!user) throw new Error();
+
+  document.getElementById('greeting').textContent = `Welcome back, ${user.name.split(' ')[0]}.`;
+
+  if (!user.profile) document.getElementById('welcome-banner').style.display = 'block';
+
+  // Package card
+  const pkg = user.package || { name: 'No package', lessons: 0 };
+  const used = (user.lessonsUsed || 0);
+  const total = pkg.lessons || 0;
+  const pct = total ? Math.min(100, Math.round(used/total*100)) : 0;
+  document.getElementById('pkg-card').innerHTML = `
+    <div class="flex-between">
+      <div>
+        <div class="page-label">MY PACKAGE</div>
+        <h3 style="color:var(--navy); font-size:20px; margin-top:4px;">${RRG.esc(pkg.name)}</h3>
+        <p class="muted small mt-2">
+          ${total ? `Lesson ${used} of ${total} used` : 'Buy or extend a package to schedule lessons.'}
+          ${pkg.startedAt ? ` · Started ${RRG.fmtDate(pkg.startedAt)}` : ''}
+        </p>
+      </div>
+      <div style="min-width:200px;">
+        ${total ? `
+          <div class="progress-bar"><div style="width:${pct}%;"></div></div>
+          <div class="muted small mt-2 text-center">${pct}% through your package</div>
+        ` : ''}
+      </div>
+    </div>
+    ${total && used >= total ? `
+      <div class="callout mt-4">
+        <b>Package complete.</b> Want to keep going? Email Ryan to extend with another
+        package — your profile, rounds, videos, and tools all stay in this portal.
+      </div>
+    ` : ''}
+  `;
+
+  // Lessons
+  const lessons = RRG.lessons.forUser(user.id);
+  const wrap = document.getElementById('lessons-list');
+  if (lessons.length === 0) {
+    wrap.innerHTML = `
+      <div class="history-empty">
+        <h3 class="navy">No lessons scheduled yet.</h3>
+        <p class="muted mt-2">Ryan will schedule your first lesson after reviewing your Know Your Game profile.</p>
+      </div>
+    `;
+  } else {
+    wrap.innerHTML = lessons.map(l => {
+      const status = l.completedAt ? 'complete' : (l.scheduledAt ? 'scheduled' : 'pending');
+      const statusBadge = {
+        complete: '<span class="badge badge-green">COMPLETE</span>',
+        scheduled: '<span class="badge badge-gold">SCHEDULED</span>',
+        pending: '<span class="badge badge-ghost">PENDING</span>',
+      }[status];
+      return `
+        <a href="lesson.html?id=${l.id}" class="lesson-row ${status}" style="text-decoration:none;">
+          <div class="lnum">#${String(l.number || '—').padStart(2,'0')}</div>
+          <div>
+            <div style="font-weight:700; color:var(--navy);">${RRG.esc(l.focus || 'Focus TBD')}</div>
+            <div class="lfocus">${RRG.esc(l.preWork || 'No pre-work yet')}</div>
+          </div>
+          <div class="ldate">${l.scheduledAt ? RRG.fmtDate(l.scheduledAt) : '—'}</div>
+          <div>${statusBadge}</div>
+        </a>
+      `;
+    }).join('');
+  }
+</script>
+</body>
+</html>

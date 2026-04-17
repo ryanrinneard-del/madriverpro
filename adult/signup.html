@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<base href="/adult/">
+<title>Activate — RR Golf Performance Adult Coaching</title>
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  .package-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:6px; }
+  .package-card {
+    border:1px solid var(--rule); border-radius:6px; padding:14px 16px; cursor:pointer;
+    background: var(--white); transition: all 0.15s ease; position:relative;
+  }
+  .package-card:hover { border-color: var(--gold); }
+  .package-card input[type=radio] { position:absolute; opacity:0; }
+  .package-card.selected { border-color: var(--gold); background: var(--cream); box-shadow: 0 0 0 2px rgba(201,168,76,0.2); }
+  .package-card .pkg-title { font-weight:700; color:var(--navy); font-size:14px; }
+  .package-card .pkg-sub { color:var(--mid-grey); font-size:11px; margin-top:2px; }
+  .package-card .pkg-price { color:var(--gold); font-weight:700; font-size:16px; margin-top:6px; }
+  .package-card .pkg-rec { position:absolute; top:-8px; right:10px; background:var(--gold); color:var(--navy); font-size:9px; font-weight:700; letter-spacing:1px; padding:2px 8px; border-radius:3px; }
+</style>
+</head>
+<body>
+
+<div class="auth-shell">
+  <div class="auth-hero">
+    <div>
+      <div class="brand">RR GOLF PERFORMANCE</div>
+      <div style="margin-top:60px;">
+        <div class="brand" style="color:var(--gold); font-size:11px; letter-spacing:2px;">
+          A C T I V A T E   ·   A D U L T   C O A C H I N G &trade;   2 0 2 6
+        </div>
+        <h1 class="hero-title" style="margin-top:12px;">
+          Let's get to <em>work</em>.
+        </h1>
+        <p class="hero-sub">
+          Adult Coaching is <strong style="color:var(--gold-light);">invite-only</strong>. You should
+          have received an invite code from Ryan. After activation, you'll complete the
+          confidential Know Your Game questionnaire — the frame for our 1-on-1 work.
+        </p>
+        <p class="hero-sub" style="margin-top:14px;">
+          <strong style="color:var(--gold-light);">Fill it out with absolute honesty.</strong>
+          Only Ryan sees it.
+        </p>
+        <p class="hero-sub" style="margin-top:14px;">
+          Don't have a code? Email <a style="color:var(--gold-light);" href="mailto:ryan@rrgolfperformance.com">ryan@rrgolfperformance.com</a>.
+        </p>
+      </div>
+    </div>
+    <div class="hero-foot">
+      Lesson-package based · Pay through the club or direct · Videos reviewed between sessions
+    </div>
+  </div>
+
+  <div class="auth-panel" style="overflow-y:auto;">
+    <div class="form-label">CREATE MY ACCOUNT</div>
+    <h1>Activate your portal.</h1>
+
+    <form id="signup-form">
+      <div class="field">
+        <label for="inviteCode">Invite code</label>
+        <input id="inviteCode" name="inviteCode" type="text" required
+               placeholder="RRA-XXXX-XXXX"
+               style="text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">
+        <div class="hint">The code Ryan emailed you when you signed up for a package.</div>
+      </div>
+
+      <div class="field">
+        <label>Lesson package</label>
+        <div class="hint" style="margin-bottom:6px;">Pick what you bought. You can always extend later.</div>
+        <div class="package-grid" id="pkg-grid"></div>
+      </div>
+
+      <div class="field">
+        <label for="name">Full name</label>
+        <input id="name" name="name" type="text" required placeholder="First Last">
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="handicap">Current handicap / avg score</label>
+          <input id="handicap" name="handicap" type="text" placeholder="e.g. 18 or 92">
+        </div>
+        <div class="field">
+          <label for="homeClub">Home club</label>
+          <input id="homeClub" name="homeClub" type="text" placeholder="Where do you play?">
+        </div>
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" required placeholder="you@example.com">
+      </div>
+      <div class="field">
+        <label for="password">Create a password</label>
+        <input id="password" name="password" type="password" required minlength="8" placeholder="At least 8 characters">
+      </div>
+
+      <div id="signup-error" class="callout" style="display:none; color:var(--red-risk); border-left-color:var(--red-risk); background:#FDF0EE; margin-bottom:16px;"></div>
+
+      <button type="submit" class="btn btn-primary btn-block">Create my portal account</button>
+    </form>
+
+    <p class="alt">
+      Already have an account? <a href="index.html">Sign in</a>
+    </p>
+  </div>
+</div>
+
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  if (RRG.auth.isLoggedIn()) location.replace('dashboard.html');
+
+  // Render packages
+  const grid = document.getElementById('pkg-grid');
+  grid.innerHTML = RRG.PACKAGES.map((p, i) => `
+    <label class="package-card${i===2?' selected':''}" data-id="${p.id}">
+      <input type="radio" name="packageId" value="${p.id}" ${i===2?'checked':''}>
+      ${p.recommended ? '<span class="pkg-rec">MOST POPULAR</span>' : ''}
+      <div class="pkg-title">${RRG.esc(p.name)}</div>
+      <div class="pkg-sub">${p.lessons} lesson${p.lessons>1?'s':''}${p.price?` · $${p.price}`:''}</div>
+    </label>
+  `).join('');
+
+  grid.addEventListener('change', () => {
+    document.querySelectorAll('.package-card').forEach(c => {
+      c.classList.toggle('selected', c.querySelector('input').checked);
+    });
+  });
+
+  const form = document.getElementById('signup-form');
+  const errBox = document.getElementById('signup-error');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errBox.style.display = 'none';
+    const fd = Object.fromEntries(new FormData(form).entries());
+    try {
+      await RRG.auth.signup(fd);
+      location.href = 'profile.html?welcome=1';
+    } catch (err) {
+      errBox.textContent = err.message;
+      errBox.style.display = 'block';
+    }
+  });
+</script>
+</body>
+</html>

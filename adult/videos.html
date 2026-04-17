@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<base href="/adult/">
+<title>My Videos — RR Golf Performance Adult Coaching</title>
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  .video-card {
+    background: var(--white); border-radius: 8px; overflow: hidden;
+    box-shadow: var(--shadow-sm); border-top: 2px solid var(--gold);
+    margin-bottom: 20px;
+  }
+  .video-card .meta-row { padding: 14px 18px; display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: start; border-bottom: 1px solid var(--rule); }
+  .video-card video { width: 100%; max-height: 420px; background: var(--navy); display: block; }
+  .video-card .body { padding: 14px 18px; }
+  .video-card .actions { padding: 12px 18px; background: var(--light-bg); display:flex; gap:8px; justify-content:flex-end; }
+</style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container">
+
+  <div class="page-header">
+    <div class="page-label">MY UPLOADS</div>
+    <h1 class="page-title">My Videos</h1>
+    <hr class="gold-rule">
+    <p class="page-subtitle">
+      Every swing video you've sent Ryan, in one place. Review inline, re-download for your
+      own use, or delete what you don't need anymore.
+    </p>
+  </div>
+
+  <div id="new-banner" style="display:none;" class="callout mb-4">
+    <b>Video sent.</b> Ryan has been notified. Watch for his feedback at your next session.
+  </div>
+
+  <div class="flex-between mb-4">
+    <div class="stat-strip" style="flex:1; margin-right:16px;" id="summary"></div>
+    <a class="btn btn-primary" href="upload-video.html">+ Upload Another</a>
+  </div>
+
+  <div id="videos-wrap"></div>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  const user = RRG.mount('videos');
+  if (!user) throw new Error();
+
+  if (RRG.qs('new')) document.getElementById('new-banner').style.display = 'block';
+
+  const videos = RRG.videos.forUser(user.id);
+  const reviewed = videos.filter(v => v.status === 'reviewed').length;
+
+  document.getElementById('summary').innerHTML = `
+    <div class="stat-cell"><div class="val">${videos.length}</div><div class="lbl">Uploaded</div></div>
+    <div class="stat-cell"><div class="val">${videos.length - reviewed}</div><div class="lbl">Awaiting Review</div></div>
+    <div class="stat-cell"><div class="val">${reviewed}</div><div class="lbl">Reviewed</div></div>
+  `;
+
+  const wrap = document.getElementById('videos-wrap');
+  if (videos.length === 0) {
+    wrap.innerHTML = `
+      <div class="history-empty">
+        <h3 class="navy">No videos yet.</h3>
+        <p class="muted mt-2">Send Ryan your first swing clip so he can review it between sessions.</p>
+        <a class="btn btn-primary mt-4" href="upload-video.html">Upload a Video &uarr;</a>
+      </div>
+    `;
+  } else {
+    wrap.innerHTML = videos.map(v => {
+      const lesson = v.lessonId ? RRG.lessons.all().find(l => l.id === v.lessonId) : null;
+      const statusBadge = v.status === 'reviewed'
+        ? '<span class="badge badge-green">REVIEWED</span>'
+        : '<span class="badge badge-gold">AWAITING REVIEW</span>';
+      return `
+        <div class="video-card">
+          <div class="meta-row">
+            <div>
+              <div style="font-weight:700; color:var(--navy);">${RRG.esc(v.filename)}</div>
+              <div class="muted small mt-2">
+                ${RRG.fmtDate(v.createdAt)} ·
+                ${RRG.fmtBytes(v.size)}
+                ${v.club ? ' · ' + RRG.esc(v.club) : ''}
+                ${v.angle ? ' · ' + RRG.esc(v.angle) : ''}
+                ${lesson ? ` · <a href="lesson.html?id=${lesson.id}">Lesson ${lesson.number}</a>` : ''}
+              </div>
+            </div>
+            <div>${statusBadge}</div>
+          </div>
+          ${v.blobUrl ? `<video controls src="${v.blobUrl}"></video>` : `
+            <div style="padding:32px; text-align:center; color:var(--mid-grey);">
+              Video preview unavailable in this session.
+            </div>
+          `}
+          ${v.note ? `<div class="body"><div class="page-label">NOTE TO RYAN</div><p class="mt-2">${RRG.esc(v.note)}</p></div>` : ''}
+          ${v.coachFeedback ? `
+            <div class="body" style="border-top:1px solid var(--rule); background:var(--cream);">
+              <div class="page-label">RYAN'S FEEDBACK</div>
+              <p class="mt-2" style="color:var(--navy-mid);"><i>${RRG.esc(v.coachFeedback)}</i></p>
+            </div>
+          ` : ''}
+          <div class="actions">
+            ${v.blobUrl ? `<a class="btn btn-ghost btn-sm" href="${v.blobUrl}" download="${RRG.esc(v.filename)}">Download</a>` : ''}
+            <button class="btn btn-ghost btn-sm" style="color:var(--red-risk);" onclick="removeVid('${v.id}')">Delete</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  window.removeVid = (id) => {
+    if (!confirm('Delete this video? This cannot be undone.')) return;
+    RRG.videos.remove(id);
+    location.reload();
+  };
+</script>
+</body>
+</html>

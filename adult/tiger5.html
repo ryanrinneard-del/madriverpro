@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<base href="/adult/">
+<title>Tiger 5 — RR Golf Performance</title>
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  /* Tiger 5 printable card specific */
+  .t5-card {
+    background: var(--white);
+    border: 2px solid var(--navy);
+    border-radius: 10px;
+    padding: 28px;
+    max-width: 5.5in;
+    margin: 0 auto;
+    page-break-inside: avoid;
+  }
+  .t5-card .t5-hdr {
+    border-bottom: 2px solid var(--gold);
+    padding-bottom: 12px;
+    margin-bottom: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .t5-card .t5-hdr .brand { font-weight: 700; letter-spacing: 1.5px; color: var(--navy); font-size: 14px; }
+  .t5-card .t5-hdr .sub { color: var(--gold); font-size: 10px; letter-spacing: 2px; font-weight: 700; }
+  .t5-card table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+  .t5-card th, .t5-card td {
+    border-bottom: 1px solid var(--rule);
+    padding: 8px 6px;
+    font-size: 13px;
+    vertical-align: top;
+  }
+  .t5-card th {
+    background: var(--navy);
+    color: var(--white);
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-align: left;
+  }
+  .t5-card th.hole, .t5-card td.hole { text-align: center; width: 28px; }
+  .t5-card td.hole { color: var(--mid-grey); font-size: 11px; }
+  .t5-card td.error-type {
+    font-size: 9px;
+    color: var(--navy);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  .t5-card td.box {
+    width: 22px; height: 22px;
+    border: 1px solid var(--navy);
+    background: var(--white);
+  }
+  .t5-card .totals-row td { background: var(--cream); font-weight: 700; color: var(--navy); }
+  .t5-card .meta-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-top: 14px; font-size: 11px; color: var(--mid-grey); }
+  .t5-card .meta-row .lbl { font-size: 9px; letter-spacing: 1.2px; font-weight: 700; color: var(--navy); display: block; margin-bottom: 2px; }
+  .t5-card .meta-row input {
+    border: none; border-bottom: 1px solid var(--rule); padding: 4px 0; width: 100%; font-size: 12px;
+  }
+  @media print {
+    body { background: white; }
+    .container { padding: 0; }
+    .print-page { page-break-after: always; }
+  }
+</style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container">
+  <div class="page-header">
+    <div class="page-label">MENTAL SCORECARD</div>
+    <h1 class="page-title">Tiger 5</h1>
+    <hr class="gold-rule">
+    <p class="page-subtitle">
+      Five avoidable errors. Track live, hole by hole. Tiger's benchmark was ≤ 6 across a four-round
+      tournament — he figured he'd win. For you: <b>1–2 or fewer per round</b> is the working target.
+    </p>
+  </div>
+
+  <!-- Live tally for tracking right now -->
+  <div class="card mb-5 no-print">
+    <div class="page-label">LIVE TALLY</div>
+    <h2 style="font-size:18px; color:var(--navy); margin-bottom:14px;">Tap to count as errors happen today</h2>
+    <div id="live-panel" class="tiger5-grid"></div>
+    <div class="tiger5-summary mt-4" id="live-summary">
+      <div class="total"><b id="live-total">0</b>Events so far</div>
+      <div class="flex gap-3">
+        <span class="status good" id="live-status">ON BENCHMARK</span>
+        <button class="btn btn-ghost btn-sm" onclick="resetLive()">Reset</button>
+      </div>
+    </div>
+    <p class="muted small mt-3">
+      This live tally stays in your browser. When you submit the round, the totals travel with your
+      scorecard to Ryan.
+    </p>
+  </div>
+
+  <!-- Printable card -->
+  <div class="flex-between mb-4 no-print">
+    <div>
+      <div class="page-label">CARRY THIS CARD</div>
+      <h2 style="font-size:18px; color:var(--navy);">Printable Tiger 5 Scorecard</h2>
+      <p class="muted small">Print it, fold it, slip it into your scorecard holder.</p>
+    </div>
+    <button onclick="window.print()" class="btn btn-primary">Print this card ↗</button>
+  </div>
+
+  <div class="t5-card print-page" id="printable">
+    <div class="t5-hdr">
+      <div>
+        <div class="brand">TIGER 5 · MENTAL SCORECARD</div>
+        <div class="muted" style="font-size:11px; margin-top:2px;">RR Golf Performance</div>
+      </div>
+      <div class="sub">JUNIOR ELITE · 2026</div>
+    </div>
+
+    <div class="meta-row">
+      <div><span class="lbl">PLAYER</span><input id="meta-player" placeholder=""></div>
+      <div><span class="lbl">COURSE</span><input placeholder=""></div>
+      <div><span class="lbl">DATE</span><input placeholder=""></div>
+    </div>
+
+    <table>
+      <thead>
+        <tr id="printable-head"><th>#</th><th>ERROR</th></tr>
+      </thead>
+      <tbody id="printable-body"></tbody>
+    </table>
+
+    <div style="font-size:10.5px; color:var(--navy-mid); margin-top:14px; line-height:1.5;">
+      <b>Goal:</b> 1–2 or fewer events per round · ≤ 6 across a 4-round tournament.<br>
+      <b>How to use:</b> tick the hole box the moment a Tiger 5 error happens. Total at the end.
+      Carry this card; submit your round in the portal after.
+    </div>
+  </div>
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  const user = RRG.mount('tiger5');
+  if (!user) throw new Error();
+
+  document.getElementById('meta-player').value = user.name || '';
+
+  // Live tally UI
+  const state = { 1:0, 2:0, 3:0, 4:0, 5:0 };
+  const panel = document.getElementById('live-panel');
+  panel.innerHTML = RRG.TIGER5.map(t => `
+    <div class="tiger5-row">
+      <div class="t5-num">${t.n}</div>
+      <div class="t5-desc">
+        <b>${RRG.esc(t.title)}</b>
+        <div class="muted small">${RRG.esc(t.desc)}</div>
+      </div>
+      <div class="t5-count">
+        <button onclick="tick(${t.n}, -1)">−</button>
+        <span class="n" id="live-n-${t.n}">0</span>
+        <button onclick="tick(${t.n}, +1)">+</button>
+      </div>
+    </div>
+  `).join('');
+
+  window.tick = (n, d) => {
+    state[n] = Math.max(0, state[n] + d);
+    document.getElementById('live-n-' + n).textContent = state[n];
+    const total = Object.values(state).reduce((a,b) => a+b, 0);
+    document.getElementById('live-total').textContent = total;
+    const status = document.getElementById('live-status');
+    if (total <= 2) { status.textContent = 'ON BENCHMARK'; status.className = 'status good'; }
+    else if (total <= 4) { status.textContent = 'CLOSE'; status.className = 'status ok'; }
+    else { status.textContent = 'STROKES ON THE TABLE'; status.className = 'status bad'; }
+  };
+
+  window.resetLive = () => {
+    Object.keys(state).forEach(k => state[k] = 0);
+    RRG.TIGER5.forEach(t => document.getElementById('live-n-'+t.n).textContent = '0');
+    document.getElementById('live-total').textContent = '0';
+    const status = document.getElementById('live-status');
+    status.textContent = 'ON BENCHMARK'; status.className = 'status good';
+  };
+
+  // Printable card: build hole-by-hole grid
+  const thead = document.getElementById('printable-head');
+  thead.innerHTML = '<th>#</th><th>ERROR</th>' +
+    Array.from({length:18}, (_,i) => `<th class="hole">${i+1}</th>`).join('') +
+    '<th class="hole" style="background:var(--gold); color:var(--navy);">T</th>';
+
+  const tbody = document.getElementById('printable-body');
+  const short = [
+    'Bogey+ on Par 5',
+    'Double bogey +',
+    'Blown easy save',
+    '3-putt',
+    'Bogey · 9i or less',
+  ];
+  tbody.innerHTML = RRG.TIGER5.map((t,i) => `
+    <tr>
+      <td class="hole">${t.n}</td>
+      <td class="error-type">${RRG.esc(short[i])}</td>
+      ${Array.from({length:18}, () => `<td class="box"></td>`).join('')}
+      <td class="box" style="background:var(--cream);"></td>
+    </tr>
+  `).join('') + `
+    <tr class="totals-row">
+      <td></td><td style="text-align:right; font-size:10px; letter-spacing:1px;">ROUND TOTAL →</td>
+      ${Array.from({length:18}, () => `<td></td>`).join('')}
+      <td class="box" style="background:var(--gold);"></td>
+    </tr>
+  `;
+</script>
+</body>
+</html>

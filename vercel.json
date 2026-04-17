@@ -42,6 +42,11 @@
       "source": "/portal",
       "destination": "/portal/",
       "permanent": true
+    },
+    {
+      "source": "/adult",
+      "destination": "/adult/",
+      "permanent": true
     }
   ]
 }

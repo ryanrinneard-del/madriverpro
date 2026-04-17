@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<base href="/adult/">
+<title>Coach View — RR Golf Performance Adult Coaching</title>
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  .vid-queue {
+    display: grid; grid-template-columns: 280px 1fr; gap: 14px;
+    background: var(--white); border-radius: 8px; padding: 14px;
+    border-left: 3px solid var(--gold); margin-bottom: 12px;
+  }
+  .vid-queue video { width: 100%; border-radius: 4px; background: var(--navy); max-height: 200px; }
+</style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container">
+
+  <div class="page-header">
+    <div class="page-label">COACH VIEW · RYAN</div>
+    <h1 class="page-title">Adult Coaching 2026&trade; · Roster</h1>
+    <hr class="gold-rule">
+    <p class="page-subtitle">
+      Every adult player. Every package. Every video. Schedule lessons, review uploads,
+      pull to OnForm when you want.
+    </p>
+  </div>
+
+  <div class="stat-strip mb-5" id="coach-stats"></div>
+
+  <!-- Video review queue -->
+  <div class="page-header">
+    <div class="page-label">VIDEO QUEUE</div>
+    <h2 class="page-title" style="font-size:20px;">Awaiting Your Review</h2>
+    <hr class="gold-rule">
+  </div>
+  <div id="vid-wrap"></div>
+
+  <!-- Roster -->
+  <div class="page-header mt-6">
+    <div class="page-label">ROSTER</div>
+    <h2 class="page-title" style="font-size:20px;">Your Adult Players</h2>
+    <hr class="gold-rule">
+  </div>
+  <div id="roster-wrap"></div>
+
+  <!-- Invites -->
+  <div class="page-header mt-6">
+    <div class="page-label">INVITES</div>
+    <h2 class="page-title" style="font-size:20px;">Invite Codes</h2>
+    <hr class="gold-rule">
+  </div>
+  <div class="card mb-4">
+    <div class="flex-between">
+      <div>
+        <b>Generate a new invite code</b>
+        <div class="muted small">One code per player. Each code can be used once.</div>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="generateInvite()">+ Generate Code</button>
+    </div>
+  </div>
+  <div id="invites-wrap"></div>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  const user = RRG.mount('coach');
+  if (!user) throw new Error();
+
+  if (user.role !== 'coach') {
+    document.querySelector('main').innerHTML = `
+      <div class="callout">This area is for the coach. <a href="dashboard.html">Back to my dashboard</a>.</div>
+    `;
+    throw new Error('not coach');
+  }
+
+  const players = RRG.users.all().filter(u => u.role === 'player');
+  const allVideos = RRG.videos.all();
+  const pendingVideos = allVideos.filter(v => v.status !== 'reviewed');
+  const allLessons = RRG.lessons.all();
+  const invitesOpen = RRG.invites.all().filter(i => !i.usedBy).length;
+
+  document.getElementById('coach-stats').innerHTML = `
+    <div class="stat-cell"><div class="val">${players.length}</div><div class="lbl">Active Players</div></div>
+    <div class="stat-cell"><div class="val">${allLessons.length}</div><div class="lbl">Total Lessons</div></div>
+    <div class="stat-cell"><div class="val">${pendingVideos.length}</div><div class="lbl">Videos To Review</div></div>
+    <div class="stat-cell"><div class="val">${invitesOpen}</div><div class="lbl">Open Invites</div></div>
+  `;
+
+  // Video queue
+  const vidWrap = document.getElementById('vid-wrap');
+  if (pendingVideos.length === 0) {
+    vidWrap.innerHTML = `<div class="history-empty"><h3 class="navy">Inbox zero.</h3><p class="muted mt-2">No videos awaiting review.</p></div>`;
+  } else {
+    vidWrap.innerHTML = pendingVideos.map(v => `
+      <div class="vid-queue">
+        ${v.blobUrl ? `<video controls src="${v.blobUrl}"></video>`
+                    : '<div style="background:var(--light-bg); border-radius:4px; padding:20px; text-align:center; color:var(--mid-grey);">Preview not available</div>'}
+        <div>
+          <div class="flex-between">
+            <div>
+              <div style="font-weight:700; color:var(--navy);">${RRG.esc(v.userName || '')}</div>
+              <div class="muted small">${RRG.esc(v.filename)} · ${RRG.fmtBytes(v.size)} · ${RRG.fmtDate(v.createdAt)}</div>
+            </div>
+            <span class="badge badge-gold">AWAITING REVIEW</span>
+          </div>
+          <div class="mt-3">
+            ${v.club ? `<div class="small"><b>Club:</b> ${RRG.esc(v.club)}</div>` : ''}
+            ${v.angle ? `<div class="small"><b>Angle:</b> ${RRG.esc(v.angle)}</div>` : ''}
+            ${v.note ? `<div class="small mt-2"><b>Note:</b> <i>${RRG.esc(v.note)}</i></div>` : ''}
+          </div>
+          <div class="flex gap-2 mt-3">
+            ${v.blobUrl ? `<a class="btn btn-ghost btn-sm" href="${v.blobUrl}" download="${RRG.esc(v.filename)}">Download for OnForm</a>` : ''}
+            <button class="btn btn-navy btn-sm" onclick="leaveFeedback('${v.id}')">Add Feedback</button>
+            <button class="btn btn-primary btn-sm" onclick="markReviewed('${v.id}')">Mark Reviewed</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  window.markReviewed = (id) => {
+    RRG.videos.update(id, { status: 'reviewed', reviewedAt: new Date().toISOString() });
+    RRG.toast('Marked reviewed.');
+    setTimeout(() => location.reload(), 600);
+  };
+  window.leaveFeedback = (id) => {
+    const existing = (RRG.videos.all().find(v => v.id === id) || {}).coachFeedback || '';
+    const txt = prompt('Feedback for the player (they see this in their video list):', existing);
+    if (txt == null) return;
+    RRG.videos.update(id, { coachFeedback: txt });
+    RRG.toast('Feedback saved.');
+    setTimeout(() => location.reload(), 600);
+  };
+
+  // Roster
+  const rosterWrap = document.getElementById('roster-wrap');
+  if (players.length === 0) {
+    rosterWrap.innerHTML = `<div class="history-empty"><h3 class="navy">No players yet.</h3><p class="muted mt-2">Generate an invite code below to add your first adult player.</p></div>`;
+  } else {
+    rosterWrap.innerHTML = `
+      <table class="history-table">
+        <thead>
+          <tr>
+            <th>Player</th><th>Package</th><th>Lessons</th>
+            <th>Videos</th><th>Rounds</th><th>Profile</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${players.map(p => {
+            const userLessons = RRG.lessons.forUser(p.id);
+            const userVids = RRG.videos.forUser(p.id);
+            const rounds = RRG.subs.forUser(p.id).length;
+            const profileStatus = p.profile?._status === 'complete'
+              ? '<span class="badge badge-green">COMPLETE</span>'
+              : p.profile?._status === 'draft'
+                ? '<span class="badge badge-amber">DRAFT</span>'
+                : '<span class="badge badge-navy">NOT STARTED</span>';
+            return `
+              <tr>
+                <td><b>${RRG.esc(p.name)}</b><br><span class="muted small">${RRG.esc(p.email)}</span></td>
+                <td>${RRG.esc(p.package?.name || '—')}</td>
+                <td>${userLessons.length}${p.package?.lessons ? ' / ' + p.package.lessons : ''}</td>
+                <td>${userVids.length}</td>
+                <td>${rounds}</td>
+                <td>${profileStatus}</td>
+                <td><button class="btn btn-ghost btn-sm" onclick="scheduleLesson('${p.id}')">+ Lesson</button></td>
+              </tr>
+            `;
+          }).join('')}
+        </tbody>
+      </table>
+    `;
+  }
+
+  window.scheduleLesson = (userId) => {
+    const player = players.find(p => p.id === userId);
+    const existingCount = RRG.lessons.forUser(userId).length;
+    const focus = prompt('Focus for this lesson (what are you working on with ' + player.name + '?)');
+    if (!focus) return;
+    const dateStr = prompt('Date (YYYY-MM-DD or leave blank for TBD):', '');
+    const preWork = prompt('Pre-lesson work for the player (optional):', '');
+    RRG.lessons.create({
+      userId,
+      number: existingCount + 1,
+      focus,
+      preWork: preWork || '',
+      scheduledAt: dateStr || null,
+    });
+    RRG.toast('Lesson scheduled.');
+    setTimeout(() => location.reload(), 600);
+  };
+
+  // Invites
+  function renderInvites() {
+    const invites = RRG.invites.all().slice().sort((a,b) => b.createdAt.localeCompare(a.createdAt));
+    const wrap = document.getElementById('invites-wrap');
+    if (invites.length === 0) {
+      wrap.innerHTML = `<div class="history-empty"><h3 class="navy">No invites yet.</h3></div>`;
+      return;
+    }
+    wrap.innerHTML = `
+      <table class="history-table">
+        <thead><tr><th>Code</th><th>Status</th><th>Used By</th><th>Created</th><th>Note</th><th></th></tr></thead>
+        <tbody>
+          ${invites.map(inv => {
+            const player = inv.usedBy ? RRG.users.all().find(u => u.id === inv.usedBy) : null;
+            const status = inv.usedBy
+              ? '<span class="badge badge-green">ACTIVATED</span>'
+              : '<span class="badge badge-gold">AVAILABLE</span>';
+            return `
+              <tr>
+                <td><code style="font-weight:700; color:var(--navy); letter-spacing:1px;">${RRG.esc(inv.code)}</code></td>
+                <td>${status}</td>
+                <td>${player ? RRG.esc(player.name) : '<span class="muted">—</span>'}</td>
+                <td class="small muted">${RRG.fmtDate(inv.createdAt)}</td>
+                <td class="small">${RRG.esc(inv.note || '')}</td>
+                <td>
+                  ${!inv.usedBy ? `
+                    <div class="flex gap-2">
+                      <button class="btn btn-ghost btn-sm" onclick="copyCode('${inv.code}')">Copy</button>
+                      <button class="btn btn-ghost btn-sm" onclick="revokeInvite('${inv.code}')" style="color:var(--red-risk);">Revoke</button>
+                    </div>
+                  ` : ''}
+                </td>
+              </tr>
+            `;
+          }).join('')}
+        </tbody>
+      </table>
+    `;
+  }
+  window.generateInvite = () => {
+    const note = prompt('Optional note (who is this for?)') || '';
+    const inv = RRG.invites.create({ issuedBy: user.name, note });
+    RRG.toast('New invite: ' + inv.code);
+    renderInvites();
+  };
+  window.copyCode = (code) => { navigator.clipboard?.writeText(code); RRG.toast('Copied: ' + code); };
+  window.revokeInvite = (code) => {
+    if (!confirm('Revoke ' + code + '?')) return;
+    RRG.invites.revoke(code); renderInvites(); RRG.toast('Invite revoked.');
+  };
+  renderInvites();
+</script>
+</body>
+</html>

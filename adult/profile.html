@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<base href="/adult/">
+<title>Know Your Game — RR Golf Performance</title>
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container-narrow">
+
+  <div class="page-header">
+    <div class="page-label">CONFIDENTIAL PROFILE</div>
+    <h1 class="page-title">Know Your Game</h1>
+    <hr class="gold-rule">
+    <p class="page-subtitle">
+      This is the <b>most important document of your season.</b> It is private — only Ryan sees it.
+      Fill it out with <b>absolute honesty</b>. Sugar-coating it means coaching aimed at the wrong
+      target. The less you soften, the better your lesson package will be.
+    </p>
+  </div>
+
+  <div id="welcome-note" class="callout mb-5" style="display:none;">
+    <b>Welcome to Adult Coaching.</b> Before Week 1, Ryan needs this profile.
+    You can save a draft and come back, but it must be complete by the first Saturday.
+  </div>
+
+  <form id="profile-form" class="card">
+
+    <!-- Section 1: About you -->
+    <div class="section-label">SECTION 1 · ABOUT YOU</div>
+    <div class="field-row">
+      <div class="field">
+        <label>Age</label>
+        <input name="s1_age" type="number" min="10" max="25">
+      </div>
+      <div class="field">
+        <label>Years playing golf</label>
+        <input name="s1_years" type="number" min="0" max="15">
+      </div>
+    </div>
+    <div class="field">
+      <label>What are your golf goals this year? (Be specific.)</label>
+      <textarea name="s1_goals" placeholder="e.g. Break 80 consistently. Top-10 on SCJGT order of merit. Win a high school event."></textarea>
+    </div>
+    <div class="field">
+      <label>What does your best round look like this season?</label>
+      <input name="s1_bestRound" type="text" placeholder="e.g. 74 at Mad River in July">
+    </div>
+
+    <!-- Section 2: Long game -->
+    <div class="section-label">SECTION 2 · LONG GAME (DRIVER, FW, LONG IRONS)</div>
+    <div class="field">
+      <label>Typical driver miss</label>
+      <select name="s2_miss">
+        <option value="">Select…</option>
+        <option>Slice / fade right</option>
+        <option>Hook / draw left</option>
+        <option>Push right (straight)</option>
+        <option>Pull left (straight)</option>
+        <option>Top / thin</option>
+        <option>Fat / heavy</option>
+        <option>Two-way miss (both directions)</option>
+        <option>No consistent miss</option>
+      </select>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Driver carry (yards)</label>
+        <input name="s2_carry" type="text" placeholder="e.g. 240">
+      </div>
+      <div class="field">
+        <label>Fairways hit %</label>
+        <input name="s2_fir" type="text" placeholder="e.g. 45%">
+      </div>
+    </div>
+    <div class="field">
+      <label>Confidence with fairway woods / long irons (1–10)</label>
+      <input name="s2_longConf" type="number" min="1" max="10">
+    </div>
+
+    <!-- Section 3: Approach -->
+    <div class="section-label">SECTION 3 · APPROACH GAME</div>
+    <div class="field">
+      <label>Do you know your yardages with each iron?</label>
+      <select name="s3_yardages">
+        <option value="">Select…</option>
+        <option>Not really — I'm guessing on every approach</option>
+        <option>Rough idea</option>
+        <option>Yes, dialed in</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Greens in Regulation per round (average)</label>
+      <input name="s3_gir" type="text" placeholder="e.g. 5/18">
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Confidence 6–8 iron (1–10)</label>
+        <input name="s3_conf68" type="number" min="1" max="10">
+      </div>
+      <div class="field">
+        <label>Confidence 9-PW + wedges (1–10)</label>
+        <input name="s3_conf9pw" type="number" min="1" max="10">
+      </div>
+    </div>
+
+    <!-- Section 4: Short game -->
+    <div class="section-label">SECTION 4 · SHORT GAME (CHIP, PITCH, BUNKER)</div>
+    <div class="field-row-3">
+      <div class="field"><label>Chipping confidence (1–10)</label><input name="s4_chip" type="number" min="1" max="10"></div>
+      <div class="field"><label>Pitching confidence (1–10)</label><input name="s4_pitch" type="number" min="1" max="10"></div>
+      <div class="field"><label>Bunker confidence (1–10)</label><input name="s4_bunker" type="number" min="1" max="10"></div>
+    </div>
+    <div class="field">
+      <label>Your most common short-game mistake</label>
+      <select name="s4_mistake">
+        <option value="">Select…</option>
+        <option>Chunk / fat</option>
+        <option>Blade / thin</option>
+        <option>Poor distance control</option>
+        <option>Wrong club choice</option>
+        <option>Deceleration through impact</option>
+        <option>Can't get out of bunker first try</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Go-to club around the green</label>
+      <input name="s4_goto" type="text" placeholder="e.g. 58° / PW / putter">
+    </div>
+
+    <!-- Section 5: Putting -->
+    <div class="section-label">SECTION 5 · PUTTING</div>
+    <div class="field-row-3">
+      <div class="field"><label>Inside 5 ft (1–10)</label><input name="s5_short" type="number" min="1" max="10"></div>
+      <div class="field"><label>6–15 ft (1–10)</label><input name="s5_mid" type="number" min="1" max="10"></div>
+      <div class="field"><label>25+ ft lag (1–10)</label><input name="s5_long" type="number" min="1" max="10"></div>
+    </div>
+    <div class="field">
+      <label>Biggest putting struggle</label>
+      <select name="s5_struggle">
+        <option value="">Select…</option>
+        <option>Distance control (3-putting)</option>
+        <option>Green reading</option>
+        <option>Short putts</option>
+        <option>Lack of consistent routine</option>
+        <option>All of the above</option>
+      </select>
+    </div>
+
+    <!-- Section 6: On-course behaviour -->
+    <div class="section-label">SECTION 6 · ON-COURSE BEHAVIOUR &amp; STRATEGY</div>
+    <div class="field">
+      <label>Do you think about risk/reward before each shot?</label>
+      <select name="s6_risk">
+        <option value="">Select…</option>
+        <option>Always</option><option>Usually</option><option>Sometimes</option><option>Rarely</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>What aspect of your game <em>shows up best</em> under pressure?</label>
+      <textarea name="s6_pressureGood"></textarea>
+    </div>
+    <div class="field">
+      <label>What makes you <em>most uncomfortable</em> on the course?</label>
+      <textarea name="s6_pressureBad"></textarea>
+    </div>
+    <div class="field">
+      <label>Most frequent on-course mistake</label>
+      <select name="s6_mistake">
+        <option value="">Select…</option>
+        <option>Technical (execution failure)</option>
+        <option>Strategic (wrong decision)</option>
+        <option>Mental (lack of commitment)</option>
+        <option>Physical (fatigue / setup)</option>
+      </select>
+    </div>
+
+    <!-- Section 7: Strengths & goals -->
+    <div class="section-label">SECTION 7 · STRENGTHS &amp; GOALS</div>
+    <div class="field">
+      <label>What are your top 2–3 strengths as a golfer?</label>
+      <textarea name="s7_strengths"></textarea>
+    </div>
+    <div class="field">
+      <label>What are your top 2–3 weaknesses (be honest — no one but Ryan sees this)?</label>
+      <textarea name="s7_weaknesses"></textarea>
+    </div>
+    <div class="field">
+      <label>What would make this season a success for you?</label>
+      <textarea name="s7_success"></textarea>
+    </div>
+
+    <div class="callout mt-4">
+      <b>One last thing.</b> If there's something else Ryan should know — an injury,
+      a mental block, a tournament you really want to peak for — say it here.
+    </div>
+    <div class="field mt-3">
+      <label>Anything else</label>
+      <textarea name="s7_extra" style="min-height:80px;"></textarea>
+    </div>
+
+    <div class="flex gap-3 mt-4">
+      <button type="submit" class="btn btn-primary">Save my profile</button>
+      <button type="button" class="btn btn-ghost" onclick="saveDraft()">Save draft</button>
+    </div>
+    <p class="muted small mt-3">
+      Your profile is private. Only Ryan sees it. It is the frame for your lesson package.
+    </p>
+  </form>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  const user = RRG.mount('profile');
+  if (!user) throw new Error();
+
+  if (RRG.qs('welcome')) {
+    document.getElementById('welcome-note').style.display = 'block';
+  }
+
+  const form = document.getElementById('profile-form');
+
+  // Load existing profile
+  const existing = user.profile || {};
+  Object.entries(existing).forEach(([k, v]) => {
+    const el = form.querySelector(`[name="${k}"]`);
+    if (el) el.value = v;
+  });
+
+  window.saveDraft = () => {
+    const data = Object.fromEntries(new FormData(form).entries());
+    RRG.users.update(user.id, { profile: { ...(user.profile||{}), ...data, _status: 'draft' } });
+    RRG.toast('Draft saved. Come back anytime.');
+  };
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(form).entries());
+    RRG.users.update(user.id, { profile: { ...data, _status: 'complete', _savedAt: new Date().toISOString() } });
+    RRG.toast('Profile saved to your portal. Ryan has been notified.');
+    setTimeout(() => location.href = 'dashboard.html', 1200);
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<base href="/adult/">
+<title>Lesson — RR Golf Performance Adult Coaching</title>
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  /* Slider */
+  .slider-row { margin-bottom: 18px; }
+  .slider-row .slabel {
+    display:flex; justify-content:space-between; align-items:baseline;
+    margin-bottom: 8px;
+  }
+  .slider-row .slabel .lbl {
+    font-size: 12px; font-weight: 700; letter-spacing: 1px; color: var(--navy);
+    text-transform: uppercase;
+  }
+  .slider-row .slabel .val {
+    font-weight: 800; font-size: 22px; color: var(--gold); line-height: 1;
+  }
+  .slider-row input[type=range] {
+    width: 100%; -webkit-appearance: none; appearance: none;
+    height: 6px; background: var(--rule); border-radius: 999px; outline: none;
+  }
+  .slider-row input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 22px; height: 22px; border-radius: 50%; background: var(--gold);
+    cursor: pointer; border: 3px solid var(--white);
+    box-shadow: 0 1px 4px rgba(10,22,40,0.25);
+  }
+  .slider-row input[type=range]::-moz-range-thumb {
+    width: 22px; height: 22px; border-radius: 50%; background: var(--gold);
+    cursor: pointer; border: 3px solid var(--white);
+  }
+  .slider-row .sticks {
+    display:flex; justify-content:space-between; margin-top: 6px;
+    font-size: 10.5px; color: var(--mid-grey); letter-spacing: 0.3px;
+  }
+
+  /* Chip group (multi-choice) */
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+  .chip {
+    display: inline-flex; align-items: center; padding: 7px 14px;
+    border: 1px solid var(--rule); border-radius: 999px;
+    font-size: 12.5px; color: var(--dark-text); background: var(--white);
+    cursor: pointer; transition: all 0.12s ease; user-select: none;
+  }
+  .chip:hover { border-color: var(--gold); }
+  .chip.selected {
+    background: var(--navy); color: var(--white); border-color: var(--navy);
+  }
+  .chip input { display: none; }
+
+  .fieldblock {
+    padding: 20px 22px; background: var(--white); border-radius: 8px;
+    border-left: 3px solid var(--gold); margin-bottom: 14px;
+  }
+</style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container-narrow" id="lesson-main">
+  <!-- rendered by script -->
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  const user = RRG.mount('dashboard');
+  if (!user) throw new Error();
+
+  const id = RRG.qs('id');
+  const lessons = RRG.lessons.forUser(user.id);
+  const lesson = RRG.lessons.all().find(l => l.id === id);
+  const main = document.getElementById('lesson-main');
+
+  if (!lesson || lesson.userId !== user.id) {
+    main.innerHTML = `<div class="callout">Lesson not found. <a href="dashboard.html">Back to dashboard</a>.</div>`;
+    throw new Error('not found');
+  }
+
+  const pos = lessons.findIndex(l => l.id === lesson.id);
+  const prev = lessons[pos - 1];
+  const next = lessons[pos + 1];
+
+  const status = lesson.completedAt ? 'COMPLETE' : (lesson.scheduledAt ? 'SCHEDULED' : 'PENDING');
+  const d = lesson.debrief || {};
+
+  main.innerHTML = `
+    <div class="flex-between mb-4">
+      <a href="dashboard.html" class="small muted">&larr; Back to my dashboard</a>
+      <div class="flex gap-2">
+        ${prev ? `<a class="btn btn-ghost btn-sm" href="lesson.html?id=${prev.id}">&larr; Lesson ${prev.number}</a>` : ''}
+        ${next ? `<a class="btn btn-ghost btn-sm" href="lesson.html?id=${next.id}">Lesson ${next.number} &rarr;</a>` : ''}
+      </div>
+    </div>
+
+    <div class="week-hero">
+      <span class="tag">${status}</span>
+      <h1>Lesson ${String(lesson.number || '—').padStart(2,'0')} — ${RRG.esc(lesson.focus || 'Focus TBD')}</h1>
+      <div class="meta">
+        <div class="m"><b>Scheduled</b>${lesson.scheduledAt ? RRG.fmtDate(lesson.scheduledAt) : 'TBD'}</div>
+        ${lesson.completedAt ? `<div class="m"><b>Completed</b>${RRG.fmtDate(lesson.completedAt)}</div>` : ''}
+        <div class="m"><b>Coach</b>Ryan Rinneard</div>
+      </div>
+    </div>
+
+    <div class="section-label">FOCUS</div>
+    <div class="section-title">What We're Working On</div>
+    <div class="card">${RRG.esc(lesson.focus || 'Ryan will set the focus before your lesson.')}</div>
+
+    ${lesson.preWork ? `
+      <div class="section-label">PRE-LESSON WORK</div>
+      <div class="section-title">Do This Before We Meet</div>
+      <div class="card-cream" style="border-radius:8px;"><i>${RRG.esc(lesson.preWork)}</i></div>
+    ` : ''}
+
+    ${lesson.completedAt ? `
+      <div class="section-label">POST-LESSON NOTES FROM RYAN</div>
+      <div class="section-title">What We Covered</div>
+      <div class="card">${RRG.esc(lesson.coachNotes || '—')}</div>
+    ` : ''}
+
+    <div class="section-label">MY DEBRIEF</div>
+    <div class="section-title">How the Lesson Felt</div>
+    <p class="muted small">
+      Fill this out right after your lesson. Sliders + chips, not essays — quick and honest.
+    </p>
+
+    <form id="debrief-form">
+
+      <div class="fieldblock">
+        <div class="slider-row">
+          <div class="slabel"><span class="lbl">Overall feel of the lesson</span><span class="val" id="v-feel">—</span></div>
+          <input type="range" min="1" max="10" name="feel" value="${d.feel || 5}" oninput="document.getElementById('v-feel').textContent=this.value">
+          <div class="sticks"><span>Tough</span><span>Average</span><span>Nailed it</span></div>
+        </div>
+      </div>
+
+      <div class="fieldblock">
+        <div class="slider-row">
+          <div class="slabel"><span class="lbl">Confidence with today's focus</span><span class="val" id="v-conf">—</span></div>
+          <input type="range" min="1" max="10" name="confidence" value="${d.confidence || 5}" oninput="document.getElementById('v-conf').textContent=this.value">
+          <div class="sticks"><span>Not yet</span><span>Getting there</span><span>Fully dialed</span></div>
+        </div>
+      </div>
+
+      <div class="fieldblock">
+        <div class="slider-row">
+          <div class="slabel"><span class="lbl">Commitment to practice before next lesson</span><span class="val" id="v-commit">—</span></div>
+          <input type="range" min="1" max="10" name="commitment" value="${d.commitment || 5}" oninput="document.getElementById('v-commit').textContent=this.value">
+          <div class="sticks"><span>Light week</span><span>Regular</span><span>All-in</span></div>
+        </div>
+      </div>
+
+      <div class="fieldblock">
+        <div class="slabel"><span class="lbl">What clicked today? (tap all that apply)</span></div>
+        <div class="chips" id="chips-good"></div>
+      </div>
+
+      <div class="fieldblock">
+        <div class="slabel"><span class="lbl">What still needs work?</span></div>
+        <div class="chips" id="chips-work"></div>
+      </div>
+
+      <div class="fieldblock">
+        <div class="slabel"><span class="lbl">One sentence you want Ryan to remember</span></div>
+        <input type="text" name="oneLine" value="${RRG.esc(d.oneLine || '')}"
+               style="width:100%; padding:10px 12px; border:1px solid var(--rule); border-radius:4px; font-size:14px; margin-top:4px;">
+      </div>
+
+      <div class="flex gap-3 mt-4">
+        <button type="submit" class="btn btn-primary">Save my debrief</button>
+        <a href="dashboard.html" class="btn btn-ghost">Cancel</a>
+      </div>
+      <p class="muted small mt-3">
+        Your debrief saves to your portal and flows to ryan@rrgolfperformance.com so it's
+        waiting for him before your next session.
+      </p>
+    </form>
+
+    <div class="section-label mt-6">VIDEO FROM THIS LESSON</div>
+    <div class="section-title">Upload or Attach Footage</div>
+    <div class="card">
+      <p class="small muted">
+        Shot something today you'd like Ryan to see between sessions? Upload it and tag it to
+        this lesson — Ryan can review inline or pull it to OnForm on his iPad.
+      </p>
+      <div class="mt-3 flex gap-2">
+        <a class="btn btn-primary btn-sm" href="upload-video.html?lesson=${lesson.id}">Upload a Video &uarr;</a>
+        <a class="btn btn-ghost btn-sm" href="videos.html">View My Videos</a>
+      </div>
+    </div>
+  `;
+
+  // Render chips for FOCUS_AREAS
+  const goodSel = new Set(d.chipsGood || []);
+  const workSel = new Set(d.chipsWork || []);
+  const renderChips = (containerId, selected) => {
+    document.getElementById(containerId).innerHTML = RRG.FOCUS_AREAS.map(a => `
+      <label class="chip ${selected.has(a) ? 'selected' : ''}">
+        <input type="checkbox" value="${RRG.esc(a)}" ${selected.has(a) ? 'checked' : ''}>
+        ${RRG.esc(a)}
+      </label>
+    `).join('');
+    document.querySelectorAll(`#${containerId} input`).forEach(i => {
+      i.addEventListener('change', e => {
+        e.target.closest('.chip').classList.toggle('selected', e.target.checked);
+      });
+    });
+  };
+  renderChips('chips-good', goodSel);
+  renderChips('chips-work', workSel);
+
+  // Init slider value labels
+  ['v-feel','v-conf','v-commit'].forEach((elId, i) => {
+    const srcName = ['feel','confidence','commitment'][i];
+    const v = document.querySelector(`input[name="${srcName}"]`).value;
+    document.getElementById(elId).textContent = v;
+  });
+
+  // Submit debrief
+  document.getElementById('debrief-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const fd = Object.fromEntries(new FormData(e.target).entries());
+    const chipsGood = [...document.querySelectorAll('#chips-good input:checked')].map(i => i.value);
+    const chipsWork = [...document.querySelectorAll('#chips-work input:checked')].map(i => i.value);
+    RRG.lessons.update(lesson.id, {
+      debrief: {
+        feel: +fd.feel, confidence: +fd.confidence, commitment: +fd.commitment,
+        chipsGood, chipsWork, oneLine: fd.oneLine,
+        savedAt: new Date().toISOString(),
+      }
+    });
+    RRG.toast('Debrief saved — Ryan will see it before your next session.');
+    setTimeout(() => location.href = 'dashboard.html', 1200);
+  });
+</script>
+</body>
+</html>
