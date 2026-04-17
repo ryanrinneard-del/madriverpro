@@ -46,12 +46,17 @@
   }
   .bag-card input.yard:focus { border-color: var(--gold); outline: none; }
   .remove-btn {
-    position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
-    width: 22px; height: 22px; border: 1px solid var(--rule); border-radius: 50%;
+    width: 28px; height: 28px; border: 1px solid var(--rule); border-radius: 50%;
     background: var(--white); color: var(--mid-grey); cursor: pointer;
-    font-size: 14px; line-height: 1; display: flex; align-items: center; justify-content: center;
+    font-size: 16px; line-height: 1; display: inline-flex;
+    align-items: center; justify-content: center;
+    transition: all 0.15s ease;
   }
-  .remove-btn:hover { border-color: var(--red-risk); color: var(--red-risk); }
+  .remove-btn:hover {
+    border-color: var(--red-risk); color: var(--white); background: var(--red-risk);
+    transform: scale(1.05);
+  }
+  .bag-card td.actions { text-align: center; width: 48px; }
   .add-row { text-align: center; padding: 12px !important; }
   .add-row button {
     background: transparent; border: 1px dashed var(--gold); color: var(--gold);
@@ -133,7 +138,7 @@
           <th>Club</th>
           <th>Carry</th>
           <th>Total</th>
-          <th class="no-print" style="width:32px;"></th>
+          <th class="no-print" style="width:56px; text-align:center;">Remove</th>
         </tr>
       </thead>
       <tbody id="bag-body"></tbody>
@@ -147,7 +152,7 @@
     </table>
 
     <div style="font-size:11px; color:var(--navy-mid); margin-top:14px; line-height:1.55;">
-      <b>Why this matters.</b> On course, you're not picking a club \u2014 you're picking a yardage.
+      <b>Why this matters.</b> On course, you're not picking a club &mdash; you're picking a yardage.
       The club just delivers it. When you know every number, every shot becomes a decision,
       not a guess.
     </div>
@@ -216,8 +221,8 @@
           <input class="yard" type="number" min="0" max="400"
                  data-idx="${idx}" data-field="total" value="${RRG.esc(c.total ?? '')}">
         </td>
-        <td class="no-print">
-          <button class="remove-btn" title="Remove this club" onclick="removeRow(${idx})">×</button>
+        <td class="no-print actions">
+          <button class="remove-btn" title="Remove this club" aria-label="Remove" onclick="removeRow(${idx})">×</button>
         </td>
       </tr>
     `).join('');
