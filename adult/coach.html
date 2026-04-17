@@ -119,9 +119,10 @@
             ${v.note ? `<div class="small mt-2"><b>Note:</b> <i>${RRG.esc(v.note)}</i></div>` : ''}
           </div>
           <div class="flex gap-2 mt-3">
+            <a class="btn btn-primary btn-sm" href="video-review.html?v=${v.id}">Review + Annotate</a>
             ${v.blobUrl ? `<a class="btn btn-ghost btn-sm" href="${v.blobUrl}" download="${RRG.esc(v.filename)}">Download for OnForm</a>` : ''}
-            <button class="btn btn-navy btn-sm" onclick="leaveFeedback('${v.id}')">Add Feedback</button>
-            <button class="btn btn-primary btn-sm" onclick="markReviewed('${v.id}')">Mark Reviewed</button>
+            <button class="btn btn-ghost btn-sm" onclick="leaveFeedback('${v.id}')">Note only</button>
+            <button class="btn btn-ghost btn-sm" onclick="markReviewed('${v.id}')">Mark Reviewed</button>
           </div>
         </div>
       </div>

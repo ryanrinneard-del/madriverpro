@@ -14,7 +14,20 @@
   }
   .video-card .meta-row { padding: 14px 18px; display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: start; border-bottom: 1px solid var(--rule); }
   .video-card video { width: 100%; max-height: 420px; background: var(--navy); display: block; }
+  .video-card .video-holder { position: relative; background: var(--navy); }
+  .video-card .video-holder canvas {
+    position: absolute; top: 0; left: 0; pointer-events: none;
+  }
   .video-card .body { padding: 14px 18px; }
+  .ann-timeline {
+    height: 6px; background: var(--rule); border-radius: 999px;
+    position: relative; margin: 8px 18px;
+  }
+  .ann-timeline .mark {
+    position: absolute; top: -3px; width: 3px; height: 12px;
+    background: var(--gold); border-radius: 2px; cursor: pointer;
+  }
+  .ann-timeline .mark:hover { background: var(--navy); }
   .video-card .actions { padding: 12px 18px; background: var(--light-bg); display:flex; gap:8px; justify-content:flex-end; }
 </style>
 </head>
@@ -81,8 +94,10 @@
       const statusBadge = v.status === 'reviewed'
         ? '<span class="badge badge-green">REVIEWED</span>'
         : '<span class="badge badge-gold">AWAITING REVIEW</span>';
+      const annCount = (v.annotations || []).length;
+      const annFrames = new Set((v.annotations || []).map(a => a.t.toFixed(2))).size;
       return `
-        <div class="video-card">
+        <div class="video-card" data-vid="${v.id}">
           <div class="meta-row">
             <div>
               <div style="font-weight:700; color:var(--navy);">${RRG.esc(v.filename)}</div>
@@ -92,16 +107,26 @@
                 ${v.club ? ' · ' + RRG.esc(v.club) : ''}
                 ${v.angle ? ' · ' + RRG.esc(v.angle) : ''}
                 ${lesson ? ` · <a href="lesson.html?id=${lesson.id}">Lesson ${lesson.number}</a>` : ''}
+                ${annCount ? ` · <b class="gold">${annCount} annotation${annCount>1?'s':''} · ${annFrames} frame${annFrames>1?'s':''}</b>` : ''}
               </div>
             </div>
             <div>${statusBadge}</div>
           </div>
-          ${v.blobUrl ? `<video controls src="${v.blobUrl}"></video>` : `
+          ${v.blobUrl ? `
+            <div class="video-holder">
+              <video controls src="${v.blobUrl}" data-vid="${v.id}"></video>
+              <canvas data-vid="${v.id}"></canvas>
+            </div>
+            ${annCount ? `<div class="ann-timeline" data-vid="${v.id}"></div>
+              <div class="body" style="padding-top:0; color:var(--mid-grey); font-size:12px;">
+                Gold marks = frames where Ryan left annotations. Click one to jump; pause playback to see the drawings.
+              </div>` : ''}
+          ` : `
             <div style="padding:32px; text-align:center; color:var(--mid-grey);">
               Video preview unavailable in this session.
             </div>
           `}
-          ${v.note ? `<div class="body"><div class="page-label">NOTE TO RYAN</div><p class="mt-2">${RRG.esc(v.note)}</p></div>` : ''}
+          ${v.note ? `<div class="body"><div class="page-label">MY NOTE TO RYAN</div><p class="mt-2">${RRG.esc(v.note)}</p></div>` : ''}
           ${v.coachFeedback ? `
             <div class="body" style="border-top:1px solid var(--rule); background:var(--cream);">
               <div class="page-label">RYAN'S FEEDBACK</div>
@@ -115,6 +140,97 @@
         </div>
       `;
     }).join('');
+
+    // Wire up annotation overlays on each video
+    videos.filter(v => v.blobUrl && (v.annotations || []).length).forEach(v => {
+      const video = document.querySelector(`video[data-vid="${v.id}"]`);
+      const canvas = document.querySelector(`canvas[data-vid="${v.id}"]`);
+      const timeline = document.querySelector(`.ann-timeline[data-vid="${v.id}"]`);
+      if (!video || !canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      function resize() {
+        if (!video.videoWidth) return;
+        const r = video.getBoundingClientRect();
+        canvas.style.width = r.width + 'px';
+        canvas.style.height = r.height + 'px';
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+      }
+      video.addEventListener('loadedmetadata', () => {
+        resize();
+        renderAnnTimeline();
+      });
+      window.addEventListener('resize', resize);
+
+      function renderAnnTimeline() {
+        if (!timeline || !video.duration) return;
+        timeline.innerHTML = '';
+        const seen = new Set();
+        (v.annotations || []).forEach(a => {
+          const key = a.t.toFixed(2);
+          if (seen.has(key)) return; seen.add(key);
+          const pct = (a.t / video.duration) * 100;
+          const mark = document.createElement('div');
+          mark.className = 'mark';
+          mark.style.left = `calc(${pct}% - 1.5px)`;
+          mark.title = 'Jump to ' + a.t.toFixed(2) + 's';
+          mark.onclick = () => { video.pause(); video.currentTime = a.t; };
+          timeline.appendChild(mark);
+        });
+      }
+
+      function drawAnn(ctx, a) {
+        ctx.strokeStyle = a.color; ctx.fillStyle = a.color;
+        ctx.lineWidth = a.width; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+        const pts = a.points;
+        if (a.tool === 'pen') {
+          if (pts.length < 2) return;
+          ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y);
+          for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
+          ctx.stroke();
+        } else if (a.tool === 'line' && pts.length >= 2) {
+          ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y); ctx.lineTo(pts[1].x, pts[1].y); ctx.stroke();
+        } else if (a.tool === 'arrow' && pts.length >= 2) {
+          const [s, e] = pts;
+          ctx.beginPath(); ctx.moveTo(s.x, s.y); ctx.lineTo(e.x, e.y); ctx.stroke();
+          const ang = Math.atan2(e.y - s.y, e.x - s.x);
+          const ah = Math.max(10, a.width * 3);
+          ctx.beginPath();
+          ctx.moveTo(e.x, e.y);
+          ctx.lineTo(e.x - ah * Math.cos(ang - Math.PI/7), e.y - ah * Math.sin(ang - Math.PI/7));
+          ctx.lineTo(e.x - ah * Math.cos(ang + Math.PI/7), e.y - ah * Math.sin(ang + Math.PI/7));
+          ctx.closePath(); ctx.fill();
+        } else if (a.tool === 'rect' && pts.length >= 2) {
+          const [s, e] = pts;
+          ctx.strokeRect(s.x, s.y, e.x - s.x, e.y - s.y);
+        } else if (a.tool === 'circle' && pts.length >= 2) {
+          const [s, e] = pts;
+          const r = Math.hypot(e.x - s.x, e.y - s.y);
+          ctx.beginPath(); ctx.arc(s.x, s.y, r, 0, Math.PI * 2); ctx.stroke();
+        } else if (a.tool === 'angle' && pts.length === 3) {
+          const [p1, vp, p2] = pts;
+          ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(vp.x, vp.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
+          const a1 = Math.atan2(p1.y - vp.y, p1.x - vp.x);
+          const a2 = Math.atan2(p2.y - vp.y, p2.x - vp.x);
+          let deg = Math.abs((a2 - a1) * 180 / Math.PI);
+          if (deg > 180) deg = 360 - deg;
+          ctx.font = Math.max(14, a.width * 4) + 'px Helvetica';
+          ctx.fillText(deg.toFixed(0) + '°', vp.x + 8, vp.y - 8);
+        }
+      }
+
+      function redraw() {
+        if (!canvas.width) return;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        if (!video.paused) return;
+        const t = video.currentTime;
+        (v.annotations || []).filter(a => Math.abs(a.t - t) < 0.12).forEach(a => drawAnn(ctx, a));
+      }
+      video.addEventListener('timeupdate', redraw);
+      video.addEventListener('pause', redraw);
+      video.addEventListener('play', redraw);
+    });
   }
 
   window.removeVid = (id) => {

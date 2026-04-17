@@ -1,0 +1,725 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<base href="/adult/">
+<title>Video Review — RR Golf Performance Adult Coaching</title>
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  /* ============ Video Review layout ============ */
+  body { background: #0d1522; color: #E6EAF0; }
+  .review-shell {
+    display: flex; flex-direction: column;
+    min-height: calc(100vh - 64px - 46px);
+  }
+  .review-topbar {
+    background: var(--navy-mid); color: var(--white);
+    padding: 12px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 2px solid var(--gold);
+    flex-wrap: wrap; gap: 10px;
+  }
+  .review-topbar .title { font-weight: 700; font-size: 14px; letter-spacing: 0.5px; }
+  .review-topbar .title .muted-light { color: #B0BEC5; font-weight: 400; margin-left: 10px; font-size: 12px; }
+
+  /* Tool palette */
+  .toolbar {
+    background: var(--navy); color: var(--white);
+    padding: 10px 16px;
+    display: flex; gap: 14px; align-items: center;
+    border-bottom: 1px solid #1a2a3d;
+    flex-wrap: wrap;
+  }
+  .tool-group {
+    display: flex; gap: 4px; align-items: center;
+    padding: 0 10px;
+    border-right: 1px solid rgba(255,255,255,0.1);
+  }
+  .tool-group:last-child { border-right: none; }
+  .tool-group .lbl {
+    font-size: 10px; color: #B0BEC5; letter-spacing: 1.5px;
+    margin-right: 4px; font-weight: 700; text-transform: uppercase;
+  }
+  .tool-btn {
+    background: transparent; border: 1px solid transparent;
+    color: #B0BEC5; padding: 7px 10px; border-radius: 4px;
+    cursor: pointer; font-size: 13px; transition: all 0.1s ease;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .tool-btn:hover { background: rgba(255,255,255,0.06); color: var(--white); }
+  .tool-btn.active {
+    background: var(--gold); color: var(--navy); border-color: var(--gold);
+  }
+  .tool-btn .icon { font-size: 15px; line-height: 1; }
+
+  .color-swatch {
+    width: 22px; height: 22px; border-radius: 50%;
+    border: 2px solid transparent; cursor: pointer;
+    display: inline-block; transition: transform 0.1s ease;
+  }
+  .color-swatch:hover { transform: scale(1.1); }
+  .color-swatch.active { border-color: var(--white); box-shadow: 0 0 0 2px rgba(255,255,255,0.25); }
+
+  .width-dot {
+    display: inline-block; background: var(--white); border-radius: 50%;
+    margin: 0 6px; cursor: pointer; border: 2px solid transparent;
+  }
+  .width-dot.active { border-color: var(--gold); }
+
+  /* Panels */
+  .panels {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 12px;
+    background: #0d1522;
+    min-height: 0;
+  }
+  .panels.single { grid-template-columns: 1fr; }
+  .panels.single .panel.right { display: none; }
+
+  .panel {
+    background: #000;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    border: 2px solid transparent;
+  }
+  .panel.active { border-color: var(--gold); }
+  .panel-header {
+    background: #1a2a3d; color: #E6EAF0;
+    padding: 8px 12px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 12px;
+    border-bottom: 1px solid #2c4a6e;
+  }
+  .panel-header .label {
+    font-weight: 700; letter-spacing: 1px; color: var(--gold); font-size: 11px;
+  }
+  .panel-header .sub { color: #B0BEC5; margin-left: 10px; }
+  .panel-header button {
+    background: transparent; border: 1px solid rgba(255,255,255,0.15);
+    color: #B0BEC5; padding: 4px 10px; border-radius: 3px;
+    font-size: 11px; cursor: pointer;
+  }
+  .panel-header button:hover { border-color: var(--gold); color: var(--gold); }
+
+  .video-wrap {
+    position: relative;
+    flex: 1;
+    display: flex; align-items: center; justify-content: center;
+    background: #000;
+    min-height: 0;
+  }
+  .video-wrap video {
+    max-width: 100%; max-height: 100%;
+    display: block;
+  }
+  .video-wrap canvas {
+    position: absolute; top: 0; left: 0;
+    pointer-events: auto;
+    touch-action: none;
+  }
+  .video-wrap .empty-state {
+    color: #B0BEC5; font-size: 14px; text-align: center; padding: 40px;
+  }
+  .video-wrap .empty-state input[type=file] { display: none; }
+  .video-wrap .empty-state .btn {
+    margin-top: 14px; cursor: pointer;
+  }
+
+  /* Per-panel controls */
+  .panel-ctl {
+    background: #1a2a3d; color: #E6EAF0;
+    padding: 10px 12px;
+    display: flex; align-items: center; gap: 8px;
+    border-top: 1px solid #2c4a6e;
+    flex-wrap: wrap;
+  }
+  .panel-ctl button {
+    background: transparent; border: 1px solid rgba(255,255,255,0.15);
+    color: #E6EAF0; padding: 6px 10px; border-radius: 3px;
+    cursor: pointer; font-size: 13px; min-width: 36px;
+  }
+  .panel-ctl button:hover { border-color: var(--gold); color: var(--gold); }
+  .panel-ctl button.active { background: var(--gold); color: var(--navy); border-color: var(--gold); }
+  .panel-ctl .seek {
+    flex: 1; appearance: none; height: 4px;
+    background: #2c4a6e; border-radius: 999px; outline: none; margin: 0 6px;
+  }
+  .panel-ctl .seek::-webkit-slider-thumb {
+    appearance: none; width: 14px; height: 14px; border-radius: 50%;
+    background: var(--gold); cursor: pointer;
+  }
+  .panel-ctl .time {
+    font-family: monospace; font-size: 12px; color: #B0BEC5; min-width: 110px; text-align: right;
+  }
+  .panel-ctl .ann-markers {
+    flex: 1; height: 4px; position: relative; margin: 0 6px;
+  }
+
+  /* Sticky save bar */
+  .save-bar {
+    background: var(--navy-mid); color: var(--white);
+    padding: 10px 16px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-top: 2px solid var(--gold);
+  }
+  .save-bar .info { color: #B0BEC5; font-size: 12px; }
+  .save-bar .info b { color: var(--gold-light); }
+
+  @media (max-width: 900px) {
+    .panels { grid-template-columns: 1fr; }
+    .panels.single .panel.right { display: none; }
+    .toolbar { padding: 8px; gap: 8px; }
+    .tool-group { padding: 0 6px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<div class="review-shell">
+
+  <div class="review-topbar">
+    <div>
+      <div class="title">
+        Video Review &amp; Annotation
+        <span class="muted-light" id="player-label"></span>
+      </div>
+    </div>
+    <div class="flex gap-2">
+      <button class="btn btn-ghost btn-sm" id="toggle-compare">Show comparison panel</button>
+      <a href="coach.html" class="btn btn-ghost btn-sm">&larr; Back to coach view</a>
+    </div>
+  </div>
+
+  <!-- Drawing toolbar -->
+  <div class="toolbar" id="toolbar">
+
+    <div class="tool-group">
+      <span class="lbl">Tool</span>
+      <button class="tool-btn active" data-tool="pen" title="Freehand"><span class="icon">✎</span> Pen</button>
+      <button class="tool-btn" data-tool="line" title="Line"><span class="icon">╱</span> Line</button>
+      <button class="tool-btn" data-tool="arrow" title="Arrow"><span class="icon">→</span> Arrow</button>
+      <button class="tool-btn" data-tool="rect" title="Rectangle"><span class="icon">▭</span> Rect</button>
+      <button class="tool-btn" data-tool="circle" title="Circle"><span class="icon">◯</span> Circle</button>
+      <button class="tool-btn" data-tool="angle" title="3-point angle"><span class="icon">∠</span> Angle</button>
+    </div>
+
+    <div class="tool-group" id="color-group">
+      <span class="lbl">Color</span>
+      <span class="color-swatch active" style="background:#FFCF40;" data-color="#FFCF40"></span>
+      <span class="color-swatch" style="background:#E0E6EE;" data-color="#E0E6EE"></span>
+      <span class="color-swatch" style="background:#E74C3C;" data-color="#E74C3C"></span>
+      <span class="color-swatch" style="background:#2ECC71;" data-color="#2ECC71"></span>
+      <span class="color-swatch" style="background:#3498DB;" data-color="#3498DB"></span>
+      <span class="color-swatch" style="background:#9B59B6;" data-color="#9B59B6"></span>
+    </div>
+
+    <div class="tool-group" id="width-group">
+      <span class="lbl">Size</span>
+      <span class="width-dot" data-w="2" style="width:6px; height:6px;"></span>
+      <span class="width-dot active" data-w="4" style="width:10px; height:10px;"></span>
+      <span class="width-dot" data-w="6" style="width:14px; height:14px;"></span>
+    </div>
+
+    <div class="tool-group">
+      <span class="lbl">Active panel</span>
+      <button class="tool-btn active" id="pick-left">Left</button>
+      <button class="tool-btn" id="pick-right">Right</button>
+    </div>
+
+    <div class="tool-group">
+      <button class="tool-btn" id="undo-btn" title="Undo"><span class="icon">↶</span> Undo</button>
+      <button class="tool-btn" id="clear-frame" title="Clear this frame">Clear Frame</button>
+      <button class="tool-btn" id="clear-all" title="Clear all annotations">Clear All</button>
+    </div>
+  </div>
+
+  <!-- Panels -->
+  <div class="panels single" id="panels">
+
+    <!-- LEFT PANEL -->
+    <div class="panel active left" id="panel-left">
+      <div class="panel-header">
+        <div>
+          <span class="label">PLAYER'S VIDEO</span>
+          <span class="sub" id="left-filename">—</span>
+        </div>
+        <div id="left-ann-count" class="sub"></div>
+      </div>
+      <div class="video-wrap" id="left-wrap">
+        <video id="left-video" playsinline></video>
+        <canvas id="left-canvas"></canvas>
+      </div>
+      <div class="panel-ctl">
+        <button id="left-play">▶</button>
+        <button id="left-step-back" title="Step back a frame">◀◀</button>
+        <button id="left-step-fwd" title="Step forward a frame">▶▶</button>
+        <button id="left-speed" title="Playback speed">1×</button>
+        <input type="range" class="seek" id="left-seek" min="0" max="100" step="0.01" value="0">
+        <span class="time" id="left-time">0:00.00 / 0:00.00</span>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL (optional comparison) -->
+    <div class="panel right" id="panel-right">
+      <div class="panel-header">
+        <div>
+          <span class="label">COMPARISON</span>
+          <span class="sub" id="right-filename">No video loaded</span>
+        </div>
+        <div>
+          <input type="file" id="right-file" accept="video/*" style="display:none;">
+          <button onclick="document.getElementById('right-file').click()">Load video</button>
+          <button id="right-clear-btn" style="margin-left:4px;">Clear</button>
+        </div>
+      </div>
+      <div class="video-wrap" id="right-wrap">
+        <div class="empty-state" id="right-empty">
+          <div>No comparison video.</div>
+          <div style="margin-top:8px;">Load a tour swing, another player's upload,<br>or a past video from your device.</div>
+        </div>
+        <video id="right-video" playsinline style="display:none;"></video>
+        <canvas id="right-canvas" style="display:none;"></canvas>
+      </div>
+      <div class="panel-ctl" id="right-ctl" style="display:none;">
+        <button id="right-play">▶</button>
+        <button id="right-step-back">◀◀</button>
+        <button id="right-step-fwd">▶▶</button>
+        <button id="right-speed">1×</button>
+        <label style="display:flex; align-items:center; gap:4px; font-size:11px; color:#B0BEC5; padding:0 4px;">
+          <input type="checkbox" id="sync-toggle"> Sync
+        </label>
+        <input type="range" class="seek" id="right-seek" min="0" max="100" step="0.01" value="0">
+        <span class="time" id="right-time">0:00.00 / 0:00.00</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Save bar -->
+  <div class="save-bar">
+    <div class="info">
+      <b>Annotations save to the player's portal.</b>
+      They'll see your drawings at the exact frames where you paused and drew them,
+      plus any feedback note you add below.
+    </div>
+    <div class="flex gap-2">
+      <input type="text" id="coach-feedback" placeholder="Optional written feedback to include with annotations"
+             style="width:320px; padding:8px 10px; border:1px solid rgba(255,255,255,0.15); background:#0d1522; color:#E6EAF0; border-radius:4px; font-size:13px;">
+      <button class="btn btn-primary" id="save-btn">Save &amp; Notify Player</button>
+    </div>
+  </div>
+
+</div>
+
+<div id="footer-mount"></div>
+
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  const user = RRG.mount('coach');
+  if (!user) throw new Error();
+  if (user.role !== 'coach') {
+    document.body.innerHTML = '<main class="container"><div class="callout">Coach-only. <a href="dashboard.html">Back</a>.</div></main>';
+    throw new Error('not coach');
+  }
+
+  // ===== Load the player's video =====
+  const videoId = RRG.qs('v');
+  const videoRecord = RRG.videos.all().find(v => v.id === videoId);
+  if (!videoRecord) {
+    document.querySelector('.review-shell').innerHTML =
+      '<div style="padding:40px; text-align:center; color:#B0BEC5;">Video not found. <a href="coach.html" style="color:var(--gold);">Back to coach view</a></div>';
+    throw new Error('video not found');
+  }
+
+  document.getElementById('player-label').textContent =
+    `${videoRecord.userName || 'Player'} · ${videoRecord.filename}`;
+  document.getElementById('left-filename').textContent = videoRecord.filename;
+
+  // ===== Per-panel state =====
+  function makePanel(prefix, opts = {}) {
+    return {
+      prefix,
+      video: document.getElementById(prefix + '-video'),
+      canvas: document.getElementById(prefix + '-canvas'),
+      wrap: document.getElementById(prefix + '-wrap'),
+      playBtn: document.getElementById(prefix + '-play'),
+      stepBack: document.getElementById(prefix + '-step-back'),
+      stepFwd: document.getElementById(prefix + '-step-fwd'),
+      speedBtn: document.getElementById(prefix + '-speed'),
+      seek: document.getElementById(prefix + '-seek'),
+      timeEl: document.getElementById(prefix + '-time'),
+      ctx: null,
+      // Annotations: array of { id, tool, t (timestamp), color, width, points, done }
+      anns: opts.initialAnns || [],
+      current: null,
+      speedIdx: 2,
+    };
+  }
+  const SPEEDS = [0.25, 0.5, 1, 1.5, 2];
+
+  const left = makePanel('left', { initialAnns: videoRecord.annotations || [] });
+  const right = makePanel('right');
+
+  left.ctx = left.canvas.getContext('2d');
+  right.ctx = right.canvas.getContext('2d');
+
+  // ===== Tool state =====
+  let activePanel = left;
+  let tool = 'pen';
+  let color = '#FFCF40';
+  let width = 4;
+
+  // ===== Active-panel switching =====
+  document.getElementById('pick-left').addEventListener('click', () => setActivePanel('left'));
+  document.getElementById('pick-right').addEventListener('click', () => setActivePanel('right'));
+  function setActivePanel(which) {
+    activePanel = which === 'left' ? left : right;
+    document.getElementById('pick-left').classList.toggle('active', which === 'left');
+    document.getElementById('pick-right').classList.toggle('active', which === 'right');
+    document.getElementById('panel-left').classList.toggle('active', which === 'left');
+    document.getElementById('panel-right').classList.toggle('active', which === 'right');
+  }
+  ['left-wrap','right-wrap'].forEach((id, i) => {
+    document.getElementById(id).addEventListener('mousedown',
+      () => setActivePanel(i === 0 ? 'left' : 'right'), true);
+  });
+
+  // ===== Toolbar handlers =====
+  document.querySelectorAll('[data-tool]').forEach(b => {
+    b.addEventListener('click', () => {
+      tool = b.dataset.tool;
+      document.querySelectorAll('[data-tool]').forEach(x => x.classList.toggle('active', x === b));
+    });
+  });
+  document.querySelectorAll('.color-swatch').forEach(s => {
+    s.addEventListener('click', () => {
+      color = s.dataset.color;
+      document.querySelectorAll('.color-swatch').forEach(x => x.classList.toggle('active', x === s));
+    });
+  });
+  document.querySelectorAll('.width-dot').forEach(d => {
+    d.addEventListener('click', () => {
+      width = +d.dataset.w;
+      document.querySelectorAll('.width-dot').forEach(x => x.classList.toggle('active', x === d));
+    });
+  });
+
+  document.getElementById('undo-btn').addEventListener('click', () => {
+    const near = annsNear(activePanel, activePanel.video.currentTime);
+    const last = near[near.length - 1];
+    if (last) activePanel.anns = activePanel.anns.filter(a => a !== last);
+    redraw(activePanel);
+    updateAnnCount();
+  });
+  document.getElementById('clear-frame').addEventListener('click', () => {
+    const near = annsNear(activePanel, activePanel.video.currentTime);
+    activePanel.anns = activePanel.anns.filter(a => !near.includes(a));
+    redraw(activePanel);
+    updateAnnCount();
+  });
+  document.getElementById('clear-all').addEventListener('click', () => {
+    if (!confirm('Clear ALL annotations on the active panel? This cannot be undone.')) return;
+    activePanel.anns = [];
+    redraw(activePanel);
+    updateAnnCount();
+  });
+
+  // ===== Comparison toggle =====
+  document.getElementById('toggle-compare').addEventListener('click', () => {
+    document.getElementById('panels').classList.toggle('single');
+    const showing = !document.getElementById('panels').classList.contains('single');
+    document.getElementById('toggle-compare').textContent = showing ? 'Hide comparison panel' : 'Show comparison panel';
+  });
+
+  // ===== Load player video =====
+  left.video.src = videoRecord.blobUrl || '';
+  left.video.addEventListener('loadedmetadata', () => {
+    resizeCanvas(left);
+    redraw(left);
+    updateTime(left);
+    updateAnnCount();
+  });
+  left.video.addEventListener('timeupdate', () => {
+    updateTime(left);
+    redraw(left);
+  });
+  left.video.addEventListener('play', () => { left.playBtn.textContent = '⏸'; });
+  left.video.addEventListener('pause', () => { left.playBtn.textContent = '▶'; });
+
+  // ===== Load comparison video from file =====
+  document.getElementById('right-file').addEventListener('change', (e) => {
+    const f = e.target.files[0]; if (!f) return;
+    const url = URL.createObjectURL(f);
+    right.video.src = url;
+    right.video.style.display = '';
+    right.canvas.style.display = '';
+    document.getElementById('right-empty').style.display = 'none';
+    document.getElementById('right-ctl').style.display = 'flex';
+    document.getElementById('right-filename').textContent = f.name;
+    document.getElementById('panels').classList.remove('single');
+    document.getElementById('toggle-compare').textContent = 'Hide comparison panel';
+  });
+  document.getElementById('right-clear-btn').addEventListener('click', () => {
+    right.video.removeAttribute('src');
+    right.video.load();
+    right.video.style.display = 'none';
+    right.canvas.style.display = 'none';
+    document.getElementById('right-empty').style.display = '';
+    document.getElementById('right-ctl').style.display = 'none';
+    document.getElementById('right-filename').textContent = 'No video loaded';
+    right.anns = [];
+    right.ctx.clearRect(0, 0, right.canvas.width, right.canvas.height);
+  });
+
+  right.video.addEventListener('loadedmetadata', () => {
+    resizeCanvas(right);
+    redraw(right);
+    updateTime(right);
+  });
+  right.video.addEventListener('timeupdate', () => {
+    updateTime(right);
+    redraw(right);
+    if (syncEnabled()) syncFrom('right');
+  });
+  left.video.addEventListener('timeupdate', () => {
+    if (syncEnabled()) syncFrom('left');
+  });
+  right.video.addEventListener('play',  () => { right.playBtn.textContent = '⏸'; });
+  right.video.addEventListener('pause', () => { right.playBtn.textContent = '▶'; });
+
+  function syncEnabled() {
+    const cb = document.getElementById('sync-toggle');
+    return cb && cb.checked && right.video.src && left.video.src;
+  }
+  function syncFrom(which) {
+    const a = which === 'left' ? left : right;
+    const b = which === 'left' ? right : left;
+    if (!a.video.duration || !b.video.duration) return;
+    const ratio = a.video.currentTime / a.video.duration;
+    const target = ratio * b.video.duration;
+    if (Math.abs(target - b.video.currentTime) > 0.08) {
+      b.video.currentTime = target;
+    }
+  }
+
+  // ===== Controls per panel =====
+  [left, right].forEach(p => {
+    p.playBtn.addEventListener('click', () => {
+      if (p.video.paused) p.video.play(); else p.video.pause();
+    });
+    p.stepBack.addEventListener('click', () => { p.video.pause(); p.video.currentTime = Math.max(0, p.video.currentTime - 1/30); });
+    p.stepFwd.addEventListener('click',  () => { p.video.pause(); p.video.currentTime = Math.min(p.video.duration || 0, p.video.currentTime + 1/30); });
+    p.speedBtn.addEventListener('click', () => {
+      p.speedIdx = (p.speedIdx + 1) % SPEEDS.length;
+      p.video.playbackRate = SPEEDS[p.speedIdx];
+      p.speedBtn.textContent = SPEEDS[p.speedIdx] + '×';
+    });
+    p.seek.addEventListener('input', () => {
+      if (p.video.duration) p.video.currentTime = (p.seek.value / 100) * p.video.duration;
+    });
+  });
+
+  // ===== Canvas sizing + drawing =====
+  window.addEventListener('resize', () => { resizeCanvas(left); resizeCanvas(right); });
+  function resizeCanvas(p) {
+    if (!p.video.videoWidth) return;
+    const rect = p.video.getBoundingClientRect();
+    p.canvas.style.width = rect.width + 'px';
+    p.canvas.style.height = rect.height + 'px';
+    // Internal resolution = video native for crisp annotations
+    p.canvas.width = p.video.videoWidth;
+    p.canvas.height = p.video.videoHeight;
+    // Position canvas over video
+    const wrapRect = p.wrap.getBoundingClientRect();
+    const vRect = p.video.getBoundingClientRect();
+    p.canvas.style.left = (vRect.left - wrapRect.left) + 'px';
+    p.canvas.style.top = (vRect.top - wrapRect.top) + 'px';
+  }
+
+  function canvasPointFromEvent(p, ev) {
+    const rect = p.canvas.getBoundingClientRect();
+    const x = (ev.clientX || (ev.touches && ev.touches[0].clientX)) - rect.left;
+    const y = (ev.clientY || (ev.touches && ev.touches[0].clientY)) - rect.top;
+    // Scale from display size to canvas internal resolution
+    return {
+      x: x * (p.canvas.width  / rect.width),
+      y: y * (p.canvas.height / rect.height),
+    };
+  }
+
+  function setupDraw(p) {
+    let start = null;
+    let anglePts = [];
+
+    const down = (ev) => {
+      ev.preventDefault();
+      p.video.pause();
+      const pt = canvasPointFromEvent(p, ev);
+      if (tool === 'angle') {
+        anglePts.push(pt);
+        if (anglePts.length === 3) {
+          commit(p, { tool, points: anglePts.slice(), color, width, t: p.video.currentTime, id: 'a_' + Date.now() });
+          anglePts = [];
+          redraw(p);
+        } else {
+          // draw preview dots
+          redraw(p);
+          anglePts.forEach(q => {
+            p.ctx.beginPath();
+            p.ctx.arc(q.x, q.y, width + 1, 0, Math.PI * 2);
+            p.ctx.fillStyle = color; p.ctx.fill();
+          });
+        }
+        return;
+      }
+      start = pt;
+      p.current = { tool, points: [pt], color, width, t: p.video.currentTime };
+      if (tool === 'pen') {
+        p.canvas.addEventListener('mousemove', move);
+        p.canvas.addEventListener('touchmove', move, { passive: false });
+      } else {
+        p.canvas.addEventListener('mousemove', liveShape);
+        p.canvas.addEventListener('touchmove', liveShape, { passive: false });
+      }
+      document.addEventListener('mouseup', up, { once: true });
+      document.addEventListener('touchend', up, { once: true });
+    };
+    const move = (ev) => {
+      ev.preventDefault();
+      const pt = canvasPointFromEvent(p, ev);
+      p.current.points.push(pt);
+      redraw(p);
+    };
+    const liveShape = (ev) => {
+      ev.preventDefault();
+      const pt = canvasPointFromEvent(p, ev);
+      p.current.points = [start, pt];
+      redraw(p);
+    };
+    const up = () => {
+      p.canvas.removeEventListener('mousemove', move);
+      p.canvas.removeEventListener('touchmove', move);
+      p.canvas.removeEventListener('mousemove', liveShape);
+      p.canvas.removeEventListener('touchmove', liveShape);
+      if (p.current && p.current.points.length >= 1) {
+        commit(p, { ...p.current, id: 'a_' + Date.now() });
+      }
+      p.current = null;
+      redraw(p);
+    };
+
+    p.canvas.addEventListener('mousedown', down);
+    p.canvas.addEventListener('touchstart', down, { passive: false });
+  }
+  setupDraw(left);
+  setupDraw(right);
+
+  function commit(p, ann) {
+    p.anns.push(ann);
+    updateAnnCount();
+  }
+
+  function annsNear(p, t) {
+    return p.anns.filter(a => Math.abs(a.t - t) < 0.12);
+  }
+
+  function drawOne(ctx, a) {
+    ctx.strokeStyle = a.color; ctx.fillStyle = a.color;
+    ctx.lineWidth = a.width; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    const pts = a.points;
+    if (a.tool === 'pen') {
+      if (pts.length < 2) return;
+      ctx.beginPath();
+      ctx.moveTo(pts[0].x, pts[0].y);
+      for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
+      ctx.stroke();
+    } else if (a.tool === 'line' && pts.length >= 2) {
+      ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y); ctx.lineTo(pts[1].x, pts[1].y); ctx.stroke();
+    } else if (a.tool === 'arrow' && pts.length >= 2) {
+      const [s, e] = pts;
+      ctx.beginPath(); ctx.moveTo(s.x, s.y); ctx.lineTo(e.x, e.y); ctx.stroke();
+      const ang = Math.atan2(e.y - s.y, e.x - s.x);
+      const ah = Math.max(10, a.width * 3);
+      ctx.beginPath();
+      ctx.moveTo(e.x, e.y);
+      ctx.lineTo(e.x - ah * Math.cos(ang - Math.PI/7), e.y - ah * Math.sin(ang - Math.PI/7));
+      ctx.lineTo(e.x - ah * Math.cos(ang + Math.PI/7), e.y - ah * Math.sin(ang + Math.PI/7));
+      ctx.closePath(); ctx.fill();
+    } else if (a.tool === 'rect' && pts.length >= 2) {
+      const [s, e] = pts;
+      ctx.strokeRect(s.x, s.y, e.x - s.x, e.y - s.y);
+    } else if (a.tool === 'circle' && pts.length >= 2) {
+      const [s, e] = pts;
+      const r = Math.hypot(e.x - s.x, e.y - s.y);
+      ctx.beginPath(); ctx.arc(s.x, s.y, r, 0, Math.PI * 2); ctx.stroke();
+    } else if (a.tool === 'angle' && pts.length === 3) {
+      const [p1, v, p2] = pts;
+      ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(v.x, v.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
+      // Angle label
+      const a1 = Math.atan2(p1.y - v.y, p1.x - v.x);
+      const a2 = Math.atan2(p2.y - v.y, p2.x - v.x);
+      let deg = Math.abs((a2 - a1) * 180 / Math.PI);
+      if (deg > 180) deg = 360 - deg;
+      ctx.font = Math.max(14, a.width * 4) + 'px Helvetica';
+      ctx.fillText(deg.toFixed(0) + '°', v.x + 8, v.y - 8);
+    }
+  }
+
+  function redraw(p) {
+    if (!p.canvas.width) return;
+    p.ctx.clearRect(0, 0, p.canvas.width, p.canvas.height);
+    // Only show annotations when paused (and near the frame)
+    if (!p.video.paused) return;
+    const t = p.video.currentTime;
+    p.anns.filter(a => Math.abs(a.t - t) < 0.12).forEach(a => drawOne(p.ctx, a));
+    if (p.current) drawOne(p.ctx, p.current);
+  }
+
+  function fmtTime(s) {
+    if (!isFinite(s)) return '0:00.00';
+    const m = Math.floor(s / 60);
+    const r = (s - m * 60).toFixed(2);
+    return `${m}:${r.padStart(5, '0')}`;
+  }
+  function updateTime(p) {
+    if (!p.video.duration) return;
+    p.seek.value = (p.video.currentTime / p.video.duration) * 100;
+    p.timeEl.textContent = `${fmtTime(p.video.currentTime)} / ${fmtTime(p.video.duration)}`;
+  }
+
+  function updateAnnCount() {
+    const n = left.anns.length;
+    document.getElementById('left-ann-count').textContent =
+      n ? `${n} annotation${n > 1 ? 's' : ''} · ${new Set(left.anns.map(a => a.t.toFixed(2))).size} frames` : '';
+  }
+
+  // ===== Save =====
+  document.getElementById('save-btn').addEventListener('click', () => {
+    const feedback = document.getElementById('coach-feedback').value.trim();
+    // Strip any live-edit state; persist only committed annotations
+    const clean = left.anns.map(a => ({
+      id: a.id, tool: a.tool, t: a.t, color: a.color, width: a.width,
+      points: a.points.map(pt => ({ x: Math.round(pt.x), y: Math.round(pt.y) })),
+    }));
+    RRG.videos.update(videoRecord.id, {
+      annotations: clean,
+      annotatedAt: new Date().toISOString(),
+      annotatedBy: user.name,
+      status: 'reviewed',
+      reviewedAt: new Date().toISOString(),
+      coachFeedback: feedback || videoRecord.coachFeedback || '',
+    });
+    RRG.toast('Saved — player will see annotations on their next visit.');
+    setTimeout(() => location.href = 'coach.html', 1000);
+  });
+</script>
+</body>
+</html>
