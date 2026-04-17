@@ -114,8 +114,11 @@
           </div>
           ${v.blobUrl ? `
             <div class="video-holder">
-              <video controls src="${v.blobUrl}" data-vid="${v.id}"></video>
+              <video controls src="${v.blobUrl}" data-vid="${v.id}" onerror="markStale('${v.id}')"></video>
               <canvas data-vid="${v.id}"></canvas>
+            </div>
+            <div class="stale-notice" data-vid="${v.id}" style="display:none; padding:20px; background:#FFF8EC; color:var(--navy-mid); text-align:center; font-size:13px; border-top:1px solid var(--rule);">
+              <b>This video needs to be re-uploaded.</b> In the prototype, video files only live in the browser tab where they were uploaded. Production (with Vercel Blob) persists them permanently.
             </div>
             ${annCount ? `<div class="ann-timeline" data-vid="${v.id}"></div>
               <div class="body" style="padding-top:0; color:var(--mid-grey); font-size:12px;">
@@ -237,6 +240,16 @@
     if (!confirm('Delete this video? This cannot be undone.')) return;
     RRG.videos.remove(id);
     location.reload();
+  };
+
+  // Show friendly message if a video's blob URL is stale (cross-session)
+  window.markStale = (id) => {
+    const card = document.querySelector(`.video-card[data-vid="${id}"]`);
+    if (!card) return;
+    const holder = card.querySelector('.video-holder');
+    const notice = card.querySelector(`.stale-notice[data-vid="${id}"]`);
+    if (holder) holder.style.display = 'none';
+    if (notice) notice.style.display = 'block';
   };
 </script>
 </body>

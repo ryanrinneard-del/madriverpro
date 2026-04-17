@@ -53,6 +53,17 @@
   }
   .tool-btn .icon { font-size: 15px; line-height: 1; }
 
+  /* Edit buttons (Undo, Clear Frame, Clear All) — stand out from tools */
+  .tool-btn.edit-btn {
+    border-color: rgba(255,255,255,0.18); background: rgba(255,255,255,0.04);
+  }
+  .tool-btn.edit-btn:hover {
+    background: rgba(231,76,60,0.15); border-color: #E74C3C; color: #fff;
+  }
+  .tool-btn.edit-btn.danger:hover {
+    background: #E74C3C; color: #fff; border-color: #E74C3C;
+  }
+
   .color-swatch {
     width: 22px; height: 22px; border-radius: 50%;
     border: 2px solid transparent; cursor: pointer;
@@ -192,7 +203,8 @@
       </div>
     </div>
     <div class="flex gap-2">
-      <button class="btn btn-ghost btn-sm" id="toggle-compare">Show comparison panel</button>
+      <input type="file" id="topbar-compare-file" accept="video/*" style="display:none;">
+      <button class="btn btn-primary btn-sm" id="add-compare-btn">+ Add Comparison Video</button>
       <a href="coach.html" class="btn btn-ghost btn-sm">&larr; Back to coach view</a>
     </div>
   </div>
@@ -233,10 +245,17 @@
       <button class="tool-btn" id="pick-right">Right</button>
     </div>
 
-    <div class="tool-group">
-      <button class="tool-btn" id="undo-btn" title="Undo"><span class="icon">↶</span> Undo</button>
-      <button class="tool-btn" id="clear-frame" title="Clear this frame">Clear Frame</button>
-      <button class="tool-btn" id="clear-all" title="Clear all annotations">Clear All</button>
+    <div class="tool-group" id="edit-group">
+      <span class="lbl">Edit</span>
+      <button class="tool-btn edit-btn" id="undo-btn" title="Undo last drawing (Ctrl/Cmd+Z)">
+        <span class="icon">↶</span> Undo
+      </button>
+      <button class="tool-btn edit-btn" id="clear-frame" title="Clear all drawings on this frame">
+        <span class="icon">✕</span> Clear Frame
+      </button>
+      <button class="tool-btn edit-btn danger" id="clear-all" title="Clear ALL drawings on this video">
+        <span class="icon">🗑</span> Clear All
+      </button>
     </div>
   </div>
 
@@ -432,11 +451,52 @@
     updateAnnCount();
   });
 
-  // ===== Comparison toggle =====
-  document.getElementById('toggle-compare').addEventListener('click', () => {
-    document.getElementById('panels').classList.toggle('single');
-    const showing = !document.getElementById('panels').classList.contains('single');
-    document.getElementById('toggle-compare').textContent = showing ? 'Hide comparison panel' : 'Show comparison panel';
+  // ===== Comparison loading =====
+  // Topbar button directly opens the file picker — no hidden step.
+  document.getElementById('add-compare-btn').addEventListener('click', () => {
+    document.getElementById('topbar-compare-file').click();
+  });
+  document.getElementById('topbar-compare-file').addEventListener('change', (e) => {
+    const f = e.target.files[0]; if (!f) return;
+    loadComparisonFile(f);
+  });
+
+  function loadComparisonFile(f) {
+    const url = URL.createObjectURL(f);
+    right.video.src = url;
+    right.video.style.display = '';
+    right.canvas.style.display = '';
+    document.getElementById('right-empty').style.display = 'none';
+    document.getElementById('right-ctl').style.display = 'flex';
+    document.getElementById('right-filename').textContent = f.name;
+    // Reveal the panel if it was hidden
+    document.getElementById('panels').classList.remove('single');
+    document.getElementById('add-compare-btn').textContent = '+ Swap Comparison Video';
+    // Focus the right panel so drawing targets it
+    setActivePanel('right');
+    RRG.toast('Comparison loaded — click Left or Right to choose where to draw.');
+  }
+
+  // ===== Keyboard shortcuts =====
+  document.addEventListener('keydown', (e) => {
+    const mod = e.ctrlKey || e.metaKey;
+    // Don't hijack shortcuts while typing in an input
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (mod && e.key === 'z' && !e.shiftKey) {
+      e.preventDefault();
+      document.getElementById('undo-btn').click();
+    } else if (mod && e.key === 'z' && e.shiftKey) {
+      e.preventDefault();
+      document.getElementById('clear-frame').click();
+    } else if (e.key === ' ') {
+      // space toggles play/pause on the active panel
+      e.preventDefault();
+      activePanel.playBtn.click();
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault(); activePanel.stepBack.click();
+    } else if (e.key === 'ArrowRight') {
+      e.preventDefault(); activePanel.stepFwd.click();
+    }
   });
 
   // ===== Load player video =====
@@ -446,6 +506,15 @@
     redraw(left);
     updateTime(left);
     updateAnnCount();
+  });
+  left.video.addEventListener('error', () => {
+    document.getElementById('left-wrap').innerHTML = `
+      <div style="padding:40px; color:#B0BEC5; text-align:center; max-width:420px;">
+        <b style="color:#E6EAF0;">This video can't be opened.</b><br><br>
+        In the prototype, uploads are stored in the browser tab that created them.
+        Ask the player to re-upload from their portal, or wire the production
+        Vercel Blob pipeline described in <code>README.md</code>.
+      </div>`;
   });
   left.video.addEventListener('timeupdate', () => {
     updateTime(left);
@@ -582,12 +651,13 @@
       }
       start = pt;
       p.current = { tool, points: [pt], color, width, t: p.video.currentTime };
+      // Attach to document so drag continues even when cursor leaves the canvas
       if (tool === 'pen') {
-        p.canvas.addEventListener('mousemove', move);
-        p.canvas.addEventListener('touchmove', move, { passive: false });
+        document.addEventListener('mousemove', move);
+        document.addEventListener('touchmove', move, { passive: false });
       } else {
-        p.canvas.addEventListener('mousemove', liveShape);
-        p.canvas.addEventListener('touchmove', liveShape, { passive: false });
+        document.addEventListener('mousemove', liveShape);
+        document.addEventListener('touchmove', liveShape, { passive: false });
       }
       document.addEventListener('mouseup', up, { once: true });
       document.addEventListener('touchend', up, { once: true });
@@ -605,12 +675,17 @@
       redraw(p);
     };
     const up = () => {
-      p.canvas.removeEventListener('mousemove', move);
-      p.canvas.removeEventListener('touchmove', move);
-      p.canvas.removeEventListener('mousemove', liveShape);
-      p.canvas.removeEventListener('touchmove', liveShape);
-      if (p.current && p.current.points.length >= 1) {
-        commit(p, { ...p.current, id: 'a_' + Date.now() });
+      document.removeEventListener('mousemove', move);
+      document.removeEventListener('touchmove', move);
+      document.removeEventListener('mousemove', liveShape);
+      document.removeEventListener('touchmove', liveShape);
+      // Only commit shapes/pens that actually have length
+      if (p.current) {
+        const n = p.current.points.length;
+        const minLen = (p.current.tool === 'pen') ? 2 : 2;
+        if (n >= minLen) {
+          commit(p, { ...p.current, id: 'a_' + Date.now() });
+        }
       }
       p.current = null;
       redraw(p);

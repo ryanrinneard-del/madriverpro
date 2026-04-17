@@ -39,6 +39,13 @@
     </p>
   </div>
 
+  <div class="callout mb-4" style="border-left-color: var(--amber); background:#FFF8EC;">
+    <b>Prototype note.</b> Video files stay in <i>this browser tab</i> only — they don't
+    persist across tabs or reloads yet. The production build wires this to Vercel Blob so
+    uploads live forever (see README). Fine for testing the flow; don't rely on it for
+    actual session-to-session review yet.
+  </div>
+
   <form id="upload-form">
 
     <label class="dropzone" id="dropzone" for="file-input">
