@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dashboard — RR Golf Performance</title>
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container">
+
+  <div id="welcome-banner" style="display:none;" class="card-cream mb-5">
+    <div class="page-label">WELCOME</div>
+    <h2 style="color:var(--navy); font-size:20px;">You're in. Let's start with honesty.</h2>
+    <p style="margin-top:6px; color:var(--navy-mid);">
+      The first thing Ryan needs from you is a completed Know Your Game profile. It's confidential — only Ryan sees it — and it is the frame for your 15 weeks. Fill it out with <b>absolute honesty</b>. Do this now.
+    </p>
+    <div class="mt-4">
+      <a href="profile.html" class="btn btn-primary">Complete My Profile →</a>
+    </div>
+  </div>
+
+  <div class="page-header">
+    <div class="page-label">MY SEASON</div>
+    <h1 class="page-title" id="greeting">Dashboard</h1>
+    <hr class="gold-rule">
+  </div>
+
+  <!-- Stat strip -->
+  <div class="stat-strip mb-5" id="stat-strip"></div>
+
+  <!-- Current week block (full width) -->
+  <div class="card mb-4" id="current-week-card">
+    <div class="page-label">THIS WEEK</div>
+    <div id="current-week-body"></div>
+  </div>
+
+  <!-- Quick tools row -->
+  <div class="grid grid-3 mb-5">
+    <a class="card" href="bag.html" style="cursor:pointer; text-decoration:none;">
+      <div class="page-label">QUICK TOOL</div>
+      <h3 style="color:var(--navy); margin-top:4px;">Map My Bag</h3>
+      <p class="muted small mt-2">Every club, carry &amp; total distance. Fully customizable — not everyone carries a 3-wood or a 4-iron.</p>
+    </a>
+    <a class="card" href="wedge-matrix.html" style="cursor:pointer; text-decoration:none;">
+      <div class="page-label">QUICK TOOL</div>
+      <h3 style="color:var(--navy); margin-top:4px;">Wedge Matrix</h3>
+      <p class="muted small mt-2">Full / ¾ / ½ / knockdown for <i>your</i> exact wedges. Save, print, carry.</p>
+    </a>
+    <a class="card" href="tiger5.html" style="cursor:pointer; text-decoration:none;">
+      <div class="page-label">QUICK TOOL</div>
+      <h3 style="color:var(--navy); margin-top:4px;">Tiger 5 Scorecard</h3>
+      <p class="muted small mt-2">Live-tally your 5 avoidable errors during a round. Printable card for the scorecard holder.</p>
+    </a>
+  </div>
+
+  <!-- Week grid -->
+  <div class="page-header">
+    <div class="page-label">15-WEEK ARC</div>
+    <h2 class="page-title" style="font-size:22px;">Every Week</h2>
+    <hr class="gold-rule">
+  </div>
+  <div class="week-grid" id="week-grid"></div>
+
+  <!-- SCJGT strip -->
+  <div class="page-header mt-6">
+    <div class="page-label">TOUR PATHWAY</div>
+    <h2 class="page-title" style="font-size:22px;">SCJGT 2026 Schedule</h2>
+    <hr class="gold-rule">
+  </div>
+  <table class="history-table">
+    <thead><tr><th>#</th><th>Date</th><th>Host Course</th><th>Entry Deadline</th></tr></thead>
+    <tbody id="scjgt-body"></tbody>
+  </table>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  const user = RRG.mount('dashboard');
+  if (!user) throw new Error();
+
+  // Greeting
+  document.getElementById('greeting').textContent =
+    `Welcome back, ${user.name.split(' ')[0]}.`;
+
+  // Welcome banner if new
+  if (RRG.qs('welcome') || !user.profile) {
+    document.getElementById('welcome-banner').style.display = 'block';
+  }
+
+  // Stat strip — computed from submissions
+  const subs = RRG.subs.forUser(user.id);
+  const weeksDone = new Set(subs.map(s => s.week)).size;
+  const roundsSubmitted = subs.length;
+  const avgScore = subs.length
+    ? (subs.reduce((a,s) => a + (+s.score || 0), 0) / subs.length).toFixed(1)
+    : '—';
+  const avgT5 = subs.length
+    ? (subs.reduce((a,s) => a + (+s.tiger5Total || 0), 0) / subs.length).toFixed(1)
+    : '—';
+
+  document.getElementById('stat-strip').innerHTML = `
+    <div class="stat-cell"><div class="val">${weeksDone}/15</div><div class="lbl">Weeks Logged</div></div>
+    <div class="stat-cell"><div class="val">${roundsSubmitted}</div><div class="lbl">Rounds Submitted</div></div>
+    <div class="stat-cell"><div class="val">${avgScore}</div><div class="lbl">Avg Score</div></div>
+    <div class="stat-cell"><div class="val">${avgT5}</div><div class="lbl">Avg Tiger 5 / Round</div></div>
+  `;
+
+  // Current week: today vs week open dates
+  const today = new Date().toISOString().slice(0,10);
+  const currentWeek = RRG.WEEKS.find(w => w.open <= today &&
+    (RRG.WEEKS[RRG.WEEKS.indexOf(w)+1]?.open > today || !RRG.WEEKS[RRG.WEEKS.indexOf(w)+1]))
+    || RRG.WEEKS[0];
+
+  const cwBody = document.getElementById('current-week-body');
+  cwBody.innerHTML = `
+    <h3 style="color:var(--navy); margin-top:4px;">Week ${String(currentWeek.n).padStart(2,'0')} · ${RRG.esc(currentWeek.title)}</h3>
+    <div class="muted small mt-2">${RRG.esc(currentWeek.date)}</div>
+    <p class="mt-3" style="font-size:13.5px; line-height:1.55;">${currentWeek.focus}</p>
+    <div class="mt-4 flex gap-3">
+      <a class="btn btn-primary btn-sm" href="week.html?n=${currentWeek.n}">Open Week →</a>
+      <a class="btn btn-ghost btn-sm" href="submit-round.html?week=${currentWeek.n}">Submit My Round</a>
+    </div>
+  `;
+
+  // Week grid
+  const grid = document.getElementById('week-grid');
+  grid.innerHTML = RRG.WEEKS.map(w => {
+    const subsForWeek = RRG.subs.forUserWeek(user.id, w.n);
+    let status = 'pending';
+    if (subsForWeek.length > 0) status = 'complete';
+    else if (w.n === currentWeek.n) status = 'current';
+    else if (w.open > today) status = 'locked';
+    const statusLabel = {
+      complete: 'SUBMITTED',
+      current: 'THIS WEEK',
+      locked: 'OPENS ' + RRG.fmtDate(w.open),
+      pending: 'OPEN'
+    }[status];
+    const href = status === 'locked' ? '#' : `week.html?n=${w.n}`;
+    return `
+      <a href="${href}" class="week-card ${status}">
+        <div class="week-num">WEEK ${String(w.n).padStart(2,'0')}</div>
+        <div class="week-date">${RRG.esc(w.date)}</div>
+        <div class="week-title">${RRG.esc(w.title)}</div>
+        <div class="week-codes">Codes ${w.codes.join(' · ')}</div>
+        <span class="week-status">${statusLabel}</span>
+      </a>
+    `;
+  }).join('');
+
+  // SCJGT
+  document.getElementById('scjgt-body').innerHTML = RRG.SCJGT_EVENTS.map(e => `
+    <tr${e.n==='CH' ? ' style="background:var(--cream);"' : ''}>
+      <td><b class="${e.n==='CH' ? 'gold' : 'navy'}">${e.n}</b></td>
+      <td>${RRG.esc(e.date)}</td>
+      <td>${RRG.esc(e.course)}</td>
+      <td class="muted">${RRG.esc(e.deadline)}</td>
+    </tr>
+  `).join('');
+</script>
+</body>
+</html>

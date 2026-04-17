@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Apply — RR Golf Performance Junior Elite Academy</title>
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<div class="auth-shell">
+  <div class="auth-hero">
+    <div>
+      <div class="brand">RR GOLF PERFORMANCE</div>
+      <div style="margin-top:60px;">
+        <div class="brand" style="color:var(--gold); font-size:11px; letter-spacing:2px;">
+          A P P L I C A T I O N  ·  J U N I O R   E L I T E   2 0 2 6
+        </div>
+        <h1 class="hero-title" style="margin-top:12px;">
+          Start the <em>season</em>.
+        </h1>
+        <p class="hero-sub">
+          Junior Elite is <strong style="color:var(--gold-light);">invite-only</strong>. You should
+          have received an invite code from Ryan. After signup, you'll land on the Know Your Game
+          questionnaire — the confidential profile that sets the frame for your 15 weeks.
+        </p>
+        <p class="hero-sub" style="margin-top:14px;">
+          <strong style="color:var(--gold-light);">Fill it out with absolute honesty.</strong>
+          Only Ryan sees it. It is the most important document of your season.
+        </p>
+        <p class="hero-sub" style="margin-top:14px;">
+          Don't have a code? Email <a style="color:var(--gold-light);" href="mailto:ryan@rrgolfperformance.com">ryan@rrgolfperformance.com</a>.
+        </p>
+      </div>
+    </div>
+    <div class="hero-foot">
+      Tuition $995 + HST · Deposit $250 · Balance due May 1, 2026
+    </div>
+  </div>
+
+  <div class="auth-panel">
+    <div class="form-label">CREATE MY ACCOUNT</div>
+    <h1>Apply to Junior Elite.</h1>
+
+    <form id="signup-form">
+      <div class="field">
+        <label for="inviteCode">Invite code</label>
+        <input id="inviteCode" name="inviteCode" type="text" required
+               placeholder="RRG-XXXX-XXXX"
+               style="text-transform: uppercase; letter-spacing: 1px; font-weight: 600;">
+        <div class="hint">The code Ryan emailed you when you were invited to the cohort.</div>
+      </div>
+      <div class="field">
+        <label for="name">Full name</label>
+        <input id="name" name="name" type="text" required placeholder="First Last">
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="dob">Date of birth</label>
+          <input id="dob" name="dob" type="date" required>
+        </div>
+        <div class="field">
+          <label for="handicap">Current handicap / avg score</label>
+          <input id="handicap" name="handicap" type="text" placeholder="e.g. 8 or 82">
+        </div>
+      </div>
+      <div class="field">
+        <label for="homeClub">Home club</label>
+        <input id="homeClub" name="homeClub" type="text" placeholder="Where do you play most often?">
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" required placeholder="you@example.com">
+      </div>
+      <div class="field">
+        <label for="password">Create a password</label>
+        <input id="password" name="password" type="password" required minlength="8" placeholder="At least 8 characters">
+      </div>
+
+      <div id="signup-error" class="callout" style="display:none; color:var(--red-risk); border-left-color:var(--red-risk); background:#FDF0EE; margin-bottom:16px;"></div>
+
+      <button type="submit" class="btn btn-primary btn-block">Create my portal account</button>
+    </form>
+
+    <p class="alt">
+      Already have an account? <a href="index.html">Sign in</a>
+    </p>
+  </div>
+</div>
+
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  if (RRG.auth.isLoggedIn()) location.replace('dashboard.html');
+
+  const form = document.getElementById('signup-form');
+  const errBox = document.getElementById('signup-error');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errBox.style.display = 'none';
+    const fd = Object.fromEntries(new FormData(form).entries());
+    try {
+      await RRG.auth.signup(fd);
+      location.href = 'profile.html?welcome=1';
+    } catch (err) {
+      errBox.textContent = err.message;
+      errBox.style.display = 'block';
+    }
+  });
+</script>
+</body>
+</html>

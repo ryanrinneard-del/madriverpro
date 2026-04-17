@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coach View — RR Golf Performance</title>
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container">
+
+  <div class="page-header">
+    <div class="page-label">COACH VIEW · RYAN</div>
+    <h1 class="page-title">Junior Elite 2026 · Cohort Dashboard</h1>
+    <hr class="gold-rule">
+    <p class="page-subtitle">
+      Every player. Every submission. Every profile. This is your home base for the 15 weeks —
+      spot patterns, build Performance Docs, keep the cohort on track.
+    </p>
+  </div>
+
+  <!-- Cohort stats -->
+  <div class="stat-strip mb-5" id="coach-stats"></div>
+
+  <!-- Player roster -->
+  <div class="page-header">
+    <div class="page-label">ROSTER</div>
+    <h2 class="page-title" style="font-size:20px;">Your Players</h2>
+    <hr class="gold-rule">
+  </div>
+
+  <div id="roster-wrap"></div>
+
+  <!-- Invite codes -->
+  <div class="page-header mt-6">
+    <div class="page-label">INVITES</div>
+    <h2 class="page-title" style="font-size:20px;">Invite Codes</h2>
+    <hr class="gold-rule">
+    <p class="page-subtitle">
+      Junior Elite is invite-only. Generate a code for each new player, send it to them,
+      and it becomes their single-use signup key. Used codes stay in the log so you can
+      trace every account back to the invite that created it.
+    </p>
+  </div>
+
+  <div class="card mb-5">
+    <div class="flex-between">
+      <div>
+        <b>Generate a new invite code</b>
+        <div class="muted small">One code per player. Each code can be used once.</div>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="generateInvite()">+ Generate Code</button>
+    </div>
+  </div>
+
+  <div id="invites-wrap"></div>
+
+  <!-- Submission stream -->
+  <div class="page-header mt-6">
+    <div class="page-label">SUBMISSION STREAM</div>
+    <h2 class="page-title" style="font-size:20px;">Latest Rounds In</h2>
+    <hr class="gold-rule">
+  </div>
+  <div id="stream-wrap"></div>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  const user = RRG.mount('coach');
+  if (!user) throw new Error();
+
+  if (user.role !== 'coach') {
+    document.querySelector('main').innerHTML = `
+      <div class="callout">
+        This area is for the coach. <a href="dashboard.html">Back to my dashboard</a>.
+      </div>
+    `;
+    throw new Error('not coach');
+  }
+
+  const players = RRG.users.all().filter(u => u.role === 'player');
+  const allSubs = RRG.subs.all();
+
+  const completedProfiles = players.filter(p => p.profile && p.profile._status === 'complete').length;
+  const thisWeekSubs = allSubs.filter(s => {
+    const d = new Date(s.createdAt); const now = new Date();
+    return (now - d) < 7 * 24 * 60 * 60 * 1000;
+  }).length;
+
+  const invitesOpen = RRG.invites.all().filter(i => !i.usedBy).length;
+
+  document.getElementById('coach-stats').innerHTML = `
+    <div class="stat-cell"><div class="val">${players.length}</div><div class="lbl">Players</div></div>
+    <div class="stat-cell"><div class="val">${completedProfiles}/${players.length}</div><div class="lbl">Profiles Complete</div></div>
+    <div class="stat-cell"><div class="val">${invitesOpen}</div><div class="lbl">Open Invites</div></div>
+    <div class="stat-cell"><div class="val">${allSubs.length}</div><div class="lbl">Total Rounds</div></div>
+    <div class="stat-cell"><div class="val">${thisWeekSubs}</div><div class="lbl">This Week</div></div>
+  `;
+
+  // Roster
+  const rosterWrap = document.getElementById('roster-wrap');
+  if (players.length === 0) {
+    rosterWrap.innerHTML = `
+      <div class="history-empty">
+        <h3 class="navy">No players yet.</h3>
+        <p class="muted mt-2">Players will appear here after they create portal accounts.</p>
+      </div>
+    `;
+  } else {
+    rosterWrap.innerHTML = `
+      <table class="history-table">
+        <thead>
+          <tr>
+            <th>Player</th><th>Email</th><th>Handicap</th><th>Home Club</th>
+            <th>Profile</th><th>Rounds</th><th>Avg Score</th><th>Avg Tiger 5</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${players.map(p => {
+            const subs = RRG.subs.forUser(p.id);
+            const scores = subs.map(s => +s.score).filter(n => !isNaN(n));
+            const avg = scores.length ? (scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1) : '—';
+            const avgT5 = subs.length ? (subs.reduce((a,s)=>a+(+s.tiger5Total||0),0)/subs.length).toFixed(1) : '—';
+            const profileStatus = p.profile?._status === 'complete'
+              ? '<span class="badge badge-green">COMPLETE</span>'
+              : p.profile?._status === 'draft'
+                ? '<span class="badge badge-amber">DRAFT</span>'
+                : '<span class="badge badge-navy">NOT STARTED</span>';
+            return `
+              <tr>
+                <td><b>${RRG.esc(p.name)}</b></td>
+                <td class="muted small">${RRG.esc(p.email)}</td>
+                <td>${RRG.esc(p.handicap || '—')}</td>
+                <td>${RRG.esc(p.homeClub || '—')}</td>
+                <td>${profileStatus}</td>
+                <td><b>${subs.length}</b></td>
+                <td>${avg}</td>
+                <td>${avgT5}</td>
+              </tr>
+            `;
+          }).join('')}
+        </tbody>
+      </table>
+    `;
+  }
+
+  // Invites
+  function renderInvites() {
+    const invites = RRG.invites.all().slice().sort((a,b) => b.createdAt.localeCompare(a.createdAt));
+    const wrap = document.getElementById('invites-wrap');
+    if (invites.length === 0) {
+      wrap.innerHTML = `
+        <div class="history-empty">
+          <h3 class="navy">No invites yet.</h3>
+          <p class="muted mt-2">Generate one above to invite your first player.</p>
+        </div>
+      `;
+      return;
+    }
+    wrap.innerHTML = `
+      <table class="history-table">
+        <thead>
+          <tr>
+            <th>Code</th><th>Status</th><th>Used By</th>
+            <th>Created</th><th>Note</th><th></th>
+          </tr>
+        </thead>
+        <tbody>
+          ${invites.map(inv => {
+            const player = inv.usedBy ? RRG.users.all().find(u => u.id === inv.usedBy) : null;
+            const status = inv.usedBy
+              ? '<span class="badge badge-green">ACTIVATED</span>'
+              : '<span class="badge badge-gold">AVAILABLE</span>';
+            return `
+              <tr>
+                <td><code style="font-weight:700; color:var(--navy); letter-spacing:1px;">${RRG.esc(inv.code)}</code></td>
+                <td>${status}</td>
+                <td>${player ? RRG.esc(player.name) + '<br><span class="muted small">'+RRG.esc(player.email)+'</span>' : '<span class="muted">—</span>'}</td>
+                <td class="small muted">${RRG.fmtDate(inv.createdAt)}</td>
+                <td class="small">${RRG.esc(inv.note || '')}</td>
+                <td>
+                  ${!inv.usedBy ? `
+                    <div class="flex gap-2">
+                      <button class="btn btn-ghost btn-sm" onclick="copyCode('${inv.code}')">Copy</button>
+                      <button class="btn btn-ghost btn-sm" onclick="revokeInvite('${inv.code}')" style="color:var(--red-risk);">Revoke</button>
+                    </div>
+                  ` : ''}
+                </td>
+              </tr>
+            `;
+          }).join('')}
+        </tbody>
+      </table>
+    `;
+  }
+
+  window.generateInvite = () => {
+    const note = prompt('Optional note (who is this for?)') || '';
+    const invite = RRG.invites.create({ issuedBy: user.name, note });
+    RRG.toast('New invite: ' + invite.code);
+    renderInvites();
+  };
+
+  window.copyCode = (code) => {
+    navigator.clipboard?.writeText(code);
+    RRG.toast('Copied: ' + code);
+  };
+
+  window.revokeInvite = (code) => {
+    if (!confirm('Revoke invite ' + code + '? It cannot be used after this.')) return;
+    RRG.invites.revoke(code);
+    renderInvites();
+    RRG.toast('Invite revoked.');
+  };
+
+  renderInvites();
+
+  // Submission stream
+  const streamWrap = document.getElementById('stream-wrap');
+  const recent = allSubs.slice().sort((a,b)=>b.createdAt.localeCompare(a.createdAt)).slice(0, 20);
+  if (recent.length === 0) {
+    streamWrap.innerHTML = `
+      <div class="history-empty">
+        <h3 class="navy">No rounds submitted yet.</h3>
+        <p class="muted mt-2">Player submissions will flow here in real time.</p>
+      </div>
+    `;
+  } else {
+    streamWrap.innerHTML = `
+      <table class="history-table">
+        <thead>
+          <tr>
+            <th>Submitted</th><th>Player</th><th>Week</th><th>Course</th>
+            <th>Score</th><th>Tiger 5</th><th>Reflection</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${recent.map(s => `
+            <tr>
+              <td class="small muted">${RRG.fmtDate(s.createdAt)}</td>
+              <td><b>${RRG.esc(s.userName || '')}</b></td>
+              <td>${s.week ? 'W' + s.week : '—'}</td>
+              <td>${RRG.esc(s.course || '')}</td>
+              <td><b>${RRG.esc(s.score || '')}</b></td>
+              <td>
+                <span class="badge ${+s.tiger5Total <= 2 ? 'badge-green' : +s.tiger5Total <= 4 ? 'badge-amber' : 'badge-navy'}">
+                  ${RRG.esc(s.tiger5Total || '0')}
+                </span>
+              </td>
+              <td class="small muted" style="max-width:280px;">${RRG.esc((s.oneThing || s.reflectionBad || '').slice(0, 100))}${s.oneThing?.length > 100 ? '…' : ''}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Submit Round — RR Golf Performance</title>
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container-narrow">
+
+  <div class="page-header">
+    <a href="dashboard.html" class="small muted">← Back to dashboard</a>
+    <div class="page-label mt-3">SUBMIT MY ROUND</div>
+    <h1 class="page-title" id="week-title">Log This Week's 18</h1>
+    <hr class="gold-rule">
+    <p class="page-subtitle">
+      Every field matters. Ryan reviews every submission and returns a one-page Performance
+      Doc before the next session. Take the 4 minutes to fill this out honestly.
+    </p>
+  </div>
+
+  <form id="round-form" class="card">
+
+    <!-- Round meta -->
+    <div class="field-row">
+      <div class="field">
+        <label>Round date</label>
+        <input type="date" name="roundDate" required>
+      </div>
+      <div class="field">
+        <label>Course played</label>
+        <input type="text" name="course" required placeholder="e.g. Mad River GC">
+      </div>
+    </div>
+    <div class="field-row-3">
+      <div class="field">
+        <label>Tees / Yardage</label>
+        <input type="text" name="tees" placeholder="e.g. Whites · 6,200">
+      </div>
+      <div class="field">
+        <label>Format</label>
+        <select name="format">
+          <option>Stroke Play</option>
+          <option>Matchplay</option>
+          <option>Worst-ball 9</option>
+          <option>Par-3 Scramble</option>
+          <option>Playing Lesson</option>
+          <option>Tournament (SCJGT)</option>
+          <option>Shortee / Par-3 course</option>
+          <option>Prep Round</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Holes</label>
+        <select name="holes"><option>18</option><option>9</option></select>
+      </div>
+    </div>
+
+    <!-- Scoring essentials -->
+    <div class="section-label">SCORING ESSENTIALS</div>
+    <div class="field-row-4">
+      <div class="field">
+        <label>Score</label>
+        <input type="number" name="score" required min="30" max="150">
+      </div>
+      <div class="field">
+        <label>Fairways (FIR)</label>
+        <input type="text" name="fir" placeholder="e.g. 8 / 14">
+      </div>
+      <div class="field">
+        <label>Greens (GIR)</label>
+        <input type="text" name="gir" placeholder="e.g. 9 / 18">
+      </div>
+      <div class="field">
+        <label>Putts</label>
+        <input type="number" name="putts" min="18" max="50">
+      </div>
+    </div>
+    <div class="field-row-4">
+      <div class="field">
+        <label>3-Putts</label>
+        <input type="number" name="threePutts" min="0" max="18" value="0">
+      </div>
+      <div class="field">
+        <label>Up-and-Down %</label>
+        <input type="text" name="upDown" placeholder="e.g. 3 / 6">
+      </div>
+      <div class="field">
+        <label>Penalty strokes</label>
+        <input type="number" name="penalties" min="0" max="20" value="0">
+      </div>
+      <div class="field">
+        <label>Lost balls</label>
+        <input type="number" name="lostBalls" min="0" max="20" value="0">
+      </div>
+    </div>
+
+    <!-- Tiger 5 -->
+    <div class="section-label">TIGER 5 TALLY</div>
+    <div class="section-title" style="font-size:15px;">Count each avoidable error that happened today.</div>
+    <div id="t5-panel" class="tiger5-grid"></div>
+    <div class="tiger5-summary mt-4" id="t5-summary">
+      <div class="total"><b id="t5-total">0</b>Tiger 5 events this round</div>
+      <div class="status good" id="t5-status">ON BENCHMARK</div>
+    </div>
+    <p class="muted small mt-2">
+      <b>Junior Elite target:</b> 1–2 or fewer per round. Tour benchmark: ≤ 6 across a 4-round event.
+    </p>
+
+    <!-- Reflection -->
+    <div class="section-label">REFLECTION</div>
+    <div class="field">
+      <label>What went well today?</label>
+      <textarea name="reflectionGood" placeholder="Be specific. One concrete moment beats a generalization."></textarea>
+    </div>
+    <div class="field">
+      <label>What cost you strokes?</label>
+      <textarea name="reflectionBad" placeholder="Where did strokes leak? Tee shots, wedges, putting, decisions, mental?"></textarea>
+    </div>
+    <div class="field">
+      <label>Routine consistency (1–10)</label>
+      <input type="number" name="routineScore" min="1" max="10" placeholder="How consistent was your pre-shot routine?">
+    </div>
+    <div class="field">
+      <label>One thing to work on before next session</label>
+      <textarea name="oneThing" placeholder="Pick ONE — not five."></textarea>
+    </div>
+
+    <div id="form-error" class="callout" style="display:none; color:var(--red-risk); border-left-color:var(--red-risk); background:#FDF0EE; margin-bottom:16px;"></div>
+
+    <div class="flex gap-3 mt-4">
+      <button type="submit" class="btn btn-primary">Submit My Round</button>
+      <a href="dashboard.html" class="btn btn-ghost">Cancel</a>
+    </div>
+
+    <p class="muted small mt-4">
+      On submit: your round is saved to your private portal and an email is sent to
+      <b>ryan@rrgolfperformance.com</b>. Ryan returns your Performance Doc before the next session.
+    </p>
+  </form>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  const user = RRG.mount('dashboard');
+  if (!user) throw new Error();
+
+  const weekN = parseInt(RRG.qs('week'), 10) || null;
+  const week = weekN ? RRG.WEEKS.find(w => w.n === weekN) : null;
+  if (week) {
+    document.getElementById('week-title').textContent =
+      `Week ${week.n} — ${week.title}`;
+  }
+
+  // Tiger 5 UI
+  const t5Panel = document.getElementById('t5-panel');
+  const t5State = { 1:0, 2:0, 3:0, 4:0, 5:0 };
+
+  t5Panel.innerHTML = RRG.TIGER5.map(t => `
+    <div class="tiger5-row">
+      <div class="t5-num">${t.n}</div>
+      <div class="t5-desc">
+        <b>${RRG.esc(t.title)}</b>
+        <div class="muted small">${RRG.esc(t.desc)}</div>
+      </div>
+      <div class="t5-count">
+        <button type="button" onclick="rrgT5(${t.n}, -1)" aria-label="decrease">−</button>
+        <span class="n" id="t5-n-${t.n}">0</span>
+        <button type="button" onclick="rrgT5(${t.n}, +1)" aria-label="increase">+</button>
+      </div>
+    </div>
+  `).join('');
+
+  window.rrgT5 = (n, delta) => {
+    t5State[n] = Math.max(0, t5State[n] + delta);
+    document.getElementById('t5-n-' + n).textContent = t5State[n];
+    const total = Object.values(t5State).reduce((a,b) => a+b, 0);
+    document.getElementById('t5-total').textContent = total;
+    const status = document.getElementById('t5-status');
+    if (total <= 2) { status.textContent = 'ON BENCHMARK'; status.className = 'status good'; }
+    else if (total <= 4) { status.textContent = 'CLOSE'; status.className = 'status ok'; }
+    else { status.textContent = 'STROKES ON THE TABLE'; status.className = 'status bad'; }
+  };
+
+  // Submit
+  const form = document.getElementById('round-form');
+  const errBox = document.getElementById('form-error');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    errBox.style.display = 'none';
+    const data = Object.fromEntries(new FormData(form).entries());
+    const total = Object.values(t5State).reduce((a,b) => a+b, 0);
+    const entry = RRG.subs.create({
+      userId: user.id,
+      userName: user.name,
+      week: week?.n ?? null,
+      weekTitle: week?.title ?? null,
+      ...data,
+      tiger5: { ...t5State },
+      tiger5Total: total,
+    });
+    RRG.toast('Round submitted — Performance Doc will be ready before next session.');
+    setTimeout(() => { location.href = 'history.html?new=' + entry.id; }, 1200);
+  });
+</script>
+</body>
+</html>

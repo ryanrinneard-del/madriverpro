@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Week — RR Golf Performance</title>
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container-narrow" id="week-main">
+  <!-- rendered by script -->
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  const user = RRG.mount('dashboard');
+  if (!user) throw new Error();
+
+  const n = parseInt(RRG.qs('n'), 10) || 1;
+  const week = RRG.WEEKS.find(w => w.n === n);
+  const main = document.getElementById('week-main');
+  if (!week) {
+    main.innerHTML = '<p class="callout">Week not found. <a href="dashboard.html">Back to dashboard</a>.</p>';
+  } else {
+    const phaseLabel = week.phase === 'P1' ? 'PHASE ONE · SATURDAYS' : 'PHASE TWO · TUE / THU 10 AM';
+    const prev = RRG.WEEKS.find(w => w.n === n - 1);
+    const next = RRG.WEEKS.find(w => w.n === n + 1);
+    const subs = RRG.subs.forUserWeek(user.id, n);
+    const codes = week.codes.map(c => RRG.CODES.find(x => x.n === c)).filter(Boolean);
+
+    main.innerHTML = `
+      <div class="flex-between mb-4">
+        <a href="dashboard.html" class="small muted">← Back to all weeks</a>
+        <div class="flex gap-2">
+          ${prev ? `<a class="btn btn-ghost btn-sm" href="week.html?n=${prev.n}">← Week ${prev.n}</a>` : ''}
+          ${next ? `<a class="btn btn-ghost btn-sm" href="week.html?n=${next.n}">Week ${next.n} →</a>` : ''}
+        </div>
+      </div>
+
+      <div class="week-hero">
+        <span class="tag">${phaseLabel}</span>
+        <h1>Week ${String(week.n).padStart(2,'0')} — ${RRG.esc(week.title)}</h1>
+        <div class="meta">
+          <div class="m"><b>Date</b>${RRG.esc(week.date)}</div>
+          <div class="m"><b>Codes</b>${week.codes.join(' · ')}</div>
+          <div class="m"><b>Submissions</b>${subs.length}</div>
+        </div>
+      </div>
+
+      <div class="section-label">FOCUS</div>
+      <div class="section-title">What We Work On This Week</div>
+      <div class="card">${week.focus}</div>
+
+      <div class="section-label">CONTEXT</div>
+      <div class="section-title">Why This Week</div>
+      <div class="card-cream" style="border-radius:8px;"><i>${week.context}</i></div>
+
+      <div class="section-label">SELF-GUIDED ON-COURSE</div>
+      <div class="section-title">Your Assignment Between Sessions</div>
+      <div class="card">${week.selfGuided}</div>
+
+      <div class="section-label">PERFORMANCE CODES THIS WEEK</div>
+      <div class="section-title">How It Maps</div>
+      <div class="kv-list">
+        ${codes.map(c => `
+          <div class="kv-row">
+            <div class="kv-key">CODE ${c.n} · ${RRG.esc(c.title)}</div>
+            <div class="kv-val">${RRG.esc(c.desc)}</div>
+          </div>
+        `).join('')}
+      </div>
+
+      <div class="section-label">TOOLS FOR THIS WEEK</div>
+      <div class="section-title">Resources on Your Portal</div>
+      <div class="grid grid-3">
+        <a class="card" href="tiger5.html" style="text-decoration:none;">
+          <h3 style="color:var(--navy);">Tiger 5 Scorecard</h3>
+          <p class="muted small mt-2">Live mental scorecard. Print the card, carry on course.</p>
+        </a>
+        <a class="card" href="wedge-matrix.html" style="text-decoration:none;">
+          <h3 style="color:var(--navy);">Wedge Matrix</h3>
+          <p class="muted small mt-2">Your personal yardage matrix. Save + print for the bag.</p>
+        </a>
+        <a class="card" href="submit-round.html?week=${week.n}" style="text-decoration:none;">
+          <h3 style="color:var(--navy);">Submit Round</h3>
+          <p class="muted small mt-2">Log your 18 holes — FIR, GIR, putts, Tiger 5, reflection.</p>
+        </a>
+      </div>
+
+      ${subs.length > 0 ? `
+        <div class="section-label">MY SUBMISSIONS THIS WEEK</div>
+        <div class="section-title">What I've Logged</div>
+        <table class="history-table">
+          <thead><tr><th>Date</th><th>Score</th><th>FIR</th><th>GIR</th><th>Putts</th><th>Tiger 5</th></tr></thead>
+          <tbody>
+            ${subs.map(s => `
+              <tr>
+                <td>${RRG.fmtDate(s.createdAt)}</td>
+                <td>${RRG.esc(s.score||'')}</td>
+                <td>${RRG.esc(s.fir||'')}</td>
+                <td>${RRG.esc(s.gir||'')}</td>
+                <td>${RRG.esc(s.putts||'')}</td>
+                <td><b>${RRG.esc(s.tiger5Total||'0')}</b></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      ` : ''}
+
+      <div class="card-navy mt-6 text-center">
+        <div class="page-label" style="color:var(--gold);">READY?</div>
+        <h2 style="color:var(--white); margin-top:6px;">Submit This Week's Round</h2>
+        <p style="color:var(--soft-grey); margin-top:8px; max-width:440px; margin-left:auto; margin-right:auto;">
+          Once you've played, log the scorecard and reflection. Ryan reviews every submission
+          and returns your Performance Doc before the next session.
+        </p>
+        <div class="mt-4">
+          <a href="submit-round.html?week=${week.n}" class="btn btn-primary">Submit My Round →</a>
+        </div>
+      </div>
+
+      <div class="flex-between mt-6">
+        ${prev ? `<a class="btn btn-ghost btn-sm" href="week.html?n=${prev.n}">← Week ${prev.n}</a>` : '<span></span>'}
+        ${next ? `<a class="btn btn-ghost btn-sm" href="week.html?n=${next.n}">Week ${next.n} →</a>` : '<span></span>'}
+      </div>
+    `;
+  }
+</script>
+</body>
+</html>

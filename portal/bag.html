@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Map My Bag — RR Golf Performance</title>
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  .bag-card {
+    background: var(--white);
+    border: 2px solid var(--navy);
+    border-radius: 10px;
+    padding: 28px;
+    max-width: 6in;
+    margin: 0 auto;
+  }
+  .bag-card .bc-hdr {
+    border-bottom: 2px solid var(--gold);
+    padding-bottom: 12px;
+    margin-bottom: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .bag-card table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+  .bag-card th {
+    background: var(--navy); color: var(--white); padding: 10px 8px;
+    font-size: 11px; letter-spacing: 1px;
+  }
+  .bag-card th:first-child { text-align: left; padding-left: 14px; width: 38%; }
+  .bag-card td { padding: 8px 6px; border-bottom: 1px solid var(--rule); font-size: 14px; }
+  .bag-card td.club { text-align: left; padding-left: 14px; background: var(--light-bg); position: relative; }
+  .bag-card td.num  { text-align: center; }
+  .bag-card input.name {
+    width: 100%; padding: 8px 8px; border: 1px solid transparent; background: transparent;
+    font-weight: 700; color: var(--navy); font-size: 14px; border-radius: 4px;
+  }
+  .bag-card input.name:focus {
+    border-color: var(--gold); background: var(--white); outline: none;
+  }
+  .bag-card input.name:hover { border-color: var(--rule); }
+  .bag-card input.yard {
+    width: 90px; padding: 8px 6px; border: 1px solid var(--rule); border-radius: 4px;
+    text-align: center; font-size: 14px; font-weight: 600;
+  }
+  .bag-card input.yard:focus { border-color: var(--gold); outline: none; }
+  .remove-btn {
+    position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+    width: 22px; height: 22px; border: 1px solid var(--rule); border-radius: 50%;
+    background: var(--white); color: var(--mid-grey); cursor: pointer;
+    font-size: 14px; line-height: 1; display: flex; align-items: center; justify-content: center;
+  }
+  .remove-btn:hover { border-color: var(--red-risk); color: var(--red-risk); }
+  .add-row { text-align: center; padding: 12px !important; }
+  .add-row button {
+    background: transparent; border: 1px dashed var(--gold); color: var(--gold);
+    padding: 8px 18px; border-radius: 4px; cursor: pointer;
+    font-size: 12px; font-weight: 700; letter-spacing: 0.5px;
+  }
+  .add-row button:hover { background: var(--gold); color: var(--navy); }
+
+  .drag-handle {
+    cursor: grab; color: var(--mid-grey); font-size: 14px; user-select: none;
+    padding-right: 6px;
+  }
+  .bag-row.dragging { opacity: 0.4; }
+
+  @media print {
+    body { background: white; }
+    .container { padding: 0; }
+    .bag-card input.yard, .bag-card input.name {
+      border: none; background: transparent; font-size: 15px;
+    }
+    .remove-btn, .add-row, .drag-handle, .no-print { display: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container">
+  <div class="page-header">
+    <div class="page-label">MY BAG</div>
+    <h1 class="page-title">Map My Bag</h1>
+    <hr class="gold-rule">
+    <p class="page-subtitle">
+      Every club, every yardage. <b>Carry</b> is how far it flies, <b>Total</b> is where it stops.
+      Customize the list — your bag isn't a template. Not everyone carries a 3-wood or a 4-iron,
+      and yours might have a 4-hybrid, a 6-hybrid, or a gapped-out wedge setup. Make it yours.
+    </p>
+  </div>
+
+  <div class="flex-between mb-4 no-print">
+    <div class="callout" style="flex:1; margin-right:20px;">
+      <b>Tip.</b> Hit 8–10 balls with each club on a calm day. Drop your two worst and two best,
+      then take the average of the middle. That's your number. Update it every month — yardages
+      change with tempo, turf, and the season.
+    </div>
+    <div class="flex gap-2">
+      <button class="btn btn-ghost btn-sm" onclick="resetBag()">Reset to Default</button>
+      <button class="btn btn-navy btn-sm" onclick="saveBag(true)">Save</button>
+      <button class="btn btn-primary btn-sm" onclick="window.print()">Print ↗</button>
+    </div>
+  </div>
+
+  <div class="bag-card" id="bag">
+    <div class="bc-hdr">
+      <div>
+        <div style="font-weight:700; letter-spacing:1.5px; color:var(--navy); font-size:14px;">BAG MAP · YARDAGES</div>
+        <div class="muted" style="font-size:11px; margin-top:2px;">RR Golf Performance · Junior Elite 2026</div>
+      </div>
+      <div style="color:var(--gold); font-size:10px; letter-spacing:2px; font-weight:700;">
+        DISTANCES · IN YARDS
+      </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:10px;">
+      <div>
+        <div style="font-size:10px; letter-spacing:1px; font-weight:700; color:var(--navy);">PLAYER</div>
+        <input id="player-name" style="width:100%; padding:6px 0; border:none; border-bottom:1px solid var(--rule); font-size:13px;">
+      </div>
+      <div>
+        <div style="font-size:10px; letter-spacing:1px; font-weight:700; color:var(--navy);">BUILT ON</div>
+        <input id="built-on" style="width:100%; padding:6px 0; border:none; border-bottom:1px solid var(--rule); font-size:13px;">
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Club</th>
+          <th>Carry</th>
+          <th>Total</th>
+          <th class="no-print" style="width:32px;"></th>
+        </tr>
+      </thead>
+      <tbody id="bag-body"></tbody>
+      <tfoot>
+        <tr class="no-print">
+          <td class="add-row" colspan="4">
+            <button onclick="addRow()">+ Add a club</button>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <div style="font-size:11px; color:var(--navy-mid); margin-top:14px; line-height:1.55;">
+      <b>Why this matters.</b> On course, you're not picking a club \u2014 you're picking a yardage.
+      The club just delivers it. When you know every number, every shot becomes a decision,
+      not a guess.
+    </div>
+  </div>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  const user = RRG.mount('bag');
+  if (!user) throw new Error();
+
+  document.getElementById('player-name').value = user.name || '';
+  document.getElementById('built-on').value = new Date().toLocaleDateString();
+
+  const BAG_KEY = 'rrg_bag_v1_' + user.id;
+
+  // Default bag — a reasonable starting list, fully editable.
+  const DEFAULT_BAG = [
+    { name: 'Driver',     carry: '', total: '' },
+    { name: '3 Wood',     carry: '', total: '' },
+    { name: '5 Wood',     carry: '', total: '' },
+    { name: '4 Hybrid',   carry: '', total: '' },
+    { name: '4 Iron',     carry: '', total: '' },
+    { name: '5 Iron',     carry: '', total: '' },
+    { name: '6 Iron',     carry: '', total: '' },
+    { name: '7 Iron',     carry: '', total: '' },
+    { name: '8 Iron',     carry: '', total: '' },
+    { name: '9 Iron',     carry: '', total: '' },
+    { name: 'PW',         carry: '', total: '' },
+    { name: 'GW / 52°',   carry: '', total: '' },
+    { name: 'SW / 56°',   carry: '', total: '' },
+    { name: 'LW / 60°',   carry: '', total: '' },
+    { name: 'Putter',     carry: '',  total: '' },
+  ];
+
+  let bag = [];
+  try { bag = JSON.parse(localStorage.getItem(BAG_KEY) || '[]'); } catch {}
+  if (!bag.length) {
+    bag = DEFAULT_BAG.map((c, i) => ({ id: 'c' + (Date.now() + i), ...c }));
+    localStorage.setItem(BAG_KEY, JSON.stringify(bag));
+  }
+
+  window.saveBag = (announce = false) => {
+    localStorage.setItem(BAG_KEY, JSON.stringify(bag));
+    if (announce) RRG.toast('Bag map saved to your portal.');
+  };
+
+  function render() {
+    document.getElementById('bag-body').innerHTML = bag.map((c, idx) => `
+      <tr class="bag-row" data-idx="${idx}" draggable="true">
+        <td class="club">
+          <span class="drag-handle no-print" title="Drag to reorder">⋮⋮</span>
+          <input class="name" data-idx="${idx}" value="${RRG.esc(c.name)}"
+                 placeholder="e.g. 5-hybrid or 4i / 22°"
+                 style="display:inline-block; width:calc(100% - 24px); vertical-align:middle;">
+        </td>
+        <td class="num">
+          <input class="yard" type="number" min="0" max="400"
+                 data-idx="${idx}" data-field="carry" value="${RRG.esc(c.carry ?? '')}">
+        </td>
+        <td class="num">
+          <input class="yard" type="number" min="0" max="400"
+                 data-idx="${idx}" data-field="total" value="${RRG.esc(c.total ?? '')}">
+        </td>
+        <td class="no-print">
+          <button class="remove-btn" title="Remove this club" onclick="removeRow(${idx})">×</button>
+        </td>
+      </tr>
+    `).join('');
+
+    document.querySelectorAll('input.name').forEach(inp => {
+      inp.addEventListener('input', () => {
+        bag[+inp.dataset.idx].name = inp.value;
+        saveBag();
+      });
+    });
+    document.querySelectorAll('input.yard').forEach(inp => {
+      inp.addEventListener('input', () => {
+        const idx = +inp.dataset.idx, field = inp.dataset.field;
+        bag[idx][field] = inp.value === '' ? '' : +inp.value;
+        saveBag();
+      });
+    });
+
+    // Drag-and-drop reordering
+    let dragIdx = null;
+    document.querySelectorAll('.bag-row').forEach(row => {
+      row.addEventListener('dragstart', (e) => {
+        dragIdx = +row.dataset.idx;
+        row.classList.add('dragging');
+      });
+      row.addEventListener('dragend', () => row.classList.remove('dragging'));
+      row.addEventListener('dragover', (e) => e.preventDefault());
+      row.addEventListener('drop', (e) => {
+        e.preventDefault();
+        const dropIdx = +row.dataset.idx;
+        if (dragIdx === null || dragIdx === dropIdx) return;
+        const [moved] = bag.splice(dragIdx, 1);
+        bag.splice(dropIdx, 0, moved);
+        saveBag();
+        render();
+      });
+    });
+  }
+
+  window.addRow = () => {
+    bag.push({ id: 'c' + Date.now(), name: '', carry: '', total: '' });
+    saveBag();
+    render();
+    setTimeout(() => {
+      const inputs = document.querySelectorAll('input.name');
+      inputs[inputs.length - 1]?.focus();
+    }, 20);
+  };
+
+  window.removeRow = (idx) => {
+    if (!confirm('Remove "' + (bag[idx].name || 'this club') + '" from your bag?')) return;
+    bag.splice(idx, 1);
+    saveBag();
+    render();
+  };
+
+  window.resetBag = () => {
+    if (!confirm('Reset your bag to the default list? Your carry / total numbers will be cleared.')) return;
+    bag = DEFAULT_BAG.map((c, i) => ({ id: 'c' + (Date.now() + i), ...c }));
+    saveBag();
+    render();
+    RRG.toast('Bag reset to default.');
+  };
+
+  render();
+</script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sign in — RR Golf Performance Junior Elite Academy</title>
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<div class="auth-shell">
+
+  <!-- HERO / LEFT -->
+  <div class="auth-hero">
+    <div>
+      <div class="brand">RR GOLF PERFORMANCE</div>
+      <div style="margin-top:60px;">
+        <div class="brand" style="color:var(--gold); font-size:11px; letter-spacing:2px;">
+          J U N I O R   E L I T E   A C A D E M Y   ·   2 0 2 6
+        </div>
+        <h1 class="hero-title" style="margin-top:12px;">
+          Your private<br>player <em>portal</em>.
+        </h1>
+        <p class="hero-sub">
+          The season's Weekly Playbook lives here. Read this week, print your Tiger 5
+          card, dial in your wedge matrix, log every round. Before your next session,
+          Ryan reviews your submission and returns a written Performance Doc.
+        </p>
+        <div class="hero-stats">
+          <div class="hero-stat"><div class="n">15</div><div class="l">Weeks</div></div>
+          <div class="hero-stat"><div class="n">4–6</div><div class="l">Per Cohort</div></div>
+          <div class="hero-stat"><div class="n">8</div><div class="l">Tour Events</div></div>
+          <div class="hero-stat"><div class="n">1×1</div><div class="l">Private Access</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-foot">
+      <strong>Confidential.</strong> Your profile, your submissions, your Performance Docs —
+      visible only to you and your coach.
+    </div>
+  </div>
+
+  <!-- FORM / RIGHT -->
+  <div class="auth-panel">
+    <div class="form-label">PORTAL LOGIN</div>
+    <h1>Welcome back.</h1>
+
+    <form id="login-form">
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" required autocomplete="current-password" placeholder="••••••••">
+      </div>
+
+      <div id="login-error" class="callout" style="display:none; color:var(--red-risk); border-left-color:var(--red-risk); background:#FDF0EE; margin-bottom:16px;"></div>
+
+      <button type="submit" class="btn btn-primary btn-block">Sign in to my portal</button>
+    </form>
+
+    <p class="alt">
+      Have an invite code? <a href="signup.html">Activate your portal →</a>
+    </p>
+
+    <div style="margin-top:32px; padding:14px; background:var(--light-bg); border-radius:6px; font-size:11px; color:var(--mid-grey);">
+      <b style="color:var(--navy);">Prototype note:</b> Authentication is currently simulated in your browser (localStorage). See <code>README.md</code> for the production auth plan (Supabase + email magic links). Demo coach login: <code>ryan@rrgolfperformance.com</code> / <code>coach2026</code>. Demo invite codes: <code>RRG-DEMO-2026</code>, <code>RRG-ELITE-01</code>.
+    </div>
+  </div>
+
+</div>
+
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  // Redirect if already logged in
+  if (RRG.auth.isLoggedIn()) location.replace('dashboard.html');
+
+  const form = document.getElementById('login-form');
+  const errBox = document.getElementById('login-error');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errBox.style.display = 'none';
+    const email = form.email.value.trim();
+    const password = form.password.value;
+    try {
+      await RRG.auth.login(email, password);
+      location.href = 'dashboard.html';
+    } catch (err) {
+      errBox.textContent = err.message;
+      errBox.style.display = 'block';
+    }
+  });
+</script>
+</body>
+</html>

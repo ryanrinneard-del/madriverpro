@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wedge Matrix — RR Golf Performance</title>
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  .matrix-card {
+    background: var(--white);
+    border: 2px solid var(--navy);
+    border-radius: 10px;
+    padding: 28px;
+    max-width: 6in;
+    margin: 0 auto;
+  }
+  .matrix-card .mc-hdr {
+    border-bottom: 2px solid var(--gold);
+    padding-bottom: 12px;
+    margin-bottom: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .matrix-card table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+  .matrix-card th { background: var(--navy); color: var(--white); padding: 10px 8px; font-size: 11px; letter-spacing: 1px; }
+  .matrix-card th:first-child { text-align: left; padding-left: 14px; }
+  .matrix-card td { padding: 8px 6px; border-bottom: 1px solid var(--rule); text-align: center; font-size: 14px; }
+  .matrix-card td.club {
+    text-align: left; padding-left: 14px; background: var(--light-bg); position: relative;
+  }
+  .matrix-card td.club input.name {
+    width: 100%; padding: 8px 6px; border: 1px solid transparent; background: transparent;
+    font-weight: 700; color: var(--navy); font-size: 14px; border-radius: 4px;
+  }
+  .matrix-card td.club input.name:focus {
+    border-color: var(--gold); background: var(--white); outline: none;
+  }
+  .matrix-card td.club input.name:hover { border-color: var(--rule); }
+  .matrix-card input.yard {
+    width: 78px; padding: 8px 6px; border: 1px solid var(--rule); border-radius: 4px;
+    text-align: center; font-size: 14px; font-weight: 600;
+  }
+  .matrix-card input.yard:focus { border-color: var(--gold); outline: none; }
+  .remove-btn {
+    position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+    width: 22px; height: 22px; border: 1px solid var(--rule); border-radius: 50%;
+    background: var(--white); color: var(--mid-grey); cursor: pointer;
+    font-size: 14px; line-height: 1; display: flex; align-items: center; justify-content: center;
+  }
+  .remove-btn:hover { border-color: var(--red-risk); color: var(--red-risk); }
+  .add-row {
+    text-align: center; padding: 12px !important;
+  }
+  .add-row button {
+    background: transparent; border: 1px dashed var(--gold); color: var(--gold);
+    padding: 8px 18px; border-radius: 4px; cursor: pointer;
+    font-size: 12px; font-weight: 700; letter-spacing: 0.5px;
+  }
+  .add-row button:hover { background: var(--gold); color: var(--navy); }
+  @media print {
+    body { background: white; }
+    .container { padding: 0; }
+    .matrix-card input.yard, .matrix-card input.name {
+      border: none; background: transparent; font-size: 15px;
+    }
+    .remove-btn, .add-row, .no-print { display: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container">
+  <div class="page-header">
+    <div class="page-label">WEEK 5 TOOL · FULLY EDITABLE</div>
+    <h1 class="page-title">Your Wedge Matrix</h1>
+    <hr class="gold-rule">
+    <p class="page-subtitle">
+      Set up <b>your exact wedges</b> — type in whatever you carry (e.g. 43°, 48°, 54°, 58°,
+      60° bent to 61°). Dial every swing length. Autosaves to your portal, and prints for the
+      scorecard holder.
+    </p>
+  </div>
+
+  <div class="flex-between mb-4 no-print">
+    <div class="callout" style="flex:1; margin-right:20px;">
+      <b>How to build this.</b> On the range, hit 5 balls with each wedge at each swing length.
+      Record the <b>average carry</b>, not the best one.
+    </div>
+    <div class="flex gap-2">
+      <button class="btn btn-ghost btn-sm" onclick="resetMatrix()">Reset to Default</button>
+      <button class="btn btn-navy btn-sm" onclick="saveMatrix()">Save</button>
+      <button class="btn btn-primary btn-sm" onclick="window.print()">Print ↗</button>
+    </div>
+  </div>
+
+  <div class="matrix-card" id="matrix">
+    <div class="mc-hdr">
+      <div>
+        <div style="font-weight:700; letter-spacing:1.5px; color:var(--navy); font-size:14px;">WEDGE YARDAGE MATRIX</div>
+        <div class="muted" style="font-size:11px; margin-top:2px;">RR Golf Performance · Junior Elite 2026</div>
+      </div>
+      <div style="color:var(--gold); font-size:10px; letter-spacing:2px; font-weight:700;">
+        CARRY · IN YARDS
+      </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:10px;">
+      <div>
+        <div style="font-size:10px; letter-spacing:1px; font-weight:700; color:var(--navy);">PLAYER</div>
+        <input id="player-name" style="width:100%; padding:6px 0; border:none; border-bottom:1px solid var(--rule); font-size:13px;">
+      </div>
+      <div>
+        <div style="font-size:10px; letter-spacing:1px; font-weight:700; color:var(--navy);">BUILT ON</div>
+        <input id="built-on" style="width:100%; padding:6px 0; border:none; border-bottom:1px solid var(--rule); font-size:13px;">
+      </div>
+    </div>
+
+    <table id="matrix-table">
+      <thead><tr id="matrix-head"></tr></thead>
+      <tbody id="matrix-body"></tbody>
+      <tfoot id="matrix-foot"></tfoot>
+    </table>
+
+    <div style="font-size:11px; color:var(--navy-mid); margin-top:14px; line-height:1.55;">
+      <b>Read it this way.</b> You have a 92-yard pitch. Which wedge, which swing? Check your matrix.
+      If you have a 62-yard gap wedge ¾ swing, that's your shot. No guessing, no deceleration.
+    </div>
+  </div>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  const user = RRG.mount('wedge');
+  if (!user) throw new Error();
+
+  document.getElementById('player-name').value = user.name || '';
+  document.getElementById('built-on').value = new Date().toLocaleDateString();
+
+  const WEDGE_KEY = 'rrg_wedges_v2_' + user.id;
+  const YARD_KEY  = 'rrg_wedge_yd_v2_' + user.id;
+
+  // Load saved wedge list or seed defaults
+  let wedges = [];
+  try { wedges = JSON.parse(localStorage.getItem(WEDGE_KEY) || '[]'); } catch {}
+  if (!wedges.length) {
+    wedges = RRG.WEDGE_CLUBS.map((name, i) => ({ id: 'w' + (Date.now() + i), name }));
+    localStorage.setItem(WEDGE_KEY, JSON.stringify(wedges));
+  }
+
+  let yardages = {};
+  try { yardages = JSON.parse(localStorage.getItem(YARD_KEY) || '{}'); } catch {}
+
+  function saveAll(announce = false) {
+    localStorage.setItem(WEDGE_KEY, JSON.stringify(wedges));
+    localStorage.setItem(YARD_KEY, JSON.stringify(yardages));
+    if (announce) RRG.toast('Wedge matrix saved to your portal.');
+  }
+  window.saveMatrix = () => saveAll(true);
+
+  function render() {
+    // Header
+    document.getElementById('matrix-head').innerHTML =
+      '<th>Club</th>' +
+      RRG.WEDGE_SHOTS.map(s => `<th>${RRG.esc(s)}</th>`).join('') +
+      '<th class="no-print" style="width:32px;"></th>';
+
+    // Body
+    document.getElementById('matrix-body').innerHTML = wedges.map(w => `
+      <tr data-id="${w.id}">
+        <td class="club">
+          <input class="name" value="${RRG.esc(w.name)}" data-id="${w.id}"
+                 placeholder="e.g. 54° or 60° bent to 61°">
+        </td>
+        ${RRG.WEDGE_SHOTS.map(shot => `
+          <td><input class="yard" type="number" min="10" max="170"
+                     data-wedge="${w.id}" data-shot="${RRG.esc(shot)}"
+                     value="${yardages[w.id + '|' + shot] ?? ''}"></td>
+        `).join('')}
+        <td class="no-print">
+          <button class="remove-btn" title="Remove this wedge" onclick="removeWedge('${w.id}')">×</button>
+        </td>
+      </tr>
+    `).join('');
+
+    // Footer with add button
+    const colspan = RRG.WEDGE_SHOTS.length + 2;
+    document.getElementById('matrix-foot').innerHTML = `
+      <tr class="no-print">
+        <td class="add-row" colspan="${colspan}">
+          <button onclick="addWedge()">+ Add a wedge</button>
+        </td>
+      </tr>
+    `;
+
+    // Wire events
+    document.querySelectorAll('input.name').forEach(inp => {
+      inp.addEventListener('input', () => {
+        const w = wedges.find(x => x.id === inp.dataset.id);
+        if (w) { w.name = inp.value; saveAll(); }
+      });
+    });
+    document.querySelectorAll('input.yard').forEach(inp => {
+      inp.addEventListener('input', () => {
+        const k = inp.dataset.wedge + '|' + inp.dataset.shot;
+        if (inp.value === '') delete yardages[k];
+        else yardages[k] = +inp.value;
+        saveAll();
+      });
+    });
+  }
+
+  window.addWedge = () => {
+    wedges.push({ id: 'w' + Date.now(), name: '' });
+    saveAll();
+    render();
+    // focus the new name input
+    setTimeout(() => {
+      const inputs = document.querySelectorAll('input.name');
+      inputs[inputs.length - 1]?.focus();
+    }, 20);
+  };
+
+  window.removeWedge = (id) => {
+    if (!confirm('Remove this wedge from your matrix?')) return;
+    wedges = wedges.filter(w => w.id !== id);
+    // clean up yardages for that wedge
+    Object.keys(yardages).filter(k => k.startsWith(id + '|')).forEach(k => delete yardages[k]);
+    saveAll();
+    render();
+  };
+
+  window.resetMatrix = () => {
+    if (!confirm('Clear all wedges and yardages and reset to the starter list?')) return;
+    wedges = RRG.WEDGE_CLUBS.map((name, i) => ({ id: 'w' + (Date.now() + i), name }));
+    yardages = {};
+    saveAll();
+    render();
+    RRG.toast('Matrix reset.');
+  };
+
+  render();
+</script>
+</body>
+</html>
