@@ -366,19 +366,29 @@ RRG.renderNav = function(active = '') {
   const initials = (user.name || 'RR').split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
   const coachLink = user.role === 'coach'
     ? `<li><a href="coach.html" class="${active==='coach'?'active':''}">Coach View</a></li>` : '';
+  // Videos temporarily hidden from the main nav until the Vercel Blob upload
+  // pipeline is wired. Pages are still accessible at /adult/videos.html and
+  // /adult/upload-video.html for testing.
   return `
     <nav class="nav no-print">
       <div class="nav-brand">RR GOLF PERFORMANCE</div>
-      <ul class="nav-links">
+      <button class="nav-toggle" aria-label="Menu" onclick="RRG.toggleNav(this)">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="rrg-nav-drawer">
         <li><a href="dashboard.html" class="${active==='dashboard'?'active':''}">Dashboard</a></li>
-        <li><a href="videos.html" class="${active==='videos'?'active':''}">My Videos</a></li>
         <li><a href="history.html" class="${active==='history'?'active':''}">My Rounds</a></li>
         <li><a href="profile.html" class="${active==='profile'?'active':''}">Profile</a></li>
         <li><a href="bag.html" class="${active==='bag'?'active':''}">My Bag</a></li>
         <li><a href="wedge-matrix.html" class="${active==='wedge'?'active':''}">Wedge Matrix</a></li>
         <li><a href="tiger5.html" class="${active==='tiger5'?'active':''}">Tiger 5</a></li>
         ${coachLink}
+        <li class="nav-user-mobile">
+          <div class="who">Signed in as <b>${RRG.esc(user.name)}</b></div>
+          <button onclick="RRG.auth.logout()">Log out</button>
+        </li>
       </ul>
+      <div class="nav-scrim" id="rrg-nav-scrim" onclick="RRG.toggleNav()"></div>
       <div class="nav-user">
         <span>${RRG.esc(user.name)}</span>
         <span class="avatar">${RRG.esc(initials)}</span>
@@ -386,6 +396,18 @@ RRG.renderNav = function(active = '') {
       </div>
     </nav>
   `;
+};
+
+RRG.toggleNav = function(btn) {
+  const drawer = document.getElementById('rrg-nav-drawer');
+  const scrim  = document.getElementById('rrg-nav-scrim');
+  const toggle = document.querySelector('.nav-toggle');
+  if (!drawer) return;
+  const willOpen = !drawer.classList.contains('open');
+  drawer.classList.toggle('open', willOpen);
+  if (scrim)  scrim.classList.toggle('open', willOpen);
+  if (toggle) toggle.classList.toggle('open', willOpen);
+  document.body.style.overflow = willOpen ? 'hidden' : '';
 };
 
 RRG.renderFooter = function() {

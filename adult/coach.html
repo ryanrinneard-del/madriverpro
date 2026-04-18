@@ -13,6 +13,10 @@
     border-left: 3px solid var(--gold); margin-bottom: 12px;
   }
   .vid-queue video { width: 100%; border-radius: 4px; background: var(--navy); max-height: 200px; }
+  @media (max-width: 768px) {
+    .vid-queue { grid-template-columns: 1fr; padding: 12px; }
+    .vid-queue video { max-height: 280px; }
+  }
 </style>
 </head>
 <body>
