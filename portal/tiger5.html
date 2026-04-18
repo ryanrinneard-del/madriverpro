@@ -113,21 +113,49 @@
     </p>
   </div>
 
-  <!-- Live tally for tracking right now -->
-  <div class="card mb-5 no-print">
-    <div class="page-label">LIVE TALLY</div>
-    <h2 style="font-size:18px; color:var(--navy); margin-bottom:14px;">Tap to count as errors happen today</h2>
-    <div id="live-panel" class="tiger5-grid"></div>
-    <div class="tiger5-summary mt-4" id="live-summary">
-      <div class="total"><b id="live-total">0</b>Events so far</div>
-      <div class="flex gap-3">
-        <span class="status good" id="live-status">ON BENCHMARK</span>
-        <button class="btn btn-ghost btn-sm" onclick="resetLive()">Reset</button>
+  <!-- HOW TO USE — two paths -->
+  <div class="card-cream mb-4 no-print">
+    <div class="page-label">HOW THIS WORKS</div>
+    <h2 style="font-size:17px; color:var(--navy); margin:4px 0 8px;">Two ways to use Tiger 5. Pick what fits your round.</h2>
+    <div style="color:var(--navy-mid); line-height:1.6; font-size:14px;">
+      <b>Option A &mdash; Use your phone.</b> Tap the counter below as each error happens. Your tally
+      auto-saves, so you can close this tab, walk off to the next tee, open it again, and it's all
+      still there. When the round's done, tap <b>Log this round &rarr;</b> and your counts flow
+      straight into the scorecard for Ryan.<br><br>
+      <b>Option B &mdash; Carry paper.</b> Print the card below (6&nbsp;&times;&nbsp;4", fits a standard
+      scorecard holder). Tick the hole boxes as things happen. After the round, open
+      <a href="submit-round.html" style="color:var(--gold); border-bottom:1px dotted var(--gold);">Submit Round</a>
+      and type in your totals.
+    </div>
+  </div>
+
+  <!-- LIVE TALLY — persistent, on-course counter -->
+  <div class="card mb-5 no-print" id="tally-card">
+    <div class="flex-between" style="align-items:flex-start;">
+      <div>
+        <div class="page-label">ROUND IN PROGRESS</div>
+        <h2 style="font-size:18px; color:var(--navy); margin-top:4px;">
+          <span id="tally-state-label">No round started yet &mdash; tap + on an error to begin</span>
+        </h2>
+        <p class="muted small mt-2" id="tally-started" style="display:none;"></p>
       </div>
     </div>
+
+    <div id="live-panel" class="tiger5-grid mt-4"></div>
+
+    <div class="tiger5-summary mt-4" id="live-summary">
+      <div class="total"><b id="live-total">0</b>Events this round</div>
+      <span class="status good" id="live-status">ON BENCHMARK</span>
+    </div>
+
+    <div class="flex gap-3 mt-4">
+      <a href="submit-round.html" class="btn btn-primary" id="log-round-btn">Log this round &rarr;</a>
+      <button class="btn btn-ghost" onclick="resetLive()">Start new round</button>
+    </div>
     <p class="muted small mt-3">
-      This live tally stays in your browser. When you submit the round, the totals travel with your
-      scorecard to Ryan.
+      Your tally auto-saves to this device. Tapping <b>Log this round</b> opens the scorecard form
+      with your Tiger 5 totals pre-filled &mdash; you'll still need to add your score, fairways,
+      GIR, putts, and a quick reflection before sending to Ryan.
     </p>
   </div>
 
@@ -138,7 +166,7 @@
       <h2 style="font-size:18px; color:var(--navy);">Printable Tiger 5 Scorecard</h2>
       <p class="muted small">Print it, fold it, slip it into your scorecard holder.</p>
     </div>
-    <button onclick="rrgPrint(this)" class="btn btn-primary">Print this card ↗</button>
+    <button onclick="rrgPrint(this)" class="btn btn-primary" id="t5-print-btn">Print this card ↗</button>
   </div>
 
   <div class="t5-card print-page" id="printable">
@@ -181,8 +209,18 @@
 
   document.getElementById('meta-player').value = user.name || '';
 
-  // Live tally UI
-  const state = { 1:0, 2:0, 3:0, 4:0, 5:0 };
+  // ========== LIVE TALLY (persistent across sessions) ==========
+  const TALLY_KEY = 'rrg_t5_live_' + user.id;
+  let tally = { counts: {1:0, 2:0, 3:0, 4:0, 5:0}, startedAt: null };
+  try {
+    const saved = JSON.parse(localStorage.getItem(TALLY_KEY) || 'null');
+    if (saved && saved.counts) tally = saved;
+  } catch {}
+
+  function saveTally() {
+    localStorage.setItem(TALLY_KEY, JSON.stringify(tally));
+  }
+
   const panel = document.getElementById('live-panel');
   panel.innerHTML = RRG.TIGER5.map(t => `
     <div class="tiger5-row">
@@ -192,33 +230,59 @@
         <div class="muted small">${RRG.esc(t.desc)}</div>
       </div>
       <div class="t5-count">
-        <button onclick="tick(${t.n}, -1)">−</button>
+        <button onclick="tick(${t.n}, -1)" aria-label="decrease">&minus;</button>
         <span class="n" id="live-n-${t.n}">0</span>
-        <button onclick="tick(${t.n}, +1)">+</button>
+        <button onclick="tick(${t.n}, +1)" aria-label="increase">+</button>
       </div>
     </div>
   `).join('');
 
-  window.tick = (n, d) => {
-    state[n] = Math.max(0, state[n] + d);
-    document.getElementById('live-n-' + n).textContent = state[n];
-    const total = Object.values(state).reduce((a,b) => a+b, 0);
+  function render() {
+    let total = 0;
+    for (const t of RRG.TIGER5) {
+      const c = tally.counts[t.n] || 0;
+      document.getElementById('live-n-' + t.n).textContent = c;
+      total += c;
+    }
     document.getElementById('live-total').textContent = total;
     const status = document.getElementById('live-status');
     if (total <= 2) { status.textContent = 'ON BENCHMARK'; status.className = 'status good'; }
     else if (total <= 4) { status.textContent = 'CLOSE'; status.className = 'status ok'; }
     else { status.textContent = 'STROKES ON THE TABLE'; status.className = 'status bad'; }
+
+    const started = document.getElementById('tally-started');
+    const label = document.getElementById('tally-state-label');
+    if (tally.startedAt) {
+      label.textContent = 'Tap + as each error happens. Auto-saves as you go.';
+      started.style.display = '';
+      const d = new Date(tally.startedAt);
+      started.textContent = 'Round started ' + d.toLocaleDateString() + ' · ' + d.toLocaleTimeString([], {hour:'numeric', minute:'2-digit'});
+    } else {
+      label.textContent = 'No round started yet — tap + on an error to begin';
+      started.style.display = 'none';
+    }
+  }
+
+  window.tick = (n, d) => {
+    tally.counts[n] = Math.max(0, (tally.counts[n] || 0) + d);
+    if (!tally.startedAt && Object.values(tally.counts).some(v => v > 0)) {
+      tally.startedAt = new Date().toISOString();
+    }
+    saveTally();
+    render();
   };
 
   window.resetLive = () => {
-    Object.keys(state).forEach(k => state[k] = 0);
-    RRG.TIGER5.forEach(t => document.getElementById('live-n-'+t.n).textContent = '0');
-    document.getElementById('live-total').textContent = '0';
-    const status = document.getElementById('live-status');
-    status.textContent = 'ON BENCHMARK'; status.className = 'status good';
+    if (!confirm('Clear the current round tally and start fresh?')) return;
+    tally = { counts: {1:0, 2:0, 3:0, 4:0, 5:0}, startedAt: null };
+    saveTally();
+    render();
+    RRG.toast('Cleared. Tap + on an error to start a new round.');
   };
 
-  // Printable card: build hole-by-hole grid
+  render();
+
+  // ========== Printable card: build hole-by-hole grid ==========
   const thead = document.getElementById('printable-head');
   thead.innerHTML = '<th>#</th><th>ERROR</th>' +
     Array.from({length:18}, (_,i) => `<th class="hole">${i+1}</th>`).join('') +

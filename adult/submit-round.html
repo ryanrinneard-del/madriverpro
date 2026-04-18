@@ -161,9 +161,42 @@
       `Week ${week.n} — ${week.title}`;
   }
 
-  // Tiger 5 UI
+  // Tiger 5 UI — pre-fill from the live tally if one exists
+  const TALLY_KEY = 'rrgA_t5_live_' + user.id;
+  let liveTally = null;
+  try { liveTally = JSON.parse(localStorage.getItem(TALLY_KEY) || 'null'); } catch {}
+
   const t5Panel = document.getElementById('t5-panel');
-  const t5State = { 1:0, 2:0, 3:0, 4:0, 5:0 };
+  const t5State = (liveTally && liveTally.counts)
+    ? { ...{1:0,2:0,3:0,4:0,5:0}, ...liveTally.counts }
+    : { 1:0, 2:0, 3:0, 4:0, 5:0 };
+
+  // If pre-filled, show a small banner above the Tiger 5 panel
+  if (liveTally && liveTally.startedAt &&
+      Object.values(t5State).some(v => v > 0)) {
+    const banner = document.createElement('div');
+    banner.className = 'callout';
+    banner.style.cssText = 'border-left-color: var(--gold); background: var(--cream); margin-bottom: 10px; font-size: 13px;';
+    banner.innerHTML = '<b>Tiger 5 pre-filled from your live tally.</b> ' +
+      'Adjust any count if needed \u2014 these numbers save with your round below. ' +
+      '<a href="#" id="clear-tally-link" style="color:var(--gold); border-bottom:1px dotted var(--gold); margin-left:6px;">Clear &amp; start over</a>';
+    t5Panel.parentElement.insertBefore(banner, t5Panel);
+    setTimeout(() => {
+      const link = document.getElementById('clear-tally-link');
+      if (link) link.addEventListener('click', (e) => {
+        e.preventDefault();
+        Object.keys(t5State).forEach(k => t5State[k] = 0);
+        Object.keys(t5State).forEach(k => {
+          const el = document.getElementById('t5-n-' + k);
+          if (el) el.textContent = '0';
+        });
+        document.getElementById('t5-total').textContent = '0';
+        const status = document.getElementById('t5-status');
+        status.textContent = 'ON BENCHMARK'; status.className = 'status good';
+        banner.remove();
+      });
+    }, 0);
+  }
 
   t5Panel.innerHTML = RRG.TIGER5.map(t => `
     <div class="tiger5-row">
@@ -174,11 +207,21 @@
       </div>
       <div class="t5-count">
         <button type="button" onclick="rrgT5(${t.n}, -1)" aria-label="decrease">−</button>
-        <span class="n" id="t5-n-${t.n}">0</span>
+        <span class="n" id="t5-n-${t.n}">${t5State[t.n] || 0}</span>
         <button type="button" onclick="rrgT5(${t.n}, +1)" aria-label="increase">+</button>
       </div>
     </div>
   `).join('');
+
+  // Set the total + status to reflect any pre-fill
+  {
+    const total = Object.values(t5State).reduce((a,b) => a+b, 0);
+    document.getElementById('t5-total').textContent = total;
+    const status = document.getElementById('t5-status');
+    if (total <= 2) { status.textContent = 'ON BENCHMARK'; status.className = 'status good'; }
+    else if (total <= 4) { status.textContent = 'CLOSE'; status.className = 'status ok'; }
+    else { status.textContent = 'STROKES ON THE TABLE'; status.className = 'status bad'; }
+  }
 
   window.rrgT5 = (n, delta) => {
     t5State[n] = Math.max(0, t5State[n] + delta);
@@ -208,6 +251,8 @@
       tiger5: { ...t5State },
       tiger5Total: total,
     });
+    // Round saved — wipe the live tally so the next round starts fresh
+    localStorage.removeItem(TALLY_KEY);
     RRG.toast('Round submitted — Performance Doc will be ready before next session.');
     setTimeout(() => { location.href = 'history.html?new=' + entry.id; }, 1200);
   });
