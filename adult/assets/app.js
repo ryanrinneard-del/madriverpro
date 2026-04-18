@@ -410,6 +410,18 @@ RRG.toggleNav = function(btn) {
   document.body.style.overflow = willOpen ? 'hidden' : '';
 };
 
+// Debounced print. iOS Safari re-fires its "blocked from automatically
+// printing" dialog if window.print() is called in quick succession; locking
+// for 1.5s between fires stops the loop.
+let _rrgPrintLock = false;
+window.rrgPrint = function(btn) {
+  if (_rrgPrintLock) return;
+  _rrgPrintLock = true;
+  if (btn) { btn.disabled = true; setTimeout(() => btn.disabled = false, 1500); }
+  setTimeout(() => _rrgPrintLock = false, 1500);
+  try { window.print(); } catch (e) { /* Safari may block; user can use Share \u2192 Print */ }
+};
+
 RRG.renderFooter = function() {
   return `
     <footer class="site-footer no-print">

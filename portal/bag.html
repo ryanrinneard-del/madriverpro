@@ -71,24 +71,26 @@
   }
   .bag-row.dragging { opacity: 0.4; }
 
-  @media (max-width: 768px) {
-    .bag-card {
-      max-width: 100%;
-      padding: 14px;
+  /* Mobile: give club names room to breathe */
+  @media (max-width: 640px) {
+    .bag-card { padding: 14px 10px; }
+    .bag-card table { table-layout: fixed; width: 100%; }
+    .bag-card th:first-child { width: auto; padding-left: 10px; }
+    .bag-card th:nth-child(2), .bag-card th:nth-child(3) { width: 58px; }
+    .bag-card th:nth-child(4) { width: 36px; }
+    .bag-card td { padding: 6px 3px; font-size: 13px; }
+    .bag-card td.club { padding-left: 10px; }
+    .bag-card .drag-handle { display: none; }
+    .bag-card input.name {
+      width: 100% !important; padding: 8px 6px; font-size: 13px;
+      background: var(--white); border: 1px solid var(--rule);
     }
-    .bag-card .bc-hdr {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 4px;
-    }
-    /* Make table horizontally scrollable */
-    .bag-card table {
-      display: block;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-    .bag-card input.yard { width: 70px; }
+    .bag-card input.yard { width: 52px; padding: 8px 4px; font-size: 13px; }
+    .remove-btn { width: 26px; height: 26px; font-size: 14px; }
   }
+
+
+
   @media print {
     @page { size: 6in 4in; margin: 0.15in; }
     html, body { background: white; margin: 0; padding: 0; }
@@ -145,7 +147,7 @@
     <div class="flex gap-2">
       <button class="btn btn-ghost btn-sm" onclick="resetBag()">Reset to Default</button>
       <button class="btn btn-navy btn-sm" onclick="saveBag(true)">Save</button>
-      <button class="btn btn-primary btn-sm" onclick="window.print()">Print ↗</button>
+      <button class="btn btn-primary btn-sm" onclick="rrgPrint(this)">Print ↗</button>
     </div>
   </div>
 
