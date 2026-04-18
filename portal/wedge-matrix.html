@@ -74,13 +74,17 @@
       align-items: flex-start;
       gap: 4px;
     }
-    /* Make table horizontally scrollable so all columns are reachable */
+    /* Fixed layout: Club gets ~35%, remove button 32px, 3 yardage cols share rest */
     .matrix-card table {
-      display: block;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
+      table-layout: fixed;
+      width: 100%;
     }
-    .matrix-card input.yard { width: 58px; }
+    .matrix-card th, .matrix-card td { padding: 8px 3px; }
+    .matrix-card th:first-child, .matrix-card td.club { padding-left: 8px; width: 35%; }
+    .matrix-card td.actions { width: 32px; padding: 8px 0; }
+    /* Inputs fill their cell so columns auto-distribute */
+    .matrix-card input.yard { width: 100%; min-width: 0; padding: 6px 2px; font-size: 13px; }
+    .matrix-card td.club input.name { font-size: 13px; }
   }
   @media print {
     @page { size: 6in 4in; margin: 0.18in; }

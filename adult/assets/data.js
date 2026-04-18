@@ -106,4 +106,4 @@ RRG.FOCUS_AREAS = [
 
 /* ---------- Wedge Matrix defaults (universal) ---------- */
 RRG.WEDGE_CLUBS = ['PW', 'GW / 52°', 'SW / 56°', 'LW / 60°'];
-RRG.WEDGE_SHOTS = ['Full', '¾ swing', '½ swing', 'Knockdown'];
+RRG.WEDGE_SHOTS = ['Full', '¾ swing', '½ swing'];
