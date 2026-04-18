@@ -203,11 +203,14 @@
 
 <div id="footer-mount"></div>
 
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js"></script>
 <script src="assets/data.js"></script>
 <script src="assets/app.js"></script>
 <script>
-  const user = RRG.mount('bag');
-  if (!user) throw new Error();
+  (async () => {
+    const user = await RRG.mount('bag');
+    if (!user) return;
 
   document.getElementById('player-name').value = user.name || '';
   document.getElementById('built-on').value = new Date().toLocaleDateString();
@@ -329,6 +332,8 @@
   };
 
   render();
+
+  })();
 </script>
 </body>
 </html>

@@ -97,11 +97,14 @@
 
 <div id="footer-mount"></div>
 
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js"></script>
 <script src="assets/data.js"></script>
 <script src="assets/app.js"></script>
 <script>
-  const user = RRG.mount('videos');
-  if (!user) throw new Error();
+  (async () => {
+    const user = await RRG.mount('videos');
+    if (!user) return;
 
   // Populate lesson dropdown
   const lessons = RRG.lessons.forUser(user.id);
@@ -210,6 +213,8 @@
     RRG.toast('Video sent — Ryan has been notified.');
     setTimeout(() => { location.href = 'videos.html?new=' + video.id; }, 900);
   });
+
+  })();
 </script>
 </body>
 </html>

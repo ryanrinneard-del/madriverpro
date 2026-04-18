@@ -148,11 +148,14 @@
 
 <div id="footer-mount"></div>
 
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js"></script>
 <script src="assets/data.js"></script>
 <script src="assets/app.js"></script>
 <script>
-  const user = RRG.mount('dashboard');
-  if (!user) throw new Error();
+  (async () => {
+    const user = await RRG.mount('dashboard');
+    if (!user) return;
 
   const weekN = parseInt(RRG.qs('week'), 10) || null;
   const week = weekN ? RRG.WEEKS.find(w => w.n === weekN) : null;
@@ -256,6 +259,8 @@
     RRG.toast('Round submitted — Performance Doc will be ready before next session.');
     setTimeout(() => { location.href = 'history.html?new=' + entry.id; }, 1200);
   });
+
+  })();
 </script>
 </body>
 </html>

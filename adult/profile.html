@@ -235,11 +235,14 @@
 
 <div id="footer-mount"></div>
 
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js"></script>
 <script src="assets/data.js"></script>
 <script src="assets/app.js"></script>
 <script>
-  const user = RRG.mount('profile');
-  if (!user) throw new Error();
+  (async () => {
+    const user = await RRG.mount('profile');
+    if (!user) return;
 
   if (RRG.qs('welcome')) {
     document.getElementById('welcome-note').style.display = 'block';
@@ -267,6 +270,8 @@
     RRG.toast('Profile saved to your portal. Ryan has been notified.');
     setTimeout(() => location.href = 'dashboard.html', 1200);
   });
+
+  })();
 </script>
 </body>
 </html>

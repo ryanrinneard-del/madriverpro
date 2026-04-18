@@ -1,0 +1,301 @@
+-- =====================================================================
+-- RR Golf Performance — Supabase schema (Phase 1: auth, invites, profiles)
+-- Run this once in the Supabase SQL Editor after creating the project.
+-- =====================================================================
+
+-- ---------- enums ----------
+create type user_role    as enum ('player', 'coach');
+create type cohort_type  as enum ('junior_elite_2026', 'adult_coaching_2026');
+create type package_id   as enum ('single', 'p5', 'p10', 'p20');
+
+-- ---------- profiles ----------
+-- One row per auth user. Extends Supabase's auth.users table.
+create table profiles (
+  id                 uuid primary key references auth.users(id) on delete cascade,
+  email              text not null,
+  name               text,
+  role               user_role not null default 'player',
+  cohort             cohort_type,
+  package_id         package_id,                 -- null = no package (e.g. junior, coach)
+  package_lessons    int,                         -- from PACKAGES.lessons at signup
+  lessons_used       int not null default 0,
+  handicap           text,
+  home_club          text,
+  dob                date,
+  invite_code        text,                        -- the code they used (audit trail)
+  profile_json       jsonb default '{}'::jsonb,   -- Know Your Game + future fields
+  created_at         timestamptz not null default now(),
+  updated_at         timestamptz not null default now()
+);
+
+create index profiles_email_idx   on profiles(lower(email));
+create index profiles_cohort_idx  on profiles(cohort);
+create index profiles_role_idx    on profiles(role);
+
+-- ---------- invites ----------
+create table invites (
+  code               text primary key,
+  cohort             cohort_type not null,
+  default_package    package_id,
+  issued_by          uuid references profiles(id),
+  used_by            uuid references profiles(id),
+  note               text,
+  expires_at         timestamptz,
+  created_at         timestamptz not null default now(),
+  used_at            timestamptz
+);
+
+create index invites_used_by_idx  on invites(used_by);
+
+-- ---------- rounds (scorecard submissions) ----------
+create table rounds (
+  id                 uuid primary key default gen_random_uuid(),
+  user_id            uuid not null references profiles(id) on delete cascade,
+  week_n             int,
+  round_date         date,
+  course             text,
+  tees               text,
+  format             text,
+  holes              int,
+  score              int,
+  fir                text,
+  gir                text,
+  putts              int,
+  three_putts        int,
+  up_down            text,
+  penalties          int,
+  lost_balls         int,
+  tiger5             jsonb default '{}'::jsonb,
+  tiger5_total       int default 0,
+  reflection_good    text,
+  reflection_bad     text,
+  routine_score      int,
+  one_thing          text,
+  created_at         timestamptz not null default now()
+);
+
+create index rounds_user_created_idx on rounds(user_id, created_at desc);
+
+-- ---------- lessons (scheduled 1-on-1s, adult program) ----------
+create table lessons (
+  id                 uuid primary key default gen_random_uuid(),
+  user_id            uuid not null references profiles(id) on delete cascade,
+  number             int,
+  focus              text,
+  pre_work           text,
+  scheduled_at       timestamptz,
+  completed_at       timestamptz,
+  coach_notes        text,
+  debrief            jsonb default '{}'::jsonb,
+  created_at         timestamptz not null default now()
+);
+
+create index lessons_user_scheduled_idx on lessons(user_id, scheduled_at);
+
+-- =====================================================================
+-- TRIGGER: keep updated_at fresh on profiles
+-- =====================================================================
+create or replace function set_updated_at() returns trigger as $$
+begin
+  new.updated_at = now();
+  return new;
+end;
+$$ language plpgsql;
+
+create trigger profiles_updated_at
+  before update on profiles
+  for each row execute function set_updated_at();
+
+-- =====================================================================
+-- HELPER: is_coach(uid) — used inside RLS policies
+-- =====================================================================
+create or replace function is_coach(uid uuid) returns boolean as $$
+  select exists (
+    select 1 from profiles where id = uid and role = 'coach'
+  );
+$$ language sql stable security definer;
+
+-- =====================================================================
+-- RPC: check_invite(code) — called before signup to surface errors early
+-- Returns 1 row if the code is claimable, 0 rows if not.
+-- =====================================================================
+create or replace function check_invite(p_code text)
+  returns table(code text, cohort cohort_type, default_package package_id)
+  language sql stable security definer
+as $$
+  select i.code, i.cohort, i.default_package
+  from invites i
+  where lower(i.code) = lower(p_code)
+    and i.used_by is null
+    and (i.expires_at is null or i.expires_at > now());
+$$;
+
+grant execute on function check_invite(text) to anon, authenticated;
+
+-- =====================================================================
+-- RPC: claim_invite — atomically mark invite used + upsert profile
+-- Called immediately after magic-link auth completes for new users.
+-- =====================================================================
+create or replace function claim_invite(
+  p_code         text,
+  p_name         text,
+  p_handicap     text default null,
+  p_home_club    text default null,
+  p_package_id   package_id default null
+) returns profiles
+language plpgsql security definer
+as $$
+declare
+  v_invite invites%rowtype;
+  v_user   uuid := auth.uid();
+  v_email  text := (select email from auth.users where id = v_user);
+  v_profile profiles%rowtype;
+begin
+  if v_user is null then
+    raise exception 'not authenticated';
+  end if;
+
+  -- Lock the invite row, validate
+  select * into v_invite from invites
+    where lower(code) = lower(p_code)
+    for update;
+
+  if not found then
+    raise exception 'Invite code not found.';
+  end if;
+  if v_invite.used_by is not null then
+    raise exception 'Invite code has already been used.';
+  end if;
+  if v_invite.expires_at is not null and v_invite.expires_at < now() then
+    raise exception 'Invite code has expired.';
+  end if;
+
+  -- Mark invite used
+  update invites
+    set used_by = v_user, used_at = now()
+    where code = v_invite.code;
+
+  -- Upsert profile (user may already have a skeleton row from a prior attempt)
+  insert into profiles (id, email, name, role, cohort, package_id, package_lessons,
+                         handicap, home_club, invite_code)
+    values (
+      v_user, v_email, p_name, 'player', v_invite.cohort,
+      coalesce(p_package_id, v_invite.default_package),
+      case coalesce(p_package_id, v_invite.default_package)
+        when 'single' then 1
+        when 'p5'     then 5
+        when 'p10'    then 10
+        when 'p20'    then 20
+        else null
+      end,
+      p_handicap, p_home_club, v_invite.code
+    )
+    on conflict (id) do update set
+      name          = excluded.name,
+      cohort        = excluded.cohort,
+      package_id    = excluded.package_id,
+      package_lessons = excluded.package_lessons,
+      handicap      = excluded.handicap,
+      home_club     = excluded.home_club,
+      invite_code   = excluded.invite_code
+    returning * into v_profile;
+
+  return v_profile;
+end;
+$$;
+
+grant execute on function claim_invite(text, text, text, text, package_id) to authenticated;
+
+-- =====================================================================
+-- RPC: create_invite — coach-only, generates a new invite code
+-- =====================================================================
+create or replace function create_invite(
+  p_cohort          cohort_type,
+  p_default_package package_id default null,
+  p_note            text default null,
+  p_expires_at      timestamptz default null
+) returns invites
+language plpgsql security definer
+as $$
+declare
+  v_user uuid := auth.uid();
+  v_code text;
+  v_inv  invites%rowtype;
+  v_alphabet text := 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+  v_prefix text;
+begin
+  if not is_coach(v_user) then
+    raise exception 'coach only';
+  end if;
+
+  v_prefix := case p_cohort
+    when 'junior_elite_2026' then 'RRG'
+    when 'adult_coaching_2026' then 'RRA'
+  end;
+
+  -- Generate 8 chars in two groups of 4, e.g. RRG-7K3M-P9XN
+  -- (retry on the vanishingly small chance of collision)
+  loop
+    v_code := v_prefix || '-' ||
+      substr(translate(encode(gen_random_bytes(3), 'base64'), '+/=', 'XYZ'), 1, 4) || '-' ||
+      substr(translate(encode(gen_random_bytes(3), 'base64'), '+/=', 'XYZ'), 1, 4);
+    v_code := upper(regexp_replace(v_code, '[^A-Z0-9-]', '', 'g'));
+    exit when not exists (select 1 from invites where code = v_code);
+  end loop;
+
+  insert into invites (code, cohort, default_package, issued_by, note, expires_at)
+    values (v_code, p_cohort, p_default_package, v_user, p_note, p_expires_at)
+    returning * into v_inv;
+
+  return v_inv;
+end;
+$$;
+
+grant execute on function create_invite(cohort_type, package_id, text, timestamptz) to authenticated;
+
+-- =====================================================================
+-- ROW LEVEL SECURITY
+-- =====================================================================
+
+alter table profiles enable row level security;
+alter table invites  enable row level security;
+alter table rounds   enable row level security;
+alter table lessons  enable row level security;
+
+-- ---------- profiles ----------
+-- Players: read + update their OWN profile
+create policy "profiles_self_select" on profiles for select
+  using (id = auth.uid());
+create policy "profiles_self_update" on profiles for update
+  using (id = auth.uid()) with check (id = auth.uid());
+
+-- Coach: can read all profiles
+create policy "profiles_coach_select" on profiles for select
+  using (is_coach(auth.uid()));
+create policy "profiles_coach_update" on profiles for update
+  using (is_coach(auth.uid())) with check (is_coach(auth.uid()));
+
+-- No direct inserts from clients — profiles are created inside claim_invite().
+
+-- ---------- invites ----------
+-- Coach: full access (list, revoke) — creation uses the RPC
+create policy "invites_coach_all" on invites for all
+  using (is_coach(auth.uid()));
+-- Players: no direct access (the RPC handles claim)
+
+-- ---------- rounds ----------
+create policy "rounds_self_all" on rounds for all
+  using (user_id = auth.uid()) with check (user_id = auth.uid());
+create policy "rounds_coach_select" on rounds for select
+  using (is_coach(auth.uid()));
+
+-- ---------- lessons ----------
+create policy "lessons_self_select" on lessons for select
+  using (user_id = auth.uid());
+create policy "lessons_coach_all" on lessons for all
+  using (is_coach(auth.uid()));
+-- Players: read-only, debrief updates via a dedicated RPC (added in Phase 2).
+
+-- =====================================================================
+-- DONE.
+-- =====================================================================

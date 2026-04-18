@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<base href="/adult/">
+<title>Signing you in — RR Golf Performance</title>
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  .callback-shell {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    background: var(--navy); color: var(--white); padding: 24px;
+  }
+  .callback-card {
+    background: var(--white); color: var(--dark-text);
+    border-radius: 12px; padding: 36px 32px;
+    max-width: 440px; width: 100%;
+    border-top: 3px solid var(--gold);
+    text-align: center;
+  }
+  .callback-card h1 { color: var(--navy); font-size: 22px; margin-bottom: 8px; }
+  .callback-card p { color: var(--mid-grey); font-size: 14px; line-height: 1.55; }
+  .spinner {
+    width: 32px; height: 32px; border: 3px solid var(--rule);
+    border-top-color: var(--gold); border-radius: 50%;
+    margin: 0 auto 18px; animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<div class="callback-shell">
+  <div class="callback-card">
+    <div class="spinner" id="spinner"></div>
+    <h1 id="state-title">Signing you in…</h1>
+    <p id="state-msg">One sec. Finishing up your portal.</p>
+    <div id="error-actions" style="display:none; margin-top:20px;">
+      <a href="index.html" class="btn btn-primary">Try signing in again</a>
+    </div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js"></script>
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  (async () => {
+    const title = document.getElementById('state-title');
+    const msg = document.getElementById('state-msg');
+    const spinner = document.getElementById('spinner');
+    const actions = document.getElementById('error-actions');
+
+    function fail(errorMsg) {
+      spinner.style.display = 'none';
+      title.textContent = 'Couldn\u2019t sign you in';
+      msg.textContent = errorMsg;
+      actions.style.display = 'block';
+    }
+
+    try {
+      await RRG._sbReady;
+      if (!RRG.sb) throw new Error('Portal not configured yet. Email Ryan.');
+
+      // Supabase's detectSessionInUrl reads tokens from the URL hash automatically.
+      // Give it a tick to process.
+      let tries = 0, sess = null;
+      while (tries++ < 20) {
+        const { data } = await RRG.sb.auth.getSession();
+        sess = data.session;
+        if (sess) break;
+        await new Promise(r => setTimeout(r, 150));
+      }
+      if (!sess) throw new Error('Sign-in link expired or already used. Request a new one.');
+
+      // If this is a first-time login, complete the signup (claim invite + create profile).
+      let profile;
+      try {
+        profile = await RRG.auth.completeSignupIfNeeded();
+      } catch (claimErr) {
+        throw new Error(claimErr.message || 'Invite claim failed.');
+      }
+
+      title.textContent = 'You\u2019re in.';
+      msg.textContent = 'Taking you to your dashboard…';
+      // Strip the URL hash so refresh doesn't re-trigger the OTP flow
+      history.replaceState({}, '', location.pathname);
+      setTimeout(() => { location.href = 'dashboard.html'; }, 600);
+    } catch (err) {
+      fail(err.message || 'Something went wrong.');
+    }
+  })();
+</script>
+</body>
+</html>

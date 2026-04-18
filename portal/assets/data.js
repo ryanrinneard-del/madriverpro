@@ -183,4 +183,4 @@ RRG.SCJGT_EVENTS = [
 
 /* ---------- Wedge Matrix default template ---------- */
 RRG.WEDGE_CLUBS = ['PW', 'GW / 52°', 'SW / 56°', 'LW / 60°'];
-RRG.WEDGE_SHOTS = ['Full', '¾ swing', '½ swing'];
+RRG.WEDGE_SHOTS = ['Full', '¾ swing', '½ swing', 'Knockdown'];

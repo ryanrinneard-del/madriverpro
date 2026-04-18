@@ -1,15 +1,18 @@
 /* ============================================================
-   RR GOLF PERFORMANCE — Junior Elite Academy Portal
-   app.js — auth, storage, navigation, UI helpers
+   RR GOLF PERFORMANCE — Adult Coaching Portal
+   app.js — Supabase-backed auth, data, UI helpers.
 
-   NOTE: This prototype uses localStorage for persistence. Swap
-   the three labelled sections (AUTH, USER STORE, SUBMISSIONS)
-   for real backend calls (Supabase / Firebase / custom) when
-   the portal is deployed. See README.md for a full production
-   architecture.
+   Each page must load, in order:
+     1. https://unpkg.com/@supabase/supabase-js@2  (Supabase CDN)
+     2. assets/supabase-config.js                  (your keys)
+     3. assets/data.js                             (curriculum)
+     4. assets/app.js                              (this file)
    ============================================================ */
 
 window.RRG = window.RRG || {};
+
+/* ---------- Cohort this portal represents ---------- */
+RRG.COHORT = 'junior_elite_2026';
 
 /* ---------- helpers ---------- */
 RRG.$ = (sel, ctx = document) => ctx.querySelector(sel);
@@ -17,251 +20,362 @@ RRG.$$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
 RRG.esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
 }[c]));
-
 RRG.qs = (k) => new URLSearchParams(location.search).get(k);
 
 RRG.toast = (msg, ms = 2800) => {
   const t = document.createElement('div');
-  t.className = 'toast';
-  t.textContent = msg;
+  t.className = 'toast'; t.textContent = msg;
   document.body.appendChild(t);
   setTimeout(() => t.remove(), ms);
 };
 
 RRG.fmtDate = (iso) => {
   if (!iso) return '';
-  try {
-    const d = new Date(iso);
-    return d.toLocaleDateString('en-CA', { weekday: 'short', month: 'short', day: 'numeric' });
-  } catch { return iso; }
+  try { return new Date(iso).toLocaleDateString('en-CA', { weekday:'short', month:'short', day:'numeric' }); }
+  catch { return iso; }
+};
+
+RRG.fmtBytes = (n) => {
+  if (!n) return '—'; const u = ['B','KB','MB','GB']; let i = 0; n = +n;
+  while (n >= 1024 && i < u.length - 1) { n /= 1024; i++; }
+  return n.toFixed(i === 0 ? 0 : 1) + ' ' + u[i];
 };
 
 /* ============================================================
-   AUTH (replace with Supabase / Firebase for production)
+   Supabase client (async init guard — every other method awaits it)
+   ============================================================ */
+RRG._sbReady = (async () => {
+  if (!window.supabase) {
+    console.error('Supabase JS not loaded. Check the CDN <script> tag.');
+    return;
+  }
+  if (!window.SUPABASE_CONFIG || /REPLACE_ME/.test(window.SUPABASE_CONFIG.url || '')) {
+    console.error('SUPABASE_CONFIG not set. Edit assets/supabase-config.js.');
+    return;
+  }
+  RRG.sb = window.supabase.createClient(
+    window.SUPABASE_CONFIG.url,
+    window.SUPABASE_CONFIG.anonKey,
+    { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } }
+  );
+})();
+
+/* ============================================================
+   AUTH — email magic link
    ============================================================ */
 RRG.auth = {
-  KEY: 'rrg_session_v1',
+  _profileCache: null,
 
-  currentUser() {
-    try { return JSON.parse(localStorage.getItem(this.KEY) || 'null'); }
-    catch { return null; }
+  async currentSession() {
+    await RRG._sbReady;
+    if (!RRG.sb) return null;
+    const { data: { session } } = await RRG.sb.auth.getSession();
+    return session || null;
   },
 
-  isLoggedIn() { return !!this.currentUser(); },
-
-  async signup({ name, email, password, dob, handicap, homeClub, inviteCode }) {
-    // Validate invite code — portal is invite-only
-    const invite = RRG.invites.find(inviteCode);
-    if (!invite) throw new Error('That invite code is not valid.');
-    if (invite.usedBy) throw new Error('That invite code has already been used.');
-    if (invite.expiresAt && invite.expiresAt < new Date().toISOString()) {
-      throw new Error('That invite code has expired.');
-    }
-
-    const users = RRG.users.all();
-    if (users.find(u => u.email.toLowerCase() === email.toLowerCase())) {
-      throw new Error('An account with that email already exists.');
-    }
-    // NOTE: Passwords should NEVER be stored plaintext in production.
-    // This prototype stores a hashed-looking string for demo only.
-    const user = {
-      id: 'u_' + Date.now().toString(36),
-      name, email,
-      passwordHash: btoa(password + '|rrg'),   // prototype only
-      dob: dob || '',
-      handicap: handicap || '',
-      homeClub: homeClub || '',
-      role: 'player',
-      profile: null,       // Know Your Game
-      cohort: invite.cohort || 'junior-elite-2026',
-      invitedBy: invite.issuedBy || 'coach',
-      createdAt: new Date().toISOString(),
-    };
-    RRG.users.save([...users, user]);
-    RRG.invites.markUsed(inviteCode, user.id);
-    this._setSession(user);
-    return user;
+  async currentUser() {
+    if (RRG.auth._profileCache) return RRG.auth._profileCache;
+    const sess = await this.currentSession();
+    if (!sess) return null;
+    const { data, error } = await RRG.sb
+      .from('profiles').select('*').eq('id', sess.user.id).maybeSingle();
+    if (error) { console.warn('profile fetch', error); return null; }
+    RRG.auth._profileCache = data || null;
+    return RRG.auth._profileCache;
   },
 
-  async login(email, password) {
-    // Built-in coach credentials for demo
-    if (email === 'ryan@rrgolfperformance.com' && password === 'coach2026') {
-      const coach = {
-        id: 'coach_ryan', name: 'Ryan Rinneard',
-        email, role: 'coach',
-      };
-      this._setSession(coach);
-      return coach;
-    }
-    const user = RRG.users.all().find(
-      u => u.email.toLowerCase() === email.toLowerCase()
-        && u.passwordHash === btoa(password + '|rrg')
-    );
-    if (!user) throw new Error('Email or password is incorrect.');
-    this._setSession(user);
-    return user;
+  async isLoggedIn() { return !!(await this.currentSession()); },
+
+  _callbackUrl() {
+    // e.g. https://rrgolfperformance.com/adult/auth-callback.html
+    const pathname = window.location.pathname.replace(/[^/]*$/, '') + 'auth-callback.html';
+    return window.location.origin + pathname;
   },
 
-  logout() {
-    localStorage.removeItem(this.KEY);
+  // Login (user already has an account): send a magic link only if the user exists.
+  async sendLoginLink(email) {
+    await RRG._sbReady;
+    const { error } = await RRG.sb.auth.signInWithOtp({
+      email,
+      options: { emailRedirectTo: this._callbackUrl(), shouldCreateUser: false }
+    });
+    if (error) throw error;
+  },
+
+  // Signup: validate the invite first, then send a magic link that creates the user.
+  // The invite code + profile data are stashed in user_metadata so the callback
+  // can call claim_invite() after the session is established — no matter which
+  // device they click the link on.
+  async signup({ email, name, inviteCode, packageId, handicap, homeClub }) {
+    await RRG._sbReady;
+
+    // 1. Pre-check the invite
+    const { data: check, error: cErr } = await RRG.sb.rpc('check_invite', { p_code: inviteCode });
+    if (cErr) throw cErr;
+    if (!check || check.length === 0) {
+      throw new Error('That invite code is not valid or has already been used.');
+    }
+
+    // 2. Send the magic link with pending signup data
+    const { error: oErr } = await RRG.sb.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: this._callbackUrl(),
+        shouldCreateUser: true,
+        data: {
+          pending_invite_code: inviteCode,
+          pending_name: name,
+          pending_handicap: handicap || '',
+          pending_home_club: homeClub || '',
+          pending_package_id: packageId || null,
+          pending_cohort: RRG.COHORT,
+        },
+      },
+    });
+    if (oErr) throw oErr;
+  },
+
+  async logout() {
+    await RRG._sbReady;
+    RRG.auth._profileCache = null;
+    if (RRG.sb) await RRG.sb.auth.signOut();
     location.href = 'index.html';
   },
 
-  _setSession(user) {
-    const safe = { ...user }; delete safe.passwordHash;
-    localStorage.setItem(this.KEY, JSON.stringify(safe));
+  // Wait for auth to resolve, redirect to login if none.
+  async requireAuth() {
+    const user = await this.currentUser();
+    if (!user) { location.replace('index.html'); return null; }
+    return user;
   },
 
-  requireAuth() {
-    if (!this.isLoggedIn()) {
-      location.replace('index.html');
+  // Called from auth-callback.html after the magic link completes.
+  // If the user hasn't yet claimed their invite (first login), does it now.
+  async completeSignupIfNeeded() {
+    await RRG._sbReady;
+    const { data: { user: authUser } } = await RRG.sb.auth.getUser();
+    if (!authUser) return null;
+
+    // Already has a profile? We're done.
+    const { data: existing } = await RRG.sb
+      .from('profiles').select('*').eq('id', authUser.id).maybeSingle();
+    if (existing) { RRG.auth._profileCache = existing; return existing; }
+
+    // Otherwise consume the invite from user metadata.
+    const meta = authUser.user_metadata || {};
+    if (!meta.pending_invite_code) {
+      // Logged in but no profile and no invite metadata — shouldn't happen for
+      // real clients, but could happen for coach bootstrapping. Return null
+      // so the caller can route to a setup page.
       return null;
     }
-    return this.currentUser();
+    const { data: profile, error } = await RRG.sb.rpc('claim_invite', {
+      p_code: meta.pending_invite_code,
+      p_name: meta.pending_name || authUser.email,
+      p_handicap: meta.pending_handicap || null,
+      p_home_club: meta.pending_home_club || null,
+      p_package_id: meta.pending_package_id || null,
+    });
+    if (error) throw error;
+    RRG.auth._profileCache = profile;
+    return profile;
   },
 };
 
 /* ============================================================
-   USER STORE (replace with Postgres table + row-level security)
+   USERS / PROFILES
    ============================================================ */
 RRG.users = {
-  KEY: 'rrg_users_v1',
-  all() {
-    try { return JSON.parse(localStorage.getItem(this.KEY) || '[]'); }
-    catch { return []; }
+  async all() {
+    await RRG._sbReady;
+    const { data, error } = await RRG.sb.from('profiles')
+      .select('*')
+      .eq('cohort', RRG.COHORT)
+      .order('created_at', { ascending: false });
+    if (error) throw error;
+    return data || [];
   },
-  save(list) { localStorage.setItem(this.KEY, JSON.stringify(list)); },
-  update(userId, patch) {
-    const list = this.all();
-    const i = list.findIndex(u => u.id === userId);
-    if (i === -1) return;
-    list[i] = { ...list[i], ...patch };
-    this.save(list);
-    // refresh session copy if the patched user is current
-    const current = RRG.auth.currentUser();
-    if (current?.id === userId) {
-      RRG.auth._setSession(list[i]);
-    }
-    return list[i];
+
+  async get(userId) {
+    const { data, error } = await RRG.sb.from('profiles').select('*').eq('id', userId).maybeSingle();
+    if (error) throw error;
+    return data;
+  },
+
+  async update(userId, patch) {
+    await RRG._sbReady;
+    const { data, error } = await RRG.sb.from('profiles')
+      .update(patch).eq('id', userId).select().maybeSingle();
+    if (error) throw error;
+    RRG.auth._profileCache = null; // force refresh on next currentUser()
+    return data;
   },
 };
 
 /* ============================================================
-   INVITES (replace with `invites` table + coach-gated API)
-   Each code is single-use and optionally expires. In production
-   Ryan generates codes from the coach view; each is emailed to
-   the invited player with a signup link.
+   INVITES
    ============================================================ */
 RRG.invites = {
-  KEY: 'rrg_invites_v1',
-  SEED_KEY: 'rrg_invites_seeded_v1',
+  async all() {
+    await RRG._sbReady;
+    const { data, error } = await RRG.sb.from('invites')
+      .select('*')
+      .eq('cohort', RRG.COHORT)
+      .order('created_at', { ascending: false });
+    if (error) throw error;
+    return data || [];
+  },
 
-  all() {
-    this._seedIfEmpty();
-    try { return JSON.parse(localStorage.getItem(this.KEY) || '[]'); }
-    catch { return []; }
+  async create({ defaultPackage = null, note = '' } = {}) {
+    await RRG._sbReady;
+    const { data, error } = await RRG.sb.rpc('create_invite', {
+      p_cohort: RRG.COHORT,
+      p_default_package: defaultPackage,
+      p_note: note || null,
+      p_expires_at: null,
+    });
+    if (error) throw error;
+    return data;
   },
-  save(list) { localStorage.setItem(this.KEY, JSON.stringify(list)); },
-  find(code) {
-    if (!code) return null;
-    return this.all().find(i =>
-      i.code.toLowerCase() === String(code).trim().toLowerCase());
-  },
-  create({ issuedBy = 'coach', cohort = 'junior-elite-2026', note = '' } = {}) {
-    const code = this._generateCode();
-    const list = this.all();
-    const invite = {
-      code, issuedBy, cohort, note,
-      usedBy: null,
-      createdAt: new Date().toISOString(),
-      expiresAt: null,    // can be set in coach view later
-    };
-    list.push(invite);
-    this.save(list);
-    return invite;
-  },
-  markUsed(code, userId) {
-    const list = this.all();
-    const i = list.findIndex(inv => inv.code.toLowerCase() === code.toLowerCase());
-    if (i === -1) return;
-    list[i].usedBy = userId;
-    list[i].usedAt = new Date().toISOString();
-    this.save(list);
-  },
-  revoke(code) {
-    const list = this.all().filter(i => i.code.toLowerCase() !== code.toLowerCase());
-    this.save(list);
-  },
-  _generateCode() {
-    // Human-friendly 8-char code, ambiguous chars removed
-    const alphabet = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
-    const g = () => Array.from({length:4}, () => alphabet[Math.floor(Math.random()*alphabet.length)]).join('');
-    return `RRG-${g()}-${g()}`;
-  },
-  _seedIfEmpty() {
-    // Drop a few starter demo codes so the prototype is usable
-    if (localStorage.getItem(this.SEED_KEY)) return;
-    const existing = JSON.parse(localStorage.getItem(this.KEY) || '[]');
-    if (existing.length === 0) {
-      const demo = [
-        { code: 'RRG-DEMO-2026', issuedBy: 'coach', cohort: 'junior-elite-2026', note: 'Demo invite', usedBy: null, createdAt: new Date().toISOString(), expiresAt: null },
-        { code: 'RRG-ELITE-01', issuedBy: 'coach', cohort: 'junior-elite-2026', note: 'Starter code 1', usedBy: null, createdAt: new Date().toISOString(), expiresAt: null },
-        { code: 'RRG-ELITE-02', issuedBy: 'coach', cohort: 'junior-elite-2026', note: 'Starter code 2', usedBy: null, createdAt: new Date().toISOString(), expiresAt: null },
-      ];
-      localStorage.setItem(this.KEY, JSON.stringify(demo));
-    }
-    localStorage.setItem(this.SEED_KEY, '1');
+
+  async revoke(code) {
+    await RRG._sbReady;
+    const { error } = await RRG.sb.from('invites').delete().eq('code', code);
+    if (error) throw error;
   },
 };
 
 /* ============================================================
-   SUBMISSIONS (replace with scorecards table + API route)
-   On submit, production will POST to /api/submit which:
-     1. saves to DB
-     2. emails ryan@rrgolfperformance.com with parsed round
-     3. triggers a Performance Doc draft generation
+   ROUNDS / LESSONS / VIDEOS — Phase 2 (still on localStorage/IDB)
+
+   These continue to work on a single device for now. Auth is
+   already cross-device, which was the critical fix. A follow-up
+   commit moves these to Postgres tables (schema already in place).
    ============================================================ */
 RRG.subs = {
   KEY: 'rrg_submissions_v1',
-  all() {
-    try { return JSON.parse(localStorage.getItem(this.KEY) || '[]'); }
-    catch { return []; }
-  },
+  all() { try { return JSON.parse(localStorage.getItem(this.KEY) || '[]'); } catch { return []; } },
   save(list) { localStorage.setItem(this.KEY, JSON.stringify(list)); },
   create(sub) {
     const entry = { id: 's_' + Date.now().toString(36), ...sub, createdAt: new Date().toISOString() };
-    const list = this.all();
-    list.push(entry);
-    this.save(list);
+    const list = this.all(); list.push(entry); this.save(list);
     return entry;
   },
   forUser(userId) {
     return this.all().filter(s => s.userId === userId)
       .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
   },
-  forUserWeek(userId, week) {
-    return this.forUser(userId).filter(s => s.week === week);
+};
+
+RRG.lessons = {
+  KEY: 'rrg_lessons_v1',
+  all() { try { return JSON.parse(localStorage.getItem(this.KEY) || '[]'); } catch { return []; } },
+  save(list) { localStorage.setItem(this.KEY, JSON.stringify(list)); },
+  create(lesson) {
+    const entry = { id: 'l_' + Date.now().toString(36), ...lesson, createdAt: new Date().toISOString() };
+    const list = this.all(); list.push(entry); this.save(list);
+    return entry;
+  },
+  update(id, patch) {
+    const list = this.all();
+    const i = list.findIndex(l => l.id === id);
+    if (i === -1) return;
+    list[i] = { ...list[i], ...patch };
+    this.save(list);
+    return list[i];
+  },
+  remove(id) { this.save(this.all().filter(l => l.id !== id)); },
+  forUser(userId) {
+    return this.all().filter(l => l.userId === userId)
+      .sort((a, b) => (a.scheduledAt || '').localeCompare(b.scheduledAt || ''));
+  },
+};
+
+/* IndexedDB-backed video store — unchanged from the last revision. */
+RRG.idb = {
+  DB_NAME: 'rrg_video_store', STORE: 'videos', _dbPromise: null,
+  _open() {
+    if (this._dbPromise) return this._dbPromise;
+    this._dbPromise = new Promise((resolve, reject) => {
+      if (!window.indexedDB) { reject(new Error('IndexedDB not supported.')); return; }
+      const req = indexedDB.open(this.DB_NAME, 1);
+      req.onerror = () => reject(req.error);
+      req.onupgradeneeded = (e) => {
+        const db = e.target.result;
+        if (!db.objectStoreNames.contains(this.STORE)) db.createObjectStore(this.STORE);
+      };
+      req.onsuccess = () => resolve(req.result);
+    });
+    return this._dbPromise;
+  },
+  async putVideo(id, blob) {
+    const db = await this._open();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(this.STORE, 'readwrite');
+      tx.objectStore(this.STORE).put(blob, id);
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+      tx.onabort = () => reject(tx.error || new Error('Storage quota exceeded.'));
+    });
+  },
+  async getVideo(id) {
+    const db = await this._open();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(this.STORE, 'readonly');
+      const req = tx.objectStore(this.STORE).get(id);
+      req.onsuccess = () => resolve(req.result || null);
+      req.onerror = () => reject(req.error);
+    });
+  },
+  async deleteVideo(id) {
+    const db = await this._open();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(this.STORE, 'readwrite');
+      tx.objectStore(this.STORE).delete(id);
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+  },
+  async blobUrlFor(id) {
+    try { const b = await this.getVideo(id); return b ? URL.createObjectURL(b) : null; }
+    catch { return null; }
+  },
+};
+
+RRG.videos = {
+  KEY: 'rrg_videos_v1',
+  all() { try { return JSON.parse(localStorage.getItem(this.KEY) || '[]'); } catch { return []; } },
+  save(list) { localStorage.setItem(this.KEY, JSON.stringify(list)); },
+  create(v) {
+    const entry = { id: 'v_' + Date.now().toString(36), ...v, createdAt: new Date().toISOString() };
+    const list = this.all(); list.push(entry); this.save(list);
+    return entry;
+  },
+  update(id, patch) {
+    const list = this.all();
+    const i = list.findIndex(v => v.id === id);
+    if (i === -1) return;
+    list[i] = { ...list[i], ...patch };
+    this.save(list);
+    return list[i];
+  },
+  async remove(id) {
+    this.save(this.all().filter(x => x.id !== id));
+    try { await RRG.idb.deleteVideo(id); } catch {}
+  },
+  forUser(userId) {
+    return this.all().filter(v => v.userId === userId)
+      .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
   },
 };
 
 /* ============================================================
-   WEEK STATUS HELPERS
+   NAV / FOOTER
    ============================================================ */
-RRG.weekStatus = function(week, user) {
-  const today = new Date().toISOString().slice(0, 10);
-  const subs = RRG.subs.forUserWeek(user.id, week.n);
-  if (subs.length > 0) return 'complete';
-  if (week.open > today) return 'locked';
-  return 'current';
-};
-
-/* ============================================================
-   NAVIGATION BAR RENDER
-   ============================================================ */
-RRG.renderNav = function(active = '') {
-  const user = RRG.auth.currentUser();
+RRG.renderNav = function(user, active = '') {
   if (!user) return '';
-  const initials = (user.name || 'RR').split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
+  const initials = (user.name || user.email || 'RR')
+    .split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
   const coachLink = user.role === 'coach'
     ? `<li><a href="coach.html" class="${active==='coach'?'active':''}">Coach View</a></li>` : '';
   return `
@@ -272,28 +386,27 @@ RRG.renderNav = function(active = '') {
       </button>
       <ul class="nav-links" id="rrg-nav-drawer">
         <li><a href="dashboard.html" class="${active==='dashboard'?'active':''}">Dashboard</a></li>
-        <li><a href="history.html" class="${active==='history'?'active':''}">My Rounds</a></li>
-        <li><a href="profile.html" class="${active==='profile'?'active':''}">Profile</a></li>
-        <li><a href="bag.html" class="${active==='bag'?'active':''}">My Bag</a></li>
+        <li><a href="history.html"   class="${active==='history'?'active':''}">My Rounds</a></li>
+        <li><a href="profile.html"   class="${active==='profile'?'active':''}">Profile</a></li>
+        <li><a href="bag.html"       class="${active==='bag'?'active':''}">My Bag</a></li>
         <li><a href="wedge-matrix.html" class="${active==='wedge'?'active':''}">Wedge Matrix</a></li>
-        <li><a href="tiger5.html" class="${active==='tiger5'?'active':''}">Tiger 5</a></li>
+        <li><a href="tiger5.html"    class="${active==='tiger5'?'active':''}">Tiger 5</a></li>
         ${coachLink}
         <li class="nav-user-mobile">
-          <div class="who">Signed in as <b>${RRG.esc(user.name)}</b></div>
+          <div class="who">Signed in as <b>${RRG.esc(user.name || user.email)}</b></div>
           <button onclick="RRG.auth.logout()">Log out</button>
         </li>
       </ul>
       <div class="nav-scrim" id="rrg-nav-scrim" onclick="RRG.toggleNav()"></div>
       <div class="nav-user">
-        <span>${RRG.esc(user.name)}</span>
+        <span>${RRG.esc(user.name || user.email)}</span>
         <span class="avatar">${RRG.esc(initials)}</span>
         <button onclick="RRG.auth.logout()">Log out</button>
       </div>
-    </nav>
-  `;
+    </nav>`;
 };
 
-RRG.toggleNav = function(btn) {
+RRG.toggleNav = function() {
   const drawer = document.getElementById('rrg-nav-drawer');
   const scrim  = document.getElementById('rrg-nav-scrim');
   const toggle = document.querySelector('.nav-toggle');
@@ -305,47 +418,34 @@ RRG.toggleNav = function(btn) {
   document.body.style.overflow = willOpen ? 'hidden' : '';
 };
 
-// Debounced print. iOS Safari re-fires its "blocked from automatically
-// printing" dialog if window.print() is called in quick succession; locking
-// for 1.5s between fires stops the loop.
-let _rrgPrintLock = false;
-window.rrgPrint = function(btn) {
-  if (_rrgPrintLock) return;
-  _rrgPrintLock = true;
-  if (btn) { btn.disabled = true; setTimeout(() => btn.disabled = false, 1500); }
-  setTimeout(() => _rrgPrintLock = false, 1500);
-  try { window.print(); } catch (e) { /* Safari may block; user can use Share \u2192 Print */ }
-};
-
 RRG.renderFooter = function() {
   return `
     <footer class="site-footer no-print">
       RR Golf Performance &nbsp;·&nbsp; Junior Elite Academy 2026 &nbsp;·&nbsp;
       <a href="mailto:ryan@rrgolfperformance.com">ryan@rrgolfperformance.com</a>
       &nbsp;·&nbsp; <a href="https://rrgolfperformance.com">rrgolfperformance.com</a>
-    </footer>
-  `;
+    </footer>`;
 };
 
-/* ============================================================
-   MOUNT — call on every logged-in page
-   ============================================================ */
-RRG.mount = function(activeNav = '') {
-  const user = RRG.auth.requireAuth();
+/* Mount is ASYNC. Every page wraps its boot code in an async IIFE that awaits it.
+   Example:  (async () => { const user = await RRG.mount('dashboard'); if (!user) return; ... })(); */
+RRG.mount = async function(activeNav = '') {
+  const user = await RRG.auth.requireAuth();
   if (!user) return null;
   const navMount = document.getElementById('nav-mount');
-  if (navMount) navMount.outerHTML = RRG.renderNav(activeNav);
+  if (navMount) navMount.outerHTML = RRG.renderNav(user, activeNav);
   const footMount = document.getElementById('footer-mount');
   if (footMount) footMount.outerHTML = RRG.renderFooter();
   return user;
 };
 
-/* ============================================================
-   EMAIL PREVIEW (shows what would send to coach on real deploy)
-   ============================================================ */
-RRG.previewEmail = function(subject, body) {
-  const pre = document.createElement('pre');
-  pre.style.cssText = 'white-space:pre-wrap;background:#F7F8FA;border:1px solid #DDE3EC;padding:14px;border-radius:6px;font-size:12px;max-width:640px;';
-  pre.textContent = `To: ryan@rrgolfperformance.com\nFrom: portal@rrgolfperformance.com\nSubject: ${subject}\n\n${body}`;
-  return pre;
+/* Debounced print — iOS Safari re-fires its "blocked from automatically
+   printing" dialog if window.print() is called in quick succession. */
+let _rrgPrintLock = false;
+window.rrgPrint = function(btn) {
+  if (_rrgPrintLock) return;
+  _rrgPrintLock = true;
+  if (btn) { btn.disabled = true; setTimeout(() => btn.disabled = false, 1500); }
+  setTimeout(() => _rrgPrintLock = false, 1500);
+  try { window.print(); } catch (e) { /* Safari may block */ }
 };

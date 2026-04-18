@@ -69,11 +69,14 @@
 
 <div id="footer-mount"></div>
 
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js"></script>
 <script src="assets/data.js"></script>
 <script src="assets/app.js"></script>
 <script>
-  const user = RRG.mount('dashboard');
-  if (!user) throw new Error();
+  (async () => {
+    const user = await RRG.mount('dashboard');
+    if (!user) return;
 
   const id = RRG.qs('id');
   const lessons = RRG.lessons.forUser(user.id);
@@ -241,6 +244,8 @@
     RRG.toast('Debrief saved — Ryan will see it before your next session.');
     setTimeout(() => location.href = 'dashboard.html', 1200);
   });
+
+  })();
 </script>
 </body>
 </html>

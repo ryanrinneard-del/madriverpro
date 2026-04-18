@@ -22,21 +22,18 @@
           Your private<br>coaching <em>portal</em>.
         </h1>
         <p class="hero-sub">
-          One-on-one adult coaching built around your game. Lesson packages, video review,
-          Tiger 5 scorecard, wedge matrix, bag map. Every lesson, every round, every piece
-          of feedback — in one place.
+          One-on-one adult coaching built around your game. Lessons, profile, Tiger 5,
+          wedge matrix, bag map. Every piece, in one place, on any device.
         </p>
         <div class="hero-stats">
           <div class="hero-stat"><div class="n">1×1</div><div class="l">Private Coaching</div></div>
-          <div class="hero-stat"><div class="n">Video</div><div class="l">Remote Review</div></div>
           <div class="hero-stat"><div class="n">TPI</div><div class="l">Physical Screen</div></div>
           <div class="hero-stat"><div class="n">∞</div><div class="l">History Kept</div></div>
         </div>
       </div>
     </div>
     <div class="hero-foot">
-      <strong>Confidential.</strong> Your profile, your lessons, your videos &mdash;
-      visible only to you and your coach.
+      <strong>No passwords.</strong> Enter your email and we'll send a one-click sign-in link.
     </div>
   </div>
 
@@ -47,45 +44,80 @@
     <form id="login-form">
       <div class="field">
         <label for="email">Email</label>
-        <input id="email" name="email" type="email" required autocomplete="email" placeholder="you@example.com">
-      </div>
-      <div class="field">
-        <label for="password">Password</label>
-        <input id="password" name="password" type="password" required autocomplete="current-password" placeholder="••••••••">
+        <input id="email" name="email" type="email" required autocomplete="email" placeholder="you@example.com" autofocus>
+        <div class="hint">We'll email you a one-time sign-in link. It expires in 60 minutes.</div>
       </div>
 
       <div id="login-error" class="callout" style="display:none; color:var(--red-risk); border-left-color:var(--red-risk); background:#FDF0EE; margin-bottom:16px;"></div>
 
-      <button type="submit" class="btn btn-primary btn-block">Sign in to my portal</button>
+      <button type="submit" class="btn btn-primary btn-block" id="send-btn">Send my sign-in link</button>
     </form>
 
-    <p class="alt">
+    <div id="sent-state" style="display:none; margin-top:24px; padding:20px; background:var(--cream); border-left:3px solid var(--gold); border-radius:6px;">
+      <h3 style="color:var(--navy); font-size:16px; margin-bottom:6px;">Check your inbox.</h3>
+      <p style="color:var(--navy-mid); font-size:14px; line-height:1.5;">
+        We just sent a sign-in link to <b id="sent-email"></b>. Tap it from any device and you're in.
+        If you don't see it in a minute, check spam.
+      </p>
+      <p style="color:var(--mid-grey); font-size:12px; margin-top:14px;">
+        Wrong email? <a href="#" id="again" style="color:var(--gold);">Try again</a>
+      </p>
+    </div>
+
+    <p class="alt" id="activate-line">
       Have an invite code? <a href="signup.html">Activate your portal &rarr;</a>
     </p>
   </div>
 
 </div>
 
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js"></script>
 <script src="assets/data.js"></script>
 <script src="assets/app.js"></script>
 <script>
-  if (RRG.auth.isLoggedIn()) location.replace('dashboard.html');
+  (async () => {
+    // If already signed in, skip this page
+    if (await RRG.auth.isLoggedIn()) { location.replace('dashboard.html'); return; }
 
-  const form = document.getElementById('login-form');
-  const errBox = document.getElementById('login-error');
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    errBox.style.display = 'none';
-    const email = form.email.value.trim();
-    const password = form.password.value;
-    try {
-      await RRG.auth.login(email, password);
-      location.href = 'dashboard.html';
-    } catch (err) {
-      errBox.textContent = err.message;
-      errBox.style.display = 'block';
-    }
-  });
+    const form = document.getElementById('login-form');
+    const errBox = document.getElementById('login-error');
+    const sentBox = document.getElementById('sent-state');
+    const sentEmail = document.getElementById('sent-email');
+    const sendBtn = document.getElementById('send-btn');
+    const activateLine = document.getElementById('activate-line');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errBox.style.display = 'none';
+      const email = form.email.value.trim();
+      sendBtn.disabled = true; sendBtn.textContent = 'Sending…';
+      try {
+        await RRG.auth.sendLoginLink(email);
+        form.style.display = 'none';
+        activateLine.style.display = 'none';
+        sentEmail.textContent = email;
+        sentBox.style.display = 'block';
+      } catch (err) {
+        // Supabase returns a generic error when user doesn't exist; clarify.
+        const msg = /User not found|not allowed/i.test(err.message || '')
+          ? 'No account with that email. Use your invite code to activate your portal instead.'
+          : (err.message || 'Something went wrong. Try again.');
+        errBox.textContent = msg;
+        errBox.style.display = 'block';
+        sendBtn.disabled = false; sendBtn.textContent = 'Send my sign-in link';
+      }
+    });
+
+    document.getElementById('again').addEventListener('click', (e) => {
+      e.preventDefault();
+      sentBox.style.display = 'none';
+      form.style.display = '';
+      activateLine.style.display = '';
+      sendBtn.disabled = false; sendBtn.textContent = 'Send my sign-in link';
+      form.email.focus();
+    });
+  })();
 </script>
 </body>
 </html>
