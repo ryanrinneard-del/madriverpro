@@ -71,6 +71,23 @@
   }
   .bag-row.dragging { opacity: 0.4; }
 
+  @media (max-width: 768px) {
+    .bag-card {
+      max-width: 100%;
+      padding: 14px;
+    }
+    .bag-card .bc-hdr {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+    }
+    .bag-card table {
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .bag-card input.yard { width: 70px; }
+  }
   @media print {
     @page { size: 6in 4in; margin: 0.15in; }
     html, body { background: white; margin: 0; padding: 0; }
