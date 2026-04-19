@@ -750,6 +750,65 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; }
   border-top: 2px solid var(--gold);
 }
 
+/* ===== LESSON ROW (dashboard "Every Session, Logged") ===== */
+.lesson-row {
+  display: grid;
+  grid-template-columns: 52px 1fr 110px 110px;
+  column-gap: 16px;
+  align-items: center;
+  padding: 14px 18px;
+  background: var(--white);
+  border-radius: var(--radius);
+  border-left: 3px solid var(--gold);
+  margin-bottom: 10px;
+  color: var(--navy);
+  transition: transform 0.12s ease, box-shadow 0.15s ease;
+}
+.lesson-row:hover {
+  transform: translateX(2px);
+  box-shadow: 0 6px 14px rgba(15, 27, 53, 0.08);
+}
+.lesson-row.complete  { border-left-color: var(--green-ok); }
+.lesson-row.scheduled { border-left-color: var(--gold); }
+.lesson-row.pending   { border-left-color: var(--rule); }
+.lesson-row .lnum {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0.5px;
+  font-variant-numeric: tabular-nums;
+}
+.lesson-row .lfocus {
+  font-size: 12px;
+  color: var(--mid-grey);
+  margin-top: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lesson-row .ldate {
+  font-size: 13px;
+  color: var(--navy-mid);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+@media (max-width: 640px) {
+  .lesson-row {
+    grid-template-columns: 44px 1fr auto;
+    grid-template-areas:
+      "num title  badge"
+      "num date   date";
+    column-gap: 12px;
+    row-gap: 2px;
+    padding: 12px 14px;
+  }
+  .lesson-row .lnum   { grid-area: num; }
+  .lesson-row > div:nth-child(2) { grid-area: title; min-width: 0; }
+  .lesson-row .ldate  { grid-area: date; text-align: left; font-size: 11px; }
+  .lesson-row > div:last-child { grid-area: badge; }
+}
+
 /* ===== HELPERS ===== */
 .muted { color: var(--mid-grey); }
 .gold { color: var(--gold); }

@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<base href="/adult/">
+<title>Adult Coaching Packages — RR Golf Performance</title>
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  .pkg-hero {
+    background: linear-gradient(135deg, var(--navy) 0%, #2C3B5A 100%);
+    color: var(--white); padding: 48px 36px;
+    border-radius: 12px; margin-bottom: 32px; position: relative; overflow: hidden;
+  }
+  .pkg-hero::before {
+    content: ''; position: absolute; top: 0; right: 0;
+    width: 200px; height: 200px; background: var(--gold); opacity: 0.08;
+    border-radius: 50%; transform: translate(60px, -60px);
+  }
+  .pkg-hero .kicker {
+    display: inline-block; background: var(--gold); color: var(--navy);
+    padding: 5px 12px; font-size: 10px; letter-spacing: 2px;
+    font-weight: 700; border-radius: 3px; margin-bottom: 16px;
+  }
+  .pkg-hero h1 {
+    font-size: clamp(28px, 4vw, 38px); color: var(--white);
+    line-height: 1.15; margin: 0 0 10px 0; font-weight: 700;
+  }
+  .pkg-hero p { color: #D8DEE8; font-size: 16px; line-height: 1.55; max-width: 640px; margin: 0; }
+
+  .pkg-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 18px; margin-bottom: 40px;
+  }
+  .pkg-card {
+    background: var(--white); border: 1px solid var(--rule);
+    border-radius: 12px; padding: 28px 26px;
+    display: flex; flex-direction: column;
+    border-top: 3px solid var(--gold);
+    transition: all 0.18s ease;
+  }
+  .pkg-card.highlight {
+    border-top-color: var(--gold);
+    box-shadow: 0 8px 24px rgba(195, 162, 79, 0.18);
+  }
+  .pkg-card .pkg-name {
+    font-size: 11px; letter-spacing: 1.5px; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 6px;
+  }
+  .pkg-card h2 {
+    font-size: 22px; color: var(--navy); margin: 0 0 6px 0;
+    line-height: 1.2;
+  }
+  .pkg-card .pkg-price {
+    font-size: 30px; font-weight: 700; color: var(--navy);
+    margin: 14px 0 6px 0; font-variant-numeric: tabular-nums;
+  }
+  .pkg-card .pkg-price .cad {
+    font-size: 13px; font-weight: 600; color: var(--mid-grey);
+    margin-left: 4px;
+  }
+  .pkg-card .pkg-subprice {
+    font-size: 13px; color: var(--mid-grey); margin-bottom: 16px;
+  }
+  .pkg-card ul {
+    list-style: none; padding: 0; margin: 0 0 22px 0;
+  }
+  .pkg-card li {
+    font-size: 14px; line-height: 1.55; color: var(--navy-mid);
+    padding: 6px 0 6px 22px; position: relative;
+  }
+  .pkg-card li::before {
+    content: ''; position: absolute; left: 0; top: 14px;
+    width: 8px; height: 8px; background: var(--gold); border-radius: 50%;
+  }
+  .pkg-card .pkg-cta {
+    margin-top: auto;
+  }
+  .pkg-card .pkg-tiers {
+    background: var(--light-bg); border-radius: 6px;
+    padding: 12px 14px; margin-bottom: 18px;
+    font-size: 13px; color: var(--navy-mid);
+  }
+  .pkg-card .pkg-tiers div { padding: 4px 0; }
+  .pkg-card .pkg-tiers strong { color: var(--navy); }
+
+  .pkg-note {
+    background: var(--cream); border-left: 3px solid var(--gold);
+    border-radius: 6px; padding: 18px 22px;
+    font-size: 14px; color: var(--navy-mid); line-height: 1.55;
+    margin-top: 24px;
+  }
+  .pkg-note strong { color: var(--navy); }
+
+  @media (max-width: 640px) {
+    .pkg-hero { padding: 32px 22px; }
+    .pkg-card { padding: 22px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container">
+
+  <div class="pkg-hero">
+    <div class="kicker">ADULT COACHING · 2026</div>
+    <h1>Packages &amp; Private Lessons</h1>
+    <p>
+      Private 1-on-1 coaching with Ryan Rinneard, Director of Instruction at Mad River
+      Golf Club. Every lesson is built around your game, logged in your portal, and
+      backed by TrackMan data.
+    </p>
+  </div>
+
+  <h2 style="font-size:18px; color:var(--navy); margin: 0 0 14px 0; letter-spacing:0.3px;">
+    Series Packages
+  </h2>
+  <p style="color:var(--mid-grey); font-size:14px; margin: 0 0 20px 0;">
+    The best value for adults committed to getting better across the season. Book each
+    lesson when you want &mdash; the package stays on your account.
+  </p>
+
+  <div class="pkg-grid">
+    <div class="pkg-card">
+      <div class="pkg-name">Entry</div>
+      <h2>Series of 5 Lessons</h2>
+      <div class="pkg-price">$595<span class="cad">CAD</span></div>
+      <div class="pkg-subprice">$119 per lesson</div>
+      <ul>
+        <li>Five private lessons, booked on your schedule</li>
+        <li>TrackMan + video review every session</li>
+        <li>Portal tracking &mdash; every lesson logged</li>
+        <li>Best for targeted game work</li>
+      </ul>
+      <div class="pkg-cta">
+        <a href="https://app.acuityscheduling.com/catalog.php?owner=25734550"
+           target="_blank" rel="noopener" class="btn btn-primary btn-block">
+          Buy 5-Lesson Package &rarr;
+        </a>
+      </div>
+    </div>
+
+    <div class="pkg-card highlight">
+      <div class="pkg-name">Most Popular</div>
+      <h2>Series of 10 Lessons</h2>
+      <div class="pkg-price">$1,150<span class="cad">CAD</span></div>
+      <div class="pkg-subprice">$115 per lesson</div>
+      <ul>
+        <li>Ten private lessons across the season</li>
+        <li>Full TPI screen + mid-season re-screen</li>
+        <li>Video uploads + remote analysis</li>
+        <li>Season-long coaching relationship</li>
+      </ul>
+      <div class="pkg-cta">
+        <a href="https://app.acuityscheduling.com/catalog.php?owner=25734550"
+           target="_blank" rel="noopener" class="btn btn-primary btn-block">
+          Buy 10-Lesson Package &rarr;
+        </a>
+      </div>
+    </div>
+
+    <div class="pkg-card">
+      <div class="pkg-name">Full Season</div>
+      <h2>Series of 20 Lessons</h2>
+      <div class="pkg-price">$2,200<span class="cad">CAD</span></div>
+      <div class="pkg-subprice">$110 per lesson &mdash; best per-lesson price</div>
+      <ul>
+        <li>Twenty private lessons &mdash; full-season commitment</li>
+        <li>Full TPI + fall re-screen</li>
+        <li>Unlimited video review</li>
+        <li>Best for serious improvers</li>
+      </ul>
+      <div class="pkg-cta">
+        <a href="https://app.acuityscheduling.com/catalog.php?owner=25734550"
+           target="_blank" rel="noopener" class="btn btn-primary btn-block">
+          Buy 20-Lesson Package &rarr;
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <h2 style="font-size:18px; color:var(--navy); margin: 24px 0 14px 0; letter-spacing:0.3px;">
+    Single Lessons
+  </h2>
+  <p style="color:var(--mid-grey); font-size:14px; margin: 0 0 20px 0;">
+    One-off lessons if you want to try Ryan's coaching before committing to a package.
+    Three durations to match your goal.
+  </p>
+
+  <div class="pkg-grid">
+    <div class="pkg-card">
+      <div class="pkg-name">Quick Tune-Up</div>
+      <h2>1 Hour</h2>
+      <div class="pkg-price">$130<span class="cad">CAD</span></div>
+      <ul>
+        <li>The most focused hour on your game</li>
+        <li>TrackMan data, real solution, no guesswork</li>
+        <li>Perfect as a starting point or sharp tune-up</li>
+      </ul>
+      <div class="pkg-cta">
+        <a href="https://madriverpro.as.me/?appointmentType=category:Adult%20Private%20Lessons"
+           target="_blank" rel="noopener" class="btn btn-primary btn-block">
+          Book 1-Hour Lesson &rarr;
+        </a>
+      </div>
+    </div>
+
+    <div class="pkg-card">
+      <div class="pkg-name">Deeper Work</div>
+      <h2>2 Hours</h2>
+      <div class="pkg-price">$245<span class="cad">CAD</span></div>
+      <ul>
+        <li>More time = deeper diagnosis</li>
+        <li>Build the changes, then lock them in</li>
+        <li>Backed by TrackMan and nearly 20 years of coaching</li>
+      </ul>
+      <div class="pkg-cta">
+        <a href="https://madriverpro.as.me/?appointmentType=category:Adult%20Private%20Lessons"
+           target="_blank" rel="noopener" class="btn btn-primary btn-block">
+          Book 2-Hour Lesson &rarr;
+        </a>
+      </div>
+    </div>
+
+    <div class="pkg-card">
+      <div class="pkg-name">Transformation</div>
+      <h2>Half Day (3 Hours)</h2>
+      <div class="pkg-price">$355<span class="cad">CAD</span></div>
+      <ul>
+        <li>Three focused hours entirely around your game</li>
+        <li>The most thorough single-session option</li>
+        <li>Assess, diagnose, rebuild, reinforce</li>
+      </ul>
+      <div class="pkg-cta">
+        <a href="https://madriverpro.as.me/?appointmentType=category:Adult%20Private%20Lessons"
+           target="_blank" rel="noopener" class="btn btn-primary btn-block">
+          Book Half-Day Lesson &rarr;
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <h2 style="font-size:18px; color:var(--navy); margin: 24px 0 14px 0; letter-spacing:0.3px;">
+    Season Starter
+  </h2>
+  <p style="color:var(--mid-grey); font-size:14px; margin: 0 0 20px 0;">
+    The best way to start your season &mdash; assessment, a written plan, and 5 lessons
+    built around your results.
+  </p>
+
+  <div class="pkg-grid">
+    <div class="pkg-card highlight">
+      <div class="pkg-name">Recommended for New Clients</div>
+      <h2>Season Starter &mdash; Adult</h2>
+      <div class="pkg-price">$649<span class="cad">CAD</span></div>
+      <div class="pkg-subprice">Retail value $800+ &middot; save $150+</div>
+      <ul>
+        <li>90-minute Performance Assessment (TrackMan + TPI screen)</li>
+        <li>Written prescription with your top priorities</li>
+        <li>5 private lessons built around your assessment results</li>
+        <li>No guesswork &mdash; just a clear plan for your game</li>
+      </ul>
+      <div class="pkg-cta">
+        <a href="https://app.acuityscheduling.com/catalog.php?owner=25734550"
+           target="_blank" rel="noopener" class="btn btn-primary btn-block">
+          Buy Season Starter &rarr;
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="pkg-note">
+    <strong>Looking for Ladies Series or Junior Elite?</strong><br>
+    The Mad River Ladies Golf Series (6 sessions $210 CAD / Full Summer $495 CAD) and
+    Junior Season Starter ($549 CAD) are also available. Visit
+    <a href="https://app.acuityscheduling.com/catalog.php?owner=25734550"
+       target="_blank" rel="noopener" style="color:var(--gold);">the full catalog</a>
+    for those options &mdash; or ask Ryan directly.
+  </div>
+
+  <div style="margin-top: 32px; text-align: center;">
+    <a href="dashboard.html" class="btn btn-ghost">&larr; Back to my dashboard</a>
+  </div>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js"></script>
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  (async () => {
+    await RRG.mount('packages');
+  })();
+</script>
+</body>
+</html>

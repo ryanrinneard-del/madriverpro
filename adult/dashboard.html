@@ -9,17 +9,8 @@
 <style>
   .progress-bar { background: var(--rule); border-radius: 999px; height: 8px; overflow: hidden; }
   .progress-bar > div { height: 100%; background: var(--gold); transition: width 0.3s ease; }
-  .lesson-row {
-    background: var(--white); border-radius: 8px; padding: 14px 18px;
-    border-left: 3px solid var(--rule); margin-bottom: 10px;
-    display: grid; grid-template-columns: 60px 1fr 120px auto; gap: 14px; align-items: center;
-  }
-  .lesson-row.complete { border-left-color: var(--green-ok); background: var(--green-light); }
-  .lesson-row.scheduled { border-left-color: var(--gold); }
-  .lesson-row.pending { opacity: 0.75; }
-  .lesson-row .lnum { font-weight:800; color:var(--gold); font-size:16px; letter-spacing:1px; text-align:center; }
-  .lesson-row .lfocus { color:var(--dark-text); font-size:13px; }
-  .lesson-row .ldate { color:var(--mid-grey); font-size:12px; }
+  /* .lesson-row styles moved to assets/styles.css so the mobile grid-areas
+     restructure can take effect (was previously overridden by inline CSS). */
 </style>
 </head>
 <body>
@@ -98,8 +89,8 @@
   const used = (user.lessons_used || 0);
   const total = (user.package_lessons || pkgMeta?.lessons || 0);
   const pct = total ? Math.min(100, Math.round(used/total*100)) : 0;
-  const acuityBook   = (RRG.ACUITY && RRG.ACUITY.bookAdultPrivate) || '#';
-  const acuityBuy    = (RRG.ACUITY && RRG.ACUITY.catalog)          || '#';
+  const acuityBook  = (RRG.ACUITY && RRG.ACUITY.bookAdultPrivate) || '#';
+  const packagesUrl = 'packages.html';   // local landing page; clean adult-only view
 
   document.getElementById('pkg-card').innerHTML = `
     <div class="flex-between">
@@ -121,7 +112,7 @@
       <a href="${acuityBook}" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
         Book next lesson →
       </a>
-      <a href="${acuityBuy}" target="_blank" rel="noopener" class="btn btn-ghost btn-sm">
+      <a href="${packagesUrl}" class="btn btn-ghost btn-sm">
         ${total ? 'Extend with another package' : 'Buy a package'}
       </a>
     </div>

@@ -67,7 +67,6 @@ RRG.PACKAGES = [
       'Video uploads + remote analysis',
       'Most popular \u2014 season-long coaching',
     ],
-    recommended: true,
   },
   {
     id: 'p20',
