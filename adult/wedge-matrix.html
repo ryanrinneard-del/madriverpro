@@ -64,6 +64,142 @@
     font-size: 12px; font-weight: 700; letter-spacing: 0.5px;
   }
   .add-row button:hover { background: var(--gold); color: var(--navy); }
+
+  /* -------- Wind-adjusted matrix -------- */
+  .wind-card {
+    background: var(--white);
+    border: 2px solid var(--gold);
+    border-radius: 10px;
+    padding: 24px 22px;
+    max-width: 6in;
+    margin: 24px auto 0;
+  }
+  .wind-header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    gap: 14px; border-bottom: 2px solid var(--navy);
+    padding-bottom: 12px; margin-bottom: 18px;
+  }
+  .wind-title {
+    font-weight: 700; letter-spacing: 1.5px; color: var(--navy); font-size: 14px;
+  }
+  .wind-sub { color: var(--mid-grey); font-size: 11px; margin-top: 3px; }
+  .wind-readout { text-align: right; flex-shrink: 0; }
+  .wind-readout .wind-value {
+    display: block; font-size: 22px; font-weight: 700; color: var(--navy); line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .wind-readout .wind-label {
+    display: block; font-size: 10px; letter-spacing: 1.5px; color: var(--gold);
+    text-transform: uppercase; font-weight: 700; margin-top: 4px;
+  }
+  .wind-controls { margin-bottom: 16px; }
+  .wind-dir-toggle {
+    display: flex; gap: 6px; margin-bottom: 14px; justify-content: center;
+  }
+  .wind-dir {
+    flex: 1; max-width: 130px; padding: 9px 10px;
+    border: 1px solid var(--rule); background: var(--white);
+    color: var(--navy-mid); font-weight: 600; font-size: 12px;
+    letter-spacing: 0.5px; cursor: pointer; border-radius: 4px;
+    transition: all 0.15s ease; font-family: inherit;
+  }
+  .wind-dir:hover { border-color: var(--gold); color: var(--navy); }
+  .wind-dir.active {
+    background: var(--navy); color: var(--white); border-color: var(--navy);
+  }
+  .wind-slider {
+    width: 100%; -webkit-appearance: none; appearance: none;
+    height: 6px; background: linear-gradient(to right, var(--rule) 0%, var(--gold) 100%);
+    border-radius: 3px; outline: none; margin: 0;
+  }
+  .wind-slider::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 24px; height: 24px; background: var(--navy);
+    border: 3px solid var(--gold); border-radius: 50%;
+    cursor: pointer; margin-top: 0;
+  }
+  .wind-slider::-moz-range-thumb {
+    width: 24px; height: 24px; background: var(--navy);
+    border: 3px solid var(--gold); border-radius: 50%;
+    cursor: pointer; border-width: 3px;
+  }
+  .wind-tick-labels {
+    display: flex; justify-content: space-between;
+    font-size: 10px; color: var(--mid-grey); margin-top: 8px;
+    letter-spacing: 0.5px; font-variant-numeric: tabular-nums;
+  }
+  .wind-matrix { width: 100%; border-collapse: collapse; margin-top: 4px; }
+  .wind-matrix th {
+    background: var(--gold); color: var(--navy);
+    padding: 10px 8px; font-size: 11px; letter-spacing: 1px;
+  }
+  .wind-matrix th:first-child { text-align: left; padding-left: 14px; }
+  .wind-matrix td {
+    padding: 8px 6px; border-bottom: 1px solid var(--rule);
+    text-align: center; font-size: 14px;
+    font-variant-numeric: tabular-nums;
+  }
+  .wind-matrix td.club {
+    text-align: left; padding-left: 14px; background: var(--light-bg);
+    font-weight: 700; color: var(--navy);
+  }
+  .wind-matrix td.adj-up { color: #2E7D32; font-weight: 600; }
+  .wind-matrix td.adj-down { color: var(--red-risk); font-weight: 600; }
+  .wind-matrix td.adj-same { color: var(--mid-grey); }
+
+  /* -------- Tour-pro education card -------- */
+  .tour-pro-card {
+    background: var(--navy); color: var(--white);
+    border-radius: 10px; padding: 30px 28px;
+    max-width: 6in; margin: 24px auto 0;
+  }
+  .tpc-badge {
+    display: inline-block; background: var(--gold); color: var(--navy);
+    padding: 4px 10px; font-size: 10px; letter-spacing: 2px;
+    font-weight: 700; border-radius: 3px; margin-bottom: 12px;
+  }
+  .tour-pro-card h2 {
+    color: var(--white); font-size: 22px; line-height: 1.25;
+    margin: 0 0 6px 0; font-weight: 700;
+  }
+  .tour-pro-card .tpc-kicker {
+    color: var(--gold); font-size: 13px; letter-spacing: 1px;
+    text-transform: uppercase; font-weight: 700; margin-bottom: 18px;
+  }
+  .tpc-body p {
+    color: #D8DEE8; font-size: 14px; line-height: 1.65; margin: 0 0 14px 0;
+  }
+  .tpc-body strong { color: var(--white); }
+  .tpc-body h3 {
+    color: var(--gold); font-size: 12px; letter-spacing: 2px;
+    text-transform: uppercase; margin: 22px 0 10px 0; font-weight: 700;
+  }
+  .tpc-body ul { margin: 0 0 14px 18px; padding: 0; }
+  .tpc-body li {
+    font-size: 14px; line-height: 1.6; color: #D8DEE8; margin-bottom: 7px;
+  }
+  .tpc-body li strong { color: var(--white); }
+  .tpc-cue {
+    background: rgba(195, 162, 79, 0.12);
+    border-left: 3px solid var(--gold);
+    padding: 14px 18px; border-radius: 4px; margin-top: 18px;
+  }
+  .tpc-cue .tpc-cue-label {
+    font-size: 10px; letter-spacing: 2px; color: var(--gold);
+    font-weight: 700; margin-bottom: 6px;
+  }
+  .tpc-cue p { color: var(--white); margin: 0; font-style: italic; }
+
+  @media (max-width: 640px) {
+    .wind-card, .tour-pro-card { padding: 20px 16px; }
+    .wind-header { flex-direction: column; }
+    .wind-readout { text-align: left; }
+    .wind-dir { font-size: 11px; padding: 8px 6px; }
+    .wind-matrix th, .wind-matrix td { font-size: 12px; padding: 6px 4px; }
+    .tour-pro-card h2 { font-size: 18px; }
+    .tpc-body p, .tpc-body li { font-size: 13px; }
+  }
+
   @media print {
     @page { size: 6in 4in; margin: 0.18in; }
     html, body { background: white; margin: 0; padding: 0; }
@@ -156,6 +292,126 @@
     </div>
   </div>
 
+  <!-- WIND-ADJUSTED MATRIX -->
+  <div class="wind-card no-print" id="wind-tool">
+    <div class="wind-header">
+      <div>
+        <div class="wind-title">WIND-ADJUSTED MATRIX</div>
+        <div class="wind-sub">Same wedges, dialed for today's wind. Updates live.</div>
+      </div>
+      <div class="wind-readout">
+        <span class="wind-value" id="wind-value">0 km/h</span>
+        <span class="wind-label" id="wind-label">No wind</span>
+      </div>
+    </div>
+
+    <div class="wind-controls">
+      <div class="wind-dir-toggle" role="group" aria-label="Wind direction">
+        <button class="wind-dir" data-dir="head" type="button">↑ Headwind</button>
+        <button class="wind-dir active" data-dir="none" type="button">○ None</button>
+        <button class="wind-dir" data-dir="tail" type="button">↓ Tailwind</button>
+      </div>
+      <input type="range" class="wind-slider" id="wind-slider"
+             min="0" max="40" step="1" value="0"
+             aria-label="Wind speed in km/h">
+      <div class="wind-tick-labels">
+        <span>0</span><span>10</span><span>20</span><span>30</span><span>40 km/h</span>
+      </div>
+    </div>
+
+    <table class="wind-matrix" id="wind-matrix">
+      <thead><tr id="wind-head"></tr></thead>
+      <tbody id="wind-body"></tbody>
+    </table>
+
+    <div style="font-size:11px; color:var(--navy-mid); margin-top:14px; line-height:1.55;">
+      <b>How to use it.</b> Set the wind direction, drag the slider to today's speed,
+      and read your <em>actual</em> carry numbers off the table. Green means the ball flies
+      farther (tailwind); red means it falls short (headwind). Numbers assume a sub-30°
+      launch — see why that matters below.
+    </div>
+  </div>
+
+  <!-- TOUR PRO WRITE-UP -->
+  <div class="tour-pro-card">
+    <span class="tpc-badge">TOUR PRO KNOW-HOW</span>
+    <h2>Why the pros launch wedges under 30°</h2>
+    <div class="tpc-kicker">The most copyable shot in professional golf</div>
+
+    <div class="tpc-body">
+      <p>
+        Above 30° of launch angle, a wedge does something the wind loves: it climbs
+        slowly and stays airborne. The longer the ball is in the air, the more a 10 km/h
+        breeze gets to push it around. Watch any tour event in wind — every wedge looks
+        shorter, flatter, and more <strong>penetrating</strong> than what the weekend
+        player tries to hit.
+      </p>
+
+      <p>
+        A wedge that launches at 35°+ <strong>balloons</strong>. A 10 km/h headwind that
+        steals 6 yards from a flat flight steals 15 or more from a high one — and the
+        ball drops vertically onto the green without the spin or speed to check up.
+        Tailwind's just as ugly: ball lands hot, skips past the hole, runs out 20 feet.
+      </p>
+
+      <p>
+        The tour move — call it the <strong>knocked-down wedge</strong>, the dead-hand
+        flight, the Phil Mickelson punch — lives under 30° of launch. Here's how they
+        build it.
+      </p>
+
+      <h3>Setup</h3>
+      <ul>
+        <li><strong>Ball position</strong> — centered or one ball back of center. Never forward.</li>
+        <li><strong>Hands forward</strong> — shaft leans 5–8° toward the target at address.</li>
+        <li><strong>Stance</strong> — slightly open, weight 55% on the lead foot.</li>
+        <li><strong>Grip down</strong> — an inch or so for more control, less yardage, better feel.</li>
+      </ul>
+
+      <h3>Motion</h3>
+      <ul>
+        <li><strong>Backswing</strong> — three-quarters max, often half. You're buying control, not power.</li>
+        <li><strong>Tempo</strong> — slower, with softer grip pressure. This shot is timing, not effort.</li>
+        <li><strong>Chest covers the ball</strong> — sternum stays over (or slightly ahead of) the ball through impact.</li>
+        <li><strong>Shaft leans forward at impact</strong> — de-lofts the face, compresses the ball, launches it down.</li>
+        <li><strong>Abbreviated finish</strong> — hands stop at chest height. Don't wrap around.</li>
+      </ul>
+
+      <h3>What you get</h3>
+      <ul>
+        <li><strong>Lower apex</strong> — less time exposed to wind.</li>
+        <li><strong>Higher spin-to-launch ratio</strong> — the ball still stops quickly even though it's flying flat.</li>
+        <li><strong>Predictable carry</strong> — what you practice in still air is what you get in wind.</li>
+        <li><strong>Cuts through headwinds</strong> instead of getting shoved sideways and short.</li>
+        <li><strong>Usable in cold weather</strong> — cold air is denser and amplifies every flaw in a high shot.</li>
+      </ul>
+
+      <h3>When to deploy it</h3>
+      <ul>
+        <li>Any wind over 10 km/h — head <em>or</em> tail. Tailwind shots balloon too.</li>
+        <li>Firm, fast greens where a stock wedge would skip and release.</li>
+        <li>Cold rounds below 10°C / 50°F.</li>
+        <li>Tucked back pins where you need the ball to check up short.</li>
+      </ul>
+
+      <div class="tpc-cue">
+        <div class="tpc-cue-label">PRACTICE CUE</div>
+        <p>
+          Pick a flag. Aim a foot under it. If your ball reaches the flag, you're already
+          too high — quit the ballooning wedge. Drill the sensation: chest over it, ball
+          knocked down.
+        </p>
+      </div>
+
+      <p style="margin-top:18px;">
+        Every yard of carry you trade for control in wind, you get back in predictability.
+        That's the trade tour players make on roughly 80% of their wedge shots from 100
+        yards in. It's the most copyable shot in professional golf — and the fastest way
+        to start scoring like a pro from inside a wedge.
+      </p>
+    </div>
+  </div>
+
 </main>
 
 <div id="footer-mount"></div>
@@ -242,9 +498,81 @@
         if (inp.value === '') delete yardages[k];
         else yardages[k] = +inp.value;
         saveAll();
+        renderWind();
       });
     });
+
+    renderWind();
   }
+
+  /* -------- Wind-adjusted matrix -------- */
+  // Physics, distilled:
+  //   Headwind: ball flies ~0.6 yards shorter per 1 km/h, scaled to a 100-yard reference.
+  //   Tailwind: ball flies ~0.3 yards farther per 1 km/h, scaled to a 100-yard reference.
+  // Scaling by stock carry / 100 because shorter shots spend less time in the wind.
+  let windDir = 'none';   // 'head' | 'tail' | 'none'
+  let windSpeed = 0;      // km/h, 0–40
+
+  function windAdjust(stock) {
+    if (!stock || windDir === 'none' || !windSpeed) return stock;
+    const rate = windDir === 'head' ? 0.6 : 0.3;
+    const delta = (windSpeed * rate * stock) / 100;
+    return windDir === 'head' ? stock - delta : stock + delta;
+  }
+
+  function renderWind() {
+    const head = document.getElementById('wind-head');
+    if (!head) return;
+    head.innerHTML = '<th>Club</th>' +
+      RRG.WEDGE_SHOTS.map(s => `<th>${RRG.esc(s)}</th>`).join('');
+
+    const cls = (windDir === 'none' || !windSpeed)
+      ? 'adj-same'
+      : (windDir === 'head' ? 'adj-down' : 'adj-up');
+
+    document.getElementById('wind-body').innerHTML = wedges.map(w => `
+      <tr>
+        <td class="club">${RRG.esc(w.name || '—')}</td>
+        ${RRG.WEDGE_SHOTS.map(shot => {
+          const stock = yardages[w.id + '|' + shot];
+          if (!stock) return '<td class="adj-same">—</td>';
+          return `<td class="${cls}">${Math.round(windAdjust(stock))}</td>`;
+        }).join('')}
+      </tr>
+    `).join('');
+
+    const valEl = document.getElementById('wind-value');
+    const labEl = document.getElementById('wind-label');
+    if (windDir === 'none' || !windSpeed) {
+      valEl.textContent = '0 km/h';
+      labEl.textContent = 'No wind';
+    } else {
+      valEl.textContent = windSpeed + ' km/h';
+      labEl.textContent = windDir === 'head' ? 'Into your face' : 'At your back';
+    }
+  }
+
+  function setWindDir(d) {
+    windDir = d;
+    document.querySelectorAll('.wind-dir').forEach(b => {
+      b.classList.toggle('active', b.dataset.dir === d);
+    });
+    if (d === 'none') {
+      windSpeed = 0;
+      document.getElementById('wind-slider').value = 0;
+    }
+    renderWind();
+  }
+
+  document.getElementById('wind-slider').addEventListener('input', (e) => {
+    windSpeed = +e.target.value;
+    if (windSpeed > 0 && windDir === 'none') setWindDir('head');
+    else renderWind();
+  });
+
+  document.querySelectorAll('.wind-dir').forEach(b => {
+    b.addEventListener('click', () => setWindDir(b.dataset.dir));
+  });
 
   window.addWedge = () => {
     wedges.push({ id: 'w' + Date.now(), name: '' });
