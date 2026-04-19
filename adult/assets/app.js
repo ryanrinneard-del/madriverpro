@@ -115,6 +115,9 @@ RRG.auth = {
     if (!check || check.length === 0) {
       throw new Error('That invite code is not valid or has already been used.');
     }
+    if (check[0].cohort !== RRG.COHORT) {
+      throw new Error('That invite code is for a different program. Use the correct signup page.');
+    }
 
     // 2. Send the magic link with pending signup data
     const { error: oErr } = await RRG.sb.auth.signInWithOtp({
@@ -143,9 +146,20 @@ RRG.auth = {
   },
 
   // Wait for auth to resolve, redirect to login if none.
+  // Also routes the user to the correct portal for their cohort —
+  // coaches can view either portal; players are locked to their own.
   async requireAuth() {
     const user = await this.currentUser();
     if (!user) { location.replace('index.html'); return null; }
+    if (user.role !== 'coach' && user.cohort && user.cohort !== RRG.COHORT) {
+      const target = user.cohort === 'junior_elite_2026' ? '/portal/'
+                   : user.cohort === 'adult_coaching_2026' ? '/adult/'
+                   : null;
+      if (target && !location.pathname.startsWith(target)) {
+        location.replace(target + 'dashboard.html');
+        return null;
+      }
+    }
     return user;
   },
 
