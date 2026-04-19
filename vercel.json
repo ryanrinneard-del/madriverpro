@@ -47,6 +47,11 @@
       "source": "/adult",
       "destination": "/adult/",
       "permanent": true
+    },
+    {
+      "source": "/improve",
+      "destination": "/improve/",
+      "permanent": true
     }
   ]
 }

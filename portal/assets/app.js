@@ -405,6 +405,7 @@ RRG.renderNav = function(user, active = '') {
         <li><a href="bag.html"       class="${active==='bag'?'active':''}">My Bag</a></li>
         <li><a href="wedge-matrix.html" class="${active==='wedge'?'active':''}">Wedge Matrix</a></li>
         <li><a href="tiger5.html"    class="${active==='tiger5'?'active':''}">Tiger 5</a></li>
+        <li><a href="/improve/" class="${active==='library'?'active':''}">Library</a></li>
         ${coachLink}
         <li class="nav-user-mobile">
           <div class="who">Signed in as <b>${RRG.esc(user.name || user.email)}</b></div>
