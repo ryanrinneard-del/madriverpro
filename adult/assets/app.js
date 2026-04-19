@@ -266,18 +266,41 @@ RRG.invites = {
    already cross-device, which was the critical fix. A follow-up
    commit moves these to Postgres tables (schema already in place).
    ============================================================ */
+/* Rounds — Supabase-backed. RLS: players manage their own rounds;
+   coaches can read all. Schema columns are snake_case. */
 RRG.subs = {
-  KEY: 'rrgA_submissions_v1',
-  all() { try { return JSON.parse(localStorage.getItem(this.KEY) || '[]'); } catch { return []; } },
-  save(list) { localStorage.setItem(this.KEY, JSON.stringify(list)); },
-  create(sub) {
-    const entry = { id: 's_' + Date.now().toString(36), ...sub, createdAt: new Date().toISOString() };
-    const list = this.all(); list.push(entry); this.save(list);
-    return entry;
+  async forUser(userId) {
+    await RRG._sbReady;
+    if (!RRG.sb) return [];
+    const { data, error } = await RRG.sb.from('rounds')
+      .select('*')
+      .eq('user_id', userId)
+      .order('round_date', { ascending: false, nullsFirst: false });
+    if (error) { console.warn('rounds fetch', error); return []; }
+    return data || [];
   },
-  forUser(userId) {
-    return this.all().filter(s => s.userId === userId)
-      .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+  async get(id) {
+    await RRG._sbReady;
+    const { data, error } = await RRG.sb.from('rounds').select('*').eq('id', id).maybeSingle();
+    if (error) throw error;
+    return data;
+  },
+  async create(round) {
+    await RRG._sbReady;
+    const { data, error } = await RRG.sb.from('rounds').insert(round).select().single();
+    if (error) throw error;
+    return data;
+  },
+  async update(id, patch) {
+    await RRG._sbReady;
+    const { data, error } = await RRG.sb.from('rounds').update(patch).eq('id', id).select().single();
+    if (error) throw error;
+    return data;
+  },
+  async remove(id) {
+    await RRG._sbReady;
+    const { error } = await RRG.sb.from('rounds').delete().eq('id', id);
+    if (error) throw error;
   },
 };
 

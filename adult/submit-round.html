@@ -4,8 +4,108 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <base href="/adult/">
-<title>Submit Round — RR Golf Performance</title>
+<title>Log a Round — RR Golf Performance</title>
 <link rel="stylesheet" href="assets/styles.css">
+<style>
+  .sr-hero {
+    background: linear-gradient(135deg, var(--navy) 0%, #2C3B5A 100%);
+    color: var(--white); padding: 32px 32px 28px;
+    border-radius: 12px; margin-bottom: 24px;
+  }
+  .sr-hero .kicker {
+    display: inline-block; background: var(--gold); color: var(--navy);
+    padding: 4px 10px; font-size: 10px; letter-spacing: 2px;
+    font-weight: 700; border-radius: 3px; margin-bottom: 12px;
+  }
+  .sr-hero h1 {
+    color: var(--white); font-size: clamp(22px, 3.5vw, 30px);
+    line-height: 1.15; margin: 0 0 4px 0;
+  }
+  .sr-hero p { color: #D8DEE8; margin: 4px 0 0 0; font-size: 14px; line-height: 1.5; }
+
+  .sr-card {
+    background: var(--white); border-radius: var(--radius, 10px);
+    padding: 28px 28px 24px;
+    border-top: 3px solid var(--gold);
+    margin-bottom: 16px;
+  }
+  .sr-card .card-label {
+    font-size: 10px; letter-spacing: 1.5px; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .sr-card h2 { color: var(--navy); font-size: 18px; margin: 0 0 18px 0; }
+
+  .sr-grid { display: grid; gap: 14px; }
+  .sr-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .sr-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+  .sr-field label {
+    display: block; font-size: 11px; letter-spacing: 1px;
+    color: var(--navy); font-weight: 700;
+    text-transform: uppercase; margin-bottom: 6px;
+  }
+  .sr-field label .opt {
+    font-weight: 500; text-transform: none; letter-spacing: 0;
+    color: var(--mid-grey); font-size: 11px; margin-left: 6px;
+  }
+  .sr-field input, .sr-field select, .sr-field textarea {
+    width: 100%; padding: 12px 14px; border: 1px solid var(--rule);
+    border-radius: 6px; font-size: 16px; font-family: inherit;
+    background: var(--white); color: var(--dark-text);
+    transition: border-color 0.15s ease;
+  }
+  .sr-field input:focus, .sr-field select:focus, .sr-field textarea:focus {
+    outline: none; border-color: var(--gold); box-shadow: 0 0 0 2px rgba(195,162,79,0.12);
+  }
+  .sr-field textarea { resize: vertical; min-height: 70px; }
+  .sr-field .big-score input {
+    font-size: 32px; font-weight: 700; text-align: center;
+    padding: 14px; font-variant-numeric: tabular-nums;
+    color: var(--navy);
+  }
+
+  details.sr-details {
+    background: var(--light-bg); border: 1px solid var(--rule);
+    border-radius: 8px; padding: 16px 22px; margin-bottom: 14px;
+  }
+  details.sr-details[open] { background: var(--white); }
+  details.sr-details summary {
+    cursor: pointer; font-weight: 700; color: var(--navy);
+    font-size: 14px; letter-spacing: 0.3px;
+    display: flex; justify-content: space-between; align-items: center;
+    user-select: none;
+  }
+  details.sr-details summary::after {
+    content: '+'; color: var(--gold); font-size: 20px; font-weight: 400;
+    transition: transform 0.15s ease;
+  }
+  details.sr-details[open] summary::after { content: '−'; }
+  details.sr-details .details-hint {
+    font-size: 12px; color: var(--mid-grey); margin-top: 2px;
+    font-weight: 400; text-transform: none; letter-spacing: 0;
+  }
+  details.sr-details > *:not(summary) { margin-top: 14px; }
+
+  .t5-prefill {
+    background: rgba(195,162,79,0.12); border-left: 3px solid var(--gold);
+    padding: 12px 14px; border-radius: 4px; font-size: 13px;
+    color: var(--navy); margin-bottom: 14px; line-height: 1.5;
+  }
+  .t5-prefill a { color: var(--gold); }
+
+  .sr-submit-bar {
+    display: flex; gap: 10px; flex-wrap: wrap; margin-top: 24px;
+  }
+  .sr-submit-bar .btn-primary {
+    flex: 1; min-width: 180px; font-size: 16px; padding: 14px 20px;
+  }
+
+  @media (max-width: 640px) {
+    .sr-card { padding: 22px 20px; }
+    .sr-hero { padding: 26px 22px; }
+    .sr-grid.cols-3 { grid-template-columns: 1fr 1fr; }
+  }
+</style>
 </head>
 <body>
 
@@ -13,134 +113,172 @@
 
 <main class="container-narrow">
 
-  <div class="page-header">
-    <a href="dashboard.html" class="small muted">← Back to dashboard</a>
-    <div class="page-label mt-3">SUBMIT MY ROUND</div>
-    <h1 class="page-title" id="week-title">Log This Week's 18</h1>
-    <hr class="gold-rule">
-    <p class="page-subtitle">
-      Every field matters. Ryan reviews every submission and returns a one-page Performance
-      Doc before the next session. Take the 4 minutes to fill this out honestly.
-    </p>
+  <div class="sr-hero">
+    <div class="kicker">LOG A ROUND</div>
+    <h1 id="hero-title">Your round — three minutes, done.</h1>
+    <p>Only <b>Score</b> is required. Everything else is optional — fill in what you have.</p>
   </div>
 
-  <form id="round-form" class="card">
+  <form id="round-form">
 
-    <!-- Round meta -->
-    <div class="field-row">
-      <div class="field">
-        <label>Round date</label>
-        <input type="date" name="roundDate" required>
+    <!-- ========== THE ESSENTIALS ========== -->
+    <div class="sr-card">
+      <div class="card-label">ESSENTIALS</div>
+      <h2>Round &amp; score</h2>
+
+      <div class="sr-grid cols-2" style="margin-bottom:14px;">
+        <div class="sr-field">
+          <label>Round date</label>
+          <input type="date" name="round_date" id="round_date">
+        </div>
+        <div class="sr-field">
+          <label>Course <span class="opt">optional</span></label>
+          <input type="text" name="course" placeholder="e.g. Mad River GC">
+        </div>
       </div>
-      <div class="field">
-        <label>Course played</label>
-        <input type="text" name="course" required placeholder="e.g. Mad River GC">
-      </div>
-    </div>
-    <div class="field-row-3">
-      <div class="field">
-        <label>Tees / Yardage</label>
-        <input type="text" name="tees" placeholder="e.g. Whites · 6,200">
-      </div>
-      <div class="field">
-        <label>Format</label>
-        <select name="format">
-          <option>Stroke Play</option>
-          <option>Matchplay</option>
-          <option>Worst-ball 9</option>
-          <option>Par-3 Scramble</option>
-          <option>Playing Lesson</option>
-          <option>Tournament (SCJGT)</option>
-          <option>Shortee / Par-3 course</option>
-          <option>Prep Round</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>Holes</label>
-        <select name="holes"><option>18</option><option>9</option></select>
+
+      <div class="sr-grid cols-2">
+        <div class="sr-field big-score">
+          <label>Score <span class="opt" style="color:var(--red-risk);">required</span></label>
+          <input type="number" name="score" required min="30" max="150" placeholder="—">
+        </div>
+        <div class="sr-field">
+          <label>Holes <span class="opt">default 18</span></label>
+          <select name="holes">
+            <option value="18" selected>18</option>
+            <option value="9">9</option>
+          </select>
+        </div>
       </div>
     </div>
 
-    <!-- Scoring essentials -->
-    <div class="section-label">SCORING ESSENTIALS</div>
-    <div class="field-row-4">
-      <div class="field">
-        <label>Score</label>
-        <input type="number" name="score" required min="30" max="150">
-      </div>
-      <div class="field">
-        <label>Fairways (FIR)</label>
-        <input type="text" name="fir" placeholder="e.g. 8 / 14">
-      </div>
-      <div class="field">
-        <label>Greens (GIR)</label>
-        <input type="text" name="gir" placeholder="e.g. 9 / 18">
-      </div>
-      <div class="field">
-        <label>Putts</label>
-        <input type="number" name="putts" min="18" max="50">
-      </div>
-    </div>
-    <div class="field-row-4">
-      <div class="field">
-        <label>3-Putts</label>
-        <input type="number" name="threePutts" min="0" max="18" value="0">
-      </div>
-      <div class="field">
-        <label>Up-and-Down %</label>
-        <input type="text" name="upDown" placeholder="e.g. 3 / 6">
-      </div>
-      <div class="field">
-        <label>Penalty strokes</label>
-        <input type="number" name="penalties" min="0" max="20" value="0">
-      </div>
-      <div class="field">
-        <label>Lost balls</label>
-        <input type="number" name="lostBalls" min="0" max="20" value="0">
+    <!-- ========== KEY STATS (still "simple" zone) ========== -->
+    <div class="sr-card">
+      <div class="card-label">KEY STATS · OPTIONAL</div>
+      <h2>Fairways · Greens · Putts</h2>
+      <div class="sr-grid cols-3">
+        <div class="sr-field">
+          <label>Fairways (FIR)</label>
+          <input type="text" name="fir" placeholder="8 / 14">
+        </div>
+        <div class="sr-field">
+          <label>Greens (GIR)</label>
+          <input type="text" name="gir" placeholder="9 / 18">
+        </div>
+        <div class="sr-field">
+          <label>Putts</label>
+          <input type="number" name="putts" min="18" max="50" placeholder="—">
+        </div>
       </div>
     </div>
 
-    <!-- Tiger 5 -->
-    <div class="section-label">TIGER 5 TALLY</div>
-    <div class="section-title" style="font-size:15px;">Count each avoidable error that happened today.</div>
-    <div id="t5-panel" class="tiger5-grid"></div>
-    <div class="tiger5-summary mt-4" id="t5-summary">
-      <div class="total"><b id="t5-total">0</b>Tiger 5 events this round</div>
-      <div class="status good" id="t5-status">ON BENCHMARK</div>
-    </div>
-    <p class="muted small mt-2">
-      <b>Adult Coaching target:</b> 1–2 or fewer per round. Tour benchmark: ≤ 6 across a 4-round event.
-    </p>
+    <!-- ========== TIGER 5 (collapsed unless pre-filled from live tally) ========== -->
+    <details class="sr-details" id="t5-details">
+      <summary>
+        <span>
+          Tiger 5 tally
+          <div class="details-hint">Avoidable errors — the benchmark is 1–2 or fewer per round.</div>
+        </span>
+      </summary>
 
-    <!-- Reflection -->
-    <div class="section-label">REFLECTION</div>
-    <div class="field">
-      <label>What went well today?</label>
-      <textarea name="reflectionGood" placeholder="Be specific. One concrete moment beats a generalization."></textarea>
-    </div>
-    <div class="field">
-      <label>What cost you strokes?</label>
-      <textarea name="reflectionBad" placeholder="Where did strokes leak? Tee shots, wedges, putting, decisions, mental?"></textarea>
-    </div>
-    <div class="field">
-      <label>Routine consistency (1–10)</label>
-      <input type="number" name="routineScore" min="1" max="10" placeholder="How consistent was your pre-shot routine?">
-    </div>
-    <div class="field">
-      <label>One thing to work on before next session</label>
-      <textarea name="oneThing" placeholder="Pick ONE — not five."></textarea>
-    </div>
+      <div id="t5-prefill-banner"></div>
+      <div id="t5-panel" class="tiger5-grid"></div>
+      <div class="tiger5-summary mt-4" id="t5-summary">
+        <div class="total"><b id="t5-total">0</b>Tiger 5 events this round</div>
+        <div class="status good" id="t5-status">ON BENCHMARK</div>
+      </div>
+    </details>
 
+    <!-- ========== REFLECTION (two prompts) ========== -->
+    <details class="sr-details" id="reflection-details">
+      <summary>
+        <span>
+          Reflection <span class="opt" style="color:var(--mid-grey);">optional but valuable</span>
+          <div class="details-hint">Two prompts. One sentence each is enough.</div>
+        </span>
+      </summary>
+
+      <div class="sr-field" style="margin-bottom:14px;">
+        <label>What went well?</label>
+        <textarea name="reflection_good" placeholder="Be specific. One moment beats a generalization."></textarea>
+      </div>
+      <div class="sr-field">
+        <label>What needs work?</label>
+        <textarea name="reflection_bad" placeholder="Where did strokes leak?"></textarea>
+      </div>
+    </details>
+
+    <!-- ========== ADVANCED (tees, format, 3-putts, penalties, up-down, lost balls, routine score, one-thing) ========== -->
+    <details class="sr-details" id="advanced-details">
+      <summary>
+        <span>
+          Advanced details
+          <div class="details-hint">Tees, format, 3-putts, up-and-downs, penalties, lost balls, routine score, one thing to work on.</div>
+        </span>
+      </summary>
+
+      <div class="sr-grid cols-2" style="margin-bottom:14px;">
+        <div class="sr-field">
+          <label>Tees / Yardage</label>
+          <input type="text" name="tees" placeholder="Whites · 6,200">
+        </div>
+        <div class="sr-field">
+          <label>Format</label>
+          <select name="format">
+            <option value="Stroke Play">Stroke Play</option>
+            <option value="Matchplay">Matchplay</option>
+            <option value="Worst-ball 9">Worst-ball 9</option>
+            <option value="Par-3 Scramble">Par-3 Scramble</option>
+            <option value="Playing Lesson">Playing Lesson</option>
+            <option value="Tournament">Tournament</option>
+            <option value="Shortee / Par-3 course">Shortee / Par-3 course</option>
+            <option value="Prep Round">Prep Round</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="sr-grid cols-3" style="margin-bottom:14px;">
+        <div class="sr-field">
+          <label>3-putts</label>
+          <input type="number" name="three_putts" min="0" max="18" placeholder="0">
+        </div>
+        <div class="sr-field">
+          <label>Up-and-downs</label>
+          <input type="text" name="up_down" placeholder="3 / 6">
+        </div>
+        <div class="sr-field">
+          <label>Penalties</label>
+          <input type="number" name="penalties" min="0" max="20" placeholder="0">
+        </div>
+      </div>
+
+      <div class="sr-grid cols-2" style="margin-bottom:14px;">
+        <div class="sr-field">
+          <label>Lost balls</label>
+          <input type="number" name="lost_balls" min="0" max="20" placeholder="0">
+        </div>
+        <div class="sr-field">
+          <label>Pre-shot routine (1–10)</label>
+          <input type="number" name="routine_score" min="1" max="10" placeholder="—">
+        </div>
+      </div>
+
+      <div class="sr-field">
+        <label>One thing to work on before next session</label>
+        <textarea name="one_thing" placeholder="Pick ONE — not five."></textarea>
+      </div>
+    </details>
+
+    <!-- Error box + submit -->
     <div id="form-error" class="callout" style="display:none; color:var(--red-risk); border-left-color:var(--red-risk); background:#FDF0EE; margin-bottom:16px;"></div>
 
-    <div class="flex gap-3 mt-4">
-      <button type="submit" class="btn btn-primary">Submit My Round</button>
-      <a href="dashboard.html" class="btn btn-ghost">Cancel</a>
+    <div class="sr-submit-bar">
+      <button type="submit" class="btn btn-primary" id="submit-btn">Submit my round →</button>
+      <a href="history.html" class="btn btn-ghost">Cancel</a>
     </div>
 
-    <p class="muted small mt-4">
-      On submit: your round is saved to your private portal and an email is sent to
-      <b>ryan@rrgolfperformance.com</b>. Ryan returns your Performance Doc before the next session.
+    <p class="muted small mt-3" style="text-align:center;">
+      Saved instantly to your portal. Ryan reviews every round and returns your Performance Doc before the next session.
     </p>
   </form>
 
@@ -154,111 +292,125 @@
 <script src="assets/app.js"></script>
 <script>
   (async () => {
-    const user = await RRG.mount('dashboard');
+    const user = await RRG.mount('history');
     if (!user) return;
 
-  const weekN = parseInt(RRG.qs('week'), 10) || null;
-  const week = weekN ? RRG.WEEKS.find(w => w.n === weekN) : null;
-  if (week) {
-    document.getElementById('week-title').textContent =
-      `Week ${week.n} — ${week.title}`;
-  }
+    // Default round date to today
+    const today = new Date();
+    const pad = n => String(n).padStart(2, '0');
+    document.getElementById('round_date').value =
+      `${today.getFullYear()}-${pad(today.getMonth()+1)}-${pad(today.getDate())}`;
 
-  // Tiger 5 UI — pre-fill from the live tally if one exists
-  const TALLY_KEY = 'rrgA_t5_live_' + user.id;
-  let liveTally = null;
-  try { liveTally = JSON.parse(localStorage.getItem(TALLY_KEY) || 'null'); } catch {}
+    // ============ Tiger 5 live-tally pre-fill ============
+    const TALLY_KEY = 'rrgA_t5_live_' + user.id;
+    let liveTally = null;
+    try { liveTally = JSON.parse(localStorage.getItem(TALLY_KEY) || 'null'); } catch {}
 
-  const t5Panel = document.getElementById('t5-panel');
-  const t5State = (liveTally && liveTally.counts)
-    ? { ...{1:0,2:0,3:0,4:0,5:0}, ...liveTally.counts }
-    : { 1:0, 2:0, 3:0, 4:0, 5:0 };
+    const t5State = (liveTally && liveTally.counts)
+      ? { ...{1:0,2:0,3:0,4:0,5:0}, ...liveTally.counts }
+      : { 1:0, 2:0, 3:0, 4:0, 5:0 };
 
-  // If pre-filled, show a small banner above the Tiger 5 panel
-  if (liveTally && liveTally.startedAt &&
-      Object.values(t5State).some(v => v > 0)) {
-    const banner = document.createElement('div');
-    banner.className = 'callout';
-    banner.style.cssText = 'border-left-color: var(--gold); background: var(--cream); margin-bottom: 10px; font-size: 13px;';
-    banner.innerHTML = '<b>Tiger 5 pre-filled from your live tally.</b> ' +
-      'Adjust any count if needed \u2014 these numbers save with your round below. ' +
-      '<a href="#" id="clear-tally-link" style="color:var(--gold); border-bottom:1px dotted var(--gold); margin-left:6px;">Clear &amp; start over</a>';
-    t5Panel.parentElement.insertBefore(banner, t5Panel);
-    setTimeout(() => {
-      const link = document.getElementById('clear-tally-link');
-      if (link) link.addEventListener('click', (e) => {
-        e.preventDefault();
-        Object.keys(t5State).forEach(k => t5State[k] = 0);
-        Object.keys(t5State).forEach(k => {
-          const el = document.getElementById('t5-n-' + k);
-          if (el) el.textContent = '0';
+    // Auto-expand Tiger 5 if there's a pre-fill
+    if (liveTally && Object.values(t5State).some(v => v > 0)) {
+      document.getElementById('t5-details').open = true;
+      document.getElementById('t5-prefill-banner').innerHTML = `
+        <div class="t5-prefill">
+          <b>Pre-filled from your live tally.</b> Adjust if needed; these save with your round below.
+          <a href="#" id="clear-tally-link">Clear &amp; start fresh</a>
+        </div>`;
+      setTimeout(() => {
+        const link = document.getElementById('clear-tally-link');
+        if (link) link.addEventListener('click', (e) => {
+          e.preventDefault();
+          Object.keys(t5State).forEach(k => { t5State[k] = 0; });
+          renderT5();
+          document.getElementById('t5-prefill-banner').innerHTML = '';
         });
-        document.getElementById('t5-total').textContent = '0';
-        const status = document.getElementById('t5-status');
-        status.textContent = 'ON BENCHMARK'; status.className = 'status good';
-        banner.remove();
-      });
-    }, 0);
-  }
+      }, 0);
+    }
 
-  t5Panel.innerHTML = RRG.TIGER5.map(t => `
-    <div class="tiger5-row">
-      <div class="t5-num">${t.n}</div>
-      <div class="t5-desc">
-        <b>${RRG.esc(t.title)}</b>
-        <div class="muted small">${RRG.esc(t.desc)}</div>
-      </div>
-      <div class="t5-count">
-        <button type="button" onclick="rrgT5(${t.n}, -1)" aria-label="decrease">−</button>
-        <span class="n" id="t5-n-${t.n}">${t5State[t.n] || 0}</span>
-        <button type="button" onclick="rrgT5(${t.n}, +1)" aria-label="increase">+</button>
-      </div>
-    </div>
-  `).join('');
+    function renderT5() {
+      document.getElementById('t5-panel').innerHTML = RRG.TIGER5.map(t => `
+        <div class="tiger5-row">
+          <div class="t5-num">${t.n}</div>
+          <div class="t5-desc">
+            <b>${RRG.esc(t.title)}</b>
+            <div class="muted small">${RRG.esc(t.desc)}</div>
+          </div>
+          <div class="t5-count">
+            <button type="button" onclick="rrgT5(${t.n}, -1)" aria-label="decrease">−</button>
+            <span class="n" id="t5-n-${t.n}">${t5State[t.n] || 0}</span>
+            <button type="button" onclick="rrgT5(${t.n}, +1)" aria-label="increase">+</button>
+          </div>
+        </div>
+      `).join('');
+      const total = Object.values(t5State).reduce((a,b) => a+b, 0);
+      document.getElementById('t5-total').textContent = total;
+      const status = document.getElementById('t5-status');
+      if (total <= 2) { status.textContent = 'ON BENCHMARK'; status.className = 'status good'; }
+      else if (total <= 4) { status.textContent = 'CLOSE'; status.className = 'status ok'; }
+      else { status.textContent = 'STROKES ON THE TABLE'; status.className = 'status bad'; }
+    }
+    window.rrgT5 = (n, delta) => {
+      t5State[n] = Math.max(0, t5State[n] + delta);
+      renderT5();
+    };
+    renderT5();
 
-  // Set the total + status to reflect any pre-fill
-  {
-    const total = Object.values(t5State).reduce((a,b) => a+b, 0);
-    document.getElementById('t5-total').textContent = total;
-    const status = document.getElementById('t5-status');
-    if (total <= 2) { status.textContent = 'ON BENCHMARK'; status.className = 'status good'; }
-    else if (total <= 4) { status.textContent = 'CLOSE'; status.className = 'status ok'; }
-    else { status.textContent = 'STROKES ON THE TABLE'; status.className = 'status bad'; }
-  }
+    // ============ Submit ============
+    const form = document.getElementById('round-form');
+    const errBox = document.getElementById('form-error');
+    const submitBtn = document.getElementById('submit-btn');
 
-  window.rrgT5 = (n, delta) => {
-    t5State[n] = Math.max(0, t5State[n] + delta);
-    document.getElementById('t5-n-' + n).textContent = t5State[n];
-    const total = Object.values(t5State).reduce((a,b) => a+b, 0);
-    document.getElementById('t5-total').textContent = total;
-    const status = document.getElementById('t5-status');
-    if (total <= 2) { status.textContent = 'ON BENCHMARK'; status.className = 'status good'; }
-    else if (total <= 4) { status.textContent = 'CLOSE'; status.className = 'status ok'; }
-    else { status.textContent = 'STROKES ON THE TABLE'; status.className = 'status bad'; }
-  };
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errBox.style.display = 'none';
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting…';
 
-  // Submit
-  const form = document.getElementById('round-form');
-  const errBox = document.getElementById('form-error');
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    errBox.style.display = 'none';
-    const data = Object.fromEntries(new FormData(form).entries());
-    const total = Object.values(t5State).reduce((a,b) => a+b, 0);
-    const entry = RRG.subs.create({
-      userId: user.id,
-      userName: user.name,
-      week: week?.n ?? null,
-      weekTitle: week?.title ?? null,
-      ...data,
-      tiger5: { ...t5State },
-      tiger5Total: total,
+      const fd = Object.fromEntries(new FormData(form).entries());
+      const t5Total = Object.values(t5State).reduce((a,b) => a+b, 0);
+
+      // Build payload with proper type coercion + null for empty optionals
+      const toInt  = v => (v === '' || v == null ? null : parseInt(v, 10));
+      const toText = v => (v === '' || v == null ? null : String(v));
+
+      const payload = {
+        user_id: user.id,
+        round_date: fd.round_date || null,
+        course: toText(fd.course),
+        tees: toText(fd.tees),
+        format: toText(fd.format),
+        holes: toInt(fd.holes),
+        score: toInt(fd.score),
+        fir: toText(fd.fir),
+        gir: toText(fd.gir),
+        putts: toInt(fd.putts),
+        three_putts: toInt(fd.three_putts),
+        up_down: toText(fd.up_down),
+        penalties: toInt(fd.penalties),
+        lost_balls: toInt(fd.lost_balls),
+        tiger5: { ...t5State },
+        tiger5_total: t5Total,
+        reflection_good: toText(fd.reflection_good),
+        reflection_bad:  toText(fd.reflection_bad),
+        routine_score:   toInt(fd.routine_score),
+        one_thing:       toText(fd.one_thing),
+      };
+
+      try {
+        const entry = await RRG.subs.create(payload);
+        localStorage.removeItem(TALLY_KEY);
+        RRG.toast('Round saved — Ryan will have your Performance Doc before next session.');
+        setTimeout(() => { location.href = 'history.html?new=' + entry.id; }, 1000);
+      } catch (err) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit my round →';
+        errBox.textContent = 'Could not save the round: ' + (err.message || err);
+        errBox.style.display = 'block';
+        errBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     });
-    // Round saved — wipe the live tally so the next round starts fresh
-    localStorage.removeItem(TALLY_KEY);
-    RRG.toast('Round submitted — Performance Doc will be ready before next session.');
-    setTimeout(() => { location.href = 'history.html?new=' + entry.id; }, 1200);
-  });
 
   })();
 </script>
