@@ -228,6 +228,89 @@
   </form>
 </div>
 
+<!-- Snapshot Modal — coach-set 3 metrics that show on the player's dashboard -->
+<div id="snapshot-modal" class="modal-scrim" style="display:none;">
+  <form id="snapshot-form" class="modal-card" autocomplete="off">
+    <h3>Game Snapshot</h3>
+    <div id="snapshot-client-name" class="client-pill"></div>
+    <p style="font-size:13px; color:var(--mid-grey); margin: 4px 0 16px 0; line-height:1.5;">
+      Three plain-English metrics that show on the player's dashboard. Title (e.g. "Driver Start Line"),
+      Status (one to three words), and a tone color. Leave a row blank to hide it.
+    </p>
+
+    <input type="hidden" name="user_id">
+
+    <div id="snap-rows">
+      <div class="snap-edit-row">
+        <label>Metric 1</label>
+        <div class="snap-edit-grid">
+          <input type="text" name="title_0" placeholder="Driver Start Line">
+          <input type="text" name="status_0" placeholder="Needs Work">
+          <select name="tone_0">
+            <option value="good">Strong (green)</option>
+            <option value="ok">Improving (gold)</option>
+            <option value="warn" selected>Needs Work (red)</option>
+            <option value="flat">Neutral (grey)</option>
+          </select>
+        </div>
+      </div>
+      <div class="snap-edit-row">
+        <label>Metric 2</label>
+        <div class="snap-edit-grid">
+          <input type="text" name="title_1" placeholder="Wedge Distance Control">
+          <input type="text" name="status_1" placeholder="Improving">
+          <select name="tone_1">
+            <option value="good">Strong (green)</option>
+            <option value="ok" selected>Improving (gold)</option>
+            <option value="warn">Needs Work (red)</option>
+            <option value="flat">Neutral (grey)</option>
+          </select>
+        </div>
+      </div>
+      <div class="snap-edit-row">
+        <label>Metric 3</label>
+        <div class="snap-edit-grid">
+          <input type="text" name="title_2" placeholder="5 ft Putting">
+          <input type="text" name="status_2" placeholder="Strong">
+          <select name="tone_2">
+            <option value="good" selected>Strong (green)</option>
+            <option value="ok">Improving (gold)</option>
+            <option value="warn">Needs Work (red)</option>
+            <option value="flat">Neutral (grey)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button type="button" class="btn btn-ghost btn-sm" onclick="clearSnapshot()" style="color:var(--red-risk);">Clear all</button>
+      <span class="spacer"></span>
+      <button type="button" class="btn btn-ghost btn-sm" onclick="closeSnapshotModal()">Cancel</button>
+      <button type="submit" class="btn btn-primary btn-sm">Save snapshot</button>
+    </div>
+  </form>
+</div>
+
+<style>
+  .snap-edit-row { margin-bottom: 14px; }
+  .snap-edit-row label {
+    display: block; font-weight: 700; color: var(--navy);
+    font-size: 11px; letter-spacing: 0.8px; text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .snap-edit-grid {
+    display: grid; grid-template-columns: 1.4fr 1fr 1.2fr;
+    gap: 8px;
+  }
+  .snap-edit-grid input, .snap-edit-grid select {
+    padding: 9px 10px; border: 1px solid var(--rule); border-radius: 6px;
+    font-size: 14px; font-family: inherit; min-width: 0;
+  }
+  @media (max-width: 640px) {
+    .snap-edit-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
 <div id="footer-mount"></div>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -390,7 +473,10 @@
                   <td>${used}${total ? ' / ' + total : ''}</td>
                   <td class="small muted">${lastDate}</td>
                   <td style="text-align:right;">
-                    <button class="btn btn-primary btn-sm" onclick="openNewLessonFor('${p.id}')">+ Log Lesson</button>
+                    <div style="display:flex; gap:6px; justify-content:flex-end; flex-wrap:wrap;">
+                      <button class="btn btn-primary btn-sm" onclick="openNewLessonFor('${p.id}')">+ Log Lesson</button>
+                      <button class="btn btn-ghost btn-sm" onclick="openSnapshotFor('${p.id}')">Snapshot</button>
+                    </div>
                   </td>
                 </tr>
               `;
@@ -566,6 +652,73 @@
         await refreshAll();
       } catch (err) {
         RRG.toast('Could not save: ' + (err.message || ''));
+      }
+    });
+
+    // ------------------------------------------------------------------
+    // Game Snapshot editor — persists to profiles.profile_json.snapshot
+    // ------------------------------------------------------------------
+    const snapModal = document.getElementById('snapshot-modal');
+    const snapForm  = document.getElementById('snapshot-form');
+
+    window.openSnapshotFor = (userId) => {
+      const p = playersList.find(pp => pp.id === userId);
+      if (!p) { RRG.toast('Player not found'); return; }
+      snapForm.reset();
+      snapForm.user_id.value = userId;
+      document.getElementById('snapshot-client-name').textContent = p.name || p.email;
+      // Load existing snapshot from profile_json
+      const existing = (p.profile_json && Array.isArray(p.profile_json.snapshot))
+        ? p.profile_json.snapshot : [];
+      [0, 1, 2].forEach(i => {
+        const row = existing[i] || {};
+        snapForm['title_'  + i].value = row.title  || '';
+        snapForm['status_' + i].value = row.status || '';
+        if (row.tone && ['good','ok','warn','flat'].includes(row.tone)) {
+          snapForm['tone_' + i].value = row.tone;
+        }
+      });
+      snapModal.style.display = 'flex';
+    };
+
+    window.closeSnapshotModal = () => { snapModal.style.display = 'none'; };
+
+    window.clearSnapshot = () => {
+      [0, 1, 2].forEach(i => {
+        snapForm['title_'  + i].value = '';
+        snapForm['status_' + i].value = '';
+      });
+    };
+
+    snapModal.addEventListener('click', (e) => { if (e.target === snapModal) closeSnapshotModal(); });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && snapModal.style.display !== 'none') closeSnapshotModal();
+    });
+
+    snapForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const userId = snapForm.user_id.value;
+      const player = playersList.find(pp => pp.id === userId);
+      if (!player) return;
+
+      const snapshot = [0, 1, 2]
+        .map(i => ({
+          title:  (snapForm['title_'  + i].value || '').trim(),
+          status: (snapForm['status_' + i].value || '').trim(),
+          tone:   snapForm['tone_' + i].value || 'flat',
+        }))
+        .filter(r => r.title && r.status);
+
+      const nextProfile = { ...(player.profile_json || {}), snapshot };
+
+      try {
+        await RRG.users.update(userId, { profile_json: nextProfile });
+        // Patch in-memory too so re-opening shows latest
+        player.profile_json = nextProfile;
+        RRG.toast('Snapshot saved.');
+        closeSnapshotModal();
+      } catch (err) {
+        RRG.toast('Could not save snapshot: ' + (err.message || ''));
       }
     });
 
