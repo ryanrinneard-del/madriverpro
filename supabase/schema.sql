@@ -311,5 +311,74 @@ create policy "lessons_coach_all" on lessons for all
 -- Players: read-only, debrief updates via a dedicated RPC (added in Phase 2).
 
 -- =====================================================================
+-- PHASE 1 TRUST FIXES (run once against production)
+-- =====================================================================
+
+-- Block role / cohort self-escalation. Non-coach users cannot change their
+-- own role or cohort via the profiles_self_update RLS path.
+create or replace function block_profile_role_escalation() returns trigger
+language plpgsql security definer
+as $$
+declare
+  is_caller_coach boolean;
+begin
+  -- Coaches are exempt (they need to promote and re-assign others).
+  select (role = 'coach') into is_caller_coach
+    from profiles where id = auth.uid();
+  if coalesce(is_caller_coach, false) then
+    return new;
+  end if;
+  if new.role is distinct from old.role then
+    raise exception 'Not authorized to change role';
+  end if;
+  if new.cohort is distinct from old.cohort then
+    raise exception 'Not authorized to change cohort';
+  end if;
+  return new;
+end;
+$$;
+
+drop trigger if exists profiles_block_escalation on profiles;
+create trigger profiles_block_escalation
+  before update on profiles
+  for each row execute function block_profile_role_escalation();
+
+-- Auto-maintain lessons_used when a lesson transitions in/out of "completed".
+create or replace function bump_lessons_used() returns trigger
+language plpgsql security definer
+as $$
+begin
+  if tg_op = 'INSERT' then
+    if new.completed_at is not null then
+      update profiles set lessons_used = coalesce(lessons_used, 0) + 1
+        where id = new.user_id;
+    end if;
+    return new;
+  elsif tg_op = 'UPDATE' then
+    if old.completed_at is null and new.completed_at is not null then
+      update profiles set lessons_used = coalesce(lessons_used, 0) + 1
+        where id = new.user_id;
+    elsif old.completed_at is not null and new.completed_at is null then
+      update profiles set lessons_used = greatest(coalesce(lessons_used, 0) - 1, 0)
+        where id = new.user_id;
+    end if;
+    return new;
+  elsif tg_op = 'DELETE' then
+    if old.completed_at is not null then
+      update profiles set lessons_used = greatest(coalesce(lessons_used, 0) - 1, 0)
+        where id = old.user_id;
+    end if;
+    return old;
+  end if;
+  return null;
+end;
+$$;
+
+drop trigger if exists lessons_bump_usage on lessons;
+create trigger lessons_bump_usage
+  after insert or update of completed_at or delete on lessons
+  for each row execute function bump_lessons_used();
+
+-- =====================================================================
 -- DONE.
 -- =====================================================================
