@@ -4,19 +4,130 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <base href="/adult/">
-<title>Coach View — RR Golf Performance Adult Coaching</title>
+<title>Coach View — RR Golf Performance</title>
 <link rel="stylesheet" href="assets/styles.css">
 <style>
-  .vid-queue {
-    display: grid; grid-template-columns: 280px 1fr; gap: 14px;
-    background: var(--white); border-radius: 8px; padding: 14px;
-    border-left: 3px solid var(--gold); margin-bottom: 12px;
+  /* -------- Stats strip -------- */
+  .stat-strip {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px; margin-bottom: 32px;
   }
-  .vid-queue video { width: 100%; border-radius: 4px; background: var(--navy); max-height: 200px; }
-  @media (max-width: 768px) {
-    .vid-queue { grid-template-columns: 1fr; padding: 12px; }
-    .vid-queue video { max-height: 280px; }
+  .stat-cell {
+    background: var(--white); border-radius: 8px; padding: 20px 16px;
+    border-top: 3px solid var(--gold); text-align: center;
   }
+  .stat-cell .val {
+    font-size: 30px; font-weight: 700; color: var(--navy); line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat-cell .lbl {
+    font-size: 10px; letter-spacing: 1.5px; color: var(--mid-grey);
+    margin-top: 8px; font-weight: 700;
+  }
+
+  /* -------- Master code cards -------- */
+  .master-code-card {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid, #2C3B5A) 100%);
+    color: var(--white); padding: 22px 24px; border-radius: 10px;
+    margin-bottom: 12px; display: flex; justify-content: space-between;
+    align-items: center; gap: 16px; flex-wrap: wrap;
+  }
+  .master-code-card .mc-body { flex: 1; min-width: 240px; }
+  .master-code-card .mc-kicker {
+    font-size: 10px; letter-spacing: 2px; color: var(--gold); margin-bottom: 6px;
+    font-weight: 700;
+  }
+  .master-code-card code {
+    background: rgba(195, 162, 79, 0.18); color: #E5CE8C;
+    padding: 6px 14px; border-radius: 4px; font-size: 17px;
+    font-weight: 700; letter-spacing: 1.5px; display: inline-block;
+  }
+  .master-code-card .mc-sub {
+    font-size: 12px; color: rgba(255, 255, 255, 0.65); margin-top: 8px;
+  }
+
+  /* -------- Roster table -------- */
+  .roster-table {
+    width: 100%; border-collapse: collapse; background: var(--white);
+    border-radius: 8px; overflow: hidden;
+    box-shadow: 0 1px 3px rgba(15, 27, 53, 0.05);
+  }
+  .roster-table th {
+    background: var(--navy); color: var(--white); padding: 12px 14px;
+    text-align: left; font-size: 10px; letter-spacing: 1.5px; font-weight: 700;
+  }
+  .roster-table td {
+    padding: 14px 14px; border-bottom: 1px solid var(--rule); font-size: 14px;
+    vertical-align: middle;
+  }
+  .roster-table tr:last-child td { border-bottom: none; }
+  .roster-table .player-name { font-weight: 700; color: var(--navy); }
+  .roster-table .player-email { color: var(--mid-grey); font-size: 12px; margin-top: 2px; }
+  @media (max-width: 640px) {
+    .roster-table { display: block; overflow-x: auto; white-space: nowrap; }
+  }
+
+  /* -------- Lesson rows (upcoming / recent) -------- */
+  .lesson-row-card {
+    background: var(--white); border-left: 3px solid var(--gold);
+    padding: 14px 18px; border-radius: 6px; margin-bottom: 8px;
+    display: flex; justify-content: space-between; align-items: center; gap: 14px;
+  }
+  .lesson-row-card.completed { border-left-color: #2E7D32; }
+  .lesson-row-card .lr-date {
+    font-weight: 700; color: var(--navy); font-size: 14px;
+    font-variant-numeric: tabular-nums;
+  }
+  .lesson-row-card .lr-meta { font-size: 12px; color: var(--mid-grey); margin-top: 2px; }
+
+  /* -------- Modal -------- */
+  .modal-scrim {
+    position: fixed; inset: 0; background: rgba(15, 27, 53, 0.65);
+    z-index: 1000; display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .modal-card {
+    background: var(--white); border-radius: 10px; padding: 32px 28px;
+    max-width: 560px; width: 100%; max-height: 90vh; overflow-y: auto;
+    border-top: 4px solid var(--gold);
+  }
+  .modal-card h3 {
+    color: var(--navy); margin-top: 0; margin-bottom: 6px; font-size: 20px;
+  }
+  .modal-card .client-pill {
+    display: inline-block; background: var(--cream, #F7F2E8);
+    color: var(--navy); font-weight: 600; font-size: 13px;
+    padding: 4px 10px; border-radius: 4px; margin-bottom: 14px;
+  }
+  .modal-card label {
+    display: block; font-weight: 600; color: var(--navy);
+    font-size: 12px; margin: 16px 0 4px 0; letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .modal-card input[type="text"],
+  .modal-card input[type="datetime-local"],
+  .modal-card textarea,
+  .modal-card select {
+    width: 100%; padding: 10px 12px; border: 1px solid var(--rule);
+    border-radius: 6px; font-size: 15px; font-family: inherit;
+    background: var(--white); color: var(--dark-text);
+  }
+  .modal-card input:focus, .modal-card textarea:focus, .modal-card select:focus {
+    outline: none; border-color: var(--gold); box-shadow: 0 0 0 2px rgba(195, 162, 79, 0.15);
+  }
+  .modal-card textarea { resize: vertical; min-height: 70px; }
+  .modal-card .checkbox-row {
+    display: flex; align-items: center; gap: 8px; margin-top: 18px;
+    font-size: 14px; color: var(--navy);
+  }
+  .modal-card .hint {
+    font-size: 12px; color: var(--mid-grey); margin-top: 4px; line-height: 1.4;
+  }
+  .modal-card .actions {
+    display: flex; gap: 8px; justify-content: flex-end; margin-top: 26px;
+    padding-top: 20px; border-top: 1px solid var(--rule);
+  }
+  .modal-card .actions .spacer { flex: 1; }
 </style>
 </head>
 <body>
@@ -27,23 +138,32 @@
 
   <div class="page-header">
     <div class="page-label">COACH VIEW · RYAN</div>
-    <h1 class="page-title">Adult Coaching 2026&trade; · Roster</h1>
+    <h1 class="page-title">Command Center</h1>
     <hr class="gold-rule">
     <p class="page-subtitle">
-      Every adult player. Every package. Every video. Schedule lessons, review uploads,
-      pull to OnForm when you want.
+      Every adult player, every lesson, every invite. Log sessions in a few clicks —
+      clients see the debrief instantly in their portal.
     </p>
   </div>
 
-  <div class="stat-strip mb-5" id="coach-stats"></div>
+  <div id="coach-err" class="callout" style="display:none; color:var(--red-risk); border-left-color:var(--red-risk); background:#FDF0EE; margin-bottom:20px;"></div>
 
-  <!-- Video review queue -->
+  <div id="coach-stats" class="stat-strip"></div>
+
+  <!-- Master invite codes -->
   <div class="page-header">
-    <div class="page-label">VIDEO QUEUE</div>
-    <h2 class="page-title" style="font-size:20px;">Awaiting Your Review</h2>
+    <div class="page-label">INVITE CODES</div>
+    <h2 class="page-title" style="font-size:20px;">Share These With New Clients</h2>
     <hr class="gold-rule">
   </div>
-  <div id="vid-wrap"></div>
+  <div id="master-codes-wrap"></div>
+  <details style="margin-top:16px;">
+    <summary style="cursor:pointer; color:var(--navy-mid); font-weight:600; font-size:13px; letter-spacing:0.3px;">
+      Custom one-off codes (for promos or special clients)
+    </summary>
+    <div id="custom-invites-wrap" style="margin-top:14px;"></div>
+    <button class="btn btn-ghost btn-sm" onclick="generateInvite()" style="margin-top:12px;">+ Generate one-off code</button>
+  </details>
 
   <!-- Roster -->
   <div class="page-header mt-6">
@@ -53,24 +173,60 @@
   </div>
   <div id="roster-wrap"></div>
 
-  <!-- Invites -->
+  <!-- Upcoming lessons -->
   <div class="page-header mt-6">
-    <div class="page-label">INVITES</div>
-    <h2 class="page-title" style="font-size:20px;">Invite Codes</h2>
+    <div class="page-label">UPCOMING</div>
+    <h2 class="page-title" style="font-size:20px;">Scheduled Lessons</h2>
     <hr class="gold-rule">
   </div>
-  <div class="card mb-4">
-    <div class="flex-between">
-      <div>
-        <b>Generate a new invite code</b>
-        <div class="muted small">One code per player. Each code can be used once.</div>
-      </div>
-      <button class="btn btn-primary btn-sm" onclick="generateInvite()">+ Generate Code</button>
-    </div>
+  <div id="upcoming-wrap"></div>
+
+  <!-- Recent completed -->
+  <div class="page-header mt-6">
+    <div class="page-label">RECENT</div>
+    <h2 class="page-title" style="font-size:20px;">Last 10 Logged Sessions</h2>
+    <hr class="gold-rule">
   </div>
-  <div id="invites-wrap"></div>
+  <div id="recent-wrap"></div>
 
 </main>
+
+<!-- Log Lesson Modal -->
+<div id="lesson-modal" class="modal-scrim" style="display:none;">
+  <form id="lesson-form" class="modal-card" autocomplete="off">
+    <h3 id="lesson-modal-title">Log a Lesson</h3>
+    <div id="lesson-client-name" class="client-pill"></div>
+
+    <input type="hidden" name="id">
+    <input type="hidden" name="user_id">
+
+    <label for="lesson-date">Date &amp; Time</label>
+    <input id="lesson-date" type="datetime-local" name="scheduled_at" required>
+
+    <label for="lesson-focus">Focus (what you worked on)</label>
+    <input id="lesson-focus" type="text" name="focus" placeholder="Driver path · Wedge distance · Putting stroke">
+
+    <label for="lesson-pre">Pre-work for next session</label>
+    <textarea id="lesson-pre" name="pre_work" placeholder="What should they practice before we meet again?"></textarea>
+
+    <label for="lesson-notes">Debrief — visible to the client</label>
+    <textarea id="lesson-notes" name="coach_notes" placeholder="What we covered. What to remember. The one key takeaway."></textarea>
+    <div class="hint">This is what shows up in their "Every Session, Logged" feed.</div>
+
+    <label class="checkbox-row">
+      <input type="checkbox" name="mark_complete">
+      Mark this lesson as completed now
+    </label>
+    <div class="hint">Unchecked = still upcoming. Checked = moves to client's completed history with today's timestamp.</div>
+
+    <div class="actions">
+      <button type="button" id="lesson-delete-btn" class="btn btn-ghost btn-sm" onclick="deleteLesson()" style="display:none; color:var(--red-risk);">Delete</button>
+      <span class="spacer"></span>
+      <button type="button" class="btn btn-ghost btn-sm" onclick="closeLessonModal()">Cancel</button>
+      <button type="submit" class="btn btn-primary btn-sm">Save</button>
+    </div>
+  </form>
+</div>
 
 <div id="footer-mount"></div>
 
@@ -83,212 +239,363 @@
     const user = await RRG.mount('coach');
     if (!user) return;
 
-  if (user.role !== 'coach') {
-    document.querySelector('main').innerHTML = `
-      <div class="callout">This area is for the coach. <a href="dashboard.html">Back to my dashboard</a>.</div>
-    `;
-    throw new Error('not coach');
-  }
-
-  const players = RRG.users.all().filter(u => u.role === 'player');
-  const allVideos = RRG.videos.all();
-  const pendingVideos = allVideos.filter(v => v.status !== 'reviewed');
-  const allLessons = RRG.lessons.all();
-  const invitesOpen = RRG.invites.all().filter(i => !i.usedBy).length;
-
-  document.getElementById('coach-stats').innerHTML = `
-    <div class="stat-cell"><div class="val">${players.length}</div><div class="lbl">Active Players</div></div>
-    <div class="stat-cell"><div class="val">${allLessons.length}</div><div class="lbl">Total Lessons</div></div>
-    <div class="stat-cell"><div class="val">${pendingVideos.length}</div><div class="lbl">Videos To Review</div></div>
-    <div class="stat-cell"><div class="val">${invitesOpen}</div><div class="lbl">Open Invites</div></div>
-  `;
-
-  // Video queue
-  const vidWrap = document.getElementById('vid-wrap');
-  if (pendingVideos.length === 0) {
-    vidWrap.innerHTML = `<div class="history-empty"><h3 class="navy">Inbox zero.</h3><p class="muted mt-2">No videos awaiting review.</p></div>`;
-  } else {
-    vidWrap.innerHTML = pendingVideos.map(v => `
-      <div class="vid-queue" data-vid="${v.id}">
-        <div class="vid-thumb" data-vid="${v.id}">
-          <video controls data-vid="${v.id}"></video>
-        </div>
-        <div>
-          <div class="flex-between">
-            <div>
-              <div style="font-weight:700; color:var(--navy);">${RRG.esc(v.userName || '')}</div>
-              <div class="muted small">${RRG.esc(v.filename)} · ${RRG.fmtBytes(v.size)} · ${RRG.fmtDate(v.createdAt)}</div>
-            </div>
-            <span class="badge badge-gold">AWAITING REVIEW</span>
-          </div>
-          <div class="mt-3">
-            ${v.club ? `<div class="small"><b>Club:</b> ${RRG.esc(v.club)}</div>` : ''}
-            ${v.angle ? `<div class="small"><b>Angle:</b> ${RRG.esc(v.angle)}</div>` : ''}
-            ${v.note ? `<div class="small mt-2"><b>Note:</b> <i>${RRG.esc(v.note)}</i></div>` : ''}
-          </div>
-          <div class="flex gap-2 mt-3">
-            <a class="btn btn-primary btn-sm" href="video-review.html?v=${v.id}">Review + Annotate</a>
-            <a class="btn btn-ghost btn-sm" href="#" onclick="downloadForOnForm(event, '${v.id}', '${RRG.esc(v.filename).replace(/'/g,"\\'")}')">Download for OnForm</a>
-            <button class="btn btn-ghost btn-sm" onclick="leaveFeedback('${v.id}')">Note only</button>
-            <button class="btn btn-ghost btn-sm" onclick="markReviewed('${v.id}')">Mark Reviewed</button>
-          </div>
-        </div>
-      </div>
-    `).join('');
-
-    // Async: hydrate each preview video from IndexedDB
-    (async () => {
-      for (const v of pendingVideos) {
-        const url = await RRG.idb.blobUrlFor(v.id);
-        const vid = document.querySelector(`video[data-vid="${v.id}"]`);
-        if (!vid) continue;
-        if (url) {
-          vid.src = url;
-        } else {
-          // Replace thumb with "not on this device" message
-          const thumb = document.querySelector(`.vid-thumb[data-vid="${v.id}"]`);
-          if (thumb) thumb.innerHTML =
-            '<div style="background:var(--light-bg); border-radius:4px; padding:20px; text-align:center; color:var(--mid-grey); font-size:12px;">' +
-            '<b>Not on this device.</b><br>Video is stored in the browser where it was uploaded.</div>';
-        }
-      }
-    })();
-  }
-
-  window.downloadForOnForm = async (ev, id, filename) => {
-    ev.preventDefault();
-    const blob = await RRG.idb.getVideo(id);
-    if (!blob) { RRG.toast('Video not on this device.'); return; }
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = filename || 'video.mp4';
-    document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 10000);
-  };
-
-  window.markReviewed = (id) => {
-    RRG.videos.update(id, { status: 'reviewed', reviewedAt: new Date().toISOString() });
-    RRG.toast('Marked reviewed.');
-    setTimeout(() => location.reload(), 600);
-  };
-  window.leaveFeedback = (id) => {
-    const existing = (RRG.videos.all().find(v => v.id === id) || {}).coachFeedback || '';
-    const txt = prompt('Feedback for the player (they see this in their video list):', existing);
-    if (txt == null) return;
-    RRG.videos.update(id, { coachFeedback: txt });
-    RRG.toast('Feedback saved.');
-    setTimeout(() => location.reload(), 600);
-  };
-
-  // Roster
-  const rosterWrap = document.getElementById('roster-wrap');
-  if (players.length === 0) {
-    rosterWrap.innerHTML = `<div class="history-empty"><h3 class="navy">No players yet.</h3><p class="muted mt-2">Generate an invite code below to add your first adult player.</p></div>`;
-  } else {
-    rosterWrap.innerHTML = `
-      <table class="history-table">
-        <thead>
-          <tr>
-            <th>Player</th><th>Package</th><th>Lessons</th>
-            <th>Videos</th><th>Rounds</th><th>Profile</th><th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${players.map(p => {
-            const userLessons = RRG.lessons.forUser(p.id);
-            const userVids = RRG.videos.forUser(p.id);
-            const rounds = RRG.subs.forUser(p.id).length;
-            const profileStatus = p.profile?._status === 'complete'
-              ? '<span class="badge badge-green">COMPLETE</span>'
-              : p.profile?._status === 'draft'
-                ? '<span class="badge badge-amber">DRAFT</span>'
-                : '<span class="badge badge-navy">NOT STARTED</span>';
-            return `
-              <tr>
-                <td><b>${RRG.esc(p.name)}</b><br><span class="muted small">${RRG.esc(p.email)}</span></td>
-                <td>${RRG.esc(p.package?.name || '—')}</td>
-                <td>${userLessons.length}${p.package?.lessons ? ' / ' + p.package.lessons : ''}</td>
-                <td>${userVids.length}</td>
-                <td>${rounds}</td>
-                <td>${profileStatus}</td>
-                <td><button class="btn btn-ghost btn-sm" onclick="scheduleLesson('${p.id}')">+ Lesson</button></td>
-              </tr>
-            `;
-          }).join('')}
-        </tbody>
-      </table>
-    `;
-  }
-
-  window.scheduleLesson = (userId) => {
-    const player = players.find(p => p.id === userId);
-    const existingCount = RRG.lessons.forUser(userId).length;
-    const focus = prompt('Focus for this lesson (what are you working on with ' + player.name + '?)');
-    if (!focus) return;
-    const dateStr = prompt('Date (YYYY-MM-DD or leave blank for TBD):', '');
-    const preWork = prompt('Pre-lesson work for the player (optional):', '');
-    RRG.lessons.create({
-      userId,
-      number: existingCount + 1,
-      focus,
-      preWork: preWork || '',
-      scheduledAt: dateStr || null,
-    });
-    RRG.toast('Lesson scheduled.');
-    setTimeout(() => location.reload(), 600);
-  };
-
-  // Invites
-  function renderInvites() {
-    const invites = RRG.invites.all().slice().sort((a,b) => b.createdAt.localeCompare(a.createdAt));
-    const wrap = document.getElementById('invites-wrap');
-    if (invites.length === 0) {
-      wrap.innerHTML = `<div class="history-empty"><h3 class="navy">No invites yet.</h3></div>`;
-      return;
+    if (user.role !== 'coach') {
+      document.querySelector('main').innerHTML = `
+        <div class="callout">This area is for the coach only.
+          <a href="dashboard.html">Back to my dashboard</a>.</div>
+      `;
+      throw new Error('not coach');
     }
-    wrap.innerHTML = `
-      <table class="history-table">
-        <thead><tr><th>Code</th><th>Status</th><th>Used By</th><th>Created</th><th>Note</th><th></th></tr></thead>
-        <tbody>
-          ${invites.map(inv => {
-            const player = inv.usedBy ? RRG.users.all().find(u => u.id === inv.usedBy) : null;
-            const status = inv.usedBy
-              ? '<span class="badge badge-green">ACTIVATED</span>'
-              : '<span class="badge badge-gold">AVAILABLE</span>';
-            return `
-              <tr>
-                <td><code style="font-weight:700; color:var(--navy); letter-spacing:1px;">${RRG.esc(inv.code)}</code></td>
-                <td>${status}</td>
-                <td>${player ? RRG.esc(player.name) : '<span class="muted">—</span>'}</td>
-                <td class="small muted">${RRG.fmtDate(inv.createdAt)}</td>
-                <td class="small">${RRG.esc(inv.note || '')}</td>
-                <td>
-                  ${!inv.usedBy ? `
+
+    // ------------------------------------------------------------------
+    // State
+    // ------------------------------------------------------------------
+    let playersList = [];
+    let lessonsMap = {};   // user_id -> lesson[]
+
+    const errorBox = document.getElementById('coach-err');
+    const showError = (msg) => {
+      errorBox.textContent = msg;
+      errorBox.style.display = 'block';
+      setTimeout(() => errorBox.style.display = 'none', 8000);
+    };
+
+    // ------------------------------------------------------------------
+    // Data loading (parallelized; any failure shows an error, never silently drops)
+    // ------------------------------------------------------------------
+    async function loadAll() {
+      try {
+        const players = await RRG.users.all();
+        playersList = players.filter(u => u.role === 'player');
+        const lessonArrays = await Promise.all(
+          playersList.map(p => RRG.lessons.forUser(p.id))
+        );
+        lessonsMap = {};
+        playersList.forEach((p, i) => { lessonsMap[p.id] = lessonArrays[i] || []; });
+      } catch (err) {
+        showError('Could not load coach data: ' + (err.message || err));
+        throw err;
+      }
+    }
+
+    // ------------------------------------------------------------------
+    // Renderers
+    // ------------------------------------------------------------------
+    function renderStats() {
+      const all = Object.values(lessonsMap).flat();
+      const upcoming = all.filter(l => !l.completed_at).length;
+      const completed = all.filter(l => l.completed_at).length;
+      const noPkg = playersList.filter(p => !p.package_id).length;
+      document.getElementById('coach-stats').innerHTML = `
+        <div class="stat-cell"><div class="val">${playersList.length}</div><div class="lbl">ACTIVE PLAYERS</div></div>
+        <div class="stat-cell"><div class="val">${upcoming}</div><div class="lbl">UPCOMING</div></div>
+        <div class="stat-cell"><div class="val">${completed}</div><div class="lbl">LOGGED</div></div>
+        <div class="stat-cell"><div class="val">${noPkg}</div><div class="lbl">NO PACKAGE</div></div>
+      `;
+    }
+
+    function renderMasterCodes() {
+      document.getElementById('master-codes-wrap').innerHTML = `
+        <div class="master-code-card">
+          <div class="mc-body">
+            <div class="mc-kicker">ADULT COACHING 2026</div>
+            <code>RRA-ADULT-2026</code>
+            <div class="mc-sub">Share with every new adult client. Reusable forever.</div>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="copyCode('RRA-ADULT-2026')">Copy Code</button>
+        </div>
+        <div class="master-code-card">
+          <div class="mc-body">
+            <div class="mc-kicker">JUNIOR ELITE 2026</div>
+            <code>RRG-JUNIOR-2026</code>
+            <div class="mc-sub">Share with every new junior elite athlete. Reusable forever.</div>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="copyCode('RRG-JUNIOR-2026')">Copy Code</button>
+        </div>
+      `;
+    }
+
+    async function renderCustomInvites() {
+      try {
+        const all = await RRG.invites.all();
+        const invites = all.filter(i => !i.is_master);
+        const wrap = document.getElementById('custom-invites-wrap');
+        if (invites.length === 0) {
+          wrap.innerHTML = '<div class="muted small">No one-off codes yet.</div>';
+          return;
+        }
+        wrap.innerHTML = `
+          <table class="history-table">
+            <thead><tr><th>Code</th><th>Status</th><th>Created</th><th>Note</th><th></th></tr></thead>
+            <tbody>
+              ${invites.map(inv => `
+                <tr>
+                  <td><code style="font-weight:700; color:var(--navy);">${RRG.esc(inv.code)}</code></td>
+                  <td>${inv.used_by
+                      ? '<span class="badge badge-green">USED</span>'
+                      : '<span class="badge badge-gold">OPEN</span>'}</td>
+                  <td class="small muted">${RRG.fmtDate(inv.created_at)}</td>
+                  <td class="small">${RRG.esc(inv.note || '')}</td>
+                  <td>
                     <div class="flex gap-2">
                       <button class="btn btn-ghost btn-sm" onclick="copyCode('${inv.code}')">Copy</button>
-                      <button class="btn btn-ghost btn-sm" onclick="revokeInvite('${inv.code}')" style="color:var(--red-risk);">Revoke</button>
+                      ${!inv.used_by
+                        ? `<button class="btn btn-ghost btn-sm" onclick="revokeInvite('${inv.code}')" style="color:var(--red-risk);">Revoke</button>`
+                        : ''}
                     </div>
-                  ` : ''}
-                </td>
-              </tr>
-            `;
-          }).join('')}
-        </tbody>
-      </table>
-    `;
-  }
-  window.generateInvite = () => {
-    const note = prompt('Optional note (who is this for?)') || '';
-    const inv = RRG.invites.create({ issuedBy: user.name, note });
-    RRG.toast('New invite: ' + inv.code);
-    renderInvites();
-  };
-  window.copyCode = (code) => { navigator.clipboard?.writeText(code); RRG.toast('Copied: ' + code); };
-  window.revokeInvite = (code) => {
-    if (!confirm('Revoke ' + code + '?')) return;
-    RRG.invites.revoke(code); renderInvites(); RRG.toast('Invite revoked.');
-  };
-  renderInvites();
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        `;
+      } catch (err) { showError('Could not load invites: ' + err.message); }
+    }
+
+    function renderRoster() {
+      const wrap = document.getElementById('roster-wrap');
+      if (playersList.length === 0) {
+        wrap.innerHTML = `
+          <div class="history-empty">
+            <h3 class="navy">No players yet.</h3>
+            <p class="muted mt-2">Text <code>RRA-ADULT-2026</code> to your first client to get started.</p>
+          </div>`;
+        return;
+      }
+      wrap.innerHTML = `
+        <table class="roster-table">
+          <thead>
+            <tr>
+              <th>Player</th><th>Package</th><th>Lessons</th>
+              <th>Last Session</th><th style="text-align:right;">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${playersList.map(p => {
+              const pkg = (RRG.PACKAGES || []).find(x => x.id === p.package_id);
+              const pkgName = pkg ? pkg.name : '—';
+              const total = p.package_lessons || 0;
+              const used = p.lessons_used || 0;
+              const completed = (lessonsMap[p.id] || []).filter(l => l.completed_at);
+              const lastDate = completed.length
+                ? RRG.fmtDate(completed[0].completed_at)
+                : '—';
+              return `
+                <tr>
+                  <td>
+                    <div class="player-name">${RRG.esc(p.name || p.email)}</div>
+                    <div class="player-email">${RRG.esc(p.email)}</div>
+                  </td>
+                  <td>${RRG.esc(pkgName)}</td>
+                  <td>${used}${total ? ' / ' + total : ''}</td>
+                  <td class="small muted">${lastDate}</td>
+                  <td style="text-align:right;">
+                    <button class="btn btn-primary btn-sm" onclick="openNewLessonFor('${p.id}')">+ Log Lesson</button>
+                  </td>
+                </tr>
+              `;
+            }).join('')}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function renderUpcoming() {
+      const all = Object.entries(lessonsMap).flatMap(([uid, lessons]) =>
+        lessons.filter(l => !l.completed_at).map(l => ({
+          ...l, player: playersList.find(p => p.id === uid)
+        }))
+      ).sort((a, b) => (a.scheduled_at || '').localeCompare(b.scheduled_at || ''));
+      const wrap = document.getElementById('upcoming-wrap');
+      if (all.length === 0) {
+        wrap.innerHTML = '<div class="history-empty"><p class="muted">Nothing scheduled yet.</p></div>';
+        return;
+      }
+      wrap.innerHTML = all.map(l => `
+        <div class="lesson-row-card">
+          <div>
+            <div class="lr-date">${RRG.esc(l.player?.name || 'Unknown')}</div>
+            <div class="lr-meta">
+              ${l.scheduled_at ? RRG.fmtDate(l.scheduled_at) : 'TBD'}
+              · ${RRG.esc(l.focus || 'Focus TBD')}
+            </div>
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="openEditLesson('${l.id}')">Open</button>
+        </div>
+      `).join('');
+    }
+
+    function renderRecent() {
+      const all = Object.entries(lessonsMap).flatMap(([uid, lessons]) =>
+        lessons.filter(l => l.completed_at).map(l => ({
+          ...l, player: playersList.find(p => p.id === uid)
+        }))
+      ).sort((a, b) => (b.completed_at || '').localeCompare(a.completed_at || ''))
+       .slice(0, 10);
+      const wrap = document.getElementById('recent-wrap');
+      if (all.length === 0) {
+        wrap.innerHTML = '<div class="history-empty"><p class="muted">No logged sessions yet.</p></div>';
+        return;
+      }
+      wrap.innerHTML = all.map(l => `
+        <div class="lesson-row-card completed">
+          <div>
+            <div class="lr-date">${RRG.esc(l.player?.name || 'Unknown')}</div>
+            <div class="lr-meta">
+              ${RRG.fmtDate(l.completed_at)}
+              · ${RRG.esc(l.focus || '')}
+            </div>
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="openEditLesson('${l.id}')">Open</button>
+        </div>
+      `).join('');
+    }
+
+    async function refreshAll() {
+      await loadAll();
+      renderStats();
+      renderRoster();
+      renderUpcoming();
+      renderRecent();
+    }
+
+    // Initial render
+    renderMasterCodes();
+    renderCustomInvites();
+    await refreshAll();
+
+    // ------------------------------------------------------------------
+    // Modal: open/close/save/delete
+    // ------------------------------------------------------------------
+    const modal = document.getElementById('lesson-modal');
+    const form = document.getElementById('lesson-form');
+
+    function toLocalInputValue(iso) {
+      // Convert an ISO timestamp to the value a <input type="datetime-local"> expects.
+      // That format is YYYY-MM-DDTHH:mm, in LOCAL time.
+      if (!iso) return '';
+      const d = new Date(iso);
+      const pad = n => String(n).padStart(2, '0');
+      return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    }
+
+    window.openNewLessonFor = (userId) => {
+      const p = playersList.find(pp => pp.id === userId);
+      form.reset();
+      form.id.value = '';
+      form.user_id.value = userId;
+      document.getElementById('lesson-modal-title').textContent = 'Log a Lesson';
+      document.getElementById('lesson-client-name').textContent = p ? (p.name || p.email) : '';
+      // Default to now, rounded to nearest 15 min
+      const now = new Date();
+      now.setMinutes(Math.round(now.getMinutes() / 15) * 15, 0, 0);
+      form.scheduled_at.value = toLocalInputValue(now.toISOString());
+      document.getElementById('lesson-delete-btn').style.display = 'none';
+      modal.style.display = 'flex';
+      setTimeout(() => form.focus.focus(), 50);
+    };
+
+    window.openEditLesson = (lessonId) => {
+      const l = Object.values(lessonsMap).flat().find(x => x.id === lessonId);
+      if (!l) { RRG.toast('Lesson not found'); return; }
+      const p = playersList.find(pp => pp.id === l.user_id);
+      form.reset();
+      form.id.value = l.id;
+      form.user_id.value = l.user_id;
+      document.getElementById('lesson-modal-title').textContent = l.completed_at
+        ? 'Edit Logged Lesson' : 'Edit Scheduled Lesson';
+      document.getElementById('lesson-client-name').textContent = p ? (p.name || p.email) : '';
+      form.scheduled_at.value = toLocalInputValue(l.scheduled_at);
+      form.focus.value = l.focus || '';
+      form.pre_work.value = l.pre_work || '';
+      form.coach_notes.value = l.coach_notes || '';
+      form.mark_complete.checked = !!l.completed_at;
+      document.getElementById('lesson-delete-btn').style.display = 'inline-block';
+      modal.style.display = 'flex';
+    };
+
+    window.closeLessonModal = () => { modal.style.display = 'none'; };
+
+    // ESC closes modal, click-outside closes modal
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeLessonModal(); });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.style.display !== 'none') closeLessonModal();
+    });
+
+    window.deleteLesson = async () => {
+      const id = form.id.value;
+      if (!id) return;
+      if (!confirm('Delete this lesson? This cannot be undone.')) return;
+      try {
+        await RRG.lessons.remove(id);
+        RRG.toast('Lesson deleted.');
+        closeLessonModal();
+        await refreshAll();
+      } catch (err) {
+        RRG.toast('Could not delete: ' + (err.message || ''));
+      }
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = Object.fromEntries(new FormData(form).entries());
+      const markComplete = fd.mark_complete === 'on';
+      // Convert the datetime-local value to ISO (interpreted as local time)
+      const scheduledIso = fd.scheduled_at
+        ? new Date(fd.scheduled_at).toISOString()
+        : null;
+      const payload = {
+        user_id: fd.user_id,
+        scheduled_at: scheduledIso,
+        focus: fd.focus || null,
+        pre_work: fd.pre_work || null,
+        coach_notes: fd.coach_notes || null,
+        completed_at: markComplete ? new Date().toISOString() : null,
+      };
+      try {
+        if (fd.id) {
+          await RRG.lessons.update(fd.id, payload);
+          RRG.toast('Lesson updated.');
+        } else {
+          const existing = lessonsMap[fd.user_id] || [];
+          payload.number = existing.length + 1;
+          await RRG.lessons.create(payload);
+          RRG.toast('Lesson logged.');
+        }
+        closeLessonModal();
+        await refreshAll();
+      } catch (err) {
+        RRG.toast('Could not save: ' + (err.message || ''));
+      }
+    });
+
+    // ------------------------------------------------------------------
+    // Invite helpers
+    // ------------------------------------------------------------------
+    window.generateInvite = async () => {
+      const note = prompt('Optional note (who is this for?)') || '';
+      try {
+        const inv = await RRG.invites.create({ note });
+        RRG.toast('New code: ' + inv.code);
+        await renderCustomInvites();
+      } catch (err) { RRG.toast('Could not create: ' + (err.message || '')); }
+    };
+
+    window.copyCode = (code) => {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(code);
+      }
+      RRG.toast('Copied: ' + code);
+    };
+
+    window.revokeInvite = async (code) => {
+      if (!confirm('Revoke ' + code + '?')) return;
+      try {
+        await RRG.invites.revoke(code);
+        RRG.toast('Revoked.');
+        await renderCustomInvites();
+      } catch (err) { RRG.toast('Could not revoke: ' + (err.message || '')); }
+    };
 
   })();
 </script>
