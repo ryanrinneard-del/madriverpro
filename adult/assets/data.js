@@ -14,60 +14,93 @@ RRG.PROGRAM = {
     'Lesson-package coaching for adults who want to get better. Every lesson is 1-on-1 with Ryan, built around your game, tracked in your private portal, and backed up with video review.',
 };
 
-/* ---------- Lesson packages ---------- */
-/* Pricing is a placeholder \u2014 swap in your real numbers. */
+/* ---------- Acuity booking URLs ---------- */
+RRG.ACUITY = {
+  // Buy packages (5 / 10 / 20 lessons, Season Starters) from the catalog
+  catalog: 'https://app.acuityscheduling.com/catalog.php?owner=25734550',
+  // Book an individual adult private lesson slot (1 hr / 2 hr / 1/2 day)
+  bookAdultPrivate: 'https://madriverpro.as.me/?appointmentType=category:Adult%20Private%20Lessons',
+};
+
+/* ---------- Lesson packages (CAD pricing pulled from Ryan's Acuity catalog) ---------- */
 RRG.PACKAGES = [
   {
     id: 'single',
     name: 'Single Lesson',
     lessons: 1,
-    price: 125,            // placeholder
+    price: 130,                    // starting price
+    priceLabel: 'From $130',
+    buyUrl: RRG.ACUITY.bookAdultPrivate,
+    tiers: [
+      { duration: '1 hour',  price: 130, desc: 'The most focused hour you\u2019ll spend on your game. TrackMan data, real solution, no guesswork.' },
+      { duration: '2 hours', price: 245, desc: 'Deeper work. Properly diagnose, build the changes, and lock them in before you leave.' },
+      { duration: '3 hours (1/2 day)', price: 355, desc: 'Three focused hours entirely around your game \u2014 the most thorough option for transformation.' },
+    ],
     bullets: [
-      'One 60-minute on-range lesson',
-      'TrackMan + video review',
-      'Written Performance Doc',
-      'Post-lesson portal access',
+      'TrackMan data + video review',
+      'Written takeaways in your portal',
+      'Three durations to fit your goal',
     ],
   },
   {
     id: 'p5',
-    name: '5-Lesson Package',
+    name: 'Series of 5 Lessons',
     lessons: 5,
-    price: 575,            // placeholder
+    price: 595,
+    buyUrl: 'https://app.acuityscheduling.com/catalog.php?owner=25734550',
     bullets: [
-      'Five 60-minute on-range lessons',
-      'Full TPI screen + baseline',
-      'Video uploads for remote analysis',
-      'Wedge Matrix + Bag Map tools',
+      'Five private lessons, booked on your schedule',
+      'TrackMan + video review every session',
+      'Portal tracking: every lesson logged',
       'Best for targeted game work',
     ],
   },
   {
     id: 'p10',
-    name: '10-Lesson Package',
+    name: 'Series of 10 Lessons',
     lessons: 10,
-    price: 1095,           // placeholder
+    price: 1150,
+    buyUrl: 'https://app.acuityscheduling.com/catalog.php?owner=25734550',
     bullets: [
-      'Ten 60-minute on-range lessons',
-      'Full TPI screen + re-screen',
-      'Video uploads + OnForm-ready review',
-      'Season-long coaching relationship',
-      'Most popular',
+      'Ten private lessons across the season',
+      'Full TPI screen + mid-season re-screen',
+      'Video uploads + remote analysis',
+      'Most popular \u2014 season-long coaching',
     ],
     recommended: true,
   },
   {
     id: 'p20',
-    name: '20-Lesson Package',
+    name: 'Series of 20 Lessons',
     lessons: 20,
-    price: 2095,           // placeholder
+    price: 2200,
+    buyUrl: 'https://app.acuityscheduling.com/catalog.php?owner=25734550',
     bullets: [
-      'Twenty 60-minute on-range lessons',
+      'Twenty private lessons \u2014 full-season commitment',
       'Full TPI + fall re-screen',
       'Unlimited video review',
-      'Full game rebuild program',
       'Best for serious improvers',
     ],
+  },
+];
+
+/* Season Starter bundles (displayed separately on the landing / signup pages) */
+RRG.SEASON_STARTERS = [
+  {
+    id: 'adult_starter',
+    name: 'Season Starter \u2014 Adult',
+    price: 649,
+    retailValue: '$800+',
+    description: '90-min Performance Assessment (TrackMan + TPI) + written prescription + 5 private lessons built around your results.',
+    buyUrl: 'https://app.acuityscheduling.com/catalog.php?owner=25734550',
+  },
+  {
+    id: 'junior_starter',
+    name: 'Season Starter \u2014 Junior (Ages 7\u201317)',
+    price: 549,
+    retailValue: '$800+',
+    description: '60-min Junior Performance Assessment + written Player Development Profile + 5 structured lessons including one on-course session.',
+    buyUrl: 'https://app.acuityscheduling.com/catalog.php?owner=25734550',
   },
 ];
 

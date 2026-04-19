@@ -39,6 +39,7 @@ create table invites (
   default_package    package_id,
   issued_by          uuid references profiles(id),
   used_by            uuid references profiles(id),
+  is_master          boolean not null default false,  -- master codes can be reused by many clients
   note               text,
   expires_at         timestamptz,
   created_at         timestamptz not null default now(),
@@ -46,6 +47,16 @@ create table invites (
 );
 
 create index invites_used_by_idx  on invites(used_by);
+
+-- Seed the two master codes (idempotent; safe to re-run)
+insert into invites (code, cohort, default_package, is_master, note)
+values
+  ('RRG-JUNIOR-2026', 'junior_elite_2026',    null, true, 'Master signup code — Junior Elite 2026'),
+  ('RRA-ADULT-2026',  'adult_coaching_2026',  null, true, 'Master signup code — Adult Coaching 2026')
+on conflict (code) do update set
+  is_master = true,
+  cohort    = excluded.cohort,
+  note      = excluded.note;
 
 -- ---------- rounds (scorecard submissions) ----------
 create table rounds (
@@ -126,7 +137,7 @@ as $$
   select i.code, i.cohort, i.default_package
   from invites i
   where lower(i.code) = lower(p_code)
-    and i.used_by is null
+    and (i.is_master = true or i.used_by is null)
     and (i.expires_at is null or i.expires_at > now());
 $$;
 
@@ -163,17 +174,13 @@ begin
   if not found then
     raise exception 'Invite code not found.';
   end if;
-  if v_invite.used_by is not null then
+  -- Master codes are reusable; only single-use codes block on used_by
+  if not v_invite.is_master and v_invite.used_by is not null then
     raise exception 'Invite code has already been used.';
   end if;
   if v_invite.expires_at is not null and v_invite.expires_at < now() then
     raise exception 'Invite code has expired.';
   end if;
-
-  -- Mark invite used
-  update invites
-    set used_by = v_user, used_at = now()
-    where code = v_invite.code;
 
   -- Upsert profile (user may already have a skeleton row from a prior attempt)
   insert into profiles (id, email, name, role, cohort, package_id, package_lessons,
@@ -199,6 +206,13 @@ begin
       home_club     = excluded.home_club,
       invite_code   = excluded.invite_code
     returning * into v_profile;
+
+  -- Only mark single-use codes as consumed; master codes stay open
+  if not v_invite.is_master then
+    update invites
+      set used_by = v_user, used_at = now()
+      where code = v_invite.code;
+  end if;
 
   return v_profile;
 end;

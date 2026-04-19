@@ -281,27 +281,49 @@ RRG.subs = {
   },
 };
 
+/* Lessons — Supabase-backed. Source of truth for "Every Session, Logged".
+   RLS: each player can read/write their own; coaches have full read/write access. */
 RRG.lessons = {
-  KEY: 'rrgA_lessons_v1',
-  all() { try { return JSON.parse(localStorage.getItem(this.KEY) || '[]'); } catch { return []; } },
-  save(list) { localStorage.setItem(this.KEY, JSON.stringify(list)); },
-  create(lesson) {
-    const entry = { id: 'l_' + Date.now().toString(36), ...lesson, createdAt: new Date().toISOString() };
-    const list = this.all(); list.push(entry); this.save(list);
-    return entry;
+  async forUser(userId) {
+    await RRG._sbReady;
+    if (!RRG.sb) return [];
+    const { data, error } = await RRG.sb.from('lessons')
+      .select('*')
+      .eq('user_id', userId)
+      .order('scheduled_at', { ascending: false, nullsFirst: false });
+    if (error) { console.warn('lessons fetch', error); return []; }
+    return data || [];
   },
-  update(id, patch) {
-    const list = this.all();
-    const i = list.findIndex(l => l.id === id);
-    if (i === -1) return;
-    list[i] = { ...list[i], ...patch };
-    this.save(list);
-    return list[i];
+  async upcoming(userId) {
+    const all = await this.forUser(userId);
+    return all.filter(l => !l.completed_at).reverse(); // earliest first
   },
-  remove(id) { this.save(this.all().filter(l => l.id !== id)); },
-  forUser(userId) {
-    return this.all().filter(l => l.userId === userId)
-      .sort((a, b) => (a.scheduledAt || '').localeCompare(b.scheduledAt || ''));
+  async past(userId) {
+    const all = await this.forUser(userId);
+    return all.filter(l => l.completed_at);
+  },
+  async get(id) {
+    await RRG._sbReady;
+    const { data, error } = await RRG.sb.from('lessons').select('*').eq('id', id).maybeSingle();
+    if (error) throw error;
+    return data;
+  },
+  async create(lesson) {
+    await RRG._sbReady;
+    const { data, error } = await RRG.sb.from('lessons').insert(lesson).select().single();
+    if (error) throw error;
+    return data;
+  },
+  async update(id, patch) {
+    await RRG._sbReady;
+    const { data, error } = await RRG.sb.from('lessons').update(patch).eq('id', id).select().single();
+    if (error) throw error;
+    return data;
+  },
+  async remove(id) {
+    await RRG._sbReady;
+    const { error } = await RRG.sb.from('lessons').delete().eq('id', id);
+    if (error) throw error;
   },
 };
 

@@ -79,20 +79,22 @@
     if (!user) return;
 
   const id = RRG.qs('id');
-  const lessons = RRG.lessons.forUser(user.id);
-  const lesson = RRG.lessons.all().find(l => l.id === id);
+  const lessons = await RRG.lessons.forUser(user.id);
+  const lesson = await RRG.lessons.get(id);
   const main = document.getElementById('lesson-main');
 
-  if (!lesson || lesson.userId !== user.id) {
+  if (!lesson || lesson.user_id !== user.id) {
     main.innerHTML = `<div class="callout">Lesson not found. <a href="dashboard.html">Back to dashboard</a>.</div>`;
     throw new Error('not found');
   }
 
-  const pos = lessons.findIndex(l => l.id === lesson.id);
-  const prev = lessons[pos - 1];
-  const next = lessons[pos + 1];
+  // Lessons are sorted by scheduled_at desc by RRG.lessons.forUser; find prev/next in chronological order
+  const chrono = [...lessons].sort((a,b) => (a.scheduled_at||'').localeCompare(b.scheduled_at||''));
+  const pos = chrono.findIndex(l => l.id === lesson.id);
+  const prev = chrono[pos - 1];
+  const next = chrono[pos + 1];
 
-  const status = lesson.completedAt ? 'COMPLETE' : (lesson.scheduledAt ? 'SCHEDULED' : 'PENDING');
+  const status = lesson.completed_at ? 'COMPLETE' : (lesson.scheduled_at ? 'SCHEDULED' : 'PENDING');
   const d = lesson.debrief || {};
 
   main.innerHTML = `
@@ -108,8 +110,8 @@
       <span class="tag">${status}</span>
       <h1>Lesson ${String(lesson.number || '—').padStart(2,'0')} — ${RRG.esc(lesson.focus || 'Focus TBD')}</h1>
       <div class="meta">
-        <div class="m"><b>Scheduled</b>${lesson.scheduledAt ? RRG.fmtDate(lesson.scheduledAt) : 'TBD'}</div>
-        ${lesson.completedAt ? `<div class="m"><b>Completed</b>${RRG.fmtDate(lesson.completedAt)}</div>` : ''}
+        <div class="m"><b>Scheduled</b>${lesson.scheduled_at ? RRG.fmtDate(lesson.scheduled_at) : 'TBD'}</div>
+        ${lesson.completed_at ? `<div class="m"><b>Completed</b>${RRG.fmtDate(lesson.completed_at)}</div>` : ''}
         <div class="m"><b>Coach</b>Ryan Rinneard</div>
       </div>
     </div>
@@ -118,16 +120,16 @@
     <div class="section-title">What We're Working On</div>
     <div class="card">${RRG.esc(lesson.focus || 'Ryan will set the focus before your lesson.')}</div>
 
-    ${lesson.preWork ? `
+    ${lesson.pre_work ? `
       <div class="section-label">PRE-LESSON WORK</div>
       <div class="section-title">Do This Before We Meet</div>
-      <div class="card-cream" style="border-radius:8px;"><i>${RRG.esc(lesson.preWork)}</i></div>
+      <div class="card-cream" style="border-radius:8px;"><i>${RRG.esc(lesson.pre_work)}</i></div>
     ` : ''}
 
-    ${lesson.completedAt ? `
+    ${lesson.completed_at ? `
       <div class="section-label">POST-LESSON NOTES FROM RYAN</div>
       <div class="section-title">What We Covered</div>
-      <div class="card">${RRG.esc(lesson.coachNotes || '—')}</div>
+      <div class="card">${RRG.esc(lesson.coach_notes || '—')}</div>
     ` : ''}
 
     <div class="section-label">MY DEBRIEF</div>
@@ -228,21 +230,25 @@
     document.getElementById(elId).textContent = v;
   });
 
-  // Submit debrief
-  document.getElementById('debrief-form').addEventListener('submit', (e) => {
+  // Submit debrief — saved into lessons.debrief (jsonb)
+  document.getElementById('debrief-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const fd = Object.fromEntries(new FormData(e.target).entries());
     const chipsGood = [...document.querySelectorAll('#chips-good input:checked')].map(i => i.value);
     const chipsWork = [...document.querySelectorAll('#chips-work input:checked')].map(i => i.value);
-    RRG.lessons.update(lesson.id, {
-      debrief: {
-        feel: +fd.feel, confidence: +fd.confidence, commitment: +fd.commitment,
-        chipsGood, chipsWork, oneLine: fd.oneLine,
-        savedAt: new Date().toISOString(),
-      }
-    });
-    RRG.toast('Debrief saved — Ryan will see it before your next session.');
-    setTimeout(() => location.href = 'dashboard.html', 1200);
+    try {
+      await RRG.lessons.update(lesson.id, {
+        debrief: {
+          feel: +fd.feel, confidence: +fd.confidence, commitment: +fd.commitment,
+          chipsGood, chipsWork, oneLine: fd.oneLine,
+          savedAt: new Date().toISOString(),
+        }
+      });
+      RRG.toast('Debrief saved — Ryan will see it before your next session.');
+      setTimeout(() => location.href = 'dashboard.html', 1200);
+    } catch (err) {
+      RRG.toast('Could not save debrief — try again. ' + (err.message || ''));
+    }
   });
 
   })();
