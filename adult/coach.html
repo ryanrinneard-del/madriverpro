@@ -189,7 +189,72 @@
   </div>
   <div id="recent-wrap"></div>
 
+  <!-- Latest rounds in -->
+  <div class="page-header mt-6">
+    <div class="page-label">LATEST ROUNDS IN</div>
+    <h2 class="page-title" style="font-size:20px;">What your players are shooting &amp; missing</h2>
+    <hr class="gold-rule">
+    <p class="small muted" style="margin-top:6px;">
+      Most recent rounds across all players. Chips show Tiger 5 counts: <b>P5</b> bogey+ on par 5,
+      <b>DB</b> double bogey or worse, <b>SV</b> blown easy save, <b>3P</b> three-putt,
+      <b>SC</b> bogey with scoring club.
+    </p>
+  </div>
+  <div id="rounds-wrap"></div>
+
 </main>
+
+<!-- Round detail modal -->
+<div id="round-modal" class="modal-scrim" style="display:none;">
+  <div class="modal-card" style="max-width:560px;">
+    <h3 id="round-modal-title">Round detail</h3>
+    <div id="round-modal-body" style="margin-top:12px; color:var(--navy-mid);"></div>
+    <div class="flex gap-3 mt-4">
+      <button class="btn btn-ghost" onclick="document.getElementById('round-modal').style.display='none';">Close</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Coach view rounds UI */
+  .t5-chips { display:inline-flex; gap:6px; flex-wrap:wrap; }
+  .t5-chip {
+    display:inline-flex; align-items:center; gap:4px;
+    padding:3px 8px; border-radius:999px;
+    background:#F5F2EB; border:1px solid var(--rule);
+    font-size:11px; font-weight:600; letter-spacing:0.04em;
+    color:var(--navy-mid);
+  }
+  .t5-chip b { color: var(--navy); font-size:12px; }
+  .t5-chip.hot  { background:#FDF0EE; border-color:#F5C2BE; color:#9A2A22; }
+  .t5-chip.hot b { color:#9A2A22; }
+  .t5-chip.zero { opacity:0.45; }
+
+  .round-row {
+    background:var(--white); border-left:3px solid var(--gold);
+    border-radius:4px; padding:14px 16px; margin-bottom:10px;
+    display:grid; grid-template-columns: 1fr auto; gap:12px; align-items:start;
+  }
+  .round-row .rr-head {
+    display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
+  }
+  .round-row .rr-player { font-weight:700; color:var(--navy); font-size:14px; }
+  .round-row .rr-meta { font-size:12px; color:var(--mid-grey); }
+  .round-row .rr-score {
+    font-family:'Playfair Display', Georgia, serif;
+    font-size:22px; color:var(--navy); font-weight:600; line-height:1;
+  }
+  .round-row .rr-reflect {
+    font-size:13px; color:var(--navy-mid); margin-top:6px; line-height:1.45;
+    font-style:italic;
+  }
+  .round-row .rr-chips { margin-top:8px; }
+  .round-row .rr-actions { display:flex; gap:6px; }
+  @media (max-width: 640px) {
+    .round-row { grid-template-columns: 1fr; }
+    .round-row .rr-actions { justify-content:flex-start; }
+  }
+</style>
 
 <!-- Log Lesson Modal -->
 <div id="lesson-modal" class="modal-scrim" style="display:none;">
@@ -335,6 +400,39 @@
     // ------------------------------------------------------------------
     let playersList = [];
     let lessonsMap = {};   // user_id -> lesson[]
+    let roundsMap  = {};   // user_id -> round[]
+    let allRounds  = [];   // flat list across all players, most-recent first
+
+    /* Tiger 5 taxonomy (mirrors RRG.TIGER5 for short display). Keyed by number
+       because the rounds.tiger5 JSONB column is stored as {1..5: count}. */
+    const T5_LABELS = {
+      1: { short: 'P5', full: 'Bogey+ on par 5' },
+      2: { short: 'DB', full: 'Double bogey or worse' },
+      3: { short: 'SV', full: 'Blown easy save' },
+      4: { short: '3P', full: 'Three-putt' },
+      5: { short: 'SC', full: 'Bogey with scoring club' },
+    };
+
+    function t5CountsFor(round) {
+      const raw = round?.tiger5 || {};
+      return {1: +raw[1] || 0, 2: +raw[2] || 0, 3: +raw[3] || 0, 4: +raw[4] || 0, 5: +raw[5] || 0};
+    }
+    function t5Totals(rounds) {
+      const sum = {1:0, 2:0, 3:0, 4:0, 5:0};
+      (rounds || []).forEach(r => {
+        const c = t5CountsFor(r);
+        sum[1]+=c[1]; sum[2]+=c[2]; sum[3]+=c[3]; sum[4]+=c[4]; sum[5]+=c[5];
+      });
+      return sum;
+    }
+    function t5ChipsHtml(counts, {hotThreshold=3} = {}) {
+      return `<div class="t5-chips">` + [1,2,3,4,5].map(n => {
+        const v = counts[n] || 0;
+        const lab = T5_LABELS[n];
+        const cls = v === 0 ? 'zero' : (v >= hotThreshold ? 'hot' : '');
+        return `<span class="t5-chip ${cls}" title="${lab.full}"><b>${v}</b> ${lab.short}</span>`;
+      }).join('') + `</div>`;
+    }
 
     const errorBox = document.getElementById('coach-err');
     const showError = (msg) => {
@@ -350,11 +448,19 @@
       try {
         const players = await RRG.users.all();
         playersList = players.filter(u => u.role === 'player');
-        const lessonArrays = await Promise.all(
-          playersList.map(p => RRG.lessons.forUser(p.id))
-        );
+        // Fetch lessons (per-player) and rounds (one bulk call — RLS does the filter) in parallel.
+        const [lessonArrays, roundsFlat] = await Promise.all([
+          Promise.all(playersList.map(p => RRG.lessons.forUser(p.id))),
+          RRG.subs.all(),
+        ]);
         lessonsMap = {};
         playersList.forEach((p, i) => { lessonsMap[p.id] = lessonArrays[i] || []; });
+        roundsMap = {};
+        (roundsFlat || []).forEach(r => {
+          if (!r.user_id) return;
+          (roundsMap[r.user_id] ||= []).push(r);
+        });
+        allRounds = roundsFlat || [];
       } catch (err) {
         showError('Could not load coach data: ' + (err.message || err));
         throw err;
@@ -369,10 +475,12 @@
       const upcoming = all.filter(l => !l.completed_at).length;
       const completed = all.filter(l => l.completed_at).length;
       const noPkg = playersList.filter(p => !p.package_id).length;
+      const roundsCount = allRounds.length;
       document.getElementById('coach-stats').innerHTML = `
         <div class="stat-cell"><div class="val">${playersList.length}</div><div class="lbl">ACTIVE PLAYERS</div></div>
         <div class="stat-cell"><div class="val">${upcoming}</div><div class="lbl">UPCOMING</div></div>
-        <div class="stat-cell"><div class="val">${completed}</div><div class="lbl">LOGGED</div></div>
+        <div class="stat-cell"><div class="val">${completed}</div><div class="lbl">LESSONS LOGGED</div></div>
+        <div class="stat-cell"><div class="val">${roundsCount}</div><div class="lbl">ROUNDS IN</div></div>
         <div class="stat-cell"><div class="val">${noPkg}</div><div class="lbl">NO PACKAGE</div></div>
       `;
     }
@@ -449,8 +557,13 @@
         <table class="roster-table">
           <thead>
             <tr>
-              <th>Player</th><th>Package</th><th>Lessons</th>
-              <th>Last Session</th><th style="text-align:right;">Action</th>
+              <th>Player</th>
+              <th>Package</th>
+              <th>Lessons</th>
+              <th>Rounds</th>
+              <th>Avg</th>
+              <th>Tiger 5 totals</th>
+              <th style="text-align:right;">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -460,18 +573,30 @@
               const total = p.package_lessons || 0;
               const used = p.lessons_used || 0;
               const completed = (lessonsMap[p.id] || []).filter(l => l.completed_at);
-              const lastDate = completed.length
+              const lastLessonDate = completed.length
                 ? RRG.fmtDate(completed[0].completed_at)
+                : null;
+
+              const pRounds = roundsMap[p.id] || [];
+              const scores = pRounds.map(r => +r.score).filter(n => !isNaN(n) && n > 0);
+              const avgScore = scores.length
+                ? (scores.reduce((a,b) => a+b, 0) / scores.length).toFixed(1)
                 : '—';
+              const t5agg = t5Totals(pRounds);
+              const hasT5 = Object.values(t5agg).some(v => v > 0);
+
               return `
                 <tr>
                   <td>
                     <div class="player-name">${RRG.esc(p.name || p.email)}</div>
                     <div class="player-email">${RRG.esc(p.email)}</div>
+                    ${lastLessonDate ? `<div class="player-email">Last session: ${lastLessonDate}</div>` : ''}
                   </td>
                   <td>${RRG.esc(pkgName)}</td>
                   <td>${used}${total ? ' / ' + total : ''}</td>
-                  <td class="small muted">${lastDate}</td>
+                  <td><b>${pRounds.length}</b></td>
+                  <td>${avgScore}</td>
+                  <td>${hasT5 ? t5ChipsHtml(t5agg, {hotThreshold: 5}) : '<span class="muted small">—</span>'}</td>
                   <td style="text-align:right;">
                     <div style="display:flex; gap:6px; justify-content:flex-end; flex-wrap:wrap;">
                       <button class="btn btn-primary btn-sm" onclick="openNewLessonFor('${p.id}')">+ Log Lesson</button>
@@ -485,6 +610,94 @@
         </table>
       `;
     }
+
+    function renderRounds() {
+      const wrap = document.getElementById('rounds-wrap');
+      if (!allRounds.length) {
+        wrap.innerHTML = '<div class="history-empty"><p class="muted">No rounds submitted yet.</p></div>';
+        return;
+      }
+      const recent = allRounds.slice(0, 10);
+      wrap.innerHTML = recent.map(r => {
+        const player = playersList.find(p => p.id === r.user_id);
+        const name = player ? (player.name || player.email) : 'Unknown player';
+        const dateStr = r.round_date ? RRG.fmtDate(r.round_date) : (r.created_at ? RRG.fmtDate(r.created_at) : '—');
+        const course = r.course ? ' · ' + RRG.esc(r.course) : '';
+        const holes = r.holes ? ' · ' + r.holes + ' holes' : '';
+        const score = r.score != null ? r.score : '—';
+        const t5 = t5CountsFor(r);
+        const t5total = [1,2,3,4,5].reduce((a,n) => a + (t5[n] || 0), 0);
+        const reflectSnip = (r.reflection_good || r.reflection_bad || r.one_thing || '').trim();
+        const reflectShort = reflectSnip.length > 160 ? reflectSnip.slice(0, 157) + '…' : reflectSnip;
+        return `
+          <div class="round-row">
+            <div>
+              <div class="rr-head">
+                <div class="rr-player">${RRG.esc(name)}</div>
+                <div class="rr-meta">${dateStr}${course}${holes}</div>
+                <div class="rr-meta">&middot; T5 total <b>${t5total}</b></div>
+              </div>
+              <div class="rr-chips">${t5ChipsHtml(t5, {hotThreshold: 2})}</div>
+              ${reflectShort ? `<div class="rr-reflect">&ldquo;${RRG.esc(reflectShort)}&rdquo;</div>` : ''}
+            </div>
+            <div class="rr-score-wrap" style="text-align:right;">
+              <div class="rr-score">${score}</div>
+              <div class="rr-actions mt-2">
+                <button class="btn btn-ghost btn-sm" onclick="openRoundDetail('${r.id}')">Open</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    window.openRoundDetail = function(roundId) {
+      const r = allRounds.find(x => x.id === roundId);
+      if (!r) return;
+      const player = playersList.find(p => p.id === r.user_id);
+      const name = player ? (player.name || player.email) : 'Unknown player';
+      const dateStr = r.round_date ? RRG.fmtDate(r.round_date) : RRG.fmtDate(r.created_at);
+      const t5 = t5CountsFor(r);
+      const row = (label, val) =>
+        (val == null || val === '' || val === '—')
+          ? ''
+          : `<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid var(--rule); font-size:13px;">
+               <span class="muted">${label}</span><span style="color:var(--navy);"><b>${RRG.esc(String(val))}</b></span>
+             </div>`;
+      const quote = (label, val) =>
+        (val == null || val === '')
+          ? ''
+          : `<div style="margin-top:12px;">
+               <div class="page-label" style="font-size:10px;">${label}</div>
+               <p style="margin-top:4px; font-style:italic; color:var(--navy-mid); line-height:1.5;">${RRG.esc(val)}</p>
+             </div>`;
+      document.getElementById('round-modal-title').textContent = `${name} · ${dateStr}`;
+      document.getElementById('round-modal-body').innerHTML = `
+        ${row('Course',        r.course)}
+        ${row('Tees',          r.tees)}
+        ${row('Format',        r.format)}
+        ${row('Holes',         r.holes)}
+        ${row('Score',         r.score)}
+        ${row('Fairways hit',  r.fir)}
+        ${row('GIR',           r.gir)}
+        ${row('Putts',         r.putts)}
+        ${row('3-putts',       r.three_putts)}
+        ${row('Up &amp; down', r.up_down)}
+        ${row('Penalties',     r.penalties)}
+        ${row('Lost balls',    r.lost_balls)}
+        ${row('Routine score', r.routine_score)}
+
+        <div style="margin-top:16px;">
+          <div class="page-label" style="font-size:10px;">Tiger 5</div>
+          <div style="margin-top:6px;">${t5ChipsHtml(t5, {hotThreshold: 2})}</div>
+        </div>
+
+        ${quote('What showed up well', r.reflection_good)}
+        ${quote('What got in the way', r.reflection_bad)}
+        ${quote('One thing to work on', r.one_thing)}
+      `;
+      document.getElementById('round-modal').style.display = 'flex';
+    };
 
     function renderUpcoming() {
       const all = Object.entries(lessonsMap).flatMap(([uid, lessons]) =>
@@ -543,6 +756,7 @@
       renderRoster();
       renderUpcoming();
       renderRecent();
+      renderRounds();
     }
 
     // Initial render

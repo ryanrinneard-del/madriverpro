@@ -279,6 +279,18 @@ RRG.subs = {
     if (error) { console.warn('rounds fetch', error); return []; }
     return data || [];
   },
+  /* Coach-only. RLS on the rounds table restricts non-coaches to their own
+     rows, so this returns [] for normal users. Used by /adult/coach.html
+     for roster stats and the Latest Rounds feed. */
+  async all() {
+    await RRG._sbReady;
+    if (!RRG.sb) return [];
+    const { data, error } = await RRG.sb.from('rounds')
+      .select('*')
+      .order('round_date', { ascending: false, nullsFirst: false });
+    if (error) { console.warn('rounds all fetch', error); return []; }
+    return data || [];
+  },
   async get(id) {
     await RRG._sbReady;
     const { data, error } = await RRG.sb.from('rounds').select('*').eq('id', id).maybeSingle();
