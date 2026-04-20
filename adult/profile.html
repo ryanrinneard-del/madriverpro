@@ -250,25 +250,74 @@
 
   const form = document.getElementById('profile-form');
 
-  // Load existing profile
-  const existing = user.profile || {};
+  // Load existing profile from profile_json (the actual Supabase column).
+  // Tolerate the legacy `profile` key too in case of older data.
+  const existing = user.profile_json || user.profile || {};
   Object.entries(existing).forEach(([k, v]) => {
+    if (k.startsWith('_') || typeof v !== 'string') return;
     const el = form.querySelector(`[name="${k}"]`);
     if (el) el.value = v;
   });
 
-  window.saveDraft = () => {
+  // Email a copy of the submitted profile to Ryan via /api/process-profile.
+  // Best-effort — if email fails, the Supabase save still succeeds and the
+  // player isn't blocked. Coach can always read the profile in the DB.
+  async function emailToCoach(data) {
+    try {
+      const payload = {
+        ...data,
+        full_name: user.name || data.full_name || '',
+        email: user.email || data.email || '',
+      };
+      const r = await fetch('/api/process-profile', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (!r.ok) console.warn('email-to-coach failed', r.status);
+    } catch (err) {
+      console.warn('email-to-coach error', err);
+    }
+  }
+
+  window.saveDraft = async () => {
     const data = Object.fromEntries(new FormData(form).entries());
-    RRG.users.update(user.id, { profile: { ...(user.profile||{}), ...data, _status: 'draft' } });
-    RRG.toast('Draft saved. Come back anytime.');
+    const next = { ...(user.profile_json || {}), ...data,
+                   _status: 'draft',
+                   _savedAt: new Date().toISOString() };
+    try {
+      await RRG.users.update(user.id, { profile_json: next });
+      user.profile_json = next;
+      RRG.toast('Draft saved. Come back anytime.');
+    } catch (err) {
+      RRG.toast('Could not save draft: ' + (err.message || err));
+    }
   };
 
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    const submitBtn = form.querySelector('button[type="submit"]');
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Saving…'; }
+
     const data = Object.fromEntries(new FormData(form).entries());
-    RRG.users.update(user.id, { profile: { ...data, _status: 'complete', _savedAt: new Date().toISOString() } });
-    RRG.toast('Profile saved to your portal. Ryan has been notified.');
-    setTimeout(() => location.href = 'dashboard.html', 1200);
+    const next = { ...(user.profile_json || {}), ...data,
+                   _status: 'complete',
+                   _savedAt: new Date().toISOString() };
+
+    try {
+      // 1. Persist to Supabase (source of truth)
+      await RRG.users.update(user.id, { profile_json: next });
+      user.profile_json = next;
+
+      // 2. Email Ryan in parallel — don't block redirect on this
+      emailToCoach(data);
+
+      RRG.toast('Profile saved. Ryan has been notified by email.');
+      setTimeout(() => location.href = 'dashboard.html', 1200);
+    } catch (err) {
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Submit Profile'; }
+      RRG.toast('Could not save profile: ' + (err.message || err));
+    }
   });
 
   })();
