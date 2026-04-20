@@ -151,6 +151,7 @@
       const s = subs.find(x => x.id === id);
       if (!s) return;
       const panel = document.getElementById('detail-panel');
+      const hasReflection = !!(s.reflection_good || s.reflection_bad || s.one_thing);
       panel.innerHTML = `
         <div class="card mt-5">
           <div class="flex-between">
@@ -160,7 +161,12 @@
                 ${RRG.esc(s.course || 'Round')} · ${RRG.fmtDate(s.round_date || s.created_at)}
               </h2>
             </div>
-            <button class="btn btn-ghost btn-sm" onclick="document.getElementById('detail-panel').innerHTML=''">Close</button>
+            <div class="flex gap-2">
+              <a href="round-reflection.html?round=${s.id}" class="btn btn-ghost btn-sm">
+                ${hasReflection ? 'Edit reflection' : '+ Add reflection'}
+              </a>
+              <button class="btn btn-ghost btn-sm" onclick="document.getElementById('detail-panel').innerHTML=''">Close</button>
+            </div>
           </div>
           <hr class="gold-rule">
           <div class="grid grid-4 mb-4">

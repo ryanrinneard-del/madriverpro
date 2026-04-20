@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<base href="/adult/">
+<title>Add a reflection — RR Golf Performance</title>
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  .round-summary {
+    background: var(--cream, #F7F2E8);
+    border-left: 3px solid var(--gold);
+    padding: 14px 18px;
+    border-radius: 4px;
+    margin-bottom: 22px;
+  }
+  .round-summary-kicker {
+    font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--gold); font-weight: 700;
+  }
+  .round-summary-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 20px; color: var(--navy); margin-top: 4px; font-weight: 600;
+  }
+  .round-summary-meta {
+    font-size: 13px; color: var(--navy-mid); margin-top: 4px;
+  }
+  .round-summary-score {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 30px; color: var(--navy); font-weight: 700; margin-top: 4px;
+  }
+
+  .reflection-form textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 12px 14px;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.5;
+    resize: vertical;
+  }
+  .reflection-form label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  .reflection-form .hint {
+    font-size: 12px; color: var(--mid-grey); margin-bottom: 8px;
+  }
+  .reflection-form .field { margin-bottom: 20px; }
+</style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container-narrow">
+
+  <div class="page-header">
+    <div class="page-label">REFLECTION</div>
+    <h1 class="page-title">Add a reflection to your round</h1>
+    <hr class="gold-rule">
+    <p class="page-subtitle">
+      Two sentences is all I need. Ryan uses these to write your Performance Doc &mdash;
+      so what you notice is what we work on next.
+    </p>
+  </div>
+
+  <div id="load-error" class="callout" style="display:none; color:var(--red-risk); border-left-color:var(--red-risk); background:#FDF0EE;"></div>
+
+  <div id="round-wrap" style="display:none;">
+
+    <!-- Round summary so the player knows which round they're reflecting on -->
+    <div class="round-summary">
+      <div class="round-summary-kicker">REFLECTING ON</div>
+      <div class="round-summary-title" id="rs-title">&nbsp;</div>
+      <div class="round-summary-meta" id="rs-meta">&nbsp;</div>
+      <div class="round-summary-score" id="rs-score">&nbsp;</div>
+    </div>
+
+    <form id="reflection-form" class="card reflection-form">
+      <div class="field">
+        <label>What went well</label>
+        <p class="hint">The part of your game you'd want to bottle from this round.</p>
+        <textarea name="reflection_good" placeholder="e.g. Wedges inside 100 were dialed. Tempo held up on the back nine."></textarea>
+      </div>
+
+      <div class="field">
+        <label>What got in the way</label>
+        <p class="hint">The thing that cost you strokes today &mdash; technical, mental, or strategic.</p>
+        <textarea name="reflection_bad" placeholder="e.g. Kept pulling the driver left under pressure. Bailed on the aggressive line twice."></textarea>
+      </div>
+
+      <div class="field">
+        <label>One thing to work on</label>
+        <p class="hint">If you had 30 minutes on the range tomorrow, what would it be?</p>
+        <textarea name="one_thing" placeholder="e.g. Pre-shot routine on the tee box. Commit to the line."></textarea>
+      </div>
+
+      <div id="save-error" class="callout" style="display:none; color:var(--red-risk); border-left-color:var(--red-risk); background:#FDF0EE; margin:12px 0;"></div>
+
+      <div class="flex gap-3 mt-4">
+        <button type="submit" class="btn btn-primary" id="save-btn">Save reflection</button>
+        <a href="history.html" class="btn btn-ghost">Back to my rounds</a>
+      </div>
+      <p class="muted small mt-3">
+        Your reflection saves to this round and flows to Ryan. You can edit it any time by clicking the round again.
+      </p>
+    </form>
+
+  </div>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js"></script>
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  (async () => {
+    const user = await RRG.mount('history');
+    if (!user) return;
+
+    const roundId = RRG.qs('round');
+    const errBox = document.getElementById('load-error');
+    const saveErr = document.getElementById('save-error');
+
+    function showLoadError(msg) {
+      errBox.innerHTML = msg;
+      errBox.style.display = 'block';
+    }
+
+    if (!roundId) {
+      showLoadError(`No round specified. <a href="history.html" style="color:var(--gold);">Back to my rounds &rarr;</a>`);
+      return;
+    }
+
+    let round;
+    try {
+      round = await RRG.subs.get(roundId);
+    } catch (err) {
+      showLoadError('Could not load this round: ' + (err.message || err));
+      return;
+    }
+
+    if (!round) {
+      showLoadError(`That round wasn't found. <a href="history.html" style="color:var(--gold);">Back to my rounds &rarr;</a>`);
+      return;
+    }
+
+    // Belt-and-braces: only let the owner edit their own round
+    if (round.user_id !== user.id && user.role !== 'coach') {
+      showLoadError(`This round isn't yours to edit. <a href="history.html" style="color:var(--gold);">Back to my rounds &rarr;</a>`);
+      return;
+    }
+
+    // Render round summary header
+    document.getElementById('rs-title').textContent =
+      round.course ? round.course : 'Your round';
+    const dateStr = round.round_date
+      ? RRG.fmtDate(round.round_date)
+      : (round.created_at ? RRG.fmtDate(round.created_at) : '');
+    const holes = round.holes ? `${round.holes} holes` : '';
+    const tees  = round.tees || '';
+    document.getElementById('rs-meta').textContent =
+      [dateStr, tees, holes].filter(Boolean).join('  ·  ') || '\u00a0';
+    document.getElementById('rs-score').textContent =
+      round.score != null ? `Score ${round.score}` : '\u00a0';
+
+    // Pre-fill any existing reflection so the player can edit vs start fresh
+    const form = document.getElementById('reflection-form');
+    form.reflection_good.value = round.reflection_good || '';
+    form.reflection_bad.value  = round.reflection_bad  || '';
+    form.one_thing.value       = round.one_thing       || '';
+
+    document.getElementById('round-wrap').style.display = 'block';
+
+    const saveBtn = document.getElementById('save-btn');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      saveErr.style.display = 'none';
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'Saving…';
+
+      const toText = v => {
+        if (v == null) return null;
+        const s = String(v).trim();
+        return s === '' ? null : s;
+      };
+
+      const patch = {
+        reflection_good: toText(form.reflection_good.value),
+        reflection_bad:  toText(form.reflection_bad.value),
+        one_thing:       toText(form.one_thing.value),
+      };
+
+      try {
+        await RRG.subs.update(round.id, patch);
+        RRG.toast('Reflection saved. Ryan will see it before your next session.');
+        setTimeout(() => { location.href = 'history.html'; }, 900);
+      } catch (err) {
+        saveBtn.disabled = false;
+        saveBtn.textContent = 'Save reflection';
+        saveErr.textContent = 'Could not save: ' + (err.message || err);
+        saveErr.style.display = 'block';
+      }
+    });
+  })();
+</script>
+</body>
+</html>
