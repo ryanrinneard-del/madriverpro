@@ -609,6 +609,7 @@
                   <td>${hasT5 ? t5ChipsHtml(t5agg, {hotThreshold: 5}) : '<span class="muted small">—</span>'}</td>
                   <td style="text-align:right;">
                     <div style="display:flex; gap:6px; justify-content:flex-end; flex-wrap:wrap;">
+                      <a class="btn btn-ghost btn-sm" href="my-plan.html?userId=${p.id}" style="text-decoration:none;">View Plan</a>
                       <button class="btn btn-primary btn-sm" onclick="openNewLessonFor('${p.id}')">+ Log Lesson</button>
                       <button class="btn btn-ghost btn-sm" onclick="openSnapshotFor('${p.id}')">Snapshot</button>
                     </div>
