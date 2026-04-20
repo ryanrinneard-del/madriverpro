@@ -1,0 +1,716 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Course Strategy — Game Improvement Library</title>
+<meta name="description" content="Scott Fawcett's DECADE Golf framework, broken down letter by letter. The course-management system that changes how smart golfers play — and saves 3–5 strokes a round without changing your swing.">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  /* =============================================================
+     DECADE GOLF PAGE — world-class interactive breakdown.
+     Native <details> for the letter cards so no JS needed.
+     ============================================================= */
+
+  :root {
+    --decade-ink: #1F2B44;
+    --decade-ink-soft: #55617B;
+  }
+
+  /* ---- DECADE HERO WORDMARK ---- */
+  .decade-hero {
+    background: linear-gradient(180deg, #ffffff 0%, #F7F2E8 100%);
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    padding: 40px 32px;
+    margin-bottom: 32px;
+    text-align: center;
+  }
+  .decade-hero .wm {
+    display: inline-flex; gap: 6px; flex-wrap: wrap; justify-content: center;
+    margin-bottom: 20px;
+  }
+  .decade-hero .wm span {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(40px, 7vw, 64px);
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1;
+    padding: 0 6px;
+    border-bottom: 3px solid var(--gold);
+  }
+  .decade-hero .wm span.accent { color: var(--gold); }
+  .decade-hero .wm-sub {
+    display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
+    font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--mid-grey); font-weight: 600;
+  }
+  .decade-hero .wm-sub span { white-space: nowrap; }
+  .decade-hero p.tagline {
+    margin: 20px auto 0; max-width: 640px;
+    font-size: 16px; line-height: 1.65; color: var(--navy-mid);
+  }
+
+  /* ---- STAT ROW ---- */
+  .strat-stats {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+    margin: 24px 0 32px;
+  }
+  .strat-stats .cell {
+    background: var(--white); border: 1px solid var(--rule);
+    border-left: 3px solid var(--gold);
+    border-radius: 8px; padding: 18px 20px;
+  }
+  .strat-stats .cell .num {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 32px; color: var(--navy); font-weight: 700; line-height: 1;
+  }
+  .strat-stats .cell .lab {
+    font-size: 12px; color: var(--mid-grey); margin-top: 6px; line-height: 1.45;
+  }
+  @media (max-width: 720px) {
+    .strat-stats { grid-template-columns: 1fr; }
+  }
+
+  /* ---- LETTER CARDS (expandable) ---- */
+  .letter-stack {
+    display: grid; gap: 14px; margin: 28px 0 36px;
+  }
+  .letter-card {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--gold);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: box-shadow .18s ease;
+  }
+  .letter-card[open] {
+    box-shadow: 0 10px 28px rgba(13,31,60,0.08);
+  }
+  .letter-card summary {
+    display: grid;
+    grid-template-columns: 66px 1fr 28px;
+    gap: 16px;
+    align-items: center;
+    padding: 18px 22px;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+  }
+  .letter-card summary::-webkit-details-marker { display: none; }
+  .letter-card .letter-glyph {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 44px; font-weight: 700;
+    color: var(--gold);
+    line-height: 1; text-align: center;
+    border-right: 1px solid var(--rule);
+    padding-right: 14px;
+  }
+  .letter-card .letter-head .word {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px; color: var(--navy); font-weight: 600; line-height: 1.2;
+  }
+  .letter-card .letter-head .lead {
+    font-size: 13px; color: var(--navy-mid); line-height: 1.5;
+    margin-top: 3px;
+  }
+  .letter-card .chev {
+    color: var(--mid-grey); font-size: 22px; line-height: 1;
+    transition: transform .2s ease;
+    justify-self: center;
+  }
+  .letter-card[open] .chev { transform: rotate(90deg); color: var(--gold); }
+  .letter-card .letter-body {
+    padding: 0 22px 22px calc(22px + 66px + 16px);
+    color: var(--navy-mid); line-height: 1.65;
+  }
+  .letter-card .letter-body h4 {
+    font-size: 11px; color: var(--gold); font-weight: 700;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    margin: 14px 0 6px;
+  }
+  .letter-card .letter-body p { margin: 0 0 10px; font-size: 14.5px; }
+  .letter-card .letter-body p strong { color: var(--navy); }
+  .letter-card .letter-body .common-mistake {
+    background: #FDF6F4;
+    border-left: 3px solid #C76757;
+    padding: 10px 14px;
+    border-radius: 4px;
+    margin: 8px 0;
+  }
+  .letter-card .letter-body .common-mistake b { color: #9A3D2F; }
+  .letter-card .letter-body .the-way {
+    background: #F2F6EE;
+    border-left: 3px solid #6B8B4E;
+    padding: 10px 14px;
+    border-radius: 4px;
+    margin: 8px 0;
+  }
+  .letter-card .letter-body .the-way b { color: #4C6B30; }
+  @media (max-width: 620px) {
+    .letter-card summary {
+      grid-template-columns: 50px 1fr 24px;
+      gap: 12px; padding: 14px 16px;
+    }
+    .letter-card .letter-glyph { font-size: 34px; padding-right: 10px; }
+    .letter-card .letter-body {
+      padding: 0 16px 18px 16px;
+    }
+    .letter-card .letter-head .word { font-size: 19px; }
+  }
+
+  /* ---- WORKED EXAMPLE ---- */
+  .worked-example {
+    background: var(--navy);
+    color: #fff;
+    border-radius: 12px;
+    padding: 32px 30px;
+    margin: 32px 0;
+  }
+  .worked-example .we-kicker {
+    font-size: 11px; letter-spacing: 0.22em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .worked-example h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 24px; color: #fff; margin: 0 0 6px; font-weight: 600;
+  }
+  .worked-example .we-sub {
+    font-size: 14px; color: rgba(255,255,255,0.7);
+    margin-bottom: 22px;
+  }
+  .worked-example .we-step {
+    display: grid;
+    grid-template-columns: 42px 1fr;
+    gap: 14px; align-items: baseline;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+  }
+  .worked-example .we-step:last-child { border-bottom: none; }
+  .worked-example .we-step .letter {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 30px; color: var(--gold); font-weight: 700; line-height: 1;
+    text-align: center;
+  }
+  .worked-example .we-step .we-body b { color: #fff; }
+  .worked-example .we-step .we-body {
+    font-size: 14.5px; line-height: 1.6;
+    color: rgba(255,255,255,0.86);
+  }
+  .worked-example .outcome {
+    margin-top: 20px; padding: 16px 20px;
+    background: rgba(201,168,76,0.14);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 6px;
+    font-size: 14px; line-height: 1.6;
+  }
+  .worked-example .outcome b { color: var(--gold); }
+
+  /* ---- PORTAL CONNECTION BLOCK ---- */
+  .portal-tie {
+    background: #F7F2E8;
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 26px 28px;
+    margin: 32px 0;
+  }
+  .portal-tie h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px; color: var(--navy); margin: 0 0 8px;
+  }
+  .portal-tie p { color: var(--navy-mid); line-height: 1.65; margin: 0 0 10px; }
+  .portal-tie ul {
+    margin: 10px 0; padding-left: 20px;
+    color: var(--navy-mid); line-height: 1.65;
+  }
+  .portal-tie ul li { margin-bottom: 6px; }
+  .portal-tie .btn-row {
+    display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px;
+  }
+
+  /* ---- PULL QUOTE ---- */
+  .pull-quote {
+    border-left: 4px solid var(--gold);
+    padding: 6px 0 6px 20px;
+    margin: 24px 0;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 20px; line-height: 1.45; color: var(--navy);
+    font-style: italic;
+  }
+  .pull-quote cite {
+    display: block; margin-top: 10px;
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-size: 12px; font-style: normal;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--mid-grey); font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container">
+
+  <div class="breadcrumb">
+    <a href="index.html">Library</a><span>›</span>Course Strategy
+  </div>
+
+  <div class="section-header">
+    <div class="sh-kicker">CATEGORY 06 · COURSE STRATEGY</div>
+    <h1>The game within the game.</h1>
+    <p class="sh-intro">
+      Two golfers, same swing, same course — one shoots 82, the other shoots 89. The
+      difference isn't talent. It's decisions. Scott Fawcett's DECADE Golf is the framework
+      that separates those golfers, and it works better for a 38-handicap than for a tour pro.
+    </p>
+  </div>
+
+  <!-- ===================== DECADE HERO ===================== -->
+  <div class="decade-hero">
+    <div class="wm" aria-label="DECADE">
+      <span>D</span><span class="accent">E</span><span>C</span><span class="accent">A</span><span>D</span><span class="accent">E</span>
+    </div>
+    <div class="wm-sub" aria-hidden="true">
+      <span>Distance</span><span>·</span>
+      <span>Eliminate</span><span>·</span>
+      <span>Club</span><span>·</span>
+      <span>Aim</span><span>·</span>
+      <span>Decide</span><span>·</span>
+      <span>Execute</span>
+    </div>
+    <p class="tagline">
+      A decision system developed by Scott Fawcett from PGA Tour ShotLink data. It doesn't
+      ask you to hit better shots. It asks you to make better choices with the shots you
+      already have. The result is usually <b>3&ndash;5 strokes a round</b> without changing a
+      thing about your swing.
+    </p>
+  </div>
+
+  <!-- ===================== PARADIGM SHIFT ===================== -->
+  <article class="article">
+    <h2>You are not as accurate as you think — and that's the point.</h2>
+
+    <p>
+      Here's the hardest pill in golf: <strong>every shot you've ever hit is a dot in a
+      cloud around your intended target.</strong> You don't have <em>one</em> swing.
+      You have a shot pattern. A cloud of outcomes, some close, some wide, all
+      statistically predictable once you have enough rounds logged.
+    </p>
+
+    <p>
+      The average 15-handicap's shot cloud from 150 yards isn't a tight circle around the
+      flag. It's a <strong>scatter pattern 44 yards wide</strong> — roughly the width of a
+      basketball court.
+    </p>
+
+    <div class="strat-stats">
+      <div class="cell">
+        <div class="num">44 yds</div>
+        <div class="lab">Average shot-pattern width for a 15-handicap from 150 yards</div>
+      </div>
+      <div class="cell">
+        <div class="num">72%</div>
+        <div class="lab">Of amateur approach shots miss the green entirely</div>
+      </div>
+      <div class="cell">
+        <div class="num">3&ndash;5</div>
+        <div class="lab">Strokes per round lost to poor course-management decisions</div>
+      </div>
+    </div>
+
+    <p>
+      Once you accept your real shot pattern, three things happen:
+    </p>
+    <ul>
+      <li>You stop aiming at tucked pins.</li>
+      <li>You stop trying to carry hazards by a yard.</li>
+      <li>You stop compounding mistakes with hero recovery shots.</li>
+    </ul>
+    <p>
+      You start playing <em>your</em> game instead of a game that doesn't exist. DECADE is
+      simply the discipline of doing that, shot by shot, all the way around a golf course.
+    </p>
+
+    <div class="pull-quote">
+      "The best decision on a golf course is almost never the most exciting one.
+       It's the one that eliminates the big number."
+      <cite>— the core DECADE insight</cite>
+    </div>
+
+    <h3>How to use this page</h3>
+    <p>
+      Each letter of DECADE is a decision that happens in your head before the swing. Tap
+      any letter below to expand the full breakdown &mdash; the common mistake, the DECADE
+      way, and why it works. Then read the worked example to see all six letters applied to
+      a single tee shot.
+    </p>
+  </article>
+
+  <!-- ===================== LETTER CARDS ===================== -->
+
+  <div class="letter-stack">
+
+    <details class="letter-card">
+      <summary>
+        <div class="letter-glyph">D</div>
+        <div class="letter-head">
+          <div class="word">Distance</div>
+          <div class="lead">Know your <em>real</em> number — not your career-best number.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="letter-body">
+        <p>
+          Every club in your bag has two distances: the one it goes when you strike it
+          perfectly, and the one it averages. DECADE works only with the average.
+        </p>
+
+        <div class="common-mistake">
+          <b>Common mistake:</b> "My 7-iron goes 150." What you mean is your best 7-iron goes
+          150. Your average 7-iron goes 140. You play for 150 and come up short 70% of the time.
+        </div>
+
+        <div class="the-way">
+          <b>The DECADE way:</b> For each club, know (a) your average carry and (b) your
+          rough spread. On course, you play to <strong>average</strong>. Anything better than
+          that is a bonus. Anything worse is still in your expected range.
+        </div>
+
+        <h4>Why it works</h4>
+        <p>
+          Short of the pin is almost always worse than long of the pin on an average green.
+          Playing to your real average means you're putting from behind the hole instead of
+          chipping from short of it.
+        </p>
+      </div>
+    </details>
+
+    <details class="letter-card">
+      <summary>
+        <div class="letter-glyph">E</div>
+        <div class="letter-head">
+          <div class="word">Eliminate one side</div>
+          <div class="lead">Look at the hole. Pick the side you cannot go.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="letter-body">
+        <p>
+          Before you think about aim, you eliminate. Every hole has a death side &mdash; OB,
+          water, a lost-ball-in-the-trees situation. Your first job is to identify it and
+          make sure no version of this shot ends up there.
+        </p>
+
+        <div class="common-mistake">
+          <b>Common mistake:</b> Trying to flirt with the trouble to get the best angle in.
+          "If I just tickle it past the water I'll have a wedge." The odds of that perfect
+          flirt are lower than you think. The cost of missing it is ruinous.
+        </div>
+
+        <div class="the-way">
+          <b>The DECADE way:</b> You decide which miss is simply not an option. You then build
+          the whole rest of your decision around making sure the death side is outside your
+          shot pattern &mdash; not just outside your straight shot.
+        </div>
+
+        <h4>The phrase to use</h4>
+        <p>Out loud, on the tee: <em>"I cannot go right"</em> (or left). Say it before you
+           pick a club. Everything downstream flows from that one sentence.</p>
+      </div>
+    </details>
+
+    <details class="letter-card">
+      <summary>
+        <div class="letter-glyph">C</div>
+        <div class="letter-head">
+          <div class="word">Club selection</div>
+          <div class="lead">Pick the club whose <em>whole</em> shot pattern fits the safe zone.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="letter-body">
+        <p>
+          This is the hinge of the whole system. You're not picking the club that
+          <em>could</em> reach the pin. You're picking the club whose full shot cloud fits
+          inside the fairway, the green, or the safe-miss area.
+        </p>
+
+        <div class="common-mistake">
+          <b>Common mistake:</b> Taking driver on a tight par 4 because "I can carry the
+          fairway bunker." Your best shot carries it. Your average shot catches the lip.
+          Your worst shot is in the sand or through the fairway into trees.
+        </div>
+
+        <div class="the-way">
+          <b>The DECADE way:</b> Mentally overlay your shot pattern for every club option
+          onto the hole. The right club is the one whose <strong>wide end</strong> &mdash;
+          your outlier miss &mdash; still lands somewhere playable.
+        </div>
+
+        <h4>A simple rule</h4>
+        <p>
+          If the wide end of your pattern with driver reaches trouble, step down one club.
+          It's not weakness. It's math.
+        </p>
+      </div>
+    </details>
+
+    <details class="letter-card">
+      <summary>
+        <div class="letter-glyph">A</div>
+        <div class="letter-head">
+          <div class="word">Aim at the center of your pattern</div>
+          <div class="lead">Never at the pin. The pin is a decoration.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="letter-body">
+        <p>
+          Here's the line that changes everything: <strong>your aim point is not a target,
+          it's the center of a cloud</strong>. You're placing the center of your dispersion
+          on the map such that every point in the cloud is acceptable.
+        </p>
+
+        <div class="common-mistake">
+          <b>Common mistake:</b> Aim at the flag. Worst miss ends up in the greenside bunker
+          or over the green. You short-sided yourself before you even swung.
+        </div>
+
+        <div class="the-way">
+          <b>The DECADE way:</b> If the pin is on the right with a bunker right, aim at the
+          <strong>center-left</strong> of the green. Your best shot finishes near the pin.
+          Your average shot is middle of the green. Your worst shot is the fat side fringe
+          &mdash; a routine chip, not a buried-lie disaster.
+        </div>
+
+        <h4>The "fat side" rule</h4>
+        <p>
+          There's always a fat side of every green &mdash; the larger, safer half. Aim there
+          every single time until a ball in the cloud is no longer at risk. Over 18 holes,
+          this one change alone saves most amateurs 2&ndash;3 strokes.
+        </p>
+      </div>
+    </details>
+
+    <details class="letter-card">
+      <summary>
+        <div class="letter-glyph">D</div>
+        <div class="letter-head">
+          <div class="word">Decide &mdash; fully.</div>
+          <div class="lead">The last thought before the swing is commitment, not math.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="letter-body">
+        <p>
+          You've done the math. You know the club, you know the aim, you know why.
+          <strong>The decision ends in the think box.</strong> When you step over the ball,
+          the thinking is done.
+        </p>
+
+        <div class="common-mistake">
+          <b>Common mistake:</b> Standing over the ball re-evaluating. "Maybe I should take
+          one less." "Maybe I should aim a hair right." Second-guessing at address pulls the
+          swing off-plane as reliably as any technique flaw.
+        </div>
+
+        <div class="the-way">
+          <b>The DECADE way:</b> If you feel doubt over the ball, <strong>step off</strong>.
+          Walk back behind the ball, redo the decision, and come in again clean. Then
+          commit. You cannot execute what you haven't committed to.
+        </div>
+
+        <h4>The simplest test</h4>
+        <p>
+          Can you say the shot out loud in one sentence? <em>"7-iron, fat-side left, full
+          swing."</em> If you can, you're ready. If you can't, you're not decided yet.
+        </p>
+      </div>
+    </details>
+
+    <details class="letter-card">
+      <summary>
+        <div class="letter-glyph">E</div>
+        <div class="letter-head">
+          <div class="word">Execute &mdash; trust the pattern.</div>
+          <div class="lead">You chose the pattern for a reason. Now go.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="letter-body">
+        <p>
+          Execute means make your normal swing at your chosen target and accept whatever
+          part of the pattern today's shot lands in.
+        </p>
+
+        <div class="common-mistake">
+          <b>Common mistake:</b> Trying to steer the ball at the last second &mdash; a
+          defensive swing that pulls or blocks because you're no longer swinging freely.
+        </div>
+
+        <div class="the-way">
+          <b>The DECADE way:</b> The decision was built to handle the bad ends of your
+          pattern. If today's shot is one of your outliers, that outlier was already
+          accounted for. You picked this line because even the worst miss is acceptable.
+          <strong>Swing through the target with zero steering.</strong>
+        </div>
+
+        <h4>What success looks like</h4>
+        <p>
+          A round of DECADE golf has a lot of "meh" shots that finish in perfectly fine
+          positions. Boring is the goal. Boring wins.
+        </p>
+      </div>
+    </details>
+
+  </div>
+
+  <!-- ===================== WORKED EXAMPLE ===================== -->
+
+  <div class="worked-example">
+    <div class="we-kicker">WORKED EXAMPLE</div>
+    <h3>Par 4 · 390 yards · Pond up the right off the tee</h3>
+    <div class="we-sub">
+      One drive, six letters. Here's the thinking the DECADE golfer does in the 15 seconds
+      before pulling a club.
+    </div>
+
+    <div class="we-step">
+      <div class="letter">D</div>
+      <div class="we-body">
+        <b>Distance.</b> Your driver carries 240 on average, 260 if you flush it. Your
+        3-wood carries 220, much tighter spread.
+      </div>
+    </div>
+
+    <div class="we-step">
+      <div class="letter">E</div>
+      <div class="we-body">
+        <b>Eliminate.</b> The pond sits 260 yards out on the right. Out loud:
+        <em>"I cannot go right."</em>
+      </div>
+    </div>
+
+    <div class="we-step">
+      <div class="letter">C</div>
+      <div class="we-body">
+        <b>Club.</b> Driver's wide-right end extends well into the pond's airspace at that
+        carry. 3-wood's wide-right end stops short of it. Club: <b>3-wood.</b>
+      </div>
+    </div>
+
+    <div class="we-step">
+      <div class="letter">A</div>
+      <div class="we-body">
+        <b>Aim.</b> Fairway is 40 yards wide. Aim down the left-center. Worst left-miss is
+        light rough &mdash; playable. Worst right-miss stays short of the pond.
+      </div>
+    </div>
+
+    <div class="we-step">
+      <div class="letter">D</div>
+      <div class="we-body">
+        <b>Decide.</b> Said out loud: <em>"3-wood, left-center, full swing."</em> Step into
+        the shot.
+      </div>
+    </div>
+
+    <div class="we-step">
+      <div class="letter">E</div>
+      <div class="we-body">
+        <b>Execute.</b> Normal swing. Trust the pattern.
+      </div>
+    </div>
+
+    <div class="outcome">
+      <b>Outcome:</b> You're 170 yards out from the fairway. Clean wedge to 20 feet,
+      two-putt par. Compare that to the aggressive driver: 1-in-5 you make par, 4-in-5 it's
+      a double-bogey fishing expedition. Over a season, that's the difference between an 85
+      handicap and a 90.
+    </div>
+  </div>
+
+  <!-- ===================== PORTAL CONNECTION ===================== -->
+
+  <div class="portal-tie">
+    <h3>Your portal already has half the data you need.</h3>
+    <p>
+      DECADE depends on one thing: knowing your real numbers. Your shot dispersion, your
+      typical misses, your error patterns. You log it every time you submit a round.
+    </p>
+    <ul>
+      <li>Your <b>5 Errors to Avoid</b> show you the specific decisions that cost you strokes.</li>
+      <li>Your <b>My Rounds</b> history shows your real scoring averages by course and tee.</li>
+      <li>Your <b>Wedge Matrix</b> is the DECADE distance sheet for the scoring zone.</li>
+      <li>Your <b>Map My Bag</b> is your DECADE distance sheet for everything else.</li>
+    </ul>
+    <p>
+      The framework on this page is how you <em>use</em> that data on the course. The
+      portal stores the numbers; DECADE tells you what to do with them.
+    </p>
+    <div class="btn-row">
+      <a href="/adult/bag.html" class="btn btn-primary btn-sm">Open Map My Bag →</a>
+      <a href="/adult/wedge-matrix.html" class="btn btn-ghost btn-sm">Open Wedge Matrix</a>
+      <a href="/adult/tiger5.html" class="btn btn-ghost btn-sm">Open 5 Errors to Avoid</a>
+    </div>
+  </div>
+
+  <!-- ===================== CLOSING ===================== -->
+
+  <article class="article">
+    <h2>How to start playing DECADE on your next round</h2>
+
+    <p>
+      You don't need a Fawcett subscription or a PhD in statistics. You need four habits:
+    </p>
+
+    <ol>
+      <li><strong>Know your average distance for every club.</strong> Map My Bag is there for
+          this. Update it every 2-3 weeks as your game changes.</li>
+      <li><strong>Say the death side out loud before every shot.</strong> "I cannot go right."
+          It sounds silly. It works.</li>
+      <li><strong>Aim at the center of the fat side &mdash; not the flag.</strong> For one
+          entire round, don't aim at a single pin. Aim at the middle of every green. Count
+          your score at the end. The number will surprise you.</li>
+      <li><strong>Review big numbers after the round.</strong> For every double or worse, ask:
+          was that a bad swing or a bad decision? The honest answer is usually the decision.</li>
+    </ol>
+
+    <div class="pull-quote">
+      "Smart golfers don't play scared. They play clear. Massive difference &mdash; and
+       you can feel it in the way they stand over the ball."
+      <cite>— Ryan Rinneard, on-course coaching notes</cite>
+    </div>
+
+    <p>
+      DECADE isn't conservative. It's <em>confident</em>. Once you've done the math, there's
+      nothing left to be nervous about. You picked this shot because even the bad version of
+      it is fine. Step up, make your swing, and watch your score drop without working on a
+      single technique thing.
+    </p>
+
+    <p>
+      This is the game within the game. Once you see it, you can't unsee it.
+    </p>
+
+    <div class="callout">
+      <strong>Go deeper.</strong> The public-facing long-form version of this framework
+      &mdash; written for a general audience and with more scenarios &mdash; lives at
+      <a href="/articles/on-course-strategy-decade.html">Think Your Way to Lower Scores</a>.
+    </div>
+
+  </article>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  RRG.mountLibrary();
+</script>
+</body>
+</html>
