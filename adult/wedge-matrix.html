@@ -536,6 +536,14 @@
       flushCloudSave();
     }
   });
+  // Belt-and-braces: also flush on beforeunload for desktop browsers that
+  // sometimes skip visibilitychange when the user closes the tab outright.
+  window.addEventListener('beforeunload', () => {
+    if (pendingCloudSave) {
+      clearTimeout(saveTimer);
+      flushCloudSave();
+    }
+  });
 
   function render() {
     // Header

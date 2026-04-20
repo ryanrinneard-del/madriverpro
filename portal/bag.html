@@ -215,9 +215,13 @@
   document.getElementById('player-name').value = user.name || '';
   document.getElementById('built-on').value = new Date().toLocaleDateString();
 
+  /* ===== Bag data layer =====
+     Source of truth: profiles.profile_json.bag = [{ id, name, carry, total }, …]
+     localStorage is a warm cache for instant renders. On first load we migrate
+     any legacy localStorage data into the cloud — that gives cross-device sync
+     automatically the next time each device opens the bag. */
   const BAG_KEY = 'rrg_bag_v1_' + user.id;
 
-  // Default bag — a reasonable starting list, fully editable.
   const DEFAULT_BAG = [
     { name: 'Driver',     carry: '', total: '' },
     { name: '3 Wood',     carry: '', total: '' },
@@ -237,16 +241,59 @@
   ];
 
   let bag = [];
-  try { bag = JSON.parse(localStorage.getItem(BAG_KEY) || '[]'); } catch {}
+  let hadCloud = false;
+
+  const cloudBag = user.profile_json && user.profile_json.bag;
+  if (Array.isArray(cloudBag) && cloudBag.length) {
+    bag = cloudBag;
+    hadCloud = true;
+  } else {
+    try { bag = JSON.parse(localStorage.getItem(BAG_KEY) || '[]'); } catch {}
+  }
   if (!bag.length) {
     bag = DEFAULT_BAG.map((c, i) => ({ id: 'c' + (Date.now() + i), ...c }));
-    localStorage.setItem(BAG_KEY, JSON.stringify(bag));
+  }
+
+  let saveTimer = null;
+  let pendingCloudSave = false;
+
+  async function flushCloudSave() {
+    pendingCloudSave = false;
+    const next = { ...(user.profile_json || {}), bag };
+    try {
+      await RRG.users.update(user.id, { profile_json: next });
+      user.profile_json = next;
+    } catch (err) {
+      console.warn('bag cloud save failed', err);
+      RRG.toast('Could not sync to cloud — your changes are saved on this device.');
+    }
   }
 
   window.saveBag = (announce = false) => {
-    localStorage.setItem(BAG_KEY, JSON.stringify(bag));
-    if (announce) RRG.toast('Bag map saved to your portal.');
+    try { localStorage.setItem(BAG_KEY, JSON.stringify(bag)); } catch {}
+    pendingCloudSave = true;
+    clearTimeout(saveTimer);
+    if (announce) {
+      flushCloudSave().then(() => RRG.toast('Bag map saved to your portal.'));
+    } else {
+      saveTimer = setTimeout(flushCloudSave, 800);
+    }
   };
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden' && pendingCloudSave) {
+      clearTimeout(saveTimer);
+      flushCloudSave();
+    }
+  });
+  window.addEventListener('beforeunload', () => {
+    if (pendingCloudSave) { clearTimeout(saveTimer); flushCloudSave(); }
+  });
+
+  if (!hadCloud) {
+    pendingCloudSave = true;
+    setTimeout(flushCloudSave, 300);
+  }
 
   function render() {
     document.getElementById('bag-body').innerHTML = bag.map((c, idx) => `

@@ -260,11 +260,15 @@ RRG.invites = {
 };
 
 /* ============================================================
-   ROUNDS / LESSONS / VIDEOS — Phase 2 (still on localStorage/IDB)
+   ROUNDS / LESSONS / VIDEOS
 
-   These continue to work on a single device for now. Auth is
-   already cross-device, which was the critical fix. A follow-up
-   commit moves these to Postgres tables (schema already in place).
+   Rounds and Lessons are cloud-synced via Supabase tables — RLS
+   gives every player read/write on their own rows, coaches read
+   all. Bag and Wedge Matrix live on profiles.profile_json.{bag,
+   wedge_matrix} with a localStorage warm cache.
+
+   Videos remain on localStorage/IndexedDB but the upload UI is
+   hidden on the player side until the blob pipeline is ready.
    ============================================================ */
 /* Rounds — Supabase-backed. RLS: players manage their own rounds;
    coaches can read all. Schema columns are snake_case. */

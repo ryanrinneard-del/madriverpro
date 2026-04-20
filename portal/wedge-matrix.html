@@ -536,6 +536,9 @@
       flushCloudSave();
     }
   });
+  window.addEventListener('beforeunload', () => {
+    if (pendingCloudSave) { clearTimeout(saveTimer); flushCloudSave(); }
+  });
 
   function render() {
     // Header
