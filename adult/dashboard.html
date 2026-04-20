@@ -257,10 +257,7 @@
   <!-- 2b. YOUR 6-WEEK PLAN (generated from Know Your Game profile) -->
   <div id="game-plan-wrap" style="display:none;"></div>
 
-  <!-- 3. MY PACKAGE -->
-  <div class="card mb-5" id="pkg-card"></div>
-
-  <!-- 4. QUICK LOG -->
+  <!-- QUICK LOG -->
   <div class="page-header" style="margin-bottom:14px;">
     <div class="page-label">QUICK LOG</div>
     <h2 class="page-title" style="font-size:22px;">Log something in under a minute</h2>
@@ -303,13 +300,21 @@
     </a>
   </div>
 
-  <!-- 6. LESSONS -->
+  <!-- LESSONS -->
   <div class="page-header">
     <div class="page-label">MY LESSONS</div>
     <h2 class="page-title" style="font-size:22px;">Every Session, Logged</h2>
     <hr class="gold-rule">
   </div>
   <div id="lessons-list"></div>
+
+  <!-- MY PACKAGE — moved to bottom; less prominent but easy to find -->
+  <div class="page-header" style="margin-top:32px;">
+    <div class="page-label">MY PACKAGE</div>
+    <h2 class="page-title" style="font-size:22px;">Lessons remaining</h2>
+    <hr class="gold-rule">
+  </div>
+  <div class="card mb-5" id="pkg-card"></div>
 
 </main>
 
@@ -670,7 +675,7 @@
       ${total && used >= total ? `
         <div class="callout mt-4">
           <b>Package complete.</b> Extend with another package to keep your portal history,
-          videos, and progress all in one place.
+          rounds, and progress all in one place.
         </div>
       ` : ''}
     `;
