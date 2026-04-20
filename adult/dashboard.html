@@ -254,7 +254,7 @@
     </div>
   </div>
 
-  <!-- 2b. YOUR GAME PLAN (AI-generated from Know Your Game profile) -->
+  <!-- 2b. YOUR 6-WEEK PLAN (generated from Know Your Game profile) -->
   <div id="game-plan-wrap" style="display:none;"></div>
 
   <!-- 3. MY PACKAGE -->
@@ -516,11 +516,9 @@
     }
     renderCoachInput();
 
-    // ============ YOUR GAME PLAN (AI) ============
-    /* Renders three tabbed views from profile_json.game_plan.structured:
-         1. Coach Summary  — snapshot, identity, priorities, focuses, tiger5
-         2. 6-Week Arc     — sessions[], arc_phases, arc_themes
-         3. Full Dossier   — diagnostic_sections, skill_radar, prescriptions, goals
+    // ============ YOUR 6-WEEK PLAN ============
+    /* Renders a single 6-week arc from profile_json.game_plan.structured:
+         - arc_intro, arc_themes[], sessions[] (week 1–6), arc_closing
        Polls the profile every 8 sec while status === 'generating' so the
        view updates without a manual refresh after the player submits. */
     const GP_WRAP = document.getElementById('game-plan-wrap');
@@ -532,8 +530,8 @@
         <div class="gp-card">
           <div class="flex-between" style="align-items:flex-start; gap:12px; flex-wrap:wrap;">
             <div>
-              <div class="gp-kicker">YOUR GAME PLAN</div>
-              <h3>Generated from your Know Your Game profile</h3>
+              <div class="gp-kicker">YOUR 6-WEEK PLAN</div>
+              <h3>Built from your Know Your Game profile</h3>
             </div>
             <div class="gp-status ${statusClass}">
               ${status === 'generating' ? '<span class="gp-spin"></span>' : ''}
@@ -546,170 +544,54 @@
 
     function gpRenderReady(plan) {
       const s = plan.structured || {};
-      const tab = (id, label, active) =>
-        `<button class="gp-tab ${active ? 'active' : ''}" data-pane="${id}">${RRG.esc(label)}</button>`;
 
-      const flag = (level, label) =>
-        `<span class="gp-flag ${RRG.esc(level || '')}">${RRG.esc(label || level || '')}</span>`;
+      const intro    = s.arc_intro || '';
+      const themes   = Array.isArray(s.arc_themes) ? s.arc_themes : [];
+      const sessions = Array.isArray(s.sessions)   ? s.sessions   : [];
+      const closing  = s.arc_closing || '';
 
-      // ----- TAB 1: COACH SUMMARY -----
-      const snapshot = (s.snapshot || s.identity_paragraphs || '').toString();
-      const priorities = Array.isArray(s.priorities) ? s.priorities : [];
-      const focuses = Array.isArray(s.focuses) ? s.focuses : [];
-      const t5_session = Array.isArray(s.tiger5_session1) ? s.tiger5_session1 : [];
+      const body = `
+        ${intro ? `<p style="margin-top:8px;">${RRG.esc(intro)}</p>` : ''}
 
-      const coachHtml = `
-        <h4>Snapshot</h4>
-        <p>${RRG.esc(snapshot) || '<em>No snapshot generated.</em>'}</p>
-
-        ${priorities.length ? `
-          <h4>Top priorities</h4>
-          <ol>${priorities.map(p => `<li>${RRG.esc(typeof p === 'string' ? p : p.label || p.title || JSON.stringify(p))}</li>`).join('')}</ol>
-        ` : ''}
-
-        ${focuses.length ? `
-          <h4>Session 1 focus areas</h4>
-          <div class="gp-grid">
-            ${focuses.map(f => `
-              <div class="gp-tile">
-                <div class="gp-tile-title">${flag('AMBER', f.tag || 'FOCUS')} ${RRG.esc(f.name || f.title || '')}</div>
-                <div class="gp-tile-body">
-                  ${f.why ? `<b>Why:</b> ${RRG.esc(f.why)}<br>` : ''}
-                  ${f.drill ? `<b>Drill:</b> ${RRG.esc(f.drill)}<br>` : ''}
-                  ${f.cue ? `<b>Cue:</b> <em>${RRG.esc(f.cue)}</em>` : ''}
-                </div>
-              </div>
-            `).join('')}
-          </div>
-        ` : ''}
-
-        ${t5_session.length ? `
-          <h4>Tiger 5 — Session 1 risks</h4>
-          <ul>${t5_session.map(t => `<li>${flag(t.risk === 'HIGH RISK' ? 'RED' : 'GREEN', t.risk || 'NOTE')} ${RRG.esc(t.label || t.title || '')}</li>`).join('')}</ul>
-        ` : ''}
-      `;
-
-      // ----- TAB 2: 6-WEEK ARC -----
-      const sessions = Array.isArray(s.sessions) ? s.sessions : [];
-      const themes = Array.isArray(s.arc_themes) ? s.arc_themes : [];
-      const phases = Array.isArray(s.arc_phases) ? s.arc_phases : [];
-
-      const arcHtml = `
         ${themes.length ? `
-          <h4>Three season themes</h4>
+          <h4>Three themes for your 6 weeks</h4>
           <div class="gp-grid">
-            ${themes.map((t, i) => `
+            ${themes.map((t) => `
               <div class="gp-tile">
-                <div class="gp-tile-title">Theme ${i + 1}</div>
-                <div class="gp-tile-body">${RRG.esc(typeof t === 'string' ? t : t.name || t.title || JSON.stringify(t))}</div>
+                <div class="gp-tile-title">${RRG.esc(t.label || '')} &middot; ${RRG.esc(t.title || '')}</div>
+                <div class="gp-tile-body">${RRG.esc(t.body || '')}</div>
               </div>
             `).join('')}
           </div>
         ` : ''}
 
         ${sessions.length ? `
-          <h4>Six-week build</h4>
+          <h4>Your six weeks</h4>
           ${sessions.map((sess, i) => `
-            <div class="gp-tile" style="margin-bottom:8px;">
-              <div class="gp-tile-title">Week ${sess.week || (i + 1)} &middot; ${RRG.esc(sess.title || sess.focus || '')}</div>
+            <div class="gp-tile" style="margin-bottom:10px;">
+              <div class="gp-tile-title">Week ${RRG.esc(sess.week || (i + 1))} &middot; ${RRG.esc(sess.theme || '')}</div>
               <div class="gp-tile-body">
-                ${sess.focus && sess.title !== sess.focus ? `<b>Focus:</b> ${RRG.esc(sess.focus)}<br>` : ''}
-                ${sess.outcome ? `<b>Outcome:</b> ${RRG.esc(sess.outcome)}<br>` : ''}
-                ${sess.assignment ? `<b>Assignment:</b> ${RRG.esc(sess.assignment)}` : ''}
+                ${sess.subtitle ? `<em>${RRG.esc(sess.subtitle)}</em><br>` : ''}
+                <b>Primary:</b> ${RRG.esc(sess.primary || '')}<br>
+                <b>Secondary:</b> ${RRG.esc(sess.secondary || '')}<br>
+                ${Array.isArray(sess.practice) && sess.practice.length ? `
+                  <b>Practice this week:</b>
+                  <ul style="margin:4px 0 4px 18px;">${sess.practice.map(p => `<li>${RRG.esc(p)}</li>`).join('')}</ul>
+                ` : ''}
+                <b>Ready when:</b> ${RRG.esc(sess.ready_when || '')}<br>
+                <b>Measure:</b> ${RRG.esc(sess.measure || '')}
               </div>
             </div>
           `).join('')}
-        ` : '<p><em>No 6-week arc generated.</em></p>'}
+        ` : '<p><em>No 6-week plan generated.</em></p>'}
 
-        ${phases.length ? `
-          <h4>Arc phases</h4>
-          <ol>${phases.map(p => `<li><b>${RRG.esc(p.name || p.title || '')}</b> ${p.summary ? '— ' + RRG.esc(p.summary) : ''}</li>`).join('')}</ol>
-        ` : ''}
-      `;
+        ${closing ? `<p style="margin-top:14px; font-style:italic;">${RRG.esc(closing)}</p>` : ''}
 
-      // ----- TAB 3: FULL DOSSIER -----
-      const skillRadar = Array.isArray(s.skill_radar) ? s.skill_radar : [];
-      const skillNotes = Array.isArray(s.skill_notes) ? s.skill_notes : [];
-      const diag = Array.isArray(s.diagnostic_sections) ? s.diagnostic_sections : [];
-      const presc = Array.isArray(s.prescriptions) ? s.prescriptions : [];
-      const goals = Array.isArray(s.goals) ? s.goals : [];
-      const t5_dossier = Array.isArray(s.tiger5_dossier) ? s.tiger5_dossier : [];
-
-      const dossierHtml = `
-        ${skillRadar.length ? `
-          <h4>Skill radar</h4>
-          <div class="gp-grid">
-            ${skillRadar.map((sk, i) => {
-              const note = skillNotes[i] || {};
-              const score = sk.score != null ? sk.score : '—';
-              return `
-                <div class="gp-tile">
-                  <div class="gp-tile-title">${flag(note.level || 'NOTE', score + '/10')} ${RRG.esc(sk.label || '')}</div>
-                  ${note.note ? `<div class="gp-tile-body">${RRG.esc(note.note)}</div>` : ''}
-                </div>`;
-            }).join('')}
-          </div>
-        ` : ''}
-
-        ${diag.length ? `
-          <h4>Diagnostic sections</h4>
-          ${diag.map(d => `
-            <div class="gp-tile" style="margin-bottom:8px;">
-              <div class="gp-tile-title">${RRG.esc(d.name || d.title || '')}</div>
-              <div class="gp-tile-body">
-                ${(d.flags || []).map(f => `<div>${flag(f.prefix || 'NOTE', f.prefix || '')} ${RRG.esc(f.text || f.note || '')}</div>`).join('')}
-              </div>
-            </div>
-          `).join('')}
-        ` : ''}
-
-        ${presc.length ? `
-          <h4>Prescriptions (ranked)</h4>
-          <ol>${presc.map(p => `<li><b>${RRG.esc(p.title || p.name || '')}</b>${p.detail ? ' — ' + RRG.esc(p.detail) : ''}${p.goal_link ? ` <em>(ties to: ${RRG.esc(p.goal_link)})</em>` : ''}</li>`).join('')}</ol>
-        ` : ''}
-
-        ${goals.length ? `
-          <h4>Goals &amp; metrics</h4>
-          ${goals.map(g => `
-            <div class="gp-tile" style="margin-bottom:8px;">
-              <div class="gp-tile-title">${RRG.esc(g.goal || g.title || '')}</div>
-              <div class="gp-tile-body">
-                ${(g.metrics || []).map(m => `<div>&middot; ${RRG.esc(typeof m === 'string' ? m : (m.label || m.metric || JSON.stringify(m)))}</div>`).join('')}
-              </div>
-            </div>
-          `).join('')}
-        ` : ''}
-
-        ${t5_dossier.length ? `
-          <h4>Tiger 5 — full risk profile</h4>
-          <ul>${t5_dossier.map(t => `<li>${flag(t.risk_level || 'NOTE', t.risk_label || t.risk_level || '')} ${RRG.esc(t.label || t.title || '')}</li>`).join('')}</ul>
-        ` : ''}
-      `;
-
-      const body = `
-        <div class="gp-tabs">
-          ${tab('coach', 'Coach Summary', true)}
-          ${tab('arc',   '6-Week Arc',   false)}
-          ${tab('doss',  'Full Dossier', false)}
-        </div>
-        <div class="gp-pane active" data-pane="coach">${coachHtml}</div>
-        <div class="gp-pane" data-pane="arc">${arcHtml}</div>
-        <div class="gp-pane" data-pane="doss">${dossierHtml}</div>
         <div style="margin-top:16px; padding-top:14px; border-top:1px solid var(--rule); font-size:12px; color:var(--mid-grey);">
           Generated ${plan.generated_at ? RRG.fmtDate(plan.generated_at) : ''}
-          ${plan.model ? ` · Model: ${RRG.esc(plan.model)}` : ''}
         </div>`;
 
       renderGamePlanShell('ready', 'Ready', body);
-
-      // Wire tab switching
-      GP_WRAP.querySelectorAll('.gp-tab').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const pane = btn.dataset.pane;
-          GP_WRAP.querySelectorAll('.gp-tab').forEach(b => b.classList.toggle('active', b.dataset.pane === pane));
-          GP_WRAP.querySelectorAll('.gp-pane').forEach(p => p.classList.toggle('active', p.dataset.pane === pane));
-        });
-      });
     }
 
     function renderGamePlan() {
@@ -719,7 +601,7 @@
         gpRenderReady(plan);
       } else if (status === 'generating') {
         renderGamePlanShell('generating', 'Generating…',
-          `<p style="margin-top:14px;">Your profile is being turned into your three coaching documents — Coach Summary, 6-Week Arc, and Full Dossier. This takes a minute or two. The page will refresh automatically when it's ready.</p>`);
+          `<p style="margin-top:14px;">Your profile is being turned into your 6-Week Plan. This takes under a minute. The page will refresh automatically when it's ready.</p>`);
       } else if (status === 'error') {
         renderGamePlanShell('error', 'Error',
           `<p style="margin-top:14px;">Could not generate your game plan automatically. Ryan has been notified and will follow up with you directly.</p>

@@ -1,14 +1,14 @@
 // POST /api/generate-game-plan
 //
 // Triggered after a player submits their Know Your Game profile. Calls
-// Anthropic's Claude (claude-sonnet-4-20250514) with the Golfer Profile
-// Interpreter system prompt bound to a structured-output tool, then writes the
-// resulting roadmap to that player's profile_json.game_plan in Supabase.
+// Anthropic's Claude with the Golfer Profile Interpreter system prompt bound
+// to a slim 6-week-arc schema, then writes the result to that player's
+// profile_json.game_plan in Supabase.
 //
-// The dashboard renders three views from the structured payload:
-//   1. Coach Summary  — markdown + key flags (insight_paragraphs, tiger5)
-//   2. 6-Week Arc     — sessions[] + arc_phases + arc_themes
-//   3. Full Dossier   — diagnostic_sections + skill_radar + prescriptions + goals
+// SCOPE NOTE: this endpoint produces ONLY the 6-Week Arc (sessions, themes,
+// intro, closing). The full Coach Summary + Dossier still exist in
+// _lib/schema.js for the admin-side PDF generator, but are deliberately NOT
+// requested here so the call fits inside Vercel's 60-second Hobby-plan limit.
 //
 // Required env vars (production):
 //   ANTHROPIC_API_KEY
@@ -22,12 +22,96 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { createClient } from '@supabase/supabase-js';
 import { GOLFER_PROFILE_SYSTEM_PROMPT } from './_lib/systemPrompt.js';
-import { PDF_DATA_SCHEMA, renderMarkdown } from './_lib/schema.js';
 
-export const config = { maxDuration: 300 };
+export const config = { maxDuration: 60 };
 
 const MODEL = 'claude-sonnet-4-20250514';
-const MAX_TOKENS = 8192;
+const MAX_TOKENS = 4096;
+
+// Slim schema: only the fields the dashboard's 6-Week Plan view consumes.
+// Keeping this small is what lets the call return inside 60s on Hobby plan.
+const SIX_WEEK_SCHEMA = {
+  type: 'object',
+  required: ['student', 'arc_intro', 'arc_themes', 'sessions', 'arc_closing'],
+  properties: {
+    student: {
+      type: 'object',
+      required: ['first_name', 'goal'],
+      properties: {
+        first_name: { type: 'string' },
+        goal:       { type: 'string', description: 'One-line restatement of the player\'s goal in their words.' },
+      },
+    },
+    arc_intro: {
+      type: 'string',
+      description: '2–3 sentence intro framing the next 6 weeks for this player.',
+    },
+    arc_themes: {
+      type: 'array', minItems: 3, maxItems: 3,
+      description: 'Three season-long themes that thread through all six weeks.',
+      items: {
+        type: 'object',
+        required: ['label', 'title', 'body'],
+        properties: {
+          label: { type: 'string', description: 'Short tag, e.g. "FOUNDATION" or "STRATEGY".' },
+          title: { type: 'string' },
+          body:  { type: 'string', description: '1–2 sentences on what the theme means for this player.' },
+        },
+      },
+    },
+    sessions: {
+      type: 'array', minItems: 6, maxItems: 6,
+      description: 'The six weekly sessions in order, week 1 through week 6.',
+      items: {
+        type: 'object',
+        required: ['week', 'theme', 'subtitle', 'primary', 'secondary', 'practice', 'ready_when', 'measure'],
+        properties: {
+          week:       { type: 'string', description: 'e.g. "1"' },
+          theme:      { type: 'string', description: 'Short theme title for the week.' },
+          subtitle:   { type: 'string', description: 'One-line framing.' },
+          primary:    { type: 'string', description: 'Primary focus for the lesson — what we work on first.' },
+          secondary: { type: 'string', description: 'Secondary focus — second half of the lesson.' },
+          practice:   { type: 'array', items: { type: 'string' }, description: '2–4 bullet practice assignments for the week between lessons.' },
+          ready_when: { type: 'string', description: 'How the player knows they\'ve nailed this week.' },
+          measure:    { type: 'string', description: 'A measurable check (e.g. "10/10 putts inside 4 ft").' },
+        },
+      },
+    },
+    arc_closing: {
+      type: 'string',
+      description: '2–3 sentence closing note from the coach to the player.',
+    },
+  },
+};
+
+function renderMarkdown(data) {
+  const s = data.student || {};
+  const L = [];
+  L.push(`# ${s.first_name || 'Player'} — 6-Week Plan`);
+  if (s.goal) L.push(`**Goal:** ${s.goal}`);
+  L.push('');
+  if (data.arc_intro) { L.push(data.arc_intro); L.push(''); }
+  if (data.arc_themes?.length) {
+    L.push('## Season Themes');
+    data.arc_themes.forEach(t => L.push(`- **${t.label} — ${t.title}:** ${t.body}`));
+    L.push('');
+  }
+  if (data.sessions?.length) {
+    L.push('## Six-Week Build');
+    data.sessions.forEach(sess => {
+      L.push(`### Week ${sess.week} — ${sess.theme}`);
+      if (sess.subtitle) L.push(`_${sess.subtitle}_`);
+      L.push(`- **Primary:** ${sess.primary}`);
+      L.push(`- **Secondary:** ${sess.secondary}`);
+      if (sess.practice?.length) L.push(`- **Practice:** ${sess.practice.join('; ')}`);
+      L.push(`- **Ready when:** ${sess.ready_when}`);
+      L.push(`- **Measure:** ${sess.measure}`);
+      L.push('');
+    });
+  }
+  if (data.arc_closing) { L.push('## Closing'); L.push(data.arc_closing); }
+  return L.join('\n');
+}
 
 // Per-instance rate limiter: 3 generations per IP per minute
 const rateLimit = new Map();
@@ -112,19 +196,27 @@ export default async function handler(req, res) {
   let roadmap;
   try {
     const anthropic = new Anthropic({ apiKey: ANTHROPIC_API_KEY });
+    const userMsg =
+      formatProfileForClaude(profile_data) +
+      '\n\n=== OUTPUT SCOPE ===\n' +
+      'For THIS request, produce ONLY the 6-Week Arc: student basics, arc_intro, ' +
+      'three arc_themes, exactly six sessions (week 1–6), and arc_closing. ' +
+      'Do NOT generate Coach Summary fields, Dossier fields, Tiger 5, prescriptions, ' +
+      'diagnostics, or skill radar. The schema in the tool enforces this — follow it exactly.';
+
     const resp = await anthropic.messages.create({
       model: MODEL,
       max_tokens: MAX_TOKENS,
       system: GOLFER_PROFILE_SYSTEM_PROMPT,
       tools: [{
-        name: 'write_coaching_roadmap',
-        description: 'Write the complete structured coaching roadmap. Call exactly once.',
-        input_schema: PDF_DATA_SCHEMA,
+        name: 'write_six_week_plan',
+        description: 'Write the player\'s 6-Week Plan. Call exactly once. Follow the schema exactly — do not add extra top-level keys.',
+        input_schema: SIX_WEEK_SCHEMA,
       }],
-      tool_choice: { type: 'tool', name: 'write_coaching_roadmap' },
-      messages: [{ role: 'user', content: formatProfileForClaude(profile_data) }],
+      tool_choice: { type: 'tool', name: 'write_six_week_plan' },
+      messages: [{ role: 'user', content: userMsg }],
     });
-    const toolUse = resp.content.find((b) => b.type === 'tool_use' && b.name === 'write_coaching_roadmap');
+    const toolUse = resp.content.find((b) => b.type === 'tool_use' && b.name === 'write_six_week_plan');
     if (!toolUse || !toolUse.input) {
       throw new Error('Anthropic did not return a tool_use block.');
     }
