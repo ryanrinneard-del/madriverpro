@@ -270,11 +270,11 @@
     </div>
   </div>
 
-  <!-- 1. TODAY'S PLAN — the engine -->
+  <!-- TODAY'S PLAN — the only thing that matters right now -->
   <div class="today-card">
     <div class="today-kicker">TODAY'S PLAN</div>
     <h1 id="today-greeting">Welcome back.</h1>
-    <p class="today-sub">Three things to make today count.</p>
+    <p class="today-sub" id="today-sub">One thing to make today count.</p>
     <div class="today-list" id="today-list"></div>
     <div style="margin-top:14px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.18); font-size:12px; letter-spacing:0.06em;">
       <a href="how-to-use.html" style="color:rgba(255,255,255,0.78); text-decoration:none; border-bottom:1px solid rgba(255,255,255,0.32); padding-bottom:1px;">
@@ -283,36 +283,7 @@
     </div>
   </div>
 
-  <!-- 2. GAME SNAPSHOT + LAST COACH INPUT -->
-  <div class="insight-grid">
-    <div class="insight-card">
-      <div class="ic-kicker">YOUR GAME SNAPSHOT</div>
-      <h3>Where you stand right now</h3>
-      <div id="snapshot-body"></div>
-    </div>
-
-    <div class="insight-card">
-      <div class="ic-kicker">LAST COACH INPUT</div>
-      <h3>What Ryan said most recently</h3>
-      <div id="coach-input-body"></div>
-    </div>
-  </div>
-
-  <!-- 2b. YOUR 6-WEEK PLAN (generated from Know Your Game profile) -->
-  <div id="game-plan-wrap" style="display:none;"></div>
-
-  <!-- 3. YOUR NUMBERS -->
-  <div id="numbers-wrap" style="display:none;">
-    <div class="page-header" style="margin-bottom:14px;">
-      <div class="page-label">YOUR NUMBERS</div>
-      <h2 class="page-title" style="font-size:22px;">What the rounds are saying</h2>
-      <hr class="gold-rule">
-      <p class="small muted" style="margin-top:6px;" id="numbers-sub">&nbsp;</p>
-    </div>
-    <div class="stat-strip mb-5" id="numbers-strip"></div>
-  </div>
-
-  <!-- 4. QUICK ACTIONS — compact strip; detailed tools live in the nav -->
+  <!-- QUICK ACTIONS — 3 pill-tiles; everything else lives in the nav -->
   <div class="quick-actions mb-5">
     <a href="submit-round.html" class="quick-action">
       <div class="qa-icon">+</div>
@@ -327,22 +298,6 @@
       <div class="qa-label">My rounds</div>
     </a>
   </div>
-
-  <!-- LESSONS -->
-  <div class="page-header">
-    <div class="page-label">MY LESSONS</div>
-    <h2 class="page-title" style="font-size:22px;">Every Session, Logged</h2>
-    <hr class="gold-rule">
-  </div>
-  <div id="lessons-list"></div>
-
-  <!-- MY PACKAGE — moved to bottom; less prominent but easy to find -->
-  <div class="page-header" style="margin-top:32px;">
-    <div class="page-label">MY PACKAGE</div>
-    <h2 class="page-title" style="font-size:22px;">Lessons remaining</h2>
-    <hr class="gold-rule">
-  </div>
-  <div class="card mb-5" id="pkg-card"></div>
 
 </main>
 
@@ -365,7 +320,7 @@
     const profileComplete = prof._status === 'complete';
     if (!profileComplete) document.getElementById('welcome-banner').style.display = 'block';
 
-    // Load all the data Today's Plan needs (parallel)
+    // Load just what the top action needs
     let rounds = [], lessons = [];
     try {
       [rounds, lessons] = await Promise.all([
@@ -374,442 +329,112 @@
       ]);
     } catch (err) { console.warn('load failed', err); }
 
-    // Live Tiger 5 tally check (localStorage on this device)
+    // Live 5 Errors tally (localStorage on this device)
     let liveTally = null;
     try { liveTally = JSON.parse(localStorage.getItem('rrgA_t5_live_' + user.id) || 'null'); } catch {}
     const liveTallyHasCounts = liveTally && liveTally.counts &&
       Object.values(liveTally.counts).some(v => v > 0);
 
-    // ============ TODAY'S PLAN BUILDER ============
-    function buildTodaysPlan() {
-      const items = [];
+    // ============ ONE THING TODAY ============
+    /* Returns the single highest-priority action for this player right now.
+       Book-a-lesson and other upsell-style items are deliberately NOT here.
+       The dashboard shows exactly one thing to do today — nothing else. */
+    function pickOneAction() {
       const now = Date.now();
       const days = ms => ms / 86400000;
 
-      // 1. Live Tiger 5 in progress (urgent)
+      // 1. Live 5 Errors tally in progress → finish logging the round
       if (liveTallyHasCounts) {
-        items.push({
+        return {
           icon: '⛳', tone: 'urgent',
           title: 'Finish logging your round',
           sub: 'You have a 5 Errors tally in progress on this device — submit the full scorecard.',
           href: 'submit-round.html',
-        });
+        };
       }
 
-      // 2. Recent round (within 7 days) without a reflection
+      // 2. Most recent round within 7 days, missing a reflection
       const mostRecentRound = rounds[0];
       if (mostRecentRound) {
         const roundAgo = days(now - new Date(mostRecentRound.round_date || mostRecentRound.created_at).getTime());
         if (roundAgo <= 7 && !mostRecentRound.reflection_good && !mostRecentRound.reflection_bad) {
-          items.push({
+          return {
             icon: '✎', tone: 'normal',
             title: `Add a reflection to your ${mostRecentRound.course || 'last'} round`,
             sub: 'Two prompts, one sentence each. Ryan uses these to write your Performance Doc.',
             href: 'round-reflection.html?round=' + mostRecentRound.id,
-          });
+          };
         }
       }
 
-      // 3. Pre-work from most recent completed lesson
+      // 3. Pre-work from your most recent completed lesson
       const lastCompletedLesson = lessons
         .filter(l => l.completed_at)
         .sort((a,b) => (b.completed_at||'').localeCompare(a.completed_at||''))[0];
       if (lastCompletedLesson && lastCompletedLesson.pre_work) {
-        const pw = lastCompletedLesson.pre_work.length > 90
-          ? lastCompletedLesson.pre_work.slice(0, 87) + '…'
+        const pw = lastCompletedLesson.pre_work.length > 110
+          ? lastCompletedLesson.pre_work.slice(0, 107) + '…'
           : lastCompletedLesson.pre_work;
-        items.push({
+        return {
           icon: '◎', tone: 'normal',
           title: `Practice: ${pw}`,
           sub: `Pre-work from your last lesson on ${RRG.fmtDate(lastCompletedLesson.completed_at)}.`,
           href: 'lesson.html?id=' + lastCompletedLesson.id,
-        });
+        };
       }
 
-      // 4. Profile not complete?
+      // 4. Profile not complete
       if (!profileComplete) {
-        items.push({
+        return {
           icon: '◔', tone: 'normal',
           title: 'Complete your Know Your Game profile',
-          sub: 'Ryan needs this before your first lesson. ~10 minutes, fully confidential.',
+          sub: 'Ryan needs this before your first lesson. About 6 minutes, fully confidential.',
           href: 'profile.html',
-        });
+        };
       }
 
-      // 5. No upcoming lesson booked?
-      const upcomingLesson = lessons.find(l => !l.completed_at);
-      if (!upcomingLesson) {
-        items.push({
-          icon: '✦', tone: 'normal',
-          title: 'Book your next lesson',
-          sub: 'Best improvers book the next session before leaving the current one.',
-          href: (RRG.ACUITY && RRG.ACUITY.bookAdultPrivate) || 'packages.html',
-          external: true,
-        });
-      }
-
-      // 6. No round logged in 14 days (or ever)?
+      // 5. Haven't logged a round in a while (or ever)
       const noRecentRound = !mostRecentRound ||
         days(now - new Date(mostRecentRound.round_date || mostRecentRound.created_at).getTime()) > 14;
       if (noRecentRound) {
-        items.push({
-          icon: '⛳', tone: 'bonus',
+        return {
+          icon: '⛳', tone: 'normal',
           title: rounds.length === 0 ? 'Log your first round' : 'Log a round this week',
           sub: 'Score is the only required field — 3 taps and you\u2019re done.',
           href: 'submit-round.html',
-        });
+        };
       }
 
-      // 7. Always-on bonus: review the Library
-      items.push({
+      // 6. Default fallback: read something
+      return {
         icon: '✻', tone: 'bonus',
         title: 'Read one Game Improvement piece',
         sub: '21 articles across 5 categories — pick anything that catches your eye.',
         href: '/improve/',
-      });
-
-      // De-dupe by href, take top 3
-      const seen = new Set();
-      const top = [];
-      for (const it of items) {
-        if (!seen.has(it.href)) { top.push(it); seen.add(it.href); }
-        if (top.length >= 3) break;
-      }
-      return top;
+      };
     }
 
-    function renderTodaysPlan(items) {
+    function renderTodaysPlan() {
       const list = document.getElementById('today-list');
-      if (items.length === 0) {
-        list.innerHTML = `<div class="today-empty">You're all caught up. Stretch, hydrate, and go play.</div>`;
+      const sub = document.getElementById('today-sub');
+      const item = pickOneAction();
+      if (!item) {
+        sub.textContent = "You're all caught up.";
+        list.innerHTML = `<div class="today-empty">Stretch, hydrate, and go play.</div>`;
         return;
       }
-      list.innerHTML = items.map(it => `
-        <a href="${it.href}" class="today-item ${it.tone}"${it.external ? ' target="_blank" rel="noopener"' : ''}>
-          <div class="ti-icon">${it.icon}</div>
+      sub.textContent = 'One thing to make today count.';
+      list.innerHTML = `
+        <a href="${item.href}" class="today-item ${item.tone}">
+          <div class="ti-icon">${item.icon}</div>
           <div>
-            <div class="ti-title">${RRG.esc(it.title)}</div>
-            <div class="ti-sub">${RRG.esc(it.sub)}</div>
+            <div class="ti-title">${RRG.esc(item.title)}</div>
+            <div class="ti-sub">${RRG.esc(item.sub)}</div>
           </div>
           <div class="ti-chev">→</div>
-        </a>
-      `).join('');
+        </a>`;
     }
-    renderTodaysPlan(buildTodaysPlan());
-
-    // ============ GAME SNAPSHOT ============
-    // Read from profile_json.snapshot — array of {title, status, tone}
-    // tone: 'good' | 'ok' | 'warn' | 'flat'
-    function renderSnapshot() {
-      const wrap = document.getElementById('snapshot-body');
-      const snap = (prof.snapshot && Array.isArray(prof.snapshot)) ? prof.snapshot.slice(0, 3) : [];
-      if (snap.length === 0) {
-        wrap.innerHTML = `
-          <div class="insight-empty">
-            <strong>No snapshot yet.</strong> After your first session with Ryan, three focus
-            metrics will appear here — the things to work on, the things that are already strong,
-            and the priority for the next month.
-          </div>`;
-        return;
-      }
-      wrap.innerHTML = snap.map(s => {
-        const tone = ['good','ok','warn','flat'].includes(s.tone) ? s.tone : 'flat';
-        return `
-          <div class="snap-row">
-            <div class="snap-title">${RRG.esc(s.title || '')}</div>
-            <div class="snap-status ${tone}">${RRG.esc(s.status || '')}</div>
-          </div>`;
-      }).join('');
-    }
-    renderSnapshot();
-
-    // ============ LAST COACH INPUT ============
-    function renderCoachInput() {
-      const wrap = document.getElementById('coach-input-body');
-      const lastWithNotes = lessons
-        .filter(l => l.completed_at && l.coach_notes && l.coach_notes.trim())
-        .sort((a,b) => (b.completed_at||'').localeCompare(a.completed_at||''))[0];
-
-      if (!lastWithNotes) {
-        wrap.innerHTML = `
-          <div class="insight-empty">
-            <strong>No lesson recap yet.</strong> After your first session, the takeaway from
-            your last lesson with Ryan will appear here — one quick read so it stays top of mind.
-          </div>`;
-        return;
-      }
-      const notes = lastWithNotes.coach_notes.trim();
-      const truncated = notes.length > 220 ? notes.slice(0, 217) + '…' : notes;
-      wrap.innerHTML = `
-        <div class="coach-quote">${RRG.esc(truncated)}</div>
-        <div class="coach-attrib">
-          &mdash; <b>Ryan</b>, after your lesson on ${RRG.fmtDate(lastWithNotes.completed_at)}
-          ${lastWithNotes.focus ? ` (focus: ${RRG.esc(lastWithNotes.focus)})` : ''}
-        </div>`;
-    }
-    renderCoachInput();
-
-    // ============ YOUR NUMBERS ============
-    /* Compute 3 real numbers from the player's rounds:
-       - Avg score (last 10 rounds with a score)
-       - Avg 5 Errors per round (last 10 rounds with a tiger5 total)
-       - Biggest pattern: the 5 Errors category with the highest count
-    */
-    function renderYourNumbers() {
-      const wrap = document.getElementById('numbers-wrap');
-      const strip = document.getElementById('numbers-strip');
-      const sub = document.getElementById('numbers-sub');
-      if (!rounds || rounds.length === 0) {
-        wrap.style.display = 'none';
-        return;
-      }
-      const recent = rounds.slice(0, 10);
-      const scores = recent.map(r => +r.score).filter(n => !isNaN(n) && n > 0);
-      const avgScore = scores.length
-        ? (scores.reduce((a,b) => a+b, 0) / scores.length).toFixed(1)
-        : '—';
-
-      const t5Totals = recent.map(r => +r.tiger5_total).filter(n => !isNaN(n));
-      const avgT5 = t5Totals.length
-        ? (t5Totals.reduce((a,b) => a+b, 0) / t5Totals.length).toFixed(1)
-        : '—';
-
-      // Biggest pattern across all rounds (not just last 10, because patterns need a bigger window)
-      const CATS = {
-        1: 'Par-5 bogeys',
-        2: 'Big numbers',
-        3: 'Blown saves',
-        4: 'Three-putts',
-        5: 'Scoring-club bogeys',
-      };
-      const sum = {1:0, 2:0, 3:0, 4:0, 5:0};
-      rounds.forEach(r => {
-        const t5 = r.tiger5 || {};
-        [1,2,3,4,5].forEach(n => { sum[n] += (+t5[n] || 0); });
-      });
-      const hasAnyT5 = Object.values(sum).some(v => v > 0);
-      let topCat = null, topVal = 0;
-      if (hasAnyT5) {
-        for (const n of [1,2,3,4,5]) {
-          if (sum[n] > topVal) { topVal = sum[n]; topCat = n; }
-        }
-      }
-      const pattern = topCat
-        ? `${CATS[topCat]}`
-        : '—';
-      const patternDetail = topCat
-        ? `${topVal} across ${rounds.length} round${rounds.length === 1 ? '' : 's'}`
-        : 'Track a few rounds to see your patterns';
-
-      strip.innerHTML = `
-        <div class="stat-cell"><div class="val">${avgScore}</div><div class="lbl">AVG SCORE (last ${Math.min(10, recent.length)})</div></div>
-        <div class="stat-cell"><div class="val">${avgT5}</div><div class="lbl">AVG 5 ERRORS / ROUND</div></div>
-        <div class="stat-cell"><div class="val" style="font-size:18px; line-height:1.3;">${RRG.esc(pattern)}</div><div class="lbl">TOP PATTERN</div></div>
-      `;
-      sub.textContent = topCat
-        ? `Your biggest pattern: ${patternDetail}. Fix this one, save the most strokes.`
-        : 'Log a few rounds and your patterns will surface here.';
-      wrap.style.display = 'block';
-    }
-    renderYourNumbers();
-
-    // ============ YOUR 6-WEEK PLAN ============
-    /* Renders a single 6-week arc from profile_json.game_plan.structured:
-         - arc_intro, arc_themes[], sessions[] (week 1–6), arc_closing
-       Polls the profile every 8 sec while status === 'generating' so the
-       view updates without a manual refresh after the player submits. */
-    const GP_WRAP = document.getElementById('game-plan-wrap');
-
-    function renderGamePlanShell(status, statusText, body) {
-      const statusClass = status || '';
-      GP_WRAP.style.display = 'block';
-      GP_WRAP.innerHTML = `
-        <div class="gp-card">
-          <div class="flex-between" style="align-items:flex-start; gap:12px; flex-wrap:wrap;">
-            <div>
-              <div class="gp-kicker">YOUR 6-WEEK PLAN</div>
-              <h3>Built from your Know Your Game profile</h3>
-            </div>
-            <div class="gp-status ${statusClass}">
-              ${status === 'generating' ? '<span class="gp-spin"></span>' : ''}
-              ${RRG.esc(statusText)}
-            </div>
-          </div>
-          ${body}
-        </div>`;
-    }
-
-    function gpRenderReady(plan) {
-      const s = plan.structured || {};
-
-      const intro    = s.arc_intro || '';
-      const themes   = Array.isArray(s.arc_themes) ? s.arc_themes : [];
-      const sessions = Array.isArray(s.sessions)   ? s.sessions   : [];
-      const closing  = s.arc_closing || '';
-
-      const body = `
-        ${intro ? `<p style="margin-top:8px;">${RRG.esc(intro)}</p>` : ''}
-
-        ${themes.length ? `
-          <h4>Three themes for your 6 weeks</h4>
-          <div class="gp-grid">
-            ${themes.map((t) => `
-              <div class="gp-tile">
-                <div class="gp-tile-title">${RRG.esc(t.label || '')} &middot; ${RRG.esc(t.title || '')}</div>
-                <div class="gp-tile-body">${RRG.esc(t.body || '')}</div>
-              </div>
-            `).join('')}
-          </div>
-        ` : ''}
-
-        ${sessions.length ? `
-          <h4>Your six weeks</h4>
-          ${sessions.map((sess, i) => `
-            <div class="gp-tile" style="margin-bottom:10px;">
-              <div class="gp-tile-title">Week ${RRG.esc(sess.week || (i + 1))} &middot; ${RRG.esc(sess.theme || '')}</div>
-              <div class="gp-tile-body">
-                ${sess.subtitle ? `<em>${RRG.esc(sess.subtitle)}</em><br>` : ''}
-                <b>Primary:</b> ${RRG.esc(sess.primary || '')}<br>
-                <b>Secondary:</b> ${RRG.esc(sess.secondary || '')}<br>
-                ${Array.isArray(sess.practice) && sess.practice.length ? `
-                  <b>Practice this week:</b>
-                  <ul style="margin:4px 0 4px 18px;">${sess.practice.map(p => `<li>${RRG.esc(p)}</li>`).join('')}</ul>
-                ` : ''}
-                <b>Ready when:</b> ${RRG.esc(sess.ready_when || '')}<br>
-                <b>Measure:</b> ${RRG.esc(sess.measure || '')}
-              </div>
-            </div>
-          `).join('')}
-        ` : '<p><em>No 6-week plan generated.</em></p>'}
-
-        ${closing ? `<p style="margin-top:14px; font-style:italic;">${RRG.esc(closing)}</p>` : ''}
-
-        <div style="margin-top:16px; padding-top:14px; border-top:1px solid var(--rule); font-size:12px; color:var(--mid-grey);">
-          Generated ${plan.generated_at ? RRG.fmtDate(plan.generated_at) : ''}
-        </div>`;
-
-      renderGamePlanShell('ready', 'Ready', body);
-    }
-
-    function renderGamePlan() {
-      const status = prof.game_plan_status;
-      const plan = prof.game_plan;
-      if (status === 'ready' && plan && plan.structured) {
-        gpRenderReady(plan);
-      } else if (status === 'generating') {
-        renderGamePlanShell('generating', 'Generating…',
-          `<p style="margin-top:14px;">Your profile is being turned into your 6-Week Plan. This takes under a minute. The page will refresh automatically when it's ready.</p>`);
-      } else if (status === 'error') {
-        renderGamePlanShell('error', 'Error',
-          `<p style="margin-top:14px;">Could not generate your game plan automatically. Ryan has been notified and will follow up with you directly.</p>
-           <p style="font-size:12px; color:var(--mid-grey);">${RRG.esc(prof.game_plan_error || '')}</p>`);
-      } else {
-        // No plan yet — hide the section
-        GP_WRAP.style.display = 'none';
-      }
-    }
-    renderGamePlan();
-
-    // Poll while generating so the dashboard shows the plan the moment it's ready
-    if (prof.game_plan_status === 'generating') {
-      let polls = 0;
-      const pollId = setInterval(async () => {
-        polls++;
-        if (polls > 30) { clearInterval(pollId); return; }   // ~6 minutes of polling
-        try {
-          const fresh = await RRG.users.get(user.id);
-          if (!fresh) return;
-          const newProf = fresh.profile_json || {};
-          if (newProf.game_plan_status !== 'generating') {
-            // Mutate prof so renderGamePlan sees the new state
-            Object.keys(prof).forEach(k => delete prof[k]);
-            Object.assign(prof, newProf);
-            renderGamePlan();
-            clearInterval(pollId);
-          }
-        } catch (err) { console.warn('poll failed', err); }
-      }, 8000);
-    }
-
-    // ============ MY PACKAGE CARD (existing) ============
-    const pkgMeta = (RRG.PACKAGES || []).find(p => p.id === user.package_id);
-    const pkgName = pkgMeta ? pkgMeta.name : 'No package yet';
-    const used = (user.lessons_used || 0);
-    const total = (user.package_lessons || pkgMeta?.lessons || 0);
-    const pct = total ? Math.min(100, Math.round(used/total*100)) : 0;
-    const acuityBook  = (RRG.ACUITY && RRG.ACUITY.bookAdultPrivate) || '#';
-    const packagesUrl = 'packages.html';
-
-    document.getElementById('pkg-card').innerHTML = `
-      <div class="flex-between">
-        <div>
-          <div class="page-label">MY PACKAGE</div>
-          <h3 style="color:var(--navy); font-size:20px; margin-top:4px;">${RRG.esc(pkgName)}</h3>
-          <p class="muted small mt-2">
-            ${total ? `Lesson ${used} of ${total} used` : 'Pick a package or book a one-off lesson below.'}
-          </p>
-        </div>
-        <div style="min-width:200px;">
-          ${total ? `
-            <div class="progress-bar"><div style="width:${pct}%;"></div></div>
-            <div class="muted small mt-2 text-center">${pct}% through your package</div>
-          ` : ''}
-        </div>
-      </div>
-      <div class="flex gap-2 mt-4" style="flex-wrap:wrap;">
-        <a href="${acuityBook}" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
-          Book next lesson →
-        </a>
-        <a href="${packagesUrl}" class="btn btn-ghost btn-sm">
-          ${total ? 'Extend with another package' : 'Buy a package'}
-        </a>
-      </div>
-      ${total && used >= total ? `
-        <div class="callout mt-4">
-          <b>Package complete.</b> Extend with another package to keep your portal history,
-          rounds, and progress all in one place.
-        </div>
-      ` : ''}
-    `;
-
-    // ============ EVERY SESSION, LOGGED ============
-    const wrap = document.getElementById('lessons-list');
-    if (lessons.length === 0) {
-      wrap.innerHTML = `
-        <div class="history-empty">
-          <h3 class="navy">No lessons logged yet.</h3>
-          <p class="muted mt-2">
-            Book your next lesson above. After each session, Ryan will log the focus,
-            debrief, and your pre-work for next time — all here in your portal.
-          </p>
-        </div>
-      `;
-    } else {
-      const upcoming  = lessons.filter(l => !l.completed_at)
-        .sort((a,b) => (a.scheduled_at||'').localeCompare(b.scheduled_at||''));
-      const completed = lessons.filter(l =>  l.completed_at)
-        .sort((a,b) => (b.scheduled_at||'').localeCompare(a.scheduled_at||''));
-      const ordered = [...upcoming, ...completed];
-      wrap.innerHTML = ordered.map(l => {
-        const status = l.completed_at ? 'complete' : (l.scheduled_at ? 'scheduled' : 'pending');
-        const statusBadge = {
-          complete:  '<span class="badge badge-green">COMPLETE</span>',
-          scheduled: '<span class="badge badge-gold">UPCOMING</span>',
-          pending:   '<span class="badge badge-ghost">PENDING</span>',
-        }[status];
-        return `
-          <a href="lesson.html?id=${l.id}" class="lesson-row ${status}" style="text-decoration:none;">
-            <div class="lnum">#${String(l.number || '—').padStart(2,'0')}</div>
-            <div>
-              <div style="font-weight:700; color:var(--navy);">${RRG.esc(l.focus || 'Focus TBD')}</div>
-              <div class="lfocus">${RRG.esc(l.pre_work || 'No pre-work yet')}</div>
-            </div>
-            <div class="ldate">${l.scheduled_at ? RRG.fmtDate(l.scheduled_at) : '—'}</div>
-            <div>${statusBadge}</div>
-          </a>
-        `;
-      }).join('');
-    }
+    renderTodaysPlan();
 
   })();
 </script>
