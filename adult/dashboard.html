@@ -212,6 +212,45 @@
   .gp-flag.GOOD   { background: #E6F5E9; color: #2E7D32; }
   .gp-flag.NOTE   { background: var(--light-bg); color: var(--navy-mid); }
 
+  /* ===== THE 2 ERRORS TO AVOID (personalized from player's rounds) ===== */
+  .top-errors {
+    display: block;
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--gold);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 18px;
+    text-decoration: none;
+    color: inherit;
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .top-errors:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(13,31,60,0.08);
+  }
+  .top-errors-kicker {
+    font-size: 10px; letter-spacing: 2px; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .top-errors-list {
+    display: flex; gap: 14px; align-items: baseline; flex-wrap: wrap;
+    font-size: 16px; color: var(--navy); font-weight: 600;
+  }
+  .top-err-chip { display: inline-flex; align-items: baseline; gap: 6px; }
+  .top-err-chip .top-err-count {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 24px; color: var(--gold); font-weight: 700; line-height: 1;
+  }
+  .top-err-chip .top-err-label { font-size: 15px; color: var(--navy); }
+  .top-err-sep {
+    display: inline-block; width: 1px; height: 20px;
+    background: var(--rule); margin: 0 4px;
+  }
+  .top-errors-sub {
+    margin-top: 6px; font-size: 12px; color: var(--mid-grey);
+  }
+
   /* ===== QUICK ACTIONS (compact strip) ===== */
   .quick-actions {
     display: grid;
@@ -282,6 +321,13 @@
       </a>
     </div>
   </div>
+
+  <!-- THE 2 ERRORS TO AVOID — player's top-2 error patterns from their rounds -->
+  <a href="history.html" id="top-errors-link" class="top-errors" style="display:none;">
+    <div class="top-errors-kicker">THE 2 ERRORS TO AVOID</div>
+    <div class="top-errors-list" id="top-errors-list"></div>
+    <div class="top-errors-sub" id="top-errors-sub">&nbsp;</div>
+  </a>
 
   <!-- QUICK ACTIONS — 3 pill-tiles; everything else lives in the nav -->
   <div class="quick-actions mb-5">
@@ -435,6 +481,49 @@
         </a>`;
     }
     renderTodaysPlan();
+
+    // ============ THE 2 ERRORS TO AVOID ============
+    /* Aggregates the player's 5 Errors across every round they've logged,
+       shows the top 2 categories. Hidden until at least 2 categories have
+       counts (below that threshold there's no meaningful "top 2"). */
+    function renderTopErrors() {
+      const wrap = document.getElementById('top-errors-link');
+      const list = document.getElementById('top-errors-list');
+      const sub  = document.getElementById('top-errors-sub');
+      if (!rounds || rounds.length === 0) { wrap.style.display = 'none'; return; }
+
+      const LABELS = {
+        1: 'Par-5 bogeys',
+        2: 'Double bogeys',
+        3: 'Blown saves',
+        4: 'Three-putts',
+        5: 'Scoring-club bogeys',
+      };
+      const sum = {1:0, 2:0, 3:0, 4:0, 5:0};
+      rounds.forEach(r => {
+        const t5 = r.tiger5 || {};
+        [1,2,3,4,5].forEach(n => { sum[n] += (+t5[n] || 0); });
+      });
+
+      // Top 2 categories that actually have counts
+      const top = [1,2,3,4,5]
+        .filter(n => sum[n] > 0)
+        .sort((a,b) => sum[b] - sum[a])
+        .slice(0, 2);
+
+      if (top.length < 2) { wrap.style.display = 'none'; return; }
+
+      list.innerHTML = top.map(n => `
+        <span class="top-err-chip">
+          <span class="top-err-count">${sum[n]}</span>
+          <span class="top-err-label">${LABELS[n]}</span>
+        </span>
+      `).join('<span class="top-err-sep"></span>');
+
+      sub.textContent = `Across ${rounds.length} round${rounds.length === 1 ? '' : 's'}. Fix these two — that's where your score drops fastest.`;
+      wrap.style.display = 'block';
+    }
+    renderTopErrors();
 
   })();
 </script>
