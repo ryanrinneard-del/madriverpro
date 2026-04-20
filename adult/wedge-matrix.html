@@ -190,11 +190,34 @@
   }
   .tpc-cue p { color: var(--white); margin: 0; font-style: italic; }
 
+  /* Horizontal scroll wrapper so the matrix never overflows the viewport on iOS.
+     Matches the iPhone width (≈375px) gracefully while still fitting the columns. */
+  .matrix-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 -6px;
+    padding: 0 6px;
+  }
+  .matrix-scroll::-webkit-scrollbar { height: 4px; }
+  .matrix-scroll::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 2px; }
+
   @media (max-width: 640px) {
+    .matrix-card { padding: 20px 14px; max-width: 100%; }
+    .matrix-card .mc-hdr > div:last-child { font-size: 9px; }
+    .matrix-card table { min-width: 440px; }
+    .matrix-card th { font-size: 10px; padding: 8px 5px; }
+    .matrix-card th:first-child { padding-left: 8px; }
+    .matrix-card td { font-size: 13px; padding: 6px 3px; }
+    .matrix-card td.club { padding-left: 8px; }
+    .matrix-card td.club input.name { font-size: 13px; padding: 6px 4px; }
+    .matrix-card input.yard { width: 58px; padding: 6px 4px; font-size: 13px; }
+    .matrix-card .remove-btn { width: 26px; height: 26px; font-size: 14px; }
+
     .wind-card, .tour-pro-card { padding: 20px 16px; }
     .wind-header { flex-direction: column; }
     .wind-readout { text-align: left; }
     .wind-dir { font-size: 11px; padding: 8px 6px; }
+    .wind-matrix { min-width: 420px; }
     .wind-matrix th, .wind-matrix td { font-size: 12px; padding: 6px 4px; }
     .tour-pro-card h2 { font-size: 18px; }
     .tpc-body p, .tpc-body li { font-size: 13px; }
@@ -280,15 +303,19 @@
       </div>
     </div>
 
-    <table id="matrix-table">
-      <thead><tr id="matrix-head"></tr></thead>
-      <tbody id="matrix-body"></tbody>
-      <tfoot id="matrix-foot"></tfoot>
-    </table>
+    <div class="matrix-scroll">
+      <table id="matrix-table">
+        <thead><tr id="matrix-head"></tr></thead>
+        <tbody id="matrix-body"></tbody>
+        <tfoot id="matrix-foot"></tfoot>
+      </table>
+    </div>
 
     <div style="font-size:11px; color:var(--navy-mid); margin-top:14px; line-height:1.55;">
-      <b>Read it this way.</b> You have a 92-yard pitch. Which wedge, which swing? Check your matrix.
-      If you have a 62-yard gap wedge ¾ swing, that's your shot. No guessing, no deceleration.
+      <b>Read it this way.</b> You have a 92-yard shot. Scan your matrix for the club and swing
+      whose carry lands around 92 — maybe your PW ¾ swing, maybe your 52° full. Account for roll
+      (firm greens release more, soft greens check). That's your club, that's your swing. No
+      guessing, no deceleration.
     </div>
   </div>
 
@@ -319,10 +346,12 @@
       </div>
     </div>
 
-    <table class="wind-matrix" id="wind-matrix">
-      <thead><tr id="wind-head"></tr></thead>
-      <tbody id="wind-body"></tbody>
-    </table>
+    <div class="matrix-scroll">
+      <table class="wind-matrix" id="wind-matrix">
+        <thead><tr id="wind-head"></tr></thead>
+        <tbody id="wind-body"></tbody>
+      </table>
+    </div>
 
     <div style="font-size:11px; color:var(--navy-mid); margin-top:14px; line-height:1.55;">
       <b>How to use it.</b> Set the wind direction, drag the slider to today's speed,
@@ -428,26 +457,75 @@
   document.getElementById('player-name').value = user.name || '';
   document.getElementById('built-on').value = new Date().toLocaleDateString();
 
-  const WEDGE_KEY = 'rrg_wedges_v2_' + user.id;
-  const YARD_KEY  = 'rrg_wedge_yd_v2_' + user.id;
+  /* ===== Wedge matrix data layer =====
+     Source of truth: profiles.profile_json.wedge_matrix = { wedges, yardages }
+     localStorage acts as a warm cache only, so edits feel instant between page
+     loads and the matrix survives a bad network moment. On first load we
+     migrate any legacy localStorage data into the cloud automatically. */
+  const WEDGE_LS_KEY = 'rrg_wedges_v2_' + user.id;
+  const YARD_LS_KEY  = 'rrg_wedge_yd_v2_' + user.id;
 
-  // Load saved wedge list or seed defaults
   let wedges = [];
-  try { wedges = JSON.parse(localStorage.getItem(WEDGE_KEY) || '[]'); } catch {}
+  let yardages = {};
+
+  // 1. Cloud first (Supabase profile_json)
+  const cloud = user.profile_json && user.profile_json.wedge_matrix;
+  if (cloud && Array.isArray(cloud.wedges)) {
+    wedges = cloud.wedges;
+    yardages = cloud.yardages || {};
+  } else {
+    // 2. Legacy localStorage fallback (will get pushed to cloud on next save)
+    try { wedges = JSON.parse(localStorage.getItem(WEDGE_LS_KEY) || '[]'); } catch {}
+    try { yardages = JSON.parse(localStorage.getItem(YARD_LS_KEY) || '{}'); } catch {}
+  }
+
+  // 3. Seed defaults if still empty
   if (!wedges.length) {
     wedges = RRG.WEDGE_CLUBS.map((name, i) => ({ id: 'w' + (Date.now() + i), name }));
-    localStorage.setItem(WEDGE_KEY, JSON.stringify(wedges));
   }
 
-  let yardages = {};
-  try { yardages = JSON.parse(localStorage.getItem(YARD_KEY) || '{}'); } catch {}
+  // Debounced cloud save. Every edit writes to localStorage immediately (instant
+  // in-device continuity) and schedules a Supabase write ~800ms later (cross-
+  // device sync without hammering the API on every keystroke).
+  let saveTimer = null;
+  let pendingCloudSave = false;
+
+  async function flushCloudSave() {
+    pendingCloudSave = false;
+    const next = { ...(user.profile_json || {}), wedge_matrix: { wedges, yardages } };
+    try {
+      await RRG.users.update(user.id, { profile_json: next });
+      user.profile_json = next;
+    } catch (err) {
+      console.warn('wedge matrix cloud save failed', err);
+      RRG.toast('Could not sync to cloud — your changes are saved on this device.');
+    }
+  }
 
   function saveAll(announce = false) {
-    localStorage.setItem(WEDGE_KEY, JSON.stringify(wedges));
-    localStorage.setItem(YARD_KEY, JSON.stringify(yardages));
-    if (announce) RRG.toast('Wedge matrix saved to your portal.');
+    // Instant local cache
+    try {
+      localStorage.setItem(WEDGE_LS_KEY, JSON.stringify(wedges));
+      localStorage.setItem(YARD_LS_KEY, JSON.stringify(yardages));
+    } catch {}
+    // Debounced cloud sync
+    pendingCloudSave = true;
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(flushCloudSave, 800);
+    if (announce) {
+      clearTimeout(saveTimer);
+      flushCloudSave().then(() => RRG.toast('Wedge matrix saved to your portal.'));
+    }
   }
   window.saveMatrix = () => saveAll(true);
+
+  // If the user leaves the tab with an unsent change, flush now.
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden' && pendingCloudSave) {
+      clearTimeout(saveTimer);
+      flushCloudSave();
+    }
+  });
 
   function render() {
     // Header
