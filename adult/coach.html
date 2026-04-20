@@ -493,7 +493,11 @@
             <code>RRA-ADULT-2026</code>
             <div class="mc-sub">Share with every new adult client. Reusable forever.</div>
           </div>
-          <button class="btn btn-primary btn-sm" onclick="copyCode('RRA-ADULT-2026')">Copy Code</button>
+          <div class="flex gap-2" style="flex-wrap:wrap;">
+            <button class="btn btn-ghost btn-sm"   onclick="copyCode('RRA-ADULT-2026')">Copy</button>
+            <button class="btn btn-primary btn-sm" onclick="emailInvite('RRA-ADULT-2026','adult')">✉ Email</button>
+            <button class="btn btn-primary btn-sm" onclick="textInvite('RRA-ADULT-2026','adult')">💬 Text</button>
+          </div>
         </div>
         <div class="master-code-card">
           <div class="mc-body">
@@ -501,7 +505,11 @@
             <code>RRG-JUNIOR-2026</code>
             <div class="mc-sub">Share with every new junior elite athlete. Reusable forever.</div>
           </div>
-          <button class="btn btn-primary btn-sm" onclick="copyCode('RRG-JUNIOR-2026')">Copy Code</button>
+          <div class="flex gap-2" style="flex-wrap:wrap;">
+            <button class="btn btn-ghost btn-sm"   onclick="copyCode('RRG-JUNIOR-2026')">Copy</button>
+            <button class="btn btn-primary btn-sm" onclick="emailInvite('RRG-JUNIOR-2026','junior')">✉ Email</button>
+            <button class="btn btn-primary btn-sm" onclick="textInvite('RRG-JUNIOR-2026','junior')">💬 Text</button>
+          </div>
         </div>
       `;
     }
@@ -528,11 +536,13 @@
                   <td class="small muted">${RRG.fmtDate(inv.created_at)}</td>
                   <td class="small">${RRG.esc(inv.note || '')}</td>
                   <td>
-                    <div class="flex gap-2">
+                    <div class="flex gap-2" style="flex-wrap:wrap;">
                       <button class="btn btn-ghost btn-sm" onclick="copyCode('${inv.code}')">Copy</button>
-                      ${!inv.used_by
-                        ? `<button class="btn btn-ghost btn-sm" onclick="revokeInvite('${inv.code}')" style="color:var(--red-risk);">Revoke</button>`
-                        : ''}
+                      ${!inv.used_by ? `
+                        <button class="btn btn-ghost btn-sm" onclick="emailInvite('${inv.code}','adult')">✉ Email</button>
+                        <button class="btn btn-ghost btn-sm" onclick="textInvite('${inv.code}','adult')">💬 Text</button>
+                        <button class="btn btn-ghost btn-sm" onclick="revokeInvite('${inv.code}')" style="color:var(--red-risk);">Revoke</button>
+                      ` : ''}
                     </div>
                   </td>
                 </tr>
@@ -963,6 +973,69 @@
         navigator.clipboard.writeText(code);
       }
       RRG.toast('Copied: ' + code);
+    };
+
+    /* Invite helpers. Opens the user's default email or SMS composer
+       with a prefilled template. No backend, no contact list — Ryan
+       types the recipient, reviews, and sends. Works on desktop (mail
+       client) and on phones (iMessage / Mail). Track is 'adult' or
+       'junior' and determines the signup URL the recipient sees. */
+    function inviteSignupUrl(track) {
+      return track === 'junior'
+        ? 'https://rrgolfperformance.com/portal/signup.html'
+        : 'https://rrgolfperformance.com/adult/signup.html';
+    }
+
+    window.emailInvite = (code, track) => {
+      const url = inviteSignupUrl(track);
+      const program = track === 'junior' ? 'Junior Elite' : 'Adult Coaching';
+      const subject = 'Welcome to Ryan Rinneard Golf — your portal invite';
+      const body =
+`Hi,
+
+Welcome to Ryan Rinneard Golf Performance. Your access to the ${program} portal is ready.
+
+Getting set up takes about two minutes:
+
+1. Go to ${url}
+
+2. Enter your email, then the access code below when prompted:
+
+   ${code}
+
+3. You'll get a magic-link email. Click the link and you're in.
+
+Once you're signed in, the first thing to do is the Know Your Game profile — it's the frame for every lesson we do together. About 6 minutes, fully confidential, only I see it.
+
+Any trouble? Just reply to this email.
+
+See you on the range,
+Ryan
+
+Ryan Rinneard
+CPGA Class A · Director of Instruction, Mad River Golf Club
+ryan@rrgolfperformance.com`;
+
+      location.href = 'mailto:?subject=' + encodeURIComponent(subject) +
+                      '&body='    + encodeURIComponent(body);
+    };
+
+    window.textInvite = (code, track) => {
+      const url = inviteSignupUrl(track);
+      /* SMS has a rough 160-char "comfortable" limit. This fits in two
+         messages max on every carrier while still including what they need. */
+      const body =
+`Hi — welcome to RR Golf Performance! Your portal is ready.
+
+1. Sign up: ${url}
+2. Use code: ${code}
+
+You'll get a magic link — click it and you're in. First job: the Know Your Game profile (~6 min).
+
+Questions? Text back.
+
+— Ryan`;
+      location.href = 'sms:?&body=' + encodeURIComponent(body);
     };
 
     window.revokeInvite = async (code) => {
