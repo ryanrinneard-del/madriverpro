@@ -164,9 +164,12 @@
     <div>
       <div class="page-label">CARRY THIS CARD</div>
       <h2 style="font-size:18px; color:var(--navy);">Printable Tiger 5 Scorecard</h2>
-      <p class="muted small">Print it, fold it, slip it into your scorecard holder.</p>
+      <p class="muted small">Print one for the scorecard holder, or print 4-up on letter and cut.</p>
     </div>
-    <button onclick="rrgPrint(this)" class="btn btn-primary" id="t5-print-btn">Print this card ↗</button>
+    <div class="flex gap-2" style="flex-wrap:wrap;">
+      <button onclick="rrgPrint(this)" class="btn btn-ghost btn-sm" id="t5-print-btn">Print 1 (6×4)</button>
+      <button onclick="printT5Multi(this)" class="btn btn-primary btn-sm" id="t5-print-multi-btn">Print 4 per sheet (letter) ↗</button>
+    </div>
   </div>
 
   <div class="t5-card print-page" id="printable">
@@ -313,6 +316,90 @@
       <td class="box" style="background:var(--gold);"></td>
     </tr>
   `;
+
+  /* ===== Multi-card print: 4 cards on a single letter page ===== */
+  window.printT5Multi = function(btn) {
+    if (btn) { btn.disabled = true; btn.textContent = 'Preparing…'; }
+    const original = document.getElementById('printable');
+    if (!original) { if (btn) btn.disabled = false; return; }
+
+    const wrap = document.createElement('div');
+    wrap.id = 't5-print-multi-wrap';
+    wrap.className = 't5-multi-grid';
+    const placeholder = document.createComment('t5-printable-placeholder');
+    original.parentNode.insertBefore(placeholder, original);
+    wrap.appendChild(original);
+    for (let i = 0; i < 3; i++) {
+      const clone = original.cloneNode(true);
+      clone.removeAttribute('id');
+      clone.classList.add('t5-print-clone');
+      wrap.appendChild(clone);
+    }
+    placeholder.parentNode.insertBefore(wrap, placeholder);
+
+    const styleEl = document.createElement('style');
+    styleEl.id = 't5-multi-print-style';
+    styleEl.textContent = `
+      @media print {
+        @page { size: letter; margin: 0.32in; }
+        html, body { background: white; margin: 0; padding: 0; }
+        body > *:not(#t5-print-multi-wrap):not(#footer-mount) { display: none !important; }
+        #footer-mount { display: none !important; }
+        #t5-print-multi-wrap.t5-multi-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          grid-template-rows: 1fr 1fr;
+          gap: 0.18in;
+          width: 100%;
+          height: 10.36in;
+          margin: 0; padding: 0;
+        }
+        #t5-print-multi-wrap .t5-card {
+          width: 100%; max-width: 100%; height: 100%;
+          margin: 0; padding: 6px 8px;
+          border: 1px solid var(--navy);
+          border-radius: 4px;
+          page-break-inside: avoid; break-inside: avoid;
+          box-sizing: border-box;
+          display: flex; flex-direction: column;
+        }
+        #t5-print-multi-wrap .t5-card .t5-hdr { padding-bottom: 3px; margin-bottom: 3px; }
+        #t5-print-multi-wrap .t5-card .t5-hdr .brand { font-size: 9px; letter-spacing: 0.6px; }
+        #t5-print-multi-wrap .t5-card .t5-hdr .muted { font-size: 6.5px; }
+        #t5-print-multi-wrap .t5-card .t5-hdr .sub { font-size: 7px; letter-spacing: 0.8px; }
+        #t5-print-multi-wrap .t5-card .meta-row { font-size: 7.5px; gap: 6px; margin-top: 4px; }
+        #t5-print-multi-wrap .t5-card .meta-row .lbl { font-size: 6.5px; }
+        #t5-print-multi-wrap .t5-card .meta-row input { font-size: 8px; padding: 2px 0; }
+        #t5-print-multi-wrap .t5-card table { margin-top: 4px; flex: 1; }
+        #t5-print-multi-wrap .t5-card th, #t5-print-multi-wrap .t5-card td {
+          padding: 2px 2px; font-size: 7.5px;
+        }
+        #t5-print-multi-wrap .t5-card th { font-size: 6.5px; letter-spacing: 0.3px; }
+        #t5-print-multi-wrap .t5-card td.box { width: 12px; height: 12px; }
+        #t5-print-multi-wrap .t5-card td.error-type { font-size: 6px; }
+        #t5-print-multi-wrap .t5-card .totals-row td { font-size: 8px; }
+        #t5-print-multi-wrap .t5-card > div:last-child { font-size: 6px !important; line-height: 1.2 !important; margin-top: 3px !important; }
+      }
+    `;
+    document.head.appendChild(styleEl);
+
+    function cleanup() {
+      const orig = wrap.firstElementChild;
+      if (orig) placeholder.parentNode.insertBefore(orig, placeholder);
+      placeholder.remove();
+      wrap.remove();
+      const s = document.getElementById('t5-multi-print-style');
+      if (s) s.remove();
+      if (btn) { btn.disabled = false; btn.textContent = 'Print 4 per sheet (letter) ↗'; }
+      window.removeEventListener('afterprint', cleanup);
+    }
+    window.addEventListener('afterprint', cleanup);
+
+    setTimeout(() => {
+      try { window.print(); } catch (e) { cleanup(); return; }
+      setTimeout(cleanup, 800);
+    }, 50);
+  };
 
   })();
 </script>
