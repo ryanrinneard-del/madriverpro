@@ -280,6 +280,22 @@
     }
   }
 
+  // Kick off the Golfer Profile Interpreter AI pipeline. Writes back to
+  // profile_json.game_plan once Claude responds (~30 sec). Best-effort —
+  // if the env vars aren't set in production, the endpoint silently no-ops.
+  async function generateGamePlan(data) {
+    try {
+      const r = await fetch('/api/generate-game-plan', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: user.id, profile_data: data }),
+      });
+      if (!r.ok) console.warn('game-plan trigger failed', r.status);
+    } catch (err) {
+      console.warn('game-plan trigger error', err);
+    }
+  }
+
   window.saveDraft = async () => {
     const data = Object.fromEntries(new FormData(form).entries());
     const next = { ...(user.profile_json || {}), ...data,
@@ -309,11 +325,13 @@
       await RRG.users.update(user.id, { profile_json: next });
       user.profile_json = next;
 
-      // 2. Email Ryan in parallel — don't block redirect on this
+      // 2. Email Ryan + kick off AI generation in parallel — both
+      // best-effort; neither blocks the redirect.
       emailToCoach(data);
+      generateGamePlan(data);
 
-      RRG.toast('Profile saved. Ryan has been notified by email.');
-      setTimeout(() => location.href = 'dashboard.html', 1200);
+      RRG.toast('Profile saved. Ryan has been notified — your Game Plan is generating now.');
+      setTimeout(() => location.href = 'dashboard.html', 1500);
     } catch (err) {
       if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Submit Profile'; }
       RRG.toast('Could not save profile: ' + (err.message || err));

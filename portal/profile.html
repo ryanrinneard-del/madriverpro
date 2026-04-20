@@ -258,6 +258,19 @@
     }
   }
 
+  async function generateGamePlan(data) {
+    try {
+      const r = await fetch('/api/generate-game-plan', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: user.id, profile_data: data }),
+      });
+      if (!r.ok) console.warn('game-plan trigger failed', r.status);
+    } catch (err) {
+      console.warn('game-plan trigger error', err);
+    }
+  }
+
   window.saveDraft = async () => {
     const data = Object.fromEntries(new FormData(form).entries());
     const next = { ...(user.profile_json || {}), ...data,
@@ -285,8 +298,9 @@
       await RRG.users.update(user.id, { profile_json: next });
       user.profile_json = next;
       emailToCoach(data);
-      RRG.toast('Profile saved. Ryan has been notified by email.');
-      setTimeout(() => location.href = 'dashboard.html', 1200);
+      generateGamePlan(data);
+      RRG.toast('Profile saved. Ryan has been notified — your Game Plan is generating now.');
+      setTimeout(() => location.href = 'dashboard.html', 1500);
     } catch (err) {
       if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Submit Profile'; }
       RRG.toast('Could not save profile: ' + (err.message || err));
