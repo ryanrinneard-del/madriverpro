@@ -119,7 +119,90 @@
     .bag-card input.name { font-size: 9px; padding: 0 2px; border: none; background: transparent; width: 100% !important; }
     .bag-card input.yard { width: 40px; font-size: 9px; padding: 0 2px; border: none; background: transparent; text-align: center; }
     .bag-card > div:last-child { display: none; }  /* hide the 'Why this matters' footer \u2014 no room */
+    .wind-card { display: none !important; }
   }
+
+  /* ========== WIND-ADJUSTED BAG ========== */
+  .wind-card {
+    background: var(--white); border: 1px solid var(--rule);
+    border-top: 3px solid var(--gold);
+    border-radius: 12px; padding: 24px 26px;
+    margin-top: 28px;
+  }
+  .wind-card .wind-header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    gap: 16px; flex-wrap: wrap; margin-bottom: 14px;
+  }
+  .wind-card .wind-title {
+    font-size: 11px; letter-spacing: 2px; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 6px;
+  }
+  .wind-card .wind-sub { font-size: 13px; color: var(--navy-mid); }
+  .wind-card .wind-readout { text-align: right; flex-shrink: 0; }
+  .wind-card .wind-readout .wind-value {
+    display: block; font-family: 'Playfair Display', Georgia, serif;
+    font-size: 26px; font-weight: 700; color: var(--navy); line-height: 1;
+  }
+  .wind-card .wind-readout .wind-label {
+    display: block; font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--mid-grey); margin-top: 4px;
+  }
+  .wind-dir-toggle {
+    display: inline-flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap;
+  }
+  .wind-dir {
+    background: var(--white); border: 1px solid var(--rule);
+    padding: 8px 14px; border-radius: 6px;
+    font-size: 13px; color: var(--mid-grey); font-weight: 600;
+    cursor: pointer; transition: all .15s ease;
+  }
+  .wind-dir:hover { border-color: var(--gold); color: var(--navy); }
+  .wind-dir.active {
+    background: var(--navy); color: var(--white); border-color: var(--navy);
+  }
+  .wind-slider {
+    width: 100%; -webkit-appearance: none; appearance: none;
+    height: 6px; background: var(--rule); border-radius: 3px;
+    outline: none; margin-top: 6px;
+  }
+  .wind-slider::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 22px; height: 22px; background: var(--gold);
+    border: 2px solid var(--white); border-radius: 50%;
+    cursor: pointer; box-shadow: 0 2px 6px rgba(13,31,60,0.25);
+  }
+  .wind-slider::-moz-range-thumb {
+    width: 22px; height: 22px; background: var(--gold);
+    border: 2px solid var(--white); border-radius: 50%;
+    cursor: pointer; box-shadow: 0 2px 6px rgba(13,31,60,0.25);
+  }
+  .wind-tick-labels {
+    display: flex; justify-content: space-between;
+    font-size: 10px; color: var(--mid-grey); letter-spacing: 0.05em;
+    margin-top: 4px;
+  }
+  .wind-table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+  .wind-table th {
+    text-align: right; padding: 8px 10px;
+    font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--mid-grey); font-weight: 700;
+    border-bottom: 1px solid var(--rule);
+  }
+  .wind-table th:first-child { text-align: left; padding-left: 14px; }
+  .wind-table td {
+    padding: 10px; text-align: right;
+    border-bottom: 1px solid var(--rule); font-size: 14px;
+  }
+  .wind-table td.club {
+    text-align: left; padding-left: 14px;
+    color: var(--navy); font-weight: 600;
+  }
+  .wind-table td.stock { color: var(--mid-grey); }
+  .wind-table td.adj { font-weight: 700; font-size: 16px; }
+  .wind-table td.adj-up   { color: #2E7D32; }
+  .wind-table td.adj-down { color: var(--red-risk); }
+  .wind-table td.adj-same { color: var(--navy); }
+  .wind-table td.adj small { display: block; font-weight: 500; font-size: 11px; color: var(--mid-grey); margin-top: 2px; }
 </style>
 </head>
 <body>
@@ -196,6 +279,60 @@
       <b>Why this matters.</b> On course, you're not picking a club &mdash; you're picking a yardage.
       The club just delivers it. When you know every number, every shot becomes a decision,
       not a guess.
+    </div>
+  </div>
+
+  <!-- ========== WIND-ADJUSTED BAG ========== -->
+  <div class="wind-card no-print" id="wind-tool">
+    <div class="wind-header">
+      <div>
+        <div class="wind-title">WIND-ADJUSTED BAG</div>
+        <div class="wind-sub">Your full bag, dialed for today's wind. Updates live.</div>
+      </div>
+      <div class="wind-readout">
+        <span class="wind-value" id="wind-value">0 km/h</span>
+        <span class="wind-label" id="wind-label">No wind</span>
+      </div>
+    </div>
+
+    <div class="wind-controls">
+      <div class="wind-dir-toggle" role="group" aria-label="Wind direction">
+        <button class="wind-dir" data-dir="head" type="button">&uarr; Headwind</button>
+        <button class="wind-dir active" data-dir="none" type="button">&#9675; None</button>
+        <button class="wind-dir" data-dir="tail" type="button">&darr; Tailwind</button>
+      </div>
+      <input type="range" class="wind-slider" id="wind-slider"
+             min="0" max="40" step="1" value="0"
+             aria-label="Wind speed in km/h">
+      <div class="wind-tick-labels">
+        <span>0</span><span>10</span><span>20</span><span>30</span><span>40 km/h</span>
+      </div>
+    </div>
+
+    <table class="wind-table" id="wind-table">
+      <thead>
+        <tr>
+          <th>Club</th>
+          <th>Stock carry</th>
+          <th>Adjusted</th>
+        </tr>
+      </thead>
+      <tbody id="wind-body"></tbody>
+    </table>
+
+    <div style="font-size:11px; color:var(--navy-mid); margin-top:14px; line-height:1.55;">
+      <b>How we compute this.</b> Wind affects every club differently because each club has its own
+      trajectory &mdash; a driver runs flat and penetrates wind; a sand wedge floats and gets
+      shoved around. We categorize your bag into low-flight (driver, woods, long irons),
+      mid-flight (6&ndash;8 iron), and high-flight (9 iron through wedges), then scale the
+      effect by your actual carry distance. Your personal <b>carry&nbsp;:&nbsp;total ratio</b>
+      nudges the estimate up or down &mdash; a shot that rolls out a lot flies lower and is less
+      wind-affected, and vice versa.
+    </div>
+    <div style="font-size:11px; color:var(--mid-grey); margin-top:8px; line-height:1.5;">
+      <b>Disclaimer.</b> Numbers assume a pure strike off a clean lie. Mishits, slopes, elevation,
+      temperature, and altitude all move the number. Use these as a starting point, not a final
+      answer &mdash; and as always, commit to the shot before you swing.
     </div>
   </div>
 
@@ -379,6 +516,105 @@
   };
 
   render();
+
+  /* ===================================================================
+     WIND-ADJUSTED BAG (mirrors adult/bag.html)
+     Trajectory-based wind model + per-player carry:total refinement.
+     =================================================================== */
+
+  function trajectoryFactor(name) {
+    const n = (name || '').toLowerCase();
+    if (/(pw|gap|\bgw\b|\bsw\b|\blw\b|wedge|\b60|\b58|\b56|\b54|\b52|\b50\b|\b48)/.test(n)) return 1.25;
+    if (/\b9\s*iron\b|\b9i\b/.test(n)) return 1.15;
+    if (/\b[678]\s*iron\b|\b[678]i\b/.test(n)) return 1.0;
+    if (/driver|\bdrv\b|\bdrive\b|\bwood\b|\b[35]w\b|hybrid|rescue/.test(n)) return 0.75;
+    if (/\b[345]\s*iron\b|\b[345]i\b/.test(n)) return 0.85;
+    if (/putter/.test(n)) return 0;
+    return 1.0;
+  }
+
+  function playerFactor(carry, total) {
+    const c = +carry, t = +total;
+    if (!c || !t || t <= c) return 1.0;
+    const ratio = (t - c) / c;
+    if (ratio < 0.08) return 1.10;
+    if (ratio > 0.18) return 0.90;
+    return 1.0;
+  }
+
+  let windDir = 'none';
+  let windSpeed = 0;
+
+  function windAdjustCarry(club) {
+    const carry = +club.carry;
+    if (!carry || windDir === 'none' || !windSpeed) return { adjusted: carry, delta: 0 };
+    const tf = trajectoryFactor(club.name);
+    if (tf === 0) return { adjusted: carry, delta: 0 };
+    const pf = playerFactor(club.carry, club.total);
+    const rate = windDir === 'head' ? 0.6 : 0.3;
+    const rawDelta = (windSpeed * rate * carry) / 100 * tf * pf;
+    const delta = windDir === 'head' ? -rawDelta : rawDelta;
+    return { adjusted: Math.round(carry + delta), delta: Math.round(delta) };
+  }
+
+  function renderWind() {
+    const body = document.getElementById('wind-body');
+    if (!body) return;
+    body.innerHTML = bag.map(c => {
+      const carry = +c.carry;
+      if (!carry) {
+        return `<tr>
+          <td class="club">${RRG.esc(c.name || '—')}</td>
+          <td class="stock">—</td>
+          <td class="adj adj-same">—</td>
+        </tr>`;
+      }
+      const { adjusted, delta } = windAdjustCarry(c);
+      const cls = delta === 0 ? 'adj-same' : (delta > 0 ? 'adj-up' : 'adj-down');
+      const sign = delta > 0 ? '+' : '';
+      const deltaLabel = delta === 0 ? '' : `<small>${sign}${delta} yd</small>`;
+      return `<tr>
+        <td class="club">${RRG.esc(c.name || '—')}</td>
+        <td class="stock">${carry} yd</td>
+        <td class="adj ${cls}">${adjusted} yd${deltaLabel}</td>
+      </tr>`;
+    }).join('');
+
+    const valEl = document.getElementById('wind-value');
+    const labEl = document.getElementById('wind-label');
+    if (windDir === 'none' || !windSpeed) {
+      valEl.textContent = '0 km/h';
+      labEl.textContent = 'No wind';
+    } else {
+      valEl.textContent = windSpeed + ' km/h';
+      labEl.textContent = windDir === 'head' ? 'Headwind' : 'Tailwind';
+    }
+  }
+
+  document.querySelectorAll('.wind-dir').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.wind-dir').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      windDir = btn.dataset.dir;
+      renderWind();
+    });
+  });
+  document.getElementById('wind-slider').addEventListener('input', (e) => {
+    windSpeed = +e.target.value;
+    if (windSpeed > 0 && windDir === 'none') {
+      windDir = 'head';
+      document.querySelectorAll('.wind-dir').forEach(b => b.classList.toggle('active', b.dataset.dir === 'head'));
+    }
+    renderWind();
+  });
+
+  const origSaveBag = window.saveBag;
+  window.saveBag = (announce = false) => {
+    origSaveBag(announce);
+    renderWind();
+  };
+
+  renderWind();
 
   })();
 </script>

@@ -477,12 +477,14 @@
 
   let wedges = [];
   let yardages = {};
+  let hadCloud = false;
 
   // 1. Cloud first (Supabase profile_json)
   const cloud = user.profile_json && user.profile_json.wedge_matrix;
-  if (cloud && Array.isArray(cloud.wedges)) {
+  if (cloud && Array.isArray(cloud.wedges) && cloud.wedges.length) {
     wedges = cloud.wedges;
     yardages = cloud.yardages || {};
+    hadCloud = true;
   } else {
     // 2. Legacy localStorage fallback (will get pushed to cloud on next save)
     try { wedges = JSON.parse(localStorage.getItem(WEDGE_LS_KEY) || '[]'); } catch {}
@@ -544,6 +546,14 @@
       flushCloudSave();
     }
   });
+
+  // Auto-migration: if this device landed with no cloud data but DID load
+  // something from localStorage (or just seeded defaults), push to cloud so
+  // the other devices pick it up. Fires ~300ms after mount. Mirrors bag.html.
+  if (!hadCloud) {
+    pendingCloudSave = true;
+    setTimeout(flushCloudSave, 300);
+  }
 
   function render() {
     // Header
