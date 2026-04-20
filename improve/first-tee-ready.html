@@ -1,0 +1,1130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>First-Tee Ready — Game Improvement Library</title>
+<meta name="description" content="The quiet code of a private golf club — every rhythm, ritual, and unspoken rule that separates a confident first round from an anxious one. A reference guide for players new to private-club golf.">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  /* =============================================================
+     FIRST-TEE READY — expandable reference deck.
+     Reuses the DECADE letter-card pattern but with plain headers
+     (no glyph) and a small count badge on each section.
+     ============================================================= */
+
+  /* ---- HERO ---- */
+  .ftr-hero {
+    background: linear-gradient(180deg, #ffffff 0%, #F7F2E8 100%);
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    padding: 40px 32px;
+    margin-bottom: 32px;
+    text-align: center;
+  }
+  .ftr-hero .wm-line {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(42px, 7vw, 64px);
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+  .ftr-hero .wm-line em {
+    color: var(--gold); font-style: italic; font-weight: 400;
+  }
+  .ftr-hero .tagline {
+    margin: 18px auto 0; max-width: 640px;
+    font-size: 16px; line-height: 1.65; color: var(--navy-mid);
+  }
+
+  /* ---- SECTION KICKERS ---- */
+  .ftr-section-head {
+    display: flex; align-items: baseline; gap: 12px;
+    margin: 40px 0 14px 0;
+    padding-bottom: 10px; border-bottom: 1px solid var(--rule);
+    flex-wrap: wrap;
+  }
+  .ftr-section-head .sh-num {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; font-size: 20px;
+    color: var(--gold); font-weight: 400;
+  }
+  .ftr-section-head h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 26px; color: var(--navy); font-weight: 600;
+    margin: 0;
+  }
+  .ftr-section-head .count {
+    margin-left: auto;
+    font-size: 11px; letter-spacing: 0.14em;
+    color: var(--mid-grey); text-transform: uppercase;
+  }
+  .ftr-section-desc {
+    font-size: 13px; color: var(--navy-mid);
+    margin: -4px 0 18px; line-height: 1.55;
+  }
+
+  /* ---- REFERENCE CARDS (expandable) ---- */
+  .ref-stack { display: grid; gap: 10px; margin-bottom: 20px; }
+  .ref-card {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--gold);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: box-shadow .18s ease, border-color .18s ease;
+  }
+  .ref-card[open] {
+    box-shadow: 0 8px 24px rgba(13,31,60,0.06);
+    border-color: var(--gold);
+  }
+  .ref-card summary {
+    display: grid;
+    grid-template-columns: 1fr 28px;
+    gap: 12px; align-items: center;
+    padding: 14px 18px;
+    cursor: pointer; list-style: none; user-select: none;
+  }
+  .ref-card summary::-webkit-details-marker { display: none; }
+  .ref-card .ref-title {
+    font-size: 15px; color: var(--navy); font-weight: 600; line-height: 1.35;
+  }
+  .ref-card .chev {
+    color: var(--mid-grey); font-size: 20px; line-height: 1;
+    transition: transform .2s ease; text-align: center;
+  }
+  .ref-card[open] .chev { transform: rotate(90deg); color: var(--gold); }
+  .ref-card .ref-body {
+    padding: 0 18px 16px; color: var(--navy-mid);
+    line-height: 1.6; font-size: 14px;
+  }
+  .ref-card .ref-body p { margin: 0 0 10px; }
+  .ref-card .ref-body p:last-child { margin-bottom: 0; }
+  .ref-card .ref-body b { color: var(--navy); }
+
+  /* ---- BIG ARTICLE CALLOUT (the unsolicited-advice piece) ---- */
+  .featured-article {
+    background: var(--navy);
+    color: #fff;
+    border-radius: 14px;
+    padding: 44px 44px 38px;
+    margin: 48px 0 36px;
+    position: relative;
+  }
+  .featured-article::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--gold);
+    border-radius: 14px 14px 0 0;
+  }
+  .featured-article .fa-kicker {
+    font-size: 11px; letter-spacing: 0.22em;
+    color: var(--gold); font-weight: 700; text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .featured-article h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(28px, 4.5vw, 38px); line-height: 1.15;
+    color: #fff; font-weight: 600;
+    margin: 0 0 8px;
+  }
+  .featured-article h2 em { color: var(--gold); font-style: italic; font-weight: 400; }
+  .featured-article .fa-sub {
+    font-size: 15px; color: rgba(255,255,255,0.7);
+    margin-bottom: 26px; line-height: 1.55; font-style: italic;
+  }
+  .featured-article .fa-body p {
+    font-size: 15.5px; line-height: 1.7; color: rgba(255,255,255,0.92);
+    margin: 0 0 16px;
+  }
+  .featured-article .fa-body p strong { color: var(--gold); font-weight: 700; }
+  .featured-article .fa-body h3 {
+    color: #fff; font-size: 13px; letter-spacing: 0.18em;
+    text-transform: uppercase; font-weight: 700;
+    margin: 28px 0 10px; padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,0.15);
+  }
+  .featured-article .fa-body h3:first-child { border-top: 0; padding-top: 0; margin-top: 0; }
+  .featured-article .fa-pull {
+    border-left: 3px solid var(--gold);
+    padding: 4px 0 4px 18px;
+    margin: 20px 0;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 19px; line-height: 1.45; color: #fff;
+    font-style: italic;
+  }
+  .featured-article .fa-body ul, .featured-article .fa-body ol {
+    margin: 8px 0 14px 22px; padding: 0;
+  }
+  .featured-article .fa-body li {
+    margin-bottom: 6px; color: rgba(255,255,255,0.92); line-height: 1.55;
+  }
+
+  /* ---- GLOSSARY ---- */
+  .glossary {
+    background: #F7F2E8;
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 28px 30px;
+    margin: 36px 0;
+  }
+  .glossary h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px; color: var(--navy); margin: 0 0 14px;
+    font-weight: 600;
+  }
+  .glossary dl {
+    display: grid; grid-template-columns: minmax(140px, 1fr) 2fr;
+    gap: 10px 22px;
+  }
+  .glossary dt {
+    font-weight: 700; color: var(--navy); font-size: 14px;
+  }
+  .glossary dd {
+    margin: 0; color: var(--navy-mid); font-size: 14px; line-height: 1.5;
+  }
+  @media (max-width: 620px) {
+    .glossary dl { grid-template-columns: 1fr; gap: 4px 0; }
+    .glossary dd { margin-bottom: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container">
+
+  <div class="breadcrumb">
+    <a href="index.html">Library</a><span>›</span>First-Tee Ready
+  </div>
+
+  <!-- HERO -->
+  <div class="ftr-hero">
+    <div class="wm-line">First-Tee <em>Ready.</em></div>
+    <p class="tagline">
+      The quiet code of a private club &mdash; every rhythm, ritual, and unspoken rule
+      that separates a confident first round from an anxious one. Bookmark this. Open it
+      before you tee off. No one will ever have to tell you <em>"that's not how we do
+      it here."</em>
+    </p>
+  </div>
+
+  <article class="article">
+    <p>
+      Every private club has rules you won't find in the member handbook. They're the
+      things everyone who's been around a while just <em>knows</em> &mdash; how to move
+      at the right pace, where to stand when someone's over the ball, what to do with the
+      flagstick, how to order a drink at the turn. This page is that knowledge, laid out
+      so you can tap any topic, read the 60 seconds of context, and close the tab
+      confident.
+    </p>
+    <p>
+      Use it like a reference deck. You don't need to read the whole thing &mdash; when
+      something comes up, open the section, open the card, done.
+    </p>
+  </article>
+
+  <!-- ===================== SECTION 1 · PACE OF PLAY ===================== -->
+  <div class="ftr-section-head">
+    <span class="sh-num">01</span>
+    <h2>Pace of play</h2>
+    <span class="count">5 rules</span>
+  </div>
+  <p class="ftr-section-desc">
+    The single biggest issue at every private club in the world. Move briskly, and most
+    other sins are forgiven.
+  </p>
+
+  <div class="ref-stack">
+    <details class="ref-card">
+      <summary>
+        <div class="ref-title">The 4 hour 15 minute target</div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="ref-body">
+        <p>
+          Most private clubs expect a foursome to finish 18 holes in about <b>4 hours, 15
+          minutes.</b> Anything over that, the pro shop notices. Anything under, you'll
+          get a quiet nod of respect.
+        </p>
+        <p>
+          In a twosome, it's closer to 3:15. Play in a fivesome and you're already over
+          &mdash; most clubs don't even allow them.
+        </p>
+      </div>
+    </details>
+
+    <details class="ref-card">
+      <summary>
+        <div class="ref-title">Stay with the group in front, not ahead of the group behind</div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="ref-body">
+        <p>
+          The one sentence that makes pace simple: <b>your job is to keep up with the
+          group in front of you.</b> If there's a hole gap between you and them, you're
+          slow, no matter what the group behind you thinks.
+        </p>
+        <p>
+          Watch the group in front. If they're out of sight and you can't see them, speed
+          up &mdash; they've already played through trouble you'll hit in a minute.
+        </p>
+      </div>
+    </details>
+
+    <details class="ref-card">
+      <summary>
+        <div class="ref-title">Ready golf</div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="ref-body">
+        <p>
+          The old rule said the player farthest from the hole always plays first. That's
+          <b>honours</b>, and it still applies in tournaments. In everyday play, most
+          private clubs have moved to <b>ready golf</b>:
+        </p>
+        <p>
+          If you're ready, it's safe, and you're not standing in someone's line &mdash;
+          hit. Don't wait for formalities. The whole round stays tighter when everyone
+          plays the moment they're ready.
+        </p>
+      </div>
+    </details>
+
+    <details class="ref-card">
+      <summary>
+        <div class="ref-title">Pick up your ball at double par</div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="ref-body">
+        <p>
+          If you've taken <b>double par</b> and you're still not in the hole &mdash; pick
+          up. Record "max" for the hole and walk to the next tee.
+        </p>
+        <p>
+          Picking up isn't giving up; it's <b>caring for the field behind you.</b>
+          Nobody has ever been judged for saying "that's me, I'll pick up." Everybody has
+          been judged for grinding out a nine while the next group stands in the fairway.
+        </p>
+      </div>
+    </details>
+
+    <details class="ref-card">
+      <summary>
+        <div class="ref-title">When to wave a faster group through</div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="ref-body">
+        <p>
+          If there's a single or a twosome right behind your fourball, and there's a full
+          hole between you and the group in front &mdash; wave them through. The best spot
+          is a par 3 (they tee off as you walk forward) or any hole where they can pass
+          safely.
+        </p>
+        <p>
+          You lose 5 minutes. You gain immense goodwill with members you've probably just
+          met. Worth it.
+        </p>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===================== SECTION 2 · ON THE GREEN ===================== -->
+  <div class="ftr-section-head">
+    <span class="sh-num">02</span>
+    <h2>On the green &mdash; the fine detail</h2>
+    <span class="count">5 rules</span>
+  </div>
+  <p class="ftr-section-desc">
+    The putting green is where everyone sees everyone. Small moves, big signals.
+  </p>
+
+  <div class="ref-stack">
+    <details class="ref-card">
+      <summary>
+        <div class="ref-title">Mark your ball with a coin, carefully</div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="ref-body">
+        <p>
+          When your ball is on the green, place a coin (or a ball marker) <b>directly
+          behind the ball</b>, then lift. Don't mark with a tee; don't spin the ball; don't
+          flip it.
+        </p>
+        <p>
+          When it's your turn to putt, replace the ball in front of the coin, then lift
+          the coin. Same careful motion, in reverse.
+        </p>
+      </div>
+    </details>
+
+    <details class="ref-card">
+      <summary>
+        <div class="ref-title">Order of play — and ready-putt</div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="ref-body">
+        <p>
+          By the book, whoever is <b>farthest from the hole</b> putts first. In casual
+          private-club play, <b>ready-putt</b> is welcome and expected &mdash; if you're
+          ready and not in someone's line, go ahead.
+        </p>
+        <p>
+          On a short putt (inside 3 feet) you'll often tap in out of turn to keep the pace
+          moving. Nobody minds.
+        </p>
+      </div>
+    </details>
+
+    <details class="ref-card">
+      <summary>
+        <div class="ref-title">Don't walk in someone else's line</div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="ref-body">
+        <p>
+          The <b>line of putt</b> is the path from a player's ball to the hole. Walking
+          across it leaves a footprint in the grass that can nudge a putt off line.
+        </p>
+        <p>
+          Step <em>around</em> other players' lines. When in doubt, walk behind their ball
+          rather than in front of it. Watch where the other players are relative to the
+          hole before you move.
+        </p>
+      </div>
+    </details>
+
+    <details class="ref-card">
+      <summary>
+        <div class="ref-title">Tap-in etiquette</div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="ref-body">
+        <p>
+          If your ball is 18 inches or less from the hole and nobody's line is in the way,
+          just <b>tap it in.</b> Don't mark, don't line up, don't overthink.
+        </p>
+        <p>
+          Marking a tap-in and then re-lining it reads as either taking the hole too
+          seriously for a casual round, or not trusting yourself. Both slow the game.
+        </p>
+      </div>
+    </details>
+
+    <details class="ref-card">
+      <summary>
+        <div class="ref-title">Finish the hole before you react</div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="ref-body">
+        <p>
+          Made a great putt? Don't celebrate standing over the hole while the next player
+          is waiting. <b>Collect your ball, step to the side of the green, and celebrate
+          there.</b>
+        </p>
+        <p>
+          Missed a short one? Same rule. Keep the reaction small and off the green
+          surface. Write your scores on the next tee box, not while you're standing over
+          the cup.
+        </p>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===================== SECTION 3 · AFTER THE ROUND ===================== -->
+  <div class="ftr-section-head">
+    <span class="sh-num">03</span>
+    <h2>After the round</h2>
+    <span class="count">4 rules</span>
+  </div>
+  <p class="ftr-section-desc">
+    The round doesn't end when you hole out on 18. The 30 minutes after the handshake are
+    when private clubs do a lot of their judging.
+  </p>
+
+  <div class="ref-stack">
+    <details class="ref-card">
+      <summary>
+        <div class="ref-title">Hand your clubs back to the bag drop</div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="ref-body">
+        <p>
+          Drive (or walk) your cart to the <b>bag drop</b> at the front of the clubhouse.
+          The outside-services team pulls your bag, cleans your clubs, and returns them
+          to storage.
+        </p>
+        <p>
+          Tip $5&ndash;$10 in cash. You'll see them again next round &mdash; they'll
+          remember.
+        </p>
+      </div>
+    </details>
+
+    <details class="ref-card">
+      <summary>
+        <div class="ref-title">Post your score for handicap</div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="ref-body">
+        <p>
+          If you carry a handicap, post your score. Most private clubs have auto-posting
+          through their tee-time system &mdash; check once, and you're set.
+        </p>
+        <p>
+          If you have to post manually, use the <b>GHIN</b> app (in North America) or
+          your club's handicap portal. Post on the day you played; leaving scores unposted
+          is a pet peeve of every handicap committee alive.
+        </p>
+      </div>
+    </details>
+
+    <details class="ref-card">
+      <summary>
+        <div class="ref-title">The 19th hole &mdash; it's not optional</div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="ref-body">
+        <p>
+          After the round, the foursome almost always heads to the <b>grill room</b>
+          (also called the 19th hole) for a drink or a quick bite. This is where the real
+          conversation happens.
+        </p>
+        <p>
+          You don't have to stay long &mdash; 15 minutes is fine. Skipping it every time
+          reads as aloof. Attending and buying the occasional round is how you get invited
+          back.
+        </p>
+      </div>
+    </details>
+
+    <details class="ref-card">
+      <summary>
+        <div class="ref-title">Settle up</div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="ref-body">
+        <p>
+          Almost everything at a private club charges to your member account via <b>chits</b>
+          &mdash; sign your name and member number, and it shows up on your monthly statement.
+        </p>
+        <p>
+          What you <em>do</em> pay in cash for: tips (bag drop, beverage cart, locker room,
+          halfway-house turns). Keep a few $5s and $10s in your wallet before every round.
+        </p>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===================== SECTION 4 · CULTURE ===================== -->
+  <div class="ftr-section-head">
+    <span class="sh-num">04</span>
+    <h2>Club culture</h2>
+    <span class="count">4 rules</span>
+  </div>
+  <p class="ftr-section-desc">
+    Private clubs are small communities. The small courtesies compound into whether
+    people enjoy seeing your name on the tee sheet.
+  </p>
+
+  <div class="ref-stack">
+    <details class="ref-card">
+      <summary>
+        <div class="ref-title">Introduce yourself to everyone</div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="ref-body">
+        <p>
+          Locker room, bag drop, pro shop, first tee &mdash; if you don't know someone,
+          introduce yourself. <b>First name, handshake, eye contact.</b> You'll forget
+          some of the names; that's normal. They'll forgive that; they won't forgive
+          indifference.
+        </p>
+      </div>
+    </details>
+
+    <details class="ref-card">
+      <summary>
+        <div class="ref-title">Learn staff names. Tip well. Greet them warmly.</div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="ref-body">
+        <p>
+          The back-shop crew, pro-shop team, starters, beverage-cart staff, and grill-room
+          servers are the <b>heartbeat of the club.</b> They see everything. They remember
+          everyone. Members who treat them well get the best bag storage, the best tee
+          times, the quiet heads-up when the course is playing fast.
+        </p>
+        <p>
+          Learn names in the first two weeks. Greet by name every time. Tip in cash, every
+          time.
+        </p>
+      </div>
+    </details>
+
+    <details class="ref-card">
+      <summary>
+        <div class="ref-title">Cell phones &mdash; silenced, mostly out of sight</div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="ref-body">
+        <p>
+          Silenced on the course. Kept in your bag between shots. If you have to take a
+          call, <b>step away from the group and keep it short</b>.
+        </p>
+        <p>
+          In the grill room and locker room, most clubs expect phones <em>off</em> &mdash;
+          not just silenced. Photos of other members without asking is a bright-line
+          violation in most clubs.
+        </p>
+      </div>
+    </details>
+
+    <details class="ref-card">
+      <summary>
+        <div class="ref-title">Hats off indoors</div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="ref-body">
+        <p>
+          In the grill room, dining room, and often the entire clubhouse &mdash; <b>hat
+          comes off.</b> Stash it in your bag or set it crown-down on the seat next to you.
+        </p>
+        <p>
+          It's a 100-year-old rule. Most clubs still care. The one time you leave it on,
+          the oldest member in the room will notice.
+        </p>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===================== FEATURED ARTICLE — UNSOLICITED ADVICE ===================== -->
+  <div class="featured-article">
+    <div class="fa-kicker">THE ONE RULE NOBODY TELLS YOU</div>
+    <h2>Never give <em>unsolicited</em> swing advice.</h2>
+    <div class="fa-sub">
+      Of all the unwritten rules of private-club golf, this is the one that ends more
+      friendships than all the others combined. Read this article. Memorize it. Live by it.
+    </div>
+
+    <div class="fa-body">
+      <p>
+        There's a moment on every course, every weekend, where a player watches someone
+        else's swing, sees something <em>obvious</em> to them, and opens their mouth.
+        <strong>"You're coming over the top."</strong> <strong>"Try a stronger grip."</strong>
+        <strong>"You're swaying off the ball."</strong>
+      </p>
+
+      <p>
+        It never &mdash; never &mdash; ends the way the advice-giver thinks it will. It
+        ends one of three ways: the receiver politely changes the subject, the receiver
+        pretends to listen and resents you for the rest of the round, or the receiver
+        swings worse for the next four holes because now they're thinking about whatever
+        you just said instead of playing golf.
+      </p>
+
+      <div class="fa-pull">
+        "Everyone's a golf teacher &mdash; until they take a lesson."
+      </div>
+
+      <h3>Why it happens</h3>
+
+      <p>
+        Golf is hard. When someone else is struggling, and you see a pattern, the instinct
+        to help is a good one. That's not the problem. The problem is that you have no
+        idea what that player is working on with their coach, what they've tried, what
+        their body can and can't do, and what swing thought is currently holding their
+        round together. <strong>You're diagnosing without the chart.</strong>
+      </p>
+
+      <p>
+        Worse: the same "obvious" fix will ruin a swing for one player and save it for
+        another. "Keep your head down" has probably cost more people more strokes than any
+        other phrase in the history of the sport.
+      </p>
+
+      <h3>What the Rules of Golf actually say</h3>
+
+      <p>
+        You may not know this: giving or asking for advice during a round is actually
+        <strong>against the Rules of Golf</strong>. In match play, giving advice to an
+        opponent is a <strong>loss-of-hole penalty</strong>. In stroke play, it's
+        <strong>two strokes</strong>. The only person you're allowed to seek or give
+        advice to is your <em>partner</em> (in a team format) or your
+        <em>caddie</em>.
+      </p>
+
+      <p>
+        This rule exists because golf was designed as an individual, self-tested sport.
+        Your round is your round. Their round is theirs. Swing changes mid-round are not
+        the spirit of the game.
+      </p>
+
+      <h3>What it sounds like on the receiving end</h3>
+
+      <p>
+        Here's what the person you're "helping" actually hears when you offer an
+        unsolicited tip:
+      </p>
+
+      <ul>
+        <li><em>"I'm a better golfer than you and I want you to know it."</em></li>
+        <li><em>"I've noticed your flaws and catalogued them."</em></li>
+        <li><em>"You need help."</em></li>
+      </ul>
+
+      <p>
+        That's not what you <em>meant</em>. But it is what lands. Because the receiver
+        didn't ask. Nobody is excited to receive swing critique from a near-stranger on
+        the fourth tee, even if the critique is technically correct.
+      </p>
+
+      <h3>The only three times it's okay</h3>
+
+      <ol>
+        <li><strong>They explicitly ask.</strong> "What am I doing that's pulling it left?" is a real request. Answer briefly, then drop it.</li>
+        <li><strong>They have a club-endangering habit</strong> (like swinging too close to others). That's safety, not swing coaching.</li>
+        <li><strong>You're their official coach or caddie.</strong> That's a role you've been given, not one you assumed.</li>
+      </ol>
+
+      <h3>How to ask for advice, if you want it</h3>
+
+      <p>
+        If you're the player who wants input from a better golfer you're playing with,
+        the move is simple: <strong>pick one specific thing</strong> and ask. "I keep
+        losing it right off the tee. Can you watch my next swing and tell me what you
+        see?" gives them a focused invitation. Don't give a blanket "tell me what I'm
+        doing wrong" &mdash; that opens the door to everything, and nothing useful.
+      </p>
+
+      <p>
+        And once they've answered, thank them and move on. Don't keep asking on every
+        shot. They're trying to play their round too.
+      </p>
+
+      <h3>How to deflect advice, graciously</h3>
+
+      <p>
+        If someone gives you unsolicited advice and you don't want it, the cleanest
+        response is the shortest:
+      </p>
+
+      <ul>
+        <li><em>"Thanks &mdash; I'm working on something else with my coach, but I appreciate it."</em></li>
+        <li><em>"Good eye. I'll pass it on to Ryan next session."</em> (Credits them; deflects it.)</li>
+      </ul>
+
+      <p>
+        Both are warm, both are clear, and both close the door without making them feel
+        attacked. Then change the subject &mdash; what they're having at the turn, the
+        pin position on 12, anything.
+      </p>
+
+      <h3>The bottom line</h3>
+
+      <p>
+        Golf is a long game &mdash; not one round, but many years of rounds with the same
+        people. <strong>The member who keeps their mouth shut on other people's swings is
+        invited back every week.</strong> The one who doesn't, gets a reputation. Neither
+        of them would tell you that directly, which is exactly why you're reading this.
+      </p>
+
+      <p>
+        Keep your tips for your own game. Keep your eyes on your own ball. Let your
+        playing partners have their round the way they want to have it.
+      </p>
+    </div>
+  </div>
+
+  <!-- ===================== SECTION 5 · WEATHER ===================== -->
+  <div class="ftr-section-head">
+    <span class="sh-num">05</span>
+    <h2>Weather</h2>
+    <span class="count">3 rules</span>
+  </div>
+  <p class="ftr-section-desc">
+    The course plays through a lot. But three weather calls will always be the club's,
+    not yours.
+  </p>
+
+  <div class="ref-stack">
+    <details class="ref-card">
+      <summary>
+        <div class="ref-title">Thunder or lightning — get off the course immediately</div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="ref-body">
+        <p>
+          One long siren, horn blast, or air cannon means <b>stop now.</b> Don't finish
+          the hole, don't putt out, don't take one more shot. Get in a cart, get to
+          shelter. The clubhouse, the halfway house, or the nearest lightning shelter
+          if the course has them.
+        </p>
+        <p>
+          If you ignore the horn and keep playing, the club is not liable for injury
+          &mdash; and insurance won't cover you either. No round is worth this.
+        </p>
+      </div>
+    </details>
+
+    <details class="ref-card">
+      <summary>
+        <div class="ref-title">Frost delays</div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="ref-body">
+        <p>
+          Spring and late-fall mornings in Ontario often start with <b>frost on the
+          greens.</b> Walking or rolling on a frozen green kills the grass &mdash; the
+          turf shatters at the cellular level. That's why the course opens late those
+          mornings.
+        </p>
+        <p>
+          Always check with the pro shop on cold mornings. If there's a frost delay, use
+          the time for breakfast, range, or a slow coffee. It's part of the season.
+        </p>
+      </div>
+    </details>
+
+    <details class="ref-card">
+      <summary>
+        <div class="ref-title">Light rain — play on</div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="ref-body">
+        <p>
+          Most clubs play through light rain. Keep a <b>full set of rain gear</b> in
+          your bag year-round: waterproof jacket, rain pants, a towel for grips, a
+          second glove or two. If the starter doesn't call a delay, the round is on.
+        </p>
+        <p>
+          Wet conditions also change how the course plays &mdash; fairways run shorter,
+          greens hold more. Adjust your club selection, not your attitude.
+        </p>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===================== SECTION 6 · RULES OF THE GAME ===================== -->
+  <div class="ftr-section-head">
+    <span class="sh-num">06</span>
+    <h2>Basic rules of the game</h2>
+    <span class="count">12 rules</span>
+  </div>
+  <p class="ftr-section-desc">
+    The minimum working knowledge of the Rules of Golf. Not every edge case &mdash; the
+    dozen things you'll actually run into in a first season.
+  </p>
+
+  <div class="ref-stack">
+    <details class="ref-card">
+      <summary>
+        <div class="ref-title">14 clubs maximum</div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="ref-body">
+        <p>
+          You're allowed <b>14 clubs</b> in your bag. Any more and you're penalized two
+          strokes per hole (max four strokes) in stroke play, or one hole per breach in
+          match play. Count before the round.
+        </p>
+      </div>
+    </details>
+
+    <details class="ref-card">
+      <summary>
+        <div class="ref-title">Play it as it lies</div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="ref-body">
+        <p>
+          The foundational rule of golf. Wherever the ball lands, that's where you play
+          from &mdash; don't move it, don't clean it (outside the green), don't improve
+          your lie. The exceptions are in the rules; if you're not sure, play it as it
+          lies and ask after the round.
+        </p>
+      </div>
+    </details>
+
+    <details class="ref-card">
+      <summary>
+        <div class="ref-title">Every attempt counts &mdash; including whiffs</div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="ref-body">
+        <p>
+          A "stroke" is any intent to hit the ball. If you swing and miss, that's a
+          stroke. If you accidentally hit the ball on a practice swing, that's a stroke
+          plus (possibly) a penalty. If you touch the ball with the club face at address
+          and the ball moves &mdash; you guessed it &mdash; stroke.
+        </p>
+      </div>
+    </details>
+
+    <details class="ref-card">
+      <summary>
+        <div class="ref-title">Out of bounds &mdash; white stakes, stroke + distance</div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="ref-body">
+        <p>
+          <b>White stakes</b> (or white lines) mark out of bounds. If your ball ends up
+          past them, the penalty is <b>stroke and distance</b> &mdash; add a penalty
+          stroke AND replay from the same spot you just hit.
+        </p>
+        <p>
+          If you hit your first tee shot OB and play a second from the tee, you're now
+          hitting your <b>fourth</b> shot. (First shot, one-stroke penalty, second attempt
+          from the tee = shot three; the next one from wherever that lands is four.)
+        </p>
+      </div>
+    </details>
+
+    <details class="ref-card">
+      <summary>
+        <div class="ref-title">Lost ball &mdash; 3 minutes, then stroke + distance</div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="ref-body">
+        <p>
+          You get <b>3 minutes</b> from when you start searching for your ball. If you
+          can't find it, same penalty as out of bounds: stroke + distance. Go back to
+          the spot of the previous shot and hit again.
+        </p>
+        <p>
+          This is why the <b>provisional ball</b> (next card) exists &mdash; it saves
+          the long walk back.
+        </p>
+      </div>
+    </details>
+
+    <details class="ref-card">
+      <summary>
+        <div class="ref-title">Provisional ball &mdash; always announce it</div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="ref-body">
+        <p>
+          If you think your ball <em>might</em> be lost or out of bounds, announce
+          <b>"I'll hit a provisional"</b> and play another ball before you go look. If
+          you find the original in play, you pick up the provisional and continue. If you
+          don't, the provisional is in play and you've just saved 5 minutes of walking.
+        </p>
+        <p>
+          You <em>must</em> say the word "provisional." Without it, the second ball is
+          automatically in play.
+        </p>
+      </div>
+    </details>
+
+    <details class="ref-card">
+      <summary>
+        <div class="ref-title">Penalty areas &mdash; red and yellow stakes</div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="ref-body">
+        <p>
+          <b>Red stakes</b> mark lateral penalty areas (typical water hazards, rough).
+          <b>Yellow stakes</b> are the older-style in-front-of-green water hazards.
+          Both cost you one penalty stroke.
+        </p>
+        <p>
+          For red, you have multiple relief options &mdash; most common: drop within two
+          club-lengths of where the ball last crossed the edge, no nearer the hole. The
+          cart-path-free-relief drop procedure is the same: <b>knee-height, within the
+          relief area</b>, ball must not roll closer to the hole.
+        </p>
+      </div>
+    </details>
+
+    <details class="ref-card">
+      <summary>
+        <div class="ref-title">Unplayable lie &mdash; you can always declare it</div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="ref-body">
+        <p>
+          If your ball is behind a tree, in heavy rough, up against a root, or anywhere
+          else you don't want to swing from &mdash; you can declare it <b>unplayable.</b>
+          One penalty stroke, three drop options: back-on-line, within two club-lengths
+          no nearer the hole, or return to where you just played from.
+        </p>
+        <p>
+          This rule is your friend. Take the penalty stroke rather than trying a hero
+          shot out of trouble and making it worse.
+        </p>
+      </div>
+    </details>
+
+    <details class="ref-card">
+      <summary>
+        <div class="ref-title">On the green &mdash; mark, lift, clean, replace</div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="ref-body">
+        <p>
+          On the green only, you may <b>mark your ball with a coin, lift it, clean it,
+          and replace it</b> as many times as you like. You may also repair any mark on
+          the green &mdash; pitch marks, spike marks, animal damage, anything.
+        </p>
+      </div>
+    </details>
+
+    <details class="ref-card">
+      <summary>
+        <div class="ref-title">The flagstick &mdash; in or out, your call</div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="ref-body">
+        <p>
+          Since 2019 you've been allowed to <b>putt with the flagstick in the hole.</b>
+          If your ball hits the flagstick and drops in &mdash; it's good. No penalty
+          either way. Most players leave it in for long putts and pull it for short ones.
+          Ask your group before the round if you're not sure.
+        </p>
+      </div>
+    </details>
+
+    <details class="ref-card">
+      <summary>
+        <div class="ref-title">No giving or receiving advice</div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="ref-body">
+        <p>
+          By the rules, you can't ask or offer advice about club selection, swing
+          mechanics, or strategy from anyone except your partner (in a team format) or
+          your caddie. Violation in match play = loss of hole. In stroke play = two
+          strokes.
+        </p>
+        <p>
+          The exception: <b>public information.</b> You can ask anyone the distance to
+          the pin, the location of a hazard, or the rules. That's information, not
+          advice. (See the full article above for why this rule matters socially, not
+          just in tournaments.)
+        </p>
+      </div>
+    </details>
+
+    <details class="ref-card">
+      <summary>
+        <div class="ref-title">Sign your scorecard (in tournaments)</div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="ref-body">
+        <p>
+          In any event that uses stroke-play scoring &mdash; club championships, member
+          guests, most tournaments &mdash; you <b>must sign your scorecard</b> and have a
+          marker attest it. Sign it wrong, or sign a score <em>lower</em> than you actually
+          took on a hole, and you're disqualified.
+        </p>
+        <p>
+          Rule of thumb: check each hole, add the totals yourself, then sign. Never sign
+          first and count later.
+        </p>
+      </div>
+    </details>
+  </div>
+
+  <!-- ===================== GLOSSARY ===================== -->
+  <div class="glossary">
+    <h2>Quick glossary</h2>
+    <dl>
+      <dt>Par</dt>
+      <dd>The expected number of strokes for a hole, including two putts on the green.</dd>
+
+      <dt>Birdie</dt>
+      <dd>One stroke under par.</dd>
+
+      <dt>Bogey</dt>
+      <dd>One stroke over par.</dd>
+
+      <dt>Eagle</dt>
+      <dd>Two under par &mdash; rare for most amateurs. Celebrate it.</dd>
+
+      <dt>Double bogey</dt>
+      <dd>Two over par &mdash; one of your 5 Errors to Avoid.</dd>
+
+      <dt>Pro Shop</dt>
+      <dd>The retail + operations hub of the club. Where you check in, buy gear, get lesson info.</dd>
+
+      <dt>Starter</dt>
+      <dd>The person who runs the first-tee queue and pace of the day.</dd>
+
+      <dt>Back shop</dt>
+      <dd>Where members' clubs are stored and cleaned between rounds.</dd>
+
+      <dt>Bag drop</dt>
+      <dd>The entrance area where your clubs are handled by outside services before and after your round.</dd>
+
+      <dt>Halfway house</dt>
+      <dd>Snack bar between the 9th green and 10th tee. Grab a sandwich and keep moving.</dd>
+
+      <dt>Grill room</dt>
+      <dd>Casual dining at the clubhouse &mdash; also called the 19th hole.</dd>
+
+      <dt>Locker room</dt>
+      <dd>Where you change, shower, and leave personal items.</dd>
+
+      <dt>Chit</dt>
+      <dd>The signed ticket that charges food, drink, or pro-shop purchases to your member account.</dd>
+
+      <dt>GHIN / Handicap Index</dt>
+      <dd>The system (North America) that tracks your scores and outputs a handicap.</dd>
+
+      <dt>Tee sheet</dt>
+      <dd>The booking schedule at the pro shop showing every tee time for the day.</dd>
+
+      <dt>19th hole</dt>
+      <dd>The post-round drink. The most important hole of the day, socially.</dd>
+
+      <dt>Provisional</dt>
+      <dd>A second ball played from the same spot when your first might be lost or OB. Always announce it.</dd>
+
+      <dt>OB</dt>
+      <dd>Out of bounds. White stakes. Stroke + distance penalty.</dd>
+
+      <dt>Hazard / Penalty area</dt>
+      <dd>Water, rough, or other marked trouble. Red or yellow stakes. One-stroke penalty to take relief.</dd>
+
+      <dt>Fore</dt>
+      <dd>The word you shout the moment you hit a ball toward anyone. Loud. Immediate. No exceptions.</dd>
+
+      <dt>Ready golf</dt>
+      <dd>Casual-round convention: play when you're ready, don't wait for honours.</dd>
+
+      <dt>90° rule</dt>
+      <dd>Cart rule: drive on the cart path until you're even with your ball, then cut 90° across the fairway to it.</dd>
+
+      <dt>Pin sheet</dt>
+      <dd>A small card in the pro shop showing today's pin positions on each green.</dd>
+
+      <dt>Mulligan</dt>
+      <dd>An informal re-hit, usually off the first tee. Not in the rules of golf. Usually declined in private-club play.</dd>
+    </dl>
+  </div>
+
+  <!-- CLOSING + BACK LINK -->
+  <article class="article">
+    <p style="font-style:italic; color:var(--navy-mid);">
+      Bookmark this page. Come back before big rounds, guest rounds, tournaments, or any
+      time you feel the first-tee nerves creep in. The unwritten rules aren't there to
+      gatekeep &mdash; they're there to make everyone's round smoother. Now you know
+      them.
+    </p>
+  </article>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  RRG.mountLibrary();
+</script>
+</body>
+</html>
