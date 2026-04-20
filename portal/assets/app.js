@@ -399,13 +399,20 @@ RRG.renderNav = function(user, active = '') {
         <span></span><span></span><span></span>
       </button>
       <ul class="nav-links" id="rrg-nav-drawer">
+        <li class="nav-group-label">MY GAME</li>
         <li><a href="dashboard.html" class="${active==='dashboard'?'active':''}">Dashboard</a></li>
         <li><a href="history.html"   class="${active==='history'?'active':''}">My Rounds</a></li>
+        <li><a href="tiger5.html"    class="${active==='tiger5'?'active':''}">Tiger 5</a></li>
         <li><a href="profile.html"   class="${active==='profile'?'active':''}">Profile</a></li>
+
+        <li class="nav-group-label">TOOLS</li>
         <li><a href="bag.html"       class="${active==='bag'?'active':''}">My Bag</a></li>
         <li><a href="wedge-matrix.html" class="${active==='wedge'?'active':''}">Wedge Matrix</a></li>
-        <li><a href="tiger5.html"    class="${active==='tiger5'?'active':''}">Tiger 5</a></li>
+
+        <li class="nav-group-label">LEARN</li>
         <li><a href="/improve/" class="${active==='library'?'active':''}">Library</a></li>
+        <li><a href="how-to-use.html" class="${active==='how-to-use'?'active':''}">How to use this portal</a></li>
+
         ${coachLink}
         <li class="nav-user-mobile">
           <div class="who">Signed in as <b>${RRG.esc(user.name || user.email)}</b></div>

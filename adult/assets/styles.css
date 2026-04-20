@@ -99,6 +99,8 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; }
   color: var(--gold);
   border-bottom-color: var(--gold);
 }
+/* Group labels — hidden on desktop horizontal nav, visible only in mobile drawer */
+.nav-group-label { display: none; }
 .nav-user {
   display: flex;
   align-items: center;
@@ -956,6 +958,19 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; }
   }
   .nav-links.open { transform: translateX(0); }
   .nav-links li { width: 100%; border: none; }
+
+  /* Group subheadings inside the mobile drawer */
+  .nav-group-label {
+    display: block;
+    padding: 18px 22px 6px;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    font-weight: 700;
+    text-transform: uppercase;
+    border-bottom: none;
+  }
+  .nav-group-label:first-child { padding-top: 12px; }
   .nav-links a {
     display: block;
     padding: 16px 22px;

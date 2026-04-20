@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<base href="/portal/">
+<title>How to Use This Portal — RR Golf Performance</title>
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  .htu-hero {
+    background: linear-gradient(135deg, var(--navy) 0%, #2C3B5A 100%);
+    color: var(--white); padding: 44px 36px 36px;
+    border-radius: 14px; margin-bottom: 32px; position: relative; overflow: hidden;
+  }
+  .htu-hero::before {
+    content: ''; position: absolute; top: 0; right: 0;
+    width: 220px; height: 220px; background: var(--gold); opacity: 0.08;
+    border-radius: 50%; transform: translate(70px, -70px);
+  }
+  .htu-hero .badge {
+    display: inline-block; background: var(--gold); color: var(--navy);
+    padding: 5px 12px; font-size: 10px; letter-spacing: 2px;
+    font-weight: 700; border-radius: 3px; margin-bottom: 14px;
+  }
+  .htu-hero h1 {
+    color: var(--white); font-size: clamp(28px, 4.5vw, 38px);
+    line-height: 1.15; margin: 0 0 8px 0; font-weight: 700;
+  }
+  .htu-hero p { color: #D8DEE8; margin: 0; font-size: 16px; line-height: 1.55; max-width: 640px; }
+
+  .htu-toc {
+    background: var(--white); border: 1px solid var(--rule);
+    border-left: 3px solid var(--gold);
+    border-radius: 8px; padding: 22px 26px; margin-bottom: 32px;
+  }
+  .htu-toc .toc-label {
+    font-size: 10px; letter-spacing: 2px; color: var(--gold);
+    font-weight: 700; margin-bottom: 12px; text-transform: uppercase;
+  }
+  .htu-toc ol { list-style: none; padding: 0; margin: 0; counter-reset: step; }
+  .htu-toc li { counter-increment: step; margin-bottom: 8px; }
+  .htu-toc li a {
+    color: var(--navy); text-decoration: none; font-weight: 600; font-size: 14px;
+    display: flex; align-items: baseline; gap: 12px;
+  }
+  .htu-toc li a:hover { color: var(--gold); }
+  .htu-toc li a::before {
+    content: counter(step, decimal-leading-zero);
+    color: var(--gold); font-weight: 700; font-size: 12px;
+    letter-spacing: 0.8px; min-width: 24px;
+  }
+
+  .htu-step {
+    background: var(--white); border: 1px solid var(--rule);
+    border-radius: 12px; padding: 30px 30px;
+    margin-bottom: 18px; max-width: 760px;
+  }
+  .htu-step .step-kicker {
+    display: inline-block; background: var(--cream, #F7F2E8); color: var(--navy);
+    font-weight: 700; font-size: 11px; letter-spacing: 1.5px;
+    padding: 3px 10px; border-radius: 3px; margin-bottom: 10px;
+  }
+  .htu-step h2 {
+    color: var(--navy); font-size: clamp(22px, 3vw, 26px);
+    margin: 0 0 14px 0; line-height: 1.2; font-weight: 700;
+    scroll-margin-top: 80px;
+  }
+  .htu-step p {
+    font-size: 15px; line-height: 1.65; color: var(--dark-text); margin: 0 0 14px 0;
+  }
+  .htu-step p strong { color: var(--navy); }
+  .htu-step h3 {
+    color: var(--gold); font-size: 11px; letter-spacing: 2px;
+    text-transform: uppercase; font-weight: 700;
+    margin: 20px 0 8px 0;
+  }
+  .htu-step ul { margin: 0 0 14px 0; padding-left: 22px; }
+  .htu-step li {
+    font-size: 14px; line-height: 1.6; color: var(--dark-text); margin-bottom: 6px;
+  }
+  .htu-step .tip {
+    background: rgba(195, 162, 79, 0.10); border-left: 3px solid var(--gold);
+    padding: 14px 18px; border-radius: 4px; margin: 16px 0;
+    font-size: 14px; color: var(--navy); line-height: 1.55;
+  }
+  .htu-step .tip strong { color: var(--navy); }
+  .htu-step .go-btn-row {
+    display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px;
+    padding-top: 16px; border-top: 1px solid var(--rule);
+  }
+
+  @media (max-width: 640px) {
+    .htu-hero { padding: 28px 22px; }
+    .htu-step { padding: 22px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container">
+
+  <div class="htu-hero">
+    <div class="badge">HOW THIS PORTAL WORKS</div>
+    <h1>Your golf, organized.</h1>
+    <p>
+      Everything in one place. A 3-minute tour of every feature — what it does, why it's
+      here, and how to get the most out of it. Bookmark this page; refer back whenever
+      something feels unfamiliar.
+    </p>
+  </div>
+
+  <div class="htu-toc">
+    <div class="toc-label">Quick jump</div>
+    <ol>
+      <li><a href="#dashboard">The Dashboard — your home base</a></li>
+      <li><a href="#log-round">Logging a Round</a></li>
+      <li><a href="#tiger-5">Tiger 5 — the live on-course tracker</a></li>
+      <li><a href="#my-rounds">My Rounds — your history &amp; stats</a></li>
+      <li><a href="#wedge-matrix">The Wedge Matrix</a></li>
+      <li><a href="#my-bag">Map My Bag</a></li>
+      <li><a href="#lessons">Lessons — Every Session, Logged</a></li>
+      <li><a href="#library">The Game Improvement Library</a></li>
+      <li><a href="#profile">Your Know Your Game Profile</a></li>
+      <li><a href="#season">Your 15-Week Season</a></li>
+    </ol>
+  </div>
+
+  <!-- ============= 1. DASHBOARD ============= -->
+  <section class="htu-step" id="dashboard">
+    <div class="step-kicker">01 · HOME BASE</div>
+    <h2>The Dashboard</h2>
+    <p>
+      Every time you open the portal, you land here. It's designed to answer
+      <strong>"what do I do today?"</strong> in the first three seconds.
+    </p>
+
+    <h3>What you'll see</h3>
+    <ul>
+      <li><strong>Today's Plan</strong> — the navy card at the top. Up to three
+        action items picked from your real data (a round without a reflection, pre-work
+        from your last lesson, "book your next lesson," etc.). Tap any item, it takes
+        you straight to the thing to do.</li>
+      <li><strong>Your Game Snapshot</strong> — three plain-English metrics Ryan has
+        set for you ("Driver: Needs Work", "Wedges: Improving"). Updated after lessons.</li>
+      <li><strong>Last Coach Input</strong> — a one-sentence pull from Ryan's most
+        recent lesson debrief. Fast reminder of what to keep in mind.</li>
+      <li><strong>This Week</strong> — the current week card from the 15-week Weekly
+        Playbook with your focus and the week's deliverables. Click "Open week" to see
+        the full breakdown.</li>
+      <li><strong>Quick Log</strong> — three big buttons (Round / Tiger 5 / History).
+        Get you to the most-used actions in one tap.</li>
+    </ul>
+
+    <div class="tip">
+      <strong>Daily habit:</strong> open the portal once in the morning, check Today's
+      Plan. That's it. If there's something to do, it'll be right there.
+    </div>
+
+    <div class="go-btn-row">
+      <a href="dashboard.html" class="btn btn-primary btn-sm">Open my dashboard →</a>
+    </div>
+  </section>
+
+  <!-- ============= 2. LOG ROUND ============= -->
+  <section class="htu-step" id="log-round">
+    <div class="step-kicker">02 · LOG A ROUND</div>
+    <h2>Logging a round — 3 taps, done</h2>
+    <p>
+      The form is designed so you can log a round on your phone in the parking lot after
+      you finish. Only <strong>Score</strong> is required. Everything else is optional.
+    </p>
+
+    <h3>The essentials (top of the form)</h3>
+    <ul>
+      <li>Date (auto-fills to today)</li>
+      <li>Course (optional)</li>
+      <li><strong>Score (required)</strong></li>
+      <li>Holes (defaults to 18)</li>
+    </ul>
+
+    <h3>Optional — as much or as little as you want</h3>
+    <ul>
+      <li>Fairways / Greens / Putts</li>
+      <li>Tiger 5 tally (auto-fills if you used the live tracker on course)</li>
+      <li>Reflection (What went well? What needs work?)</li>
+      <li>Advanced (tees, format, 3-putts, penalties, routine score, one thing to work on)</li>
+    </ul>
+
+    <div class="tip">
+      <strong>Ryan reviews every submission.</strong> Even if you only have time to punch
+      in a score, do it. The pattern over the season tells him more than any single round.
+    </div>
+
+    <div class="go-btn-row">
+      <a href="submit-round.html" class="btn btn-primary btn-sm">+ Log a round now →</a>
+      <a href="history.html" class="btn btn-ghost btn-sm">See my rounds</a>
+    </div>
+  </section>
+
+  <!-- ============= 3. TIGER 5 ============= -->
+  <section class="htu-step" id="tiger-5">
+    <div class="step-kicker">03 · ON-COURSE TRACKER</div>
+    <h2>Tiger 5 — the five avoidable errors</h2>
+    <p>
+      Tiger Woods famously tracked five specific errors in every round and tried to keep
+      his total under 6 across an entire tournament. This tool does the same for you.
+    </p>
+
+    <h3>The five errors</h3>
+    <ol>
+      <li>Bogey or worse on a par 5</li>
+      <li>Double bogey or worse (blow-up hole)</li>
+      <li>Blown easy save (on or near green in a good lie, didn't get up-and-down)</li>
+      <li>Three-putt</li>
+      <li>Bogey with a scoring club (9-iron or shorter)</li>
+    </ol>
+
+    <h3>Two ways to use it</h3>
+    <p>
+      <strong>Live tracking</strong> — open the Tiger 5 page on your phone before the round.
+      Tap the + button on each error as it happens. Your tally auto-saves on your device,
+      so you can close the tab between holes. When you finish, tap
+      <em>"Log this round →"</em> and your Tiger 5 counts flow straight into the round
+      submission.
+    </p>
+    <p>
+      <strong>Paper card</strong> — print the 6×4" scorecard from the Tiger 5 page (fits
+      a regular scorecard holder). Tick the boxes on each hole. After the round, type your
+      totals into Submit Round.
+    </p>
+
+    <div class="tip">
+      <strong>Working target:</strong> 1–2 Tiger 5 events per round. Tiger's benchmark was
+      ≤ 6 across four tournament rounds.
+    </div>
+
+    <div class="go-btn-row">
+      <a href="tiger5.html" class="btn btn-primary btn-sm">Open Tiger 5 →</a>
+    </div>
+  </section>
+
+  <!-- ============= 4. MY ROUNDS ============= -->
+  <section class="htu-step" id="my-rounds">
+    <div class="step-kicker">04 · YOUR HISTORY</div>
+    <h2>My Rounds — every round, logged</h2>
+    <p>
+      Every round you submit lives here. Top of the page: summary stats (total rounds, avg
+      score, best score, avg Tiger 5). Below: every round as a row, most recent first.
+      Tap <em>View →</em> on any row for the full detail — score, putts, reflections,
+      Tiger 5 breakdown.
+    </p>
+    <p>
+      Cross-device: your rounds are saved to the cloud, not this device. Log on your phone,
+      review on your laptop — same data.
+    </p>
+
+    <div class="go-btn-row">
+      <a href="history.html" class="btn btn-primary btn-sm">My Rounds →</a>
+    </div>
+  </section>
+
+  <!-- ============= 5. WEDGE MATRIX ============= -->
+  <section class="htu-step" id="wedge-matrix">
+    <div class="step-kicker">05 · SCORING TOOL</div>
+    <h2>The Wedge Matrix</h2>
+    <p>
+      One page, four wedges, four swing lengths (Full / ¾ / ½ / Knockdown). 16 calibrated
+      carry numbers. Built once on the range, referenced forever.
+    </p>
+
+    <h3>How to build it</h3>
+    <ol>
+      <li>On the range, hit 5 balls with each wedge at each swing length.</li>
+      <li>Record the <strong>average</strong> carry, not the best.</li>
+      <li>Type the numbers into the matrix. Autosaves to your portal.</li>
+    </ol>
+
+    <h3>The wind calculator</h3>
+    <p>
+      Below the main matrix, a second live table. Pick direction (Head / None / Tail),
+      slide the wind speed, and the whole table recalculates with today's wind factored
+      in — color-coded red (fall short) or green (fly long).
+    </p>
+    <p>
+      Below that, a write-up on <strong>why tour pros launch wedges under 30°</strong> and
+      how to build the knocked-down wedge that cuts through wind.
+    </p>
+
+    <div class="tip">
+      <strong>Print it:</strong> the matrix prints to a 6×4" card that fits a scorecard
+      holder. Pocket it. Reference it mid-round.
+    </div>
+
+    <div class="go-btn-row">
+      <a href="wedge-matrix.html" class="btn btn-primary btn-sm">Open Wedge Matrix →</a>
+    </div>
+  </section>
+
+  <!-- ============= 6. MY BAG ============= -->
+  <section class="htu-step" id="my-bag">
+    <div class="step-kicker">06 · KNOW YOUR CLUBS</div>
+    <h2>Map My Bag</h2>
+    <p>
+      Every club in your bag with its carry and total distance. Essential for course
+      management — you can't commit to a shot if you don't know your numbers.
+    </p>
+    <p>
+      Use a launch monitor (TrackMan, GCQuad, or even a portable like Rapsodo) to get real
+      carry numbers. In a pinch, hit 10 balls with each club on a flat range with flags at
+      known distances and estimate.
+    </p>
+
+    <div class="go-btn-row">
+      <a href="bag.html" class="btn btn-primary btn-sm">Open My Bag →</a>
+    </div>
+  </section>
+
+  <!-- ============= 7. LESSONS ============= -->
+  <section class="htu-step" id="lessons">
+    <div class="step-kicker">07 · COACHING JOURNAL</div>
+    <h2>Lessons — Every Session, Logged</h2>
+    <p>
+      After every lesson with Ryan, he logs a debrief in your portal: what you worked on,
+      the one key takeaway, and pre-work for the next session. It shows up in two places:
+    </p>
+    <ul>
+      <li><strong>Last Coach Input</strong> on your dashboard (the 1-sentence summary)</li>
+      <li><strong>Every Session, Logged</strong> on your dashboard — the full history</li>
+    </ul>
+    <p>
+      Tap any lesson row to see the full detail: focus, debrief, pre-work, and a place for
+      you to add your own feel-check reflection.
+    </p>
+
+    <div class="tip">
+      <strong>Come to lessons ready:</strong> glance at the last debrief on your way to the
+      range. Arrive knowing what you're working on. The lesson becomes a tune-up, not a
+      re-explanation.
+    </div>
+  </section>
+
+  <!-- ============= 8. LIBRARY ============= -->
+  <section class="htu-step" id="library">
+    <div class="step-kicker">08 · LEARN</div>
+    <h2>The Game Improvement Library</h2>
+    <p>
+      27 articles across 6 sections. Real science, real tour pro methods, every stat cited.
+      Written as if Ryan were talking to you on the range.
+    </p>
+    <ul>
+      <li><strong>Start Here (Beginner's Guide)</strong> — grip, stance, etiquette, safety,
+        pace of play, how to book a tee time</li>
+      <li><strong>Long Game</strong> — ball flight laws, why you slice, hit higher,
+        fat/thin, tempo</li>
+      <li><strong>Short Game</strong> — putting with real PGA Tour stats, chipping,
+        pitching, AimPoint Express</li>
+      <li><strong>Mental Game</strong> — pre-shot routine, Vision54's Think/Play/Memory
+        boxes, mental chatter</li>
+      <li><strong>Golf Science</strong> — gear effect, wind physics, kinematic sequence,
+        TPI screens</li>
+      <li><strong>Practice &amp; Speed</strong> — Practice Like Rory, speed science with
+        the Stack System</li>
+    </ul>
+
+    <div class="go-btn-row">
+      <a href="/improve/" class="btn btn-primary btn-sm">Open the Library →</a>
+    </div>
+  </section>
+
+  <!-- ============= 9. PROFILE ============= -->
+  <section class="htu-step" id="profile">
+    <div class="step-kicker">09 · THE FOUNDATION</div>
+    <h2>Your Know Your Game Profile</h2>
+    <p>
+      Before your first lesson with Ryan, fill this out. It's confidential — only Ryan sees
+      it — and it frames every session afterward. Fill it out with <strong>absolute
+      honesty</strong>; that's the point.
+    </p>
+    <p>
+      Takes about 10 minutes. Topics: your background, your typical miss, your mental
+      approach, your goals. No right or wrong answers. Just a clear picture.
+    </p>
+
+    <div class="go-btn-row">
+      <a href="profile.html" class="btn btn-primary btn-sm">Complete my profile →</a>
+    </div>
+  </section>
+
+  <!-- ============= 10. JUNIOR SEASON ============= -->
+  <section class="htu-step" id="season">
+    <div class="step-kicker">10 · YOUR SEASON</div>
+    <h2>The 15-Week Junior Elite Season</h2>
+    <p>
+      Junior Elite is a 15-week structured program that runs alongside your Simcoe County
+      Junior Golf Tour schedule. Each week has a written focus, a specific drill set,
+      and a tournament-prep block. The portal walks you through it week by week.
+    </p>
+    <ul>
+      <li>The current week is shown on the <strong>Dashboard</strong> as "This Week."</li>
+      <li>Open any week to see: focus, key concept, drills, pre-round routine, and
+        a debrief area.</li>
+      <li>Submit your tournament rounds via <strong>Submit Round</strong> — they flow
+        into your season-long history.</li>
+    </ul>
+    <p>
+      Need a private lesson on top of the program? Reach out directly to Ryan at
+      <a href="mailto:ryan@rrgolfperformance.com" style="color:var(--gold);">ryan@rrgolfperformance.com</a>.
+    </p>
+  </section>
+
+  <div style="text-align:center; margin: 36px 0 8px; color: var(--mid-grey); font-size: 14px;">
+    Questions? Email <a href="mailto:ryan@rrgolfperformance.com" style="color:var(--gold);">ryan@rrgolfperformance.com</a>.
+  </div>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js"></script>
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  (async () => { await RRG.mount('how-to-use'); })();
+</script>
+</body>
+</html>
