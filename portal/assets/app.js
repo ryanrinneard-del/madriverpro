@@ -402,7 +402,7 @@ RRG.renderNav = function(user, active = '') {
         <li class="nav-group-label">MY GAME</li>
         <li><a href="dashboard.html" class="${active==='dashboard'?'active':''}">Dashboard</a></li>
         <li><a href="history.html"   class="${active==='history'?'active':''}">My Rounds</a></li>
-        <li><a href="tiger5.html"    class="${active==='tiger5'?'active':''}">Tiger 5</a></li>
+        <li><a href="tiger5.html"    class="${active==='tiger5'?'active':''}">5 Errors</a></li>
         <li><a href="profile.html"   class="${active==='profile'?'active':''}">Profile</a></li>
 
         <li class="nav-group-label">TOOLS</li>

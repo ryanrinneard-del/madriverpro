@@ -172,20 +172,20 @@
       </div>
     </div>
 
-    <!-- ========== TIGER 5 (collapsed unless pre-filled from live tally) ========== -->
+    <!-- ========== 5 AVOIDABLE ERRORS tally (collapsed unless pre-filled) ========== -->
     <details class="sr-details" id="t5-details">
       <summary>
         <span>
-          Tiger 5 tally
-          <div class="details-hint">Avoidable errors — the benchmark is 1–2 or fewer per round.</div>
+          5 Errors tally
+          <div class="details-hint">The five avoidable mistakes that quietly cost most golfers strokes.</div>
         </span>
       </summary>
 
       <div id="t5-prefill-banner"></div>
       <div id="t5-panel" class="tiger5-grid"></div>
       <div class="tiger5-summary mt-4" id="t5-summary">
-        <div class="total"><b id="t5-total">0</b>Tiger 5 events this round</div>
-        <div class="status good" id="t5-status">ON BENCHMARK</div>
+        <div class="total"><b id="t5-total">0</b>Errors this round</div>
+        <div class="status good" id="t5-status">ON TRACK</div>
       </div>
     </details>
 
@@ -347,9 +347,9 @@
       const total = Object.values(t5State).reduce((a,b) => a+b, 0);
       document.getElementById('t5-total').textContent = total;
       const status = document.getElementById('t5-status');
-      if (total <= 2) { status.textContent = 'ON BENCHMARK'; status.className = 'status good'; }
+      if (total <= 2) { status.textContent = 'ON TRACK'; status.className = 'status good'; }
       else if (total <= 4) { status.textContent = 'CLOSE'; status.className = 'status ok'; }
-      else { status.textContent = 'STROKES ON THE TABLE'; status.className = 'status bad'; }
+      else { status.textContent = 'LEAKING STROKES'; status.className = 'status bad'; }
     }
     window.rrgT5 = (n, delta) => {
       t5State[n] = Math.max(0, t5State[n] + delta);

@@ -195,9 +195,9 @@
     <h2 class="page-title" style="font-size:20px;">What your players are shooting &amp; missing</h2>
     <hr class="gold-rule">
     <p class="small muted" style="margin-top:6px;">
-      Most recent rounds across all players. Chips show Tiger 5 counts: <b>P5</b> bogey+ on par 5,
-      <b>DB</b> double bogey or worse, <b>SV</b> blown easy save, <b>3P</b> three-putt,
-      <b>SC</b> bogey with scoring club.
+      Most recent rounds across all players. Chips show the 5 Avoidable Errors:
+      <b>P5</b> bogey+ on par 5, <b>DB</b> double bogey or worse, <b>SV</b> blown easy save,
+      <b>3P</b> three-putt, <b>SC</b> bogey with scoring club.
     </p>
   </div>
   <div id="rounds-wrap"></div>
@@ -562,7 +562,7 @@
               <th>Lessons</th>
               <th>Rounds</th>
               <th>Avg</th>
-              <th>Tiger 5 totals</th>
+              <th>5 Errors totals</th>
               <th style="text-align:right;">Action</th>
             </tr>
           </thead>
@@ -688,7 +688,7 @@
         ${row('Routine score', r.routine_score)}
 
         <div style="margin-top:16px;">
-          <div class="page-label" style="font-size:10px;">Tiger 5</div>
+          <div class="page-label" style="font-size:10px;">5 Errors</div>
           <div style="margin-top:6px;">${t5ChipsHtml(t5, {hotThreshold: 2})}</div>
         </div>
 

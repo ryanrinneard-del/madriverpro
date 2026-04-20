@@ -100,17 +100,14 @@
       </div>
     </div>
 
-    <!-- Tiger 5 -->
-    <div class="section-label">TIGER 5 TALLY</div>
+    <!-- The 5 Avoidable Errors tally -->
+    <div class="section-label">5 ERRORS TALLY</div>
     <div class="section-title" style="font-size:15px;">Count each avoidable error that happened today.</div>
     <div id="t5-panel" class="tiger5-grid"></div>
     <div class="tiger5-summary mt-4" id="t5-summary">
-      <div class="total"><b id="t5-total">0</b>Tiger 5 events this round</div>
-      <div class="status good" id="t5-status">ON BENCHMARK</div>
+      <div class="total"><b id="t5-total">0</b>Errors this round</div>
+      <div class="status good" id="t5-status">ON TRACK</div>
     </div>
-    <p class="muted small mt-2">
-      <b>Adult Coaching target:</b> 1–2 or fewer per round. Tour benchmark: ≤ 6 across a 4-round event.
-    </p>
 
     <!-- Reflection -->
     <div class="section-label">REFLECTION</div>
@@ -180,7 +177,7 @@
     const banner = document.createElement('div');
     banner.className = 'callout';
     banner.style.cssText = 'border-left-color: var(--gold); background: var(--cream); margin-bottom: 10px; font-size: 13px;';
-    banner.innerHTML = '<b>Tiger 5 pre-filled from your live tally.</b> ' +
+    banner.innerHTML = '<b>5 Errors pre-filled from your live tally.</b> ' +
       'Adjust any count if needed \u2014 these numbers save with your round below. ' +
       '<a href="#" id="clear-tally-link" style="color:var(--gold); border-bottom:1px dotted var(--gold); margin-left:6px;">Clear &amp; start over</a>';
     t5Panel.parentElement.insertBefore(banner, t5Panel);
@@ -195,7 +192,7 @@
         });
         document.getElementById('t5-total').textContent = '0';
         const status = document.getElementById('t5-status');
-        status.textContent = 'ON BENCHMARK'; status.className = 'status good';
+        status.textContent = 'ON TRACK'; status.className = 'status good';
         banner.remove();
       });
     }, 0);
@@ -221,9 +218,9 @@
     const total = Object.values(t5State).reduce((a,b) => a+b, 0);
     document.getElementById('t5-total').textContent = total;
     const status = document.getElementById('t5-status');
-    if (total <= 2) { status.textContent = 'ON BENCHMARK'; status.className = 'status good'; }
+    if (total <= 2) { status.textContent = 'ON TRACK'; status.className = 'status good'; }
     else if (total <= 4) { status.textContent = 'CLOSE'; status.className = 'status ok'; }
-    else { status.textContent = 'STROKES ON THE TABLE'; status.className = 'status bad'; }
+    else { status.textContent = 'LEAKING STROKES'; status.className = 'status bad'; }
   }
 
   window.rrgT5 = (n, delta) => {
@@ -232,9 +229,9 @@
     const total = Object.values(t5State).reduce((a,b) => a+b, 0);
     document.getElementById('t5-total').textContent = total;
     const status = document.getElementById('t5-status');
-    if (total <= 2) { status.textContent = 'ON BENCHMARK'; status.className = 'status good'; }
+    if (total <= 2) { status.textContent = 'ON TRACK'; status.className = 'status good'; }
     else if (total <= 4) { status.textContent = 'CLOSE'; status.className = 'status ok'; }
-    else { status.textContent = 'STROKES ON THE TABLE'; status.className = 'status bad'; }
+    else { status.textContent = 'LEAKING STROKES'; status.className = 'status bad'; }
   };
 
   // Submit

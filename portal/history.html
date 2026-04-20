@@ -66,7 +66,7 @@
     <div class="stat-cell"><div class="val">${total}</div><div class="lbl">Rounds</div></div>
     <div class="stat-cell"><div class="val">${avg}</div><div class="lbl">Avg Score</div></div>
     <div class="stat-cell"><div class="val">${best}</div><div class="lbl">Best</div></div>
-    <div class="stat-cell"><div class="val">${avgT5}</div><div class="lbl">Avg Tiger 5</div></div>
+    <div class="stat-cell"><div class="val">${avgT5}</div><div class="lbl">Avg 5 Errors</div></div>
   `;
 
   // Table
@@ -85,7 +85,7 @@
         <thead>
           <tr>
             <th>Date</th><th>Week</th><th>Course</th><th>Score</th>
-            <th>FIR</th><th>GIR</th><th>Putts</th><th>Tiger 5</th>
+            <th>FIR</th><th>GIR</th><th>Putts</th><th>5 Errors</th>
             <th></th>
           </tr>
         </thead>
@@ -136,7 +136,7 @@
         </div>
         <div class="kv-list">
           <div class="kv-row">
-            <div class="kv-key">TIGER 5 BREAKDOWN</div>
+            <div class="kv-key">5 ERRORS BREAKDOWN</div>
             <div class="kv-val">
               ${RRG.TIGER5.map(t => `
                 <div style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px dashed var(--rule);">
