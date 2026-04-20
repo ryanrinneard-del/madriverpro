@@ -719,7 +719,7 @@
         gpRenderReady(plan);
       } else if (status === 'generating') {
         renderGamePlanShell('generating', 'Generating…',
-          `<p style="margin-top:14px;">Claude is reading your profile and building your three coaching documents — Coach Summary, 6-Week Arc, and Full Dossier. Takes about 30 seconds. This view will refresh automatically.</p>`);
+          `<p style="margin-top:14px;">Your profile is being turned into your three coaching documents — Coach Summary, 6-Week Arc, and Full Dossier. This takes a minute or two. The page will refresh automatically when it's ready.</p>`);
       } else if (status === 'error') {
         renderGamePlanShell('error', 'Error',
           `<p style="margin-top:14px;">Could not generate your game plan automatically. Ryan has been notified and will follow up with you directly.</p>
@@ -736,7 +736,7 @@
       let polls = 0;
       const pollId = setInterval(async () => {
         polls++;
-        if (polls > 20) { clearInterval(pollId); return; }   // ~3 minutes of polling
+        if (polls > 30) { clearInterval(pollId); return; }   // ~6 minutes of polling
         try {
           const fresh = await RRG.users.get(user.id);
           if (!fresh) return;

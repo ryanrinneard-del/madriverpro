@@ -24,7 +24,7 @@ import { createClient } from '@supabase/supabase-js';
 import { GOLFER_PROFILE_SYSTEM_PROMPT } from './_lib/systemPrompt.js';
 import { PDF_DATA_SCHEMA, renderMarkdown } from './_lib/schema.js';
 
-export const config = { maxDuration: 60 };
+export const config = { maxDuration: 300 };
 
 const MODEL = 'claude-sonnet-4-20250514';
 const MAX_TOKENS = 8192;

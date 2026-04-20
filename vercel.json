@@ -9,6 +9,9 @@
     },
     "api/approve-profile.js": {
       "maxDuration": 30
+    },
+    "api/generate-game-plan.js": {
+      "maxDuration": 300
     }
   },
   "headers": [
