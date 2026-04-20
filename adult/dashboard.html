@@ -211,6 +211,41 @@
   .gp-flag.WARNING{ background: #FDF0EE; color: var(--red-risk); }
   .gp-flag.GOOD   { background: #E6F5E9; color: #2E7D32; }
   .gp-flag.NOTE   { background: var(--light-bg); color: var(--navy-mid); }
+
+  /* ===== QUICK ACTIONS (compact strip) ===== */
+  .quick-actions {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .quick-action {
+    display: flex; align-items: center; gap: 10px;
+    padding: 14px 16px;
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    text-decoration: none;
+    color: var(--navy);
+    transition: border-color .15s ease, transform .15s ease;
+  }
+  .quick-action:hover {
+    border-color: var(--gold);
+    transform: translateY(-1px);
+  }
+  .quick-action .qa-icon {
+    width: 30px; height: 30px; border-radius: 6px;
+    background: var(--cream, #F7F2E8);
+    color: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 16px;
+    flex-shrink: 0;
+  }
+  .quick-action .qa-label {
+    font-size: 13px; font-weight: 600; letter-spacing: 0.03em;
+  }
+  @media (max-width: 560px) {
+    .quick-actions { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
@@ -266,46 +301,30 @@
   <!-- 2b. YOUR 6-WEEK PLAN (generated from Know Your Game profile) -->
   <div id="game-plan-wrap" style="display:none;"></div>
 
-  <!-- QUICK LOG -->
-  <div class="page-header" style="margin-bottom:14px;">
-    <div class="page-label">QUICK LOG</div>
-    <h2 class="page-title" style="font-size:22px;">Log something in under a minute</h2>
-    <hr class="gold-rule">
-  </div>
-  <div class="grid grid-3 mb-5" style="gap: 14px;">
-    <a class="card" href="submit-round.html" style="text-decoration:none; border-top:3px solid var(--gold);">
-      <div class="page-label">LOG A ROUND</div>
-      <h3 style="color:var(--navy); margin-top:4px;">+ New round</h3>
-      <p class="muted small mt-2">Score is the only required field. 3 taps, done.</p>
-    </a>
-    <a class="card" href="tiger5.html" style="text-decoration:none; border-top:3px solid var(--gold);">
-      <div class="page-label">LIVE TRACKER</div>
-      <h3 style="color:var(--navy); margin-top:4px;">Track 5 errors on course</h3>
-      <p class="muted small mt-2">Tap errors as they happen. Auto-flows into Log Round.</p>
-    </a>
-    <a class="card" href="history.html" style="text-decoration:none; border-top:3px solid var(--gold);">
-      <div class="page-label">MY HISTORY</div>
-      <h3 style="color:var(--navy); margin-top:4px;">All rounds</h3>
-      <p class="muted small mt-2">Every round, every stat, the full season.</p>
-    </a>
+  <!-- 3. YOUR NUMBERS -->
+  <div id="numbers-wrap" style="display:none;">
+    <div class="page-header" style="margin-bottom:14px;">
+      <div class="page-label">YOUR NUMBERS</div>
+      <h2 class="page-title" style="font-size:22px;">What the rounds are saying</h2>
+      <hr class="gold-rule">
+      <p class="small muted" style="margin-top:6px;" id="numbers-sub">&nbsp;</p>
+    </div>
+    <div class="stat-strip mb-5" id="numbers-strip"></div>
   </div>
 
-  <!-- 5. TOOLS -->
-  <div class="page-header" style="margin-bottom:14px;">
-    <div class="page-label">TOOLS</div>
-    <h2 class="page-title" style="font-size:22px;">Your Bag &amp; Wedges</h2>
-    <hr class="gold-rule">
-  </div>
-  <div class="grid grid-2 mb-5" style="gap: 16px;">
-    <a class="card" href="bag.html" style="text-decoration:none;">
-      <div class="page-label">QUICK TOOL</div>
-      <h3 style="color:var(--navy); margin-top:4px;">Map My Bag</h3>
-      <p class="muted small mt-2">Every club, carry &amp; total. Customize, save, print.</p>
+  <!-- 4. QUICK ACTIONS — compact strip; detailed tools live in the nav -->
+  <div class="quick-actions mb-5">
+    <a href="submit-round.html" class="quick-action">
+      <div class="qa-icon">+</div>
+      <div class="qa-label">Log a round</div>
     </a>
-    <a class="card" href="wedge-matrix.html" style="text-decoration:none;">
-      <div class="page-label">QUICK TOOL</div>
-      <h3 style="color:var(--navy); margin-top:4px;">Wedge Matrix</h3>
-      <p class="muted small mt-2">Full / ¾ / ½ / knockdown + live wind calculator.</p>
+    <a href="tiger5.html" class="quick-action">
+      <div class="qa-icon">⛳</div>
+      <div class="qa-label">Track 5 Errors</div>
+    </a>
+    <a href="history.html" class="quick-action">
+      <div class="qa-icon">≡</div>
+      <div class="qa-label">My rounds</div>
     </a>
   </div>
 
@@ -529,6 +548,70 @@
         </div>`;
     }
     renderCoachInput();
+
+    // ============ YOUR NUMBERS ============
+    /* Compute 3 real numbers from the player's rounds:
+       - Avg score (last 10 rounds with a score)
+       - Avg 5 Errors per round (last 10 rounds with a tiger5 total)
+       - Biggest pattern: the 5 Errors category with the highest count
+    */
+    function renderYourNumbers() {
+      const wrap = document.getElementById('numbers-wrap');
+      const strip = document.getElementById('numbers-strip');
+      const sub = document.getElementById('numbers-sub');
+      if (!rounds || rounds.length === 0) {
+        wrap.style.display = 'none';
+        return;
+      }
+      const recent = rounds.slice(0, 10);
+      const scores = recent.map(r => +r.score).filter(n => !isNaN(n) && n > 0);
+      const avgScore = scores.length
+        ? (scores.reduce((a,b) => a+b, 0) / scores.length).toFixed(1)
+        : '—';
+
+      const t5Totals = recent.map(r => +r.tiger5_total).filter(n => !isNaN(n));
+      const avgT5 = t5Totals.length
+        ? (t5Totals.reduce((a,b) => a+b, 0) / t5Totals.length).toFixed(1)
+        : '—';
+
+      // Biggest pattern across all rounds (not just last 10, because patterns need a bigger window)
+      const CATS = {
+        1: 'Par-5 bogeys',
+        2: 'Big numbers',
+        3: 'Blown saves',
+        4: 'Three-putts',
+        5: 'Scoring-club bogeys',
+      };
+      const sum = {1:0, 2:0, 3:0, 4:0, 5:0};
+      rounds.forEach(r => {
+        const t5 = r.tiger5 || {};
+        [1,2,3,4,5].forEach(n => { sum[n] += (+t5[n] || 0); });
+      });
+      const hasAnyT5 = Object.values(sum).some(v => v > 0);
+      let topCat = null, topVal = 0;
+      if (hasAnyT5) {
+        for (const n of [1,2,3,4,5]) {
+          if (sum[n] > topVal) { topVal = sum[n]; topCat = n; }
+        }
+      }
+      const pattern = topCat
+        ? `${CATS[topCat]}`
+        : '—';
+      const patternDetail = topCat
+        ? `${topVal} across ${rounds.length} round${rounds.length === 1 ? '' : 's'}`
+        : 'Track a few rounds to see your patterns';
+
+      strip.innerHTML = `
+        <div class="stat-cell"><div class="val">${avgScore}</div><div class="lbl">AVG SCORE (last ${Math.min(10, recent.length)})</div></div>
+        <div class="stat-cell"><div class="val">${avgT5}</div><div class="lbl">AVG 5 ERRORS / ROUND</div></div>
+        <div class="stat-cell"><div class="val" style="font-size:18px; line-height:1.3;">${RRG.esc(pattern)}</div><div class="lbl">TOP PATTERN</div></div>
+      `;
+      sub.textContent = topCat
+        ? `Your biggest pattern: ${patternDetail}. Fix this one, save the most strokes.`
+        : 'Log a few rounds and your patterns will surface here.';
+      wrap.style.display = 'block';
+    }
+    renderYourNumbers();
 
     // ============ YOUR 6-WEEK PLAN ============
     /* Renders a single 6-week arc from profile_json.game_plan.structured:
