@@ -101,6 +101,98 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; }
 }
 /* Group labels — hidden on desktop horizontal nav, visible only in mobile drawer */
 .nav-group-label { display: none; }
+
+/* ===== DROPDOWN NAV GROUPS ===== */
+.nav-group { position: relative; list-style: none; }
+.nav-group-toggle {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--soft-grey);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  padding: 6px 0;
+  border-bottom: 2px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: inherit;
+  line-height: 1;
+}
+.nav-group-toggle:hover,
+.nav-group.open > .nav-group-toggle {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+}
+.nav-group-toggle .caret {
+  font-size: 9px;
+  transition: transform .15s ease;
+  opacity: 0.8;
+}
+.nav-group.open > .nav-group-toggle .caret {
+  transform: rotate(180deg);
+}
+
+.nav-group-items {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: -14px;
+  min-width: 260px;
+  background: var(--navy);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-top: 2px solid var(--gold);
+  border-radius: 0 0 10px 10px;
+  padding: 8px 0;
+  list-style: none;
+  box-shadow: 0 14px 32px rgba(0,0,0,0.35);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition: opacity .14s ease, transform .14s ease, visibility 0s linear .14s;
+  z-index: 100;
+}
+.nav-group.open > .nav-group-items {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: opacity .14s ease, transform .14s ease, visibility 0s linear 0s;
+}
+.nav-group-items li { width: 100%; border: none; }
+.nav-group-items a {
+  display: block;
+  padding: 9px 18px;
+  color: var(--soft-grey);
+  font-size: 13px;
+  border-bottom: none;
+  white-space: nowrap;
+  text-decoration: none;
+}
+.nav-group-items a:hover,
+.nav-group-items a.active {
+  background: rgba(201,168,76,0.12);
+  color: var(--gold);
+  border-bottom: none;
+}
+.nav-group-items .nav-sublabel {
+  padding: 10px 18px 4px;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+  text-transform: uppercase;
+  font-weight: 700;
+  opacity: 0.75;
+  pointer-events: none;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  margin-top: 4px;
+}
+.nav-group-items li.nav-sublabel:first-child,
+.nav-group-items li:first-child + .nav-sublabel {
+  border-top: none;
+  margin-top: 0;
+}
+/* End EVENTS dropdown is wide — let it use two columns on desktop if long */
+.nav-group[data-group="events"] .nav-group-items { min-width: 280px; }
 .nav-user {
   display: flex;
   align-items: center;
@@ -987,6 +1079,75 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; }
     border-left: 3px solid var(--gold);
     padding-left: 19px;
   }
+
+  /* ----- MOBILE DRAWER: dropdowns become collapsible accordion sections ----- */
+  .nav-group { position: static; }
+  .nav-group-toggle {
+    display: flex;
+    width: 100%;
+    padding: 16px 22px;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+    border: none;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    background: transparent;
+    color: var(--gold);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .nav-group-toggle:hover,
+  .nav-group.open > .nav-group-toggle {
+    border-bottom-color: rgba(255,255,255,0.06);
+    background: rgba(201,168,76,0.06);
+  }
+  .nav-group-toggle .caret {
+    font-size: 11px;
+    opacity: 0.9;
+  }
+
+  .nav-group-items {
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    background: rgba(0,0,0,0.22);
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: none;
+    display: none;
+    min-width: 0;
+    transition: none;
+  }
+  .nav-group.open > .nav-group-items { display: block; }
+  .nav-group-items a {
+    display: block;
+    padding: 13px 22px 13px 34px;
+    color: var(--soft-grey);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    white-space: normal;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .nav-group-items a.active {
+    background: rgba(201,168,76,0.1);
+    color: var(--gold);
+    border-left: 3px solid var(--gold);
+    padding-left: 31px;
+  }
+  .nav-group-items .nav-sublabel {
+    padding: 10px 22px 4px 34px;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    border-top: 1px solid rgba(255,255,255,0.04);
+    margin-top: 2px;
+  }
+  .nav-group[data-group="events"] .nav-group-items { min-width: 0; }
 
   /* Mobile user chip lives inside the drawer */
   .nav-user-mobile {

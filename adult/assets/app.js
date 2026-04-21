@@ -451,8 +451,21 @@ RRG.renderNav = function(user, active = '') {
   if (!user) return '';
   const initials = (user.name || user.email || 'RR')
     .split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
-  const coachLink = user.role === 'coach'
-    ? `<li><a href="coach.html" class="${active==='coach'?'active':''}">Coach View</a></li>` : '';
+  const coachItem = user.role === 'coach'
+    ? `<li class="nav-coach"><a href="coach.html" class="${active==='coach'?'active':''}">Coach View</a></li>` : '';
+
+  const group = (label, key, items) => `
+    <li class="nav-group" data-group="${key}">
+      <button class="nav-group-toggle" type="button"
+              aria-expanded="false" aria-haspopup="true"
+              onclick="RRG.toggleNavGroup(event, this)">
+        <span>${label}</span><span class="caret" aria-hidden="true">&#9662;</span>
+      </button>
+      <ul class="nav-group-items">
+        ${items}
+      </ul>
+    </li>`;
+
   return `
     <nav class="nav no-print">
       <div class="nav-brand">RR GOLF PERFORMANCE</div>
@@ -460,31 +473,61 @@ RRG.renderNav = function(user, active = '') {
         <span></span><span></span><span></span>
       </button>
       <ul class="nav-links" id="rrg-nav-drawer">
-        <li class="nav-group-label">MY GAME</li>
-        <li><a href="dashboard.html" class="${active==='dashboard'?'active':''}">Dashboard</a></li>
-        <li><a href="my-plan.html"   class="${active==='plan'?'active':''}">My Plan</a></li>
-        <li><a href="history.html"   class="${active==='history'?'active':''}">My Rounds</a></li>
-        <li><a href="lessons.html"   class="${active==='lessons'?'active':''}">My Lessons</a></li>
-        <li><a href="tiger5.html"    class="${active==='tiger5'?'active':''}">5 Errors to Avoid</a></li>
-        <li><a href="profile.html"   class="${active==='profile'?'active':''}">Profile</a></li>
 
-        <li class="nav-group-label">TOOLS</li>
-        <li><a href="bag.html"       class="${active==='bag'?'active':''}">My Bag</a></li>
-        <li><a href="wedge-matrix.html" class="${active==='wedge'?'active':''}">Wedge Matrix</a></li>
-        <li><a href="packages.html"  class="${active==='packages'?'active':''}">Packages</a></li>
+        ${group('My Game', 'mygame', `
+          <li><a href="dashboard.html" class="${active==='dashboard'?'active':''}">Dashboard</a></li>
+          <li><a href="my-plan.html"   class="${active==='plan'?'active':''}">My Plan</a></li>
+          <li><a href="history.html"   class="${active==='history'?'active':''}">My Rounds</a></li>
+          <li><a href="lessons.html"   class="${active==='lessons'?'active':''}">My Lessons</a></li>
+          <li><a href="tiger5.html"    class="${active==='tiger5'?'active':''}">5 Errors to Avoid</a></li>
+          <li><a href="profile.html"   class="${active==='profile'?'active':''}">Profile</a></li>
+        `)}
 
-        <li class="nav-group-label">EVENTS</li>
-        <li><a href="events.html" class="${active==='events'?'active':''}">Ryan's Events</a></li>
+        ${group('Tools', 'tools', `
+          <li><a href="bag.html"          class="${active==='bag'?'active':''}">My Bag</a></li>
+          <li><a href="wedge-matrix.html" class="${active==='wedge'?'active':''}">Wedge Matrix</a></li>
+          <li><a href="packages.html"     class="${active==='packages'?'active':''}">Packages</a></li>
+        `)}
 
-        <li class="nav-group-label">LEARN</li>
-        <li><a href="/improve/" class="${active==='library'?'active':''}">Library</a></li>
-        <li><a href="/improve/first-tee-ready.html">First-Tee Ready &mdash; A Guide for Beginner Golfers</a></li>
-        <li><a href="how-to-use.html" class="${active==='how-to-use'?'active':''}">How to use this portal</a></li>
+        ${group('Events', 'events', `
+          <li><a href="events.html" class="${active==='events'?'active':''}"><strong>All Events &amp; Descriptions</strong></a></li>
 
-        <li class="nav-group-label">BOOKS</li>
-        <li><a href="/improve/bookshelf.html">The Bookshelf</a></li>
+          <li class="nav-sublabel">Friday Mornings</li>
+          <li><a href="https://madriverpro.as.me/Ladies-Fridays" target="_blank" rel="noopener">Mad River Ladies Series</a></li>
 
-        ${coachLink}
+          <li class="nav-sublabel">Thursday Evenings</li>
+          <li><a href="https://madriverpro.as.me/ladiesnight" target="_blank" rel="noopener">Ladies Night Series</a></li>
+          <li><a href="https://madriverpro.as.me/wineandwedges" target="_blank" rel="noopener">Wine &amp; Wedges</a></li>
+          <li><a href="https://madriverpro.as.me/scotchandshortgame" target="_blank" rel="noopener">Scotch &amp; Short Game</a></li>
+          <li><a href="https://madriverpro.as.me/5anddine" target="_blank" rel="noopener">9 &amp; Dine</a></li>
+          <li><a href="https://madriverpro.as.me/steaknguinness" target="_blank" rel="noopener">Links Night &mdash; Steak &amp; Guinness</a></li>
+          <li><a href="https://madriverpro.as.me/pilatesandperformance" target="_blank" rel="noopener">Pilates &amp; Performance</a></li>
+
+          <li class="nav-sublabel">Summer Intensive</li>
+          <li><a href="https://madriverpro.as.me/short-game-school" target="_blank" rel="noopener">Half Day Short Game School</a></li>
+
+          <li class="nav-sublabel">Seasonal</li>
+          <li><a href="/mothers-day.html">Mother's Day Special</a></li>
+        `)}
+
+        ${group('Learn', 'learn', `
+          <li><a href="/improve/" class="${active==='library'?'active':''}">Library (all topics)</a></li>
+          <li><a href="/improve/long-game.html">Long Game</a></li>
+          <li><a href="/improve/short-game.html">Short Game</a></li>
+          <li><a href="/improve/mental-game.html">Mental Game</a></li>
+          <li><a href="/improve/course-strategy.html">Course Strategy (DECADE)</a></li>
+          <li><a href="/improve/first-tee-ready.html">First-Tee Ready</a></li>
+          <li><a href="how-to-use.html" class="${active==='how-to-use'?'active':''}">How to use this portal</a></li>
+        `)}
+
+        ${group('Books', 'books', `
+          <li><a href="/improve/bookshelf.html"><strong>The Bookshelf</strong></a></li>
+          <li class="nav-sublabel">Volume 01</li>
+          <li><a href="/improve/book-8-step-swing.html">The 8-Step Swing</a></li>
+        `)}
+
+        ${coachItem}
+
         <li class="nav-user-mobile">
           <div class="who">Signed in as <b>${RRG.esc(user.name || user.email)}</b></div>
           <button onclick="RRG.auth.logout()">Log out</button>
@@ -498,6 +541,41 @@ RRG.renderNav = function(user, active = '') {
       </div>
     </nav>`;
 };
+
+/* Toggle one nav group dropdown, closing any others. */
+RRG.toggleNavGroup = function(evt, btn) {
+  if (evt) evt.stopPropagation();
+  const group = btn.closest('.nav-group');
+  if (!group) return;
+  const willOpen = !group.classList.contains('open');
+  document.querySelectorAll('.nav-group.open').forEach(g => {
+    if (g !== group) {
+      g.classList.remove('open');
+      const t = g.querySelector('.nav-group-toggle');
+      if (t) t.setAttribute('aria-expanded', 'false');
+    }
+  });
+  group.classList.toggle('open', willOpen);
+  btn.setAttribute('aria-expanded', String(willOpen));
+};
+
+/* Close any open nav dropdowns on outside click / Escape. */
+document.addEventListener('click', (e) => {
+  if (e.target.closest('.nav-group')) return;
+  document.querySelectorAll('.nav-group.open').forEach(g => {
+    g.classList.remove('open');
+    const t = g.querySelector('.nav-group-toggle');
+    if (t) t.setAttribute('aria-expanded', 'false');
+  });
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape') return;
+  document.querySelectorAll('.nav-group.open').forEach(g => {
+    g.classList.remove('open');
+    const t = g.querySelector('.nav-group-toggle');
+    if (t) t.setAttribute('aria-expanded', 'false');
+  });
+});
 
 RRG.toggleNav = function() {
   const drawer = document.getElementById('rrg-nav-drawer');
