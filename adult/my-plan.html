@@ -211,6 +211,39 @@
     color: var(--gold); text-transform: uppercase; letter-spacing: 0.1em;
     font-size: 10px; display: block; margin-bottom: 2px; font-weight: 700;
   }
+
+  /* ===== COACH INLINE WEEK EDITOR ===== */
+  .wk-edit-row {
+    margin-top: 12px; padding-top: 10px;
+    border-top: 1px dashed var(--rule);
+    text-align: right;
+  }
+  .wk-editor label {
+    display: block; font-weight: 700; color: var(--navy);
+    font-size: 10px; letter-spacing: 1px; text-transform: uppercase;
+    margin: 12px 0 4px;
+  }
+  .wk-editor input[type="text"],
+  .wk-editor textarea {
+    width: 100%; padding: 8px 10px;
+    border: 1px solid var(--rule); border-radius: 4px;
+    font-family: inherit; font-size: 13.5px; color: var(--navy);
+    background: var(--white);
+  }
+  .wk-editor input[type="text"]:focus,
+  .wk-editor textarea:focus {
+    border-color: var(--gold); outline: none;
+    box-shadow: 0 0 0 2px rgba(201,168,76,0.15);
+  }
+  .wk-editor textarea { resize: vertical; min-height: 64px; }
+  .wk-editor .wk-hint {
+    font-size: 11px; color: var(--mid-grey); margin-top: 3px;
+  }
+  .wk-editor .wk-editor-actions {
+    display: flex; justify-content: flex-end; gap: 8px;
+    margin-top: 14px; padding-top: 10px;
+    border-top: 1px dashed var(--rule);
+  }
   @media (max-width: 560px) {
     .week-card summary {
       grid-template-columns: 52px 1fr 20px; gap: 10px; padding: 10px 14px;
@@ -504,7 +537,7 @@
         }).filter(Boolean);
 
         return `
-          <details class="week-card">
+          <details class="week-card" data-wk-idx="${i}">
             <summary>
               <div class="wk-num">Week<b>${RRG.esc(weekNum)}</b></div>
               <div class="wk-head">
@@ -513,7 +546,7 @@
               </div>
               <div class="wk-chev">›</div>
             </summary>
-            <div class="wk-body">
+            <div class="wk-body" id="wk-body-${i}">
               <ul>
                 ${primary   ? `<li><span class="wk-tag">Primary</span>${RRG.esc(primary)}</li>` : ''}
                 ${secondary ? `<li><span class="wk-tag">Secondary</span>${RRG.esc(secondary)}</li>` : ''}
@@ -521,6 +554,13 @@
                 ${readyWhen ? `<li><span class="wk-tag">Ready when</span>${RRG.esc(readyWhen)}</li>` : ''}
               </ul>
               ${measure ? `<div class="wk-measure"><b>Measure</b>${RRG.esc(measure)}</div>` : ''}
+              ${isCoachViewing ? `
+                <div class="wk-edit-row">
+                  <button type="button" class="btn btn-ghost btn-sm" onclick="editSynopsisWeek(${i})">
+                    &#9998; Edit Week ${RRG.esc(weekNum)}
+                  </button>
+                </div>
+              ` : ''}
             </div>
           </details>
         `;
@@ -546,6 +586,82 @@
         </div>`;
       wrap.style.display = 'block';
     }
+
+    /* =================================================================
+       COACH INLINE WEEK EDITOR — replaces a single week-card's body
+       with a form. Save writes to profile_json.game_plan.structured.sessions
+       then re-renders plan + synopsis. No AI involved. This is the
+       "I just spotted the real issue — fix Week 3 directly" path.
+       ================================================================= */
+    window.editSynopsisWeek = function(idx) {
+      const sessions = (prof?.game_plan?.structured?.sessions) || [];
+      const sess = sessions[idx];
+      if (!sess) return;
+      const body = document.getElementById('wk-body-' + idx);
+      if (!body) return;
+      const practiceText = Array.isArray(sess.practice) ? sess.practice.join('\n') : '';
+      body.innerHTML = `
+        <div class="wk-editor">
+          <label>Theme</label>
+          <input type="text" id="we-theme-${idx}" value="${RRG.esc(sess.theme || '')}">
+          <label>Subtitle</label>
+          <input type="text" id="we-sub-${idx}" value="${RRG.esc(sess.subtitle || '')}">
+          <label>Primary focus</label>
+          <input type="text" id="we-primary-${idx}" value="${RRG.esc(sess.primary || '')}">
+          <label>Secondary focus</label>
+          <input type="text" id="we-secondary-${idx}" value="${RRG.esc(sess.secondary || '')}">
+          <label>Practice (one item per line)</label>
+          <textarea id="we-practice-${idx}" rows="4">${RRG.esc(practiceText)}</textarea>
+          <div class="wk-hint">Each line becomes a bullet on the player's plan.</div>
+          <label>Measure</label>
+          <input type="text" id="we-measure-${idx}" value="${RRG.esc(sess.measure || '')}">
+          <div class="wk-hint">The measurable check that tells you this week's work is done.</div>
+          <label>Ready when</label>
+          <input type="text" id="we-ready-${idx}" value="${RRG.esc(sess.ready_when || '')}">
+          <div class="wk-editor-actions">
+            <button type="button" class="btn btn-ghost btn-sm" onclick="cancelSynopsisWeekEdit(${idx})">Cancel</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="saveSynopsisWeek(${idx})">Save Week ${RRG.esc(sess.week || (idx+1))}</button>
+          </div>
+        </div>`;
+    };
+
+    window.cancelSynopsisWeekEdit = function(idx) {
+      // Simple reset — re-render the full synopsis. The details element
+      // stays open because we rebuild with the same structure.
+      renderSynopsis(prof.game_plan);
+      // Re-expand the week that was being edited
+      const card = document.querySelector('.week-card[data-wk-idx="' + idx + '"]');
+      if (card) card.setAttribute('open', '');
+    };
+
+    window.saveSynopsisWeek = async function(idx) {
+      const sessions = [...((prof?.game_plan?.structured?.sessions) || [])];
+      const sess = { ...sessions[idx] };
+      sess.theme     = document.getElementById('we-theme-' + idx).value.trim();
+      sess.subtitle  = document.getElementById('we-sub-' + idx).value.trim();
+      sess.primary   = document.getElementById('we-primary-' + idx).value.trim();
+      sess.secondary = document.getElementById('we-secondary-' + idx).value.trim();
+      sess.measure   = document.getElementById('we-measure-' + idx).value.trim();
+      sess.ready_when = document.getElementById('we-ready-' + idx).value.trim();
+      const practiceRaw = document.getElementById('we-practice-' + idx).value;
+      sess.practice = practiceRaw.split('\n').map(s => s.trim()).filter(Boolean);
+      sessions[idx] = sess;
+
+      try {
+        const newPlan = await RRG.lessonUpdates.savePlanSessions(targetUser.id, sessions);
+        // Update in-memory so re-render reads the new state
+        prof.game_plan = newPlan;
+        RRG.toast('Week ' + (sess.week || (idx+1)) + ' saved.');
+        renderPlan();
+        // Re-expand the week we just edited
+        setTimeout(() => {
+          const card = document.querySelector('.week-card[data-wk-idx="' + idx + '"]');
+          if (card) card.setAttribute('open', '');
+        }, 20);
+      } catch (err) {
+        RRG.toast('Could not save: ' + (err.message || ''));
+      }
+    };
 
     function renderPlan() {
       const status = prof.game_plan_status;
