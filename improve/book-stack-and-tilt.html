@@ -1,0 +1,1451 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Stack &amp; Tilt Swing — The Bookshelf</title>
+<meta name="description" content="A primer on Andy Plummer and Mike Bennett's Stack & Tilt swing system. Four fundamentals — weight forward, shoulder down, arms straight, hip tuck — broken down for recreational players.">
+<meta property="og:title" content="The Stack &amp; Tilt Swing · RR Golf Performance">
+<meta property="og:description" content="A primer on the Stack &amp; Tilt swing system. Four fundamentals broken down for recreational players — weight forward, shoulder down, arms straight, hip tuck.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://rrgolfperformance.com/improve/book-stack-and-tilt.html">
+<meta property="og:image" content="https://madriverpro.com/images/rr-logo.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Stack &amp; Tilt Swing · RR Golf Performance">
+<meta name="twitter:description" content="A primer on the Stack &amp; Tilt swing system. Four fundamentals broken down for recreational players.">
+<meta name="twitter:image" content="https://madriverpro.com/images/rr-logo.png">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  /* Reuses the Volume 02 (TGM) page structure exactly — same hero, coach
+     note, TOC, chapter cards, callouts, glossary. Volume 03 is the third
+     in the Bookshelf series so visual consistency matters. */
+
+  .book-hero {
+    background: linear-gradient(180deg, var(--navy) 0%, #162E54 100%);
+    color: #fff; border-radius: 14px;
+    padding: 56px 44px 48px; margin-bottom: 36px;
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .book-hero::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--gold);
+  }
+  .book-hero::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent 0%, var(--gold) 30%, var(--gold) 70%, transparent 100%);
+    opacity: 0.4;
+  }
+  .book-hero .vol {
+    display: inline-block;
+    font-size: 11px; letter-spacing: 0.24em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase;
+    padding: 5px 16px; border: 1px solid var(--gold);
+    border-radius: 999px; margin-bottom: 20px;
+  }
+  .book-hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(44px, 7vw, 68px);
+    font-weight: 600; color: #fff;
+    margin: 0; line-height: 1.05; letter-spacing: -0.01em;
+  }
+  .book-hero .subtitle {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; font-size: 20px;
+    color: rgba(255,255,255,0.78);
+    margin: 14px auto 22px; max-width: 620px;
+  }
+  .book-hero .gold-dash {
+    width: 60px; height: 2px; background: var(--gold);
+    margin: 0 auto 22px;
+  }
+  .book-hero .attrib {
+    font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(255,255,255,0.55); font-weight: 500;
+  }
+
+  .coach-note {
+    background: #F7F2E8;
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--gold);
+    border-radius: 10px;
+    padding: 28px 32px;
+    margin: 0 0 36px;
+  }
+  .coach-note .cn-label {
+    font-size: 11px; letter-spacing: 0.2em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 10px;
+  }
+  .coach-note p {
+    font-size: 15.5px; line-height: 1.7; color: var(--navy-mid);
+    margin: 0 0 12px;
+  }
+  .coach-note p:last-child { margin-bottom: 0; }
+  .coach-note p strong { color: var(--navy); }
+  .coach-note .sign-off {
+    margin-top: 14px;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; color: var(--navy); font-size: 16px;
+  }
+
+  .book-toc {
+    background: var(--white); border: 1px solid var(--rule);
+    border-top: 3px solid var(--gold); border-radius: 12px;
+    padding: 28px 32px; margin-bottom: 36px;
+  }
+  .book-toc h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px; color: var(--navy); margin: 0 0 16px; font-weight: 600;
+  }
+  .book-toc ol { list-style: none; margin: 0; padding: 0; }
+  .book-toc li {
+    display: grid; grid-template-columns: 60px 1fr auto;
+    align-items: baseline; gap: 16px;
+    padding: 12px 0; border-bottom: 1px solid var(--rule);
+  }
+  .book-toc li:last-child { border-bottom: none; }
+  .book-toc .ch-num {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; font-size: 20px; color: var(--gold); font-weight: 400;
+  }
+  .book-toc .ch-title { font-size: 15px; color: var(--navy); font-weight: 600; }
+  .book-toc .ch-title small {
+    display: block; font-size: 12px; color: var(--mid-grey);
+    font-weight: 400; margin-top: 2px; font-style: italic;
+  }
+  .book-toc a.ch-jump {
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--gold); font-weight: 700; text-decoration: none;
+  }
+  .book-toc a.ch-jump:hover { color: var(--navy); }
+
+  .chapter-stack { display: grid; gap: 16px; margin-bottom: 40px; }
+  .chapter {
+    background: var(--white); border: 1px solid var(--rule);
+    border-left: 4px solid var(--gold); border-radius: 12px;
+    overflow: hidden; transition: box-shadow .2s ease;
+  }
+  .chapter[open] { box-shadow: 0 14px 34px rgba(13,31,60,0.09); }
+  .chapter summary {
+    display: grid; grid-template-columns: 74px 1fr 28px;
+    gap: 18px; align-items: center; padding: 22px 26px;
+    cursor: pointer; list-style: none; user-select: none;
+  }
+  .chapter summary::-webkit-details-marker { display: none; }
+  .chapter .num {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 48px; color: var(--gold); font-weight: 700;
+    line-height: 1; text-align: center;
+    border-right: 1px solid var(--rule); padding-right: 18px;
+  }
+  .chapter .title-stack .ch-kicker {
+    font-size: 10px; letter-spacing: 0.22em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .chapter .title-stack h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px; color: var(--navy); font-weight: 600;
+    margin: 0 0 4px; line-height: 1.2;
+  }
+  .chapter .title-stack .ch-teaser {
+    font-size: 13px; color: var(--navy-mid); line-height: 1.5;
+  }
+  .chapter .chev {
+    color: var(--mid-grey); font-size: 22px; line-height: 1;
+    transition: transform .2s ease; text-align: center; justify-self: center;
+  }
+  .chapter[open] .chev { transform: rotate(90deg); color: var(--gold); }
+  .chapter .body {
+    padding: 0 26px 28px calc(26px + 74px + 18px);
+    color: var(--navy-mid); line-height: 1.7; font-size: 15px;
+  }
+  .chapter .body p { margin: 0 0 12px; }
+  .chapter .body p strong { color: var(--navy); }
+  .chapter .body ul { margin: 8px 0 14px 20px; padding: 0; }
+  .chapter .body ul li { margin-bottom: 6px; }
+  .chapter .body h4 {
+    font-size: 11px; letter-spacing: 0.18em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase;
+    margin: 22px 0 8px;
+  }
+
+  .key-idea {
+    background: #F7F2E8; border-left: 3px solid var(--gold);
+    padding: 14px 18px; border-radius: 4px;
+    margin: 16px 0; font-size: 15px; line-height: 1.6;
+  }
+  .key-idea b { color: var(--navy); }
+  .feel-pull {
+    border-left: 3px solid var(--gold);
+    padding: 6px 0 6px 18px; margin: 16px 0;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; font-size: 19px; line-height: 1.45; color: var(--navy);
+  }
+  .mistake-box {
+    background: #FDF6F4; border-left: 3px solid #C76757;
+    padding: 14px 18px; border-radius: 4px; margin: 16px 0;
+  }
+  .mistake-box .mb-title {
+    color: #9A3D2F; font-weight: 700; font-size: 12px;
+    letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 6px;
+  }
+  .mistake-box ul { margin: 6px 0 0 18px; padding: 0; }
+  .mistake-box li { color: var(--navy-mid); margin-bottom: 4px; }
+  .drill-box {
+    background: #F2F6EE; border-left: 3px solid #6B8B4E;
+    padding: 14px 18px; border-radius: 4px; margin: 16px 0;
+  }
+  .drill-box .db-title {
+    color: #4C6B30; font-weight: 700; font-size: 12px;
+    letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 6px;
+  }
+  .verify-box {
+    background: #F4F1FA; border-left: 3px solid #7A6BA8;
+    padding: 12px 16px; border-radius: 4px; margin: 14px 0;
+    font-size: 13.5px; line-height: 1.55;
+  }
+  .verify-box .vb-title {
+    color: #4F4380; font-weight: 700; font-size: 11px;
+    letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .bridge {
+    margin-top: 20px; padding-top: 16px;
+    border-top: 1px dashed var(--rule);
+    font-style: italic; font-size: 14px; color: var(--mid-grey);
+  }
+  @media (max-width: 620px) {
+    .chapter summary {
+      grid-template-columns: 54px 1fr 24px; gap: 12px; padding: 18px 18px;
+    }
+    .chapter .num { font-size: 36px; padding-right: 12px; }
+    .chapter .title-stack h3 { font-size: 18px; }
+    .chapter .body { padding: 0 18px 20px 18px; }
+    .book-toc li { grid-template-columns: 38px 1fr; }
+    .book-toc a.ch-jump { grid-column: 2; margin-top: 4px; }
+  }
+
+  .next-steps {
+    background: var(--navy); color: #fff;
+    border-radius: 12px; padding: 32px 34px;
+    margin: 40px 0 28px;
+  }
+  .next-steps h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 26px; color: #fff; margin: 0 0 10px; font-weight: 600;
+  }
+  .next-steps p {
+    font-size: 15px; line-height: 1.7; color: rgba(255,255,255,0.88);
+    margin: 0 0 12px;
+  }
+  .next-steps p strong { color: var(--gold); }
+  .next-steps ol {
+    margin: 8px 0 12px 22px; padding: 0;
+    color: rgba(255,255,255,0.92);
+  }
+  .next-steps ol li {
+    margin-bottom: 8px; font-size: 15px; line-height: 1.55;
+  }
+
+  .attribution {
+    background: #F7F2E8; border: 1px solid var(--rule);
+    border-radius: 10px; padding: 22px 26px; margin: 28px 0;
+  }
+  .attribution h3 {
+    font-size: 12px; letter-spacing: 0.2em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin: 0 0 10px;
+  }
+  .attribution p {
+    font-size: 14px; line-height: 1.65; color: var(--navy-mid);
+    margin: 0 0 10px;
+  }
+  .attribution p strong { color: var(--navy); }
+
+  .glossary {
+    background: var(--white); border: 1px solid var(--rule);
+    border-radius: 10px; padding: 28px 30px; margin: 28px 0;
+  }
+  .glossary h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px; color: var(--navy); margin: 0 0 14px; font-weight: 600;
+  }
+  .glossary dl {
+    display: grid; grid-template-columns: minmax(160px, 1fr) 2fr;
+    gap: 10px 22px;
+  }
+  .glossary dt { font-weight: 700; color: var(--navy); font-size: 14px; }
+  .glossary dd {
+    margin: 0; color: var(--navy-mid); font-size: 14px; line-height: 1.5;
+  }
+  @media (max-width: 620px) {
+    .glossary dl { grid-template-columns: 1fr; gap: 4px 0; }
+    .glossary dd { margin-bottom: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container">
+
+  <div class="breadcrumb">
+    <a href="index.html">Library</a><span>›</span><a href="bookshelf.html">Bookshelf</a><span>›</span>The Stack &amp; Tilt Swing
+  </div>
+
+  <!-- ===================== BOOK HERO ===================== -->
+  <div class="book-hero">
+    <span class="vol">Bookshelf · Volume 03 · Primer</span>
+    <h1>The Stack &amp; Tilt Swing.</h1>
+    <div class="subtitle">Four fundamentals. Ball-first contact. No pivot backwards.</div>
+    <div class="gold-dash"></div>
+    <div class="attrib">A primer on the Plummer &amp; Bennett system</div>
+  </div>
+
+  <!-- ===================== COACH NOTE ===================== -->
+  <div class="coach-note">
+    <div class="cn-label">From the coach</div>
+    <p>
+      When Andy Plummer and Mike Bennett published <em>The Stack &amp; Tilt Swing</em>
+      in 2009, the golf world split cleanly down the middle. Half the instruction
+      community called it a revelation &mdash; the first swing system that actually
+      matched what they were seeing in tour players' impact frames. The other half
+      called it heresy. &ldquo;You can't stay forward at the top of the swing,&rdquo;
+      they said. &ldquo;That's reverse pivot.&rdquo;
+    </p>
+    <p>
+      Plummer and Bennett went to bat with video. They'd studied dozens of the best
+      ball-strikers of all time and found that the &ldquo;classic&rdquo; motion &mdash;
+      shift your weight to the trail side at the top, then shift it back through
+      impact &mdash; <strong>wasn't what those players actually did.</strong> The
+      best ball-strikers stayed <em>more</em> on their lead side at the top than
+      convention taught. They tilted their spine <em>toward</em> the target, not away
+      from it. And the results were ball-first contact, a consistent low point, and
+      a draw-biased path that the game's best had been producing for a century.
+    </p>
+    <p>
+      <strong>This primer is for the recreational player</strong> who's heard the
+      name, is curious whether it's for them, and wants the four fundamentals
+      translated into plain English before picking up the 340-page book. Eight
+      chapters: what the system actually is, the four fundamentals one at a time,
+      how to learn them in order, the drills that ingrain each one, and where
+      Stack &amp; Tilt fits in the modern instruction landscape.
+    </p>
+    <p>
+      Read straight through or skip to the fundamental you know you're violating.
+      Then go to the range and actually try it &mdash; the book becomes useful the
+      moment you put it down and move.
+    </p>
+    <div class="sign-off">&mdash; Ryan</div>
+  </div>
+
+  <!-- ===================== TOC ===================== -->
+  <div class="book-toc">
+    <h2>Table of contents</h2>
+    <ol>
+      <li>
+        <div class="ch-num">01</div>
+        <div><div class="ch-title">What Stack &amp; Tilt actually is
+          <small>The four-fundamental system, the history, and the myth it dismantles.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch1">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">02</div>
+        <div><div class="ch-title">Weight Forward
+          <small>The fundamental that makes every other fundamental possible.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch2">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">03</div>
+        <div><div class="ch-title">Shoulder Down
+          <small>The backswing move that keeps the head still and the club on plane.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch3">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">04</div>
+        <div><div class="ch-title">Arms Straight
+          <small>Preserving the radius of your swing through impact.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch4">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">05</div>
+        <div><div class="ch-title">Tuck the Hips
+          <small>The lower-body pattern that delivers the club and holds the finish.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch5">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">06</div>
+        <div><div class="ch-title">Putting them together
+          <small>The first-lesson sequence. Why you start with weight forward.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch6">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">07</div>
+        <div><div class="ch-title">The drills
+          <small>Three named drills that ingrain the feels. The Wrench. The Bowler. 90-90-90.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch7">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">08</div>
+        <div><div class="ch-title">Where this fits
+          <small>S&amp;T, TPI, TrackMan, Vision54 &mdash; how these systems overlap and contradict.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch8">Read &rarr;</a>
+      </li>
+    </ol>
+  </div>
+
+  <!-- ===================== CHAPTERS ===================== -->
+  <div class="chapter-stack">
+
+    <!-- ========== CHAPTER 1 ========== -->
+    <details class="chapter" id="ch1">
+      <summary>
+        <div class="num">1</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter One</div>
+          <h3>What Stack &amp; Tilt actually is</h3>
+          <div class="ch-teaser">The four-fundamental system, the history, and the myth it dismantles.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          Stack &amp; Tilt gets more misrepresented than any modern swing system.
+          The nickname itself is misleading &mdash; most people hear it and assume
+          it means <em>don't move at all</em>. Stand still. Reverse pivot. Break the
+          rules of the swing. That's not what Plummer and Bennett argued, and
+          understanding what they <em>actually</em> said is the first step to using
+          the system.
+        </p>
+
+        <div class="key-idea">
+          <b>The key idea.</b> Stack &amp; Tilt identifies four fundamentals that
+          the best ball-strikers in history already do: weight forward, shoulder
+          down, arms straight, tuck the hips. The &ldquo;stack&rdquo; is staying
+          centered over the ball. The &ldquo;tilt&rdquo; is the spine angle tilting
+          <em>toward</em> the target through impact. Together they produce the one
+          thing every golfer actually needs: ball-first contact.
+        </div>
+
+        <h4>What Plummer and Bennett actually argued</h4>
+        <p>
+          The claim that launched the system was straightforward. Conventional golf
+          instruction teaches a two-part motion: shift your weight onto the trail
+          side during the backswing, then shift it back onto the lead side through
+          impact. This is taught as gospel. It's in every magazine, every YouTube
+          lesson, every junior clinic.
+        </p>
+        <p>
+          Plummer and Bennett went to the video and said: <strong>the best players
+          in the world don't actually do this.</strong> Ben Hogan didn't do it.
+          Moe Norman didn't do it. In their research, the ball-strikers with the
+          most consistent low points and the most forgiving patterns stayed
+          <em>more</em> centered over the ball than the traditional model taught.
+          Their weight didn't shift back and then forward &mdash; it stayed forward
+          the whole way and <em>kept</em> moving forward through impact.
+        </p>
+        <p>
+          That single insight, applied consistently, spawned the four fundamentals.
+          Each fundamental is a way of keeping you <em>stacked</em> over the ball
+          (not pivoting backwards) and <em>tilted</em> into the target (not leaning
+          back through impact).
+        </p>
+
+        <div class="feel-pull">
+          &ldquo;Stack &amp; Tilt isn't a method. It's a set of universal
+          observations about what actually makes a golf ball go where you want.
+          Whether you call it S&amp;T or not, the four fundamentals are what
+          distinguishes good ball-strikers from poor ones.&rdquo;
+        </div>
+
+        <h4>The four fundamentals, in one sentence each</h4>
+        <ol>
+          <li><strong>Weight Forward.</strong> More weight on your lead side at setup, and it keeps moving forward through the swing.</li>
+          <li><strong>Shoulder Down.</strong> The lead shoulder moves down in the backswing, not around or inward.</li>
+          <li><strong>Arms Straight.</strong> The arms stay extended through impact and into the finish; the radius is preserved.</li>
+          <li><strong>Tuck the Hips.</strong> The hips move laterally and upward through impact, finishing in a vertical, stacked position.</li>
+        </ol>
+
+        <div class="verify-box">
+          <div class="vb-title">A note on the name</div>
+          The label &ldquo;Stack &amp; Tilt&rdquo; gets attached to a lot of things
+          that aren't Stack &amp; Tilt. A reverse pivot is not Stack &amp; Tilt.
+          Standing still and swinging with your arms only is not Stack &amp; Tilt.
+          Leaning forward so hard your weight falls off your toes is not Stack &amp;
+          Tilt. Plummer and Bennett describe a <em>dynamic</em> motion where the
+          body rotates, tilts, and moves &mdash; just not in the directions
+          conventional instruction teaches. If what you're doing looks frozen,
+          you're not doing Stack &amp; Tilt. You're just standing there.
+        </div>
+
+        <h4>Who teaches and has used it</h4>
+        <p>
+          Andy Plummer and Mike Bennett are the founders. They've worked with
+          Aaron Baddeley, Mike Weir (briefly), Charlie Wi, Grant Waite, and a list
+          of tour players that expands year to year. Plenty of tour players use
+          the ideas without labeling themselves as &ldquo;Stack &amp; Tilt
+          players&rdquo; &mdash; because at the tour level, everyone is already
+          doing some version of the four fundamentals, whether they know it or not.
+        </p>
+
+        <div class="mistake-box">
+          <div class="mb-title">Common misunderstanding</div>
+          <p style="margin:0 0 6px;">
+            &ldquo;Stack &amp; Tilt = no weight shift. You just stand there.&rdquo;
+          </p>
+          <p style="margin:0;">
+            There is motion. Weight moves forward <em>more</em>, not less &mdash;
+            it just never moves <em>backward</em>. Hips turn. Shoulders turn.
+            Spine tilts. What's different is the direction: every motion is
+            toward the target, not away from it.
+          </p>
+        </div>
+
+        <div class="drill-box">
+          <div class="db-title">Practical takeaway</div>
+          <p style="margin:0;">
+            Film yourself face-on. Freeze at the top of your backswing. If your
+            head has moved backward or your lead heel has come off the ground,
+            you're doing the conventional reverse-pivot &mdash; and that's
+            the single biggest source of inconsistent contact for most
+            recreational players. Fix this first. Every other fundamental
+            becomes possible once this one is in place.
+          </p>
+        </div>
+
+        <div class="bridge">
+          Which is why the first fundamental &mdash; and the one we start with
+          &mdash; is Weight Forward.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 2 ========== -->
+    <details class="chapter" id="ch2">
+      <summary>
+        <div class="num">2</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Two</div>
+          <h3>Weight Forward</h3>
+          <div class="ch-teaser">The fundamental that makes every other fundamental possible.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          If you fix nothing else from this book, fix this one. Weight Forward is
+          the single most counter-intuitive idea in Stack &amp; Tilt &mdash; and
+          the most important. Get this right and the other three fundamentals
+          become achievable. Get it wrong and nothing else matters.
+        </p>
+
+        <div class="key-idea">
+          <b>The key idea.</b> At setup, more than half your lower-body weight is
+          forward on your lead side. During the swing, that weight doesn't shift
+          backwards. It stays forward and <em>keeps moving forward</em> all the way
+          through impact and into the finish. The result: the club bottoms out
+          after the ball (ball first), the shot launches low-forward on the
+          clubface, and the path becomes naturally in-to-out.
+        </div>
+
+        <h4>What it looks like, mechanically</h4>
+        <p>
+          At address with an iron, you set up with roughly 55&ndash;60% of your
+          weight on your lead foot. (For a driver it's closer to even because
+          you're hitting on the upswing, but the forward bias never disappears
+          completely.) As you take the club back, your weight does <em>not</em>
+          shift to the trail side. If anything, it moves <em>more</em> forward.
+          In the downswing, it keeps moving forward. At the finish, nearly all
+          your weight is on your lead foot and your chest is facing the target.
+        </p>
+        <p>
+          This is the exact opposite of what most golfers are taught. The
+          conventional instruction is &ldquo;shift your weight to your trail side
+          at the top of the backswing,&rdquo; which produces reverse-pivot-looking
+          motions in amateurs and a host of inconsistent-contact symptoms:
+          fat shots, thin shots, heel strikes, pull-hooks, and loss of distance.
+        </p>
+
+        <div class="feel-pull">
+          &ldquo;The weight doesn't go back and then forward. It goes forward,
+          and then <em>more</em> forward. That's the whole trick.&rdquo;
+        </div>
+
+        <h4>Why it works</h4>
+        <p>
+          Physics. If the center of your swing (your sternum, roughly) stays
+          forward of the ball throughout the motion, the clubhead's low point
+          will be forward of the ball too. The low point of the swing is where
+          the clubhead is nearest the ground &mdash; the bottom of the arc. If
+          the low point is <em>after</em> the ball, you make ball-first contact.
+          If the low point is <em>before</em> the ball, you hit the ground first
+          (fat) or, compensating, you pick up with your hands and hit the top
+          of the ball (thin).
+        </p>
+        <p>
+          Weight forward keeps the low point forward. That's the whole mechanism.
+          Everything else &mdash; the shoulder plane, the arm extension, the hip
+          tuck &mdash; serves to <em>preserve</em> the forward low point once
+          you've set it at address.
+        </p>
+
+        <div class="mistake-box">
+          <div class="mb-title">Common misunderstanding</div>
+          <p style="margin:0 0 6px;">
+            &ldquo;Weight forward = falling forward onto my toes.&rdquo;
+          </p>
+          <p style="margin:0;">
+            No. Weight <em>forward</em> means toward the target &mdash; lead foot
+            vs. trail foot. It does not mean toward the ball. Your weight should
+            still be balanced between the balls of your feet and your heels. If
+            you feel like you're falling over the ball, you're leaning, not
+            weighting forward.
+          </p>
+        </div>
+
+        <div class="mistake-box">
+          <div class="mb-title">Another common misunderstanding</div>
+          <p style="margin:0;">
+            &ldquo;Isn't this just a reverse pivot?&rdquo; A reverse pivot is when
+            your upper body leans toward the <em>target</em> at the top of the
+            backswing while your head stays centered &mdash; producing an
+            over-the-top downswing. Stack &amp; Tilt is the opposite: the head
+            stays slightly <em>target-ward</em> of where it started (or stays
+            centered), while the shoulders turn on a steep angle <em>away</em>
+            from the target. They look similar in a single frame; they are not
+            the same motion.
+          </p>
+        </div>
+
+        <div class="drill-box">
+          <div class="db-title">Test yourself</div>
+          <p style="margin:0;">
+            Stand in address with an iron. Have a friend or tripod film you
+            face-on. Take a full backswing and pause at the top. Look at the
+            video. Did your head move backwards? Did your lead foot heel lift?
+            Did your weight visibly shift to your trail side? If yes to any of
+            those, you're reverse-pivoting rather than staying forward. This is
+            the fix &mdash; don't try to hit a ball until the video shows your
+            head at the top in the same horizontal position it started, or
+            slightly forward.
+          </p>
+        </div>
+
+        <div class="bridge">
+          With weight forward anchored at setup, the next move &mdash; the
+          Shoulder Down pattern &mdash; becomes not just possible but inevitable.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 3 ========== -->
+    <details class="chapter" id="ch3">
+      <summary>
+        <div class="num">3</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Three</div>
+          <h3>Shoulder Down</h3>
+          <div class="ch-teaser">The backswing move that keeps the head still and the club on plane.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          Most golfers are taught to &ldquo;turn your shoulders&rdquo; in the
+          backswing. That instruction isn't wrong, but it's under-specified. The
+          shoulders can turn in two very different ways: flat (baseball-style,
+          around the body) or steep (a tilted rotation where the lead shoulder
+          moves <em>down</em>). One of these works. The other produces every
+          slice, pull, and over-the-top you've ever hit.
+        </p>
+
+        <div class="key-idea">
+          <b>The key idea.</b> The lead shoulder moves <em>downward</em> in the
+          backswing &mdash; not inward, not around, not flat. Combined with weight
+          forward, this keeps the head still and lets the club track on an
+          in-to-out path from the ground up, which is what produces a draw
+          bias and solid contact.
+        </div>
+
+        <h4>What it looks like</h4>
+        <p>
+          Imagine a line drawn vertically from the top of your head to the ground
+          at address. As you turn back, your lead shoulder passes <em>under</em>
+          your chin and moves toward the ground &mdash; not around toward your
+          trail side. At the top of the backswing, your lead shoulder is noticeably
+          lower than your trail shoulder. Your spine is tilted <em>toward the
+          target</em>, not away from it.
+        </p>
+        <p>
+          In conventional instruction, the turn is often taught as &ldquo;flat
+          and level &mdash; like a baseball swing.&rdquo; That produces a shoulder
+          plane that's close to horizontal, which in turn produces a club path
+          that comes from outside-in (over the top) or gets stuck behind the
+          body. In Stack &amp; Tilt, the turn is steep because the shoulders are
+          rotating on a plane that already tilts <em>toward</em> the ball. The
+          geometry does the work.
+        </p>
+
+        <div class="feel-pull">
+          &ldquo;The lead shoulder going down is what keeps your head still. If
+          your lead shoulder moves around your body instead of under your chin,
+          your head has to go with it &mdash; and now you're swaying, reverse
+          pivoting, or both.&rdquo;
+        </div>
+
+        <h4>Why the head stays still</h4>
+        <p>
+          This is the key biomechanical point, and it's worth slowing down to
+          understand. Your head sits between your shoulders. If your shoulders
+          turn <em>around</em> your body on a flat plane, one shoulder has to pass
+          through the space your head occupies. The body's only two options are:
+          move your head out of the way (sway) or pivot backward to make room
+          (reverse pivot). Either way, you've lost your center.
+        </p>
+        <p>
+          But if your shoulders rotate on a tilted plane &mdash; with the lead
+          shoulder going <em>down</em> rather than around &mdash; neither shoulder
+          passes through the head's space. The shoulders can turn a full 90
+          degrees while your head stays in the exact position where you started.
+          That's the move.
+        </p>
+
+        <h4>What it feels like for a player coming from conventional instruction</h4>
+        <p>
+          If you've been taught to turn flat your whole life, Shoulder Down will
+          feel radically steep at first. It will feel like you're tilting the
+          world over. This is normal and the feeling passes &mdash; because
+          what's actually happening is much less extreme than it feels. Film
+          yourself and you'll see a turn that looks natural to the eye, even
+          though it felt wildly tilted in the body.
+        </p>
+
+        <div class="mistake-box">
+          <div class="mb-title">Common misunderstanding</div>
+          <p style="margin:0 0 6px;">
+            &ldquo;Shoulder down means dipping my head and chest straight down
+            toward the ball.&rdquo;
+          </p>
+          <p style="margin:0;">
+            No. Your head stays in its original position. Only the lead shoulder
+            moves down &mdash; the chest rotates around the spine without the
+            whole body collapsing. If your head is visibly lower at the top of
+            the backswing than at address, you've overcooked it.
+          </p>
+        </div>
+
+        <div class="drill-box">
+          <div class="db-title">Feel it without a club</div>
+          <p style="margin:0;">
+            Stand in golf posture, arms crossed over your chest. Slowly rotate
+            so your lead shoulder tracks toward a spot on the ground about 12
+            inches in front of your lead foot. You should feel a distinct tilt
+            in your spine toward the target. Now return to start. Do this 20
+            times before you ever pick up a club. The feel should become familiar
+            before you try to execute it at swing speed.
+          </p>
+        </div>
+
+        <div class="bridge">
+          With weight forward and shoulder down working together, we can now look
+          at what the arms are doing &mdash; specifically, what they need to
+          <em>not</em> do.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 4 ========== -->
+    <details class="chapter" id="ch4">
+      <summary>
+        <div class="num">4</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Four</div>
+          <h3>Arms Straight</h3>
+          <div class="ch-teaser">Preserving the radius of your swing through impact.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          A golf swing is a circle &mdash; or as close to one as a human body can
+          make. The radius of that circle is defined by the length of your
+          outstretched arms plus the length of the club. If you preserve that
+          radius through impact, your contact is consistent. If the radius
+          changes &mdash; if your arms bend near impact &mdash; contact becomes
+          random.
+        </p>
+
+        <div class="key-idea">
+          <b>The key idea.</b> Your arms stay straight through impact and into
+          the finish. &ldquo;Straight&rdquo; doesn't mean tense or locked &mdash;
+          it means extended, unbent, radius preserved. The moment your arms flex
+          near impact, three things happen at once: the clubhead path moves off
+          line, the low point moves inconsistently, and the clubface goes random.
+          None of those are recoverable.
+        </div>
+
+        <h4>What it looks like</h4>
+        <p>
+          From the top of the backswing through impact, your lead arm stays
+          extended. The trail arm folds during the backswing &mdash; that's
+          normal &mdash; but as the downswing starts, the trail arm begins
+          extending too, and by impact both arms are fully straight. The &ldquo;V&rdquo;
+          made by your two forearms at address is preserved at impact.
+          Through the follow-through, both arms stay extended until the natural
+          rotation of the body folds the trail arm again in the finish.
+        </p>
+        <p>
+          The classic amateur problem is the &ldquo;chicken wing&rdquo;: as the
+          lead arm approaches impact, the elbow bends and tucks toward the body.
+          This happens because the arms aren't keeping up with the body's
+          rotation. The radius shortens. The clubhead comes up off the plane.
+          The face opens. Contact becomes thin, weak, or sliced.
+        </p>
+
+        <div class="feel-pull">
+          &ldquo;Think of your arms as a fishing rod you're casting. The rod
+          stays straight through the cast. It's the wrists that hinge and
+          release. If the rod bends, the cast goes haywire &mdash; same thing
+          happens to a golf club.&rdquo;
+        </div>
+
+        <h4>Why arms bend at impact</h4>
+        <p>
+          There's almost always a cause further back in the swing. The most
+          common: weight shifted backward in the backswing (violating Fundamental
+          1), which forces the player to slide forward through the downswing to
+          recover, which in turn forces the arms to fold to keep the clubhead
+          from hitting the ground first. The chicken wing is a rescue move.
+        </p>
+        <p>
+          In other words, if your arms are bending at impact, the fix isn't
+          usually to consciously straighten your arms &mdash; it's to fix the
+          weight position that's forcing the arms to bend in self-defense.
+          Weight forward from the start, arms straight becomes natural. Weight
+          back, arms straight becomes impossible.
+        </p>
+
+        <h4>The connection to clubface path</h4>
+        <p>
+          Arms straight also determines the clubhead's path through the ball.
+          A fully extended swing traces a wide, flowing arc. A bent-arm swing
+          traces a narrower, choppier arc. The wider arc gives you more time
+          for the clubface to square up through impact; the narrower arc forces
+          the face to square more quickly and often produces timing-dependent
+          contact (fine on good days, terrible on bad ones).
+        </p>
+
+        <div class="mistake-box">
+          <div class="mb-title">Common misunderstanding</div>
+          <p style="margin:0 0 6px;">
+            &ldquo;Arms straight means arms stiff and locked.&rdquo;
+          </p>
+          <p style="margin:0;">
+            Not the same thing. Straight means extended, unbent, free of flex.
+            Stiff means tense, muscularly locked, unable to move. You want
+            extended and <em>relaxed</em> &mdash; think of a martial-arts punch:
+            the arm is fully extended at the moment of contact, but there's no
+            tension anywhere. Tension kills clubhead speed.
+          </p>
+        </div>
+
+        <div class="drill-box">
+          <div class="db-title">Check your impact</div>
+          <p style="margin:0;">
+            Film yourself from face-on with a mid-iron. Freeze at impact. Draw
+            an imaginary line down your lead arm from shoulder to wrist. Is it
+            straight? Or is the elbow clearly folded? If it's folded, that's
+            your project for the next month &mdash; and the project is almost
+            always <em>weight forward</em> at address, not conscious arm
+            extension.
+          </p>
+        </div>
+
+        <div class="bridge">
+          Three down, one to go. The final fundamental is what the lower body
+          is doing while all of this happens &mdash; the hip tuck.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 5 ========== -->
+    <details class="chapter" id="ch5">
+      <summary>
+        <div class="num">5</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Five</div>
+          <h3>Tuck the Hips</h3>
+          <div class="ch-teaser">The lower-body pattern that delivers the club and holds the finish.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          The first three fundamentals are largely about the upper body and the
+          arms. This one is about the lower body &mdash; specifically, what the
+          hips do from transition through the finish. Get this right and the
+          swing finishes &ldquo;stacked&rdquo; (hence the name): hips vertical,
+          chest facing the target, lead side fully posted up, balanced finish
+          that holds.
+        </p>
+
+        <div class="key-idea">
+          <b>The key idea.</b> Through impact and into the finish, the hips move
+          <em>laterally</em> (toward the target) and <em>upward</em> (standing
+          up into the post), not rotationally around a fixed center. The motion
+          is a <strong>tuck</strong> &mdash; the pelvis moves forward and up,
+          the lead leg straightens, and the body finishes vertical. If you can't
+          pose the finish &mdash; if you stumble, fall back, or end up off-balance
+          &mdash; your hips didn't tuck correctly.
+        </div>
+
+        <h4>What it looks like</h4>
+        <p>
+          At impact, your lead hip has already shifted toward the target. Through
+          follow-through, the lead leg extends &mdash; the knee straightens as
+          the hips move up and forward. By the finish, your lead leg is a
+          straight post, your pelvis is vertical (not tilted backward), your
+          chest faces the target, and your weight is almost entirely on your
+          lead foot. You can literally lift your trail foot off the ground.
+        </p>
+        <p>
+          Compare to a conventional finish: many amateurs finish with their hips
+          <em>open but not moved forward</em> &mdash; they've rotated around a
+          fixed center, weight ends up on the trail side, lead foot still square
+          or even opened. The hip tuck is different. The hips travel, not just
+          rotate.
+        </p>
+
+        <div class="feel-pull">
+          &ldquo;If you can hold your finish position for three seconds without
+          stumbling, your hips tucked correctly. If you can't, they didn't.
+          That's the whole test.&rdquo;
+        </div>
+
+        <h4>Why it matters for the strike</h4>
+        <p>
+          The hip tuck provides something subtle but essential: <strong>vertical
+          clearance.</strong> As the body moves forward and up, it creates room
+          for the arms and club to pass through the impact zone without the body
+          getting in the way. Without the tuck, the body is too close to the
+          ball at impact &mdash; the arms have to compensate by folding (chicken
+          wing), and the clubhead often ends up hitting the ground before the
+          ball. With the tuck, the arms stay extended, the clubhead sweeps
+          through cleanly, and contact is consistent.
+        </p>
+
+        <h4>How to isolate the feel</h4>
+        <p>
+          The hip tuck can be hard to isolate at full swing speed. Ryan uses
+          half-swings to strip away everything else: make a swing where your
+          lead arm finishes parallel to the ground on the backswing, and your
+          trail arm finishes parallel to the ground on the finish. That
+          abbreviated motion takes the long levers out of it and leaves just
+          the hip move. When you can feel the tuck on a half-swing, you can
+          scale it up.
+        </p>
+
+        <div class="mistake-box">
+          <div class="mb-title">Common misunderstanding</div>
+          <p style="margin:0 0 6px;">
+            &ldquo;Tuck the hips means thrust my pelvis forward toward the ball.&rdquo;
+          </p>
+          <p style="margin:0;">
+            No &mdash; toward the target, not toward the ball. The direction is
+            lateral (down the line), not forward (toward where the ball sits).
+            Thrusting toward the ball is early extension &mdash; the opposite of
+            the tuck, and one of the most common swing faults in amateur golf.
+          </p>
+        </div>
+
+        <div class="drill-box">
+          <div class="db-title">The finish test</div>
+          <p style="margin:0;">
+            After every full swing at the range, hold your finish for three
+            seconds. Ask: are you balanced? Is your chest facing the target?
+            Could you lift your trail foot? If yes to all three, your hips
+            tucked. If any part of your body is recovering or shifting to stay
+            upright, something in the tuck failed &mdash; usually because the
+            weight started back rather than forward.
+          </p>
+        </div>
+
+        <div class="bridge">
+          Four fundamentals in hand. Now: in what order do you learn them?
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 6 ========== -->
+    <details class="chapter" id="ch6">
+      <summary>
+        <div class="num">6</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Six</div>
+          <h3>Putting them together</h3>
+          <div class="ch-teaser">The first-lesson sequence. Why you start with weight forward.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          Knowing the four fundamentals is not the same as being able to execute
+          them. In a first lesson with a new student, we don't work on all four
+          at once &mdash; we work on them in a specific order. Each one unlocks
+          the next. Try to work on them out of order and you'll chase your
+          tail for months.
+        </p>
+
+        <div class="key-idea">
+          <b>The sequence.</b>
+          <br><br>
+          <b>1. Weight Forward</b> &mdash; always first. Without this, none of
+          the others are achievable.
+          <br><br>
+          <b>2. Shoulder Down</b> &mdash; once the weight is forward, the
+          shoulder plane can tilt correctly. Trying to get the shoulder to go
+          down while the weight shifts back is like trying to thread a needle
+          on a trampoline.
+          <br><br>
+          <b>3. Tuck the Hips</b> &mdash; third, not fourth, because the lower-body
+          pattern is what gives the arms room to extend. Fix the lower body
+          before fixing the arms.
+          <br><br>
+          <b>4. Arms Straight</b> &mdash; last. If the first three are in place,
+          this one mostly happens by itself. If it doesn't, you've got a
+          genuine arm problem (rare) rather than a compensation problem
+          (common).
+        </div>
+
+        <h4>Why Weight Forward is always first</h4>
+        <p>
+          Because every other fundamental is a downstream effect of weight
+          position. Weight back &rarr; body away from ball at top &rarr; downswing
+          has to recover lost ground &rarr; hips slide instead of tuck &rarr;
+          arms bend to compensate for slide &rarr; contact random. Weight
+          forward &rarr; body centered over ball at top &rarr; downswing is a
+          release not a rescue &rarr; hips tuck naturally &rarr; arms stay
+          extended &rarr; contact consistent.
+        </p>
+        <p>
+          Trying to fix anything else first is like trying to fix a house
+          built on a cracked foundation by redoing the wallpaper. The
+          foundation is weight forward. Fix that and the rest becomes tractable.
+        </p>
+
+        <h4>Why Arms Straight is last</h4>
+        <p>
+          Because the chicken wing is almost always a symptom, not a cause. The
+          arms bend because the body was out of position and the player is
+          unconsciously compensating. If you try to consciously straighten the
+          arms without fixing the underlying position, you'll produce a new
+          set of compensations &mdash; usually worse contact, because now the
+          arms are tense instead of just bent.
+        </p>
+        <p>
+          Fix the weight, fix the shoulder, fix the hip tuck, and the arms
+          mostly straighten themselves. On the rare occasion they don't,
+          that's when we work on them directly &mdash; but it's a small
+          minority of cases.
+        </p>
+
+        <div class="feel-pull">
+          &ldquo;You don't teach the golf swing by explaining all four
+          fundamentals in the first lesson. You teach the first one, run
+          a thousand reps, confirm it's set, then move on. The body learns
+          one thing at a time.&rdquo;
+        </div>
+
+        <h4>How long this takes</h4>
+        <p>
+          Depends entirely on the player, their history, and how ingrained
+          their old pattern is. Someone new to golf can install all four
+          fundamentals in a few months of committed practice. A 20-handicap
+          who's been taught the conventional model for 15 years might take
+          a full season to unwind the old pattern and install the new one.
+          Neither timeline is bad &mdash; the change is worth the time.
+        </p>
+        <p>
+          What will <em>not</em> work: taking two lessons, hitting a few
+          balls each week, and expecting the pattern to change. Pattern
+          changes require volume. Expect to hit several thousand reps
+          thinking about weight forward alone before it's reflexive. That's
+          just how the nervous system works. Plan for it.
+        </p>
+
+        <div class="drill-box">
+          <div class="db-title">If you're going to work on this without a coach</div>
+          <p style="margin:0;">
+            Pick Fundamental 1. Weight forward. Set up an iPhone on a tripod
+            face-on. Film every ball you hit for the next two range sessions.
+            Freeze the top of each backswing. If your head moves backward
+            <em>at all</em>, that's your project. Don't move to Fundamental 2
+            until 9 of 10 swings show a centered head at the top. Then
+            you've earned the right to work on shoulder down.
+          </p>
+        </div>
+
+        <div class="bridge">
+          Which brings us to the drills Ryan uses to ingrain each fundamental
+          &mdash; by effect, not mechanics.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 7 ========== -->
+    <details class="chapter" id="ch7">
+      <summary>
+        <div class="num">7</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Seven</div>
+          <h3>The drills</h3>
+          <div class="ch-teaser">Three named drills that ingrain the feels. The Wrench. The Bowler. 90-90-90.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          Named drills matter because they create shorthand. When a student
+          hears &ldquo;run through The Bowler before your next full swing,&rdquo;
+          they know exactly what's coming &mdash; the feel, the pattern, the
+          rhythm. The drill name carries all of that in two words.
+        </p>
+        <p>
+          The drills below are the three Ryan uses most often with Stack &amp;
+          Tilt work. This section describes <em>what each drill creates</em>, not
+          the mechanics &mdash; those get taught in person, because the mechanics
+          matter less than the feel, and text descriptions of golf mechanics are
+          notoriously misleading.
+        </p>
+
+        <div class="key-idea">
+          <b>The rule of drill descriptions.</b> Describing a drill by its
+          mechanics tempts you to copy the mechanics without understanding the
+          feel. Describing a drill by its effect tells you what success feels
+          like, so when you try it in person with a coach, you know whether
+          you've hit the target.
+        </div>
+
+        <h4>The Wrench Drill</h4>
+        <p>
+          <strong>What it creates:</strong> the hip-tuck pattern. The feeling
+          of the pelvis moving laterally and upward through impact, not rotating
+          around a fixed center. After running The Wrench for a few minutes,
+          your finish should feel vertical and held &mdash; you can pose the
+          finish without thinking about it.
+        </p>
+        <p>
+          <strong>When to use it:</strong> when your finish is falling backward
+          or to the side, when you can't hold your follow-through, when the
+          ball is going left of target on otherwise good swings, or when a
+          video shows early extension (hips thrusting toward the ball at impact).
+        </p>
+
+        <div class="verify-box">
+          <div class="vb-title">On the drill mechanics</div>
+          Ryan teaches the specific mechanics of The Wrench in person. This
+          primer doesn't reproduce them for the same reason the primer doesn't
+          reproduce Homer Kelley's plane geometry: the precision matters, and
+          getting it from text instead of from a coach is a recipe for learning
+          it wrong.
+        </div>
+
+        <h4>The Bowler</h4>
+        <p>
+          <strong>What it creates:</strong> the lower-body sequencing of the
+          transition &mdash; the feel of the lead hip initiating the downswing
+          before the arms and club arrive. Syncs the body to the club. After
+          running The Bowler, the downswing should feel effortless: the body
+          moves first, the club follows.
+        </p>
+        <p>
+          <strong>When to use it:</strong> when the downswing feels rushed or
+          arm-driven, when the club gets stuck behind the body (blocks and
+          pushes), or when the transition feels jerky rather than flowing.
+        </p>
+
+        <h4>90-90-90</h4>
+        <p>
+          <strong>What it creates:</strong> a position check. A reference for
+          three key angles (lead arm, trail arm, spine / hip geometry) at
+          specific points in the swing. It's less a feel drill than a
+          calibration drill &mdash; a way to confirm the fundamentals are
+          actually being built into the swing rather than being thought about
+          in the head while the body does something else.
+        </p>
+        <p>
+          <strong>When to use it:</strong> periodically throughout a range
+          session to confirm positions are holding. If 90-90-90 feels right,
+          the fundamentals are intact. If it feels forced or unreachable,
+          something in the preceding fundamentals is off.
+        </p>
+
+        <div class="feel-pull">
+          &ldquo;Drills are only useful if you know what success feels like. The
+          drill names are shorthand between coach and student &mdash; if you
+          haven't run them with me in person, running them off a written
+          description is going to teach you something that isn't quite the drill.
+          Come see me and we'll actually do them.&rdquo;
+        </div>
+
+        <div class="mistake-box">
+          <div class="mb-title">Common misunderstanding</div>
+          <p style="margin:0 0 6px;">
+            &ldquo;I'll just find a YouTube video of these drills and run them
+            at home.&rdquo;
+          </p>
+          <p style="margin:0;">
+            YouTube is full of videos of drills with these names that aren't
+            actually these drills &mdash; or that are, but done with an
+            intention different from the one Ryan teaches. A drill without the
+            coaching context around it is just a physical motion. Bring the
+            drill names into a lesson and we'll teach you what success feels
+            like.
+          </p>
+        </div>
+
+        <div class="bridge">
+          Last chapter: where Stack &amp; Tilt fits among the other systems
+          that have shaped modern golf instruction.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 8 ========== -->
+    <details class="chapter" id="ch8">
+      <summary>
+        <div class="num">8</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Eight</div>
+          <h3>Where this fits</h3>
+          <div class="ch-teaser">S&amp;T, TPI, TrackMan, Vision54 — how these systems overlap and contradict.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          Stack &amp; Tilt is one of several modern systems that have shaped
+          how golf gets taught in the 21st century. The others &mdash; TPI,
+          TrackMan-driven instruction, Vision54, Kelley's component catalog
+          &mdash; each make distinct claims about what matters. Understanding
+          where they agree, where they disagree, and how a working coach weaves
+          them together is the final piece of the puzzle.
+        </p>
+
+        <div class="key-idea">
+          <b>The working coach's approach.</b> No single system has the
+          complete answer. Stack &amp; Tilt gives you the body-first
+          fundamentals. TPI gives you the physical screen that reveals why
+          your body does what it does. TrackMan gives you the launch-monitor
+          data that tells you whether the swing is actually working. Vision54
+          gives you the mental game that determines whether you can play your
+          swing under pressure. You need all four &mdash; and a coach who
+          knows when to lean on which.
+        </div>
+
+        <h4>Where S&amp;T and TPI agree</h4>
+        <p>
+          TPI's &ldquo;Body-Swing Connection&rdquo; framework identifies common
+          swing faults (early extension, loss of posture, sway, slide, reverse
+          spine angle) and traces them back to physical limitations (pelvic
+          mobility, thoracic rotation, hamstring length). Many of the
+          fundamentals S&amp;T prescribes &mdash; weight forward, stacked
+          finish, arms straight &mdash; fix the exact faults TPI's physical
+          screen predicts. Stack &amp; Tilt and TPI don't contradict each
+          other. They explain the same phenomenon from two different angles:
+          one from the fundamentals of motion, one from the body's physical
+          capacity to produce it.
+        </p>
+
+        <h4>Where TrackMan fits</h4>
+        <p>
+          TrackMan measures what actually happened. Clubhead speed, ball speed,
+          smash factor, launch angle, spin rate, carry distance, attack angle,
+          club path, face angle. When S&amp;T says &ldquo;weight forward
+          produces ball-first contact and an in-to-out path,&rdquo; TrackMan
+          is what confirms or denies it. The numbers don't lie. A Stack &amp;
+          Tilt swing done correctly produces a measurable attack angle, a
+          measurable club path, and a measurable spin signature. If the numbers
+          don't match, the swing doesn't actually match the model, regardless
+          of how it feels.
+        </p>
+
+        <h4>Where Vision54 fits</h4>
+        <p>
+          Pia Nilsson and Lynn Marriott's Vision54 works at the layer above
+          the mechanics: pre-shot routine, Think Box / Play Box, emotional
+          state, how to stay present under pressure. The best swing in the
+          world is useless if you can't execute it on the first tee of a
+          tournament. Vision54 is the mental and behavioral wrapping around
+          the mechanical work S&amp;T and TPI identify.
+        </p>
+
+        <h4>Where Kelley fits</h4>
+        <p>
+          Homer Kelley's <em>The Golfing Machine</em> (covered in Volume 02
+          of this series) catalogs the full universe of legal swing components
+          &mdash; a more general framework than any single system. S&amp;T
+          can be understood as a specific, opinionated selection from
+          Kelley's catalog: weight forward (Kelley's &ldquo;stationary axis
+          with forward pressure&rdquo;), shoulder down (a particular plane
+          choice), arms straight (Kelley's &ldquo;flat left wrist&rdquo; and
+          &ldquo;clubhead lag pressure point&rdquo; at impact), hip tuck (a
+          specific pivot pattern). S&amp;T didn't invent any of these
+          components &mdash; it assembled them into a coherent package.
+        </p>
+
+        <div class="feel-pull">
+          &ldquo;No one system has the complete answer. S&amp;T gives you
+          the body-first fundamentals. TPI explains why your body does what
+          it does. TrackMan tells you whether it worked. Vision54 tells you
+          whether you can do it under pressure. The job of a working coach is
+          to weave them together for the player in front of them.&rdquo;
+        </div>
+
+        <div class="mistake-box">
+          <div class="mb-title">Common misunderstanding</div>
+          <p style="margin:0 0 6px;">
+            &ldquo;I should pick one system and commit to it.&rdquo;
+          </p>
+          <p style="margin:0;">
+            The best coaches don't. They pull from all of them depending on
+            what the player in front of them needs right now. A rangy tall
+            20-year-old with hypermobile hips needs different work than a
+            55-year-old with limited thoracic rotation. A scratch player
+            who chokes on the first tee needs Vision54 more than another
+            technical adjustment. Systems are tools; the player is the
+            project.
+          </p>
+        </div>
+
+        <div class="drill-box">
+          <div class="db-title">Final takeaway</div>
+          <p style="margin:0 0 8px;">
+            The four fundamentals in this book are a strong foundation. They
+            describe how the human body delivers a golf club most reliably.
+            But they are not the whole story. Pair them with physical
+            awareness (TPI), data (TrackMan), and mental game (Vision54), and
+            you've got the complete modern picture.
+          </p>
+          <p style="margin:0;"><strong>Now go hit some golf balls.</strong></p>
+        </div>
+
+        <div class="bridge">
+          That's the primer. Eight chapters. Four fundamentals. One coach's
+          interpretation of the system that changed how a generation of
+          teachers looks at the golf swing.
+        </div>
+      </div>
+    </details>
+
+  </div>
+
+  <!-- ===================== NEXT STEPS ===================== -->
+  <div class="next-steps">
+    <h2>What to do with this.</h2>
+    <p>
+      The fundamentals here are only useful when you try them. In order of
+      highest-leverage to lowest:
+    </p>
+    <ol>
+      <li><strong>This week:</strong> Film yourself face-on hitting a 7-iron. Freeze the top of the backswing. Check where your head is. If it moved backward, your project for the month is Weight Forward.</li>
+      <li><strong>Next range session:</strong> Hit 20 balls thinking ONLY about keeping weight forward &mdash; head doesn't move back, lead foot stays heavy. Ignore everything else. It should feel wrong at first.</li>
+      <li><strong>Next week:</strong> Add Shoulder Down once the weight is locked in. Practice the no-club turn drill from Chapter 3 ten times before you hit a ball.</li>
+      <li><strong>Next month:</strong> Tuck the hips on half-swings until the finish holds without stumbling.</li>
+      <li><strong>Eventually:</strong> Come in for a lesson and we'll run through the named drills together and calibrate against TrackMan.</li>
+    </ol>
+  </div>
+
+  <!-- ===================== ATTRIBUTION ===================== -->
+  <div class="attribution">
+    <h3>About this primer</h3>
+    <p>
+      This is a <strong>primer</strong> &mdash; a plain-English translation of
+      the Stack &amp; Tilt swing system first codified by Andy Plummer and
+      Mike Bennett in their 2009 book <em>The Stack &amp; Tilt Swing</em>.
+      The fundamentals and underlying biomechanical claims are theirs. The
+      sequencing, drill selection, and teaching voice in this primer are
+      Ryan's interpretation, refined over years of teaching adult golfers
+      at Mad River.
+    </p>
+    <p>
+      A few callouts are marked as <strong>Coach's verification notes</strong>
+      to flag places where careful readers diverge on specific claims (S&amp;T
+      attributions to particular pros get argued, and different S&amp;T
+      instructors emphasize different mechanics). If something reads wrong
+      against your own understanding, mention it &mdash; the primer improves
+      the more it gets pressure-tested.
+    </p>
+    <p>
+      For the full treatment, Plummer &amp; Bennett's <em>The Stack &amp; Tilt
+      Swing</em> is still in print. Their golf.com content and the Stack &amp;
+      Tilt instructor network are the best places to go deeper if this primer
+      sparks a genuine interest.
+    </p>
+  </div>
+
+  <!-- ===================== GLOSSARY ===================== -->
+  <div class="glossary">
+    <h2>Glossary</h2>
+    <dl>
+      <dt>Stack</dt>
+      <dd>Staying centered over the ball. The body doesn't pivot backwards during the backswing; the center of mass stays above the stance.</dd>
+
+      <dt>Tilt</dt>
+      <dd>The spine angle tilting <em>toward</em> the target through impact, not away from it. Opposite of the conventional "stay behind the ball" instruction.</dd>
+
+      <dt>Reverse Pivot</dt>
+      <dd>A swing flaw where the upper body leans toward the target at the top of the backswing while the weight stays on the lead side. Looks superficially like S&amp;T but is a compensation, not a pattern.</dd>
+
+      <dt>Ball-First Contact</dt>
+      <dd>Hitting the ball before the ground. The clubhead's low point is forward of the ball. Produces solid contact, penetrating flight, and repeatable distance control.</dd>
+
+      <dt>Low Point</dt>
+      <dd>The bottom of the swing arc &mdash; where the clubhead is closest to the ground. In S&amp;T, the low point is forward of the ball by design.</dd>
+
+      <dt>In-to-Out Path</dt>
+      <dd>The clubhead traveling from inside the target line to outside it through impact. Produces a draw bias (for a right-handed player). Opposite of "over the top," which is out-to-in.</dd>
+
+      <dt>Early Extension</dt>
+      <dd>A swing flaw where the hips thrust toward the ball at impact (rather than toward the target). The body comes up out of its spine angle, the arms have to fold to compensate, and contact becomes inconsistent. The hip tuck is the fix.</dd>
+
+      <dt>Chicken Wing</dt>
+      <dd>The lead arm bending at the elbow through impact and into the finish. Usually a compensation for a swing that was out of position earlier &mdash; most often a weight-back backswing.</dd>
+
+      <dt>Post Up</dt>
+      <dd>The lead leg straightening through impact as the hips move forward and up. Provides vertical clearance and contributes to clubhead speed via ground-reaction force.</dd>
+
+      <dt>Kinematic Sequence</dt>
+      <dd>The order in which body segments accelerate and decelerate during the downswing. In an efficient swing, the hips fire first, then the torso, then the arms, then the club. S&amp;T's transition move is designed to preserve this sequence.</dd>
+
+      <dt>The Wrench Drill</dt>
+      <dd>A Ryan-taught drill that ingrains the hip-tuck pattern. Ask Ryan in person.</dd>
+
+      <dt>The Bowler</dt>
+      <dd>A Ryan-taught drill that ingrains lower-body sequencing in transition. Ask Ryan in person.</dd>
+
+      <dt>90-90-90</dt>
+      <dd>A position check Ryan uses to calibrate three specific swing geometries. A drill, a reference, and a conversation-shortener.</dd>
+    </dl>
+  </div>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  RRG.mountLibrary();
+</script>
+</body>
+</html>

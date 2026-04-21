@@ -1264,6 +1264,8 @@ RRG.renderNav = function(user, active = '') {
           <li><a href="/improve/book-8-step-swing.html">The 8-Step Swing &mdash; McLean</a></li>
           <li class="nav-sublabel">Volume 02 &middot; Primer</li>
           <li><a href="/improve/book-golfing-machine.html">The Golfing Machine &mdash; Kelley</a></li>
+          <li class="nav-sublabel">Volume 03 &middot; Primer</li>
+          <li><a href="/improve/book-stack-and-tilt.html">Stack &amp; Tilt &mdash; Plummer &amp; Bennett</a></li>
         `)}
 
         ${coachItem}
