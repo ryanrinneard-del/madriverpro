@@ -61,12 +61,6 @@
       </div>
 
       <div class="field">
-        <label>Lesson package</label>
-        <div class="hint" style="margin-bottom:6px;">Pick what you bought. You can extend later.</div>
-        <div class="package-grid" id="pkg-grid"></div>
-      </div>
-
-      <div class="field">
         <label for="name">Full name</label>
         <input id="name" name="name" type="text" required placeholder="First Last">
       </div>
@@ -113,21 +107,6 @@
   (async () => {
     if (await RRG.auth.isLoggedIn()) { location.replace('dashboard.html'); return; }
 
-    // Render package cards
-    const grid = document.getElementById('pkg-grid');
-    grid.innerHTML = RRG.PACKAGES.map((p, i) => `
-      <label class="package-card${p.recommended ? ' selected' : ''}" data-id="${p.id}">
-        <input type="radio" name="packageId" value="${p.id}" ${p.recommended ? 'checked' : ''}>
-        ${p.recommended ? '<span class="pkg-rec">MOST POPULAR</span>' : ''}
-        <div class="pkg-title">${RRG.esc(p.name)}</div>
-        <div class="pkg-sub">${p.lessons} lesson${p.lessons>1?'s':''}${p.price ? ' · $' + p.price : ''}</div>
-      </label>
-    `).join('');
-    grid.addEventListener('change', () => {
-      document.querySelectorAll('.package-card').forEach(c =>
-        c.classList.toggle('selected', c.querySelector('input').checked));
-    });
-
     const form = document.getElementById('signup-form');
     const errBox = document.getElementById('signup-error');
     const sentBox = document.getElementById('sent-state');
@@ -144,7 +123,6 @@
           email: fd.email.trim(),
           name: fd.name.trim(),
           inviteCode: fd.inviteCode.trim(),
-          packageId: fd.packageId,
           handicap: fd.handicap,
           homeClub: fd.homeClub,
         });
