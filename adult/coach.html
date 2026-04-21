@@ -357,6 +357,51 @@
   </form>
 </div>
 
+<!-- Plan Update Modal — post-lesson note, optionally with AI regen (Phase 3) -->
+<div id="lu-modal" class="modal-scrim" style="display:none;">
+  <form id="lu-form" class="modal-card" autocomplete="off">
+    <h3>Plan Update</h3>
+    <div id="lu-client-name" class="client-pill"></div>
+    <p style="font-size:13px; color:var(--mid-grey); margin: 4px 0 16px 0; line-height:1.5;">
+      Log what you identified in today's lesson. The player will see a banner on their
+      My Plan page with this note — date, root cause, and what to focus on this week.
+    </p>
+
+    <input type="hidden" name="user_id">
+
+    <label for="lu-date">Lesson date</label>
+    <input id="lu-date" type="date" name="date" required>
+
+    <label for="lu-root-cause">Root cause</label>
+    <select id="lu-root-cause" name="root_cause" required></select>
+    <div class="hint" id="lu-root-cause-hint" style="min-height:16px;"></div>
+
+    <label for="lu-week">Week they were in (optional)</label>
+    <input id="lu-week" type="number" name="week_at_update" min="1" max="6" placeholder="1–6">
+
+    <label for="lu-worked-on">What we worked on today</label>
+    <textarea id="lu-worked-on" name="what_we_worked_on" rows="3" required
+              placeholder="The core issue you identified, the drills you ran, what clicked."></textarea>
+
+    <label for="lu-focus">Focus for this week</label>
+    <textarea id="lu-focus" name="focus_this_week" rows="3" required
+              placeholder="One or two sentences the player will see on their plan banner."></textarea>
+
+    <div class="actions">
+      <span class="spacer"></span>
+      <button type="button" class="btn btn-ghost btn-sm" onclick="closeLessonUpdateModal()">Cancel</button>
+      <button type="submit" class="btn btn-primary btn-sm" id="lu-save-btn">Save update</button>
+      <button type="button" class="btn btn-primary btn-sm" id="lu-save-regen-btn"
+              onclick="saveLessonUpdateWithRegen()"
+              style="background: var(--gold); color: var(--navy);"
+              disabled
+              title="AI regeneration — coming in next update">
+        Save + AI regen (soon)
+      </button>
+    </div>
+  </form>
+</div>
+
 <style>
   .snap-edit-row { margin-bottom: 14px; }
   .snap-edit-row label {
@@ -612,6 +657,7 @@
                     <div style="display:flex; gap:6px; justify-content:flex-end; flex-wrap:wrap;">
                       <a class="btn btn-ghost btn-sm" href="my-plan.html?userId=${p.id}" style="text-decoration:none;">View Plan</a>
                       <button class="btn btn-primary btn-sm" onclick="openNewLessonFor('${p.id}')">+ Log Lesson</button>
+                      <button class="btn btn-ghost btn-sm" onclick="openLessonUpdateFor('${p.id}')">Plan Update</button>
                       <button class="btn btn-ghost btn-sm" onclick="openSnapshotFor('${p.id}')">Snapshot</button>
                     </div>
                   </td>

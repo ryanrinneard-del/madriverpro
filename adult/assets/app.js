@@ -227,6 +227,96 @@ RRG.users = {
 };
 
 /* ============================================================
+   LESSON UPDATES — notes a coach writes after a lesson, stored
+   inside profile_json.lesson_updates. Each update captures: date,
+   the week the player was in, a root-cause tag, what was worked on,
+   and the focus for this week. Shows on the player's My Plan as a
+   banner. Coach can optionally trigger an AI regen of the remaining
+   weeks based on the note (Phase 3).
+   ============================================================ */
+RRG.lessonUpdates = {
+  _uid() {
+    return 'lu_' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+  },
+
+  async list(userId) {
+    const prof = await RRG.users.get(userId);
+    const arr = prof?.profile_json?.lesson_updates;
+    return Array.isArray(arr) ? arr : [];
+  },
+
+  /* Returns the single most recent update within `withinDays` (default 14),
+     or null if none. */
+  async latest(userId, withinDays = 14) {
+    const arr = await this.list(userId);
+    if (!arr.length) return null;
+    const sorted = [...arr].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+    const mostRecent = sorted[0];
+    if (!withinDays) return mostRecent;
+    const ms = withinDays * 24 * 60 * 60 * 1000;
+    const d = new Date(mostRecent.date || mostRecent.created_at);
+    if (isNaN(d.getTime())) return null;
+    return (Date.now() - d.getTime() <= ms) ? mostRecent : null;
+  },
+
+  /* Append a lesson update to the player's profile_json.lesson_updates.
+     Returns the full stored update (with id + created_at populated). */
+  async add(userId, update) {
+    const prof = await RRG.users.get(userId);
+    const pj = prof?.profile_json || {};
+    const arr = Array.isArray(pj.lesson_updates) ? [...pj.lesson_updates] : [];
+    const stored = {
+      id: this._uid(),
+      date: update.date || new Date().toISOString().slice(0, 10),
+      week_at_update: update.week_at_update || null,
+      root_cause: update.root_cause || 'other',
+      what_we_worked_on: (update.what_we_worked_on || '').trim(),
+      focus_this_week: (update.focus_this_week || '').trim(),
+      regenerated: !!update.regenerated,
+      created_at: new Date().toISOString(),
+      created_by: update.created_by || null,
+    };
+    arr.push(stored);
+    const newPJ = { ...pj, lesson_updates: arr };
+    await RRG.users.update(userId, { profile_json: newPJ });
+    return stored;
+  },
+
+  /* Rewrite profile_json.game_plan.structured.sessions. Used by the inline
+     week editor and the AI regen endpoint. */
+  async savePlanSessions(userId, sessions) {
+    const prof = await RRG.users.get(userId);
+    const pj = prof?.profile_json || {};
+    const plan = pj.game_plan || {};
+    const structured = plan.structured || {};
+    const newPJ = {
+      ...pj,
+      game_plan: {
+        ...plan,
+        structured: { ...structured, sessions },
+        last_edited_at: new Date().toISOString(),
+      },
+    };
+    await RRG.users.update(userId, { profile_json: newPJ });
+    return newPJ.game_plan;
+  },
+};
+
+/* Root-cause taxonomy used by the lesson-update form. Keep stable — the
+   `key` values get stored in profile_json.lesson_updates.root_cause. */
+RRG.ROOT_CAUSES = [
+  { key: 'setup',       label: 'Setup',         hint: 'Grip, posture, alignment, ball position' },
+  { key: 'movement',    label: 'Movement',      hint: 'Body mechanics, rotation, weight shift' },
+  { key: 'sequencing',  label: 'Sequencing',    hint: 'Kinematic order / transition / timing' },
+  { key: 'short_game',  label: 'Short Game',    hint: 'Chipping, pitching, bunker, low-point control' },
+  { key: 'putting',     label: 'Putting',       hint: 'Stroke, green-reading, speed control' },
+  { key: 'mental',      label: 'Mental',        hint: 'Routine, self-talk, pressure, decisions' },
+  { key: 'strategy',    label: 'Strategy',      hint: 'Course management, DECADE, shot selection' },
+  { key: 'equipment',   label: 'Equipment',     hint: 'Fitting, lofts, distance gaps' },
+  { key: 'other',       label: 'Other',         hint: '' },
+];
+
+/* ============================================================
    INVITES
    ============================================================ */
 RRG.invites = {

@@ -378,8 +378,9 @@
 
       renderShell('ready', 'Ready', body);
 
-      // Coach-only — render the week-by-week synopsis above the full plan.
-      if (isCoachViewing) renderSynopsis(plan);
+      // Render the week-by-week synopsis above the full plan, for both
+      // the player (their own plan) and the coach (viewing a player's plan).
+      renderSynopsis(plan);
     }
 
     /* =================================================================
@@ -434,15 +435,19 @@
         `;
       }).join('');
 
+      const synHeadline = isCoachViewing ? 'Glance before the lesson' : 'Your 6 weeks at a glance';
+      const synHelp = isCoachViewing
+        ? 'Tap any week to see primary + secondary focus, practice bullets, and the measurable check. Full detail is below.'
+        : 'Tap any week to see your primary + secondary focus, what to practice, and how you\'ll know it\'s working. Full week-by-week detail is below.';
+
       wrap.innerHTML = `
         <div class="gp-card">
           <div class="flex-between" style="align-items:flex-start; gap:12px; flex-wrap:wrap; margin-bottom:4px;">
             <div>
               <div class="gp-kicker">WEEK-BY-WEEK SYNOPSIS</div>
-              <h3>Glance before the lesson</h3>
+              <h3>${synHeadline}</h3>
               <p style="font-size:13.5px; color:var(--navy-mid); margin:2px 0 0;">
-                Tap any week to see primary + secondary focus, practice bullets, and the
-                measurable check. Full detail is below.
+                ${synHelp}
               </p>
             </div>
           </div>
