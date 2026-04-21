@@ -357,6 +357,21 @@
   </form>
 </div>
 
+<!-- Path Modal — gap analysis view for a single player, usable during
+     on-course lessons. Reuses RRG.path.renderWidget. -->
+<div id="path-modal" class="modal-scrim" style="display:none;">
+  <div class="modal-card" style="max-width: 760px;">
+    <div class="flex-between" style="margin-bottom: 8px;">
+      <h3 style="margin: 0;">Path to Goal</h3>
+      <button type="button" class="btn btn-ghost btn-sm" onclick="closePathModal()">Close</button>
+    </div>
+    <div id="path-client-name" class="client-pill"></div>
+    <div id="path-modal-body" style="margin-top: 16px;">
+      <p class="muted small">Loading…</p>
+    </div>
+  </div>
+</div>
+
 <!-- Plan Update Modal — post-lesson note, optionally with AI regen (Phase 3) -->
 <div id="lu-modal" class="modal-scrim" style="display:none;">
   <form id="lu-form" class="modal-card" autocomplete="off">
@@ -656,6 +671,7 @@
                     <div style="display:flex; gap:6px; justify-content:flex-end; flex-wrap:wrap;">
                       <a class="btn btn-ghost btn-sm" href="my-plan.html?userId=${p.id}" style="text-decoration:none;">View Plan</a>
                       <button class="btn btn-primary btn-sm" onclick="openNewLessonFor('${p.id}')">+ Log Lesson</button>
+                      <button class="btn btn-ghost btn-sm" onclick="openPathFor('${p.id}')">Path</button>
                       <button class="btn btn-ghost btn-sm" onclick="openLessonUpdateFor('${p.id}')">Plan Update</button>
                       <button class="btn btn-ghost btn-sm" onclick="openSnapshotFor('${p.id}')">Snapshot</button>
                     </div>
@@ -1001,6 +1017,44 @@
       } catch (err) {
         RRG.toast('Could not save snapshot: ' + (err.message || ''));
       }
+    });
+
+    // ------------------------------------------------------------------
+    // Path modal — opens the Path-to-Goal gap analysis for a single
+    // player. Pulls their profile + rounds, hands off to RRG.path.renderWidget.
+    // Useful during on-course lessons for a "what moved the needle" glance.
+    // ------------------------------------------------------------------
+    const pathModal = document.getElementById('path-modal');
+
+    window.openPathFor = async (userId) => {
+      const p = playersList.find(pp => pp.id === userId);
+      const body = document.getElementById('path-modal-body');
+      const clientName = document.getElementById('path-client-name');
+      clientName.textContent = p ? (p.name || p.email) : '';
+      body.innerHTML = '<p class="muted small">Loading…</p>';
+      pathModal.style.display = 'flex';
+
+      try {
+        // Load the player's full profile + rounds. Coach RLS allows this.
+        const [targetUser, rounds] = await Promise.all([
+          RRG.users.get(userId),
+          RRG.subs.forUser(userId),
+        ]);
+        body.innerHTML = RRG.path.renderWidget({
+          user: targetUser,
+          rounds,
+          variant: 'full',
+        });
+      } catch (err) {
+        body.innerHTML = `<p class="muted small">Could not load: ${RRG.esc(err.message || '')}</p>`;
+      }
+    };
+
+    window.closePathModal = () => { pathModal.style.display = 'none'; };
+
+    pathModal.addEventListener('click', (e) => { if (e.target === pathModal) closePathModal(); });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && pathModal.style.display !== 'none') closePathModal();
     });
 
     // ------------------------------------------------------------------
