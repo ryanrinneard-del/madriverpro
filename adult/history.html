@@ -60,6 +60,9 @@
   <!-- Stat summary -->
   <div class="stat-strip mb-5" id="summary"></div>
 
+  <!-- Path-to-Goal gap analysis widget (full variant) -->
+  <div id="path-mount"></div>
+
   <!-- Rounds table -->
   <div id="rounds-wrap"></div>
 
@@ -105,6 +108,14 @@
       <div class="stat-cell"><div class="val">${best}</div><div class="lbl">Best</div></div>
       <div class="stat-cell"><div class="val">${avgT5}</div><div class="lbl">Avg 5 Errors</div></div>
     `;
+
+    // Path-to-Goal widget — full gap analysis above the rounds table.
+    try {
+      const pathMount = document.getElementById('path-mount');
+      if (pathMount && RRG.path && RRG.path.renderWidget) {
+        pathMount.innerHTML = RRG.path.renderWidget({ user, rounds: subs, variant: 'full' });
+      }
+    } catch (err) { console.warn('path widget failed', err); }
 
     // ----- Table -----
     const wrap = document.getElementById('rounds-wrap');

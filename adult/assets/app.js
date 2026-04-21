@@ -535,6 +535,238 @@ RRG.videos = {
 };
 
 /* ============================================================
+   PATH TO GOAL — gap analysis engine + widget renderer
+
+   Consumes: player's rounds (from RRG.subs.forUser) + their current &
+   goal handicap (from profile fields). Produces a color-coded widget
+   that shows which stats are holding them back from their goal.
+
+   Logic:
+   1. Pull the last N rounds (default 5).
+   2. Compute rolling averages for each stat (score, FW%, GIR%, putts,
+      scrambling, sand save %, birdies, doubles+, penalties).
+   3. Interpolate the benchmark for the player's GOAL handicap from the
+      nearest two BENCHMARK_BRACKETS.
+   4. Each stat gets a status: green (at/better than target), yellow
+      (within 15% of target), or red (further off).
+   5. Render as a sortable card on Dashboard / My Plan / History.
+   ============================================================ */
+RRG.path = {
+  /* Parse a ratio string like "8 / 14" → { made: 8, attempted: 14 }.
+     Accepts "8/14", "8 / 14", "8", null. Returns null if unparseable. */
+  parseRatio(s) {
+    if (s == null || s === '') return null;
+    if (typeof s === 'number') return { made: s, attempted: null };
+    const t = String(s).trim();
+    const m = t.match(/^(\d+(?:\.\d+)?)\s*\/\s*(\d+(?:\.\d+)?)$/);
+    if (m) return { made: parseFloat(m[1]), attempted: parseFloat(m[2]) };
+    const n = parseFloat(t);
+    return isNaN(n) ? null : { made: n, attempted: null };
+  },
+
+  /* Linear interpolation between two benchmark brackets for any handicap.
+     E.g. interpolate(17.3, 'gir_pct') returns the gir_pct benchmark
+     proportionally between the 15 and 20 hcp values. */
+  interpolate(hcp, metricKey) {
+    const arr = RRG.BENCHMARKS[metricKey];
+    const brackets = RRG.BENCHMARK_BRACKETS;
+    if (!arr || !brackets) return null;
+    const h = Math.max(0, Math.min(35, parseFloat(hcp) || 0));
+    // Find the two nearest brackets in order (brackets are descending: 35,30,...,0)
+    for (let i = 0; i < brackets.length - 1; i++) {
+      const hi = brackets[i], lo = brackets[i + 1];
+      if (h <= hi && h >= lo) {
+        const t = (hi - h) / (hi - lo);            // 0 at high bracket, 1 at low
+        return arr[i] + (arr[i + 1] - arr[i]) * t;
+      }
+    }
+    return h > brackets[0] ? arr[0] : arr[arr.length - 1];
+  },
+
+  /* Look up the closest BRACKET_FOCUS entry for a handicap (rounds down to
+     the nearest 5-stroke bracket). */
+  bracketFor(hcp) {
+    const h = parseFloat(hcp);
+    if (isNaN(h)) return null;
+    const brackets = [35, 30, 25, 20, 15, 10, 5, 0];
+    for (const b of brackets) { if (h >= b) return b; }
+    return 0;
+  },
+
+  /* Given a rounds array, compute the rolling average for the last `window`
+     rounds for every stat in RRG.STATS. Missing fields skipped per round. */
+  rollingStats(rounds, windowN = 5) {
+    const recent = (rounds || [])
+      .filter(r => r && r.score)
+      .slice(0, windowN);
+    if (!recent.length) return null;
+
+    const agg = {};
+    const init = () => ({ sum: 0, n: 0 });
+    RRG.STATS.forEach(s => { agg[s.key] = init(); });
+
+    for (const r of recent) {
+      if (r.score != null)      { agg.avg_score.sum += r.score; agg.avg_score.n++; }
+
+      const fir = RRG.path.parseRatio(r.fir);
+      if (fir && fir.attempted) { agg.fairways_pct.sum += (fir.made / fir.attempted) * 100; agg.fairways_pct.n++; }
+
+      const gir = RRG.path.parseRatio(r.gir);
+      if (gir && gir.attempted) { agg.gir_pct.sum += (gir.made / gir.attempted) * 100; agg.gir_pct.n++; }
+
+      if (r.putts != null)      { agg.putts_rd.sum += r.putts; agg.putts_rd.n++; }
+
+      const ud = RRG.path.parseRatio(r.up_down);
+      if (ud && ud.attempted)   { agg.scrambling.sum += (ud.made / ud.attempted) * 100; agg.scrambling.n++; }
+
+      const ss = RRG.path.parseRatio(r.sand_saves);
+      if (ss && ss.attempted)   { agg.sand_save.sum += (ss.made / ss.attempted) * 100; agg.sand_save.n++; }
+
+      if (r.birdies != null)    { agg.birdies_rd.sum += r.birdies; agg.birdies_rd.n++; }
+      if (r.doubles_plus != null){ agg.doubles_rd.sum += r.doubles_plus; agg.doubles_rd.n++; }
+      if (r.penalties != null)  { agg.penalties_rd.sum += r.penalties; agg.penalties_rd.n++; }
+      if (r.drive_dist != null) { agg.drive_dist.sum += r.drive_dist; agg.drive_dist.n++; }
+    }
+
+    const out = { _count: recent.length };
+    Object.keys(agg).forEach(k => {
+      out[k] = agg[k].n > 0 ? agg[k].sum / agg[k].n : null;
+    });
+    return out;
+  },
+
+  /* Compute the status color for one stat given actual value + target.
+     Threshold: within 15% of target = yellow; better = green; worse = red. */
+  statusFor(actual, target, higherBetter) {
+    if (actual == null || target == null) return 'none';
+    if (higherBetter) {
+      if (actual >= target) return 'green';
+      if (actual >= 0.85 * target) return 'yellow';
+      return 'red';
+    } else {
+      if (actual <= target) return 'green';
+      if (actual <= 1.15 * target) return 'yellow';
+      return 'red';
+    }
+  },
+
+  /* Return an array of {key, label, actual, target, status, gap} for every
+     stat that has both an actual value and a benchmark. Sorted by priority
+     (red first, then yellow, then green). */
+  gapAnalysis(rolling, goalHcp) {
+    if (!rolling) return [];
+    const out = [];
+    for (const s of RRG.STATS) {
+      const actual = rolling[s.key];
+      const target = RRG.path.interpolate(goalHcp, s.bench);
+      const status = RRG.path.statusFor(actual, target, s.higherBetter);
+      if (status === 'none') continue;
+      // gap is the RELATIVE distance from target (positive means worse)
+      const gap = s.higherBetter ? (target - actual) : (actual - target);
+      out.push({ key: s.key, label: s.label, unit: s.unit, actual, target, status, gap, higherBetter: s.higherBetter });
+    }
+    const rank = { red: 0, yellow: 1, green: 2 };
+    out.sort((a, b) => rank[a.status] - rank[b.status] || b.gap - a.gap);
+    return out;
+  },
+
+  /* Format a stat value for display. Rounds to 1 decimal, tags unit. */
+  fmt(v, unit) {
+    if (v == null || isNaN(v)) return '—';
+    const rounded = Math.round(v * 10) / 10;
+    const str = Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(1);
+    return str + (unit ? unit : '');
+  },
+
+  /* Render the full Path-to-Goal widget for a user.
+     Expects: user (with .profile_json.handicap and .profile_json.goal_handicap),
+     rounds (array). Returns HTML string. If no rounds or no handicap, shows
+     an onboarding callout instead. */
+  renderWidget({ user, rounds, variant = 'full' } = {}) {
+    const pj = (user && user.profile_json) || {};
+    // Read from both root fields (preferred) and the s1_ prefix used by the
+    // Know Your Game form, so either path works without a migration.
+    const rawCur  = pj.handicap != null && pj.handicap !== ''         ? pj.handicap
+                  : pj.s1_handicap != null && pj.s1_handicap !== ''   ? pj.s1_handicap : null;
+    const rawGoal = pj.goal_handicap != null && pj.goal_handicap !== ''            ? pj.goal_handicap
+                  : pj.s1_goal_handicap != null && pj.s1_goal_handicap !== ''      ? pj.s1_goal_handicap : 0;
+    const curHcp  = rawCur  != null ? parseFloat(rawCur)  : null;
+    const goalHcp = rawGoal != null ? parseFloat(rawGoal) : 0;
+
+    if (curHcp == null || isNaN(curHcp)) {
+      return `
+        <div class="path-card">
+          <div class="path-kicker">Path to Your Goal</div>
+          <h3 class="path-title">Set your handicap to unlock your path</h3>
+          <p class="path-sub">Tell the portal what handicap you're currently playing to (and where you want to be) and we'll show you exactly which stats are holding you back.</p>
+          <a class="btn btn-primary btn-sm" href="profile.html">Set your handicap &rarr;</a>
+        </div>`;
+    }
+
+    const rolling = RRG.path.rollingStats(rounds);
+    if (!rolling || rolling._count === 0) {
+      return `
+        <div class="path-card">
+          <div class="path-kicker">Path to Your Goal</div>
+          <h3 class="path-title">Log a round to unlock your path</h3>
+          <p class="path-sub">Your gap-analysis card lights up after you log your first round. Fairways hit, greens, putts, up-and-downs — the more you log, the sharper the picture.</p>
+          <a class="btn btn-primary btn-sm" href="submit-round.html">Log a round &rarr;</a>
+        </div>`;
+    }
+
+    const gaps = RRG.path.gapAnalysis(rolling, goalHcp);
+    const focus = RRG.BRACKET_FOCUS[RRG.path.bracketFor(curHcp)] || null;
+
+    // For compact variant (dashboard teaser): show only reds + top yellow
+    const showGaps = variant === 'compact'
+      ? gaps.filter(g => g.status === 'red').concat(gaps.filter(g => g.status === 'yellow').slice(0, 1)).slice(0, 3)
+      : gaps;
+
+    const goalLabel = goalHcp === 0 ? 'Scratch' : (Number.isInteger(goalHcp) ? String(goalHcp) : goalHcp.toFixed(1));
+    const curLabel  = Number.isInteger(curHcp) ? String(curHcp) : curHcp.toFixed(1);
+
+    const rowsHtml = showGaps.map(g => {
+      const arrow = (g.status === 'green') ? '✓' : (g.higherBetter ? '▲' : '▼');
+      return `
+        <div class="path-row path-${g.status}">
+          <div class="path-metric">${RRG.esc(g.label)}</div>
+          <div class="path-actual">${RRG.path.fmt(g.actual, g.unit)}</div>
+          <div class="path-target"><span class="path-target-label">Goal</span> ${RRG.path.fmt(g.target, g.unit)}</div>
+          <div class="path-pill path-pill-${g.status}">${arrow}</div>
+        </div>`;
+    }).join('');
+
+    const focusHtml = (variant === 'full' && focus) ? `
+      <div class="path-focus">
+        <div class="path-focus-label">Focus to get to ${focus.next == null ? 'stay there' : focus.next + ' handicap'}</div>
+        <p class="path-focus-goal">${RRG.esc(focus.goal)}</p>
+        <ul>${focus.bullets.map(b => `<li>${RRG.esc(b)}</li>`).join('')}</ul>
+      </div>
+    ` : '';
+
+    const teaserHtml = variant === 'compact' ? `
+      <div class="path-footer-link">
+        <a href="my-plan.html">See the full gap analysis &rarr;</a>
+      </div>
+    ` : '';
+
+    return `
+      <div class="path-card">
+        <div class="path-header">
+          <div>
+            <div class="path-kicker">Path to Your Goal</div>
+            <h3 class="path-title">Current ${curLabel} &rarr; Goal ${goalLabel}</h3>
+            <p class="path-sub">Based on your last ${rolling._count} round${rolling._count === 1 ? '' : 's'}. Green = you're there. Yellow = within 15%. Red = biggest gap.</p>
+          </div>
+        </div>
+        <div class="path-rows">${rowsHtml || '<p class="path-sub">Log more stats per round to unlock the full gap analysis. Try entering fairways, greens, and up-and-downs on your next round.</p>'}</div>
+        ${focusHtml}
+        ${teaserHtml}
+      </div>`;
+  },
+};
+
+/* ============================================================
    NAV / FOOTER
    ============================================================ */
 RRG.renderNav = function(user, active = '') {

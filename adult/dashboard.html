@@ -330,6 +330,9 @@
     <div class="top-errors-sub" id="top-errors-sub">&nbsp;</div>
   </a>
 
+  <!-- PATH TO YOUR GOAL — compact gap analysis, populated by JS -->
+  <div id="path-mount"></div>
+
   <!-- QUICK ACTIONS — 3 pill-tiles; everything else lives in the nav -->
   <div class="quick-actions mb-5">
     <a href="submit-round.html" class="quick-action">
@@ -375,6 +378,15 @@
         RRG.lessons.forUser(user.id),
       ]);
     } catch (err) { console.warn('load failed', err); }
+
+    // Mount the Path-to-Goal widget (compact variant — dashboard teaser).
+    // Shows only reds + one yellow, with a "see full analysis" link to My Plan.
+    try {
+      const pathMount = document.getElementById('path-mount');
+      if (pathMount && RRG.path && RRG.path.renderWidget) {
+        pathMount.innerHTML = RRG.path.renderWidget({ user, rounds, variant: 'compact' });
+      }
+    } catch (err) { console.warn('path widget failed', err); }
 
     // Live 5 Errors tally (localStorage on this device)
     let liveTally = null;

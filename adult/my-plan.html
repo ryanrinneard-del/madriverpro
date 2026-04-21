@@ -291,6 +291,9 @@
        lesson-update note within the last 14 days -->
   <div id="plan-update-banner" style="display:none;"></div>
 
+  <!-- PATH TO YOUR GOAL — full gap analysis, populated by JS -->
+  <div id="path-mount"></div>
+
   <!-- WEEK-BY-WEEK SYNOPSIS (glance at the 6 weeks) -->
   <div id="plan-synopsis-wrap" style="display:none;"></div>
 
@@ -463,6 +466,22 @@
       // Render the latest plan-update banner (gold callout) if the coach
       // has logged a post-lesson note in the last 14 days.
       renderLatestUpdateBanner();
+
+      // Render the Path-to-Goal widget (full variant with focus bullets).
+      renderPathWidget();
+    }
+
+    /* =================================================================
+       PATH TO GOAL WIDGET — full gap analysis on My Plan. Loads the
+       player's rounds once and hands off to RRG.path.renderWidget.
+       ================================================================= */
+    async function renderPathWidget() {
+      const wrap = document.getElementById('path-mount');
+      if (!wrap) return;
+      try {
+        const rounds = await RRG.subs.forUser(targetUser.id);
+        wrap.innerHTML = RRG.path.renderWidget({ user: targetUser, rounds, variant: 'full' });
+      } catch (err) { console.warn('path widget failed', err); }
     }
 
     /* =================================================================
