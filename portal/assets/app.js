@@ -411,6 +411,7 @@ RRG.renderNav = function(user, active = '') {
 
         <li class="nav-group-label">LEARN</li>
         <li><a href="/improve/" class="${active==='library'?'active':''}">Library</a></li>
+        <li><a href="/improve/first-tee-ready.html">First-Tee Ready &mdash; A Guide for Beginner Golfers</a></li>
         <li><a href="how-to-use.html" class="${active==='how-to-use'?'active':''}">How to use this portal</a></li>
 
         ${coachLink}
