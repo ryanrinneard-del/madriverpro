@@ -481,6 +481,9 @@ RRG.renderNav = function(user, active = '') {
         <li><a href="/improve/first-tee-ready.html">First-Tee Ready &mdash; A Guide for Beginner Golfers</a></li>
         <li><a href="how-to-use.html" class="${active==='how-to-use'?'active':''}">How to use this portal</a></li>
 
+        <li class="nav-group-label">BOOKS</li>
+        <li><a href="/improve/bookshelf.html">The Bookshelf</a></li>
+
         ${coachLink}
         <li class="nav-user-mobile">
           <div class="who">Signed in as <b>${RRG.esc(user.name || user.email)}</b></div>

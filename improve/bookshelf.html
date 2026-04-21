@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Bookshelf — Game Improvement Library</title>
+<meta name="description" content="Classic golf books, broken down chapter by chapter — written for the recreational player. Start with The 8-Step Swing by Jim McLean.">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  /* =============================================================
+     THE BOOKSHELF — landing page for book-length breakdowns.
+     Each book is a card that opens to a full chapter-by-chapter
+     page. Start with The 8-Step Swing; more to come.
+     ============================================================= */
+
+  .bookshelf-hero {
+    background: linear-gradient(180deg, #ffffff 0%, #F7F2E8 100%);
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    padding: 44px 32px;
+    margin-bottom: 40px;
+    text-align: center;
+  }
+  .bookshelf-hero .kicker {
+    display: inline-block;
+    font-size: 11px; letter-spacing: 0.22em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase;
+    padding: 5px 16px; border: 1px solid var(--gold);
+    border-radius: 999px;
+  }
+  .bookshelf-hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(38px, 6vw, 56px);
+    font-weight: 600;
+    color: var(--navy);
+    margin: 18px 0 8px;
+    line-height: 1.1;
+  }
+  .bookshelf-hero h1 em { color: var(--gold); font-style: italic; font-weight: 400; }
+  .bookshelf-hero .tagline {
+    max-width: 660px; margin: 10px auto 0;
+    font-size: 16px; line-height: 1.65; color: var(--navy-mid);
+  }
+
+  .shelf {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px;
+    margin-bottom: 28px;
+  }
+  @media (max-width: 760px) { .shelf { grid-template-columns: 1fr; } }
+
+  .book-card {
+    display: flex; gap: 22px;
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--gold);
+    border-radius: 12px;
+    padding: 24px 26px;
+    text-decoration: none; color: inherit;
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .book-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 32px rgba(13,31,60,0.10);
+  }
+  .book-spine {
+    flex-shrink: 0;
+    width: 82px; min-height: 120px;
+    background: linear-gradient(135deg, var(--navy) 0%, #162E54 100%);
+    border-radius: 4px 8px 8px 4px;
+    box-shadow: inset -6px 0 12px rgba(0,0,0,0.15), 0 4px 14px rgba(13,31,60,0.25);
+    padding: 18px 10px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    color: #fff; position: relative;
+  }
+  .book-spine::before {
+    content: ''; position: absolute; left: 0; top: 10%; bottom: 10%;
+    width: 3px; background: var(--gold); border-radius: 3px;
+  }
+  .book-spine .bs-label {
+    font-size: 9px; letter-spacing: 0.18em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase;
+  }
+  .book-spine .bs-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 15px; line-height: 1.2; font-weight: 600; color: #fff;
+  }
+  .book-spine .bs-author {
+    font-size: 10px; letter-spacing: 0.08em; color: rgba(255,255,255,0.65);
+    text-transform: uppercase;
+  }
+
+  .book-meta { display: flex; flex-direction: column; min-width: 0; }
+  .book-meta .book-kicker {
+    font-size: 10px; letter-spacing: 0.18em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase;
+  }
+  .book-meta h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px; color: var(--navy);
+    margin: 4px 0 6px; font-weight: 600; line-height: 1.2;
+  }
+  .book-meta .attrib {
+    font-size: 12px; color: var(--mid-grey); font-style: italic;
+    margin-bottom: 10px;
+  }
+  .book-meta p {
+    font-size: 14px; line-height: 1.55; color: var(--navy-mid);
+    margin: 0 0 12px;
+  }
+  .book-meta .open-link {
+    margin-top: auto;
+    font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--gold); font-weight: 700;
+  }
+
+  .coming-soon {
+    background: #F7F2E8;
+    border: 1px dashed var(--rule);
+    border-radius: 12px;
+    padding: 24px 28px;
+    text-align: center;
+    color: var(--navy-mid);
+  }
+  .coming-soon h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 20px; color: var(--navy); margin: 0 0 8px; font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container">
+
+  <div class="breadcrumb">
+    <a href="index.html">Library</a><span>›</span>The Bookshelf
+  </div>
+
+  <div class="bookshelf-hero">
+    <span class="kicker">THE BOOKSHELF</span>
+    <h1>Golf's classic books, <em>explained.</em></h1>
+    <p class="tagline">
+      A growing shelf of chapter-by-chapter breakdowns of the books that shaped how
+      I teach. Written for the recreational player &mdash; plain English, no jargon,
+      with drills and cues you can take to the range this week. The originals are
+      richer; read this to get the ideas into your hands, then read the book to go
+      deeper.
+    </p>
+  </div>
+
+  <div class="shelf">
+
+    <a href="book-8-step-swing.html" class="book-card">
+      <div class="book-spine">
+        <div>
+          <div class="bs-label">VOLUME 01</div>
+          <div class="bs-title">The 8-Step Swing</div>
+        </div>
+        <div class="bs-author">McLean</div>
+      </div>
+      <div class="book-meta">
+        <div class="book-kicker">CLASSIC · SWING FUNDAMENTALS</div>
+        <h2>The 8-Step Swing</h2>
+        <div class="attrib">Based on Jim McLean's framework</div>
+        <p>
+          The cleanest map of the golf swing ever committed to print. Eight checkpoints
+          from setup to finish, each one something you can feel and check. Written for
+          a beginner-to-intermediate player who wants to understand what their swing is
+          actually doing.
+        </p>
+        <div class="open-link">Open this book &rarr;</div>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="coming-soon">
+    <h3>More books coming soon</h3>
+    <p>
+      Classics on short game, putting, and the mental side are in the pipeline.
+      Check back; this shelf is going to fill up.
+    </p>
+  </div>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  RRG.mountLibrary();
+</script>
+</body>
+</html>

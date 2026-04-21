@@ -1,0 +1,1246 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The 8-Step Swing — The Bookshelf</title>
+<meta name="description" content="Eight checkpoints from setup to finish that separate reliable golf swings from random ones. A beginner-to-intermediate summary of the 8-position teaching framework made famous by Jim McLean.">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  /* =============================================================
+     THE 8-STEP SWING — book-length chapter breakdown.
+     Eight expandable chapters, each with a consistent inner layout:
+       • The opener         (plain-English intro)
+       • THE KEY IDEA       (gold callout)
+       • What it looks like (describe the position)
+       • What to feel       (italic pull-quote)
+       • Common mistakes    (red-tinted box)
+       • One simple drill   (green-tinted box)
+       • Bridge to next     (one-sentence handoff)
+     ============================================================= */
+
+  /* ---- BOOK HERO ---- */
+  .book-hero {
+    background: linear-gradient(180deg, var(--navy) 0%, #162E54 100%);
+    color: #fff;
+    border-radius: 14px;
+    padding: 56px 44px 48px;
+    margin-bottom: 36px;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .book-hero::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--gold);
+  }
+  .book-hero::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent 0%, var(--gold) 30%, var(--gold) 70%, transparent 100%);
+    opacity: 0.4;
+  }
+  .book-hero .vol {
+    display: inline-block;
+    font-size: 11px; letter-spacing: 0.24em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase;
+    padding: 5px 16px; border: 1px solid var(--gold);
+    border-radius: 999px; margin-bottom: 20px;
+  }
+  .book-hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(44px, 7vw, 68px);
+    font-weight: 600; color: #fff;
+    margin: 0; line-height: 1.05; letter-spacing: -0.01em;
+  }
+  .book-hero .subtitle {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; font-size: 20px;
+    color: rgba(255,255,255,0.78);
+    margin: 14px auto 22px; max-width: 560px;
+  }
+  .book-hero .gold-dash {
+    width: 60px; height: 2px; background: var(--gold);
+    margin: 0 auto 22px;
+  }
+  .book-hero .attrib {
+    font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(255,255,255,0.55); font-weight: 500;
+  }
+
+  /* ---- FROM THE COACH NOTE ---- */
+  .coach-note {
+    background: #F7F2E8;
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--gold);
+    border-radius: 10px;
+    padding: 28px 32px;
+    margin: 0 0 36px;
+  }
+  .coach-note .cn-label {
+    font-size: 11px; letter-spacing: 0.2em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 10px;
+  }
+  .coach-note p {
+    font-size: 15.5px; line-height: 1.7; color: var(--navy-mid);
+    margin: 0 0 12px;
+  }
+  .coach-note p:last-child { margin-bottom: 0; }
+  .coach-note p strong { color: var(--navy); }
+  .coach-note .sign-off {
+    margin-top: 14px;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; color: var(--navy); font-size: 16px;
+  }
+
+  /* ---- TOC ---- */
+  .book-toc {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--gold);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 36px;
+  }
+  .book-toc h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px; color: var(--navy); margin: 0 0 16px; font-weight: 600;
+  }
+  .book-toc ol { list-style: none; margin: 0; padding: 0; }
+  .book-toc li {
+    display: grid; grid-template-columns: 60px 1fr auto;
+    align-items: baseline; gap: 16px;
+    padding: 12px 0; border-bottom: 1px solid var(--rule);
+  }
+  .book-toc li:last-child { border-bottom: none; }
+  .book-toc .ch-num {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; font-size: 20px; color: var(--gold); font-weight: 400;
+  }
+  .book-toc .ch-title {
+    font-size: 15px; color: var(--navy); font-weight: 600;
+  }
+  .book-toc .ch-title small {
+    display: block; font-size: 12px; color: var(--mid-grey);
+    font-weight: 400; margin-top: 2px; font-style: italic;
+  }
+  .book-toc a.ch-jump {
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--gold); font-weight: 700; text-decoration: none;
+  }
+  .book-toc a.ch-jump:hover { color: var(--navy); }
+
+  /* ---- CHAPTER CARDS ---- */
+  .chapter-stack { display: grid; gap: 16px; margin-bottom: 40px; }
+
+  .chapter {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--gold);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: box-shadow .2s ease;
+  }
+  .chapter[open] {
+    box-shadow: 0 14px 34px rgba(13,31,60,0.09);
+  }
+  .chapter summary {
+    display: grid;
+    grid-template-columns: 74px 1fr 28px;
+    gap: 18px; align-items: center;
+    padding: 22px 26px;
+    cursor: pointer; list-style: none; user-select: none;
+  }
+  .chapter summary::-webkit-details-marker { display: none; }
+  .chapter .num {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 48px; color: var(--gold); font-weight: 700;
+    line-height: 1; text-align: center;
+    border-right: 1px solid var(--rule); padding-right: 18px;
+  }
+  .chapter .title-stack .ch-kicker {
+    font-size: 10px; letter-spacing: 0.22em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .chapter .title-stack h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px; color: var(--navy); font-weight: 600;
+    margin: 0 0 4px; line-height: 1.2;
+  }
+  .chapter .title-stack .ch-teaser {
+    font-size: 13px; color: var(--navy-mid); line-height: 1.5;
+  }
+  .chapter .chev {
+    color: var(--mid-grey); font-size: 22px; line-height: 1;
+    transition: transform .2s ease; text-align: center;
+    justify-self: center;
+  }
+  .chapter[open] .chev { transform: rotate(90deg); color: var(--gold); }
+
+  .chapter .body {
+    padding: 0 26px 28px calc(26px + 74px + 18px);
+    color: var(--navy-mid); line-height: 1.7; font-size: 15px;
+  }
+  .chapter .body p { margin: 0 0 12px; }
+  .chapter .body p strong { color: var(--navy); }
+
+  .chapter .body h4 {
+    font-size: 11px; letter-spacing: 0.18em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase;
+    margin: 22px 0 8px;
+  }
+
+  .key-idea {
+    background: #F7F2E8;
+    border-left: 3px solid var(--gold);
+    padding: 14px 18px; border-radius: 4px;
+    margin: 16px 0; font-size: 15px; line-height: 1.6;
+  }
+  .key-idea b { color: var(--navy); }
+
+  .feel-pull {
+    border-left: 3px solid var(--gold);
+    padding: 6px 0 6px 18px;
+    margin: 16px 0;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; font-size: 19px; line-height: 1.45;
+    color: var(--navy);
+  }
+
+  .mistake-box {
+    background: #FDF6F4;
+    border-left: 3px solid #C76757;
+    padding: 14px 18px; border-radius: 4px;
+    margin: 16px 0;
+  }
+  .mistake-box .mb-title {
+    color: #9A3D2F; font-weight: 700; font-size: 12px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .mistake-box ul { margin: 6px 0 0 18px; padding: 0; }
+  .mistake-box li { color: var(--navy-mid); margin-bottom: 4px; }
+
+  .drill-box {
+    background: #F2F6EE;
+    border-left: 3px solid #6B8B4E;
+    padding: 14px 18px; border-radius: 4px;
+    margin: 16px 0;
+  }
+  .drill-box .db-title {
+    color: #4C6B30; font-weight: 700; font-size: 12px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .bridge {
+    margin-top: 20px; padding-top: 16px;
+    border-top: 1px dashed var(--rule);
+    font-style: italic; font-size: 14px;
+    color: var(--mid-grey);
+  }
+
+  @media (max-width: 620px) {
+    .chapter summary {
+      grid-template-columns: 54px 1fr 24px; gap: 12px; padding: 18px 18px;
+    }
+    .chapter .num { font-size: 36px; padding-right: 12px; }
+    .chapter .title-stack h3 { font-size: 18px; }
+    .chapter .body {
+      padding: 0 18px 20px 18px;
+    }
+    .book-toc li { grid-template-columns: 38px 1fr; }
+    .book-toc a.ch-jump { grid-column: 2; margin-top: 4px; }
+  }
+
+  /* ---- CLOSING + ATTRIBUTION ---- */
+  .next-steps {
+    background: var(--navy);
+    color: #fff;
+    border-radius: 12px;
+    padding: 32px 34px;
+    margin: 40px 0 28px;
+  }
+  .next-steps h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 26px; color: #fff; margin: 0 0 10px; font-weight: 600;
+  }
+  .next-steps p {
+    font-size: 15px; line-height: 1.7; color: rgba(255,255,255,0.88);
+    margin: 0 0 12px;
+  }
+  .next-steps p strong { color: var(--gold); }
+  .next-steps ol {
+    margin: 8px 0 12px 22px; padding: 0;
+    color: rgba(255,255,255,0.92);
+  }
+  .next-steps ol li {
+    margin-bottom: 8px; font-size: 15px; line-height: 1.55;
+  }
+
+  .attribution {
+    background: #F7F2E8;
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 22px 26px;
+    margin: 28px 0;
+  }
+  .attribution h3 {
+    font-size: 12px; letter-spacing: 0.2em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin: 0 0 10px;
+  }
+  .attribution p {
+    font-size: 14px; line-height: 1.65; color: var(--navy-mid);
+    margin: 0 0 10px;
+  }
+  .attribution p strong { color: var(--navy); }
+
+  /* ---- GLOSSARY ---- */
+  .glossary {
+    background: var(--white); border: 1px solid var(--rule);
+    border-radius: 10px; padding: 28px 30px; margin: 28px 0;
+  }
+  .glossary h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px; color: var(--navy); margin: 0 0 14px; font-weight: 600;
+  }
+  .glossary dl {
+    display: grid; grid-template-columns: minmax(160px, 1fr) 2fr;
+    gap: 10px 22px;
+  }
+  .glossary dt { font-weight: 700; color: var(--navy); font-size: 14px; }
+  .glossary dd {
+    margin: 0; color: var(--navy-mid); font-size: 14px; line-height: 1.5;
+  }
+  @media (max-width: 620px) {
+    .glossary dl { grid-template-columns: 1fr; gap: 4px 0; }
+    .glossary dd { margin-bottom: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container">
+
+  <div class="breadcrumb">
+    <a href="index.html">Library</a><span>›</span><a href="bookshelf.html">Bookshelf</a><span>›</span>The 8-Step Swing
+  </div>
+
+  <!-- ===================== BOOK HERO ===================== -->
+  <div class="book-hero">
+    <span class="vol">Bookshelf · Volume 01</span>
+    <h1>The 8-Step Swing.</h1>
+    <div class="subtitle">Eight checkpoints. One reliable swing.</div>
+    <div class="gold-dash"></div>
+    <div class="attrib">Based on Jim McLean's 8-position teaching framework</div>
+  </div>
+
+  <!-- ===================== COACH NOTE ===================== -->
+  <div class="coach-note">
+    <div class="cn-label">From the coach</div>
+    <p>
+      Most golfers I meet can <em>feel</em> when a swing is off &mdash; they just
+      can't tell you <em>where</em> it went wrong. That's why this framework matters.
+      Jim McLean broke the swing into eight positions you can check one at a time. If
+      something's off, you stop guessing and start troubleshooting.
+    </p>
+    <p>
+      <strong>This book is for the recreational player</strong> who wants to understand
+      what their swing is actually doing &mdash; not an instruction manual for the tour.
+      Each chapter takes one position, explains it in plain English, tells you what it
+      should look like and what it should feel like, names the common mistakes, and
+      gives you one drill you can take to the range this week.
+    </p>
+    <p>
+      Read it front to back, or skip straight to the chapter that matches where your
+      swing is falling apart right now. Either way &mdash; take a club, stand in front
+      of a mirror, and move through the positions as you read. The book becomes useful
+      the moment you move.
+    </p>
+    <div class="sign-off">&mdash; Ryan</div>
+  </div>
+
+  <!-- ===================== TOC ===================== -->
+  <div class="book-toc">
+    <h2>Table of contents</h2>
+    <ol>
+      <li>
+        <div class="ch-num">01</div>
+        <div>
+          <div class="ch-title">Build your base
+            <small>Grip, stance, posture, and the move that starts the swing.</small>
+          </div>
+        </div>
+        <a class="ch-jump" href="#ch1">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">02</div>
+        <div>
+          <div class="ch-title">The takeaway
+            <small>The first three feet of the backswing, and why they matter more than the rest.</small>
+          </div>
+        </div>
+        <a class="ch-jump" href="#ch2">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">03</div>
+        <div>
+          <div class="ch-title">Set the angles
+            <small>The halfway-up checkpoint where the wrists hinge and the club stands up.</small>
+          </div>
+        </div>
+        <a class="ch-jump" href="#ch3">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">04</div>
+        <div>
+          <div class="ch-title">The coil
+            <small>The top of the backswing &mdash; your body fully loaded and ready to deliver.</small>
+          </div>
+        </div>
+        <a class="ch-jump" href="#ch4">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">05</div>
+        <div>
+          <div class="ch-title">Change of direction
+            <small>How the downswing starts &mdash; and why most golfers get it wrong.</small>
+          </div>
+        </div>
+        <a class="ch-jump" href="#ch5">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">06</div>
+        <div>
+          <div class="ch-title">The strike
+            <small>What a good impact actually looks like (hint: it's not what you think).</small>
+          </div>
+        </div>
+        <a class="ch-jump" href="#ch6">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">07</div>
+        <div>
+          <div class="ch-title">Through the ball
+            <small>The six feet after impact: extension, release, and the leg action most golfers miss.</small>
+          </div>
+        </div>
+        <a class="ch-jump" href="#ch7">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">08</div>
+        <div>
+          <div class="ch-title">A balanced finish
+            <small>If you can't pose at the end, something went wrong in the middle.</small>
+          </div>
+        </div>
+        <a class="ch-jump" href="#ch8">Read &rarr;</a>
+      </li>
+    </ol>
+  </div>
+
+  <!-- ===================== CHAPTERS ===================== -->
+  <div class="chapter-stack">
+
+    <!-- ========== CHAPTER 1 ========== -->
+    <details class="chapter" id="ch1">
+      <summary>
+        <div class="num">1</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter One</div>
+          <h3>Build your base</h3>
+          <div class="ch-teaser">Grip, stance, posture, and the move that starts the swing.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          Here's the uncomfortable truth that nobody wants to hear: <strong>most bad
+          swings start before the club ever moves.</strong> Your grip, your stance, your
+          posture, and where the ball sits in relation to your feet &mdash; all of it
+          decides what kinds of swings are even possible from that position. Get the
+          base wrong, and you spend the next two seconds trying to save a shot you
+          already compromised.
+        </p>
+
+        <div class="key-idea">
+          <b>The key idea.</b> Good swings don't rescue bad setups. A good setup makes
+          a good swing <em>possible</em>; a bad setup makes a good swing nearly impossible.
+        </div>
+
+        <h4>What it should look like</h4>
+        <p>
+          <strong>Grip.</strong> Hold the club so you can see two knuckles of your lead
+          hand (the left hand for a right-handed golfer). Your trail hand slots on top,
+          with the palms facing each other &mdash; not gripping like a bat. Light pressure,
+          roughly a 5 on a scale of 1 to 10.
+        </p>
+        <p>
+          <strong>Stance.</strong> Feet roughly shoulder-width for a middle iron; a bit
+          wider for woods, a bit narrower for wedges. Toes pointed slightly outward, not
+          straight ahead.
+        </p>
+        <p>
+          <strong>Posture.</strong> Bend from the hips, not the waist. Let your arms hang
+          straight down from your shoulders &mdash; the clubhead should reach the ball
+          without you having to stretch forward or sit back.
+        </p>
+        <p>
+          <strong>Ball position.</strong> Middle of the stance for wedges; forward of
+          centre for mid-irons; just inside the lead heel for the driver. Consistent,
+          not creative.
+        </p>
+        <p>
+          <strong>The starter.</strong> Before the club moves, most good golfers have a
+          small trigger &mdash; a waggle, a forward-press, a subtle knee flex, a breath.
+          That trigger is what kicks the swing off. Without it, the first move tends to
+          be jerky.
+        </p>
+
+        <div class="feel-pull">
+          Athletic, balanced, ready &mdash; as if someone could push you from any direction
+          and you'd absorb it without falling over.
+        </div>
+
+        <div class="mistake-box">
+          <div class="mb-title">What beginners get wrong</div>
+          <ul>
+            <li><b>Grip too weak</b> &mdash; you can see zero knuckles on your lead hand. The club face opens at impact; the ball slices.</li>
+            <li><b>Ball too far forward</b> &mdash; you're reaching through impact, not compressing. Thin shots and pulls become your home.</li>
+            <li><b>Hunched posture</b> &mdash; rounded shoulders and a curved spine. You can't rotate properly from there.</li>
+            <li><b>No trigger</b> &mdash; you stand over the ball frozen for 4 seconds, then jerk the club back. Timing dies on the first move.</li>
+          </ul>
+        </div>
+
+        <div class="drill-box">
+          <div class="db-title">Drill · The mirror check</div>
+          <p>
+            Before every range session, stand in front of a full-length mirror with a
+            club. Check four things: <b>two knuckles visible on your lead hand · feet
+            shoulder-width · posture tilted from the hips · arms hanging naturally.</b>
+            Spend 60 seconds here. You're training the default.
+          </p>
+        </div>
+
+        <div class="bridge">
+          Once the setup is locked in, we can talk about actually swinging the club &mdash;
+          starting with the first three feet of the backswing.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 2 ========== -->
+    <details class="chapter" id="ch2">
+      <summary>
+        <div class="num">2</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Two</div>
+          <h3>The takeaway</h3>
+          <div class="ch-teaser">The first three feet of the backswing, and why they matter more than the rest.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          The takeaway is the first three feet the clubhead travels away from the ball.
+          It ends at roughly shoulder height &mdash; the club shaft parallel to the
+          ground, pointing roughly down the target line. Sounds simple. It's anything but.
+        </p>
+        <p>
+          <strong>Whatever you do in the first three feet tends to echo through the
+          entire swing.</strong> Roll the clubface open at the takeaway, and the rest of
+          the swing is trying to close it. Drag the club too far inside, and you have to
+          loop it back over the top to hit the ball. Get this checkpoint right and the
+          next six become dramatically easier.
+        </p>
+
+        <div class="key-idea">
+          <b>The key idea.</b> The takeaway is done with the shoulders and chest turning
+          together as one piece. The hands do almost nothing.
+        </div>
+
+        <h4>What it should look like</h4>
+        <p>
+          At the halfway-back position, three things should be true:
+        </p>
+        <p>
+          <strong>The shaft is parallel to the ground</strong> and roughly aligned with
+          your target line &mdash; not swung way inside, not shoved outside.
+        </p>
+        <p>
+          <strong>The clubface is &quot;square&quot;</strong> to your spine angle. Easy
+          check: the toe of the club should point roughly straight up at the sky, or
+          slightly back toward you. If the face is pointing at the ground, it's rolled
+          shut; if it's pointing at the sky horizontally, it's rolled open.
+        </p>
+        <p>
+          <strong>Your chest has turned a quarter turn</strong> with the arms. The
+          triangle formed by your shoulders and the club stays intact. No independent
+          hand movement yet.
+        </p>
+
+        <div class="feel-pull">
+          Like you're brushing a table behind you with the clubhead &mdash; low, wide,
+          and smooth. The arms don't lift; the body turns.
+        </div>
+
+        <div class="mistake-box">
+          <div class="mb-title">What beginners get wrong</div>
+          <ul>
+            <li><b>Snatching the club inside</b> with the hands &mdash; the clubhead disappears behind your body almost immediately. Now you're trapped, and the only way out is to lift and loop.</li>
+            <li><b>Rolling the face open</b> &mdash; the wrists turn as the club moves back, opening the clubface. You'll spend the whole downswing trying to save it, and usually can't.</li>
+            <li><b>Lifting with the arms</b> &mdash; the body stays still, the arms go up vertically. No coil, no power, mostly a hand-flip at the ball.</li>
+          </ul>
+        </div>
+
+        <div class="drill-box">
+          <div class="db-title">Drill · The pause at parallel</div>
+          <p>
+            Swing to where you think &quot;halfway back&quot; is. <b>Pause for two
+            seconds.</b> Look at the club (or have someone video you). Is the shaft
+            parallel to the target line? Is the toe pointing up? If yes &mdash; complete
+            the swing. If no, re-set and try again. Do this 10 times before every range
+            session until the position is automatic.
+          </p>
+        </div>
+
+        <div class="bridge">
+          From halfway back, the club doesn't keep travelling horizontally &mdash; it
+          starts to go up. That's where the wrists come in.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 3 ========== -->
+    <details class="chapter" id="ch3">
+      <summary>
+        <div class="num">3</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Three</div>
+          <h3>Set the angles</h3>
+          <div class="ch-teaser">The halfway-up checkpoint where the wrists hinge and the club stands up.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          From the halfway-back position, the club has to travel roughly vertical &mdash;
+          up, toward the sky, not farther around your body. The way that happens is your
+          <strong>wrists set</strong>. They hinge, the way they'd hinge if you were
+          hammering a nail overhead. When they do, the club stands up, and your lead arm
+          starts to go parallel to the ground.
+        </p>
+        <p>
+          At this checkpoint &mdash; roughly three-quarters of the way to the top &mdash;
+          your lead arm and the club shaft form a nice clean angle, something like a right
+          angle but a bit more open. Different teachers describe it differently; the point
+          is that your wrists have <em>loaded</em>. You've stored energy you'll release
+          later.
+        </p>
+
+        <div class="key-idea">
+          <b>The key idea.</b> The wrists hinge <em>on the way up</em>, not at the top.
+          Set the angles here and the top of the backswing takes care of itself.
+        </div>
+
+        <h4>What it should look like</h4>
+        <p>
+          Your <strong>lead arm is roughly parallel to the ground.</strong> Your
+          <strong>club shaft is pointing up toward the sky</strong> (or a little behind
+          you), close to vertical. Your wrists have cocked &mdash; not collapsed, not
+          overly bent, just hinged the way they'd hinge if you lifted a hammer overhead.
+        </p>
+        <p>
+          This is also when your trail elbow starts to fold naturally. Not glued to your
+          ribs, not flying out like a chicken wing &mdash; pointing roughly at the ground
+          behind you.
+        </p>
+
+        <div class="feel-pull">
+          Hammer a nail into the ceiling. That's the wrist action. Now the club has
+          somewhere to go next &mdash; up to the top &mdash; without your arms doing
+          extra work.
+        </div>
+
+        <div class="mistake-box">
+          <div class="mb-title">What beginners get wrong</div>
+          <ul>
+            <li><b>No wrist set at all</b> &mdash; the arms lift, but the wrists stay rigid. Lots of arm swing, no power.</li>
+            <li><b>Casting early</b> &mdash; the wrists unhinge as the arms lift, which drops the club behind the body. The clubhead gets trapped.</li>
+            <li><b>Over-setting</b> &mdash; the wrists hinge so aggressively that the club crosses the line (points right of target for a right-hander). Recipe for a two-way miss.</li>
+          </ul>
+        </div>
+
+        <div class="drill-box">
+          <div class="db-title">Drill · The L-check</div>
+          <p>
+            Swing to three-quarters back and stop. Your lead arm should be parallel to
+            the ground; the club should be pointing roughly straight up. Hold it. Check
+            in a mirror. If you can see that shape &mdash; horizontal arm, vertical
+            club &mdash; you've set the angles correctly. Rehearse it until it's instinct.
+          </p>
+        </div>
+
+        <div class="bridge">
+          From here, the shoulders finish their turn and the club reaches the top. That's
+          the fully-loaded position we work on next.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 4 ========== -->
+    <details class="chapter" id="ch4">
+      <summary>
+        <div class="num">4</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Four</div>
+          <h3>The coil</h3>
+          <div class="ch-teaser">The top of the backswing &mdash; your body fully loaded and ready to deliver.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          The top of the backswing is your <strong>storage moment.</strong> Everything
+          you've done on the way up &mdash; the rotation, the weight shift, the wrist
+          set &mdash; finishes here. If the top is in a good place, you can now deliver
+          the club with power and control. If it's in a bad place, you're delivering
+          from a compromised angle and the downswing becomes damage control.
+        </p>
+        <p>
+          The word most teachers use is <strong>coiled</strong>. Your shoulders have
+          rotated roughly 90° away from the target. Your hips have rotated roughly
+          half of that &mdash; 45° or so. That difference between the two is what
+          creates the stored tension. Like winding a spring.
+        </p>
+
+        <div class="key-idea">
+          <b>The key idea.</b> At the top, your body is a loaded spring. The turn,
+          the weight shift, and the angles you set earlier are all waiting to release.
+        </div>
+
+        <h4>What it should look like</h4>
+        <p>
+          <strong>Shoulders fully turned</strong> away from the target &mdash; around 90°
+          for most players, less for older or less flexible golfers (that's fine).
+        </p>
+        <p>
+          <strong>Hips turned about half that amount.</strong> They don't match the
+          shoulders; the gap between them is where your power lives.
+        </p>
+        <p>
+          <strong>Weight loaded on the inside of your trail foot</strong> &mdash; not
+          rolled to the outside edge, not swayed off to the side.
+        </p>
+        <p>
+          <strong>The club is roughly parallel to the target line</strong> at the top
+          &mdash; or slightly short of that if you're not super flexible. Short of parallel
+          is a better problem than past parallel.
+        </p>
+
+        <div class="feel-pull">
+          Wound up like a spring. The coil in your trail-side obliques should feel
+          alive &mdash; stretched, tense, ready to snap back.
+        </div>
+
+        <div class="mistake-box">
+          <div class="mb-title">What beginners get wrong</div>
+          <ul>
+            <li><b>Reverse pivot</b> &mdash; weight leans onto the <em>lead</em> side at the top instead of the trail side. Power dies; the downswing becomes a desperate lunge.</li>
+            <li><b>Swaying instead of turning</b> &mdash; the hips slide laterally off the ball rather than rotating. Same loss of coil, no power stored.</li>
+            <li><b>Overswinging</b> &mdash; the club goes way past parallel, often with a collapsed lead arm. More moving parts, less control.</li>
+            <li><b>Flying elbow</b> &mdash; the trail elbow lifts too far away from the body. The club gets disconnected, and the downswing path goes haywire.</li>
+          </ul>
+        </div>
+
+        <div class="drill-box">
+          <div class="db-title">Drill · Feel the stretch</div>
+          <p>
+            Swing to the top. <b>Pause for three seconds.</b> Feel your trail-side
+            obliques (the muscles on the side of your torso) pulling. If you don't feel
+            a stretch there, you haven't coiled &mdash; you've just lifted. Pay attention
+            to this feeling every range session. That stretch is the energy you're about
+            to release into the ball.
+          </p>
+        </div>
+
+        <div class="bridge">
+          You're loaded. Now the hard part &mdash; the change of direction. This is where
+          most amateur swings unravel.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 5 ========== -->
+    <details class="chapter" id="ch5">
+      <summary>
+        <div class="num">5</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Five</div>
+          <h3>Change of direction</h3>
+          <div class="ch-teaser">How the downswing starts &mdash; and why most golfers get it wrong.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          The moment the club stops at the top and starts coming down is the most
+          important two-tenths of a second in golf. The body parts that move first, and
+          in what order, determine whether you hit a ball or a tree.
+        </p>
+        <p>
+          <strong>The lower body starts down. Not the hands. Not the arms. The hips and
+          the lead leg.</strong> If you get that order right, the arms and the club
+          follow &mdash; whip-like, powerful, in a great position to deliver. If you get
+          it wrong, the upper body fires first and you're coming over the top with an
+          out-to-in path. That's the classic amateur slice, or the massive pull if you
+          happen to square the face.
+        </p>
+
+        <div class="key-idea">
+          <b>The key idea.</b> The downswing is a sequence, not a single motion. Hips
+          first, then torso, then arms, then club. Like cracking a whip &mdash; the
+          handle moves before the tip.
+        </div>
+
+        <h4>What it should look like</h4>
+        <p>
+          At the very start of the downswing, the <strong>lead knee and lead hip bump
+          toward the target</strong> while the upper body is still pointing away. For
+          a split second, the two halves of your body are going in opposite directions.
+          That's good. That's the sequence working.
+        </p>
+        <p>
+          Then the <strong>torso rotates through</strong>, dragging the arms down. The
+          <strong>arms and club come last</strong>, delivered by all the rotation that
+          happened before them.
+        </p>
+        <p>
+          The visual you'll see on tour: the pros look like they're <em>pulling</em> the
+          club down from the top rather than swinging it. That pull is the lower body
+          firing first.
+        </p>
+
+        <div class="feel-pull">
+          The handle of the club moves before the head of the club. Like throwing a
+          baseball &mdash; your legs and hips fire first, the arm whips through last.
+        </div>
+
+        <div class="mistake-box">
+          <div class="mb-title">What beginners get wrong</div>
+          <ul>
+            <li><b>Casting</b> &mdash; the hands and arms throw the club out from the top, releasing all that stored energy before impact. You've spent your wrist angles on air; there's nothing left at the ball.</li>
+            <li><b>Over the top</b> &mdash; the shoulders fire before the hips. The club comes down outside the plane you swung up on, and cuts across the ball from out to in. This is the mechanical source of most slices.</li>
+            <li><b>Hanging back</b> &mdash; the weight never shifts to the lead side. You fall away from the ball and flip the hands at impact.</li>
+          </ul>
+        </div>
+
+        <div class="drill-box">
+          <div class="db-title">Drill · The step-down</div>
+          <p>
+            Stand with your feet together. Start a backswing. As you begin the downswing,
+            <b>step your lead foot toward the target</b> (a full step) and finish the
+            swing from there. The step forces the lower body to go first. It also makes
+            casting almost impossible &mdash; your body is already moving toward the
+            target when the arms come down. Do 20 of these every range session.
+          </p>
+        </div>
+
+        <div class="bridge">
+          If the sequence is right, the club arrives at the ball from a strong position.
+          Now we talk about impact &mdash; what a good strike actually looks like.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 6 ========== -->
+    <details class="chapter" id="ch6">
+      <summary>
+        <div class="num">6</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Six</div>
+          <h3>The strike</h3>
+          <div class="ch-teaser">What a good impact actually looks like (hint: it's not what you think).</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          Ask 100 amateurs what a good impact looks like, and most will describe some
+          version of a symmetrical position: club square, hands level, weight even,
+          everything neat and tidy. <strong>That's not what happens.</strong> Good impact
+          is asymmetrical, forward-leaning, and dynamic. It doesn't look like address.
+          It looks like address, wound up and pulled forward.
+        </p>
+        <p>
+          Understanding this one frame of the swing changes how you practise. You stop
+          trying to &quot;hit the ball square&quot; and start trying to arrive in a
+          position where square just happens as a consequence of the earlier
+          moves.
+        </p>
+
+        <div class="key-idea">
+          <b>The key idea.</b> Good impact has the hands ahead of the ball, the shaft
+          leaning toward the target, the hips open, and the weight shifted forward.
+          It is <em>not</em> the address position repeated.
+        </div>
+
+        <h4>What it should look like</h4>
+        <p>
+          <strong>Hands lead the clubhead.</strong> Your hands are slightly ahead of
+          the ball at contact, with the shaft leaning toward the target. This is what
+          compresses the ball and produces that clean, crisp strike you feel in your
+          hands.
+        </p>
+        <p>
+          <strong>Hips are open.</strong> They've rotated through first; at impact
+          they're turned 30&ndash;40° open to the target. The shoulders are a little
+          less open than the hips. This difference is a signature of a properly
+          sequenced swing.
+        </p>
+        <p>
+          <strong>Weight is on the lead side.</strong> Roughly 75&ndash;80% of your
+          weight is on your lead foot at impact. You've <em>moved through the shot</em>,
+          not swung while planted.
+        </p>
+        <p>
+          <strong>Lead wrist is flat or slightly bowed.</strong> Not cupped. A cupped
+          lead wrist is the signature of scooping &mdash; trying to help the ball into
+          the air. Don't help. The club's loft does the lifting.
+        </p>
+
+        <div class="feel-pull">
+          Compress the ball forward, like you're squashing it into the ground on its way
+          to the target. Forward and down &mdash; never up and back.
+        </div>
+
+        <div class="mistake-box">
+          <div class="mb-title">What beginners get wrong</div>
+          <ul>
+            <li><b>Scooping</b> &mdash; the hands flip at the ball, trying to help it into the air. The result is thin shots, fat shots, and weak contact. The club is designed to launch the ball; you don't need to add anything.</li>
+            <li><b>Hanging back</b> &mdash; weight still on the trail side at impact. The low point of the swing is behind the ball; you catch it fat or thin.</li>
+            <li><b>Chicken-winging</b> &mdash; the lead arm folds at the elbow through impact, cutting off the rotation. Weak, inconsistent contact.</li>
+          </ul>
+        </div>
+
+        <div class="drill-box">
+          <div class="db-title">Drill · Impact bag (or a towel)</div>
+          <p>
+            Fill a gym bag or a pillow case with old clothes. Set it down where the ball
+            would be. Take slow half-swings and <b>whack the bag at your impact
+            position</b>. Freeze there. Check: are your hands ahead of the bag? Hips
+            open? Weight on the lead foot? The bag gives you <em>physical feedback</em>
+            about where you really are at impact, which no amount of thinking provides.
+          </p>
+        </div>
+
+        <div class="bridge">
+          Impact isn't the end of the swing &mdash; it's the middle of a motion that
+          continues through the ball. That's where we go next.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 7 ========== -->
+    <details class="chapter" id="ch7">
+      <summary>
+        <div class="num">7</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Seven</div>
+          <h3>Through the ball</h3>
+          <div class="ch-teaser">The six feet after impact: extension, release, and the leg action most golfers miss.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          Most instruction stops at impact. That's a mistake. What happens in the
+          <strong>six feet after impact</strong> is where the swing's quality gets
+          locked in &mdash; your extension, your release, and a specific piece of leg
+          work that most amateur golfers don't even know is happening.
+        </p>
+        <p>
+          Think of it this way: if you stop accelerating through the ball, your body
+          feels it coming and slows the club down <em>before</em> impact to compensate.
+          Teachers call this &quot;quitting.&quot; The fix isn't to hit the ball harder
+          &mdash; it's to commit to the motion <em>after</em> the ball.
+        </p>
+
+        <div class="key-idea">
+          <b>The key idea.</b> Good impact is a by-product of great extension through
+          the ball. Stop teaching yourself to hit <em>at</em> the ball. Start teaching
+          yourself to swing <em>through</em> it.
+        </div>
+
+        <h4>What it should look like</h4>
+        <p>
+          <strong>Just past the ball</strong>, your hands are still moving toward the
+          target, and the shaft is <em>still</em> leaning forward. The wrists haven't
+          flipped yet. The club hasn't passed the hands.
+        </p>
+        <p>
+          <strong>A moment later</strong>, the arms reach full extension &mdash; both
+          arms long, the club releasing naturally out in front of you. Not rolled over,
+          not held off. Released.
+        </p>
+        <p>
+          <strong>And here's the piece most amateurs miss:</strong> the legs are doing
+          something very specific. The <strong>trail leg drives through</strong>, the
+          trail knee moving toward the lead knee. At the same time, the <strong>lead
+          leg straightens and posts up</strong> &mdash; almost like a brace. Top-end
+          power in golf comes from that ground reaction, and it happens in the first
+          half-second after impact.
+        </p>
+
+        <div class="feel-pull">
+          Throw the clubhead at the target. Extend out and through. Your trail foot
+          comes up onto its toe; your lead leg straightens and holds.
+        </div>
+
+        <div class="mistake-box">
+          <div class="mb-title">What beginners get wrong</div>
+          <ul>
+            <li><b>Quitting at the ball</b> &mdash; the arms collapse, the club decelerates, the follow-through is short and tentative. Predictable thin and fat shots.</li>
+            <li><b>Chicken-winging</b> (again) &mdash; the lead elbow breaks down past impact, cutting off the extension.</li>
+            <li><b>Passive legs</b> &mdash; no leg drive, no ground force. Everything is arms. The distance just isn't there, and the swing wears you out.</li>
+            <li><b>Rolling the wrists too early</b> &mdash; the club face turns over past impact before it should, sending shots left (for a right-hander).</li>
+          </ul>
+        </div>
+
+        <div class="drill-box">
+          <div class="db-title">Drill · Swing and hold the extension</div>
+          <p>
+            Hit slow three-quarter shots. <b>Freeze at the point where both arms are
+            fully extended past the ball</b>, with the club pointing out toward the
+            target. Hold for three seconds. This trains your body to keep accelerating
+            through, not <em>at</em>, the ball &mdash; and it makes the leg action
+            show up on its own, because you can't freeze there without the legs
+            engaging.
+          </p>
+        </div>
+
+        <div class="bridge">
+          If extension and leg drive happen right, you end up in a balanced, athletic
+          finish &mdash; which tells the whole story of the swing that preceded it.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 8 ========== -->
+    <details class="chapter" id="ch8">
+      <summary>
+        <div class="num">8</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Eight</div>
+          <h3>A balanced finish</h3>
+          <div class="ch-teaser">If you can't pose at the end, something went wrong in the middle.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          Your finish is the receipt of the swing that just happened. If you hold a
+          balanced, complete finish &mdash; weight on the lead side, chest facing the
+          target, club wrapped around your back &mdash; it tells me everything before
+          it went roughly correctly. If you stumble, fall backward, or can't hold the
+          pose for three seconds, something earlier went wrong and the body was trying
+          to save the shot mid-swing.
+        </p>
+        <p>
+          <strong>Treating the finish as the goal, not an afterthought, is one of the
+          fastest ways to clean up a whole swing.</strong> When you commit to ending in
+          a balanced pose, the sequencing and extension tend to organise themselves on
+          the way there.
+        </p>
+
+        <div class="key-idea">
+          <b>The key idea.</b> Your finish is a mirror held up to your swing. Bad finish,
+          bad swing. Beautiful finish, usually beautiful swing. Practise finishing well.
+        </div>
+
+        <h4>What it should look like</h4>
+        <p>
+          <strong>Weight almost entirely on the lead foot</strong> &mdash; 90% or more.
+          The trail foot is up on its toe, lightly brushing the ground.
+        </p>
+        <p>
+          <strong>Chest facing the target</strong>, or slightly past it. You've fully
+          rotated through the shot.
+        </p>
+        <p>
+          <strong>Club wrapped behind your back</strong>, behind your head. The hands
+          finish high, near or behind the trail shoulder.
+        </p>
+        <p>
+          <strong>You can hold the pose for a full three seconds without wobbling.</strong>
+          That's the test. If you can't, your balance was compromised somewhere during
+          the motion.
+        </p>
+
+        <div class="feel-pull">
+          Like a trophy pose. Chest proud, facing the target. Still and balanced enough
+          that someone could take a photo.
+        </div>
+
+        <div class="mistake-box">
+          <div class="mb-title">What beginners get wrong</div>
+          <ul>
+            <li><b>Falling back</b> &mdash; weight drifts to the trail foot at the finish, usually because it never shifted forward in the first place.</li>
+            <li><b>Short follow-through</b> &mdash; the hands stop at chest height, the rotation stalls. A sign you quit on the shot.</li>
+            <li><b>Wobbling or stepping</b> &mdash; can't hold the pose. Usually means you swung off-balance throughout. The finish is just revealing it.</li>
+            <li><b>Reverse-C</b> &mdash; upper body arched backward at the finish. Common in older back issues; also a sign of not rotating through properly.</li>
+          </ul>
+        </div>
+
+        <div class="drill-box">
+          <div class="db-title">Drill · Hold for three</div>
+          <p>
+            Every ball you hit on the range, hold your finish position for <b>three
+            full seconds before you look up.</b> Every ball. Your balance will improve
+            within a bucket; your tempo will improve within a week; your overall swing
+            will change within a month. Nobody else is doing this on the range. That's
+            why it works.
+          </p>
+        </div>
+
+        <div class="bridge">
+          That's all eight. Now the question: how do you actually practise this without
+          turning your brain into a pretzel?
+        </div>
+      </div>
+    </details>
+
+  </div>
+
+  <!-- ===================== PUTTING IT TOGETHER ===================== -->
+  <div class="next-steps">
+    <h2>Putting it all together</h2>
+    <p>
+      Eight positions is a lot to think about. You're not supposed to think about eight
+      things during an actual swing &mdash; that would be a disaster. So here's how to
+      <strong>use</strong> this framework instead of trying to memorise it:
+    </p>
+    <ol>
+      <li>
+        <strong>Pick ONE position to work on at a time.</strong> Choose the one where
+        your swing feels most off. Spend a full week on it &mdash; all your range
+        practice, a few minutes with a mirror at home. Just one.
+      </li>
+      <li>
+        <strong>Take it to the course without thinking about it.</strong> Swing freely.
+        Don't try to &quot;do&quot; the position mid-round. Your practice has already
+        put it into your motor memory.
+      </li>
+      <li>
+        <strong>When something feels off on the course,</strong> don't troubleshoot
+        mid-round. Note the feeling, come back to the range, and work through the eight
+        positions until you find the one that's off.
+      </li>
+      <li>
+        <strong>Use this book as a diagnostic, not a checklist.</strong> You're not
+        trying to check every box on every swing. You're building a map of what a
+        good swing looks like, so when yours breaks, you know where.
+      </li>
+    </ol>
+    <p>
+      The golfers who improve the fastest aren't the ones who think the most about
+      their swing. They're the ones who know <strong>where to look</strong> when the
+      swing breaks down, and can quiet their brain when it isn't broken. This
+      framework is a tool for the former. Lessons are a tool for the latter.
+    </p>
+  </div>
+
+  <!-- ===================== ATTRIBUTION ===================== -->
+  <div class="attribution">
+    <h3>About this book</h3>
+    <p>
+      <strong>This eight-chapter breakdown is my summary</strong> of a coaching
+      framework made famous by Jim McLean &mdash; one of the most respected
+      instructors of the last 30 years. His original work on the eight-position swing,
+      published in 1995, remains one of the clearest ways to organise what a golf
+      swing is actually doing.
+    </p>
+    <p>
+      The explanations, drills, cues, and voice here are mine &mdash; written for the
+      recreational player who wants the ideas without the biomechanics textbook.
+      <strong>If you want the full-depth version</strong>, with more diagrams, more
+      drills, and McLean's direct coaching voice, pick up <em>The 8-Step Swing</em>.
+      The original goes deeper than any web page should.
+    </p>
+    <p>
+      Questions on any chapter &mdash; or which position to work on first &mdash; are
+      exactly what lessons are for.
+      <a href="/adult/packages.html" style="color:var(--gold);">Book a session.</a>
+    </p>
+  </div>
+
+  <!-- ===================== GLOSSARY ===================== -->
+  <div class="glossary">
+    <h2>Glossary of swing terms</h2>
+    <dl>
+      <dt>Lead side / lead hand</dt>
+      <dd>The side of your body closer to the target at address. For a right-handed golfer, the left side. For a left-handed golfer, the right.</dd>
+
+      <dt>Trail side / trail hand</dt>
+      <dd>The side farther from the target. Right for a right-hander, left for a left-hander.</dd>
+
+      <dt>Takeaway</dt>
+      <dd>The first three feet the clubhead travels away from the ball at the start of the backswing.</dd>
+
+      <dt>Coil</dt>
+      <dd>The turning of your shoulders and torso relative to your hips, which stores elastic energy in your core &mdash; the power source of the swing.</dd>
+
+      <dt>Set (as in "setting the wrists")</dt>
+      <dd>The hinging of your wrists on the backswing, which loads angle between the clubshaft and your lead arm. The stored angle is what you release through impact.</dd>
+
+      <dt>Plane</dt>
+      <dd>The angle the club shaft traces through the air during the swing. &quot;On plane&quot; means the shaft stays on the same angular line through the whole motion.</dd>
+
+      <dt>Casting</dt>
+      <dd>Releasing the wrist angle too early in the downswing, so the club loses speed and the angle by the time it reaches the ball. The cardinal sin of amateur golf.</dd>
+
+      <dt>Over the top</dt>
+      <dd>The shoulders firing first in the downswing, which throws the club out away from your body and cuts back across the ball on a steep, out-to-in path. The mechanical source of most slices.</dd>
+
+      <dt>Square (as in clubface)</dt>
+      <dd>The clubface pointing directly at your intended target at impact. Not open (face pointing right of target for a right-hander), not closed (pointing left).</dd>
+
+      <dt>Compress the ball</dt>
+      <dd>Striking the ball with the shaft leaning forward and the hands ahead of the clubhead, producing a crisp, descending strike. Opposite of scooping.</dd>
+
+      <dt>Scooping</dt>
+      <dd>Flipping the wrists at the ball to try to help it up into the air. The club's loft already does that for you; scooping produces weak, thin contact.</dd>
+
+      <dt>Kinematic sequence</dt>
+      <dd>The order in which body parts accelerate and decelerate during the downswing: hips first, then torso, then arms, then club. Mismatched sequences produce most swing faults.</dd>
+
+      <dt>Ground reaction force</dt>
+      <dd>The push your lead leg exerts against the ground at impact and just after. It's what makes the top players' long drives look effortless &mdash; they're levering against the earth.</dd>
+
+      <dt>Reverse pivot</dt>
+      <dd>Keeping your weight on your lead foot during the backswing instead of shifting to your trail side. Kills power because nothing gets loaded.</dd>
+
+      <dt>Chicken wing</dt>
+      <dd>The lead arm bending at the elbow through impact and past, cutting off proper extension. Produces weak contact and inconsistent direction.</dd>
+
+      <dt>Hanging back</dt>
+      <dd>Keeping your weight on the trail side through impact instead of shifting forward. Produces fat and thin shots because the low point of the swing is behind the ball.</dd>
+    </dl>
+  </div>
+
+  <div style="margin:30px 0 20px; text-align:center;">
+    <a href="bookshelf.html" class="btn btn-ghost">&larr; Back to the Bookshelf</a>
+  </div>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  RRG.mountLibrary();
+</script>
+</body>
+</html>
