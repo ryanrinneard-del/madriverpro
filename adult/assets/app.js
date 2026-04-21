@@ -784,6 +784,306 @@ RRG.path = {
 };
 
 /* ============================================================
+   HANDICAP INDEX — portal-computed index tracker
+
+   Implements the Golf Canada / World Handicap System calculation
+   (simplified — no PCC or net double bogey adjustments). Players
+   can track their own index from rounds logged in the portal;
+   the value is labeled "Portal Index" so it's clearly not the
+   official Golf Canada handicap (which requires posting through
+   their system).
+
+   Formula:  differential = (113 / slope) × (score - rating)
+
+   Index = average of the N lowest differentials from the last 20
+   rounds, with scaling for players with fewer than 20 posted rounds.
+
+   Rounds need: score, course rating, slope, and a round_date.
+   - Scorecard entries supply rating/slope via round.hole_detail
+   - Totals-entry rounds require the player to enter rating/slope
+     manually (optional fields in submit-round.html)
+   ============================================================ */
+
+/* Lookup table for how many low differentials get used and what
+   adjustment to apply, based on rounds-posted count. From WHS. */
+const WHS_TABLE = [
+  // posted, use, adjustment
+  [3,  1, -2.0],
+  [4,  1, -1.0],
+  [5,  1,  0],
+  [6,  2, -1.0],
+  [7,  2,  0],
+  [8,  2,  0],
+  [9,  3,  0],
+  [10, 3,  0],
+  [11, 3,  0],
+  [12, 4,  0],
+  [13, 4,  0],
+  [14, 4,  0],
+  [15, 5,  0],
+  [16, 5,  0],
+  [17, 6,  0],
+  [18, 6,  0],
+  [19, 7,  0],
+  [20, 8,  0],
+];
+
+Object.assign(RRG.path, {
+  /* Extract rating + slope from a round. Scorecard-entered rounds keep the
+     values inside hole_detail; totals-entered rounds use explicit columns
+     if the player filled them in. Returns null if either is missing. */
+  ratingSlope(round) {
+    if (!round) return null;
+    const hd = round.hole_detail;
+    const rating = round.course_rating != null ? parseFloat(round.course_rating)
+                 : (hd && hd.rating != null)   ? parseFloat(hd.rating) : null;
+    const slope  = round.course_slope != null  ? parseFloat(round.course_slope)
+                 : (hd && hd.slope != null)    ? parseFloat(hd.slope) : null;
+    if (rating == null || isNaN(rating) || slope == null || isNaN(slope)) return null;
+    return { rating, slope };
+  },
+
+  /* Compute the score differential for a round per WHS. */
+  calcDifferential(score, rating, slope) {
+    if (!score || !rating || !slope) return null;
+    return Math.round(((113 / slope) * (score - rating)) * 10) / 10;
+  },
+
+  /* Compute the portal handicap index for a player. Takes the rounds array
+     (any order), filters to those with rating + slope, sorts by date,
+     applies the WHS best-N rule.
+     Returns:
+       {
+         index:        number | null,
+         eligible:     total rounds with rating + slope,
+         posted:       rounds used in the index calc (last 20, capped),
+         used:         how many differentials were averaged,
+         adjustment:   the WHS adjustment applied,
+         differentials: [{ round_date, score, rating, slope, diff, used }]
+       }
+     Returns { index: null, ... } if fewer than 3 eligible rounds. */
+  calcIndex(rounds) {
+    const enriched = (rounds || [])
+      .map(r => {
+        const rs = RRG.path.ratingSlope(r);
+        if (!rs || !r.score) return null;
+        const diff = RRG.path.calcDifferential(r.score, rs.rating, rs.slope);
+        if (diff == null) return null;
+        return {
+          id: r.id,
+          round_date: r.round_date || r.created_at,
+          score: r.score,
+          course: r.course,
+          rating: rs.rating,
+          slope: rs.slope,
+          diff,
+        };
+      })
+      .filter(Boolean)
+      .sort((a, b) => (b.round_date || '').localeCompare(a.round_date || ''));
+
+    const eligible = enriched.length;
+    if (eligible < 3) {
+      return { index: null, eligible, posted: 0, used: 0, adjustment: 0, differentials: enriched };
+    }
+
+    const posted = enriched.slice(0, 20);
+    const postedCount = posted.length;
+    const rule = WHS_TABLE.find(r => r[0] === postedCount) || WHS_TABLE[WHS_TABLE.length - 1];
+    const [, use, adjustment] = rule;
+
+    const sortedByDiff = [...posted].sort((a, b) => a.diff - b.diff);
+    const lowestUsed = sortedByDiff.slice(0, use);
+    const lowestIds = new Set(lowestUsed.map(r => r.id));
+    const avgDiff = lowestUsed.reduce((a, b) => a + b.diff, 0) / lowestUsed.length;
+    const index = Math.round((avgDiff + adjustment) * 10) / 10;
+
+    const differentials = posted.map(r => ({ ...r, used: lowestIds.has(r.id) }));
+
+    return {
+      index,
+      eligible,
+      posted: postedCount,
+      used: use,
+      adjustment,
+      differentials,
+    };
+  },
+
+  /* Returns an array of { round_date, index } points computed as if the
+     player had been tracking their index round-by-round. For each round
+     (chronological), we recompute calcIndex() on the rounds up to and
+     including that one. Cost is O(N²) but N ≤ 20 so it's fine. */
+  indexHistory(rounds) {
+    const chron = (rounds || [])
+      .filter(r => RRG.path.ratingSlope(r) && r.score)
+      .sort((a, b) => (a.round_date || '').localeCompare(b.round_date || ''));
+    const points = [];
+    for (let i = 0; i < chron.length; i++) {
+      const subset = chron.slice(0, i + 1);
+      const res = RRG.path.calcIndex(subset);
+      if (res.index != null) {
+        points.push({ round_date: chron[i].round_date, index: res.index });
+      }
+    }
+    return points;
+  },
+
+  /* Time-series of any stat, one point per round. Uses the same per-round
+     extraction as rollingStats but without rolling — returns actual values. */
+  statHistory(rounds, statKey) {
+    const chron = (rounds || [])
+      .filter(r => r.score)
+      .sort((a, b) => (a.round_date || '').localeCompare(b.round_date || ''));
+    const out = [];
+    for (const r of chron) {
+      let v = null;
+      if (statKey === 'avg_score') v = r.score;
+      else if (statKey === 'putts_rd' && r.putts != null) v = r.putts;
+      else if (statKey === 'penalties_rd' && r.penalties != null) v = r.penalties;
+      else if (statKey === 'birdies_rd' && r.birdies != null) v = r.birdies;
+      else if (statKey === 'doubles_rd' && r.doubles_plus != null) v = r.doubles_plus;
+      else if (statKey === 'fairways_pct') {
+        const f = RRG.path.parseRatio(r.fir);
+        if (f && f.attempted) v = (f.made / f.attempted) * 100;
+      } else if (statKey === 'gir_pct') {
+        const g = RRG.path.parseRatio(r.gir);
+        if (g && g.attempted) v = (g.made / g.attempted) * 100;
+      } else if (statKey === 'scrambling') {
+        const u = RRG.path.parseRatio(r.up_down);
+        if (u && u.attempted) v = (u.made / u.attempted) * 100;
+      } else if (statKey === 'sand_save') {
+        const s = RRG.path.parseRatio(r.sand_saves);
+        if (s && s.attempted) v = (s.made / s.attempted) * 100;
+      } else if (statKey === 'drive_dist' && r.drive_dist != null) v = r.drive_dist;
+      if (v != null) out.push({ round_date: r.round_date, value: v });
+    }
+    return out;
+  },
+});
+
+/* =============================================================
+   CHARTS — minimal dependency-free SVG line / sparkline renderer.
+   Used by the Handicap page + My Rounds trend cards. Inputs: an
+   array of { date, value } points, plus options. Output: an SVG
+   string that scales to the container. No D3, no Chart.js.
+   ============================================================= */
+RRG.charts = {
+  /* Render a compact sparkline chart.
+     points:   [{ round_date, value } OR { round_date, index }]
+     opts:     { valueKey, height, lowerBetter, benchmark, unit, title } */
+  sparkline(points, opts = {}) {
+    const {
+      valueKey = 'value',
+      height = 80,
+      lowerBetter = false,
+      benchmark = null,
+      unit = '',
+      title = '',
+    } = opts;
+
+    if (!points || points.length < 2) {
+      return `<div class="spark-empty">Not enough data to chart yet. Log more rounds.</div>`;
+    }
+
+    const W = 600; // internal viewBox width; scales via CSS
+    const H = height;
+    const padL = 6, padR = 6, padT = 10, padB = 16;
+    const plotW = W - padL - padR;
+    const plotH = H - padT - padB;
+
+    const values = points.map(p => p[valueKey]);
+    let lo = Math.min(...values, benchmark != null ? benchmark : Infinity);
+    let hi = Math.max(...values, benchmark != null ? benchmark : -Infinity);
+    // Give a small margin so the line doesn't touch edges
+    const span = Math.max(hi - lo, 1);
+    lo -= span * 0.1; hi += span * 0.1;
+
+    const x = i => padL + (i / (points.length - 1)) * plotW;
+    const y = v => padT + (1 - (v - lo) / (hi - lo)) * plotH;
+
+    // Line path
+    const path = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${x(i).toFixed(1)} ${y(p[valueKey]).toFixed(1)}`).join(' ');
+
+    // Gradient fill area
+    const areaPath = path + ` L ${x(points.length - 1).toFixed(1)} ${padT + plotH} L ${x(0).toFixed(1)} ${padT + plotH} Z`;
+
+    // Benchmark line
+    const benchLine = benchmark != null ? `
+      <line x1="${padL}" x2="${W - padR}" y1="${y(benchmark).toFixed(1)}" y2="${y(benchmark).toFixed(1)}"
+            stroke="#C9A84C" stroke-width="1" stroke-dasharray="3 3" opacity="0.6"/>
+      <text x="${W - padR - 2}" y="${(y(benchmark) - 3).toFixed(1)}" text-anchor="end" fill="#C9A84C" font-size="9" font-weight="600">
+        GOAL ${Math.round(benchmark * 10) / 10}${unit}
+      </text>
+    ` : '';
+
+    // Trend direction color: compare first and last, and improvement direction
+    const first = values[0], last = values[values.length - 1];
+    const improved = lowerBetter ? (last < first) : (last > first);
+    const lineColor = improved ? '#6B8B4E' : (last === first ? '#C9A84C' : '#C76757');
+
+    // Dots on first + last points
+    const dots = [
+      { i: 0, v: first, label: Math.round(first * 10) / 10 },
+      { i: points.length - 1, v: last, label: Math.round(last * 10) / 10 },
+    ].map(d => `
+      <circle cx="${x(d.i).toFixed(1)}" cy="${y(d.v).toFixed(1)}" r="3.5" fill="${lineColor}" stroke="#fff" stroke-width="2"/>
+    `).join('');
+
+    const lastLabel = `
+      <text x="${x(points.length - 1).toFixed(1)}" y="${(y(last) - 7).toFixed(1)}"
+            text-anchor="end" fill="#0D1F3C" font-size="11" font-weight="700">
+        ${Math.round(last * 10) / 10}${unit}
+      </text>`;
+
+    const titleEl = title ? `<div class="spark-title">${RRG.esc(title)}</div>` : '';
+
+    return `
+      ${titleEl}
+      <svg class="spark-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="${RRG.esc(title)}">
+        <defs>
+          <linearGradient id="gradFill" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%"  stop-color="${lineColor}" stop-opacity="0.25"/>
+            <stop offset="100%" stop-color="${lineColor}" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <path d="${areaPath}" fill="url(#gradFill)"/>
+        <path d="${path}" fill="none" stroke="${lineColor}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+        ${benchLine}
+        ${dots}
+        ${lastLabel}
+      </svg>`;
+  },
+
+  /* Trend card: sparkline + label + current value + delta vs. earliest. */
+  trendCard(points, opts = {}) {
+    const { title, unit = '', lowerBetter = false, benchmark = null, valueKey = 'value' } = opts;
+    if (!points || points.length < 2) {
+      return `
+        <div class="trend-card trend-empty">
+          <div class="trend-label">${RRG.esc(title)}</div>
+          <div class="trend-subempty">Not enough data yet.</div>
+        </div>`;
+    }
+    const values = points.map(p => p[valueKey]);
+    const first = values[0], last = values[values.length - 1];
+    const delta = last - first;
+    const improved = lowerBetter ? (delta < 0) : (delta > 0);
+    const deltaColor = Math.abs(delta) < 0.01 ? 'trend-flat' : (improved ? 'trend-up' : 'trend-down');
+    const arrow = Math.abs(delta) < 0.01 ? '→' : (lowerBetter ? (delta < 0 ? '↓' : '↑') : (delta > 0 ? '↑' : '↓'));
+    const deltaLabel = `${Math.abs(delta).toFixed(1)}${unit}`;
+    return `
+      <div class="trend-card">
+        <div class="trend-head">
+          <div class="trend-label">${RRG.esc(title)}</div>
+          <div class="trend-delta ${deltaColor}">${arrow} ${deltaLabel}</div>
+        </div>
+        ${RRG.charts.sparkline(points, { valueKey, unit, lowerBetter, benchmark, height: 70, title: '' })}
+      </div>`;
+  },
+};
+
+/* ============================================================
    NAV / FOOTER
    ============================================================ */
 RRG.renderNav = function(user, active = '') {
@@ -818,6 +1118,7 @@ RRG.renderNav = function(user, active = '') {
           <li><a href="my-plan.html"   class="${active==='plan'?'active':''}">My Plan</a></li>
           <li><a href="history.html"   class="${active==='history'?'active':''}">My Rounds</a></li>
           <li><a href="scorecard.html" class="${active==='scorecard'?'active':''}">Mad River Scorecard</a></li>
+          <li><a href="handicap.html"  class="${active==='handicap'?'active':''}">Handicap Index</a></li>
           <li><a href="lessons.html"   class="${active==='lessons'?'active':''}">My Lessons</a></li>
           <li><a href="tiger5.html"    class="${active==='tiger5'?'active':''}">5 Errors to Avoid</a></li>
           <li><a href="profile.html"   class="${active==='profile'?'active':''}">Profile</a></li>

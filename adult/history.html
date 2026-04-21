@@ -60,6 +60,9 @@
   <!-- Stat summary -->
   <div class="stat-strip mb-5" id="summary"></div>
 
+  <!-- Trend cards — sparklines for key stats -->
+  <div id="trend-mount"></div>
+
   <!-- Path-to-Goal gap analysis widget (full variant) -->
   <div id="path-mount"></div>
 
@@ -116,6 +119,51 @@
         pathMount.innerHTML = RRG.path.renderWidget({ user, rounds: subs, variant: 'full' });
       }
     } catch (err) { console.warn('path widget failed', err); }
+
+    // Trend cards — sparkline chart for each of the key stats, with
+    // the player's goal-hcp benchmark drawn as a dashed gold line.
+    try {
+      const tmount = document.getElementById('trend-mount');
+      if (tmount && subs.length >= 2) {
+        const pj = user.profile_json || {};
+        const goalHcp = pj.goal_handicap != null && pj.goal_handicap !== '' ? parseFloat(pj.goal_handicap)
+                      : pj.s1_goal_handicap != null && pj.s1_goal_handicap !== '' ? parseFloat(pj.s1_goal_handicap) : 0;
+        const bench = k => RRG.path.interpolate(goalHcp, k);
+
+        // Portal index history
+        const indexPoints = RRG.path.indexHistory(subs);
+        const cards = [];
+
+        if (indexPoints.length >= 2) {
+          cards.push(RRG.charts.trendCard(indexPoints, {
+            title: 'Portal Index', valueKey: 'index', lowerBetter: true,
+          }));
+        }
+        cards.push(RRG.charts.trendCard(RRG.path.statHistory(subs, 'avg_score'), {
+          title: 'Score', lowerBetter: true, benchmark: bench('avg_score'),
+        }));
+        cards.push(RRG.charts.trendCard(RRG.path.statHistory(subs, 'gir_pct'), {
+          title: 'GIR %', lowerBetter: false, unit: '%', benchmark: bench('gir_pct'),
+        }));
+        cards.push(RRG.charts.trendCard(RRG.path.statHistory(subs, 'fairways_pct'), {
+          title: 'Fairways %', lowerBetter: false, unit: '%', benchmark: bench('fairways_pct'),
+        }));
+        cards.push(RRG.charts.trendCard(RRG.path.statHistory(subs, 'putts_rd'), {
+          title: 'Putts / Rd', lowerBetter: true, benchmark: bench('putts_rd'),
+        }));
+        cards.push(RRG.charts.trendCard(RRG.path.statHistory(subs, 'scrambling'), {
+          title: 'Scrambling', lowerBetter: false, unit: '%', benchmark: bench('scrambling'),
+        }));
+
+        tmount.innerHTML = `
+          <div class="path-card" style="padding: 20px 22px 12px; margin-bottom: 22px;">
+            <div class="path-kicker">Trends</div>
+            <h3 class="path-title" style="font-size: 18px; margin-bottom: 10px;">How your game's trending</h3>
+            <p class="path-sub">Each sparkline plots one stat across every round you've logged. Dashed gold line is your goal-handicap benchmark.</p>
+            <div class="trend-grid" style="margin-top: 14px;">${cards.join('')}</div>
+          </div>`;
+      }
+    } catch (err) { console.warn('trend cards failed', err); }
 
     // ----- Table -----
     const wrap = document.getElementById('rounds-wrap');

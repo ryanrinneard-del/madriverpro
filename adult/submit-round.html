@@ -244,6 +244,20 @@
         </div>
       </div>
 
+      <div class="sr-grid cols-2" style="margin-bottom:4px;">
+        <div class="sr-field">
+          <label>Course rating <span class="opt" style="color:var(--mid-grey);">for handicap</span></label>
+          <input type="number" name="course_rating" step="0.1" min="50" max="80" placeholder="e.g. 70.7">
+        </div>
+        <div class="sr-field">
+          <label>Slope <span class="opt" style="color:var(--mid-grey);">for handicap</span></label>
+          <input type="number" name="course_slope" step="1" min="55" max="155" placeholder="e.g. 128">
+        </div>
+      </div>
+      <div class="hint" style="font-size:12px; color:var(--mid-grey); margin-bottom:14px;">
+        Rating + slope are printed on the scorecard. Filling them in makes this round count toward your portal handicap index.
+      </div>
+
       <div class="sr-grid cols-3" style="margin-bottom:14px;">
         <div class="sr-field">
           <label>3-putts</label>
@@ -407,6 +421,8 @@
         course: toText(fd.course),
         tees: toText(fd.tees),
         format: toText(fd.format),
+        course_rating: fd.course_rating ? parseFloat(fd.course_rating) : null,
+        course_slope:  fd.course_slope  ? parseInt(fd.course_slope, 10) : null,
         holes: toInt(fd.holes),
         score: toInt(fd.score),
         fir: toText(fd.fir),
