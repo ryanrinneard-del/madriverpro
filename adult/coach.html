@@ -394,9 +394,8 @@
       <button type="button" class="btn btn-primary btn-sm" id="lu-save-regen-btn"
               onclick="saveLessonUpdateWithRegen()"
               style="background: var(--gold); color: var(--navy);"
-              disabled
-              title="AI regeneration — coming in next update">
-        Save + AI regen (soon)
+              title="AI regenerates remaining weeks based on today's root cause">
+        Save + AI regen
       </button>
     </div>
   </form>
@@ -1068,9 +1067,48 @@
       }
     });
 
-    // Placeholder — wired in Phase 3 to /api/game-plan/adjust
-    window.saveLessonUpdateWithRegen = () => {
-      RRG.toast('AI regeneration ships in the next update. For now, use Save update + edit weeks manually.');
+    /* Save the lesson update, then call /api/adjust-game-plan to have
+       Claude regenerate the remaining weeks based on today's root cause.
+       Takes ~20–40s; we show a progress toast throughout. */
+    window.saveLessonUpdateWithRegen = async () => {
+      // Validate form first (reuses native HTML5 validity)
+      if (!luForm.reportValidity()) return;
+
+      const fd = Object.fromEntries(new FormData(luForm).entries());
+      const saveBtn = document.getElementById('lu-save-btn');
+      const regenBtn = document.getElementById('lu-save-regen-btn');
+      saveBtn.disabled = true; regenBtn.disabled = true;
+      regenBtn.textContent = 'Saving note…';
+
+      try {
+        // 1) Save the lesson update (gets an id back)
+        const stored = await RRG.lessonUpdates.add(fd.user_id, {
+          date: fd.date,
+          root_cause: fd.root_cause,
+          week_at_update: fd.week_at_update ? parseInt(fd.week_at_update, 10) : null,
+          what_we_worked_on: fd.what_we_worked_on,
+          focus_this_week: fd.focus_this_week,
+          created_by: (await RRG.auth.currentUser())?.id || null,
+        });
+
+        // 2) Fire the AI adjustment endpoint
+        regenBtn.textContent = 'AI is regenerating… (30–45s)';
+        const resp = await fetch('/api/adjust-game-plan', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_id: fd.user_id, update_id: stored.id }),
+        });
+        const data = await resp.json();
+        if (!resp.ok) throw new Error(data.error || 'AI regeneration failed');
+
+        RRG.toast(`Plan updated — weeks ${(data.regenerated_weeks || []).join(', ')} rebuilt.`, 5000);
+        closeLessonUpdateModal();
+      } catch (err) {
+        RRG.toast('Save + regen failed: ' + (err.message || ''), 5000);
+      } finally {
+        saveBtn.disabled = false; regenBtn.disabled = false;
+        regenBtn.textContent = 'Save + AI regen';
+      }
     };
 
     // ------------------------------------------------------------------
