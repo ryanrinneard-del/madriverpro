@@ -317,3 +317,123 @@ RRG.COURSES.madriver = {
     { key: 'red_yellow',  label: 'Red/Yellow',  mens_rating: 63.2, mens_slope: 116, womens_rating: 67.6, womens_slope: 119 },
   ],
 };
+
+/* =============================================================================
+   TRACKMAN BENCHMARKS & METADATA
+   Reference data for the TrackMan session logger. Values are approximate —
+   published PGA/LPGA Tour averages shift year to year and specific sources vary.
+   These are directional benchmarks, not absolute targets. The Scratch and Bogey
+   tiers are coaching-world approximations anchored on PGA Tour offsets.
+
+   For every club/tier combo: clubhead speed (mph), ball speed (mph), smash
+   factor, launch angle (degrees), spin rate (rpm), carry distance (yds).
+   Higher-is-better: CHS / ball / smash / carry. Launch + spin are contextual
+   (too high OR too low = bad) — the UI uses a ±range comparison there.
+============================================================================= */
+
+/* Club list — the keys used as lookup in RRG.TRACKMAN_BENCHMARKS[tier] */
+RRG.TRACKMAN_CLUBS = [
+  { key: 'driver',  label: 'Driver' },
+  { key: '3w',      label: '3-wood' },
+  { key: '5w',      label: '5-wood' },
+  { key: 'hybrid',  label: 'Hybrid' },
+  { key: '3i',      label: '3-iron' },
+  { key: '4i',      label: '4-iron' },
+  { key: '5i',      label: '5-iron' },
+  { key: '6i',      label: '6-iron' },
+  { key: '7i',      label: '7-iron' },
+  { key: '8i',      label: '8-iron' },
+  { key: '9i',      label: '9-iron' },
+  { key: 'pw',      label: 'PW' },
+  { key: 'gw',      label: 'GW (52°)' },
+  { key: 'sw',      label: 'SW (56°)' },
+  { key: 'lw',      label: 'LW (60°)' },
+];
+
+/* Metric metadata for comparison UI. direction:
+     'higher'  → higher is better (CHS, ball, smash, carry)
+     'range'   → context-dependent (launch, spin) — near the benchmark is best */
+RRG.TRACKMAN_METRICS = [
+  { key: 'clubhead_speed', label: 'Clubhead Speed', unit: ' mph', direction: 'higher' },
+  { key: 'ball_speed',     label: 'Ball Speed',     unit: ' mph', direction: 'higher' },
+  { key: 'smash',          label: 'Smash Factor',   unit: '',     direction: 'higher', precision: 2 },
+  { key: 'launch_angle',   label: 'Launch Angle',   unit: '°',    direction: 'range' },
+  { key: 'spin',           label: 'Spin Rate',      unit: ' rpm', direction: 'range' },
+  { key: 'carry',          label: 'Carry',          unit: ' yd',  direction: 'higher' },
+];
+
+/* Benchmark tiers — pick one per session for the comparison. The UI surfaces
+   a "choose your tier" dropdown so each player can pick the reference that
+   makes sense for them. */
+RRG.TRACKMAN_TIERS = [
+  { key: 'pga',      label: 'PGA Tour (Men)' },
+  { key: 'lpga',     label: 'LPGA Tour (Women)' },
+  { key: 'scratch_m',label: 'Scratch / Elite Amateur (Men)' },
+  { key: 'scratch_w',label: 'Scratch / Elite Amateur (Women)' },
+  { key: 'bogey_m',  label: 'Mid-Handicap (Men, ~15)' },
+  { key: 'bogey_w',  label: 'Mid-Handicap (Women, ~15)' },
+];
+
+RRG.TRACKMAN_BENCHMARKS = {
+  // PGA Tour averages (approx, 2020-2023 composite)
+  pga: {
+    driver: { clubhead_speed: 113, ball_speed: 167, smash: 1.48, launch_angle: 10.9, spin: 2686, carry: 275 },
+    '3w':   { clubhead_speed: 107, ball_speed: 158, smash: 1.48, launch_angle: 9.2,  spin: 3655, carry: 243 },
+    '5w':   { clubhead_speed: 103, ball_speed: 152, smash: 1.47, launch_angle: 9.4,  spin: 4350, carry: 230 },
+    hybrid: { clubhead_speed: 100, ball_speed: 146, smash: 1.46, launch_angle: 10.2, spin: 4437, carry: 225 },
+    '3i':   { clubhead_speed: 98,  ball_speed: 142, smash: 1.45, launch_angle: 10.4, spin: 4630, carry: 212 },
+    '4i':   { clubhead_speed: 96,  ball_speed: 137, smash: 1.43, launch_angle: 11.0, spin: 4836, carry: 203 },
+    '5i':   { clubhead_speed: 94,  ball_speed: 132, smash: 1.41, launch_angle: 12.1, spin: 5361, carry: 194 },
+    '6i':   { clubhead_speed: 92,  ball_speed: 127, smash: 1.38, launch_angle: 14.1, spin: 6231, carry: 183 },
+    '7i':   { clubhead_speed: 90,  ball_speed: 120, smash: 1.33, launch_angle: 16.3, spin: 7097, carry: 172 },
+    '8i':   { clubhead_speed: 87,  ball_speed: 115, smash: 1.32, launch_angle: 18.1, spin: 7998, carry: 160 },
+    '9i':   { clubhead_speed: 85,  ball_speed: 109, smash: 1.28, launch_angle: 20.4, spin: 8647, carry: 148 },
+    pw:     { clubhead_speed: 83,  ball_speed: 102, smash: 1.23, launch_angle: 24.2, spin: 9304, carry: 136 },
+    gw:     { clubhead_speed: 80,  ball_speed: 95,  smash: 1.19, launch_angle: 25.6, spin: 9500, carry: 120 },
+    sw:     { clubhead_speed: 78,  ball_speed: 90,  smash: 1.15, launch_angle: 28,   spin: 10000, carry: 100 },
+    lw:     { clubhead_speed: 75,  ball_speed: 85,  smash: 1.12, launch_angle: 30,   spin: 10500, carry: 80 },
+  },
+  // LPGA Tour averages (approx)
+  lpga: {
+    driver: { clubhead_speed: 94, ball_speed: 139, smash: 1.48, launch_angle: 13.2, spin: 2611, carry: 220 },
+    '3w':   { clubhead_speed: 90, ball_speed: 132, smash: 1.47, launch_angle: 11.2, spin: 3300, carry: 195 },
+    '5w':   { clubhead_speed: 87, ball_speed: 126, smash: 1.45, launch_angle: 11.8, spin: 3900, carry: 185 },
+    hybrid: { clubhead_speed: 84, ball_speed: 120, smash: 1.43, launch_angle: 12.6, spin: 4200, carry: 178 },
+    '5i':   { clubhead_speed: 79, ball_speed: 108, smash: 1.37, launch_angle: 14.5, spin: 5100, carry: 158 },
+    '7i':   { clubhead_speed: 76, ball_speed: 102, smash: 1.34, launch_angle: 17.5, spin: 6600, carry: 140 },
+    pw:     { clubhead_speed: 70, ball_speed: 88,  smash: 1.26, launch_angle: 25,   spin: 8600, carry: 107 },
+  },
+  // Scratch / elite amateur men (~3% below PGA)
+  scratch_m: {
+    driver: { clubhead_speed: 107, ball_speed: 158, smash: 1.47, launch_angle: 11.5, spin: 2800, carry: 255 },
+    '3w':   { clubhead_speed: 101, ball_speed: 148, smash: 1.46, launch_angle: 10.2, spin: 3800, carry: 225 },
+    hybrid: { clubhead_speed: 95,  ball_speed: 138, smash: 1.45, launch_angle: 11.0, spin: 4500, carry: 210 },
+    '5i':   { clubhead_speed: 88,  ball_speed: 122, smash: 1.38, launch_angle: 13.5, spin: 5500, carry: 178 },
+    '7i':   { clubhead_speed: 84,  ball_speed: 110, smash: 1.30, launch_angle: 17.0, spin: 7200, carry: 156 },
+    pw:     { clubhead_speed: 78,  ball_speed: 95,  smash: 1.21, launch_angle: 25,   spin: 9200, carry: 122 },
+  },
+  // Scratch / elite amateur women
+  scratch_w: {
+    driver: { clubhead_speed: 88, ball_speed: 129, smash: 1.46, launch_angle: 13.8, spin: 2750, carry: 200 },
+    '3w':   { clubhead_speed: 84, ball_speed: 122, smash: 1.45, launch_angle: 12.0, spin: 3500, carry: 180 },
+    hybrid: { clubhead_speed: 80, ball_speed: 114, smash: 1.42, launch_angle: 13.2, spin: 4400, carry: 165 },
+    '7i':   { clubhead_speed: 72, ball_speed: 96,  smash: 1.33, launch_angle: 18.0, spin: 6800, carry: 130 },
+    pw:     { clubhead_speed: 65, ball_speed: 82,  smash: 1.25, launch_angle: 26,   spin: 8800, carry: 95 },
+  },
+  // Mid-handicap men (~15 hdcp)
+  bogey_m: {
+    driver: { clubhead_speed: 93,  ball_speed: 135, smash: 1.45, launch_angle: 12.5, spin: 3000, carry: 215 },
+    '3w':   { clubhead_speed: 89,  ball_speed: 128, smash: 1.44, launch_angle: 11.0, spin: 3900, carry: 195 },
+    hybrid: { clubhead_speed: 85,  ball_speed: 120, smash: 1.41, launch_angle: 12.0, spin: 4600, carry: 180 },
+    '7i':   { clubhead_speed: 78,  ball_speed: 100, smash: 1.28, launch_angle: 18.0, spin: 7500, carry: 138 },
+    pw:     { clubhead_speed: 72,  ball_speed: 86,  smash: 1.19, launch_angle: 25,   spin: 9500, carry: 105 },
+  },
+  // Mid-handicap women (~15 hdcp)
+  bogey_w: {
+    driver: { clubhead_speed: 75, ball_speed: 108, smash: 1.44, launch_angle: 14.5, spin: 3200, carry: 165 },
+    '3w':   { clubhead_speed: 72, ball_speed: 102, smash: 1.42, launch_angle: 13.0, spin: 4000, carry: 148 },
+    hybrid: { clubhead_speed: 68, ball_speed: 95,  smash: 1.40, launch_angle: 14.0, spin: 4800, carry: 135 },
+    '7i':   { clubhead_speed: 63, ball_speed: 82,  smash: 1.30, launch_angle: 19.0, spin: 7000, carry: 110 },
+    pw:     { clubhead_speed: 58, ball_speed: 70,  smash: 1.21, launch_angle: 26,   spin: 9000, carry: 82 },
+  },
+};

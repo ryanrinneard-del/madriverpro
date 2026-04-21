@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<base href="/adult/">
+<title>TrackMan Sessions — RR Golf Performance</title>
+<meta name="description" content="Log TrackMan sessions, compare your clubhead speed / ball speed / smash / launch / spin / carry against PGA, LPGA, Scratch, and Mid-Handicap benchmarks.">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  /* ============================================================
+     TRACKMAN PAGE — session list + add-session form + benchmark
+     comparison view. Sessions live on profile_json.trackman_sessions.
+     ============================================================ */
+
+  .tm-hero {
+    background: var(--navy); color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 22px;
+    position: relative;
+  }
+  .tm-hero::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--gold); border-radius: 14px 14px 0 0;
+  }
+  .tm-hero .kicker {
+    font-size: 11px; letter-spacing: 0.22em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .tm-hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    color: #fff; font-size: 28px; margin: 0; font-weight: 600;
+  }
+  .tm-hero p { color: #D8DEE8; margin: 6px 0 0; font-size: 14px; line-height: 1.55; max-width: 620px; }
+
+  .tm-actions {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 16px; flex-wrap: wrap; gap: 10px;
+  }
+
+  /* Session card */
+  .tm-session {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--gold);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+  .tm-session-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    flex-wrap: wrap; gap: 10px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 14px;
+  }
+  .tm-session-head h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 20px; color: var(--navy); margin: 0; font-weight: 600;
+  }
+  .tm-session-head .tm-meta {
+    font-size: 12px; color: var(--mid-grey);
+  }
+  .tm-session-head .tm-meta b { color: var(--navy); font-weight: 600; }
+  .tm-session .tm-notes {
+    font-size: 13px; color: var(--navy-mid); line-height: 1.5;
+    font-style: italic;
+    margin-bottom: 14px;
+  }
+
+  /* Per-club block inside a session */
+  .tm-club-block {
+    padding: 12px 14px;
+    background: #F7F2E8;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+  .tm-club-block h4 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 15px; color: var(--navy); margin: 0 0 10px; font-weight: 700;
+  }
+
+  /* 6-up metric grid for a single club */
+  .tm-metric-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  @media (max-width: 540px) {
+    .tm-metric-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .tm-metric {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--gold);
+    border-radius: 6px;
+    padding: 8px 10px;
+  }
+  .tm-metric.tm-green  { border-left-color: #6B8B4E; }
+  .tm-metric.tm-yellow { border-left-color: #D4A84C; }
+  .tm-metric.tm-red    { border-left-color: #C76757; }
+  .tm-metric.tm-none   { opacity: 0.55; border-left-color: var(--rule); }
+
+  .tm-metric-label {
+    font-size: 9px; letter-spacing: 1.2px; color: var(--gold);
+    text-transform: uppercase; font-weight: 700; margin-bottom: 2px;
+  }
+  .tm-metric-val {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 18px; font-weight: 700; color: var(--navy); line-height: 1.1;
+  }
+  .tm-metric-bench {
+    font-size: 10px; color: var(--mid-grey); margin-top: 2px;
+  }
+  .tm-metric-bench b { color: var(--gold); font-weight: 700; }
+
+  /* Form card */
+  .tm-form-card {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--gold);
+    border-radius: 12px;
+    padding: 22px 26px;
+    margin-bottom: 22px;
+  }
+  .tm-form-card h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 20px; color: var(--navy); margin: 0 0 14px; font-weight: 600;
+  }
+  .tm-form-card label {
+    display: block; font-size: 10px; letter-spacing: 1.2px;
+    color: var(--navy); text-transform: uppercase; font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .tm-form-card input, .tm-form-card select, .tm-form-card textarea {
+    width: 100%; padding: 9px 11px;
+    border: 1px solid var(--rule); border-radius: 6px;
+    font-family: inherit; font-size: 14px; color: var(--navy);
+    background: var(--white);
+  }
+  .tm-form-card input:focus, .tm-form-card select:focus, .tm-form-card textarea:focus {
+    border-color: var(--gold); outline: none;
+    box-shadow: 0 0 0 2px rgba(201,168,76,0.15);
+  }
+  .tm-form-card textarea { min-height: 60px; resize: vertical; }
+
+  .tm-setup-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;
+  }
+  @media (max-width: 540px) {
+    .tm-setup-grid { grid-template-columns: 1fr; }
+  }
+
+  /* Club entry — 6 metrics + remove button */
+  .tm-club-entry {
+    background: #F7F2E8;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    position: relative;
+  }
+  .tm-club-entry .tm-entry-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 10px; gap: 10px;
+  }
+  .tm-club-entry select { max-width: 200px; }
+  .tm-club-entry .tm-remove {
+    background: transparent; border: none; cursor: pointer;
+    color: var(--red-risk); font-size: 12px; font-weight: 600;
+    padding: 4px 8px;
+  }
+  .tm-entry-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  @media (max-width: 540px) {
+    .tm-entry-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  .tm-entry-grid .tm-field label {
+    font-size: 9px; letter-spacing: 1px; margin-bottom: 3px;
+  }
+  .tm-entry-grid .tm-field input {
+    padding: 7px 9px; font-size: 13px;
+  }
+
+  /* Trend chart section */
+  .tm-trend-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-top: 14px;
+  }
+  @media (max-width: 760px) {
+    .tm-trend-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 460px) {
+    .tm-trend-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container">
+
+  <div class="tm-hero">
+    <div class="kicker">TrackMan Sessions</div>
+    <h1>Speed, smash, launch &mdash; tracked.</h1>
+    <p>Log TrackMan numbers after each session and compare against Tour, Scratch, or Mid-Handicap benchmarks. Color pills show where you're at or below. Trends below show how each metric moves session over session.</p>
+  </div>
+
+  <div class="tm-actions">
+    <div style="font-size: 13px; color: var(--navy-mid);" id="tm-count">Loading…</div>
+    <button class="btn btn-primary" id="tm-add-btn">+ Log New Session</button>
+  </div>
+
+  <!-- Add-session form (hidden by default) -->
+  <div id="tm-form-wrap" style="display:none;"></div>
+
+  <!-- Trend charts -->
+  <div id="tm-trend-wrap"></div>
+
+  <!-- Session list -->
+  <div id="tm-sessions-wrap"></div>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js"></script>
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  (async () => {
+    const user = await RRG.mount('trackman');
+    if (!user) return;
+
+    // Coach can view a specific player's sessions via ?userId=X.
+    const requestedId = RRG.qs('userId');
+    const isCoachViewing = requestedId && user.role === 'coach' && requestedId !== user.id;
+    const targetId = isCoachViewing ? requestedId : user.id;
+
+    const formWrap = document.getElementById('tm-form-wrap');
+    const listWrap = document.getElementById('tm-sessions-wrap');
+    const trendWrap = document.getElementById('tm-trend-wrap');
+    const addBtn = document.getElementById('tm-add-btn');
+    const countEl = document.getElementById('tm-count');
+
+    let sessions = [];
+
+    async function reload() {
+      sessions = await RRG.trackman.list(targetId);
+      countEl.textContent = sessions.length
+        ? `${sessions.length} session${sessions.length === 1 ? '' : 's'} logged`
+        : 'No sessions yet — log your first after your next TrackMan lesson.';
+      renderSessions();
+      renderTrends();
+    }
+
+    // ====== SESSION LIST ======
+    function renderSessions() {
+      if (!sessions.length) {
+        listWrap.innerHTML = `
+          <div class="path-card" style="text-align:center; padding:36px 20px;">
+            <div class="path-kicker">No sessions yet</div>
+            <h3 class="path-title">Log your first TrackMan session</h3>
+            <p class="path-sub">After your next TrackMan lesson, tap "Log New Session" above. Pick a benchmark tier, enter key metrics per club, and watch the color pills light up.</p>
+          </div>`;
+        return;
+      }
+
+      listWrap.innerHTML = sessions.map((s, idx) => {
+        const tierLabel = (RRG.TRACKMAN_TIERS.find(t => t.key === s.tier) || {}).label || s.tier;
+        const clubHtml = (s.clubs || []).map(c => {
+          const clubLabel = (RRG.TRACKMAN_CLUBS.find(x => x.key === c.club) || {}).label || c.club;
+          const gaps = RRG.trackman.clubGaps(c, s.tier);
+          const metricsHtml = gaps.map(g => `
+            <div class="tm-metric tm-${g.status}">
+              <div class="tm-metric-label">${RRG.esc(g.label)}</div>
+              <div class="tm-metric-val">${RRG.trackman.fmt(g.actual, g)}</div>
+              <div class="tm-metric-bench">
+                ${g.benchmark != null ? `bench <b>${RRG.trackman.fmt(g.benchmark, g)}</b>` : 'no benchmark'}
+              </div>
+            </div>
+          `).join('');
+          return `
+            <div class="tm-club-block">
+              <h4>${RRG.esc(clubLabel)}</h4>
+              <div class="tm-metric-grid">${metricsHtml}</div>
+            </div>`;
+        }).join('');
+
+        const dateLabel = s.date
+          ? new Date(s.date + 'T12:00:00').toLocaleDateString('en-CA', { month: 'long', day: 'numeric', year: 'numeric' })
+          : '—';
+        return `
+          <div class="tm-session">
+            <div class="tm-session-head">
+              <div>
+                <h3>${RRG.esc(dateLabel)}</h3>
+                <div class="tm-meta">Compared to <b>${RRG.esc(tierLabel)}</b> &middot; ${(s.clubs || []).length} club${(s.clubs || []).length === 1 ? '' : 's'}</div>
+              </div>
+              <button class="btn btn-ghost btn-sm" onclick="tmDelete('${s.id}')" style="color:var(--red-risk);">Delete</button>
+            </div>
+            ${s.notes ? `<div class="tm-notes">&ldquo;${RRG.esc(s.notes)}&rdquo;</div>` : ''}
+            ${clubHtml || '<p class="muted small">No clubs logged in this session.</p>'}
+          </div>`;
+      }).join('');
+    }
+
+    // ====== TREND CHARTS ======
+    /* For each club that appears in at least 2 sessions, show a sparkline
+       of each metric across sessions in chronological order. We keep it
+       focused on the most commonly tracked clubs (driver + 7i). */
+    function renderTrends() {
+      if (sessions.length < 2) { trendWrap.innerHTML = ''; return; }
+
+      const chron = [...sessions].sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+
+      const trackedClubs = ['driver', '7i'];
+      const cards = [];
+
+      trackedClubs.forEach(clubKey => {
+        const clubPoints = chron.map(s => {
+          const c = (s.clubs || []).find(x => x.club === clubKey);
+          return c ? { date: s.date, entry: c } : null;
+        }).filter(Boolean);
+
+        if (clubPoints.length < 2) return;
+        const clubLabel = (RRG.TRACKMAN_CLUBS.find(x => x.key === clubKey) || {}).label;
+
+        // Build a sparkline per primary metric (CHS, ball, smash, carry)
+        const keyMetrics = ['clubhead_speed', 'ball_speed', 'smash', 'carry'];
+        keyMetrics.forEach(mk => {
+          const meta = RRG.TRACKMAN_METRICS.find(m => m.key === mk);
+          const pts = clubPoints
+            .map(p => ({ round_date: p.date, value: p.entry[mk] }))
+            .filter(p => p.value != null);
+          if (pts.length < 2) return;
+          cards.push(RRG.charts.trendCard(pts, {
+            title: `${clubLabel} · ${meta.label}`,
+            unit: meta.unit || '',
+            lowerBetter: false,   // TrackMan metrics: higher is usually better (smash/CHS/ball/carry)
+          }));
+        });
+      });
+
+      if (!cards.length) { trendWrap.innerHTML = ''; return; }
+
+      trendWrap.innerHTML = `
+        <div class="path-card" style="padding: 20px 22px 12px; margin-bottom: 18px;">
+          <div class="path-kicker">Trends</div>
+          <h3 class="path-title" style="font-size: 18px; margin-bottom: 10px;">How your numbers are moving</h3>
+          <p class="path-sub">Sparklines track Driver and 7-iron across every logged session. Green = trending up; red = trending down.</p>
+          <div class="tm-trend-grid">${cards.join('')}</div>
+        </div>`;
+    }
+
+    // ====== ADD-SESSION FORM ======
+    addBtn.addEventListener('click', () => {
+      if (formWrap.style.display === 'block') {
+        formWrap.style.display = 'none';
+        return;
+      }
+      renderForm();
+      formWrap.style.display = 'block';
+      formWrap.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    function renderForm() {
+      const today = new Date();
+      const pad = n => String(n).padStart(2, '0');
+      const todayStr = `${today.getFullYear()}-${pad(today.getMonth()+1)}-${pad(today.getDate())}`;
+
+      const tierOpts = RRG.TRACKMAN_TIERS.map(t => `<option value="${t.key}">${t.label}</option>`).join('');
+
+      formWrap.innerHTML = `
+        <div class="tm-form-card">
+          <h2>Log a TrackMan Session</h2>
+          <div class="tm-setup-grid">
+            <div>
+              <label>Date</label>
+              <input type="date" id="tm-date" value="${todayStr}">
+            </div>
+            <div>
+              <label>Benchmark tier</label>
+              <select id="tm-tier">${tierOpts}</select>
+            </div>
+          </div>
+          <div style="margin-bottom:14px;">
+            <label>Notes (optional)</label>
+            <textarea id="tm-notes" placeholder="What the session was about — fitting, speed training, first read after a swing change…"></textarea>
+          </div>
+
+          <div id="tm-clubs-wrap">
+            <!-- club entries inserted here -->
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top: 12px; gap:10px; flex-wrap:wrap;">
+            <button type="button" class="btn btn-ghost btn-sm" onclick="tmAddClubEntry()">+ Add a club</button>
+            <div>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="tmCancelForm()">Cancel</button>
+              <button type="button" class="btn btn-primary btn-sm" onclick="tmSaveSession()">Save session</button>
+            </div>
+          </div>
+          <div id="tm-form-error" class="callout" style="display:none; color:var(--red-risk); border-left-color:var(--red-risk); background:#FDF0EE; margin-top:10px;"></div>
+        </div>`;
+      // Start with one club entry
+      tmAddClubEntry();
+    }
+
+    window.tmAddClubEntry = () => {
+      const wrap = document.getElementById('tm-clubs-wrap');
+      if (!wrap) return;
+      const clubOpts = RRG.TRACKMAN_CLUBS.map(c => `<option value="${c.key}">${c.label}</option>`).join('');
+      const uid = 'clubentry_' + Math.random().toString(36).slice(2, 9);
+      const row = document.createElement('div');
+      row.className = 'tm-club-entry';
+      row.id = uid;
+      row.innerHTML = `
+        <div class="tm-entry-head">
+          <select class="tm-club-pick">${clubOpts}</select>
+          <button type="button" class="tm-remove" onclick="document.getElementById('${uid}').remove()">Remove</button>
+        </div>
+        <div class="tm-entry-grid">
+          <div class="tm-field"><label>Clubhead mph</label><input type="number" step="0.1" min="0" max="200" class="tm-in" data-metric="clubhead_speed"></div>
+          <div class="tm-field"><label>Ball mph</label><input type="number" step="0.1" min="0" max="220" class="tm-in" data-metric="ball_speed"></div>
+          <div class="tm-field"><label>Smash factor</label><input type="number" step="0.01" min="0" max="2" class="tm-in" data-metric="smash"></div>
+          <div class="tm-field"><label>Launch °</label><input type="number" step="0.1" min="-5" max="60" class="tm-in" data-metric="launch_angle"></div>
+          <div class="tm-field"><label>Spin rpm</label><input type="number" step="10" min="0" max="15000" class="tm-in" data-metric="spin"></div>
+          <div class="tm-field"><label>Carry (yd)</label><input type="number" step="1" min="0" max="400" class="tm-in" data-metric="carry"></div>
+        </div>
+      `;
+      wrap.appendChild(row);
+    };
+
+    window.tmCancelForm = () => {
+      formWrap.style.display = 'none';
+    };
+
+    window.tmSaveSession = async () => {
+      const errBox = document.getElementById('tm-form-error');
+      errBox.style.display = 'none';
+
+      const clubs = [];
+      document.querySelectorAll('.tm-club-entry').forEach(row => {
+        const club = row.querySelector('.tm-club-pick').value;
+        const entry = { club };
+        row.querySelectorAll('.tm-in').forEach(inp => {
+          const v = inp.value;
+          if (v !== '' && !isNaN(parseFloat(v))) entry[inp.dataset.metric] = parseFloat(v);
+        });
+        // Need at least one metric to be useful
+        if (Object.keys(entry).length > 1) clubs.push(entry);
+      });
+
+      if (!clubs.length) {
+        errBox.textContent = 'Add at least one club with at least one metric before saving.';
+        errBox.style.display = 'block';
+        return;
+      }
+
+      try {
+        await RRG.trackman.add(targetId, {
+          date: document.getElementById('tm-date').value,
+          tier: document.getElementById('tm-tier').value,
+          notes: document.getElementById('tm-notes').value,
+          clubs,
+        });
+        formWrap.style.display = 'none';
+        RRG.toast('Session saved.');
+        await reload();
+      } catch (err) {
+        errBox.textContent = 'Could not save: ' + (err.message || err);
+        errBox.style.display = 'block';
+      }
+    };
+
+    window.tmDelete = async (sessionId) => {
+      if (!confirm('Delete this TrackMan session? This cannot be undone.')) return;
+      try {
+        await RRG.trackman.remove(targetId, sessionId);
+        RRG.toast('Session deleted.');
+        await reload();
+      } catch (err) {
+        RRG.toast('Could not delete: ' + (err.message || err));
+      }
+    };
+
+    await reload();
+  })();
+</script>
+</body>
+</html>

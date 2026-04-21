@@ -784,6 +784,102 @@ RRG.path = {
 };
 
 /* ============================================================
+   TRACKMAN SESSIONS — stored in profile_json.trackman_sessions
+   Each session: { id, date, tier, notes, clubs: [...], created_at }
+   Each club entry: { club, clubhead_speed, ball_speed, smash,
+                      launch_angle, spin, carry }
+
+   Status logic for comparison vs. benchmark:
+     'higher' direction (CHS, ball, smash, carry):
+       actual >= benchmark          → green
+       actual >= 0.90 × benchmark   → yellow
+       else                         → red
+     'range' direction (launch, spin):
+       within ±15% of benchmark     → green
+       within ±30% of benchmark     → yellow
+       else                         → red (too high OR too low)
+   ============================================================ */
+RRG.trackman = {
+  _uid() { return 'tm_' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36); },
+
+  /* Pull the saved sessions from a user's profile_json. */
+  async list(userId) {
+    const prof = await RRG.users.get(userId);
+    const arr = prof?.profile_json?.trackman_sessions;
+    return Array.isArray(arr) ? arr.slice().sort((a, b) => (b.date || '').localeCompare(a.date || '')) : [];
+  },
+
+  /* Append a new session. Returns the stored session. */
+  async add(userId, session) {
+    const prof = await RRG.users.get(userId);
+    const pj = prof?.profile_json || {};
+    const arr = Array.isArray(pj.trackman_sessions) ? [...pj.trackman_sessions] : [];
+    const stored = {
+      id: this._uid(),
+      date: session.date || new Date().toISOString().slice(0, 10),
+      tier: session.tier || 'pga',
+      notes: (session.notes || '').trim(),
+      clubs: Array.isArray(session.clubs) ? session.clubs : [],
+      created_at: new Date().toISOString(),
+    };
+    arr.push(stored);
+    await RRG.users.update(userId, { profile_json: { ...pj, trackman_sessions: arr } });
+    return stored;
+  },
+
+  /* Remove a session by id. */
+  async remove(userId, sessionId) {
+    const prof = await RRG.users.get(userId);
+    const pj = prof?.profile_json || {};
+    const arr = (pj.trackman_sessions || []).filter(s => s.id !== sessionId);
+    await RRG.users.update(userId, { profile_json: { ...pj, trackman_sessions: arr } });
+  },
+
+  /* Lookup benchmark for a (tier, club) combination. Returns null if missing. */
+  benchmark(tier, clubKey) {
+    const set = (RRG.TRACKMAN_BENCHMARKS || {})[tier];
+    if (!set) return null;
+    return set[clubKey] || null;
+  },
+
+  /* Compute status for one metric given actual vs. benchmark vs. direction. */
+  metricStatus(actual, benchmark, direction) {
+    if (actual == null || benchmark == null) return 'none';
+    if (direction === 'higher') {
+      if (actual >= benchmark)         return 'green';
+      if (actual >= 0.90 * benchmark)  return 'yellow';
+      return 'red';
+    }
+    if (direction === 'range') {
+      const dev = Math.abs(actual - benchmark) / Math.max(Math.abs(benchmark), 0.001);
+      if (dev <= 0.15) return 'green';
+      if (dev <= 0.30) return 'yellow';
+      return 'red';
+    }
+    return 'none';
+  },
+
+  /* Build a gap analysis for one club: [{ key, label, unit, actual, benchmark, status, direction }, ...] */
+  clubGaps(clubEntry, tier) {
+    const b = RRG.trackman.benchmark(tier, clubEntry.club);
+    return RRG.TRACKMAN_METRICS.map(m => {
+      const actual = clubEntry[m.key];
+      const benchmark = b ? b[m.key] : null;
+      const status = RRG.trackman.metricStatus(actual, benchmark, m.direction);
+      return { ...m, actual, benchmark, status };
+    });
+  },
+
+  /* Format a TrackMan metric for display. */
+  fmt(v, metric) {
+    if (v == null || isNaN(v)) return '—';
+    const prec = metric && metric.precision != null ? metric.precision : (Math.abs(v) >= 100 ? 0 : 1);
+    const rounded = Number(v).toFixed(prec);
+    return rounded + ((metric && metric.unit) || '');
+  },
+};
+
+/* ============================================================
    HANDICAP INDEX — portal-computed index tracker
 
    Implements the Golf Canada / World Handicap System calculation
@@ -1127,6 +1223,7 @@ RRG.renderNav = function(user, active = '') {
         ${group('Tools', 'tools', `
           <li><a href="bag.html"          class="${active==='bag'?'active':''}">My Bag</a></li>
           <li><a href="wedge-matrix.html" class="${active==='wedge'?'active':''}">Wedge Matrix</a></li>
+          <li><a href="trackman.html"     class="${active==='trackman'?'active':''}">TrackMan Sessions</a></li>
           <li><a href="packages.html"     class="${active==='packages'?'active':''}">Packages</a></li>
         `)}
 
