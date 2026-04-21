@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<base href="/adult/">
+<title>On-Course Lesson — RR Golf Performance</title>
+<meta name="description" content="Mobile coach view for on-course lessons. Player context, live notes, tap-to-tag root cause, one-tap save plan update.">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  /* ============================================================
+     ON-COURSE LESSON VIEW
+     Mobile-first. Designed for Ryan to pull out on the course during
+     a lesson: player context + biggest gaps at the top, big-tap notes
+     + root-cause chip picker in the middle, one-button save-plan-update
+     at the bottom. Reuses RRG.lessonUpdates + the Plan Update modal
+     logic that already lives in coach.html — but presented as a
+     native-app-feeling single page, not a desktop modal.
+     ============================================================ */
+
+  /* Use safe-area padding on modern iOS so the bottom action bar
+     doesn't hide behind the home indicator. */
+  body { padding-bottom: env(safe-area-inset-bottom, 0); }
+
+  .oc-wrap {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 16px 14px 140px;   /* bottom padding leaves room for sticky CTA */
+  }
+
+  /* Player header — compact, high-contrast */
+  .oc-header {
+    background: linear-gradient(180deg, var(--navy) 0%, #162E54 100%);
+    color: #fff;
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+    position: relative;
+  }
+  .oc-header::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--gold); border-radius: 14px 14px 0 0;
+  }
+  .oc-header .back {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 12px; letter-spacing: 0.1em; color: rgba(255,255,255,0.7);
+    text-decoration: none; margin-bottom: 10px;
+  }
+  .oc-header .back:hover { color: var(--gold); }
+  .oc-header .kicker {
+    font-size: 10px; letter-spacing: 0.22em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase;
+  }
+  .oc-header h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 26px; color: #fff; margin: 4px 0 2px; line-height: 1.15; font-weight: 600;
+  }
+  .oc-header .hcp-arrow {
+    display: flex; align-items: baseline; gap: 10px;
+    margin-top: 6px; font-size: 13px;
+  }
+  .oc-header .hcp-val {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px; color: var(--gold); font-weight: 700; line-height: 1;
+  }
+  .oc-header .hcp-sep { color: rgba(255,255,255,0.4); font-size: 18px; }
+  .oc-header .hcp-lbl {
+    font-size: 10px; letter-spacing: 1.4px; text-transform: uppercase;
+    color: rgba(255,255,255,0.55); margin-top: 2px;
+  }
+
+  /* Section card */
+  .oc-card {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--gold);
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-bottom: 14px;
+  }
+  .oc-card h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 17px; color: var(--navy); margin: 0 0 6px; font-weight: 600;
+  }
+  .oc-card .oc-kicker {
+    font-size: 10px; letter-spacing: 1.6px; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .oc-card p { font-size: 14px; color: var(--navy-mid); line-height: 1.55; margin: 0 0 8px; }
+  .oc-card p.oc-muted { color: var(--mid-grey); font-size: 13px; }
+
+  /* Compact gap row — 3 lines max, big numbers */
+  .oc-gaps .oc-gap-row {
+    display: grid;
+    grid-template-columns: 1fr auto 26px;
+    gap: 10px; align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .oc-gaps .oc-gap-row:last-child { border-bottom: none; }
+  .oc-gap-label { font-size: 13px; color: var(--navy); font-weight: 600; }
+  .oc-gap-nums {
+    font-size: 13px; color: var(--navy-mid); white-space: nowrap;
+  }
+  .oc-gap-nums .you { color: var(--navy); font-weight: 700; }
+  .oc-gap-pill {
+    display: inline-flex; width: 22px; height: 22px;
+    border-radius: 50%; color: #fff; font-weight: 700; font-size: 11px;
+    align-items: center; justify-content: center;
+    justify-self: end;
+    pointer-events: none;
+  }
+  .oc-gap-pill-red    { background: #C76757; }
+  .oc-gap-pill-yellow { background: #D4A84C; color: var(--navy); }
+  .oc-gap-pill-green  { background: #6B8B4E; }
+
+  /* Textareas — big tap targets, readable */
+  .oc-textarea {
+    width: 100%; min-height: 90px;
+    padding: 12px 14px; border: 1px solid var(--rule);
+    border-radius: 8px; font-family: inherit; font-size: 15px;
+    color: var(--navy); line-height: 1.5; background: var(--white);
+    resize: vertical;
+  }
+  .oc-textarea:focus { border-color: var(--gold); outline: none;
+    box-shadow: 0 0 0 2px rgba(201,168,76,0.15); }
+
+  /* Root-cause chip picker */
+  .oc-chips {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin-top: 6px;
+  }
+  .oc-chip {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-size: 13px; color: var(--navy-mid);
+    cursor: pointer;
+    font-weight: 600;
+    transition: all .12s ease;
+    user-select: none;
+  }
+  .oc-chip:hover { border-color: var(--gold); }
+  .oc-chip.selected {
+    background: var(--navy); color: var(--gold);
+    border-color: var(--navy);
+  }
+
+  /* Sticky bottom action bar */
+  .oc-actions {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(255,255,255,0.96);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-top: 1px solid var(--rule);
+    padding: 12px 14px calc(12px + env(safe-area-inset-bottom, 0));
+    z-index: 50;
+    display: flex; gap: 8px;
+  }
+  .oc-actions .btn { flex: 1; padding: 14px 12px; font-size: 14px; font-weight: 700; }
+
+  /* Small meta chips at top */
+  .oc-meta-strip {
+    display: flex; gap: 6px; flex-wrap: wrap;
+    margin: 10px 0 0;
+  }
+  .oc-meta-chip {
+    font-size: 10px; letter-spacing: 0.1em;
+    background: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.9);
+    padding: 4px 10px; border-radius: 999px;
+    font-weight: 600; text-transform: uppercase;
+  }
+
+  .oc-loading, .oc-error {
+    padding: 30px 20px; text-align: center;
+    color: var(--navy-mid); font-size: 14px;
+  }
+
+  /* Toast-style confirmation */
+  .oc-success {
+    position: fixed;
+    bottom: 88px; left: 50%; transform: translateX(-50%);
+    background: #0D1F3C; color: var(--gold);
+    padding: 14px 22px; border-radius: 999px;
+    font-size: 13px; font-weight: 700;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    z-index: 60;
+  }
+
+  /* Focus card for coach's latest note */
+  .oc-focus {
+    background: #F7F2E8;
+    border: 1px solid #E5D4A1;
+    border-left: 4px solid var(--gold);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin: 8px 0 0;
+  }
+  .oc-focus .focus-date {
+    font-size: 10px; letter-spacing: 1.4px; color: var(--mid-grey);
+    text-transform: uppercase; margin-bottom: 3px;
+  }
+  .oc-focus .focus-text {
+    font-size: 14px; color: var(--navy); line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+
+<!-- No top nav — this is a focused single-task view. -->
+<div id="oc-root" class="oc-wrap">
+  <div class="oc-loading">Loading…</div>
+</div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js"></script>
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  (async () => {
+    // Auth + coach-only gate. This view is for Ryan during lessons, not
+    // for players.
+    const user = await RRG.auth.requireAuth();
+    if (!user) return;
+    if (user.role !== 'coach') {
+      // Players shouldn't see this view — bounce them home.
+      location.replace('dashboard.html');
+      return;
+    }
+
+    const root = document.getElementById('oc-root');
+    const userId = RRG.qs('userId');
+    if (!userId) {
+      root.innerHTML = `
+        <div class="oc-error">
+          <p>No player selected.</p>
+          <p><a href="coach.html" class="btn btn-primary btn-sm" style="margin-top:10px;">Back to Coach View</a></p>
+        </div>`;
+      return;
+    }
+
+    // Pull player + rounds in parallel
+    let target = null, rounds = [];
+    try {
+      [target, rounds] = await Promise.all([
+        RRG.users.get(userId),
+        RRG.subs.forUser(userId),
+      ]);
+    } catch (err) {
+      root.innerHTML = `<div class="oc-error">Could not load: ${RRG.esc(err.message || '')}</div>`;
+      return;
+    }
+    if (!target) {
+      root.innerHTML = `<div class="oc-error">Player not found.</div>`;
+      return;
+    }
+
+    const pj = target.profile_json || {};
+    const firstName = (target.name || target.email || 'Player').split(' ')[0];
+
+    // Handicap context
+    const rawCur  = pj.handicap != null && pj.handicap !== ''       ? pj.handicap
+                  : pj.s1_handicap != null && pj.s1_handicap !== '' ? pj.s1_handicap : null;
+    const rawGoal = pj.goal_handicap != null && pj.goal_handicap !== ''       ? pj.goal_handicap
+                  : pj.s1_goal_handicap != null && pj.s1_goal_handicap !== '' ? pj.s1_goal_handicap : 0;
+    const curHcp  = rawCur != null ? parseFloat(rawCur) : null;
+    const goalHcp = rawGoal != null ? parseFloat(rawGoal) : 0;
+    const curLbl  = curHcp == null ? '—' : (Number.isInteger(curHcp) ? curHcp : curHcp.toFixed(1));
+    const goalLbl = goalHcp === 0 ? 'Scratch' : (Number.isInteger(goalHcp) ? goalHcp : goalHcp.toFixed(1));
+    const idx = RRG.path.calcIndex(rounds);
+    const idxLbl = idx.index != null ? `Idx ${idx.index.toFixed(1)}` : '';
+
+    // Gap analysis — top 3 worst
+    const rolling = RRG.path.rollingStats(rounds);
+    const gaps = rolling ? RRG.path.gapAnalysis(rolling, goalHcp) : [];
+    const topGaps = gaps.filter(g => g.status !== 'green').slice(0, 3);
+
+    // Latest coach lesson update (within 14 days)
+    const latestUpdate = await RRG.lessonUpdates.latest(userId, 14);
+
+    // Build the root-cause chip HTML
+    const chips = RRG.ROOT_CAUSES.map(rc => `
+      <div class="oc-chip" data-key="${rc.key}" onclick="ocToggleChip(this)">${RRG.esc(rc.label)}</div>
+    `).join('');
+
+    // Build the gap rows
+    const gapRowsHtml = topGaps.length ? topGaps.map(g => `
+      <div class="oc-gap-row">
+        <div class="oc-gap-label">${RRG.esc(g.label)}</div>
+        <div class="oc-gap-nums">
+          <span class="you">${RRG.path.fmt(g.actual, g.unit)}</span>
+          <span style="color:var(--mid-grey);"> &middot; goal ${RRG.path.fmt(g.target, g.unit)}</span>
+        </div>
+        <div class="oc-gap-pill oc-gap-pill-${g.status}">${g.status === 'red' ? '!' : g.status === 'yellow' ? '~' : '✓'}</div>
+      </div>
+    `).join('') : '<p class="oc-muted">Not enough round data for gap analysis yet.</p>';
+
+    // Build latest-update block
+    const latestHtml = latestUpdate ? `
+      <div class="oc-focus">
+        <div class="focus-date">
+          ${RRG.esc(latestUpdate.date)} &middot;
+          ${RRG.esc((RRG.ROOT_CAUSES.find(r => r.key === latestUpdate.root_cause) || {}).label || latestUpdate.root_cause)}
+        </div>
+        <div class="focus-text">${RRG.esc(latestUpdate.focus_this_week || latestUpdate.what_we_worked_on || '—')}</div>
+      </div>
+    ` : '<p class="oc-muted">No recent lesson notes. Log what you identified today below.</p>';
+
+    // Default date to today
+    const today = new Date();
+    const pad = n => String(n).padStart(2, '0');
+    const todayStr = `${today.getFullYear()}-${pad(today.getMonth()+1)}-${pad(today.getDate())}`;
+
+    root.innerHTML = `
+      <div class="oc-header">
+        <a href="coach.html" class="back">&larr; All Players</a>
+        <div class="kicker">On-Course Lesson</div>
+        <h1>${RRG.esc(target.name || target.email)}</h1>
+        <div class="hcp-arrow">
+          <div>
+            <div class="hcp-lbl">Current</div>
+            <div class="hcp-val">${curLbl}</div>
+          </div>
+          <div class="hcp-sep">&rarr;</div>
+          <div>
+            <div class="hcp-lbl">Goal</div>
+            <div class="hcp-val">${goalLbl}</div>
+          </div>
+          ${idxLbl ? `<div style="margin-left:auto;"><div class="hcp-lbl">Index</div><div style="font-size:13px; color:rgba(255,255,255,0.85); font-weight:600;">${idxLbl}</div></div>` : ''}
+        </div>
+        <div class="oc-meta-strip">
+          <span class="oc-meta-chip">${rounds.length} rounds logged</span>
+          <span class="oc-meta-chip">${gaps.filter(g => g.status === 'red').length} red gaps</span>
+          ${latestUpdate ? '<span class="oc-meta-chip">Has recent note</span>' : ''}
+        </div>
+      </div>
+
+      <div class="oc-card">
+        <div class="oc-kicker">What we've been working on</div>
+        ${latestHtml}
+      </div>
+
+      <div class="oc-card oc-gaps">
+        <div class="oc-kicker">Biggest gaps &mdash; last ${rolling ? rolling._count : 0} rounds</div>
+        ${gapRowsHtml}
+      </div>
+
+      <div class="oc-card">
+        <div class="oc-kicker">What we worked on today</div>
+        <textarea class="oc-textarea" id="oc-worked-on"
+                  placeholder="What you identified and coached today. Drills you ran. The a-ha moments."></textarea>
+      </div>
+
+      <div class="oc-card">
+        <div class="oc-kicker">Root cause we saw today (tap to select)</div>
+        <div class="oc-chips" id="oc-chips">${chips}</div>
+      </div>
+
+      <div class="oc-card">
+        <div class="oc-kicker">Focus for this week (what ${RRG.esc(firstName)} will see)</div>
+        <textarea class="oc-textarea" id="oc-focus-text" style="min-height:70px;"
+                  placeholder="One or two sentences. This shows on ${RRG.esc(firstName)}'s My Plan banner."></textarea>
+      </div>
+
+      <input type="hidden" id="oc-date" value="${todayStr}">
+      <input type="hidden" id="oc-user-id" value="${RRG.esc(userId)}">
+    `;
+
+    // Sticky bottom action bar
+    const actions = document.createElement('div');
+    actions.className = 'oc-actions';
+    actions.innerHTML = `
+      <button type="button" class="btn btn-ghost" onclick="ocCancel()">Back</button>
+      <button type="button" class="btn btn-primary" id="oc-save-btn" onclick="ocSave(false)">Save Update</button>
+      <button type="button" class="btn btn-primary" id="oc-save-regen-btn"
+              style="background: var(--gold); color: var(--navy);"
+              onclick="ocSave(true)">+ AI Regen</button>
+    `;
+    document.body.appendChild(actions);
+
+    // ==== Handlers ====
+    window.ocToggleChip = function(el) {
+      // Allow multiple selections
+      el.classList.toggle('selected');
+    };
+
+    window.ocCancel = () => { location.href = 'coach.html'; };
+
+    window.ocSave = async function(withRegen) {
+      const workedOn = document.getElementById('oc-worked-on').value.trim();
+      const focusText = document.getElementById('oc-focus-text').value.trim();
+      if (!workedOn || !focusText) {
+        alert('Please fill in both "What we worked on" and "Focus for this week" before saving.');
+        return;
+      }
+      const selectedChips = Array.from(document.querySelectorAll('.oc-chip.selected')).map(c => c.dataset.key);
+      const rootCause = selectedChips[0] || 'other';      // primary root cause
+
+      const saveBtn = document.getElementById('oc-save-btn');
+      const regenBtn = document.getElementById('oc-save-regen-btn');
+      saveBtn.disabled = true; regenBtn.disabled = true;
+      const activeBtn = withRegen ? regenBtn : saveBtn;
+      activeBtn.textContent = withRegen ? 'AI regenerating… (30–45s)' : 'Saving…';
+
+      try {
+        const stored = await RRG.lessonUpdates.add(userId, {
+          date: document.getElementById('oc-date').value,
+          root_cause: rootCause,
+          what_we_worked_on: selectedChips.length > 1
+            ? workedOn + '\n\nAlso noted: ' + selectedChips.slice(1).join(', ')
+            : workedOn,
+          focus_this_week: focusText,
+          created_by: user.id,
+        });
+
+        if (withRegen) {
+          const resp = await fetch('/api/adjust-game-plan', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ user_id: userId, update_id: stored.id }),
+          });
+          const data = await resp.json();
+          if (!resp.ok) throw new Error(data.error || 'Regen failed');
+        }
+
+        // Success toast then bounce back to coach view
+        const toast = document.createElement('div');
+        toast.className = 'oc-success';
+        toast.textContent = withRegen ? 'Saved + plan regenerated' : 'Plan update saved';
+        document.body.appendChild(toast);
+        setTimeout(() => { location.href = 'coach.html'; }, 1400);
+      } catch (err) {
+        alert('Could not save: ' + (err.message || ''));
+        saveBtn.disabled = false; regenBtn.disabled = false;
+        saveBtn.textContent = 'Save Update';
+        regenBtn.textContent = '+ AI Regen';
+      }
+    };
+  })();
+</script>
+</body>
+</html>
