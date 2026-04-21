@@ -473,6 +473,9 @@ RRG.renderNav = function(user, active = '') {
         <li><a href="wedge-matrix.html" class="${active==='wedge'?'active':''}">Wedge Matrix</a></li>
         <li><a href="packages.html"  class="${active==='packages'?'active':''}">Packages</a></li>
 
+        <li class="nav-group-label">EVENTS</li>
+        <li><a href="events.html" class="${active==='events'?'active':''}">Ryan's Events</a></li>
+
         <li class="nav-group-label">LEARN</li>
         <li><a href="/improve/" class="${active==='library'?'active':''}">Library</a></li>
         <li><a href="how-to-use.html" class="${active==='how-to-use'?'active':''}">How to use this portal</a></li>

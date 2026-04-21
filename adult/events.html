@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<base href="/adult/">
+<title>Events — RR Golf Performance</title>
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  /* =============================================================
+     RYAN'S EVENTS — standalone events catalog. Two series, each with
+     its own badge header and a card grid of individual events.
+     Booking deep-links to Acuity category pages so players land
+     pre-filtered on the right event list.
+     ============================================================= */
+
+  /* ---- HERO ---- */
+  .events-hero {
+    background: linear-gradient(180deg, #ffffff 0%, #F7F2E8 100%);
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    padding: 40px 32px;
+    margin-bottom: 32px;
+    text-align: center;
+  }
+  .events-hero .kicker {
+    display: inline-block;
+    font-size: 11px; letter-spacing: 0.22em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase;
+    padding: 5px 16px; border: 1px solid var(--gold);
+    border-radius: 999px;
+  }
+  .events-hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(36px, 6vw, 54px);
+    font-weight: 600;
+    color: var(--navy);
+    margin: 18px 0 8px;
+    line-height: 1.1;
+  }
+  .events-hero h1 em { color: var(--gold); font-style: italic; font-weight: 400; }
+  .events-hero .tagline {
+    max-width: 620px; margin: 10px auto 0;
+    font-size: 16px; line-height: 1.6; color: var(--navy-mid);
+  }
+
+  /* ---- SERIES BANNER ---- */
+  .series {
+    background: var(--navy);
+    color: #fff;
+    border-radius: 14px 14px 0 0;
+    padding: 22px 28px;
+    margin-top: 36px;
+    border-bottom: 2px solid var(--gold);
+  }
+  .series .series-kicker {
+    font-size: 11px; letter-spacing: 0.22em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 6px;
+  }
+  .series h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 26px; color: #fff; margin: 0 0 4px; font-weight: 600;
+  }
+  .series .when {
+    font-size: 13px; color: rgba(255,255,255,0.72);
+    font-style: italic;
+  }
+
+  /* ---- EVENT GRID ---- */
+  .event-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    background: #F7F2E8;
+    border: 1px solid var(--rule);
+    border-top: none;
+    border-radius: 0 0 14px 14px;
+    padding: 18px 18px 22px;
+    margin-bottom: 28px;
+  }
+  @media (max-width: 760px) {
+    .event-grid { grid-template-columns: 1fr; }
+  }
+
+  .event-card {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--gold);
+    border-radius: 10px;
+    padding: 20px 22px 18px;
+    display: flex; flex-direction: column;
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .event-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(13,31,60,0.08);
+  }
+  .event-card .ec-top {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    gap: 12px; margin-bottom: 6px; flex-wrap: wrap;
+  }
+  .event-card h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 20px; color: var(--navy); font-weight: 600;
+    margin: 0; line-height: 1.2; flex: 1 1 auto; min-width: 0;
+  }
+  .event-card .price {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px; color: var(--gold); font-weight: 700; line-height: 1;
+    white-space: nowrap;
+  }
+  .event-card .meta {
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--mid-grey); font-weight: 600; margin-bottom: 12px;
+  }
+  .event-card .meta .dot { color: var(--gold); margin: 0 6px; }
+  .event-card p.desc {
+    font-size: 14px; line-height: 1.6; color: var(--navy-mid);
+    margin: 0 0 18px; flex: 1 1 auto;
+  }
+  .event-card .book-row {
+    display: flex; justify-content: flex-end;
+  }
+  .event-card .book-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--navy); color: #fff;
+    padding: 10px 18px; border-radius: 999px;
+    font-size: 12px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; text-decoration: none;
+    transition: background .15s ease, transform .15s ease;
+  }
+  .event-card .book-btn:hover {
+    background: var(--gold); color: var(--navy);
+    transform: translateY(-1px);
+  }
+
+  /* ---- CLOSING NOTE ---- */
+  .events-close {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--gold);
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin-top: 24px;
+  }
+  .events-close h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 20px; color: var(--navy); margin: 0 0 8px; font-weight: 600;
+  }
+  .events-close p { color: var(--navy-mid); line-height: 1.6; margin: 0 0 8px; }
+</style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container">
+
+  <div class="events-hero">
+    <span class="kicker">RYAN'S EVENTS</span>
+    <h1>Events at <em>Mad River.</em></h1>
+    <p class="tagline">
+      The evenings, mornings, and themed experiences that make a season at Mad River
+      feel like a season. Book through Acuity; spots go fast.
+    </p>
+  </div>
+
+  <!-- ========== LADIES GOLF ACADEMY ========== -->
+  <div class="series">
+    <div class="series-kicker">LADIES · ACADEMY</div>
+    <h2>Mad River Ladies Golf Academy</h2>
+    <div class="when">Friday mornings · Mad River members</div>
+  </div>
+  <div class="event-grid">
+
+    <div class="event-card">
+      <div class="ec-top">
+        <h3>Mad River Ladies Golf Series</h3>
+        <div class="price">CA$40</div>
+      </div>
+      <div class="meta">Friday mornings <span class="dot">·</span> 1 hour <span class="dot">·</span> MR Members</div>
+      <p class="desc">
+        Weekly Friday-morning coaching block for Mad River ladies. Rotating focus &mdash;
+        technique, short game, putting, on-course strategy. Small groups, clear progression,
+        the same faces week to week.
+      </p>
+      <div class="book-row">
+        <a href="https://madriverpro.as.me/?appointmentType=category:Mad%20River%20Ladies%20Golf%20Academy"
+           class="book-btn" target="_blank" rel="noopener">Book via Acuity &rarr;</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ========== THURSDAY NIGHT EXPERIENCES ========== -->
+  <div class="series">
+    <div class="series-kicker">THURSDAY NIGHT · EXPERIENCES</div>
+    <h2>Thursday Night Experiences</h2>
+    <div class="when">Thursday evenings · All ability levels welcome</div>
+  </div>
+  <div class="event-grid">
+
+    <div class="event-card">
+      <div class="ec-top">
+        <h3>Ladies Night Series</h3>
+        <div class="price">CA$55</div>
+      </div>
+      <div class="meta">Thursday evenings <span class="dot">·</span> 1h 15m <span class="dot">·</span> Women only</div>
+      <p class="desc">
+        Themed weekly instruction for women &mdash; short-game fundamentals, full-swing
+        technique, on-course strategy. Social, low-pressure, and the same cohort builds
+        across the season.
+      </p>
+      <div class="book-row">
+        <a href="https://madriverpro.as.me/?appointmentType=category:Thursday%20Night%20Experiences"
+           class="book-btn" target="_blank" rel="noopener">Book via Acuity &rarr;</a>
+      </div>
+    </div>
+
+    <div class="event-card">
+      <div class="ec-top">
+        <h3>Wine &amp; Wedges</h3>
+        <div class="price">CA$125</div>
+      </div>
+      <div class="meta">Thursday evenings <span class="dot">·</span> 1h 15m <span class="dot">·</span> Adult coed</div>
+      <p class="desc">
+        Thursday evenings on the range with a curated wine pour. Sharpen your 70-yards-in
+        game while you taste your way through the off-season cellar. Glasses, wedges,
+        and a sunset over the 12th.
+      </p>
+      <div class="book-row">
+        <a href="https://madriverpro.as.me/?appointmentType=category:Thursday%20Night%20Experiences"
+           class="book-btn" target="_blank" rel="noopener">Book via Acuity &rarr;</a>
+      </div>
+    </div>
+
+    <div class="event-card">
+      <div class="ec-top">
+        <h3>Scotch &amp; Short Game</h3>
+        <div class="price">CA$135</div>
+      </div>
+      <div class="meta">Thursday evenings <span class="dot">·</span> 1h 15m <span class="dot">·</span> Adult coed</div>
+      <p class="desc">
+        Around-the-green instruction paired with a scotch tasting flight. Chip, pitch,
+        lob, putt &mdash; then cheers. The combination is not designed to sober you up;
+        it's designed to make the short game actually fun to practice.
+      </p>
+      <div class="book-row">
+        <a href="https://madriverpro.as.me/?appointmentType=category:Thursday%20Night%20Experiences"
+           class="book-btn" target="_blank" rel="noopener">Book via Acuity &rarr;</a>
+      </div>
+    </div>
+
+    <div class="event-card">
+      <div class="ec-top">
+        <h3>9 &amp; Dine <small style="font-size:12px; color:var(--mid-grey); font-family:'DM Sans',sans-serif;">(5-Hole Loop)</small></h3>
+        <div class="price">CA$165</div>
+      </div>
+      <div class="meta">Thursday evenings <span class="dot">·</span> 2 hours <span class="dot">·</span> Adult coed</div>
+      <p class="desc">
+        Five quick holes at last light, chef-prepared dinner on the patio after. The
+        evening that turns a random Thursday into the highlight of the week. Bring a
+        partner or come solo &mdash; the cohort is what makes it.
+      </p>
+      <div class="book-row">
+        <a href="https://madriverpro.as.me/?appointmentType=category:Thursday%20Night%20Experiences"
+           class="book-btn" target="_blank" rel="noopener">Book via Acuity &rarr;</a>
+      </div>
+    </div>
+
+    <div class="event-card">
+      <div class="ec-top">
+        <h3>Links Night &mdash; Steak &amp; Guinness</h3>
+        <div class="price">CA$145</div>
+      </div>
+      <div class="meta">British Open theme <span class="dot">·</span> 1h 15m <span class="dot">·</span> Adult coed</div>
+      <p class="desc">
+        British Open week special. Flat flight, knock-downs, reading a firm fescue
+        lie &mdash; the shots the Brits grew up on. Followed by a proper steak and a
+        pint of the black stuff.
+      </p>
+      <div class="book-row">
+        <a href="https://madriverpro.as.me/?appointmentType=category:Thursday%20Night%20Experiences"
+           class="book-btn" target="_blank" rel="noopener">Book via Acuity &rarr;</a>
+      </div>
+    </div>
+
+    <div class="event-card">
+      <div class="ec-top">
+        <h3>Pilates &amp; Performance</h3>
+        <div class="price">CA$95</div>
+      </div>
+      <div class="meta">Thursday evenings <span class="dot">·</span> 1h 15m <span class="dot">·</span> All levels</div>
+      <p class="desc">
+        Pre-round mobility led by a certified Pilates instructor, then targeted
+        technique work on the range. Rotation, balance, posture &mdash; the three
+        things that separate golfers who play injury-free at 60 from those who don't.
+      </p>
+      <div class="book-row">
+        <a href="https://madriverpro.as.me/?appointmentType=category:Thursday%20Night%20Experiences"
+           class="book-btn" target="_blank" rel="noopener">Book via Acuity &rarr;</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ========== CLOSING NOTE ========== -->
+  <div class="events-close">
+    <h3>How booking works</h3>
+    <p>
+      Every button above drops you into Acuity, pre-filtered to the right series.
+      Pick a date, enter your details, and you're in. Payment through Acuity.
+    </p>
+    <p>
+      Questions about a specific date or whether a series fits your level &mdash;
+      just email <a href="mailto:ryan@rrgolfperformance.com" style="color:var(--gold);">ryan@rrgolfperformance.com</a>.
+    </p>
+  </div>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js"></script>
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  (async () => { await RRG.mount('events'); })();
+</script>
+</body>
+</html>
