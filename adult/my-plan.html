@@ -92,6 +92,93 @@
     padding: 8px 0;
   }
   .insight-empty strong { color: var(--navy); }
+
+  /* ===== COACH SYNOPSIS (week-by-week dropdown) ===== */
+  .synopsis-stack { display: grid; gap: 8px; margin-top: 12px; }
+  .week-card {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--gold);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: box-shadow .18s ease, border-color .18s ease;
+  }
+  .week-card[open] {
+    box-shadow: 0 6px 18px rgba(13,31,60,0.07);
+    border-color: var(--gold);
+  }
+  .week-card summary {
+    display: grid;
+    grid-template-columns: 64px 1fr 22px;
+    gap: 14px; align-items: center;
+    padding: 12px 16px;
+    cursor: pointer; list-style: none; user-select: none;
+  }
+  .week-card summary::-webkit-details-marker { display: none; }
+  .week-card .wk-num {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 13px; color: var(--gold);
+    font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+    text-align: center;
+    padding-right: 10px;
+    border-right: 1px solid var(--rule);
+  }
+  .week-card .wk-num b {
+    display: block; font-size: 22px; color: var(--navy); font-weight: 700;
+    font-style: normal; letter-spacing: 0;
+    margin-top: 2px; line-height: 1;
+  }
+  .week-card .wk-head .wk-theme {
+    font-size: 14px; color: var(--navy); font-weight: 600; line-height: 1.3;
+  }
+  .week-card .wk-head .wk-sub {
+    font-size: 12px; color: var(--mid-grey); margin-top: 2px;
+    font-style: italic; line-height: 1.4;
+  }
+  .week-card .wk-chev {
+    color: var(--mid-grey); font-size: 18px; line-height: 1;
+    text-align: center; transition: transform .18s ease;
+  }
+  .week-card[open] .wk-chev { transform: rotate(90deg); color: var(--gold); }
+  .week-card .wk-body {
+    padding: 0 16px 14px calc(16px + 64px + 14px);
+    color: var(--navy-mid);
+  }
+  .week-card .wk-body ul {
+    margin: 4px 0 0; padding: 0; list-style: none;
+  }
+  .week-card .wk-body li {
+    font-size: 13.5px; line-height: 1.55; margin-bottom: 6px;
+    padding-left: 16px; position: relative;
+  }
+  .week-card .wk-body li::before {
+    content: '•'; color: var(--gold); font-weight: 700;
+    position: absolute; left: 4px;
+  }
+  .week-card .wk-body .wk-tag {
+    display: inline-block; font-size: 10px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--gold); font-weight: 700;
+    margin-right: 6px;
+  }
+  .week-card .wk-body .wk-measure {
+    margin-top: 10px; padding: 8px 12px;
+    background: #F7F2E8; border-radius: 4px;
+    font-size: 12.5px; color: var(--navy);
+  }
+  .week-card .wk-body .wk-measure b {
+    color: var(--gold); text-transform: uppercase; letter-spacing: 0.1em;
+    font-size: 10px; display: block; margin-bottom: 2px; font-weight: 700;
+  }
+  @media (max-width: 560px) {
+    .week-card summary {
+      grid-template-columns: 52px 1fr 20px; gap: 10px; padding: 10px 14px;
+    }
+    .week-card .wk-num { padding-right: 6px; }
+    .week-card .wk-num b { font-size: 18px; }
+    .week-card .wk-body {
+      padding: 0 14px 12px 14px;
+    }
+  }
 </style>
 </head>
 <body>
@@ -124,6 +211,9 @@
       The frame for everything we're doing this season.
     </p>
   </div>
+
+  <!-- COACH-ONLY · WEEK-BY-WEEK SYNOPSIS (glance before the lesson) -->
+  <div id="plan-synopsis-wrap" style="display:none;"></div>
 
   <!-- 6-WEEK PLAN -->
   <div id="game-plan-wrap" style="display:none;"></div>
@@ -286,6 +376,78 @@
         </div>`;
 
       renderShell('ready', 'Ready', body);
+
+      // Coach-only — render the week-by-week synopsis above the full plan.
+      if (isCoachViewing) renderSynopsis(plan);
+    }
+
+    /* =================================================================
+       COACH SYNOPSIS — glance-before-the-lesson summary.
+       Shows only when a coach is viewing a player's plan. Six collapsible
+       week cards. Each card: week number, theme/subtitle visible in the
+       header; primary/secondary focus + trimmed practice bullets +
+       measure revealed on expand. Designed for fast pre-lesson review.
+       ================================================================= */
+    function renderSynopsis(plan) {
+      const wrap = document.getElementById('plan-synopsis-wrap');
+      if (!wrap) return;
+      const sessions = Array.isArray(plan?.structured?.sessions) ? plan.structured.sessions : [];
+      if (!sessions.length) { wrap.style.display = 'none'; return; }
+
+      const weeks = sessions.map((sess, i) => {
+        const weekNum = sess.week || (i + 1);
+        const theme   = sess.theme || 'Focus';
+        const sub     = sess.subtitle || '';
+        const primary = sess.primary || '';
+        const secondary = sess.secondary || '';
+        const practice = Array.isArray(sess.practice) ? sess.practice : [];
+        const measure = sess.measure || '';
+        const readyWhen = sess.ready_when || '';
+
+        // Trim long practice items so the synopsis stays scannable.
+        const practiceTrim = practice.slice(0, 3).map(p => {
+          const t = String(p || '').trim();
+          return t.length > 140 ? t.slice(0, 137) + '…' : t;
+        }).filter(Boolean);
+
+        return `
+          <details class="week-card">
+            <summary>
+              <div class="wk-num">Week<b>${RRG.esc(weekNum)}</b></div>
+              <div class="wk-head">
+                <div class="wk-theme">${RRG.esc(theme)}</div>
+                ${sub ? `<div class="wk-sub">${RRG.esc(sub)}</div>` : ''}
+              </div>
+              <div class="wk-chev">›</div>
+            </summary>
+            <div class="wk-body">
+              <ul>
+                ${primary   ? `<li><span class="wk-tag">Primary</span>${RRG.esc(primary)}</li>` : ''}
+                ${secondary ? `<li><span class="wk-tag">Secondary</span>${RRG.esc(secondary)}</li>` : ''}
+                ${practiceTrim.map(p => `<li><span class="wk-tag">Practice</span>${RRG.esc(p)}</li>`).join('')}
+                ${readyWhen ? `<li><span class="wk-tag">Ready when</span>${RRG.esc(readyWhen)}</li>` : ''}
+              </ul>
+              ${measure ? `<div class="wk-measure"><b>Measure</b>${RRG.esc(measure)}</div>` : ''}
+            </div>
+          </details>
+        `;
+      }).join('');
+
+      wrap.innerHTML = `
+        <div class="gp-card">
+          <div class="flex-between" style="align-items:flex-start; gap:12px; flex-wrap:wrap; margin-bottom:4px;">
+            <div>
+              <div class="gp-kicker">WEEK-BY-WEEK SYNOPSIS</div>
+              <h3>Glance before the lesson</h3>
+              <p style="font-size:13.5px; color:var(--navy-mid); margin:2px 0 0;">
+                Tap any week to see primary + secondary focus, practice bullets, and the
+                measurable check. Full detail is below.
+              </p>
+            </div>
+          </div>
+          <div class="synopsis-stack">${weeks}</div>
+        </div>`;
+      wrap.style.display = 'block';
     }
 
     function renderPlan() {
