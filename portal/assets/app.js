@@ -279,6 +279,12 @@ RRG.subs = {
     return this.all().filter(s => s.userId === userId)
       .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
   },
+  /* Called by portal/dashboard.html (week grid) and portal/week.html
+     (submissions-this-week list). Was referenced but undefined before;
+     this fixes the silent failure. */
+  forUserWeek(userId, weekN) {
+    return this.forUser(userId).filter(s => Number(s.week) === Number(weekN));
+  },
 };
 
 RRG.lessons = {
