@@ -613,7 +613,9 @@ RRG.renderNav = function(user, active = '') {
         ${group('Books', 'books', `
           <li><a href="/improve/bookshelf.html"><strong>The Bookshelf</strong></a></li>
           <li class="nav-sublabel">Volume 01</li>
-          <li><a href="/improve/book-8-step-swing.html">The 8-Step Swing</a></li>
+          <li><a href="/improve/book-8-step-swing.html">The 8-Step Swing &mdash; McLean</a></li>
+          <li class="nav-sublabel">Volume 02 &middot; Primer</li>
+          <li><a href="/improve/book-golfing-machine.html">The Golfing Machine &mdash; Kelley</a></li>
         `)}
 
         ${coachItem}

@@ -1,0 +1,1246 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Golfing Machine — The Bookshelf</title>
+<meta name="description" content="A primer on Homer Kelley's The Golfing Machine — the 1969 engineering-manual approach to golf, translated into plain English for recreational players. Hitters vs. swingers, the three imperatives, pressure points, and plane lines without the jargon.">
+<meta property="og:title" content="The Golfing Machine · RR Golf Performance">
+<meta property="og:description" content="A primer on Homer Kelley's notoriously dense golf classic. The three imperatives, hitters vs. swingers, pressure points, and plane lines translated into plain English for recreational players.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://rrgolfperformance.com/improve/book-golfing-machine.html">
+<meta property="og:image" content="https://madriverpro.com/images/rr-logo.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Golfing Machine · RR Golf Performance">
+<meta name="twitter:description" content="A primer on Homer Kelley's notoriously dense golf classic. The three imperatives, hitters vs. swingers, pressure points, and plane lines translated into plain English.">
+<meta name="twitter:image" content="https://madriverpro.com/images/rr-logo.png">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  /* =============================================================
+     THE GOLFING MACHINE — primer. Six expandable chapters with the
+     same inner layout as Volume 01 (The 8-Step Swing) plus one extra:
+       • opener
+       • KEY IDEA (gold callout)
+       • what Kelley actually said
+       • what it looks like (or: how to tell)
+       • common misunderstanding (red-tinted)
+       • takeaway (green-tinted)
+       • bridge
+     Because TGM is dense and sometimes contested, some callouts carry
+     a "coach's verification note" marker — flagging spots where even
+     careful readers disagree and Ryan should fact-check if something
+     reads wrong to him.
+     ============================================================= */
+
+  /* ---- BOOK HERO ---- */
+  .book-hero {
+    background: linear-gradient(180deg, var(--navy) 0%, #162E54 100%);
+    color: #fff;
+    border-radius: 14px;
+    padding: 56px 44px 48px;
+    margin-bottom: 36px;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .book-hero::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--gold);
+  }
+  .book-hero::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent 0%, var(--gold) 30%, var(--gold) 70%, transparent 100%);
+    opacity: 0.4;
+  }
+  .book-hero .vol {
+    display: inline-block;
+    font-size: 11px; letter-spacing: 0.24em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase;
+    padding: 5px 16px; border: 1px solid var(--gold);
+    border-radius: 999px; margin-bottom: 20px;
+  }
+  .book-hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(44px, 7vw, 68px);
+    font-weight: 600; color: #fff;
+    margin: 0; line-height: 1.05; letter-spacing: -0.01em;
+  }
+  .book-hero .subtitle {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; font-size: 20px;
+    color: rgba(255,255,255,0.78);
+    margin: 14px auto 22px; max-width: 620px;
+  }
+  .book-hero .gold-dash {
+    width: 60px; height: 2px; background: var(--gold);
+    margin: 0 auto 22px;
+  }
+  .book-hero .attrib {
+    font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(255,255,255,0.55); font-weight: 500;
+  }
+
+  /* ---- FROM THE COACH NOTE ---- */
+  .coach-note {
+    background: #F7F2E8;
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--gold);
+    border-radius: 10px;
+    padding: 28px 32px;
+    margin: 0 0 36px;
+  }
+  .coach-note .cn-label {
+    font-size: 11px; letter-spacing: 0.2em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 10px;
+  }
+  .coach-note p {
+    font-size: 15.5px; line-height: 1.7; color: var(--navy-mid);
+    margin: 0 0 12px;
+  }
+  .coach-note p:last-child { margin-bottom: 0; }
+  .coach-note p strong { color: var(--navy); }
+  .coach-note .sign-off {
+    margin-top: 14px;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; color: var(--navy); font-size: 16px;
+  }
+
+  /* ---- TOC ---- */
+  .book-toc {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--gold);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 36px;
+  }
+  .book-toc h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px; color: var(--navy); margin: 0 0 16px; font-weight: 600;
+  }
+  .book-toc ol { list-style: none; margin: 0; padding: 0; }
+  .book-toc li {
+    display: grid; grid-template-columns: 60px 1fr auto;
+    align-items: baseline; gap: 16px;
+    padding: 12px 0; border-bottom: 1px solid var(--rule);
+  }
+  .book-toc li:last-child { border-bottom: none; }
+  .book-toc .ch-num {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; font-size: 20px; color: var(--gold); font-weight: 400;
+  }
+  .book-toc .ch-title {
+    font-size: 15px; color: var(--navy); font-weight: 600;
+  }
+  .book-toc .ch-title small {
+    display: block; font-size: 12px; color: var(--mid-grey);
+    font-weight: 400; margin-top: 2px; font-style: italic;
+  }
+  .book-toc a.ch-jump {
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--gold); font-weight: 700; text-decoration: none;
+  }
+  .book-toc a.ch-jump:hover { color: var(--navy); }
+
+  /* ---- CHAPTER CARDS ---- */
+  .chapter-stack { display: grid; gap: 16px; margin-bottom: 40px; }
+
+  .chapter {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--gold);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: box-shadow .2s ease;
+  }
+  .chapter[open] {
+    box-shadow: 0 14px 34px rgba(13,31,60,0.09);
+  }
+  .chapter summary {
+    display: grid;
+    grid-template-columns: 74px 1fr 28px;
+    gap: 18px; align-items: center;
+    padding: 22px 26px;
+    cursor: pointer; list-style: none; user-select: none;
+  }
+  .chapter summary::-webkit-details-marker { display: none; }
+  .chapter .num {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 48px; color: var(--gold); font-weight: 700;
+    line-height: 1; text-align: center;
+    border-right: 1px solid var(--rule); padding-right: 18px;
+  }
+  .chapter .title-stack .ch-kicker {
+    font-size: 10px; letter-spacing: 0.22em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .chapter .title-stack h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px; color: var(--navy); font-weight: 600;
+    margin: 0 0 4px; line-height: 1.2;
+  }
+  .chapter .title-stack .ch-teaser {
+    font-size: 13px; color: var(--navy-mid); line-height: 1.5;
+  }
+  .chapter .chev {
+    color: var(--mid-grey); font-size: 22px; line-height: 1;
+    transition: transform .2s ease; text-align: center;
+    justify-self: center;
+  }
+  .chapter[open] .chev { transform: rotate(90deg); color: var(--gold); }
+
+  .chapter .body {
+    padding: 0 26px 28px calc(26px + 74px + 18px);
+    color: var(--navy-mid); line-height: 1.7; font-size: 15px;
+  }
+  .chapter .body p { margin: 0 0 12px; }
+  .chapter .body p strong { color: var(--navy); }
+  .chapter .body ul { margin: 8px 0 14px 20px; padding: 0; }
+  .chapter .body ul li { margin-bottom: 6px; }
+
+  .chapter .body h4 {
+    font-size: 11px; letter-spacing: 0.18em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase;
+    margin: 22px 0 8px;
+  }
+
+  .key-idea {
+    background: #F7F2E8;
+    border-left: 3px solid var(--gold);
+    padding: 14px 18px; border-radius: 4px;
+    margin: 16px 0; font-size: 15px; line-height: 1.6;
+  }
+  .key-idea b { color: var(--navy); }
+
+  .feel-pull {
+    border-left: 3px solid var(--gold);
+    padding: 6px 0 6px 18px;
+    margin: 16px 0;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; font-size: 19px; line-height: 1.45;
+    color: var(--navy);
+  }
+
+  .mistake-box {
+    background: #FDF6F4;
+    border-left: 3px solid #C76757;
+    padding: 14px 18px; border-radius: 4px;
+    margin: 16px 0;
+  }
+  .mistake-box .mb-title {
+    color: #9A3D2F; font-weight: 700; font-size: 12px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .mistake-box ul { margin: 6px 0 0 18px; padding: 0; }
+  .mistake-box li { color: var(--navy-mid); margin-bottom: 4px; }
+
+  .drill-box {
+    background: #F2F6EE;
+    border-left: 3px solid #6B8B4E;
+    padding: 14px 18px; border-radius: 4px;
+    margin: 16px 0;
+  }
+  .drill-box .db-title {
+    color: #4C6B30; font-weight: 700; font-size: 12px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  /* NEW for TGM — Coach's verification note, flags spots where even
+     careful readers disagree so Ryan can fact-check if something reads
+     wrong against his own understanding. */
+  .verify-box {
+    background: #F4F1FA;
+    border-left: 3px solid #7A6BA8;
+    padding: 12px 16px; border-radius: 4px;
+    margin: 14px 0;
+    font-size: 13.5px; line-height: 1.55;
+  }
+  .verify-box .vb-title {
+    color: #4F4380; font-weight: 700; font-size: 11px;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .bridge {
+    margin-top: 20px; padding-top: 16px;
+    border-top: 1px dashed var(--rule);
+    font-style: italic; font-size: 14px;
+    color: var(--mid-grey);
+  }
+
+  @media (max-width: 620px) {
+    .chapter summary {
+      grid-template-columns: 54px 1fr 24px; gap: 12px; padding: 18px 18px;
+    }
+    .chapter .num { font-size: 36px; padding-right: 12px; }
+    .chapter .title-stack h3 { font-size: 18px; }
+    .chapter .body {
+      padding: 0 18px 20px 18px;
+    }
+    .book-toc li { grid-template-columns: 38px 1fr; }
+    .book-toc a.ch-jump { grid-column: 2; margin-top: 4px; }
+  }
+
+  /* ---- CLOSING + ATTRIBUTION ---- */
+  .next-steps {
+    background: var(--navy);
+    color: #fff;
+    border-radius: 12px;
+    padding: 32px 34px;
+    margin: 40px 0 28px;
+  }
+  .next-steps h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 26px; color: #fff; margin: 0 0 10px; font-weight: 600;
+  }
+  .next-steps p {
+    font-size: 15px; line-height: 1.7; color: rgba(255,255,255,0.88);
+    margin: 0 0 12px;
+  }
+  .next-steps p strong { color: var(--gold); }
+  .next-steps ol {
+    margin: 8px 0 12px 22px; padding: 0;
+    color: rgba(255,255,255,0.92);
+  }
+  .next-steps ol li {
+    margin-bottom: 8px; font-size: 15px; line-height: 1.55;
+  }
+
+  .attribution {
+    background: #F7F2E8;
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 22px 26px;
+    margin: 28px 0;
+  }
+  .attribution h3 {
+    font-size: 12px; letter-spacing: 0.2em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin: 0 0 10px;
+  }
+  .attribution p {
+    font-size: 14px; line-height: 1.65; color: var(--navy-mid);
+    margin: 0 0 10px;
+  }
+  .attribution p strong { color: var(--navy); }
+
+  /* ---- GLOSSARY ---- */
+  .glossary {
+    background: var(--white); border: 1px solid var(--rule);
+    border-radius: 10px; padding: 28px 30px; margin: 28px 0;
+  }
+  .glossary h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px; color: var(--navy); margin: 0 0 14px; font-weight: 600;
+  }
+  .glossary dl {
+    display: grid; grid-template-columns: minmax(160px, 1fr) 2fr;
+    gap: 10px 22px;
+  }
+  .glossary dt { font-weight: 700; color: var(--navy); font-size: 14px; }
+  .glossary dd {
+    margin: 0; color: var(--navy-mid); font-size: 14px; line-height: 1.5;
+  }
+  @media (max-width: 620px) {
+    .glossary dl { grid-template-columns: 1fr; gap: 4px 0; }
+    .glossary dd { margin-bottom: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container">
+
+  <div class="breadcrumb">
+    <a href="index.html">Library</a><span>›</span><a href="bookshelf.html">Bookshelf</a><span>›</span>The Golfing Machine
+  </div>
+
+  <!-- ===================== BOOK HERO ===================== -->
+  <div class="book-hero">
+    <span class="vol">Bookshelf · Volume 02 · Primer</span>
+    <h1>The Golfing Machine.</h1>
+    <div class="subtitle">The most misunderstood golf book ever written &mdash; translated.</div>
+    <div class="gold-dash"></div>
+    <div class="attrib">A primer on Homer Kelley's 1969 classic</div>
+  </div>
+
+  <!-- ===================== COACH NOTE ===================== -->
+  <div class="coach-note">
+    <div class="cn-label">From the coach</div>
+    <p>
+      I've picked up <em>The Golfing Machine</em> three times and put it down three times.
+      It reads like the operating manual for a piece of industrial equipment &mdash; which,
+      in a way, is exactly what Homer Kelley intended. Kelley was an engineer, not a golf
+      teacher, and the book he published in 1969 isn't a swing method. It's a <strong>catalog</strong>
+      of every legal component of a golf swing, organized like a periodic table.
+    </p>
+    <p>
+      That's the first thing to understand, and nobody tells you up front: there is no
+      "Kelley swing." The book is a reference for instructors to build a swing that fits
+      a specific player. Ben Doyle used it to coach Bobby Clampett to world amateur number
+      one. Mac O'Grady swore by it. Bryson DeChambeau built a career around one of its
+      patterns. But none of those three swing the same way &mdash; they all just assembled
+      valid choices from Kelley's catalog.
+    </p>
+    <p>
+      <strong>This primer is for recreational players who tried to read the book and
+      bounced off.</strong> Six chapters. I've translated the five or six concepts worth
+      stealing from TGM into plain English, and I've flagged the places where careful
+      readers disagree so you know where to double-check. Read it and you'll understand
+      what Kelley was actually arguing &mdash; more than most people who own the book.
+    </p>
+    <p>
+      The concepts that matter: hitters versus swingers, the three imperatives, the four
+      pressure points, and plane lines without the geometry textbook. At the end, a
+      practical takeaway about how to use TGM without becoming a TGM nerd.
+    </p>
+    <div class="sign-off">&mdash; Ryan</div>
+  </div>
+
+  <!-- ===================== TOC ===================== -->
+  <div class="book-toc">
+    <h2>Table of contents</h2>
+    <ol>
+      <li>
+        <div class="ch-num">01</div>
+        <div>
+          <div class="ch-title">What Kelley was actually arguing
+            <small>Why TGM isn't a swing method &mdash; and what it actually is.</small>
+          </div>
+        </div>
+        <a class="ch-jump" href="#ch1">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">02</div>
+        <div>
+          <div class="ch-title">Hitters vs. swingers
+            <small>Kelley's most useful idea. Two valid ways to deliver the club. Pick one.</small>
+          </div>
+        </div>
+        <a class="ch-jump" href="#ch2">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">03</div>
+        <div>
+          <div class="ch-title">The three imperatives
+            <small>The three things every valid golf swing must do at impact. No exceptions.</small>
+          </div>
+        </div>
+        <a class="ch-jump" href="#ch3">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">04</div>
+        <div>
+          <div class="ch-title">The four pressure points
+            <small>The four contact points that tell you what the club is doing in real time.</small>
+          </div>
+        </div>
+        <a class="ch-jump" href="#ch4">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">05</div>
+        <div>
+          <div class="ch-title">Plane lines in plain English
+            <small>Kelley's obsession. The tilted circle your clubhead draws &mdash; without the geometry textbook.</small>
+          </div>
+        </div>
+        <a class="ch-jump" href="#ch5">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">06</div>
+        <div>
+          <div class="ch-title">Using TGM without becoming a TGM nerd
+            <small>Steal the concepts. Skip the cult. Five things worth keeping from all 400 pages.</small>
+          </div>
+        </div>
+        <a class="ch-jump" href="#ch6">Read &rarr;</a>
+      </li>
+    </ol>
+  </div>
+
+  <!-- ===================== CHAPTERS ===================== -->
+  <div class="chapter-stack">
+
+    <!-- ========== CHAPTER 1 ========== -->
+    <details class="chapter" id="ch1">
+      <summary>
+        <div class="num">1</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter One</div>
+          <h3>What Kelley was actually arguing</h3>
+          <div class="ch-teaser">Why TGM isn't a swing method &mdash; and what it actually is.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          Here's the thing nobody tells you before you open <em>The Golfing Machine</em>
+          for the first time: <strong>Homer Kelley wasn't writing a swing method.</strong>
+          He was writing a catalog. If you read it as a method &mdash; like McLean's
+          <em>8-Step Swing</em> or Leadbetter's <em>The Golf Swing</em> &mdash; you'll
+          spend 400 pages looking for "the answer" and come out frustrated, because
+          Kelley never gives you one. He gives you every answer, laid out like parts in
+          a machinist's catalog, and leaves you to assemble the ones that fit you.
+        </p>
+
+        <div class="key-idea">
+          <b>The key idea.</b> Kelley was an engineer who catalogued every legal
+          component of a golf swing and showed how they fit together. There is no
+          "Kelley swing." Every valid swing is an assembly of choices from his
+          catalog &mdash; and infinitely many valid swings exist.
+        </div>
+
+        <h4>What Kelley actually said</h4>
+        <p>
+          The book organizes the golf swing into <strong>10 basic components</strong>
+          (grip, stance, plane, position, stroke, power, motion, etc.), each of which
+          contains sub-components. By the time you reach the last chapter there are
+          hundreds of individual variations catalogued. Each variation is a <em>valid
+          choice</em>. Any combination of valid choices, assembled coherently, produces
+          a swing that works.
+        </p>
+
+        <div class="feel-pull">
+          &ldquo;A golf swing is whatever a golfer does to move the clubhead from
+          address to impact. The Golfing Machine categorizes the valid ways to do that.
+          It does not prescribe one.&rdquo;
+        </div>
+
+        <p>
+          This is why the book reads the way it does. Kelley wrote in the voice of an
+          engineer because he was writing a <strong>reference manual</strong>, not a
+          teaching text. His prose is dense because it has to be unambiguous &mdash; an
+          instructor reading the book needs to know exactly which component is which,
+          with no interpretation. It's closer to an IKEA assembly manual than a golf
+          instruction book.
+        </p>
+
+        <h4>Why it's hard to read</h4>
+        <p>
+          Kelley invented precise vocabulary for components that previously had no names
+          &mdash; or had a dozen different names across different teachers. A typical
+          sentence might read: <em>"The stroke pattern is the geometric manifestation of
+          the chosen power package, plane, and hand-action trace path."</em> That's not
+          bad writing. That's an engineer being precise. But if you don't know what
+          "power package" or "trace path" means &mdash; and you don't, because Kelley
+          invented the terms &mdash; it's incomprehensible.
+        </p>
+        <p>
+          The dense vocabulary is also why TGM attracted a <strong>cult following</strong>.
+          Once you learn Kelley's terms, you can talk about golf with a precision nobody
+          else has. That precision is intoxicating for a certain kind of student. It's
+          also why most people quit &mdash; because learning the vocabulary is a project
+          unto itself, separate from actually improving your golf swing.
+        </p>
+
+        <div class="mistake-box">
+          <div class="mb-title">Common misunderstanding</div>
+          <p style="margin:0 0 6px;">
+            "TGM is a swing method. If I read it carefully, I'll learn The Kelley Swing."
+          </p>
+          <p style="margin:0;">
+            No such thing. Kelley never taught a swing. He documented the swing, as a
+            system, the way a biologist documents an ecosystem. You can't copy his swing
+            because he didn't have one to copy.
+          </p>
+        </div>
+
+        <div class="drill-box">
+          <div class="db-title">Practical takeaway</div>
+          <p style="margin:0;">
+            Read TGM as a <strong>menu</strong>, not a manual. When you see a concept
+            that resonates &mdash; a pressure point, a plane, a motion type &mdash; circle
+            it and try it at the range. When you hit a chapter that feels like engineering
+            homework, skip it. The book becomes useful the moment you stop trying to
+            read it cover-to-cover.
+          </p>
+        </div>
+
+        <div class="bridge">
+          The biggest fork in Kelley's menu is whether you're a Hitter or a Swinger.
+          That single choice determines most of what comes after.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 2 ========== -->
+    <details class="chapter" id="ch2">
+      <summary>
+        <div class="num">2</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Two</div>
+          <h3>Hitters vs. swingers</h3>
+          <div class="ch-teaser">Kelley's most useful idea. Two valid ways to deliver the club. Pick one.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          If you take away one thing from <em>The Golfing Machine</em>, take this.
+          Kelley identified <strong>two fundamentally different ways</strong> the human
+          body can deliver a golf club to a ball. Both work. Neither is better. But
+          they are <em>not</em> the same motion, and most amateurs are stuck somewhere
+          between the two &mdash; which is why their swings feel inconsistent.
+        </p>
+
+        <div class="key-idea">
+          <b>The key idea.</b> A <b>Swinger</b> uses centrifugal force &mdash; the body
+          pulls the arms, the arms pull the hands, the clubhead trails behind and
+          whips through at the bottom. A <b>Hitter</b> uses muscular thrust &mdash; the
+          trail arm actively pushes the club into the ball, like throwing a punch. Both
+          deliver the clubhead. They do it through completely different mechanisms.
+        </div>
+
+        <h4>What each one looks like</h4>
+        <p>
+          <strong>Swingers</strong> look effortless. The action flows. The clubhead
+          appears to be trailing the body all the way down, then catches up at impact
+          through pure momentum. The finish is long, balanced, held &mdash; you can
+          picture the tour-pro pose. Rory McIlroy, Bobby Jones, Fred Couples, Sam Snead
+          are often described this way.
+        </p>
+        <p>
+          <strong>Hitters</strong> look muscular. There's a visible thrust from the
+          trail arm through impact. The action happens <em>at</em> the ball, not through
+          it &mdash; the peak effort is right at the moment of contact. The finish is
+          often abbreviated or less balanced, because the work is done once the ball
+          is gone. Mac O'Grady (a famous TGM instructor) and, in some readings, Bryson
+          DeChambeau, fit the hitter pattern.
+        </p>
+
+        <div class="verify-box">
+          <div class="vb-title">Coach's verification note</div>
+          Applying "hitter" or "swinger" labels to specific tour players is a favorite
+          TGM-adherent pastime and the labels get argued over constantly. The point
+          here isn't that any specific pro is definitively one or the other &mdash; it's
+          that the two patterns exist and are visibly different. Film both and you'll
+          see it.
+        </div>
+
+        <h4>How to tell which one you are</h4>
+        <p>
+          You're probably already one or the other by nature. A few indicators:
+        </p>
+        <ul>
+          <li>If you try to "swing easier" and <strong>lose significant distance</strong>, you're likely a <strong>hitter</strong> &mdash; your body generates speed through muscular effort, and removing effort removes speed.</li>
+          <li>If you try to "hit it harder" and the shots get <strong>wild and off-line</strong>, you're likely a <strong>swinger</strong> &mdash; your body generates speed through rhythm and flow, and adding effort breaks the rhythm.</li>
+          <li>Background matters: people who come from <strong>throwing sports</strong> (football, baseball, shot put) or lifting tend toward hitter. People from <strong>rotation sports</strong> (tennis, hockey, dance) tend toward swinger.</li>
+          <li>Grip pressure preference: hitters usually want a <strong>firmer grip</strong>, swingers a <strong>softer grip</strong>. Not always &mdash; but often.</li>
+        </ul>
+
+        <div class="feel-pull">
+          &ldquo;Most amateurs are stuck because they're half-hitter, half-swinger.
+          They swing easy because the magazines tell them to &mdash; but their body
+          wants to hit. So they get neither the flow of a swinger nor the power of a
+          hitter.&rdquo;
+        </div>
+
+        <div class="mistake-box">
+          <div class="mb-title">Common misunderstanding</div>
+          <p style="margin:0 0 6px;">
+            "Hitters hit the ball. Swingers swing at the ball. The vocabulary is the
+            same thing."
+          </p>
+          <p style="margin:0;">
+            Both strike the ball. The difference is the <strong>source of the speed</strong>.
+            Swingers use centrifugal force (the trail hand is soft and passive, trailing
+            behind). Hitters use muscular push (the trail arm is active, thrusting the
+            club). You can't do both at the same time &mdash; the hand actions contradict
+            each other.
+          </p>
+        </div>
+
+        <div class="drill-box">
+          <div class="db-title">Practical takeaway</div>
+          <p style="margin:0;">
+            Pick one. Commit. Spend a full range session experimenting. Hit 20 balls
+            as a pure swinger (soft trail hand, rhythm, long finish). Hit 20 as a
+            pure hitter (firmer trail hand, thrust through impact, abbreviated finish).
+            One will feel obvious. That's your pattern. Stop trying to be the other one.
+          </p>
+        </div>
+
+        <div class="bridge">
+          Whichever you pick, Kelley said all valid swings share three non-negotiable
+          truths at impact. Those are the Three Imperatives.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 3 ========== -->
+    <details class="chapter" id="ch3">
+      <summary>
+        <div class="num">3</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Three</div>
+          <h3>The three imperatives</h3>
+          <div class="ch-teaser">The three things every valid golf swing must do at impact. No exceptions.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          This is Kelley's single most-cited contribution to golf instruction. Regardless
+          of whether you're a hitter or a swinger, regardless of whether your swing is
+          upright or flat, short or long, fast or slow &mdash; <strong>three things
+          must be true at impact</strong>, or your shots will be inconsistent. These
+          aren't style preferences. They're physics.
+        </p>
+
+        <div class="key-idea">
+          <b>The three imperatives at impact.</b>
+          <br><br>
+          <b>1. A flat lead wrist.</b> The back of your lead wrist (left wrist for a
+          right-handed player) is flat or slightly bowed &mdash; not cupped up. This is
+          what squares the clubface.
+          <br><br>
+          <b>2. Clubhead lag pressure point maintained.</b> Specifically, the trail
+          hand's index finger keeps pressure on the grip all the way through impact.
+          This is the lag that stores and delivers power.
+          <br><br>
+          <b>3. A straight plane line.</b> For a window around impact, the clubhead
+          travels along a line parallel to the target. Not swinging across it, not
+          wandering.
+        </div>
+
+        <h4>Why these three, specifically</h4>
+        <p>
+          Kelley didn't pick these three arbitrarily. Each one controls a specific
+          variable that determines where the ball goes:
+        </p>
+        <ul>
+          <li><strong>Flat lead wrist</strong> controls <strong>clubface</strong>. If the lead wrist is cupped at impact, the clubface is open and the ball goes right (for a right-handed player). Bowed, and it closes down the face.</li>
+          <li><strong>PP3 pressure</strong> controls <strong>clubhead lag</strong>. Maintain the pressure from the trail index finger, and the clubhead trails the hands through impact &mdash; meaning the shaft leans forward, the loft is de-lofted, and the energy stored in the downswing is delivered to the ball. Lose the pressure, and the clubhead throws past the hands early: "casting." Fat shots, thin shots, loss of distance.</li>
+          <li><strong>Straight plane line</strong> controls <strong>direction</strong>. If the clubhead is traveling parallel to the target when it hits the ball, the ball goes toward the target. Swing across that line and you get pulls, pushes, slices, hooks.</li>
+        </ul>
+
+        <div class="feel-pull">
+          &ldquo;Every valid golf swing ever hit &mdash; Nelson, Hogan, Jones, Woods,
+          McIlroy, Sorenstam, every pro in every era &mdash; has these three things
+          true at impact. Styles differ. Impact doesn't.&rdquo;
+        </div>
+
+        <h4>What each one looks like when an amateur gets it wrong</h4>
+        <p>
+          Most recreational players fail on imperative #1 (flat lead wrist). The wrist
+          breaks down &mdash; flips upward &mdash; at or just before impact. The result
+          is the classic "scoop": the clubface opens, the loft adds, and the ball
+          either goes weak-right or gets topped / hit thin. Watch any amateur pull a
+          phone out at the range and ask them to video a 7-iron from face-on. Seven out
+          of ten will show cupping at impact.
+        </p>
+        <p>
+          Imperative #2 failures show up as <strong>casting</strong>: the wrists unhinge
+          too early in the downswing, the clubhead races past the hands, and by impact
+          the player has no lag left to deliver. The shaft points backward (lean is
+          gone), loft is added, ball balloons.
+        </p>
+        <p>
+          Imperative #3 failures show up as <strong>direction inconsistency</strong>:
+          pulls, pushes, pull-hooks, push-fades. The clubface might be square, but
+          the clubhead is traveling across the target line at impact.
+        </p>
+
+        <div class="mistake-box">
+          <div class="mb-title">Common misunderstanding</div>
+          <p style="margin:0 0 6px;">
+            "The three imperatives = three positions I need to hold throughout my swing."
+          </p>
+          <p style="margin:0;">
+            No. They're truths about <strong>impact only</strong>. Everything before
+            impact (grip, takeaway, top, transition) and everything after (release,
+            follow-through, finish) can vary enormously between valid swings. Kelley's
+            point is that the imperatives are the <em>destination</em> &mdash; the impact
+            condition. How you get there is the component choice.
+          </p>
+        </div>
+
+        <div class="drill-box">
+          <div class="db-title">Practical takeaway</div>
+          <p style="margin:0;">
+            If you fix nothing else in your golf swing for the rest of your life, fix
+            the <strong>flat lead wrist at impact</strong>. It is the single biggest
+            miss in amateur golf. Film yourself from face-on. Freeze at impact. If
+            your lead wrist is cupped, that's your project. Everything else can wait.
+          </p>
+        </div>
+
+        <div class="bridge">
+          To feel imperative #2 (lag pressure), you need to know what Kelley meant by
+          "pressure points." Four of them, and PP3 is the one that changes your swing
+          the most.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 4 ========== -->
+    <details class="chapter" id="ch4">
+      <summary>
+        <div class="num">4</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Four</div>
+          <h3>The four pressure points</h3>
+          <div class="ch-teaser">The four contact points that tell you what the club is doing in real time.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          Kelley's most physical, most feel-based concept. The pressure points are the
+          specific places where your hands contact the club &mdash; and where your chest
+          contacts your lead upper arm. They're how you <em>feel</em> what the clubhead
+          is doing without having to think about it. Once you feel the right pressure
+          points, you can diagnose your own swing in real time.
+        </p>
+
+        <div class="key-idea">
+          <b>The four pressure points.</b>
+          <br><br>
+          <b>PP1</b> &mdash; The heel pad of your trail hand, pressing against the side
+          of the grip. The "aim" pressure. When PP1 is firm, the clubhead is pointing
+          where you've aimed it.
+          <br><br>
+          <b>PP2</b> &mdash; The base of your lead hand's index finger, pressing against
+          the grip. Often called "the last finger on the club." Critical for swingers
+          especially.
+          <br><br>
+          <b>PP3</b> &mdash; The trail hand's index finger, pressing against the grip.
+          <strong>THIS IS THE BIG ONE.</strong> Kelley's "clubhead lag pressure point."
+          <br><br>
+          <b>PP4</b> &mdash; Your chest / sternum, pressing against your lead upper arm.
+          The "pivot pressure" &mdash; your body and lead arm are connected as one unit.
+        </div>
+
+        <h4>What to feel, in plain English</h4>
+        <p>
+          Pick up a club and grip it normally. Now focus on four specific sensations:
+        </p>
+        <ul>
+          <li><strong>PP1</strong> &mdash; push the heel pad of your trail hand down into the top-side of the grip. You'll feel the grip pressing back.</li>
+          <li><strong>PP2</strong> &mdash; curl the base of your lead-hand index finger <em>around and up</em> under the grip, so the finger presses into the handle. You'll feel your lead hand "hooked" onto the club.</li>
+          <li><strong>PP3</strong> &mdash; feel the <em>side</em> of your trail-hand index finger pressing <em>into</em> the grip (not just hooked around it, but actively pressing). This is the critical one.</li>
+          <li><strong>PP4</strong> &mdash; feel your lead arm resting against the side of your chest. Your body can't turn without your arm going with it.</li>
+        </ul>
+
+        <div class="feel-pull">
+          &ldquo;If you only feel one thing, feel PP3. Maintain that trail-index-finger
+          pressure from the top of your backswing all the way to just after impact.
+          Casting disappears. Lag appears. Distance goes up.&rdquo;
+        </div>
+
+        <h4>What PP3 does for your swing</h4>
+        <p>
+          Of the four, PP3 is the one worth obsessing over. The pressure from your
+          trail-hand index finger against the grip is the <strong>direct physical
+          evidence of clubhead lag</strong>. If that pressure is there, the clubhead
+          is trailing your hands (good). If you lose that pressure &mdash; if it goes
+          slack &mdash; the clubhead has passed your hands and you're casting (bad).
+        </p>
+        <p>
+          The reason PP3 matters so much is that it translates Kelley's abstract
+          "imperative" into a sensation you can actually feel. You don't have to think
+          about shaft lean or wrist angles. You just feel whether that one finger
+          is still pressing. That's it.
+        </p>
+
+        <div class="verify-box">
+          <div class="vb-title">Coach's verification note</div>
+          Different TGM sources describe PP1/PP2 with slightly different emphasis &mdash;
+          some instructors focus on PP1 as the aim-of-the-face, others as the
+          pure lag-support pressure for hitters. The descriptions above are a
+          consolidated version of the most common framings. PP3 and PP4, by contrast,
+          are described consistently across most TGM sources.
+        </div>
+
+        <div class="mistake-box">
+          <div class="mb-title">Common misunderstanding</div>
+          <p style="margin:0 0 6px;">
+            "Pressure points are just another way of saying grip pressure."
+          </p>
+          <p style="margin:0;">
+            They're not the same thing. Grip pressure is <strong>how hard you squeeze
+            the whole club</strong>. Pressure points are <strong>specific contact
+            points</strong> that give you feedback about what the club is doing. You
+            can have a light overall grip pressure and still feel strong pressure-point
+            feedback. In fact, that's the goal.
+          </p>
+        </div>
+
+        <div class="drill-box">
+          <div class="db-title">Practical takeaway</div>
+          <p style="margin:0;">
+            Hit 20 range balls focusing only on maintaining PP3 pressure from the top
+            of your backswing through impact. Don't worry about anything else. Most
+            amateurs will feel the pressure go slack at the transition from backswing
+            to downswing &mdash; that's casting happening in real time. Once you feel
+            PP3 stay firm from the top all the way to the ball, you've felt what
+            Kelley was pointing at the whole time.
+          </p>
+        </div>
+
+        <div class="bridge">
+          Now that you can <em>feel</em> the club, let's talk about <em>where</em>
+          you're swinging it &mdash; Kelley's famously dense concept of "the plane."
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 5 ========== -->
+    <details class="chapter" id="ch5">
+      <summary>
+        <div class="num">5</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Five</div>
+          <h3>Plane lines in plain English</h3>
+          <div class="ch-teaser">Kelley's obsession. The tilted circle your clubhead draws &mdash; without the geometry textbook.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          Kelley wrote <em>hundreds of pages</em> on plane. It's the densest part of
+          TGM and the place most readers quit. But the concept itself &mdash; stripped of
+          the geometry-textbook language &mdash; is simpler than it sounds.
+        </p>
+
+        <div class="key-idea">
+          <b>The key idea.</b> A "plane" is just the tilted circle the clubhead traces
+          as it swings around you. Imagine a door on hinges: the door swings through
+          a specific tilted angle. That angle is the plane. Kelley's point is this:
+          <b>pick a plane, stay on it, don't wander between planes.</b> When you wander,
+          the clubface direction at impact becomes random.
+        </div>
+
+        <h4>The three planes Kelley referenced most</h4>
+        <p>
+          There are a lot of planes in TGM, but for a primer the three most-cited are:
+        </p>
+        <ul>
+          <li><strong>Turned shoulder plane.</strong> Draw a line across your shoulders at address. Extend it out over the ball. That tilted line, extended, traces the highest of the three planes. Often used by tall, flexible players on the backswing.</li>
+          <li><strong>Elbow plane.</strong> Defined by your trail elbow. When the trail elbow folds during the backswing, it points down toward a specific spot. The clubshaft aligning with that trail-elbow angle traces the elbow plane. A common <em>delivery</em> plane &mdash; meaning many players are on the elbow plane during the downswing even if they went up on a different plane.</li>
+          <li><strong>Hands plane.</strong> Traced by the butt of the club (your hands) as they move around your body. Flatter than the shoulder plane for most players.</li>
+        </ul>
+        <p>
+          You don't need to memorize these three. The concept you need is: <strong>a
+          plane is a tilted circle</strong>, and you're on <em>some</em> plane at every
+          moment of the swing. The question is whether you stay on it &mdash; or drift
+          onto a different one &mdash; during the most important half-second, impact.
+        </p>
+
+        <div class="feel-pull">
+          &ldquo;Kelley allowed multi-plane swings &mdash; you can go up on one plane and
+          come down on another. But he insisted the transition has to be <em>deliberate</em>.
+          Most amateurs wander between planes unconsciously, and that's why their
+          direction is random.&rdquo;
+        </div>
+
+        <h4>What "plane line" actually means</h4>
+        <p>
+          A plane is a tilted circle. The "plane line" is the straight line on the
+          ground where that tilted circle would intersect the ground if you extended
+          it. For most shots, where the plane is tilted over the target line, the
+          <strong>plane line = the target line</strong> (or a line parallel to it).
+        </p>
+        <p>
+          Kelley's imperative #3 &mdash; "straight plane line" &mdash; just means this:
+          for the window around impact (a few feet before and after), the clubhead
+          should travel parallel to the target line. Not swinging across it (that's
+          over-the-top or in-to-out). Not wandering up or down (that's lifting or
+          chopping).
+        </p>
+
+        <div class="verify-box">
+          <div class="vb-title">Coach's verification note</div>
+          Plane terminology is where even long-time TGM readers diverge. Some modern
+          instructors (Leadbetter, Hardy in <em>The Plane Truth</em>, etc.) took
+          Kelley's multi-plane idea and simplified it into the "one-plane vs. two-plane"
+          framework &mdash; which is <em>not</em> the same as Kelley's original model,
+          though it draws on it. If you've read <em>The Plane Truth</em> and are
+          comparing, the vocabulary overlaps but the frameworks are distinct.
+        </div>
+
+        <h4>How to check your own plane</h4>
+        <p>
+          You don't need a launch monitor. You need a phone:
+        </p>
+        <ul>
+          <li>Film yourself from <strong>down-the-line</strong> &mdash; behind you, looking toward the target.</li>
+          <li>Freeze the video at <strong>halfway back</strong> &mdash; when the club is parallel to the ground in the backswing.</li>
+          <li>Draw an imaginary line from the <strong>butt of the club through your trail elbow</strong>, back toward you.</li>
+          <li>Where does it point? At your <strong>trail hip</strong> = on a workable plane. At the <strong>sky</strong> = too upright (off-plane high). At the <strong>ground</strong> = too flat (off-plane low).</li>
+        </ul>
+        <p>
+          This isn't a full Kelley plane analysis &mdash; it's the amateur's version.
+          But it'll tell you within one video whether your swing is on a reasonable
+          plane or whether that's a piece of your game worth working on.
+        </p>
+
+        <div class="mistake-box">
+          <div class="mb-title">Common misunderstanding</div>
+          <p style="margin:0 0 6px;">
+            "On-plane means the club stays on one shaft-plane the whole swing &mdash; the
+            way Moe Norman or modern one-plane swingers do it."
+          </p>
+          <p style="margin:0;">
+            That's the <strong>one-plane model</strong> popularized by Jim Hardy and
+            others, <em>not</em> Kelley's model. Kelley allowed multi-plane swings &mdash;
+            you can transition from one plane to another during the swing. What he
+            required is that the transition be deliberate and that the clubhead be on
+            a straight plane line through the impact window.
+          </p>
+        </div>
+
+        <div class="drill-box">
+          <div class="db-title">Practical takeaway</div>
+          <p style="margin:0;">
+            Film one swing a month from down-the-line and run the halfway-back check.
+            That's 90% of the plane awareness you need. If the club is pointing somewhere
+            reasonable (trail hip, trail elbow), you're on a workable plane. If it's
+            pointing at the sky or the ground, that's your project for the month.
+          </p>
+        </div>
+
+        <div class="bridge">
+          Five chapters in, you now know more about TGM than most people who own the
+          book. Last chapter: what to actually do with it.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 6 ========== -->
+    <details class="chapter" id="ch6">
+      <summary>
+        <div class="num">6</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Six</div>
+          <h3>Using TGM without becoming a TGM nerd</h3>
+          <div class="ch-teaser">Steal the concepts. Skip the cult. Five things worth keeping from all 400 pages.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          There's a particular type of golfer who reads TGM three times, tattoos "PP3"
+          on their forearm, and spends the next eighteen months obsessing over plane
+          geometry and pressure-point taxonomy instead of playing golf. Don't be that
+          golfer. The book is useful. The cult is not. The whole point of this primer
+          is to let you take what's valuable from Kelley and leave the rest alone.
+        </p>
+
+        <div class="key-idea">
+          <b>The rule.</b> Steal the concepts. Skip the vocabulary.
+        </div>
+
+        <h4>The five TGM concepts worth stealing</h4>
+        <ol>
+          <li style="margin-bottom:10px;">
+            <strong>Flat lead wrist at impact.</strong> The single highest-leverage fix in
+            amateur golf. If you do nothing else from this book, film your impact and
+            work on eliminating the cup.
+          </li>
+          <li style="margin-bottom:10px;">
+            <strong>Hitter or Swinger &mdash; pick one.</strong> Stop trying to swing like
+            the tour player who's wired the opposite way from you. Your body has a
+            preferred pattern. Find it and commit.
+          </li>
+          <li style="margin-bottom:10px;">
+            <strong>PP3 pressure.</strong> Feel the trail-index finger pressing into the
+            grip. Maintain that pressure from the top of the backswing to just past
+            impact. Casting disappears the moment you can actually feel this.
+          </li>
+          <li style="margin-bottom:10px;">
+            <strong>Plane awareness.</strong> Film yourself down-the-line once a month.
+            Check whether the club is on a workable plane at halfway-back. That's it.
+            You don't need to become a geometry student.
+          </li>
+          <li>
+            <strong>The assembly mindset.</strong> Kelley's deepest insight: your swing is
+            an <em>assembly</em> of valid choices, not a single "correct" pattern.
+            Stop looking for <em>the</em> swing. Look for <em>your</em> swing, built from
+            valid components that fit your body, your history, and your goals.
+          </li>
+        </ol>
+
+        <div class="feel-pull">
+          &ldquo;The best TGM students I've met aren't the ones who can recite all 216
+          components. They're the ones who know <em>which five components</em> apply
+          to them &mdash; and practice those five.&rdquo;
+        </div>
+
+        <h4>When to read the actual book</h4>
+        <p>
+          Pick up Kelley's book if:
+        </p>
+        <ul>
+          <li>You teach golf seriously and want a precise shared vocabulary with other instructors.</li>
+          <li>You're a <strong>low single-digit handicap</strong> (4 or better) and plateaued &mdash; meaning you need swing diagnosis at a resolution most golfers never reach.</li>
+          <li>You're an engineer or physicist who genuinely enjoys dense technical writing for its own sake. (Plenty of those in the TGM community &mdash; no judgment.)</li>
+        </ul>
+        <p>
+          Skip it if:
+        </p>
+        <ul>
+          <li>You're a recreational player trying to break 90, 80, or 75.</li>
+          <li>You already have a coach who knows what they're doing &mdash; trust the coach over the book.</li>
+          <li>You want to <em>improve</em> at golf rather than <em>know</em> golf. Those sound like the same thing but they are not. Most TGM readers end up knowing more than they improve.</li>
+        </ul>
+
+        <div class="mistake-box">
+          <div class="mb-title">Common misunderstanding</div>
+          <p style="margin:0 0 6px;">
+            "TGM is outdated because modern biomechanics and TrackMan have moved past it."
+          </p>
+          <p style="margin:0;">
+            Partly true, partly not. Kelley's specific geometry and mechanics have been
+            refined by modern launch-monitor data &mdash; we know more now about impact
+            dynamics than he did in 1969. But his <strong>framework</strong> &mdash; the
+            idea that the swing is a catalog of components, that impact has non-negotiable
+            truths, that pressure points give real-time feedback &mdash; still stands.
+            Most modern instruction, knowingly or not, borrows from it.
+          </p>
+        </div>
+
+        <div class="drill-box">
+          <div class="db-title">The final takeaway</div>
+          <p style="margin:0 0 8px;">
+            Kelley gave you a <strong>language for talking about your own swing</strong>
+            &mdash; a language more precise than most players ever develop. Use the
+            language when it helps. Put it down when it doesn't. Most importantly:
+          </p>
+          <p style="margin:0;"><strong>Go hit some golf balls.</strong></p>
+        </div>
+
+        <div class="bridge">
+          That's the primer. Six chapters. Five concepts worth stealing. One book you
+          don't have to read cover-to-cover to benefit from.
+        </div>
+      </div>
+    </details>
+
+  </div>
+
+  <!-- ===================== NEXT STEPS ===================== -->
+  <div class="next-steps">
+    <h2>What to do with this.</h2>
+    <p>
+      The concepts here are worth more when you try them than when you read them. In
+      order of highest-leverage to lowest:
+    </p>
+    <ol>
+      <li>
+        <strong>This week:</strong> Film your impact from face-on and check your lead-wrist
+        position. If it's cupped, that's your project for the next month.
+      </li>
+      <li>
+        <strong>Next range session:</strong> Hit 20 balls focusing only on PP3 &mdash; the
+        trail-hand index-finger pressure, maintained from the top to past impact.
+      </li>
+      <li>
+        <strong>Next week:</strong> Spend a session experimenting with hitter vs. swinger.
+        20 balls each, then pick the pattern that felt more natural and commit.
+      </li>
+      <li>
+        <strong>Once a month:</strong> Film yourself down-the-line and run the halfway-back
+        plane check.
+      </li>
+      <li>
+        <strong>Only if you're still curious:</strong> Pick up the actual book. But only then.
+      </li>
+    </ol>
+  </div>
+
+  <!-- ===================== ATTRIBUTION ===================== -->
+  <div class="attribution">
+    <h3>About this primer</h3>
+    <p>
+      This is a <strong>primer</strong> &mdash; a plain-English translation of the
+      highest-leverage concepts from Homer Kelley's <em>The Golfing Machine</em>
+      (1969). It is not a replacement for Kelley's book, and it does not attempt to
+      cover the full ~216-component catalog Kelley documented. The goal is to give a
+      recreational player enough of the framework to recognize what Kelley was pointing
+      at &mdash; and, if they want more, to read the original with a chance of
+      actually finishing it.
+    </p>
+    <p>
+      Several callouts are marked with a <strong>Coach's verification note</strong> &mdash;
+      flagging places where careful TGM readers disagree on specific emphasis, or where
+      TGM's framework diverges from later systems (like the one-plane / two-plane model
+      from <em>The Plane Truth</em>) that borrow from Kelley's work. If you notice
+      something that reads wrong against your own understanding, mention it &mdash; the
+      primer improves the more it's pressure-tested.
+    </p>
+    <p>
+      For the fuller treatment, Homer Kelley's <em>The Golfing Machine</em> is still in
+      print. Ben Doyle's teaching archive, Mac O'Grady's work, and the community around
+      the Authorized Instructor program are the best places to go deeper if the primer
+      sparks a genuine curiosity.
+    </p>
+  </div>
+
+  <!-- ===================== GLOSSARY ===================== -->
+  <div class="glossary">
+    <h2>Glossary of TGM terms</h2>
+    <dl>
+      <dt>Hitter</dt>
+      <dd>A player who delivers the clubhead through muscular thrust from the trail arm. Active trail hand, often a firmer grip.</dd>
+
+      <dt>Swinger</dt>
+      <dd>A player who delivers the clubhead through centrifugal force. Passive trail hand, soft trailing action, long held finish.</dd>
+
+      <dt>The Three Imperatives</dt>
+      <dd>Kelley's three non-negotiables at impact: a flat lead wrist, maintained clubhead lag pressure point (PP3), and a straight plane line.</dd>
+
+      <dt>Flat Lead Wrist</dt>
+      <dd>At impact, the back of the lead wrist (left for a right-handed player) is flat or slightly bowed &mdash; not cupped upward.</dd>
+
+      <dt>Lag</dt>
+      <dd>The clubhead trailing behind the hands in the downswing. Evidence that energy is still stored for delivery. Opposite of "casting."</dd>
+
+      <dt>Casting</dt>
+      <dd>The clubhead passes the hands too early in the downswing. Lag is lost. Contact becomes thin/fat, loft is added, distance drops.</dd>
+
+      <dt>PP1 / PP2 / PP3 / PP4</dt>
+      <dd>The four pressure points. PP1 = trail-hand heel pad against grip. PP2 = base of lead-hand index finger against grip. PP3 = trail-hand index finger against grip (the lag pressure point). PP4 = chest/sternum against lead upper arm (pivot pressure).</dd>
+
+      <dt>Pressure Point (generally)</dt>
+      <dd>A specific point of contact that provides sensory feedback about what the clubhead is doing. Different from overall grip pressure.</dd>
+
+      <dt>Plane</dt>
+      <dd>The tilted circle the clubhead traces as it swings around the body. Think of a door on hinges.</dd>
+
+      <dt>Plane Line</dt>
+      <dd>The straight line on the ground where the swing's plane would intersect the ground if extended. For most shots, parallel to the target line.</dd>
+
+      <dt>Turned Shoulder Plane / Elbow Plane / Hands Plane</dt>
+      <dd>Three commonly-cited reference planes in Kelley's system, defined respectively by the line of the shoulders, the trail elbow, and the path of the hands.</dd>
+
+      <dt>Component / Basic Component</dt>
+      <dd>Kelley's name for an individual element of a golf swing. Ten "basic components" (grip, stance, plane, etc.) each contain multiple sub-components. Over 200 total. Any valid swing is an assembly of valid component choices.</dd>
+
+      <dt>Power Package</dt>
+      <dd>Kelley's term for the specific combination of body motion and hand/arm action a player uses to generate clubhead speed. Different power packages fit different bodies.</dd>
+
+      <dt>Authorized Instructor</dt>
+      <dd>An instructor trained in the TGM system and certified to teach it. Ben Doyle was the first; Mac O'Grady the most famous.</dd>
+
+      <dt>The Book</dt>
+      <dd>Shorthand among TGM adherents for Kelley's original 1969 text. Affectionate, slightly reverent, and occasionally insufferable.</dd>
+    </dl>
+  </div>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  RRG.mountLibrary();
+</script>
+</body>
+</html>
