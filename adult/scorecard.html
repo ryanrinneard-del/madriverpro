@@ -1,0 +1,700 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<base href="/adult/">
+<title>Mad River Scorecard — RR Golf Performance</title>
+<meta name="description" content="Log a round at Mad River hole-by-hole. Tee selection, per-hole score, putts, and fairways — every derived stat (GIR, scrambling, doubles+) auto-computed.">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  /* ============================================================
+     MAD RIVER SCORECARD — hole-by-hole round entry. Uses the
+     course data from RRG.COURSES.madriver (7 tees, par per hole,
+     stroke index, yardage per tee). Live-computes every derived
+     stat the Path widget consumes. Submit creates a single round
+     record matching the submit-round.html payload shape so both
+     entry paths are interchangeable.
+     ============================================================ */
+
+  .sc-hero {
+    background: var(--navy); color: #fff;
+    padding: 28px 32px; border-radius: 14px;
+    margin-bottom: 22px;
+    position: relative; overflow: hidden;
+  }
+  .sc-hero::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--gold);
+  }
+  .sc-hero .kicker {
+    font-size: 11px; letter-spacing: 0.22em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .sc-hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    color: #fff; font-size: 28px; margin: 0; font-weight: 600; line-height: 1.15;
+  }
+  .sc-hero p { color: #D8DEE8; margin: 6px 0 0; font-size: 14px; line-height: 1.5; }
+  .sc-hero .quick-link {
+    display: inline-block; margin-top: 12px;
+    font-size: 12px; letter-spacing: 0.08em; color: rgba(255,255,255,0.78);
+    text-decoration: underline; text-underline-offset: 3px;
+  }
+
+  .sc-card {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 22px 26px;
+    margin-bottom: 18px;
+  }
+  .sc-card .card-label {
+    font-size: 10px; letter-spacing: 0.2em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 6px;
+  }
+  .sc-card h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    color: var(--navy); font-size: 20px; margin: 0 0 14px; font-weight: 600;
+  }
+
+  /* Setup grid */
+  .sc-setup {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px;
+  }
+  @media (max-width: 720px) {
+    .sc-setup { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 460px) {
+    .sc-setup { grid-template-columns: 1fr; }
+  }
+  .sc-setup label {
+    display: block; font-size: 10px; letter-spacing: 1px;
+    color: var(--navy); text-transform: uppercase; font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .sc-setup input, .sc-setup select {
+    width: 100%; padding: 9px 11px;
+    border: 1px solid var(--rule); border-radius: 6px;
+    font-family: inherit; font-size: 14px; color: var(--navy);
+    background: var(--white);
+  }
+  .sc-setup input:focus, .sc-setup select:focus {
+    border-color: var(--gold); outline: none;
+    box-shadow: 0 0 0 2px rgba(201,168,76,0.15);
+  }
+
+  .sc-tee-info {
+    margin-top: 14px;
+    padding: 10px 14px;
+    background: #F7F2E8;
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--gold);
+    border-radius: 6px;
+    display: flex; gap: 22px; flex-wrap: wrap;
+    font-size: 13px; color: var(--navy-mid);
+  }
+  .sc-tee-info b { color: var(--navy); }
+
+  /* Hole table */
+  .sc-holes-wrap { overflow-x: auto; margin-bottom: 6px; }
+  table.sc-holes {
+    width: 100%; border-collapse: collapse;
+    font-size: 13px; color: var(--navy);
+    min-width: 760px;
+  }
+  table.sc-holes thead th {
+    background: var(--navy); color: #fff;
+    font-size: 10px; letter-spacing: 1px;
+    padding: 8px 6px; font-weight: 700;
+    text-transform: uppercase;
+    border-right: 1px solid rgba(255,255,255,0.08);
+  }
+  table.sc-holes thead th:first-child { border-radius: 6px 0 0 0; }
+  table.sc-holes thead th:last-child { border-right: none; border-radius: 0 6px 0 0; }
+  table.sc-holes tbody td {
+    padding: 7px 6px; border-bottom: 1px solid var(--rule);
+    text-align: center;
+  }
+  table.sc-holes tbody td.h-num {
+    font-weight: 700; color: var(--navy); background: #FCF9F2;
+    font-family: 'Playfair Display', Georgia, serif; font-size: 16px;
+  }
+  table.sc-holes tbody td.h-par  { color: var(--mid-grey); font-weight: 600; }
+  table.sc-holes tbody td.h-si   { color: var(--mid-grey); font-size: 11px; }
+  table.sc-holes tbody td.h-yd   { color: var(--navy-mid); font-size: 12px; }
+  table.sc-holes tbody td.h-in-out {
+    background: #F7F2E8; font-weight: 700;
+  }
+  table.sc-holes tbody tr.row-turn td { border-top: 2px solid var(--gold); }
+  table.sc-holes input[type="number"],
+  table.sc-holes input[type="text"] {
+    width: 46px; padding: 5px 4px;
+    text-align: center;
+    border: 1px solid var(--rule); border-radius: 4px;
+    font-family: inherit; font-size: 14px; color: var(--navy);
+    background: var(--white);
+    -moz-appearance: textfield;
+  }
+  table.sc-holes input[type="number"]::-webkit-outer-spin-button,
+  table.sc-holes input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none; margin: 0;
+  }
+  table.sc-holes input:focus {
+    border-color: var(--gold); outline: none;
+    box-shadow: 0 0 0 2px rgba(201,168,76,0.15);
+  }
+  table.sc-holes input.fw-chk {
+    width: 18px; height: 18px; accent-color: var(--gold);
+  }
+  td.fw-na {
+    color: var(--mid-grey); font-size: 12px;
+  }
+
+  /* Totals strip */
+  .sc-totals {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin: 14px 0 4px;
+  }
+  @media (max-width: 720px) {
+    .sc-totals { grid-template-columns: repeat(2, 1fr); }
+  }
+  .sc-tstat {
+    background: #F7F2E8;
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--gold);
+    border-radius: 6px;
+    padding: 10px 14px;
+  }
+  .sc-tstat .lbl {
+    font-size: 10px; letter-spacing: 1.2px; color: var(--gold);
+    text-transform: uppercase; font-weight: 700;
+  }
+  .sc-tstat .val {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 24px; font-weight: 700; color: var(--navy); line-height: 1;
+    margin-top: 4px;
+  }
+  .sc-tstat .sub {
+    font-size: 11px; color: var(--mid-grey); margin-top: 2px;
+  }
+
+  .sc-submit-bar {
+    display: flex; justify-content: flex-end; gap: 10px;
+    margin-top: 18px; padding-top: 16px;
+    border-top: 1px solid var(--rule);
+  }
+</style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container-narrow">
+
+  <div class="sc-hero">
+    <div class="kicker">SCORECARD · MAD RIVER</div>
+    <h1>Log your round, hole by hole.</h1>
+    <p>Enter score, putts, fairways hit, and penalties for each hole — greens in regulation, scrambling, doubles, and your par-type splits all compute automatically.</p>
+    <a href="submit-round.html" class="quick-link">Prefer to just enter totals? Quick-entry form &rarr;</a>
+  </div>
+
+  <form id="sc-form" autocomplete="off">
+
+    <!-- ========== SETUP ========== -->
+    <div class="sc-card">
+      <div class="card-label">Setup</div>
+      <div class="sc-setup">
+        <div>
+          <label>Date</label>
+          <input type="date" name="round_date" id="sc-date" required>
+        </div>
+        <div>
+          <label>Tees</label>
+          <select name="tee_key" id="sc-tees" required>
+            <!-- populated by JS -->
+          </select>
+        </div>
+        <div>
+          <label>Format</label>
+          <select name="format">
+            <option value="Stroke Play" selected>Stroke Play</option>
+            <option value="Matchplay">Matchplay</option>
+            <option value="Tournament">Tournament</option>
+            <option value="Playing Lesson">Playing Lesson</option>
+            <option value="Prep Round">Prep Round</option>
+          </select>
+        </div>
+      </div>
+      <div class="sc-tee-info" id="sc-tee-info">
+        <span>Pick your tees to see yardage and course rating.</span>
+      </div>
+    </div>
+
+    <!-- ========== HOLES ========== -->
+    <div class="sc-card">
+      <div class="card-label">Front 9</div>
+      <div class="sc-holes-wrap">
+        <table class="sc-holes" id="sc-front">
+          <thead>
+            <tr>
+              <th>Hole</th><th>Par</th><th>SI</th><th>Yd</th>
+              <th>Score</th><th>Putts</th><th>FW</th><th>Pen.</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sc-card">
+      <div class="card-label">Back 9</div>
+      <div class="sc-holes-wrap">
+        <table class="sc-holes" id="sc-back">
+          <thead>
+            <tr>
+              <th>Hole</th><th>Par</th><th>SI</th><th>Yd</th>
+              <th>Score</th><th>Putts</th><th>FW</th><th>Pen.</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ========== TOTALS ========== -->
+    <div class="sc-card">
+      <div class="card-label">Live totals</div>
+      <h2 id="sc-total-head">Total: <span id="sc-total">—</span></h2>
+      <div class="sc-totals">
+        <div class="sc-tstat">
+          <div class="lbl">Out / In</div>
+          <div class="val"><span id="sc-out">—</span> / <span id="sc-in">—</span></div>
+        </div>
+        <div class="sc-tstat">
+          <div class="lbl">Fairways</div>
+          <div class="val" id="sc-fw">—</div>
+          <div class="sub" id="sc-fw-sub">of 14</div>
+        </div>
+        <div class="sc-tstat">
+          <div class="lbl">GIR</div>
+          <div class="val" id="sc-gir">—</div>
+          <div class="sub">of 18</div>
+        </div>
+        <div class="sc-tstat">
+          <div class="lbl">Putts</div>
+          <div class="val" id="sc-putts">—</div>
+          <div class="sub" id="sc-3putts-sub">—</div>
+        </div>
+        <div class="sc-tstat">
+          <div class="lbl">Scrambling</div>
+          <div class="val" id="sc-scr">—</div>
+          <div class="sub" id="sc-scr-sub">—</div>
+        </div>
+        <div class="sc-tstat">
+          <div class="lbl">Penalties</div>
+          <div class="val" id="sc-pen">—</div>
+        </div>
+        <div class="sc-tstat">
+          <div class="lbl">Birdies</div>
+          <div class="val" id="sc-birdies">—</div>
+        </div>
+        <div class="sc-tstat">
+          <div class="lbl">Doubles+</div>
+          <div class="val" id="sc-doubles">—</div>
+        </div>
+      </div>
+      <div class="sc-totals" style="margin-top: 10px;">
+        <div class="sc-tstat">
+          <div class="lbl">Par 3 Avg</div>
+          <div class="val" id="sc-p3">—</div>
+        </div>
+        <div class="sc-tstat">
+          <div class="lbl">Par 4 Avg</div>
+          <div class="val" id="sc-p4">—</div>
+        </div>
+        <div class="sc-tstat">
+          <div class="lbl">Par 5 Avg</div>
+          <div class="val" id="sc-p5">—</div>
+        </div>
+        <div class="sc-tstat">
+          <div class="lbl">First hole</div>
+          <div class="val" id="sc-first">—</div>
+          <div class="sub" id="sc-first-sub">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== OPTIONAL EXTRAS ========== -->
+    <details class="sr-details" id="sc-extras-details" style="margin-bottom: 14px;">
+      <summary>
+        <span>
+          Optional extras
+          <div class="details-hint">Sand saves, avg drive distance, lost balls, reflection.</div>
+        </span>
+      </summary>
+      <div class="sr-grid cols-3" style="margin: 14px 0;">
+        <div class="sr-field">
+          <label>Sand saves</label>
+          <input type="text" name="sand_saves" placeholder="1 / 2">
+        </div>
+        <div class="sr-field">
+          <label>Avg drive (yd)</label>
+          <input type="number" name="drive_dist" min="100" max="360" placeholder="230">
+        </div>
+        <div class="sr-field">
+          <label>Lost balls</label>
+          <input type="number" name="lost_balls" min="0" max="20" placeholder="0">
+        </div>
+      </div>
+      <div class="sr-field" style="margin-bottom: 14px;">
+        <label>What went well?</label>
+        <textarea name="reflection_good" placeholder="One specific moment beats a generalization."></textarea>
+      </div>
+      <div class="sr-field">
+        <label>What needs work?</label>
+        <textarea name="reflection_bad" placeholder="Where did strokes leak?"></textarea>
+      </div>
+    </details>
+
+    <div id="sc-form-error" class="callout" style="display:none; color:var(--red-risk); border-left-color:var(--red-risk); background:#FDF0EE;"></div>
+
+    <div class="sc-submit-bar">
+      <a href="history.html" class="btn btn-ghost">Cancel</a>
+      <button type="submit" class="btn btn-primary" id="sc-submit-btn">Submit round &rarr;</button>
+    </div>
+  </form>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js"></script>
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  (async () => {
+    const user = await RRG.mount('history');
+    if (!user) return;
+
+    const course = RRG.COURSES.madriver;
+    if (!course) return;
+
+    // Default date to today
+    const today = new Date();
+    const pad = n => String(n).padStart(2, '0');
+    document.getElementById('sc-date').value =
+      `${today.getFullYear()}-${pad(today.getMonth()+1)}-${pad(today.getDate())}`;
+
+    // Populate tee selector
+    const teeSelect = document.getElementById('sc-tees');
+    teeSelect.innerHTML = '<option value="">— select —</option>' +
+      course.tees.map(t => {
+        const out = t.yards.slice(0, 9).reduce((a, b) => a + b, 0);
+        const tot = t.yards.reduce((a, b) => a + b, 0);
+        return `<option value="${t.key}">${t.label} &middot; ${tot} yd</option>`;
+      }).join('');
+
+    // Render 18 hole rows. Each row: hole #, par, SI, yd (updates on tee change),
+    // score input, putts input, FW checkbox (par 4/5 only), penalties.
+    function renderHoles() {
+      const tee = course.tees.find(t => t.key === teeSelect.value);
+      ['front', 'back'].forEach((half, halfIdx) => {
+        const tbody = document.querySelector('#sc-' + half + ' tbody');
+        const start = halfIdx * 9;
+        const rows = [];
+        for (let i = 0; i < 9; i++) {
+          const hole = start + i + 1;
+          const par = course.par[start + i];
+          const si = course.mens_si[start + i];
+          const yd = tee ? tee.yards[start + i] : '—';
+          const fwCell = (par >= 4)
+            ? `<input type="checkbox" class="fw-chk" data-hole="${hole}" onchange="scRecalc()">`
+            : `<span class="fw-na">—</span>`;
+          rows.push(`
+            <tr data-hole="${hole}" data-par="${par}">
+              <td class="h-num">${hole}</td>
+              <td class="h-par">${par}</td>
+              <td class="h-si">${si}</td>
+              <td class="h-yd">${yd}</td>
+              <td><input type="number" min="1" max="15" class="score-in" data-hole="${hole}" oninput="scRecalc()"></td>
+              <td><input type="number" min="0" max="8" class="putts-in" data-hole="${hole}" oninput="scRecalc()"></td>
+              <td>${fwCell}</td>
+              <td><input type="number" min="0" max="5" class="pen-in" data-hole="${hole}" oninput="scRecalc()" value="0"></td>
+            </tr>
+          `);
+        }
+        // OUT / IN row
+        const subtotalLabel = half === 'front' ? 'OUT' : 'IN';
+        const parSub = course.par.slice(start, start + 9).reduce((a,b)=>a+b, 0);
+        const ydSub  = tee ? tee.yards.slice(start, start + 9).reduce((a,b)=>a+b, 0) : '—';
+        rows.push(`
+          <tr class="row-turn">
+            <td class="h-num h-in-out">${subtotalLabel}</td>
+            <td class="h-par h-in-out">${parSub}</td>
+            <td></td>
+            <td class="h-yd h-in-out">${ydSub}</td>
+            <td class="h-in-out" id="sc-${half}-score">—</td>
+            <td class="h-in-out" id="sc-${half}-putts">—</td>
+            <td></td>
+            <td class="h-in-out" id="sc-${half}-pen">—</td>
+          </tr>
+        `);
+        tbody.innerHTML = rows.join('');
+      });
+      updateTeeInfo();
+      scRecalc();
+    }
+
+    // Show rating / slope under the tee picker
+    function updateTeeInfo() {
+      const tee = course.tees.find(t => t.key === teeSelect.value);
+      const box = document.getElementById('sc-tee-info');
+      if (!tee) {
+        box.innerHTML = '<span>Pick your tees to see yardage and course rating.</span>';
+        return;
+      }
+      const tot = tee.yards.reduce((a,b)=>a+b, 0);
+      const mens = tee.mens_rating ? `<span><b>Men's</b> ${tee.mens_rating} / ${tee.mens_slope}</span>` : '';
+      const wom  = tee.womens_rating ? `<span><b>Ladies</b> ${tee.womens_rating} / ${tee.womens_slope}</span>` : '';
+      box.innerHTML = `
+        <span><b>${tee.label}</b></span>
+        <span><b>Total</b> ${tot} yd</span>
+        ${mens} ${wom}
+      `;
+    }
+
+    teeSelect.addEventListener('change', renderHoles);
+
+    // =========== LIVE RECALC ===========
+    /* Called on every keystroke. Computes every derived stat and writes to
+       the totals strip + OUT/IN subtotals. Everything here is idempotent. */
+    window.scRecalc = function() {
+      let outScore = 0, inScore = 0, outPutts = 0, inPutts = 0, outPen = 0, inPen = 0;
+      let fwHit = 0, fwEligible = 0;
+      let girCount = 0;
+      let threePutts = 0;
+      let scrAttempts = 0, scrMade = 0;
+      let birdies = 0, doublesPlus = 0;
+      let penalties = 0;
+      const pByType = { 3: { n: 0, sum: 0 }, 4: { n: 0, sum: 0 }, 5: { n: 0, sum: 0 } };
+      let firstScore = null, firstPar = null;
+
+      for (let h = 1; h <= 18; h++) {
+        const scoreIn = document.querySelector('.score-in[data-hole="' + h + '"]');
+        const puttsIn = document.querySelector('.putts-in[data-hole="' + h + '"]');
+        const penIn   = document.querySelector('.pen-in[data-hole="' + h + '"]');
+        const fwChk   = document.querySelector('.fw-chk[data-hole="' + h + '"]');
+        const par = parseInt(document.querySelector('tr[data-hole="' + h + '"]').dataset.par, 10);
+
+        const score = scoreIn && scoreIn.value !== '' ? parseInt(scoreIn.value, 10) : null;
+        const putts = puttsIn && puttsIn.value !== '' ? parseInt(puttsIn.value, 10) : null;
+        const pen   = penIn   && penIn.value   !== '' ? parseInt(penIn.value, 10)   : 0;
+
+        if (score != null) {
+          if (h <= 9)  outScore += score; else inScore += score;
+
+          const delta = score - par;
+          if (delta <= -1) birdies++;
+          if (delta >= 2)  doublesPlus++;
+
+          if (pByType[par]) { pByType[par].n++; pByType[par].sum += score; }
+
+          if (h === 1) { firstScore = score; firstPar = par; }
+
+          // GIR derivation: shotsToReachGreen = score - putts; GIR if <= par-2
+          if (putts != null) {
+            const reach = score - putts;
+            const gir = reach <= (par - 2);
+            if (gir) girCount++;
+            else {
+              scrAttempts++;
+              if (score <= par) scrMade++;
+            }
+          }
+        }
+        if (putts != null) {
+          if (h <= 9) outPutts += putts; else inPutts += putts;
+          if (putts >= 3) threePutts++;
+        }
+        if (pen != null) {
+          penalties += pen;
+          if (h <= 9) outPen += pen; else inPen += pen;
+        }
+        if (par >= 4) {
+          fwEligible++;
+          if (fwChk && fwChk.checked) fwHit++;
+        }
+      }
+
+      const totalScore = outScore + inScore;
+      document.getElementById('sc-total').textContent =
+        (outScore || inScore) ? totalScore : '—';
+      document.getElementById('sc-out').textContent   = outScore || '—';
+      document.getElementById('sc-in').textContent    = inScore || '—';
+
+      const setSub = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+      setSub('sc-front-score', outScore || '—');
+      setSub('sc-back-score',  inScore || '—');
+      setSub('sc-front-putts', outPutts || '—');
+      setSub('sc-back-putts',  inPutts || '—');
+      setSub('sc-front-pen',   outPen || 0);
+      setSub('sc-back-pen',    inPen || 0);
+
+      document.getElementById('sc-fw').textContent     = fwHit + ' / ' + fwEligible;
+      document.getElementById('sc-fw-sub').textContent = fwEligible ? Math.round(100 * fwHit / fwEligible) + '% hit' : '—';
+      document.getElementById('sc-gir').textContent    = girCount;
+      document.getElementById('sc-putts').textContent  = (outPutts + inPutts) || '—';
+      document.getElementById('sc-3putts-sub').textContent = threePutts + ' three-putts';
+      document.getElementById('sc-scr').textContent    = scrAttempts ? (scrMade + ' / ' + scrAttempts) : '—';
+      document.getElementById('sc-scr-sub').textContent = scrAttempts ? Math.round(100 * scrMade / scrAttempts) + '% saved' : '—';
+      document.getElementById('sc-pen').textContent    = penalties;
+      document.getElementById('sc-birdies').textContent = birdies;
+      document.getElementById('sc-doubles').textContent = doublesPlus;
+
+      document.getElementById('sc-p3').textContent = pByType[3].n ? (pByType[3].sum / pByType[3].n).toFixed(2) : '—';
+      document.getElementById('sc-p4').textContent = pByType[4].n ? (pByType[4].sum / pByType[4].n).toFixed(2) : '—';
+      document.getElementById('sc-p5').textContent = pByType[5].n ? (pByType[5].sum / pByType[5].n).toFixed(2) : '—';
+
+      if (firstScore != null) {
+        const diff = firstScore - firstPar;
+        const label = diff === 0 ? 'Par' : diff > 0 ? `+${diff}` : `${diff}`;
+        document.getElementById('sc-first').textContent = firstScore;
+        document.getElementById('sc-first-sub').textContent = label + ' (par ' + firstPar + ')';
+      } else {
+        document.getElementById('sc-first').textContent = '—';
+        document.getElementById('sc-first-sub').textContent = '—';
+      }
+    };
+
+    // Initial render (no tee selected → placeholder row yardages)
+    renderHoles();
+
+    // =========== SUBMIT ===========
+    const form = document.getElementById('sc-form');
+    const errBox = document.getElementById('sc-form-error');
+    const submitBtn = document.getElementById('sc-submit-btn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errBox.style.display = 'none';
+
+      const tee = course.tees.find(t => t.key === teeSelect.value);
+      if (!tee) {
+        errBox.textContent = 'Pick a tee before submitting.';
+        errBox.style.display = 'block';
+        return;
+      }
+
+      // Gather per-hole data
+      const holeRows = [];
+      let total = 0, totalPutts = 0, totalPen = 0;
+      let fwHit = 0, fwElig = 0, girCount = 0, threePutts = 0;
+      let scrAtt = 0, scrMade = 0, birdies = 0, doublesPlus = 0;
+      const pByType = { 3: { n: 0, sum: 0 }, 4: { n: 0, sum: 0 }, 5: { n: 0, sum: 0 } };
+      let firstScore = null, firstPar = null;
+
+      for (let h = 1; h <= 18; h++) {
+        const scoreIn = document.querySelector('.score-in[data-hole="' + h + '"]');
+        const puttsIn = document.querySelector('.putts-in[data-hole="' + h + '"]');
+        const penIn   = document.querySelector('.pen-in[data-hole="' + h + '"]');
+        const fwChk   = document.querySelector('.fw-chk[data-hole="' + h + '"]');
+        const par = parseInt(document.querySelector('tr[data-hole="' + h + '"]').dataset.par, 10);
+
+        const s = scoreIn && scoreIn.value !== '' ? parseInt(scoreIn.value, 10) : null;
+        const p = puttsIn && puttsIn.value !== '' ? parseInt(puttsIn.value, 10) : null;
+        const pn = penIn && penIn.value !== '' ? parseInt(penIn.value, 10) : 0;
+        const fw = fwChk ? fwChk.checked : null;
+
+        holeRows.push({ hole: h, par, score: s, putts: p, penalties: pn, fw_hit: fw });
+
+        if (s != null) total += s;
+        if (p != null) totalPutts += p;
+        totalPen += pn;
+
+        if (par >= 4) { fwElig++; if (fw) fwHit++; }
+        if (s != null) {
+          const delta = s - par;
+          if (delta <= -1) birdies++;
+          if (delta >= 2) doublesPlus++;
+          if (pByType[par]) { pByType[par].n++; pByType[par].sum += s; }
+          if (h === 1) { firstScore = s; firstPar = par; }
+          if (p != null) {
+            const reach = s - p;
+            if (reach <= (par - 2)) girCount++;
+            else { scrAtt++; if (s <= par) scrMade++; }
+          }
+        }
+        if (p != null && p >= 3) threePutts++;
+      }
+
+      if (!total) {
+        errBox.textContent = 'Enter at least some hole scores before submitting.';
+        errBox.style.display = 'block';
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting…';
+
+      const fd = Object.fromEntries(new FormData(form).entries());
+      const toInt  = v => (v === '' || v == null ? null : parseInt(v, 10));
+      const toText = v => (v === '' || v == null ? null : String(v));
+
+      const payload = {
+        user_id: user.id,
+        round_date: fd.round_date || null,
+        course: course.name,
+        tees: tee.label,
+        format: toText(fd.format) || 'Stroke Play',
+        holes: 18,
+        score: total,
+        fir: fwElig ? (fwHit + ' / ' + fwElig) : null,
+        gir: girCount != null ? (girCount + ' / 18') : null,
+        putts: totalPutts || null,
+        three_putts: threePutts,
+        up_down: scrAtt ? (scrMade + ' / ' + scrAtt) : null,
+        sand_saves: toText(fd.sand_saves),
+        penalties: totalPen,
+        birdies: birdies,
+        doubles_plus: doublesPlus,
+        lost_balls: toInt(fd.lost_balls),
+        drive_dist: toInt(fd.drive_dist),
+        reflection_good: toText(fd.reflection_good),
+        reflection_bad:  toText(fd.reflection_bad),
+        // Hole-by-hole detail in a structured JSON blob for richer analysis later
+        hole_detail: {
+          tee_key: tee.key,
+          tee_label: tee.label,
+          total_yards: tee.yards.reduce((a,b)=>a+b, 0),
+          rating: tee.mens_rating,
+          slope: tee.mens_slope,
+          rows: holeRows,
+          par3_avg: pByType[3].n ? pByType[3].sum / pByType[3].n : null,
+          par4_avg: pByType[4].n ? pByType[4].sum / pByType[4].n : null,
+          par5_avg: pByType[5].n ? pByType[5].sum / pByType[5].n : null,
+          first_score: firstScore,
+          first_par: firstPar,
+        },
+      };
+
+      try {
+        await RRG.subs.create(payload);
+        location.replace('history.html?new=1');
+      } catch (err) {
+        errBox.textContent = 'Could not submit: ' + (err.message || err);
+        errBox.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit round →';
+      }
+    });
+
+  })();
+</script>
+</body>
+</html>

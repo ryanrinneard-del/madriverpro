@@ -817,6 +817,7 @@ RRG.renderNav = function(user, active = '') {
           <li><a href="dashboard.html" class="${active==='dashboard'?'active':''}">Dashboard</a></li>
           <li><a href="my-plan.html"   class="${active==='plan'?'active':''}">My Plan</a></li>
           <li><a href="history.html"   class="${active==='history'?'active':''}">My Rounds</a></li>
+          <li><a href="scorecard.html" class="${active==='scorecard'?'active':''}">Mad River Scorecard</a></li>
           <li><a href="lessons.html"   class="${active==='lessons'?'active':''}">My Lessons</a></li>
           <li><a href="tiger5.html"    class="${active==='tiger5'?'active':''}">5 Errors to Avoid</a></li>
           <li><a href="profile.html"   class="${active==='profile'?'active':''}">Profile</a></li>
