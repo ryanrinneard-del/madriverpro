@@ -248,15 +248,34 @@
           <input type="text" name="up_down" placeholder="3 / 6">
         </div>
         <div class="sr-field">
-          <label>Penalties</label>
-          <input type="number" name="penalties" min="0" max="20" placeholder="0">
+          <label>Sand saves</label>
+          <input type="text" name="sand_saves" placeholder="1 / 2">
         </div>
       </div>
 
-      <div class="sr-grid cols-2" style="margin-bottom:14px;">
+      <div class="sr-grid cols-3" style="margin-bottom:14px;">
+        <div class="sr-field">
+          <label>Penalties</label>
+          <input type="number" name="penalties" min="0" max="20" placeholder="0">
+        </div>
+        <div class="sr-field">
+          <label>Birdies</label>
+          <input type="number" name="birdies" min="0" max="18" placeholder="0">
+        </div>
+        <div class="sr-field">
+          <label>Doubles or worse</label>
+          <input type="number" name="doubles_plus" min="0" max="18" placeholder="0">
+        </div>
+      </div>
+
+      <div class="sr-grid cols-3" style="margin-bottom:14px;">
         <div class="sr-field">
           <label>Lost balls</label>
           <input type="number" name="lost_balls" min="0" max="20" placeholder="0">
+        </div>
+        <div class="sr-field">
+          <label>Avg drive (yd)</label>
+          <input type="number" name="drive_dist" min="100" max="360" placeholder="230">
         </div>
         <div class="sr-field">
           <label>Pre-shot routine (1–10)</label>
@@ -389,8 +408,12 @@
         putts: toInt(fd.putts),
         three_putts: toInt(fd.three_putts),
         up_down: toText(fd.up_down),
+        sand_saves: toText(fd.sand_saves),
         penalties: toInt(fd.penalties),
+        birdies: toInt(fd.birdies),
+        doubles_plus: toInt(fd.doubles_plus),
         lost_balls: toInt(fd.lost_balls),
+        drive_dist: toInt(fd.drive_dist),
         tiger5: { ...t5State },
         tiger5_total: t5Total,
         reflection_good: toText(fd.reflection_good),

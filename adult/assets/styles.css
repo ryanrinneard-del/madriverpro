@@ -163,14 +163,38 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; }
 .path-pill {
   justify-self: end;
   display: inline-flex; align-items: center; justify-content: center;
-  width: 30px; height: 30px;
+  width: 26px; height: 26px;
   border-radius: 50%;
   font-weight: 700; font-size: 14px;
   color: #fff;
+  cursor: default;           /* not a button */
+  user-select: none;
+  pointer-events: none;      /* kill hover + click affordance */
+  line-height: 1;
 }
 .path-pill-green  { background: #6B8B4E; }
 .path-pill-yellow { background: #D4A84C; color: var(--navy); }
 .path-pill-red    { background: #C76757; }
+
+.path-missing-hint {
+  margin-top: 16px; padding: 12px 16px;
+  background: #F7F2E8;
+  border: 1px dashed var(--rule);
+  border-radius: 6px;
+  font-size: 13px; line-height: 1.5;
+  color: var(--navy-mid);
+}
+.path-missing-hint b { color: var(--navy); }
+.path-missing-hint em {
+  font-style: normal; color: var(--navy);
+  font-weight: 600;
+}
+.path-missing-hint a {
+  display: inline-block; margin-top: 6px;
+  font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--gold); font-weight: 700; text-decoration: none;
+}
+.path-missing-hint a:hover { color: var(--navy); }
 
 .path-focus {
   margin-top: 20px; padding-top: 18px;

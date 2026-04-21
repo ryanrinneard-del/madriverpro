@@ -726,15 +726,31 @@ RRG.path = {
     const curLabel  = Number.isInteger(curHcp) ? String(curHcp) : curHcp.toFixed(1);
 
     const rowsHtml = showGaps.map(g => {
-      const arrow = (g.status === 'green') ? '✓' : (g.higherBetter ? '▲' : '▼');
+      // Status icons — pure indicators, not buttons/chevrons.
+      // Green = at/above goal. Yellow = close. Red = biggest gap.
+      const icon = g.status === 'green' ? '✓'
+                 : g.status === 'yellow' ? '~'
+                 : '!';
       return `
         <div class="path-row path-${g.status}">
           <div class="path-metric">${RRG.esc(g.label)}</div>
           <div class="path-actual">${RRG.path.fmt(g.actual, g.unit)}</div>
           <div class="path-target"><span class="path-target-label">Goal</span> ${RRG.path.fmt(g.target, g.unit)}</div>
-          <div class="path-pill path-pill-${g.status}">${arrow}</div>
+          <div class="path-pill path-pill-${g.status}" aria-label="${g.status === 'green' ? 'At or above goal' : g.status === 'yellow' ? 'Within 15% of goal' : 'Biggest gap'}">${icon}</div>
         </div>`;
     }).join('');
+
+    // Hint the player at which stats they aren't logging yet. If any stat in
+    // RRG.STATS has no rolling value, prompt them to fill more fields on the
+    // round form so their gap analysis gets richer.
+    const missingStats = RRG.STATS.filter(s => rolling[s.key] == null).map(s => s.label);
+    const missingHint = missingStats.length ? `
+      <div class="path-missing-hint">
+        <b>Add more to your gap analysis.</b> Log these stats on your next round to light up
+        the full picture: <em>${missingStats.map(s => RRG.esc(s)).join(' · ')}</em>.
+        <a href="submit-round.html">Log a round with all stats &rarr;</a>
+      </div>
+    ` : '';
 
     const focusHtml = (variant === 'full' && focus) ? `
       <div class="path-focus">
@@ -760,6 +776,7 @@ RRG.path = {
           </div>
         </div>
         <div class="path-rows">${rowsHtml || '<p class="path-sub">Log more stats per round to unlock the full gap analysis. Try entering fairways, greens, and up-and-downs on your next round.</p>'}</div>
+        ${variant === 'full' ? missingHint : ''}
         ${focusHtml}
         ${teaserHtml}
       </div>`;
