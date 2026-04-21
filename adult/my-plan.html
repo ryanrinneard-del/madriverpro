@@ -94,6 +94,47 @@
   }
   .insight-empty strong { color: var(--navy); }
 
+  /* ===== LATEST PLAN UPDATE BANNER — gold callout at top of page,
+     shown when coach has logged a lesson-update note within 14 days. */
+  .plan-update-banner {
+    background: linear-gradient(135deg, #FFF9EA 0%, #F7F2E8 100%);
+    border: 1px solid #E5D4A1;
+    border-left: 4px solid var(--gold);
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin-bottom: 22px;
+    box-shadow: 0 2px 10px rgba(201,168,76,0.08);
+  }
+  .plan-update-banner .pub-kicker {
+    font-size: 10px; letter-spacing: 2px; color: var(--gold);
+    text-transform: uppercase; font-weight: 700; margin-bottom: 4px;
+  }
+  .plan-update-banner .pub-meta {
+    display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+    margin-bottom: 10px;
+  }
+  .plan-update-banner .pub-date {
+    font-size: 12px; color: var(--navy-mid); font-weight: 600;
+  }
+  .plan-update-banner .pub-tag {
+    display: inline-block; padding: 3px 10px; border-radius: 999px;
+    background: var(--navy); color: var(--gold);
+    font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700;
+  }
+  .plan-update-banner h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px; color: var(--navy); font-weight: 600;
+    margin: 0 0 10px; line-height: 1.2;
+  }
+  .plan-update-banner .pub-label {
+    font-size: 10px; letter-spacing: 1.5px; color: var(--mid-grey);
+    font-weight: 700; text-transform: uppercase; margin-top: 8px;
+  }
+  .plan-update-banner p {
+    font-size: 14.5px; line-height: 1.6; color: var(--navy-mid);
+    margin: 4px 0 0;
+  }
+
   /* ===== COACH SYNOPSIS (week-by-week dropdown) ===== */
   .synopsis-stack { display: grid; gap: 8px; margin-top: 12px; }
   .week-card {
@@ -213,7 +254,11 @@
     </p>
   </div>
 
-  <!-- COACH-ONLY · WEEK-BY-WEEK SYNOPSIS (glance before the lesson) -->
+  <!-- LATEST PLAN UPDATE — gold banner shown when coach has logged a
+       lesson-update note within the last 14 days -->
+  <div id="plan-update-banner" style="display:none;"></div>
+
+  <!-- WEEK-BY-WEEK SYNOPSIS (glance at the 6 weeks) -->
   <div id="plan-synopsis-wrap" style="display:none;"></div>
 
   <!-- 6-WEEK PLAN -->
@@ -381,6 +426,52 @@
       // Render the week-by-week synopsis above the full plan, for both
       // the player (their own plan) and the coach (viewing a player's plan).
       renderSynopsis(plan);
+
+      // Render the latest plan-update banner (gold callout) if the coach
+      // has logged a post-lesson note in the last 14 days.
+      renderLatestUpdateBanner();
+    }
+
+    /* =================================================================
+       LATEST PLAN-UPDATE BANNER — shown at the top of My Plan when the
+       coach has logged a lesson-update note recently. Players see this
+       first thing when they open the page, so they know what to focus on
+       this week even if the 6-week plan hasn't been rewritten.
+       ================================================================= */
+    async function renderLatestUpdateBanner() {
+      const wrap = document.getElementById('plan-update-banner');
+      if (!wrap) return;
+      try {
+        const latest = await RRG.lessonUpdates.latest(targetUser.id, 14);
+        if (!latest) { wrap.style.display = 'none'; return; }
+        const rc = (RRG.ROOT_CAUSES || []).find(r => r.key === latest.root_cause);
+        const tagLabel = rc ? rc.label : latest.root_cause || 'Update';
+        const dateStr = latest.date
+          ? new Date(latest.date + 'T12:00:00').toLocaleDateString('en-CA', { month:'long', day:'numeric', year:'numeric' })
+          : '';
+        wrap.innerHTML = `
+          <div class="plan-update-banner">
+            <div class="pub-kicker">Latest update from Ryan</div>
+            <h3>What to focus on this week</h3>
+            <div class="pub-meta">
+              ${dateStr ? `<span class="pub-date">${RRG.esc(dateStr)}</span>` : ''}
+              <span class="pub-tag">${RRG.esc(tagLabel)}</span>
+              ${latest.week_at_update ? `<span class="pub-date">Week ${RRG.esc(latest.week_at_update)}</span>` : ''}
+            </div>
+            ${latest.focus_this_week ? `
+              <div class="pub-label">Focus this week</div>
+              <p>${RRG.esc(latest.focus_this_week)}</p>
+            ` : ''}
+            ${latest.what_we_worked_on ? `
+              <div class="pub-label">What we worked on</div>
+              <p>${RRG.esc(latest.what_we_worked_on)}</p>
+            ` : ''}
+          </div>
+        `;
+        wrap.style.display = 'block';
+      } catch (err) {
+        console.warn('Could not load latest plan update', err);
+      }
     }
 
     /* =================================================================

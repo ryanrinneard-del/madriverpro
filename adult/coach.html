@@ -1005,6 +1005,75 @@
     });
 
     // ------------------------------------------------------------------
+    // Plan Update (lesson-update) modal — logs a post-lesson note
+    // on the player's profile_json.lesson_updates. Player sees it as a
+    // banner on their My Plan page. AI regen button is placeholder; will
+    // wire to /api/game-plan/adjust in the next phase.
+    // ------------------------------------------------------------------
+    const luModal = document.getElementById('lu-modal');
+    const luForm  = document.getElementById('lu-form');
+    const luRootSelect = document.getElementById('lu-root-cause');
+    const luRootHint   = document.getElementById('lu-root-cause-hint');
+
+    // Populate root-cause dropdown from RRG.ROOT_CAUSES
+    (RRG.ROOT_CAUSES || []).forEach(rc => {
+      const opt = document.createElement('option');
+      opt.value = rc.key; opt.textContent = rc.label;
+      luRootSelect.appendChild(opt);
+    });
+    luRootSelect.addEventListener('change', () => {
+      const rc = (RRG.ROOT_CAUSES || []).find(x => x.key === luRootSelect.value);
+      luRootHint.textContent = rc?.hint || '';
+    });
+
+    window.openLessonUpdateFor = (userId) => {
+      const p = playersList.find(pp => pp.id === userId);
+      luForm.reset();
+      luForm.user_id.value = userId;
+      luForm.date.value = new Date().toISOString().slice(0, 10);
+      luRootSelect.value = 'setup';
+      luRootHint.textContent = (RRG.ROOT_CAUSES.find(r => r.key === 'setup') || {}).hint || '';
+      document.getElementById('lu-client-name').textContent = p ? (p.name || p.email) : '';
+      luModal.style.display = 'flex';
+      setTimeout(() => document.getElementById('lu-worked-on').focus(), 50);
+    };
+
+    window.closeLessonUpdateModal = () => { luModal.style.display = 'none'; };
+
+    luModal.addEventListener('click', (e) => { if (e.target === luModal) closeLessonUpdateModal(); });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && luModal.style.display !== 'none') closeLessonUpdateModal();
+    });
+
+    luForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = Object.fromEntries(new FormData(luForm).entries());
+      const btn = document.getElementById('lu-save-btn');
+      btn.disabled = true; btn.textContent = 'Saving…';
+      try {
+        await RRG.lessonUpdates.add(fd.user_id, {
+          date: fd.date,
+          root_cause: fd.root_cause,
+          week_at_update: fd.week_at_update ? parseInt(fd.week_at_update, 10) : null,
+          what_we_worked_on: fd.what_we_worked_on,
+          focus_this_week: fd.focus_this_week,
+          created_by: (await RRG.auth.currentUser())?.id || null,
+        });
+        RRG.toast('Plan update saved — player will see it on their My Plan.');
+        closeLessonUpdateModal();
+      } catch (err) {
+        RRG.toast('Could not save: ' + (err.message || ''));
+      } finally {
+        btn.disabled = false; btn.textContent = 'Save update';
+      }
+    });
+
+    // Placeholder — wired in Phase 3 to /api/game-plan/adjust
+    window.saveLessonUpdateWithRegen = () => {
+      RRG.toast('AI regeneration ships in the next update. For now, use Save update + edit weeks manually.');
+    };
+
+    // ------------------------------------------------------------------
     // Invite helpers
     // ------------------------------------------------------------------
     window.generateInvite = async () => {
