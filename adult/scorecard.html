@@ -103,7 +103,7 @@
   table.sc-holes {
     width: 100%; border-collapse: collapse;
     font-size: 13px; color: var(--navy);
-    min-width: 760px;
+    min-width: 900px;
   }
   table.sc-holes thead th {
     background: var(--navy); color: #fff;
@@ -149,8 +149,19 @@
   table.sc-holes input.fw-chk {
     width: 18px; height: 18px; accent-color: var(--gold);
   }
-  td.fw-na {
-    color: var(--mid-grey); font-size: 12px;
+  table.sc-holes select.sc-pick {
+    width: 52px; padding: 4px 2px;
+    border: 1px solid var(--rule); border-radius: 4px;
+    font-family: inherit; font-size: 13px; color: var(--navy);
+    background: var(--white);
+    text-align: center;
+  }
+  table.sc-holes select.sc-pick:focus {
+    border-color: var(--gold); outline: none;
+    box-shadow: 0 0 0 2px rgba(201,168,76,0.15);
+  }
+  td.fw-na, td.sc-na {
+    color: var(--mid-grey); font-size: 12px; text-align: center;
   }
 
   /* Totals strip */
@@ -200,6 +211,8 @@
     <div class="kicker">SCORECARD · MAD RIVER</div>
     <h1>Log your round, hole by hole.</h1>
     <p>Enter score, putts, fairways hit, and penalties for each hole — greens in regulation, scrambling, doubles, and your par-type splits all compute automatically.</p>
+    <a href="scorecard-guide.html" class="quick-link" style="color: var(--gold);">New to this? Read the "how to track your round" guide &rarr;</a>
+    <br>
     <a href="submit-round.html" class="quick-link">Prefer to just enter totals? Quick-entry form &rarr;</a>
   </div>
 
@@ -243,7 +256,8 @@
           <thead>
             <tr>
               <th>Hole</th><th>Par</th><th>SI</th><th>Yd</th>
-              <th>Score</th><th>Putts</th><th>FW</th><th>Pen.</th>
+              <th>Score</th><th>Tee</th><th>1st putt</th><th>Putts</th>
+              <th>Diff</th><th>Commit</th><th>Pen.</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -258,7 +272,8 @@
           <thead>
             <tr>
               <th>Hole</th><th>Par</th><th>SI</th><th>Yd</th>
-              <th>Score</th><th>Putts</th><th>FW</th><th>Pen.</th>
+              <th>Score</th><th>Tee</th><th>1st putt</th><th>Putts</th>
+              <th>Diff</th><th>Commit</th><th>Pen.</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -300,12 +315,17 @@
           <div class="val" id="sc-pen">—</div>
         </div>
         <div class="sc-tstat">
-          <div class="lbl">Birdies</div>
+          <div class="lbl">Birdies or Better</div>
           <div class="val" id="sc-birdies">—</div>
         </div>
         <div class="sc-tstat">
-          <div class="lbl">Doubles+</div>
+          <div class="lbl">Doubles or Worse</div>
           <div class="val" id="sc-doubles">—</div>
+        </div>
+        <div class="sc-tstat">
+          <div class="lbl">Commitment</div>
+          <div class="val" id="sc-commit">—</div>
+          <div class="sub" id="sc-commit-sub">—</div>
         </div>
       </div>
       <div class="sc-totals" style="margin-top: 10px;">
@@ -400,8 +420,9 @@
         return `<option value="${t.key}">${t.label} &middot; ${tot} yd</option>`;
       }).join('');
 
-    // Render 18 hole rows. Each row: hole #, par, SI, yd (updates on tee change),
-    // score input, putts input, FW checkbox (par 4/5 only), penalties.
+    // Render 18 hole rows per CT's 4-row scheme: score + tee direction
+    // (F/L/R/X), first putt distance, total putts, scramble difficulty
+    // (S/T, relevant only on missed greens), commitment grade (C/W), penalties.
     function renderHoles() {
       const tee = course.tees.find(t => t.key === teeSelect.value);
       ['front', 'back'].forEach((half, halfIdx) => {
@@ -413,9 +434,18 @@
           const par = course.par[start + i];
           const si = course.mens_si[start + i];
           const yd = tee ? tee.yards[start + i] : '—';
-          const fwCell = (par >= 4)
-            ? `<input type="checkbox" class="fw-chk" data-hole="${hole}" onchange="scRecalc()">`
-            : `<span class="fw-na">—</span>`;
+
+          // Tee-shot direction picker — only meaningful on par 4/5.
+          // F = fairway hit, L = missed left, R = missed right, X = penalty/lost.
+          const teeCell = (par >= 4) ? `
+            <select class="sc-pick tee-in" data-hole="${hole}" onchange="scRecalc()">
+              <option value="">—</option>
+              <option value="F">F</option>
+              <option value="L">L</option>
+              <option value="R">R</option>
+              <option value="X">X</option>
+            </select>` : `<span class="sc-na">—</span>`;
+
           rows.push(`
             <tr data-hole="${hole}" data-par="${par}">
               <td class="h-num">${hole}</td>
@@ -423,13 +453,28 @@
               <td class="h-si">${si}</td>
               <td class="h-yd">${yd}</td>
               <td><input type="number" min="1" max="15" class="score-in" data-hole="${hole}" oninput="scRecalc()"></td>
+              <td>${teeCell}</td>
+              <td><input type="number" min="0" max="120" class="firstputt-in" data-hole="${hole}" placeholder="ft" style="width:54px;" oninput="scRecalc()"></td>
               <td><input type="number" min="0" max="8" class="putts-in" data-hole="${hole}" oninput="scRecalc()"></td>
-              <td>${fwCell}</td>
+              <td>
+                <select class="sc-pick diff-in" data-hole="${hole}" onchange="scRecalc()">
+                  <option value="">—</option>
+                  <option value="S">S</option>
+                  <option value="T">T</option>
+                </select>
+              </td>
+              <td>
+                <select class="sc-pick commit-in" data-hole="${hole}" onchange="scRecalc()">
+                  <option value="">—</option>
+                  <option value="C">C</option>
+                  <option value="W">W</option>
+                </select>
+              </td>
               <td><input type="number" min="0" max="5" class="pen-in" data-hole="${hole}" oninput="scRecalc()" value="0"></td>
             </tr>
           `);
         }
-        // OUT / IN row
+        // OUT / IN row — just score/putts/pen subtotals, the rest spans
         const subtotalLabel = half === 'front' ? 'OUT' : 'IN';
         const parSub = course.par.slice(start, start + 9).reduce((a,b)=>a+b, 0);
         const ydSub  = tee ? tee.yards.slice(start, start + 9).reduce((a,b)=>a+b, 0) : '—';
@@ -440,7 +485,10 @@
             <td></td>
             <td class="h-yd h-in-out">${ydSub}</td>
             <td class="h-in-out" id="sc-${half}-score">—</td>
+            <td></td>
+            <td></td>
             <td class="h-in-out" id="sc-${half}-putts">—</td>
+            <td></td>
             <td></td>
             <td class="h-in-out" id="sc-${half}-pen">—</td>
           </tr>
@@ -476,25 +524,38 @@
        the totals strip + OUT/IN subtotals. Everything here is idempotent. */
     window.scRecalc = function() {
       let outScore = 0, inScore = 0, outPutts = 0, inPutts = 0, outPen = 0, inPen = 0;
-      let fwHit = 0, fwEligible = 0;
+      // Tee direction counts (par 4/5 only)
+      let fwHit = 0, teeLeft = 0, teeRight = 0, teeX = 0, teeEligible = 0;
       let girCount = 0;
       let threePutts = 0;
       let scrAttempts = 0, scrMade = 0;
+      let toughMisses = 0;  // CT's short-sided flag: missed green AND marked Tough
       let birdies = 0, doublesPlus = 0;
       let penalties = 0;
+      // Commitment audit
+      let committedN = 0, weakN = 0;
+      // First putt distance — sum + count for average
+      let fpSum = 0, fpCount = 0;
       const pByType = { 3: { n: 0, sum: 0 }, 4: { n: 0, sum: 0 }, 5: { n: 0, sum: 0 } };
       let firstScore = null, firstPar = null;
 
       for (let h = 1; h <= 18; h++) {
-        const scoreIn = document.querySelector('.score-in[data-hole="' + h + '"]');
-        const puttsIn = document.querySelector('.putts-in[data-hole="' + h + '"]');
-        const penIn   = document.querySelector('.pen-in[data-hole="' + h + '"]');
-        const fwChk   = document.querySelector('.fw-chk[data-hole="' + h + '"]');
+        const scoreIn     = document.querySelector('.score-in[data-hole="' + h + '"]');
+        const puttsIn     = document.querySelector('.putts-in[data-hole="' + h + '"]');
+        const penIn       = document.querySelector('.pen-in[data-hole="' + h + '"]');
+        const teeIn       = document.querySelector('.tee-in[data-hole="' + h + '"]');
+        const firstPuttIn = document.querySelector('.firstputt-in[data-hole="' + h + '"]');
+        const diffIn      = document.querySelector('.diff-in[data-hole="' + h + '"]');
+        const commitIn    = document.querySelector('.commit-in[data-hole="' + h + '"]');
         const par = parseInt(document.querySelector('tr[data-hole="' + h + '"]').dataset.par, 10);
 
-        const score = scoreIn && scoreIn.value !== '' ? parseInt(scoreIn.value, 10) : null;
-        const putts = puttsIn && puttsIn.value !== '' ? parseInt(puttsIn.value, 10) : null;
-        const pen   = penIn   && penIn.value   !== '' ? parseInt(penIn.value, 10)   : 0;
+        const score     = scoreIn     && scoreIn.value     !== '' ? parseInt(scoreIn.value, 10)     : null;
+        const putts     = puttsIn     && puttsIn.value     !== '' ? parseInt(puttsIn.value, 10)     : null;
+        const pen       = penIn       && penIn.value       !== '' ? parseInt(penIn.value, 10)       : 0;
+        const teeDir    = teeIn && teeIn.value !== '' ? teeIn.value : null;
+        const firstPutt = firstPuttIn && firstPuttIn.value !== '' ? parseFloat(firstPuttIn.value)   : null;
+        const diff      = diffIn && diffIn.value !== '' ? diffIn.value : null;
+        const commit    = commitIn && commitIn.value !== '' ? commitIn.value : null;
 
         if (score != null) {
           if (h <= 9)  outScore += score; else inScore += score;
@@ -515,6 +576,7 @@
             else {
               scrAttempts++;
               if (score <= par) scrMade++;
+              if (diff === 'T') toughMisses++;    // missed green AND short-sided
             }
           }
         }
@@ -526,10 +588,16 @@
           penalties += pen;
           if (h <= 9) outPen += pen; else inPen += pen;
         }
-        if (par >= 4) {
-          fwEligible++;
-          if (fwChk && fwChk.checked) fwHit++;
+        if (par >= 4 && teeDir) {
+          teeEligible++;
+          if (teeDir === 'F') fwHit++;
+          else if (teeDir === 'L') teeLeft++;
+          else if (teeDir === 'R') teeRight++;
+          else if (teeDir === 'X') teeX++;
         }
+        if (firstPutt != null) { fpSum += firstPutt; fpCount++; }
+        if (commit === 'C') committedN++;
+        if (commit === 'W') weakN++;
       }
 
       const totalScore = outScore + inScore;
@@ -546,13 +614,22 @@
       setSub('sc-front-pen',   outPen || 0);
       setSub('sc-back-pen',    inPen || 0);
 
-      document.getElementById('sc-fw').textContent     = fwHit + ' / ' + fwEligible;
-      document.getElementById('sc-fw-sub').textContent = fwEligible ? Math.round(100 * fwHit / fwEligible) + '% hit' : '—';
+      document.getElementById('sc-fw').textContent     = fwHit + ' / ' + teeEligible;
+      document.getElementById('sc-fw-sub').textContent = teeEligible
+        ? Math.round(100 * fwHit / teeEligible) + '% hit · '
+          + (teeLeft ? teeLeft + 'L ' : '')
+          + (teeRight ? teeRight + 'R ' : '')
+          + (teeX ? teeX + 'X' : '')
+        : '—';
       document.getElementById('sc-gir').textContent    = girCount;
       document.getElementById('sc-putts').textContent  = (outPutts + inPutts) || '—';
-      document.getElementById('sc-3putts-sub').textContent = threePutts + ' three-putts';
+      document.getElementById('sc-3putts-sub').textContent = threePutts + ' three-putts'
+        + (fpCount ? ' · avg 1st putt ' + (fpSum / fpCount).toFixed(0) + ' ft' : '');
       document.getElementById('sc-scr').textContent    = scrAttempts ? (scrMade + ' / ' + scrAttempts) : '—';
-      document.getElementById('sc-scr-sub').textContent = scrAttempts ? Math.round(100 * scrMade / scrAttempts) + '% saved' : '—';
+      document.getElementById('sc-scr-sub').textContent = scrAttempts
+        ? Math.round(100 * scrMade / scrAttempts) + '% saved'
+          + (toughMisses ? ' · ' + toughMisses + ' tough' : '')
+        : '—';
       document.getElementById('sc-pen').textContent    = penalties;
       document.getElementById('sc-birdies').textContent = birdies;
       document.getElementById('sc-doubles').textContent = doublesPlus;
@@ -569,6 +646,15 @@
       } else {
         document.getElementById('sc-first').textContent = '—';
         document.getElementById('sc-first-sub').textContent = '—';
+      }
+
+      // Commitment card
+      const commitTotal = committedN + weakN;
+      const commitEl = document.getElementById('sc-commit');
+      if (commitEl) {
+        commitEl.textContent = commitTotal ? Math.round(100 * committedN / commitTotal) + '%' : '—';
+        const subEl = document.getElementById('sc-commit-sub');
+        if (subEl) subEl.textContent = commitTotal ? (committedN + ' of ' + commitTotal + ' committed') : '—';
       }
     };
 
@@ -594,30 +680,51 @@
       // Gather per-hole data
       const holeRows = [];
       let total = 0, totalPutts = 0, totalPen = 0;
-      let fwHit = 0, fwElig = 0, girCount = 0, threePutts = 0;
+      let fwHit = 0, teeElig = 0, teeLeft = 0, teeRight = 0, teeX = 0;
+      let girCount = 0, threePutts = 0;
       let scrAtt = 0, scrMade = 0, birdies = 0, doublesPlus = 0;
+      let toughMisses = 0, committedN = 0, weakN = 0;
+      let fpSum = 0, fpCount = 0;
       const pByType = { 3: { n: 0, sum: 0 }, 4: { n: 0, sum: 0 }, 5: { n: 0, sum: 0 } };
       let firstScore = null, firstPar = null;
 
       for (let h = 1; h <= 18; h++) {
-        const scoreIn = document.querySelector('.score-in[data-hole="' + h + '"]');
-        const puttsIn = document.querySelector('.putts-in[data-hole="' + h + '"]');
-        const penIn   = document.querySelector('.pen-in[data-hole="' + h + '"]');
-        const fwChk   = document.querySelector('.fw-chk[data-hole="' + h + '"]');
+        const scoreIn     = document.querySelector('.score-in[data-hole="' + h + '"]');
+        const puttsIn     = document.querySelector('.putts-in[data-hole="' + h + '"]');
+        const penIn       = document.querySelector('.pen-in[data-hole="' + h + '"]');
+        const teeIn       = document.querySelector('.tee-in[data-hole="' + h + '"]');
+        const firstPuttIn = document.querySelector('.firstputt-in[data-hole="' + h + '"]');
+        const diffIn      = document.querySelector('.diff-in[data-hole="' + h + '"]');
+        const commitIn    = document.querySelector('.commit-in[data-hole="' + h + '"]');
         const par = parseInt(document.querySelector('tr[data-hole="' + h + '"]').dataset.par, 10);
 
-        const s = scoreIn && scoreIn.value !== '' ? parseInt(scoreIn.value, 10) : null;
-        const p = puttsIn && puttsIn.value !== '' ? parseInt(puttsIn.value, 10) : null;
+        const s  = scoreIn && scoreIn.value !== '' ? parseInt(scoreIn.value, 10) : null;
+        const p  = puttsIn && puttsIn.value !== '' ? parseInt(puttsIn.value, 10) : null;
         const pn = penIn && penIn.value !== '' ? parseInt(penIn.value, 10) : 0;
-        const fw = fwChk ? fwChk.checked : null;
+        const tDir = teeIn && teeIn.value !== '' ? teeIn.value : null;
+        const fp = firstPuttIn && firstPuttIn.value !== '' ? parseFloat(firstPuttIn.value) : null;
+        const diff = diffIn && diffIn.value !== '' ? diffIn.value : null;
+        const commit = commitIn && commitIn.value !== '' ? commitIn.value : null;
 
-        holeRows.push({ hole: h, par, score: s, putts: p, penalties: pn, fw_hit: fw });
+        holeRows.push({
+          hole: h, par,
+          score: s, putts: p, penalties: pn,
+          tee_dir: tDir, first_putt: fp,
+          difficulty: diff, commit: commit,
+          fw_hit: tDir === 'F' ? true : (tDir ? false : null),
+        });
 
         if (s != null) total += s;
         if (p != null) totalPutts += p;
         totalPen += pn;
 
-        if (par >= 4) { fwElig++; if (fw) fwHit++; }
+        if (par >= 4 && tDir) {
+          teeElig++;
+          if (tDir === 'F') fwHit++;
+          else if (tDir === 'L') teeLeft++;
+          else if (tDir === 'R') teeRight++;
+          else if (tDir === 'X') teeX++;
+        }
         if (s != null) {
           const delta = s - par;
           if (delta <= -1) birdies++;
@@ -627,10 +734,17 @@
           if (p != null) {
             const reach = s - p;
             if (reach <= (par - 2)) girCount++;
-            else { scrAtt++; if (s <= par) scrMade++; }
+            else {
+              scrAtt++;
+              if (s <= par) scrMade++;
+              if (diff === 'T') toughMisses++;
+            }
           }
         }
         if (p != null && p >= 3) threePutts++;
+        if (fp != null) { fpSum += fp; fpCount++; }
+        if (commit === 'C') committedN++;
+        if (commit === 'W') weakN++;
       }
 
       if (!total) {
@@ -646,6 +760,9 @@
       const toInt  = v => (v === '' || v == null ? null : parseInt(v, 10));
       const toText = v => (v === '' || v == null ? null : String(v));
 
+      const commitTotal = committedN + weakN;
+      const commitPct = commitTotal ? Math.round(100 * committedN / commitTotal) : null;
+
       const payload = {
         user_id: user.id,
         round_date: fd.round_date || null,
@@ -654,20 +771,19 @@
         format: toText(fd.format) || 'Stroke Play',
         holes: 18,
         score: total,
-        fir: fwElig ? (fwHit + ' / ' + fwElig) : null,
+        fir: teeElig ? (fwHit + ' / ' + teeElig) : null,
         gir: girCount != null ? (girCount + ' / 18') : null,
         putts: totalPutts || null,
-        three_putts: threePutts,
         up_down: scrAtt ? (scrMade + ' / ' + scrAtt) : null,
         sand_saves: toText(fd.sand_saves),
+        bad_misses: toughMisses || null,       // tough = short-sided = bad miss
         penalties: totalPen,
         birdies: birdies,
         doubles_plus: doublesPlus,
-        lost_balls: toInt(fd.lost_balls),
         drive_dist: toInt(fd.drive_dist),
         reflection_good: toText(fd.reflection_good),
         reflection_bad:  toText(fd.reflection_bad),
-        // Hole-by-hole detail in a structured JSON blob for richer analysis later
+        // Hole-by-hole detail + CT's mental-audit + tee-direction stats
         hole_detail: {
           tee_key: tee.key,
           tee_label: tee.label,
@@ -680,6 +796,17 @@
           par5_avg: pByType[5].n ? pByType[5].sum / pByType[5].n : null,
           first_score: firstScore,
           first_par: firstPar,
+          // CT's tee-direction pattern — diagnostic for face/path issues
+          tee_pattern: { F: fwHit, L: teeLeft, R: teeRight, X: teeX },
+          // CT's mental audit
+          commitment_pct: commitPct,
+          committed_n: committedN,
+          weak_n: weakN,
+          // First-putt distance average (Mad-River-specific rich data)
+          avg_first_putt: fpCount ? fpSum / fpCount : null,
+          first_putt_count: fpCount,
+          tough_misses: toughMisses,
+          three_putts: threePutts,
         },
       };
 

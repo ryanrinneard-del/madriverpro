@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<base href="/adult/">
+<title>How to Track Your Round — Mad River Scorecard Guide</title>
+<meta name="description" content="A pencil-and-paper guide to tracking seven stats per hole on the Mad River scorecard. No phone during play — transcribe into the portal after.">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  .guide-hero {
+    background: linear-gradient(180deg, var(--navy) 0%, #162E54 100%);
+    color: #fff; border-radius: 14px;
+    padding: 40px 36px; margin-bottom: 28px;
+    position: relative; overflow: hidden;
+  }
+  .guide-hero::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--gold);
+  }
+  .guide-hero .kicker {
+    font-size: 11px; letter-spacing: 0.22em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 10px;
+  }
+  .guide-hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    color: #fff; font-size: 32px; margin: 0 0 8px; font-weight: 600;
+  }
+  .guide-hero p { color: #D8DEE8; max-width: 620px; font-size: 15px; line-height: 1.6; margin: 0; }
+
+  .guide-card {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--gold);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 16px;
+  }
+  .guide-card h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 20px; color: var(--navy); margin: 0 0 6px; font-weight: 600;
+  }
+  .guide-card h2 small {
+    display: block; font-size: 12px; color: var(--gold); font-weight: 700;
+    letter-spacing: 1.4px; text-transform: uppercase; margin-bottom: 6px;
+    font-family: inherit; font-style: normal;
+  }
+  .guide-card p { color: var(--navy-mid); line-height: 1.6; font-size: 14px; margin: 6px 0 10px; }
+
+  .legend-grid {
+    display: grid; grid-template-columns: 80px 1fr;
+    gap: 10px 16px; align-items: baseline;
+    margin-top: 12px;
+    font-size: 14px;
+  }
+  .legend-grid dt {
+    font-family: 'Playfair Display', Georgia, serif;
+    color: var(--gold); font-weight: 700; font-size: 18px;
+    text-align: center;
+    background: #F7F2E8; border-radius: 6px;
+    padding: 6px 0;
+  }
+  .legend-grid dd {
+    margin: 0; color: var(--navy-mid); line-height: 1.55;
+  }
+  .legend-grid dd b { color: var(--navy); }
+
+  .sample-hole {
+    background: #F7F2E8;
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-top: 16px;
+    font-family: 'Monaco', 'Menlo', monospace;
+    font-size: 14px; line-height: 1.9;
+    color: var(--navy);
+  }
+  .sample-hole .sh-label {
+    font-family: inherit; font-size: 11px; letter-spacing: 1.4px;
+    color: var(--gold); text-transform: uppercase; font-weight: 700;
+    margin-bottom: 6px;
+    display: block;
+  }
+  .sample-hole .sh-row {
+    display: grid; grid-template-columns: 56px 1fr;
+    gap: 10px; padding: 4px 0;
+    border-bottom: 1px dashed rgba(13,31,60,0.1);
+  }
+  .sample-hole .sh-row:last-child { border-bottom: none; }
+  .sample-hole .sh-row .label {
+    font-weight: 700; color: var(--gold);
+    font-size: 11px; letter-spacing: 1.2px;
+    text-transform: uppercase;
+    padding-top: 3px;
+  }
+  .sample-hole .sh-row .data {
+    font-size: 15px;
+  }
+  .sample-hole .sh-meta {
+    font-family: 'Playfair Display', Georgia, serif; font-style: italic;
+    color: var(--mid-grey); font-size: 12px; margin-top: 10px;
+    line-height: 1.5;
+  }
+
+  .credit-box {
+    background: #FBF7EC;
+    border-left: 3px solid var(--gold);
+    padding: 14px 18px; border-radius: 4px;
+    margin-top: 18px;
+    font-size: 13px; line-height: 1.55; color: var(--navy-mid);
+  }
+  .credit-box b { color: var(--navy); }
+
+  .flow-arrow {
+    display: block;
+    text-align: center;
+    color: var(--gold);
+    font-size: 24px;
+    margin: 12px 0;
+  }
+
+  @media (max-width: 560px) {
+    .legend-grid { grid-template-columns: 60px 1fr; gap: 8px 12px; }
+    .legend-grid dt { font-size: 16px; padding: 4px 0; }
+    .sample-hole .sh-row { grid-template-columns: 50px 1fr; gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container-narrow">
+
+  <div class="breadcrumb">
+    <a href="dashboard.html">Dashboard</a><span>›</span><a href="scorecard.html">Scorecard</a><span>›</span>How to Track
+  </div>
+
+  <div class="guide-hero">
+    <div class="kicker">Pencil-and-Paper Scorecard Guide</div>
+    <h1>How to track your round &mdash; without your phone.</h1>
+    <p>
+      The Mad River scorecard has four blank rows below each hole. Here's how
+      to use them to capture seven stats per hole with a pencil, then transcribe
+      into the portal after the round. Designed so nothing gets in the way of
+      actually playing.
+    </p>
+  </div>
+
+  <!-- ROW 1 -->
+  <div class="guide-card">
+    <h2><small>Row 1</small>The Result &mdash; Score &amp; Tee Shot</h2>
+    <p>
+      Your standard scoring line, with one addition: a single letter next to
+      the score showing where the drive went.
+    </p>
+    <dl class="legend-grid">
+      <dt>5</dt>
+      <dd>Your <b>score</b> on the hole. Write the big number.</dd>
+      <dt>F</dt>
+      <dd><b>Fairway hit.</b> Use on par 4/5 only.</dd>
+      <dt>L</dt>
+      <dd><b>Missed left.</b> Anywhere left of the fairway.</dd>
+      <dt>R</dt>
+      <dd><b>Missed right.</b> Anywhere right of the fairway.</dd>
+      <dt>X</dt>
+      <dd><b>Penalty / lost ball.</b> The unforced error. OB, water, or ball not found.</dd>
+    </dl>
+  </div>
+
+  <!-- ROW 2 -->
+  <div class="guide-card">
+    <h2><small>Row 2</small>The Approach &mdash; GIR &amp; Putting</h2>
+    <p>
+      Whether you reached the green, how far your first putt was, and how many
+      putts you took. This row tells you if you're actually striking the ball
+      or just scrambling for par.
+    </p>
+    <dl class="legend-grid">
+      <dt>G</dt>
+      <dd><b>Green in regulation.</b> Reached the green in par&minus;2 strokes. Leave blank if you missed.</dd>
+      <dt>25</dt>
+      <dd><b>First putt distance (feet).</b> Your best guess. 5, 15, 40 &mdash; whatever's closest.</dd>
+      <dt>2</dt>
+      <dd><b>Total putts.</b> Write it small, in the corner.</dd>
+    </dl>
+  </div>
+
+  <!-- ROW 3 -->
+  <div class="guide-card">
+    <h2><small>Row 3</small>The Grind &mdash; Scrambling Context</h2>
+    <p>
+      Only use this row if you <em>missed</em> the green. Dash or leave blank
+      if you hit the green. This is where we find out if your short game has
+      a pulse.
+    </p>
+    <dl class="legend-grid">
+      <dt>S</dt>
+      <dd><b>Simple.</b> Standard chip, plenty of green to work with, decent lie.</dd>
+      <dt>T</dt>
+      <dd><b>Tough.</b> Short-sided, deep bunker, buried lie, tight lie over water. The one that asked for more than you had.</dd>
+      <dt>✓</dt>
+      <dd><b>Up and down.</b> Saved par or better from off the green.</dd>
+      <dt>X</dt>
+      <dd><b>Failed.</b> Bogey or worse after missing the green.</dd>
+    </dl>
+  </div>
+
+  <!-- ROW 4 -->
+  <div class="guide-card">
+    <h2><small>Row 4</small>The Mental Audit &mdash; The Intent Grade</h2>
+    <p>
+      The most important row on the card &mdash; and the hardest to be honest
+      about. Be brutally honest. You can hit a terrible shot and still mark
+      <b>C</b>. You can hit a great shot and still mark <b>W</b>. This row
+      tracks your <em>process</em>, not your <em>result</em>.
+    </p>
+    <dl class="legend-grid">
+      <dt>C</dt>
+      <dd><b>Committed.</b> Picked a target, visualized the shot, swung without hesitation. Total conviction.</dd>
+      <dt>W</dt>
+      <dd><b>Weak.</b> You doubted the club, peeked, steered it, got lazy, or second-guessed yourself mid-swing.</dd>
+    </dl>
+    <div class="credit-box">
+      <b>Why this matters.</b> Over 18 holes, tracking commitment reveals a
+      pattern. Maybe you're committed on tee shots but weak on chips. Maybe
+      the back nine shows weak intent creeping in as you tire. Maybe pressure
+      situations pull "W" out of you. The diagnosis is in the pattern &mdash;
+      and the portal will graph your commitment percentage over time.
+    </div>
+  </div>
+
+  <!-- EXAMPLE -->
+  <div class="guide-card">
+    <h2><small>Example</small>A par-4 bogey, broken down</h2>
+    <p>
+      Here's what a single hole looks like when you're tracking all four rows.
+      Par 4, ended up with a bogey.
+    </p>
+
+    <div class="sample-hole">
+      <span class="sh-label">Your scorecard entries, Hole 3 (Par 4)</span>
+      <div class="sh-row">
+        <div class="label">Row 1</div>
+        <div class="data">5 (R)</div>
+      </div>
+      <div class="sh-row">
+        <div class="label">Row 2</div>
+        <div class="data">&nbsp; 12 2</div>
+      </div>
+      <div class="sh-row">
+        <div class="label">Row 3</div>
+        <div class="data">S X</div>
+      </div>
+      <div class="sh-row">
+        <div class="label">Row 4</div>
+        <div class="data">W</div>
+      </div>
+      <div class="sh-meta">
+        Translation: bogey (5 on a par 4), tee shot missed right. No GIR
+        (blank), first putt was 12 feet, two putts total. Missed green was a
+        simple chip (S) but you failed to get up and down (X). And the
+        mental audit was honest &mdash; you knew the chip was rushed, weak
+        intent (W). A bogey with a story.
+      </div>
+    </div>
+  </div>
+
+  <!-- WORKFLOW -->
+  <div class="guide-card">
+    <h2>The full workflow</h2>
+    <ol style="margin: 6px 0 6px 20px; padding: 0; color: var(--navy-mid); line-height: 1.7; font-size: 14.5px;">
+      <li><strong>On the course:</strong> pencil and paper only. Mark each of the four rows for every hole. Takes ten seconds per hole. No phone.</li>
+      <li><strong>After the round:</strong> open the Mad River Scorecard in the portal, pick your tees, and transcribe the card hole-by-hole.</li>
+      <li><strong>The portal auto-derives</strong> FW%, GIR%, scrambling %, commitment %, bad-miss count, par-type averages, and more &mdash; all from the data you wrote on the paper card.</li>
+      <li><strong>Trends + the Path widget</strong> update automatically with the new round's data. You can see immediately where this round moved the needle (or didn't).</li>
+    </ol>
+    <p style="margin-top:14px;">
+      <a href="scorecard.html" class="btn btn-primary btn-sm">Open the Mad River Scorecard &rarr;</a>
+    </p>
+  </div>
+
+  <div class="credit-box">
+    <b>Credit where it's due.</b> The four-row scheme above is adapted from
+    one designed by Colin T &mdash; a Mad River member who built a similar
+    tracking system in his own spreadsheet before we had the portal. It's
+    clean, it captures everything the portal needs, and it works with just
+    pencil and paper.
+  </div>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  (async () => { await RRG.mount(''); })();
+</script>
+</body>
+</html>
