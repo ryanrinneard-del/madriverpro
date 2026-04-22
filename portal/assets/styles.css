@@ -1142,3 +1142,64 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; }
   .card-navy, .week-hero { background: var(--navy) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .gold, .page-label, .section-label, .week-card .week-num { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
+
+/* =============================================================
+   MILESTONES WIDGET (junior beginner / developing tiers)
+   Warmer, slightly more playful styling than the adult version —
+   brighter green for completed, same gold for next-up targets.
+============================================================= */
+.ms-card {
+  background: var(--white);
+  border: 1px solid var(--rule);
+  border-top: 3px solid var(--gold);
+  border-radius: 12px;
+  padding: 24px 28px;
+  margin-bottom: 24px;
+}
+.ms-kicker {
+  font-size: 11px; letter-spacing: 0.2em; color: var(--gold);
+  font-weight: 700; text-transform: uppercase; margin-bottom: 4px;
+}
+.ms-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 22px; color: var(--navy); font-weight: 600;
+  margin: 0 0 6px; line-height: 1.2;
+}
+.ms-sub {
+  font-size: 13px; color: var(--navy-mid); line-height: 1.5;
+  margin: 0 0 6px;
+}
+.ms-section-label {
+  font-size: 10px; letter-spacing: 1.6px; color: var(--gold);
+  font-weight: 700; text-transform: uppercase;
+  margin: 18px 0 8px;
+}
+.ms-list { display: flex; flex-direction: column; gap: 8px; }
+.ms-row {
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  gap: 12px; align-items: center;
+  padding: 10px 14px;
+  background: #F7F2E8;
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--gold);
+  border-radius: 6px;
+  font-size: 13.5px;
+}
+.ms-row.ms-done { border-left-color: #6B8B4E; background: #F2F6EE; }
+.ms-row.ms-next { border-left-color: var(--gold); }
+.ms-icon {
+  width: 28px; height: 28px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  font-size: 16px; font-weight: 700;
+  background: #6B8B4E; color: #fff;
+}
+.ms-icon.ms-target {
+  background: transparent; border: 2px solid var(--gold);
+  color: var(--gold); font-size: 18px;
+}
+.ms-mt { font-weight: 600; color: var(--navy); font-size: 14.5px; line-height: 1.3; }
+.ms-ms { font-size: 12px; color: var(--mid-grey); margin-top: 2px; }
+.ms-best { display: inline-block; margin-top: 4px; font-size: 11px; letter-spacing: 0.5px; color: var(--navy-mid); }
+.ms-best b { color: var(--navy); font-weight: 700; font-family: 'Playfair Display', Georgia, serif; font-size: 15px; }

@@ -124,7 +124,8 @@
         <thead>
           <tr>
             <th>Player</th><th>Email</th><th>Handicap</th><th>Home Club</th>
-            <th>Profile</th><th>Rounds</th><th>Avg Score</th><th>Avg 5 Errors</th>
+            <th>Profile / Tier</th><th>Rounds</th><th>Avg Score</th><th>Avg 5 Errors</th>
+            <th>Elite</th>
           </tr>
         </thead>
         <tbody>
@@ -138,16 +139,30 @@
               : p.profile?._status === 'draft'
                 ? '<span class="badge badge-amber">DRAFT</span>'
                 : '<span class="badge badge-navy">NOT STARTED</span>';
+            const pj = p.profile_json || p.profile || {};
+            const tier = (pj.s1_skill_level || pj.skill_level || '').toLowerCase();
+            const eliteAccepted = !!pj.junior_elite_accepted;
+            const tierBadge = tier === 'elite'
+              ? '<span class="badge badge-gold">ELITE</span>'
+              : tier === 'developing'
+                ? '<span class="badge badge-amber">DEVELOPING</span>'
+                : tier === 'just_starting'
+                  ? '<span class="badge badge-green">JUST STARTING</span>'
+                  : '<span class="muted small">—</span>';
+            const eliteBtn = eliteAccepted
+              ? `<button class="btn btn-ghost btn-sm" onclick="rrgRevokeElite('${p.id}')" style="color:var(--red-risk);">Revoke Elite</button>`
+              : `<button class="btn btn-primary btn-sm" onclick="rrgPromoteElite('${p.id}')" style="background: var(--gold); color: var(--navy);">Promote to Elite &rarr;</button>`;
             return `
               <tr>
                 <td><b>${RRG.esc(p.name)}</b></td>
                 <td class="muted small">${RRG.esc(p.email)}</td>
                 <td>${RRG.esc(p.handicap || '—')}</td>
                 <td>${RRG.esc(p.homeClub || '—')}</td>
-                <td>${profileStatus}</td>
+                <td>${profileStatus} ${tierBadge}</td>
                 <td><b>${subs.length}</b></td>
                 <td>${avg}</td>
                 <td>${avgT5}</td>
+                <td>${eliteBtn}</td>
               </tr>
             `;
           }).join('')}
@@ -223,6 +238,41 @@
     RRG.invites.revoke(code);
     renderInvites();
     RRG.toast('Invite revoked.');
+  };
+
+  /* Promote a junior to the Elite tier. Flips
+     profile_json.junior_elite_accepted = true on that player. They can
+     then pick Elite from their own profile dropdown. */
+  window.rrgPromoteElite = async (userId) => {
+    const p = players.find(pp => pp.id === userId);
+    if (!p) return;
+    if (!confirm(`Promote ${p.name} to the Elite tier?\n\nThey'll be able to switch to Elite in their profile and will see the full stats-and-handicap dashboard view.`)) return;
+    try {
+      const pj = { ...(p.profile_json || p.profile || {}), junior_elite_accepted: true };
+      await RRG.users.update(userId, { profile_json: pj });
+      RRG.toast(`${p.name.split(' ')[0]} promoted to Elite.`);
+      setTimeout(() => location.reload(), 800);
+    } catch (err) {
+      RRG.toast('Could not promote: ' + (err.message || ''));
+    }
+  };
+
+  /* Revoke Elite — unsets the flag AND resets tier to developing. */
+  window.rrgRevokeElite = async (userId) => {
+    const p = players.find(pp => pp.id === userId);
+    if (!p) return;
+    if (!confirm(`Revoke Elite status from ${p.name}?\n\nThey'll drop back to Developing tier.`)) return;
+    try {
+      const pj = { ...(p.profile_json || p.profile || {}) };
+      pj.junior_elite_accepted = false;
+      if (pj.s1_skill_level === 'elite') pj.s1_skill_level = 'developing';
+      if (pj.skill_level === 'elite') pj.skill_level = 'developing';
+      await RRG.users.update(userId, { profile_json: pj });
+      RRG.toast(`${p.name.split(' ')[0]} Elite revoked.`);
+      setTimeout(() => location.reload(), 800);
+    } catch (err) {
+      RRG.toast('Could not revoke: ' + (err.message || ''));
+    }
   };
 
   renderInvites();

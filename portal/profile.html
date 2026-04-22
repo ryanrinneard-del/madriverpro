@@ -53,6 +53,19 @@
       <input name="s1_bestRound" type="text" placeholder="e.g. 74 at Mad River in July">
     </div>
 
+    <div class="field">
+      <label>Where are you in your golf journey?</label>
+      <select name="s1_skill_level">
+        <option value="">Pick one…</option>
+        <option value="just_starting">Just Starting — first year or two, learning the basics</option>
+        <option value="developing">Developing — playing regularly, working on breaking 100</option>
+        <option value="elite" id="opt-elite-jr" disabled>Elite — invitation only (ask Ryan)</option>
+      </select>
+    </div>
+    <div class="hint" style="margin-top:-8px; font-size:12px; color:var(--mid-grey);">
+      This changes what shows on your dashboard. Elite is unlocked when Ryan invites you &mdash; keep playing and it'll come.
+    </div>
+
     <!-- Section 2: Long game -->
     <div class="section-label">SECTION 2 · LONG GAME (DRIVER, FW, LONG IRONS)</div>
     <div class="field">
@@ -240,6 +253,14 @@
     const el = form.querySelector(`[name="${k}"]`);
     if (el) el.value = v;
   });
+
+  // Elite tier is coach-gated. Unlock the option only if Ryan has flipped
+  // the profile_json.junior_elite_accepted flag.
+  const eliteOpt = document.getElementById('opt-elite-jr');
+  if (eliteOpt && existing.junior_elite_accepted) {
+    eliteOpt.disabled = false;
+    eliteOpt.textContent = 'Elite — Ryan has accepted you into the Elite tier';
+  }
 
   async function emailToCoach(data) {
     try {

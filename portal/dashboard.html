@@ -38,6 +38,10 @@
     </p>
   </div>
 
+  <!-- Progress widget — Milestones for Just Starting / Developing tiers,
+       full Path/stats for Elite tier. Set in JS below. -->
+  <div id="progress-mount"></div>
+
   <!-- Stat strip -->
   <div class="stat-strip mb-5" id="stat-strip"></div>
 
@@ -106,6 +110,30 @@
   if (RRG.qs('welcome') || !user.profile) {
     document.getElementById('welcome-banner').style.display = 'block';
   }
+
+  // Progress widget — Milestones (Just Starting / Developing) or Elite view.
+  // Uses rounds from the adult-style rounds table via RRG.subs.forUser.
+  // Elite juniors see the normal stat strip below; beginners get Milestones.
+  try {
+    const pj = user.profile_json || user.profile || {};
+    const tier = (pj.s1_skill_level || pj.skill_level || '').toLowerCase();
+    const isElite = (tier === 'elite' || pj.junior_elite_accepted) && tier !== 'just_starting' && tier !== 'developing';
+    const isBeginner = (tier === 'just_starting' || tier === 'developing');
+    if (isBeginner && RRG.milestones) {
+      // Use the same rounds-table feed. If RRG.subs.forUser returns localStorage
+      // rounds only, milestones still work — they just look at score/date/holes.
+      let rounds = [];
+      try {
+        // Prefer Supabase rounds (async) — fall back to local submissions
+        if (RRG.subs && RRG.subs.forUser) {
+          const r = RRG.subs.forUser(user.id);
+          rounds = (r && typeof r.then === 'function') ? await r : (r || []);
+        }
+      } catch (_) {}
+      const mount = document.getElementById('progress-mount');
+      if (mount) mount.innerHTML = RRG.milestones.renderWidget({ user, rounds, variant: 'compact' });
+    }
+  } catch (err) { console.warn('milestones widget failed', err); }
 
   // Stat strip — computed from submissions
   const subs = RRG.subs.forUser(user.id);
