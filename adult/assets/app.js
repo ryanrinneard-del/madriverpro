@@ -1258,14 +1258,14 @@ RRG.renderNav = function(user, active = '') {
           <li><a href="how-to-use.html" class="${active==='how-to-use'?'active':''}">How to use this portal</a></li>
         `)}
 
-        ${group('Books', 'books', `
-          <li><a href="/improve/bookshelf.html"><strong>The Bookshelf</strong></a></li>
-          <li class="nav-sublabel">Volume 01</li>
-          <li><a href="/improve/book-8-step-swing.html">The 8-Step Swing &mdash; McLean</a></li>
-          <li class="nav-sublabel">Volume 02 &middot; Primer</li>
-          <li><a href="/improve/book-golfing-machine.html">The Golfing Machine &mdash; Kelley</a></li>
-          <li class="nav-sublabel">Volume 03 &middot; Primer</li>
-          <li><a href="/improve/book-stack-and-tilt.html">Stack &amp; Tilt &mdash; Plummer &amp; Bennett</a></li>
+        ${group('Library', 'library-books', `
+          <li><a href="/improve/bookshelf.html"><strong>Teaching Library</strong></a></li>
+          <li class="nav-sublabel">Ryan's Framework</li>
+          <li><a href="/improve/module-01-fundamentals.html"><strong>Module 01 &middot; Fundamentals</strong></a></li>
+          <li class="nav-sublabel">Primers on the books that shaped it</li>
+          <li><a href="/improve/book-8-step-swing.html">8-Position Swing Map &middot; McLean</a></li>
+          <li><a href="/improve/book-golfing-machine.html">Component Model &middot; Kelley</a></li>
+          <li><a href="/improve/book-stack-and-tilt.html">Ball-First Swing &middot; Plummer &amp; Bennett</a></li>
         `)}
 
         ${coachItem}
