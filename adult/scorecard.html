@@ -103,7 +103,7 @@
   table.sc-holes {
     width: 100%; border-collapse: collapse;
     font-size: 13px; color: var(--navy);
-    min-width: 900px;
+    min-width: 980px;
   }
   table.sc-holes thead th {
     background: var(--navy); color: #fff;
@@ -257,7 +257,7 @@
             <tr>
               <th>Hole</th><th>Par</th><th>SI</th><th>Yd</th>
               <th>Score</th><th>Tee</th><th>1st putt</th><th>Putts</th>
-              <th>Diff</th><th>Commit</th><th>Pen.</th>
+              <th>Diff</th><th>Commit</th><th title="Scoring Club — wedge or short iron">SC</th><th>Pen.</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -273,7 +273,7 @@
             <tr>
               <th>Hole</th><th>Par</th><th>SI</th><th>Yd</th>
               <th>Score</th><th>Tee</th><th>1st putt</th><th>Putts</th>
-              <th>Diff</th><th>Commit</th><th>Pen.</th>
+              <th>Diff</th><th>Commit</th><th title="Scoring Club — wedge or short iron">SC</th><th>Pen.</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -327,6 +327,16 @@
           <div class="val" id="sc-commit">—</div>
           <div class="sub" id="sc-commit-sub">—</div>
         </div>
+        <div class="sc-tstat">
+          <div class="lbl">Easy Saves Blown</div>
+          <div class="val" id="sc-esb">—</div>
+          <div class="sub">5 Errors</div>
+        </div>
+        <div class="sc-tstat">
+          <div class="lbl">Scoring Club Bogeys</div>
+          <div class="val" id="sc-scb">—</div>
+          <div class="sub">5 Errors</div>
+        </div>
       </div>
       <div class="sc-totals" style="margin-top: 10px;">
         <div class="sc-tstat">
@@ -354,30 +364,36 @@
       <summary>
         <span>
           Optional extras
-          <div class="details-hint">Sand saves, avg drive distance, lost balls, reflection.</div>
+          <div class="details-hint">Sand saves, avg drive, pre-shot routine, and reflection prompts.</div>
         </span>
       </summary>
+
       <div class="sr-grid cols-3" style="margin: 14px 0;">
         <div class="sr-field">
           <label>Sand saves</label>
           <input type="text" name="sand_saves" placeholder="1 / 2">
         </div>
         <div class="sr-field">
-          <label>Avg drive (yd)</label>
+          <label>Avg drive (yd) <span class="opt" style="color:var(--mid-grey);">optional</span></label>
           <input type="number" name="drive_dist" min="100" max="360" placeholder="230">
         </div>
         <div class="sr-field">
-          <label>Lost balls</label>
-          <input type="number" name="lost_balls" min="0" max="20" placeholder="0">
+          <label>Pre-shot routine (1&ndash;10)</label>
+          <input type="number" name="routine_score" min="1" max="10" placeholder="—">
         </div>
       </div>
+
       <div class="sr-field" style="margin-bottom: 14px;">
         <label>What went well?</label>
-        <textarea name="reflection_good" placeholder="One specific moment beats a generalization."></textarea>
+        <textarea name="reflection_good" placeholder="Be specific. One moment beats a generalization."></textarea>
       </div>
-      <div class="sr-field">
+      <div class="sr-field" style="margin-bottom: 14px;">
         <label>What needs work?</label>
         <textarea name="reflection_bad" placeholder="Where did strokes leak?"></textarea>
+      </div>
+      <div class="sr-field">
+        <label>One thing to work on before next session</label>
+        <textarea name="one_thing" placeholder="Pick ONE — not five."></textarea>
       </div>
     </details>
 
@@ -470,6 +486,10 @@
                   <option value="W">W</option>
                 </select>
               </td>
+              <td>
+                <input type="checkbox" class="fw-chk scoringclub-chk" data-hole="${hole}"
+                       onchange="scRecalc()" title="Check if you approached with a wedge or short iron — 'scoring club'">
+              </td>
               <td><input type="number" min="0" max="5" class="pen-in" data-hole="${hole}" oninput="scRecalc()" value="0"></td>
             </tr>
           `);
@@ -488,6 +508,7 @@
             <td></td>
             <td></td>
             <td class="h-in-out" id="sc-${half}-putts">—</td>
+            <td></td>
             <td></td>
             <td></td>
             <td class="h-in-out" id="sc-${half}-pen">—</td>
@@ -530,6 +551,8 @@
       let threePutts = 0;
       let scrAttempts = 0, scrMade = 0;
       let toughMisses = 0;  // CT's short-sided flag: missed green AND marked Tough
+      let easySavesBlown = 0;  // missed green, Simple difficulty, still made bogey+
+      let scoringClubBogeys = 0;  // scoring-club hole, bogey or worse
       let birdies = 0, doublesPlus = 0;
       let penalties = 0;
       // Commitment audit
@@ -547,6 +570,7 @@
         const firstPuttIn = document.querySelector('.firstputt-in[data-hole="' + h + '"]');
         const diffIn      = document.querySelector('.diff-in[data-hole="' + h + '"]');
         const commitIn    = document.querySelector('.commit-in[data-hole="' + h + '"]');
+        const scClubChk   = document.querySelector('.scoringclub-chk[data-hole="' + h + '"]');
         const par = parseInt(document.querySelector('tr[data-hole="' + h + '"]').dataset.par, 10);
 
         const score     = scoreIn     && scoreIn.value     !== '' ? parseInt(scoreIn.value, 10)     : null;
@@ -556,6 +580,7 @@
         const firstPutt = firstPuttIn && firstPuttIn.value !== '' ? parseFloat(firstPuttIn.value)   : null;
         const diff      = diffIn && diffIn.value !== '' ? diffIn.value : null;
         const commit    = commitIn && commitIn.value !== '' ? commitIn.value : null;
+        const scoringClub = !!(scClubChk && scClubChk.checked);
 
         if (score != null) {
           if (h <= 9)  outScore += score; else inScore += score;
@@ -577,8 +602,11 @@
               scrAttempts++;
               if (score <= par) scrMade++;
               if (diff === 'T') toughMisses++;    // missed green AND short-sided
+              if (diff === 'S' && score > par) easySavesBlown++;  // 5 Errors: Easy Save Blown
             }
           }
+          // 5 Errors: Scoring Club Bogey — player flagged a scoring club AND made bogey+
+          if (scoringClub && score > par) scoringClubBogeys++;
         }
         if (putts != null) {
           if (h <= 9) outPutts += putts; else inPutts += putts;
@@ -656,6 +684,11 @@
         const subEl = document.getElementById('sc-commit-sub');
         if (subEl) subEl.textContent = commitTotal ? (committedN + ' of ' + commitTotal + ' committed') : '—';
       }
+      // 5 Errors auto-counts
+      const esbEl = document.getElementById('sc-esb');
+      if (esbEl) esbEl.textContent = easySavesBlown;
+      const scbEl = document.getElementById('sc-scb');
+      if (scbEl) scbEl.textContent = scoringClubBogeys;
     };
 
     // Initial render (no tee selected → placeholder row yardages)
@@ -684,6 +717,7 @@
       let girCount = 0, threePutts = 0;
       let scrAtt = 0, scrMade = 0, birdies = 0, doublesPlus = 0;
       let toughMisses = 0, committedN = 0, weakN = 0;
+      let easySavesBlown = 0, scoringClubBogeys = 0;
       let fpSum = 0, fpCount = 0;
       const pByType = { 3: { n: 0, sum: 0 }, 4: { n: 0, sum: 0 }, 5: { n: 0, sum: 0 } };
       let firstScore = null, firstPar = null;
@@ -696,6 +730,7 @@
         const firstPuttIn = document.querySelector('.firstputt-in[data-hole="' + h + '"]');
         const diffIn      = document.querySelector('.diff-in[data-hole="' + h + '"]');
         const commitIn    = document.querySelector('.commit-in[data-hole="' + h + '"]');
+        const scClubChk   = document.querySelector('.scoringclub-chk[data-hole="' + h + '"]');
         const par = parseInt(document.querySelector('tr[data-hole="' + h + '"]').dataset.par, 10);
 
         const s  = scoreIn && scoreIn.value !== '' ? parseInt(scoreIn.value, 10) : null;
@@ -705,12 +740,14 @@
         const fp = firstPuttIn && firstPuttIn.value !== '' ? parseFloat(firstPuttIn.value) : null;
         const diff = diffIn && diffIn.value !== '' ? diffIn.value : null;
         const commit = commitIn && commitIn.value !== '' ? commitIn.value : null;
+        const scoringClub = !!(scClubChk && scClubChk.checked);
 
         holeRows.push({
           hole: h, par,
           score: s, putts: p, penalties: pn,
           tee_dir: tDir, first_putt: fp,
           difficulty: diff, commit: commit,
+          scoring_club: scoringClub,
           fw_hit: tDir === 'F' ? true : (tDir ? false : null),
         });
 
@@ -738,8 +775,10 @@
               scrAtt++;
               if (s <= par) scrMade++;
               if (diff === 'T') toughMisses++;
+              if (diff === 'S' && s > par) easySavesBlown++;
             }
           }
+          if (scoringClub && s > par) scoringClubBogeys++;
         }
         if (p != null && p >= 3) threePutts++;
         if (fp != null) { fpSum += fp; fpCount++; }
@@ -781,8 +820,10 @@
         birdies: birdies,
         doubles_plus: doublesPlus,
         drive_dist: toInt(fd.drive_dist),
+        routine_score:   toInt(fd.routine_score),
         reflection_good: toText(fd.reflection_good),
         reflection_bad:  toText(fd.reflection_bad),
+        one_thing:       toText(fd.one_thing),
         // Hole-by-hole detail + CT's mental-audit + tee-direction stats
         hole_detail: {
           tee_key: tee.key,
@@ -807,6 +848,8 @@
           first_putt_count: fpCount,
           tough_misses: toughMisses,
           three_putts: threePutts,
+          easy_saves_blown: easySavesBlown,
+          scoring_club_bogeys: scoringClubBogeys,
         },
       };
 
