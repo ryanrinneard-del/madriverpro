@@ -225,6 +225,7 @@
               <a href="round-reflection.html?round=${s.id}" class="btn btn-ghost btn-sm">
                 ${hasReflection ? 'Edit reflection' : '+ Add reflection'}
               </a>
+              <button class="btn btn-ghost btn-sm" onclick="deleteRound('${s.id}')" style="color: var(--red-risk);">Delete</button>
               <button class="btn btn-ghost btn-sm" onclick="document.getElementById('detail-panel').innerHTML=''">Close</button>
             </div>
           </div>
@@ -259,6 +260,24 @@
         </div>
       `;
       panel.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    /* Delete a round — prompts to confirm, removes via RRG.subs.remove,
+       then reloads the page so the table, trends, and path widget all
+       refresh against the new round set. */
+    window.deleteRound = async (id) => {
+      const s = subs.find(x => x.id === id);
+      if (!s) return;
+      const label = `${RRG.esc(s.course || 'Round')} · ${RRG.fmtDate(s.round_date || s.created_at)}`;
+      if (!confirm(`Delete this round?\n\n${label}\nScore: ${s.score}\n\nThis cannot be undone.`)) return;
+      try {
+        await RRG.subs.remove(id);
+        RRG.toast('Round deleted.');
+        // Simplest refresh: reload the page
+        location.reload();
+      } catch (err) {
+        RRG.toast('Could not delete: ' + (err.message || ''));
+      }
     };
 
   })();
