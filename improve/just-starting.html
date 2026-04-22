@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Just Starting — Teaching Library</title>
+<meta name="description" content="A warm, jargon-free starting point for new golfers and anyone shooting over 100. Week one, first month, first season — a curated reading path.">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  .js-hero {
+    background: linear-gradient(180deg, var(--navy) 0%, #162E54 100%);
+    color: #fff; border-radius: 14px;
+    padding: 48px 40px 40px;
+    margin-bottom: 28px;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .js-hero::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--gold);
+  }
+  .js-hero .kicker {
+    font-size: 11px; letter-spacing: 0.24em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 14px;
+  }
+  .js-hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    color: #fff; font-size: clamp(32px, 5vw, 46px);
+    margin: 0; font-weight: 600; line-height: 1.15;
+  }
+  .js-hero p {
+    color: #D8DEE8; font-size: 16px; line-height: 1.65;
+    margin: 16px auto 0; max-width: 580px;
+  }
+
+  .js-coach-note {
+    background: #F7F2E8;
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--gold);
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin: 0 0 36px;
+  }
+  .js-coach-note .cn-label {
+    font-size: 11px; letter-spacing: 0.2em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 10px;
+  }
+  .js-coach-note p {
+    font-size: 15px; line-height: 1.7; color: var(--navy-mid);
+    margin: 0 0 10px;
+  }
+  .js-coach-note p:last-child { margin-bottom: 0; }
+  .js-coach-note p strong { color: var(--navy); }
+  .js-coach-note .sign-off {
+    margin-top: 12px;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; color: var(--navy); font-size: 15px;
+  }
+
+  .phase-card {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--gold);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 22px;
+  }
+  .phase-card .phase-kicker {
+    font-size: 10px; letter-spacing: 2px; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .phase-card h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    color: var(--navy); font-size: 24px; margin: 0 0 8px; font-weight: 600;
+    line-height: 1.2;
+  }
+  .phase-card > p {
+    font-size: 14.5px; line-height: 1.65; color: var(--navy-mid);
+    margin: 0 0 16px;
+  }
+
+  .phase-list {
+    display: flex; flex-direction: column; gap: 10px;
+    margin-top: 10px;
+  }
+  .phase-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 14px 16px;
+    background: #F7F2E8;
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--gold);
+    border-radius: 8px;
+    text-decoration: none; color: inherit;
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .phase-item:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(13,31,60,0.08);
+  }
+  .phase-item .pi-num {
+    flex-shrink: 0;
+    width: 30px; height: 30px;
+    background: var(--navy); color: var(--gold);
+    border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 700; font-size: 15px;
+  }
+  .phase-item .pi-title {
+    font-size: 14.5px; font-weight: 600; color: var(--navy); line-height: 1.3;
+  }
+  .phase-item .pi-desc {
+    font-size: 13px; color: var(--navy-mid); line-height: 1.5;
+    margin-top: 3px;
+  }
+
+  .encouragement-card {
+    background: #F2F6EE;
+    border-left: 4px solid #6B8B4E;
+    border-radius: 10px;
+    padding: 22px 26px;
+    margin: 28px 0;
+  }
+  .encouragement-card h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    color: var(--navy); font-size: 19px; margin: 0 0 8px; font-weight: 600;
+  }
+  .encouragement-card p {
+    font-size: 14.5px; line-height: 1.65; color: var(--navy-mid);
+    margin: 0 0 8px;
+  }
+
+  .graduate-box {
+    background: linear-gradient(180deg, var(--navy) 0%, #162E54 100%);
+    color: #fff;
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin: 30px 0 22px;
+  }
+  .graduate-box h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    color: #fff; font-size: 22px; margin: 0 0 10px; font-weight: 600;
+  }
+  .graduate-box p { color: rgba(255,255,255,0.88); font-size: 14.5px; line-height: 1.65; margin: 0 0 10px; }
+  .graduate-box strong { color: var(--gold); }
+</style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container">
+
+  <div class="breadcrumb">
+    <a href="index.html">Library</a><span>›</span><a href="bookshelf.html">Teaching Library</a><span>›</span>Just Starting
+  </div>
+
+  <!-- ===== HERO ===== -->
+  <div class="js-hero">
+    <div class="kicker">For new players &amp; anyone still finding their game</div>
+    <h1>Just Starting.</h1>
+    <p>The part of the portal where we strip out the jargon. No handicap required. No fairway percentages. Just the basics, in order, with room to grow.</p>
+  </div>
+
+  <!-- ===== COACH NOTE ===== -->
+  <div class="js-coach-note">
+    <div class="cn-label">From the coach</div>
+    <p>
+      Most of the people who start golf never stick with it. Not because they
+      lack the talent &mdash; because the game is set up to make them feel stupid
+      in their first year. You show up to the range and everyone around you seems
+      to know what they're doing. You show up to the course and you're not sure
+      which tees to play, how fast to walk, or whether it's your shot. You hit
+      twelve shots on one hole and wonder if you'll ever hit a good one.
+    </p>
+    <p>
+      <strong>Here's the truth nobody tells you:</strong> every good golfer was
+      terrible once. Ben Hogan shot in the 100s. Tiger Woods had to be taught to
+      swing. The difference between the people who stick with golf and the
+      people who don't isn't talent &mdash; it's whether anyone gave them the
+      patience and the road map to keep going.
+    </p>
+    <p>
+      This section is that road map. Three phases. Week one, first month, first
+      season. No stat dashboards. No benchmarks telling you what you're doing
+      wrong. Just the stuff that matters, in order, with a coach's voice
+      telling you you're doing fine.
+    </p>
+    <div class="sign-off">&mdash; Ryan</div>
+  </div>
+
+  <!-- ===== PHASE 1 ===== -->
+  <div class="phase-card">
+    <div class="phase-kicker">Week One &middot; The absolute basics</div>
+    <h2>Learn to hold the club, stand to the ball, and survive a round.</h2>
+    <p>
+      Before you worry about how far you hit it or whether your swing plane is
+      correct, learn these four things. They're not the sexy parts of golf &mdash;
+      they're the ones that make you welcome on any course.
+    </p>
+    <div class="phase-list">
+      <a href="beginner-golfer.html#grip" class="phase-item">
+        <div class="pi-num">1</div>
+        <div>
+          <div class="pi-title">The grip</div>
+          <div class="pi-desc">How you hold the club. The single biggest source of bad shots for beginners &mdash; and the easiest fix.</div>
+        </div>
+      </a>
+      <a href="beginner-golfer.html#stance" class="phase-item">
+        <div class="pi-num">2</div>
+        <div>
+          <div class="pi-title">Stance, posture, and alignment</div>
+          <div class="pi-desc">How to stand to the ball. If your feet and shoulders aren't pointing where you think they are, you'll fight your swing forever.</div>
+        </div>
+      </a>
+      <a href="beginner-golfer.html#pace" class="phase-item">
+        <div class="pi-num">3</div>
+        <div>
+          <div class="pi-title">Pace of play and etiquette</div>
+          <div class="pi-desc">The social rules of golf. Play ready, keep up, know when to pick up &mdash; and never worry about bothering the group behind you again.</div>
+        </div>
+      </a>
+      <a href="/adult/how-to-use.html" class="phase-item">
+        <div class="pi-num">4</div>
+        <div>
+          <div class="pi-title">How this portal works</div>
+          <div class="pi-desc">Your home for everything we work on together. Log rounds, set goals, track what matters &mdash; and skip the rest until you're ready.</div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ===== PHASE 2 ===== -->
+  <div class="phase-card">
+    <div class="phase-kicker">First Month &middot; Comfortable on the course</div>
+    <h2>The unspoken rules, the rules that are actually spoken, and the basics of how a ball moves.</h2>
+    <p>
+      Now we layer in the stuff that makes golf make sense. How a round
+      actually flows. Why balls curve. What "first-tee ready" means. By the end
+      of this phase, you walk to the first tee without nerves, and you know
+      what to do with your body for the next four hours.
+    </p>
+    <div class="phase-list">
+      <a href="first-tee-ready.html" class="phase-item">
+        <div class="pi-num">1</div>
+        <div>
+          <div class="pi-title">First-Tee Ready</div>
+          <div class="pi-desc">The quiet code of golf &mdash; every rhythm, ritual, and unspoken rule that separates a confident first round from an anxious one.</div>
+        </div>
+      </a>
+      <a href="long-game.html" class="phase-item">
+        <div class="pi-num">2</div>
+        <div>
+          <div class="pi-title">Why the ball does what it does</div>
+          <div class="pi-desc">The laws of ball flight, in plain English. Why you slice. How to hit it higher. The one thing that separates a solid strike from a thin one.</div>
+        </div>
+      </a>
+      <a href="short-game.html" class="phase-item">
+        <div class="pi-num">3</div>
+        <div>
+          <div class="pi-title">The short game is where scores live</div>
+          <div class="pi-desc">You'll shave more strokes from 50 yards and in than you will from the tee. Chip, pitch, and putt with intent.</div>
+        </div>
+      </a>
+      <a href="/adult/log-simple.html" class="phase-item">
+        <div class="pi-num">4</div>
+        <div>
+          <div class="pi-title">Log your first few rounds</div>
+          <div class="pi-desc">Use the Simple Log &mdash; score, how it felt, one thing to remember. That's it. Every round moves a milestone.</div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ===== ENCOURAGEMENT ===== -->
+  <div class="encouragement-card">
+    <h3>A reminder.</h3>
+    <p>
+      You're going to hit bad shots this season. You're going to hit them in
+      front of people. You're going to hit them on holes where you'd have
+      sworn you finally had it figured out. That's the game.
+    </p>
+    <p>
+      The players who end up good &mdash; and the players who end up <em>happy</em>
+      &mdash; are the ones who didn't let the bad shots define them. Take the next
+      one, commit to it, and keep going. Every hour on the course is a bet on
+      the next hour being better than this one. Keep making the bet.
+    </p>
+  </div>
+
+  <!-- ===== PHASE 3 ===== -->
+  <div class="phase-card">
+    <div class="phase-kicker">First Season &middot; Building actual skills</div>
+    <h2>Now we start sharpening. Pick one thing at a time, work on it, and move on.</h2>
+    <p>
+      After you've played a dozen rounds and you feel like you belong on the
+      course, we start layering in real skill work. Not a lot &mdash; one thing
+      at a time. The goal for your first full season is simple: break a score
+      you didn't think you could. 120, 115, 110, 100 &mdash; whatever your
+      ceiling is, break it.
+    </p>
+    <div class="phase-list">
+      <a href="practice.html" class="phase-item">
+        <div class="pi-num">1</div>
+        <div>
+          <div class="pi-title">How to practice so it actually sticks</div>
+          <div class="pi-desc">Most amateur practice doesn't produce learning. Here's the version that does. Short sessions. Use video. Keep it simple.</div>
+        </div>
+      </a>
+      <a href="mental-game.html" class="phase-item">
+        <div class="pi-num">2</div>
+        <div>
+          <div class="pi-title">The mental game for new players</div>
+          <div class="pi-desc">A pre-shot routine. What to do when you hit a bad one. How to stay in your own round when the group next door is crushing it.</div>
+        </div>
+      </a>
+      <a href="course-strategy.html" class="phase-item">
+        <div class="pi-num">3</div>
+        <div>
+          <div class="pi-title">Playing smarter, not harder</div>
+          <div class="pi-desc">Why a 7-iron to the middle of the green beats a 56° wedge at the pin. Course management in plain English.</div>
+        </div>
+      </a>
+      <a href="/adult/profile.html" class="phase-item">
+        <div class="pi-num">4</div>
+        <div>
+          <div class="pi-title">When you break 100, come back to your profile</div>
+          <div class="pi-desc">Flip your skill tier from Developing to Player. The stats-and-handicap view of the portal becomes useful. Until then, keep doing what's working.</div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ===== GRADUATE ===== -->
+  <div class="graduate-box">
+    <h3>When you're ready to graduate.</h3>
+    <p>
+      The portal has a whole other layer for players who want to track fairways,
+      greens, putts, scrambling percentages, and move handicap indexes. It's
+      great &mdash; and it's waiting for you.
+    </p>
+    <p>
+      <strong>You don't need any of that until you're consistently breaking
+      100.</strong> Before then, the stats are noisy and the benchmarks are
+      discouraging. After &mdash; they're exactly what you want. When the time
+      comes, switch your skill tier to <strong>Player</strong> in your profile,
+      and the dashboard rearranges itself.
+    </p>
+    <p style="margin-top:16px;">
+      <a href="/adult/log-simple.html" style="color: var(--gold); font-weight: 700; text-decoration: underline; text-underline-offset: 3px;">Log a round &rarr;</a>
+      &nbsp;&middot;&nbsp;
+      <a href="/adult/dashboard.html" style="color: var(--gold); font-weight: 700; text-decoration: underline; text-underline-offset: 3px;">Back to dashboard &rarr;</a>
+    </p>
+  </div>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  RRG.mountLibrary();
+</script>
+</body>
+</html>

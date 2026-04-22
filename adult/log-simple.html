@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<base href="/adult/">
+<title>Log Your Round — RR Golf Performance</title>
+<meta name="description" content="Simple 30-second round log. Score if you kept it, how the round felt, and one thing to remember. For beginners and developing players.">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  /* Simple log — designed for someone who just played a round and wants
+     to log it in 30 seconds. Three things: optional score, a feel rating
+     (1-5 smiley scale), one free-text takeaway. Backs into the rounds
+     table with score + reflection_good so the player's history still
+     populates. Everything else (FIR/GIR/putts) stays null — that's OK. */
+
+  .ls-hero {
+    background: linear-gradient(180deg, var(--navy) 0%, #162E54 100%);
+    color: #fff;
+    border-radius: 14px;
+    padding: 36px 32px;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  .ls-hero::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--gold);
+  }
+  .ls-hero .kicker {
+    font-size: 11px; letter-spacing: 0.22em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .ls-hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    color: #fff; font-size: 30px; margin: 0 0 4px; font-weight: 600;
+  }
+  .ls-hero p { color: #D8DEE8; font-size: 15px; line-height: 1.55; margin: 6px 0 0; max-width: 580px; }
+
+  .ls-card {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--gold);
+    border-radius: 12px;
+    padding: 26px 30px;
+    margin-bottom: 18px;
+  }
+  .ls-card h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 20px; color: var(--navy); margin: 0 0 8px; font-weight: 600;
+  }
+  .ls-card p.hint {
+    font-size: 13px; color: var(--mid-grey);
+    margin: 0 0 14px; line-height: 1.5;
+  }
+
+  .ls-field label {
+    display: block; font-size: 10px; letter-spacing: 1px;
+    color: var(--navy); text-transform: uppercase; font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .ls-field input[type="number"],
+  .ls-field input[type="date"],
+  .ls-field textarea {
+    width: 100%; padding: 12px 14px;
+    border: 1px solid var(--rule); border-radius: 8px;
+    font-family: inherit; font-size: 15px; color: var(--navy);
+    background: var(--white);
+  }
+  .ls-field input:focus,
+  .ls-field textarea:focus {
+    border-color: var(--gold); outline: none;
+    box-shadow: 0 0 0 2px rgba(201,168,76,0.15);
+  }
+  .ls-field textarea { min-height: 90px; resize: vertical; }
+
+  .ls-field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  @media (max-width: 520px) { .ls-field-row { grid-template-columns: 1fr; } }
+
+  /* Mood picker — 5 emoji buttons */
+  .mood-picker {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    margin-top: 6px;
+  }
+  .mood-btn {
+    flex: 1; min-width: 80px;
+    padding: 14px 10px;
+    border: 2px solid var(--rule);
+    border-radius: 10px;
+    background: var(--white);
+    cursor: pointer;
+    text-align: center;
+    font-size: 13px; color: var(--navy-mid);
+    font-weight: 600;
+    transition: all .15s ease;
+    user-select: none;
+  }
+  .mood-btn .mood-emoji {
+    display: block; font-size: 28px;
+    margin-bottom: 4px;
+    font-family: 'Apple Color Emoji', 'Segoe UI Emoji', sans-serif;
+  }
+  .mood-btn:hover { border-color: var(--gold); }
+  .mood-btn.selected {
+    border-color: var(--gold);
+    background: #FBF7EC;
+    color: var(--navy);
+  }
+
+  .ls-submit-bar {
+    display: flex; justify-content: flex-end; gap: 10px;
+    margin-top: 10px;
+  }
+  .ls-submit-bar .btn { padding: 14px 24px; font-size: 15px; }
+
+  .ls-welcome-note {
+    background: #F7F2E8;
+    border-left: 3px solid var(--gold);
+    padding: 14px 18px;
+    border-radius: 4px;
+    font-size: 14px; line-height: 1.6; color: var(--navy-mid);
+    margin-bottom: 18px;
+  }
+  .ls-welcome-note b { color: var(--navy); }
+</style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container-narrow">
+
+  <div class="breadcrumb">
+    <a href="dashboard.html">Dashboard</a><span>›</span>Log Your Round
+  </div>
+
+  <div class="ls-hero">
+    <div class="kicker">Quick Log &middot; 30 Seconds</div>
+    <h1>Log your round.</h1>
+    <p>Three things. Score if you kept it, how the round felt, and one thing to remember for next time. That's it.</p>
+  </div>
+
+  <form id="ls-form" autocomplete="off">
+
+    <!-- Optional welcome note for first-timers -->
+    <div id="first-note" class="ls-welcome-note" style="display:none;">
+      <b>Your first round log!</b> Don't worry about getting everything perfect.
+      The more you log, the more the portal remembers about your game &mdash;
+      and the more specific the advice we can give you over time.
+    </div>
+
+    <!-- ===== Score + date ===== -->
+    <div class="ls-card">
+      <h2>The basics</h2>
+      <p class="hint">If you lost track of score at some point, just put in your best estimate &mdash; or leave it blank.</p>
+      <div class="ls-field-row">
+        <div class="ls-field">
+          <label>Date</label>
+          <input type="date" name="round_date" id="ls-date" required>
+        </div>
+        <div class="ls-field">
+          <label>Score <span style="color:var(--mid-grey); font-weight:400; text-transform:none; letter-spacing:0;">(optional)</span></label>
+          <input type="number" name="score" id="ls-score" min="30" max="200" placeholder="e.g. 105">
+        </div>
+      </div>
+      <div class="ls-field">
+        <label>Course <span style="color:var(--mid-grey); font-weight:400; text-transform:none; letter-spacing:0;">(optional)</span></label>
+        <input type="text" name="course" id="ls-course" placeholder="e.g. Mad River, or just 'the local muni'" style="font-size:15px; padding:12px 14px; width:100%; border:1px solid var(--rule); border-radius:8px;">
+      </div>
+    </div>
+
+    <!-- ===== Mood ===== -->
+    <div class="ls-card">
+      <h2>How did the round feel?</h2>
+      <p class="hint">Gut answer. Not about the score &mdash; about the experience.</p>
+      <div class="mood-picker" id="mood-picker">
+        <div class="mood-btn" data-mood="1"><span class="mood-emoji">&#128533;</span>Rough</div>
+        <div class="mood-btn" data-mood="2"><span class="mood-emoji">&#128577;</span>Frustrating</div>
+        <div class="mood-btn" data-mood="3"><span class="mood-emoji">&#128528;</span>Mixed</div>
+        <div class="mood-btn" data-mood="4"><span class="mood-emoji">&#128578;</span>Pretty good</div>
+        <div class="mood-btn" data-mood="5"><span class="mood-emoji">&#128515;</span>Loved it</div>
+      </div>
+      <input type="hidden" name="mood" id="ls-mood" value="">
+    </div>
+
+    <!-- ===== One takeaway ===== -->
+    <div class="ls-card">
+      <h2>One thing to remember</h2>
+      <p class="hint">A moment that worked. A shot you were proud of. Something you want to remember for next time. One sentence is enough.</p>
+      <div class="ls-field">
+        <textarea name="takeaway" id="ls-takeaway" placeholder="e.g. Kept my head still on the 11th tee and striped one. Or: get to the course earlier to warm up properly."></textarea>
+      </div>
+    </div>
+
+    <div id="ls-form-error" class="callout" style="display:none; color:var(--red-risk); border-left-color:var(--red-risk); background:#FDF0EE;"></div>
+
+    <div class="ls-submit-bar">
+      <a href="dashboard.html" class="btn btn-ghost">Cancel</a>
+      <button type="submit" class="btn btn-primary" id="ls-submit-btn">Log this round &rarr;</button>
+    </div>
+
+    <p style="text-align:center; margin-top:18px; font-size:12px; color:var(--mid-grey);">
+      Want to track more? Try the
+      <a href="submit-round.html" style="color:var(--gold);">quick-entry form</a> or the
+      <a href="scorecard.html" style="color:var(--gold);">Mad River scorecard</a> when you're ready.
+    </p>
+  </form>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js"></script>
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  (async () => {
+    const user = await RRG.mount('');
+    if (!user) return;
+
+    // Default date to today
+    const today = new Date();
+    const pad = n => String(n).padStart(2, '0');
+    document.getElementById('ls-date').value =
+      `${today.getFullYear()}-${pad(today.getMonth()+1)}-${pad(today.getDate())}`;
+
+    // Show first-time welcome note if no rounds yet
+    try {
+      const existing = await RRG.subs.forUser(user.id);
+      if (!existing || existing.length === 0) {
+        document.getElementById('first-note').style.display = 'block';
+      }
+    } catch (_) {}
+
+    // Mood picker — single-select, stores 1-5 in hidden input
+    document.querySelectorAll('.mood-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        document.getElementById('ls-mood').value = btn.dataset.mood;
+      });
+    });
+
+    const form = document.getElementById('ls-form');
+    const errBox = document.getElementById('ls-form-error');
+    const submitBtn = document.getElementById('ls-submit-btn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errBox.style.display = 'none';
+
+      const fd = Object.fromEntries(new FormData(form).entries());
+      const score = fd.score ? parseInt(fd.score, 10) : null;
+      const mood = fd.mood ? parseInt(fd.mood, 10) : null;
+      const takeaway = (fd.takeaway || '').trim();
+      const course = (fd.course || '').trim();
+
+      if (!score && !takeaway && !mood) {
+        errBox.textContent = 'Add a score, a mood, or a takeaway before logging.';
+        errBox.style.display = 'block';
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Logging…';
+
+      const payload = {
+        user_id: user.id,
+        round_date: fd.round_date,
+        course: course || null,
+        holes: 18,
+        score: score,
+        format: 'Stroke Play',
+        reflection_good: takeaway || null,
+        // Store the mood rating inside the existing routine_score column
+        // (range 1-10, we write 1-5 in there) so beginners get credit for
+        // logging without needing a new database column.
+        routine_score: mood,
+      };
+
+      try {
+        await RRG.subs.create(payload);
+        location.replace('history.html?new=1');
+      } catch (err) {
+        errBox.textContent = 'Could not log: ' + (err.message || err);
+        errBox.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Log this round →';
+      }
+    });
+
+  })();
+</script>
+</body>
+</html>

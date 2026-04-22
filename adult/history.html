@@ -112,13 +112,20 @@
       <div class="stat-cell"><div class="val">${avgT5}</div><div class="lbl">Avg 5 Errors</div></div>
     `;
 
-    // Path-to-Goal widget — full gap analysis above the rounds table.
+    // Path-to-Goal or Milestones widget — pick based on skill tier.
     try {
       const pathMount = document.getElementById('path-mount');
-      if (pathMount && RRG.path && RRG.path.renderWidget) {
-        pathMount.innerHTML = RRG.path.renderWidget({ user, rounds: subs, variant: 'full' });
+      if (pathMount) {
+        const pj = user.profile_json || {};
+        const skill = (pj.s1_skill_level || pj.skill_level || 'player').toLowerCase();
+        const isBeginner = (skill === 'just_starting' || skill === 'developing');
+        if (isBeginner && RRG.milestones) {
+          pathMount.innerHTML = RRG.milestones.renderWidget({ user, rounds: subs, variant: 'full' });
+        } else if (RRG.path && RRG.path.renderWidget) {
+          pathMount.innerHTML = RRG.path.renderWidget({ user, rounds: subs, variant: 'full' });
+        }
       }
-    } catch (err) { console.warn('path widget failed', err); }
+    } catch (err) { console.warn('progress widget failed', err); }
 
     // Trend cards — sparkline chart for each of the key stats, with
     // the player's goal-hcp benchmark drawn as a dashed gold line.

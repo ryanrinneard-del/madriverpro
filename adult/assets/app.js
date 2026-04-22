@@ -784,6 +784,261 @@ RRG.path = {
 };
 
 /* ============================================================
+   MILESTONES — progressive goals for beginners + developing players
+
+   Replaces the Path-to-Goal widget for players in "just_starting" or
+   "developing" skill tiers. Instead of showing red/yellow/red gaps vs.
+   benchmark handicaps (which is demoralizing when you shoot 115),
+   milestones celebrate what a newer player is actually working toward:
+   breaking 120, making their first par, breaking 100.
+
+   Each milestone has:
+     - id                  unique key
+     - title               short name
+     - description         one-line detail
+     - test(rounds)        returns { done: boolean, best: value, date: string }
+
+   The widget shows: recent completions (celebrate), the next 2-3 targets
+   (work toward), a best-so-far hint where applicable.
+   ============================================================ */
+
+RRG.milestones = {
+  /* Full list in rough progression order. A player graduates to the Player
+     tier after breaking 90 with some consistency — at which point the Path
+     widget is more useful to them than milestones. */
+  all: [
+    {
+      id: 'first_9',
+      title: 'Complete your first 9-hole round',
+      test(rounds) {
+        const r = rounds.find(r => (r.holes === 9) || (r.score && r.score < 60));
+        return { done: !!r, date: r?.round_date };
+      },
+    },
+    {
+      id: 'first_18',
+      title: 'Complete your first 18-hole round',
+      test(rounds) {
+        const r = rounds.find(r => (r.holes === 18) || (r.score && r.score >= 60));
+        return { done: !!r, date: r?.round_date };
+      },
+    },
+    {
+      id: 'break_130',
+      title: 'Break 130',
+      description: 'A full round under 130',
+      test(rounds) {
+        const scores = rounds.map(r => +r.score).filter(n => !isNaN(n) && n > 0);
+        const best = scores.length ? Math.min(...scores) : null;
+        const r = rounds.find(r => r.score && r.score < 130);
+        return { done: !!r, date: r?.round_date, best };
+      },
+    },
+    {
+      id: 'break_120',
+      title: 'Break 120',
+      description: 'Consistency starts here',
+      test(rounds) {
+        const scores = rounds.map(r => +r.score).filter(n => !isNaN(n) && n > 0);
+        const best = scores.length ? Math.min(...scores) : null;
+        const r = rounds.find(r => r.score && r.score < 120);
+        return { done: !!r, date: r?.round_date, best };
+      },
+    },
+    {
+      id: 'first_par_3',
+      title: 'Make your first par on a par 3',
+      test(rounds) {
+        for (const r of rounds) {
+          const rows = r.hole_detail?.rows;
+          if (!rows) continue;
+          const hit = rows.find(h => h.par === 3 && h.score === 3);
+          if (hit) return { done: true, date: r.round_date };
+        }
+        return { done: false };
+      },
+    },
+    {
+      id: 'break_110',
+      title: 'Break 110',
+      description: 'Bogey golf gets real',
+      test(rounds) {
+        const scores = rounds.map(r => +r.score).filter(n => !isNaN(n) && n > 0);
+        const best = scores.length ? Math.min(...scores) : null;
+        const r = rounds.find(r => r.score && r.score < 110);
+        return { done: !!r, date: r?.round_date, best };
+      },
+    },
+    {
+      id: 'first_par_4',
+      title: 'Make your first par on a par 4',
+      test(rounds) {
+        for (const r of rounds) {
+          const rows = r.hole_detail?.rows;
+          if (!rows) continue;
+          const hit = rows.find(h => h.par === 4 && h.score === 4);
+          if (hit) return { done: true, date: r.round_date };
+        }
+        return { done: false };
+      },
+    },
+    {
+      id: 'first_birdie',
+      title: 'Make your first birdie',
+      description: 'One under par on any hole',
+      test(rounds) {
+        for (const r of rounds) {
+          const rows = r.hole_detail?.rows;
+          if (!rows) continue;
+          const hit = rows.find(h => h.par && h.score && h.score < h.par);
+          if (hit) return { done: true, date: r.round_date };
+        }
+        return { done: false };
+      },
+    },
+    {
+      id: 'break_100',
+      title: 'Break 100',
+      description: 'The biggest milestone in amateur golf',
+      test(rounds) {
+        const scores = rounds.map(r => +r.score).filter(n => !isNaN(n) && n > 0);
+        const best = scores.length ? Math.min(...scores) : null;
+        const r = rounds.find(r => r.score && r.score < 100);
+        return { done: !!r, date: r?.round_date, best };
+      },
+    },
+    {
+      id: 'break_95',
+      title: 'Break 95',
+      description: 'Regular mid-90s rounds',
+      test(rounds) {
+        const scores = rounds.map(r => +r.score).filter(n => !isNaN(n) && n > 0);
+        const best = scores.length ? Math.min(...scores) : null;
+        const r = rounds.find(r => r.score && r.score < 95);
+        return { done: !!r, date: r?.round_date, best };
+      },
+    },
+    {
+      id: 'break_90',
+      title: 'Break 90',
+      description: 'You\'re now a player — switch to Player tier',
+      test(rounds) {
+        const scores = rounds.map(r => +r.score).filter(n => !isNaN(n) && n > 0);
+        const best = scores.length ? Math.min(...scores) : null;
+        const r = rounds.find(r => r.score && r.score < 90);
+        return { done: !!r, date: r?.round_date, best };
+      },
+    },
+  ],
+
+  /* Run every milestone test against the user's rounds. Returns
+     { completed: [...], upcoming: [...], recentlyDone: latest done }. */
+  evaluate(rounds) {
+    const completed = [], upcoming = [];
+    let recentlyDone = null;
+    for (const m of RRG.milestones.all) {
+      const res = m.test(rounds || []);
+      const entry = { ...m, ...res };
+      if (res.done) {
+        completed.push(entry);
+        if (!recentlyDone || (entry.date || '') > (recentlyDone.date || '')) {
+          recentlyDone = entry;
+        }
+      } else {
+        upcoming.push(entry);
+      }
+    }
+    return { completed, upcoming, recentlyDone };
+  },
+
+  /* Format a milestone date (YYYY-MM-DD) for display. */
+  fmtDate(iso) {
+    if (!iso) return '';
+    try {
+      return new Date(iso + (iso.length === 10 ? 'T12:00:00' : ''))
+        .toLocaleDateString('en-CA', { month: 'short', day: 'numeric', year: 'numeric' });
+    } catch { return iso; }
+  },
+
+  /* Render the milestones widget for a player. Replaces the Path widget
+     for beginner/developing tiers. */
+  renderWidget({ user, rounds, variant = 'full' } = {}) {
+    const res = RRG.milestones.evaluate(rounds || []);
+    const completedCount = res.completed.length;
+    const totalCount = RRG.milestones.all.length;
+    const nextUp = res.upcoming.slice(0, variant === 'compact' ? 2 : 3);
+
+    // If they haven't logged anything yet, give a warm first-time framing.
+    if (!rounds || rounds.length === 0) {
+      return `
+        <div class="path-card">
+          <div class="path-kicker">Your Journey</div>
+          <h3 class="path-title">Ready to log your first round?</h3>
+          <p class="path-sub">
+            Once you've played your first round &mdash; even just 9 holes &mdash; we'll
+            track your progress through the milestones every golfer works toward. Don't
+            worry about score; just get out there.
+          </p>
+          <a href="log-simple.html" class="btn btn-primary btn-sm">+ Log Your First Round</a>
+        </div>`;
+    }
+
+    // Completed strip (most recent 2 if any)
+    const recentDone = res.completed
+      .filter(c => c.date)
+      .sort((a, b) => (b.date || '').localeCompare(a.date || ''))
+      .slice(0, 2);
+
+    const doneHtml = recentDone.length ? recentDone.map(m => `
+      <div class="ms-row ms-done">
+        <div class="ms-icon">&check;</div>
+        <div>
+          <div class="ms-title">${RRG.esc(m.title)}</div>
+          <div class="ms-sub">${RRG.esc(RRG.milestones.fmtDate(m.date))}</div>
+        </div>
+      </div>`).join('') : '';
+
+    // Upcoming milestones — show "best so far" if a break-N milestone
+    const upHtml = nextUp.map(m => {
+      let bestHint = '';
+      if (m.best != null && m.id.startsWith('break_')) {
+        bestHint = `<span class="ms-best">Best so far: <b>${m.best}</b></span>`;
+      }
+      return `
+        <div class="ms-row ms-next">
+          <div class="ms-icon ms-target">&cir;</div>
+          <div>
+            <div class="ms-title">${RRG.esc(m.title)}</div>
+            ${m.description ? `<div class="ms-sub">${RRG.esc(m.description)}</div>` : ''}
+            ${bestHint}
+          </div>
+        </div>`;
+    }).join('');
+
+    const progress = `${completedCount} / ${totalCount}`;
+
+    return `
+      <div class="path-card">
+        <div class="path-header">
+          <div>
+            <div class="path-kicker">Your Journey &middot; ${progress} milestones</div>
+            <h3 class="path-title">Keep going. You're building something.</h3>
+            <p class="path-sub">Every round moves you forward. Here's what you've hit and what's next.</p>
+          </div>
+        </div>
+        ${doneHtml ? `
+          <div class="ms-section-label">Recently unlocked</div>
+          <div class="ms-list">${doneHtml}</div>
+        ` : ''}
+        ${upHtml ? `
+          <div class="ms-section-label">What's next</div>
+          <div class="ms-list">${upHtml}</div>
+        ` : '<p class="path-sub" style="margin-top:10px;">You\'ve hit every milestone on this list. Time to graduate to Player tier and start tracking real stats — open your profile to switch.</p>'}
+      </div>`;
+  },
+};
+
+/* ============================================================
    TRACKMAN SESSIONS — stored in profile_json.trackman_sessions
    Each session: { id, date, tier, notes, clubs: [...], created_at }
    Each club entry: { club, clubhead_speed, ball_speed, smash,
@@ -1213,6 +1468,7 @@ RRG.renderNav = function(user, active = '') {
           <li><a href="dashboard.html" class="${active==='dashboard'?'active':''}">Dashboard</a></li>
           <li><a href="my-plan.html"   class="${active==='plan'?'active':''}">My Plan</a></li>
           <li><a href="history.html"   class="${active==='history'?'active':''}">My Rounds</a></li>
+          <li><a href="log-simple.html">Simple Log &middot; 30 seconds</a></li>
           <li><a href="scorecard.html" class="${active==='scorecard'?'active':''}">Mad River Scorecard</a></li>
           <li><a href="scorecard-away.html" class="${active==='scorecard-away'?'active':''}">Away Scorecard</a></li>
           <li><a href="scorecard-guide.html">How to Track Your Round</a></li>
@@ -1262,8 +1518,10 @@ RRG.renderNav = function(user, active = '') {
 
         ${group('Library', 'library-books', `
           <li><a href="/improve/bookshelf.html"><strong>Teaching Library</strong></a></li>
+          <li class="nav-sublabel">New to golf?</li>
+          <li><a href="/improve/just-starting.html"><strong>Just Starting &middot; Start Here</strong></a></li>
           <li class="nav-sublabel">Ryan's Framework</li>
-          <li><a href="/improve/module-01-fundamentals.html"><strong>Module 01 &middot; Fundamentals</strong></a></li>
+          <li><a href="/improve/module-01-fundamentals.html">Module 01 &middot; Fundamentals</a></li>
           <li class="nav-sublabel">Primers on the books that shaped it</li>
           <li><a href="/improve/book-8-step-swing.html">8-Position Swing Map &middot; McLean</a></li>
           <li><a href="/improve/book-golfing-machine.html">Component Model &middot; Kelley</a></li>

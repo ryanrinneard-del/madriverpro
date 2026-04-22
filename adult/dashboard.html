@@ -379,31 +379,39 @@
       ]);
     } catch (err) { console.warn('load failed', err); }
 
-    // Mount the Path-to-Goal widget (compact variant — dashboard teaser).
-    // Shows only reds + one yellow, with a "see full analysis" link to My Plan.
-    // If the player has a computed portal index, surface it above the widget.
+    // Mount the appropriate progress widget based on skill tier.
+    //   "just_starting" / "developing" → Milestones widget (celebrates progress)
+    //   "player" (or unset)            → Path-to-Goal widget (stat gaps)
     try {
       const pathMount = document.getElementById('path-mount');
-      if (pathMount && RRG.path && RRG.path.renderWidget) {
-        let indexChip = '';
-        try {
-          const ic = RRG.path.calcIndex(rounds);
-          if (ic.index != null) {
-            indexChip = `
-              <a href="handicap.html" style="display:block; text-decoration:none;">
-                <div class="path-card" style="padding: 16px 22px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(180deg, var(--navy) 0%, #162E54 100%); color: #fff; border-color: transparent;">
-                  <div>
-                    <div style="font-size: 10px; letter-spacing: 2px; color: var(--gold); font-weight: 700; text-transform: uppercase;">Portal Index</div>
-                    <div style="font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 2px;">From your best ${ic.used} of ${ic.posted} eligible rounds</div>
+      if (pathMount) {
+        const skill = (prof.s1_skill_level || prof.skill_level || 'player').toLowerCase();
+        const isBeginner = (skill === 'just_starting' || skill === 'developing');
+
+        if (isBeginner && RRG.milestones) {
+          pathMount.innerHTML = RRG.milestones.renderWidget({ user, rounds, variant: 'compact' });
+        } else if (RRG.path && RRG.path.renderWidget) {
+          // Existing player flow — portal index chip + path widget
+          let indexChip = '';
+          try {
+            const ic = RRG.path.calcIndex(rounds);
+            if (ic.index != null) {
+              indexChip = `
+                <a href="handicap.html" style="display:block; text-decoration:none;">
+                  <div class="path-card" style="padding: 16px 22px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(180deg, var(--navy) 0%, #162E54 100%); color: #fff; border-color: transparent;">
+                    <div>
+                      <div style="font-size: 10px; letter-spacing: 2px; color: var(--gold); font-weight: 700; text-transform: uppercase;">Portal Index</div>
+                      <div style="font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 2px;">From your best ${ic.used} of ${ic.posted} eligible rounds</div>
+                    </div>
+                    <div style="font-family: 'Playfair Display', Georgia, serif; font-size: 40px; color: var(--gold); font-weight: 700; line-height: 1;">${ic.index.toFixed(1)}</div>
                   </div>
-                  <div style="font-family: 'Playfair Display', Georgia, serif; font-size: 40px; color: var(--gold); font-weight: 700; line-height: 1;">${ic.index.toFixed(1)}</div>
-                </div>
-              </a>`;
-          }
-        } catch (_) {}
-        pathMount.innerHTML = indexChip + RRG.path.renderWidget({ user, rounds, variant: 'compact' });
+                </a>`;
+            }
+          } catch (_) {}
+          pathMount.innerHTML = indexChip + RRG.path.renderWidget({ user, rounds, variant: 'compact' });
+        }
       }
-    } catch (err) { console.warn('path widget failed', err); }
+    } catch (err) { console.warn('progress widget failed', err); }
 
     // Live 5 Errors tally (localStorage on this device)
     let liveTally = null;
