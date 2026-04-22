@@ -259,8 +259,8 @@ RRG.STATS = [
   { key: 'putts_rd',     label: 'Putts per Round',        unit: '',        higherBetter: false, bench: 'putts_rd' },
   { key: 'scrambling',   label: 'Scrambling',             unit: '%',       higherBetter: true,  bench: 'scrambling' },
   { key: 'sand_save',    label: 'Sand Saves',             unit: '%',       higherBetter: true,  bench: 'sand_save' },
-  { key: 'birdies_rd',   label: 'Birdies per Round',      unit: '',        higherBetter: true,  bench: 'birdies_rd' },
-  { key: 'doubles_rd',   label: 'Doubles+ per Round',     unit: '',        higherBetter: false, bench: 'doubles_rd' },
+  { key: 'birdies_rd',   label: 'Birdies or Better',      unit: '',        higherBetter: true,  bench: 'birdies_rd' },
+  { key: 'doubles_rd',   label: 'Doubles or Worse',       unit: '',        higherBetter: false, bench: 'doubles_rd' },
   { key: 'penalties_rd', label: 'Penalties per Round',    unit: '',        higherBetter: false, bench: 'penalties_rd' },
 ];
 

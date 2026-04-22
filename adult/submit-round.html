@@ -260,10 +260,6 @@
 
       <div class="sr-grid cols-3" style="margin-bottom:14px;">
         <div class="sr-field">
-          <label>3-putts</label>
-          <input type="number" name="three_putts" min="0" max="18" placeholder="0">
-        </div>
-        <div class="sr-field">
           <label>Up-and-downs</label>
           <input type="text" name="up_down" placeholder="3 / 6">
         </div>
@@ -271,30 +267,30 @@
           <label>Sand saves</label>
           <input type="text" name="sand_saves" placeholder="1 / 2">
         </div>
+        <div class="sr-field">
+          <label>Bad misses <span class="opt" style="color:var(--mid-grey);">short-sided</span></label>
+          <input type="number" name="bad_misses" min="0" max="18" placeholder="0">
+        </div>
       </div>
 
       <div class="sr-grid cols-3" style="margin-bottom:14px;">
         <div class="sr-field">
-          <label>Penalties</label>
+          <label>Penalties <span class="opt" style="color:var(--mid-grey);">incl. OB, water, lost</span></label>
           <input type="number" name="penalties" min="0" max="20" placeholder="0">
         </div>
         <div class="sr-field">
-          <label>Birdies</label>
+          <label>Birdies or Better</label>
           <input type="number" name="birdies" min="0" max="18" placeholder="0">
         </div>
         <div class="sr-field">
-          <label>Doubles or worse</label>
+          <label>Doubles or Worse</label>
           <input type="number" name="doubles_plus" min="0" max="18" placeholder="0">
         </div>
       </div>
 
-      <div class="sr-grid cols-3" style="margin-bottom:14px;">
+      <div class="sr-grid cols-2" style="margin-bottom:14px;">
         <div class="sr-field">
-          <label>Lost balls</label>
-          <input type="number" name="lost_balls" min="0" max="20" placeholder="0">
-        </div>
-        <div class="sr-field">
-          <label>Avg drive (yd)</label>
+          <label>Avg drive (yd) <span class="opt" style="color:var(--mid-grey);">optional</span></label>
           <input type="number" name="drive_dist" min="100" max="360" placeholder="230">
         </div>
         <div class="sr-field">
@@ -428,13 +424,12 @@
         fir: toText(fd.fir),
         gir: toText(fd.gir),
         putts: toInt(fd.putts),
-        three_putts: toInt(fd.three_putts),
         up_down: toText(fd.up_down),
         sand_saves: toText(fd.sand_saves),
+        bad_misses: toInt(fd.bad_misses),
         penalties: toInt(fd.penalties),
         birdies: toInt(fd.birdies),
         doubles_plus: toInt(fd.doubles_plus),
-        lost_balls: toInt(fd.lost_balls),
         drive_dist: toInt(fd.drive_dist),
         tiger5: { ...t5State },
         tiger5_total: t5Total,
