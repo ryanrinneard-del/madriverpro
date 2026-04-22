@@ -1,0 +1,1578 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Module 01 · Swing Fundamentals — Teaching Library</title>
+<meta name="description" content="Ryan Rinneard's swing-fundamentals framework. How to read the ball, why ball-first contact is non-negotiable, the four fundamentals Ryan teaches, and the first-lesson sequence. Built on the work of John Jacobs, Ben Hogan, Michael Hebron, Jim McLean, and Plummer & Bennett.">
+<meta property="og:title" content="Module 01 · Swing Fundamentals · RR Golf Performance">
+<meta property="og:description" content="Ryan Rinneard's swing-fundamentals framework. The four fundamentals Ryan teaches, how to read the ball, and the first-lesson sequence.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://rrgolfperformance.com/improve/module-01-fundamentals.html">
+<meta property="og:image" content="https://madriverpro.com/images/rr-logo.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Module 01 · Swing Fundamentals · RR Golf Performance">
+<meta name="twitter:description" content="Ryan Rinneard's swing-fundamentals framework. The four fundamentals Ryan teaches and the first-lesson sequence.">
+<meta name="twitter:image" content="https://madriverpro.com/images/rr-logo.png">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  /* Module 01 — Swing Fundamentals. First entry in the reorganized Teaching
+     Library. This is Ryan's framework, attributed to the teachers whose work
+     informs it. Reuses the primer CSS template from V01/V02/V03 for visual
+     consistency — but the content is structured around Ryan's teaching logic,
+     not any single author's book. */
+
+  .book-hero {
+    background: linear-gradient(180deg, var(--navy) 0%, #162E54 100%);
+    color: #fff; border-radius: 14px;
+    padding: 56px 44px 48px; margin-bottom: 36px;
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .book-hero::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--gold);
+  }
+  .book-hero::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent 0%, var(--gold) 30%, var(--gold) 70%, transparent 100%);
+    opacity: 0.4;
+  }
+  .book-hero .vol {
+    display: inline-block;
+    font-size: 11px; letter-spacing: 0.24em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase;
+    padding: 5px 16px; border: 1px solid var(--gold);
+    border-radius: 999px; margin-bottom: 20px;
+  }
+  .book-hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(44px, 7vw, 68px);
+    font-weight: 600; color: #fff;
+    margin: 0; line-height: 1.05; letter-spacing: -0.01em;
+  }
+  .book-hero .subtitle {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; font-size: 20px;
+    color: rgba(255,255,255,0.78);
+    margin: 14px auto 22px; max-width: 680px;
+  }
+  .book-hero .gold-dash {
+    width: 60px; height: 2px; background: var(--gold);
+    margin: 0 auto 22px;
+  }
+  .book-hero .attrib {
+    font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(255,255,255,0.55); font-weight: 500;
+  }
+
+  .primer-disclaimer {
+    background: #FDF6F4;
+    border: 1px solid #E5D0CB;
+    border-left: 4px solid #C76757;
+    border-radius: 10px;
+    padding: 22px 28px;
+    margin: 0 0 28px;
+  }
+  .primer-disclaimer .pd-label {
+    font-size: 11px; letter-spacing: 0.22em; color: #9A3D2F;
+    font-weight: 700; text-transform: uppercase; margin-bottom: 10px;
+  }
+  .primer-disclaimer p {
+    font-size: 14px; line-height: 1.6; color: var(--navy-mid);
+    margin: 0 0 10px;
+  }
+  .primer-disclaimer p:last-child { margin-bottom: 0; }
+  .primer-disclaimer p strong { color: var(--navy); }
+  .primer-disclaimer a {
+    color: var(--gold); font-weight: 700;
+    text-decoration: underline; text-underline-offset: 3px;
+  }
+
+  .coach-note {
+    background: #F7F2E8;
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--gold);
+    border-radius: 10px;
+    padding: 28px 32px;
+    margin: 0 0 36px;
+  }
+  .coach-note .cn-label {
+    font-size: 11px; letter-spacing: 0.2em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 10px;
+  }
+  .coach-note p {
+    font-size: 15.5px; line-height: 1.7; color: var(--navy-mid);
+    margin: 0 0 12px;
+  }
+  .coach-note p:last-child { margin-bottom: 0; }
+  .coach-note p strong { color: var(--navy); }
+  .coach-note .sign-off {
+    margin-top: 14px;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; color: var(--navy); font-size: 16px;
+  }
+
+  .book-toc {
+    background: var(--white); border: 1px solid var(--rule);
+    border-top: 3px solid var(--gold); border-radius: 12px;
+    padding: 28px 32px; margin-bottom: 36px;
+  }
+  .book-toc h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px; color: var(--navy); margin: 0 0 16px; font-weight: 600;
+  }
+  .book-toc ol { list-style: none; margin: 0; padding: 0; }
+  .book-toc li {
+    display: grid; grid-template-columns: 60px 1fr auto;
+    align-items: baseline; gap: 16px;
+    padding: 12px 0; border-bottom: 1px solid var(--rule);
+  }
+  .book-toc li:last-child { border-bottom: none; }
+  .book-toc .ch-num {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; font-size: 20px; color: var(--gold); font-weight: 400;
+  }
+  .book-toc .ch-title { font-size: 15px; color: var(--navy); font-weight: 600; }
+  .book-toc .ch-title small {
+    display: block; font-size: 12px; color: var(--mid-grey);
+    font-weight: 400; margin-top: 2px; font-style: italic;
+  }
+  .book-toc a.ch-jump {
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--gold); font-weight: 700; text-decoration: none;
+  }
+  .book-toc a.ch-jump:hover { color: var(--navy); }
+
+  .chapter-stack { display: grid; gap: 16px; margin-bottom: 40px; }
+  .chapter {
+    background: var(--white); border: 1px solid var(--rule);
+    border-left: 4px solid var(--gold); border-radius: 12px;
+    overflow: hidden; transition: box-shadow .2s ease;
+  }
+  .chapter[open] { box-shadow: 0 14px 34px rgba(13,31,60,0.09); }
+  .chapter summary {
+    display: grid; grid-template-columns: 74px 1fr 28px;
+    gap: 18px; align-items: center; padding: 22px 26px;
+    cursor: pointer; list-style: none; user-select: none;
+  }
+  .chapter summary::-webkit-details-marker { display: none; }
+  .chapter .num {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 48px; color: var(--gold); font-weight: 700;
+    line-height: 1; text-align: center;
+    border-right: 1px solid var(--rule); padding-right: 18px;
+  }
+  .chapter .title-stack .ch-kicker {
+    font-size: 10px; letter-spacing: 0.22em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .chapter .title-stack h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px; color: var(--navy); font-weight: 600;
+    margin: 0 0 4px; line-height: 1.2;
+  }
+  .chapter .title-stack .ch-teaser {
+    font-size: 13px; color: var(--navy-mid); line-height: 1.5;
+  }
+  .chapter .chev {
+    color: var(--mid-grey); font-size: 22px; line-height: 1;
+    transition: transform .2s ease; text-align: center; justify-self: center;
+  }
+  .chapter[open] .chev { transform: rotate(90deg); color: var(--gold); }
+  .chapter .body {
+    padding: 0 26px 28px calc(26px + 74px + 18px);
+    color: var(--navy-mid); line-height: 1.7; font-size: 15px;
+  }
+  .chapter .body p { margin: 0 0 12px; }
+  .chapter .body p strong { color: var(--navy); }
+  .chapter .body ul { margin: 8px 0 14px 20px; padding: 0; }
+  .chapter .body ul li { margin-bottom: 6px; }
+  .chapter .body ol { margin: 8px 0 14px 22px; padding: 0; }
+  .chapter .body ol li { margin-bottom: 6px; }
+  .chapter .body h4 {
+    font-size: 11px; letter-spacing: 0.18em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase;
+    margin: 22px 0 8px;
+  }
+
+  .key-idea {
+    background: #F7F2E8; border-left: 3px solid var(--gold);
+    padding: 14px 18px; border-radius: 4px;
+    margin: 16px 0; font-size: 15px; line-height: 1.6;
+  }
+  .key-idea b { color: var(--navy); }
+  .feel-pull {
+    border-left: 3px solid var(--gold);
+    padding: 6px 0 6px 18px; margin: 16px 0;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; font-size: 19px; line-height: 1.45; color: var(--navy);
+  }
+  .mistake-box {
+    background: #FDF6F4; border-left: 3px solid #C76757;
+    padding: 14px 18px; border-radius: 4px; margin: 16px 0;
+  }
+  .mistake-box .mb-title {
+    color: #9A3D2F; font-weight: 700; font-size: 12px;
+    letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 6px;
+  }
+  .mistake-box ul { margin: 6px 0 0 18px; padding: 0; }
+  .mistake-box li { color: var(--navy-mid); margin-bottom: 4px; }
+  .drill-box {
+    background: #F2F6EE; border-left: 3px solid #6B8B4E;
+    padding: 14px 18px; border-radius: 4px; margin: 16px 0;
+  }
+  .drill-box .db-title {
+    color: #4C6B30; font-weight: 700; font-size: 12px;
+    letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 6px;
+  }
+
+  /* NEW for modules — Source callout, names the teacher whose work underpins
+     a given idea. Gold-gradient pill so it reads as attribution, not correction. */
+  .source-box {
+    background: #FBF7EC;
+    border-left: 3px solid var(--gold);
+    padding: 12px 16px; border-radius: 4px; margin: 14px 0;
+    font-size: 13.5px; line-height: 1.55;
+  }
+  .source-box .sb-title {
+    color: var(--gold); font-weight: 700; font-size: 10px;
+    letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .source-box b { color: var(--navy); }
+
+  .bridge {
+    margin-top: 20px; padding-top: 16px;
+    border-top: 1px dashed var(--rule);
+    font-style: italic; font-size: 14px; color: var(--mid-grey);
+  }
+  @media (max-width: 620px) {
+    .chapter summary {
+      grid-template-columns: 54px 1fr 24px; gap: 12px; padding: 18px 18px;
+    }
+    .chapter .num { font-size: 36px; padding-right: 12px; }
+    .chapter .title-stack h3 { font-size: 18px; }
+    .chapter .body { padding: 0 18px 20px 18px; }
+    .book-toc li { grid-template-columns: 38px 1fr; }
+    .book-toc a.ch-jump { grid-column: 2; margin-top: 4px; }
+  }
+
+  .next-steps {
+    background: var(--navy); color: #fff;
+    border-radius: 12px; padding: 32px 34px;
+    margin: 40px 0 28px;
+  }
+  .next-steps h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 26px; color: #fff; margin: 0 0 10px; font-weight: 600;
+  }
+  .next-steps p {
+    font-size: 15px; line-height: 1.7; color: rgba(255,255,255,0.88);
+    margin: 0 0 12px;
+  }
+  .next-steps p strong { color: var(--gold); }
+  .next-steps ol {
+    margin: 8px 0 12px 22px; padding: 0;
+    color: rgba(255,255,255,0.92);
+  }
+  .next-steps ol li {
+    margin-bottom: 8px; font-size: 15px; line-height: 1.55;
+  }
+
+  .attribution {
+    background: #F7F2E8; border: 1px solid var(--rule);
+    border-radius: 10px; padding: 22px 26px; margin: 28px 0;
+  }
+  .attribution h3 {
+    font-size: 12px; letter-spacing: 0.2em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin: 0 0 10px;
+  }
+  .attribution p {
+    font-size: 14px; line-height: 1.65; color: var(--navy-mid);
+    margin: 0 0 10px;
+  }
+  .attribution p strong { color: var(--navy); }
+  .attribution ul {
+    margin: 6px 0 0 20px; padding: 0;
+    font-size: 14px; line-height: 1.65; color: var(--navy-mid);
+  }
+  .attribution ul li { margin-bottom: 6px; }
+  .attribution ul li strong { color: var(--navy); }
+</style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container">
+
+  <div class="breadcrumb">
+    <a href="index.html">Library</a><span>›</span><a href="bookshelf.html">Teaching Library</a><span>›</span>Module 01 · Fundamentals
+  </div>
+
+  <!-- ===================== HERO ===================== -->
+  <div class="book-hero">
+    <span class="vol">Teaching Library · Module 01</span>
+    <h1>The Swing Fundamentals.</h1>
+    <div class="subtitle">How I teach the golf swing &mdash; built on the shoulders of John Jacobs, Ben Hogan, Michael Hebron, Jim McLean, and Plummer &amp; Bennett.</div>
+    <div class="gold-dash"></div>
+    <div class="attrib">Ryan's framework &middot; influences credited throughout</div>
+  </div>
+
+  <!-- ===================== DISCLAIMER ===================== -->
+  <div class="primer-disclaimer">
+    <div class="pd-label">Ryan's Framework</div>
+    <p>
+      This module is Ryan Rinneard's original teaching framework, synthesized
+      over years of coaching adult golfers. It draws on the published work of
+      multiple golf instructors &mdash; they are credited by name throughout
+      and listed in the attribution section at the end. Every source referenced
+      is in print; links to buy their books are provided.
+    </p>
+    <p>
+      <strong>This is not an authorized publication of any named teacher or
+      system.</strong> "Stack &amp; Tilt" is a trademark of its owners; the
+      Jim McLean Golf Schools and the Michael Hebron Golf Academy are separate
+      entities from Ryan's coaching practice. Concepts below are described in
+      Ryan's own words with the original work of each teacher cited as the
+      inspiration.
+    </p>
+  </div>
+
+  <!-- ===================== COACH NOTE ===================== -->
+  <div class="coach-note">
+    <div class="cn-label">From the coach</div>
+    <p>
+      I've been teaching golf for a long time, and I've learned from everyone.
+      John Jacobs taught me to read the ball before I touch the player. Ben
+      Hogan taught me the setup is 90 percent of the shot. Michael Hebron
+      taught me that knowing and doing are two different neurological
+      processes and that most practice doesn't actually produce learning.
+      Jim McLean gave me the eight-position checkpoints I still use on every
+      video review. Andy Plummer and Mike Bennett &mdash; through Stack &amp;
+      Tilt &mdash; made me rethink what &ldquo;weight shift&rdquo; actually
+      means, and changed how I teach impact.
+    </p>
+    <p>
+      <strong>This module is the synthesis.</strong> Not a book summary &mdash;
+      those are in the Teaching Library under their own listings, marked clearly
+      as independent interpretations. This is the way I actually teach. The
+      framework, the sequence, the four fundamentals I come back to in every
+      first lesson with a new student. Eight chapters. Starts with what has to
+      be true at impact. Ends with how I put it all together in the first hour
+      with someone I've never taught before.
+    </p>
+    <p>
+      Read it straight through. If something rings true, take it to the range
+      this week. If something reads wrong, tell me &mdash; I update this
+      framework as my teaching evolves.
+    </p>
+    <div class="sign-off">&mdash; Ryan</div>
+  </div>
+
+  <!-- ===================== TOC ===================== -->
+  <div class="book-toc">
+    <h2>In this module</h2>
+    <ol>
+      <li>
+        <div class="ch-num">01</div>
+        <div><div class="ch-title">What every swing must do at impact
+          <small>Three non-negotiables. Everything else is style.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch1">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">02</div>
+        <div><div class="ch-title">Reading the ball
+          <small>John Jacobs's insight. Diagnose before you prescribe.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch2">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">03</div>
+        <div><div class="ch-title">The ball-first principle
+          <small>Where the low point of your swing actually lives &mdash; and how to move it.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch3">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">04</div>
+        <div><div class="ch-title">The four fundamentals
+          <small>Weight forward. Shoulder down. Arms straight. Hips tuck. In that order.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch4">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">05</div>
+        <div><div class="ch-title">The 8-position check
+          <small>Using McLean's framework as a diagnostic tool. Checkpoints, not prescriptions.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch5">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">06</div>
+        <div><div class="ch-title">How you actually install a swing
+          <small>Michael Hebron on motor learning. Why most practice doesn't produce change.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch6">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">07</div>
+        <div><div class="ch-title">Hogan's modern fundamentals
+          <small>Why a 1957 book is still the most-cited text in golf instruction.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch7">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">08</div>
+        <div><div class="ch-title">The first-lesson sequence
+          <small>How I put all of it together in the first hour with a new student.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch8">Read &rarr;</a>
+      </li>
+    </ol>
+  </div>
+
+  <!-- ===================== CHAPTERS ===================== -->
+  <div class="chapter-stack">
+
+    <!-- ========== CHAPTER 1 ========== -->
+    <details class="chapter" id="ch1">
+      <summary>
+        <div class="num">1</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter One</div>
+          <h3>What every swing must do at impact</h3>
+          <div class="ch-teaser">Three non-negotiables. Everything else is style.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          Before we talk about how to swing, we have to agree on what a swing
+          has to <em>accomplish</em> at the one moment that matters &mdash;
+          impact. If you look at the greatest ball-strikers in history, their
+          swings look radically different on the way back and on the way down.
+          Hogan looked nothing like Moe Norman. Rory McIlroy looks nothing like
+          Tiger Woods. Dustin Johnson and Jim Furyk share a planet and very
+          little else in a swing sense.
+        </p>
+        <p>
+          But at <em>impact</em>, they are remarkably similar. That's not
+          coincidence. At impact, three things are true of every single one of
+          them. Miss any of the three and the ball doesn't go where you want.
+          Produce all three and the ball does &mdash; no matter what the swing
+          looked like on the way.
+        </p>
+
+        <div class="key-idea">
+          <b>The three non-negotiables at impact.</b>
+          <br><br>
+          <b>1. The clubface is close to square to the path.</b> If the face is
+          radically open or closed to the direction the clubhead is travelling,
+          the ball curves a lot. Close enough and it flies straight or with a
+          playable curve.
+          <br><br>
+          <b>2. The lead wrist is flat or slightly bowed.</b> Not cupped up
+          under the club. A flat lead wrist is what delivers shaft lean, de-lofts
+          the club for compression, and keeps the face square.
+          <br><br>
+          <b>3. The clubhead's low point is at or past the ball.</b> The ball
+          gets struck before the ground is. The club compresses the ball against
+          the turf. This is what produces a penetrating shot with repeatable
+          distance.
+        </div>
+
+        <h4>Why these three, specifically</h4>
+        <p>
+          Each one controls a different variable of where the ball goes:
+        </p>
+        <ul>
+          <li><strong>Face-to-path</strong> controls the <strong>curve</strong> of the shot.</li>
+          <li><strong>Flat lead wrist</strong> controls the <strong>face angle itself</strong> and therefore the starting direction.</li>
+          <li><strong>Low point past the ball</strong> controls <strong>strike quality</strong> &mdash; whether the shot is struck solid or fat/thin.</li>
+        </ul>
+        <p>
+          You could list other variables (attack angle, clubhead speed, dynamic
+          loft), but those are either downstream of the three above or are
+          variables of <em>how much</em> rather than <em>whether</em> the shot
+          works. The three above are the essentials.
+        </p>
+
+        <div class="source-box">
+          <div class="sb-title">Where this framing comes from</div>
+          The concept that impact, not the swing, defines the shot goes back to
+          <b>John Jacobs</b> &mdash; who said "the ball tells you everything." The
+          flat-left-wrist imperative was codified by <b>Homer Kelley</b> in
+          <em>The Golfing Machine</em> (1969) as one of his "three imperatives."
+          The emphasis on impact as the destination, rather than any particular
+          swing pattern, is shared across modern teachers including <b>Jim
+          McLean</b> and the <b>TrackMan</b> launch-monitor era.
+        </div>
+
+        <h4>What this means for how we teach</h4>
+        <p>
+          Everything in this module &mdash; the four fundamentals, the 8-position
+          check, the motor-learning principles, the first-lesson sequence &mdash;
+          is a set of tools for producing the three impact conditions reliably.
+          That's the only goal.
+        </p>
+        <p>
+          Different students need different tools to get there. Some are
+          natural rotators who need to work on weight shift; others are natural
+          sliders who need to work on rotation. Some need to be shown video;
+          others need to feel a drill. The <em>path</em> to the three impact
+          conditions is individual. The <em>destination</em> is universal.
+        </p>
+
+        <div class="feel-pull">
+          &ldquo;Styles are infinite. Impact is universal. Teach toward impact,
+          not toward a style.&rdquo;
+        </div>
+
+        <div class="mistake-box">
+          <div class="mb-title">Common misunderstanding</div>
+          <p style="margin:0 0 6px;">
+            "If I swing like my favourite tour player, I'll hit it like them."
+          </p>
+          <p style="margin:0;">
+            You won't. Copying a tour player's backswing copies their
+            <em>style</em>, not their <em>impact</em>. Your body is different,
+            your flexibility is different, your sequencing is different. Copy
+            the impact &mdash; the flat wrist, the forward low point, the
+            square face &mdash; and let your body find its own way there.
+          </p>
+        </div>
+
+        <div class="bridge">
+          Before we can build toward impact, we have to be able to diagnose
+          what the ball is telling us &mdash; which is John Jacobs's enduring
+          contribution.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 2 ========== -->
+    <details class="chapter" id="ch2">
+      <summary>
+        <div class="num">2</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Two</div>
+          <h3>Reading the ball</h3>
+          <div class="ch-teaser">John Jacobs's insight. Diagnose before you prescribe.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          John Jacobs was a British teacher who, more than anyone else, changed
+          how the modern generation of coaches looks at a golf swing. His core
+          insight is captured in four words: <strong>"the ball tells you
+          everything."</strong> Before Jacobs, golf instruction was largely
+          about <em>style</em> &mdash; what the swing looked like. After
+          Jacobs, good instruction became about <em>diagnosis</em>: watch the
+          ball, reverse-engineer what happened at impact, then work backward
+          to the cause.
+        </p>
+
+        <div class="key-idea">
+          <b>The key idea.</b> Every ball flight is the signature of a specific
+          impact condition. A pull-slice means the face was open to the path
+          and the path was inside-out. A straight shot left means the face was
+          square to the path but the path went left. Before you change anything
+          in a student's swing, you read the ball to know what happened at
+          impact. Then &mdash; and only then &mdash; you work backward to find
+          the swing flaw producing that impact.
+        </div>
+
+        <h4>The ball-flight laws, in plain English</h4>
+        <p>
+          Modern research (especially from the <strong>TrackMan</strong> launch
+          monitor) has refined Jacobs's original framing, but the core is
+          intact:
+        </p>
+        <ul>
+          <li><strong>Starting direction</strong> is mostly determined by <strong>where the clubface points at impact</strong>. Roughly 80 percent face, 20 percent path. If the ball starts left of your target, the face was left of your target at impact.</li>
+          <li><strong>Curve</strong> is determined by <strong>the gap between face and path</strong>. Face open to path = the ball curves right (slice). Face closed to path = ball curves left (hook). Face matched to path = ball goes straight.</li>
+          <li><strong>Strike quality</strong> (solid vs. fat vs. thin) is determined by <strong>where the low point of the swing is</strong> relative to the ball.</li>
+        </ul>
+
+        <div class="source-box">
+          <div class="sb-title">Where this comes from</div>
+          <b>John Jacobs</b> published <em>Practical Golf</em> in 1972, the book that
+          formalized ball-flight-based instruction. He trained Butch Harmon,
+          David Leadbetter, and a generation of the world's top teachers. Every
+          modern instructor, knowingly or not, works in Jacobs's tradition. The
+          specific percentages (80 face / 20 path for starting direction) come
+          from TrackMan's D-Plane research, which refined Jacobs's original
+          approximation that starting direction was 100 percent face.
+        </div>
+
+        <h4>The nine ball flights</h4>
+        <p>
+          Every shot you can hit falls into one of nine categories, defined by
+          start direction (left / straight / right) and curve (left / straight
+          / right). For a right-handed player:
+        </p>
+        <ul>
+          <li><strong>Pull-hook</strong>: starts left, curves more left. Face closed to target and path, path is out-to-in.</li>
+          <li><strong>Pull</strong>: starts left, goes straight. Face matched to an out-to-in path.</li>
+          <li><strong>Pull-slice</strong>: starts left, curves right. Face pointing left at impact but open to an even-more-left path.</li>
+          <li><strong>Hook</strong>: starts at target, curves left. Face closed to a neutral path.</li>
+          <li><strong>Straight</strong>: starts at target, goes straight. Face matched to a neutral path.</li>
+          <li><strong>Slice</strong>: starts at target, curves right. Face open to a neutral path.</li>
+          <li><strong>Push-hook</strong>: starts right, curves left. Face closed to an even-more-right path.</li>
+          <li><strong>Push</strong>: starts right, goes straight. Face matched to an in-to-out path.</li>
+          <li><strong>Push-slice</strong>: starts right, curves more right. Face open to an in-to-out path.</li>
+        </ul>
+        <p>
+          Each pattern is a different impact signature. Each has a different
+          fix. &ldquo;You hit it left&rdquo; is not a diagnosis &mdash; it's
+          three different problems with three different fixes.
+        </p>
+
+        <div class="feel-pull">
+          &ldquo;I don't tell a student what to change until I've watched twenty
+          shots. For the first twenty, I'm just reading the ball. The ball is
+          the diagnosis.&rdquo;
+        </div>
+
+        <h4>What this means for self-taught players</h4>
+        <p>
+          If you're working on your swing without a coach, the ball-flight
+          laws are your most important tool. Before you try to fix anything,
+          hit ten balls and write down the pattern. Does every miss curve the
+          same direction? Does the miss start left or right? Is the contact
+          consistently fat, thin, or solid? That pattern is your diagnostic
+          data. You can't fix what you haven't identified.
+        </p>
+
+        <div class="mistake-box">
+          <div class="mb-title">Common misunderstanding</div>
+          <p style="margin:0 0 6px;">
+            "I hit it left, so I must be swinging over the top."
+          </p>
+          <p style="margin:0;">
+            Not necessarily. Hitting it left could mean over-the-top (pull),
+            or a closed face (hook), or both (pull-hook). Each has a different
+            fix. Over-the-top needs path work. Closed face needs grip or
+            clubface-control work. Applying the wrong fix makes the problem
+            worse.
+          </p>
+        </div>
+
+        <div class="bridge">
+          Once you know what the ball is telling you, the single biggest lever
+          you have is where the low point of your swing lives.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 3 ========== -->
+    <details class="chapter" id="ch3">
+      <summary>
+        <div class="num">3</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Three</div>
+          <h3>The ball-first principle</h3>
+          <div class="ch-teaser">Where the low point of your swing actually lives &mdash; and how to move it.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          Solid iron contact, in one sentence: the clubhead's low point is
+          <em>past</em> the ball. You hit the ball first, then the ground. You
+          take a divot that starts at or in front of the ball. The club
+          compresses the ball against the turf before the turf is disturbed.
+        </p>
+        <p>
+          That's it. If you do that, your iron shots fly the way irons are
+          supposed to fly &mdash; penetrating trajectory, repeatable distance,
+          clean strike. If you don't do that, you're either hitting the ground
+          first (fat) or picking the ball thin in compensation. Everything in
+          this chapter is about moving the low point to where it needs to be.
+        </p>
+
+        <div class="key-idea">
+          <b>The key idea.</b> The clubhead's low point lives roughly beneath
+          the center of your swing &mdash; which is approximately your sternum.
+          If your sternum is forward of the ball at impact, the low point is
+          forward of the ball. If your sternum is behind the ball at impact,
+          the low point is behind the ball. The whole of iron-striking boils
+          down to keeping the sternum forward of the ball through the swing.
+        </div>
+
+        <h4>Why the "shift to the trail side" instruction fails for most amateurs</h4>
+        <p>
+          Traditional golf instruction teaches a two-part weight shift: shift
+          your weight to the trail side during the backswing, shift it back to
+          the lead side during the downswing. This is taught everywhere &mdash;
+          magazines, YouTube, junior clinics, most club pros.
+        </p>
+        <p>
+          For skilled players with strong rotation, it works. For the majority
+          of amateur players, it doesn't &mdash; because the "shift back"
+          portion of the sequence fails. They shift back to the trail side
+          beautifully, then never fully shift forward again. Their sternum is
+          still behind the ball at impact. Their low point is behind the ball.
+          The result: fat shots, thin shots, and the compensations that follow
+          (chicken-wing release, scooping at impact, loss of distance).
+        </p>
+
+        <div class="source-box">
+          <div class="sb-title">The corrective framing</div>
+          <b>Andy Plummer</b> and <b>Mike Bennett</b>, in their 2009 book
+          <em>The Stack &amp; Tilt Swing</em>, formalized an alternative: don't
+          shift back at all. Start with weight forward and <em>keep moving
+          forward</em> through the swing. The observation itself isn't new
+          &mdash; Hogan's impact position shows it, Moe Norman's entire swing
+          shows it &mdash; but Plummer and Bennett named it, codified it, and
+          built a teaching system around it. Their book is the original source
+          for what follows.
+        </div>
+
+        <h4>How this feels, in practice</h4>
+        <p>
+          At setup with an iron, roughly 55&ndash;60 percent of your lower-body
+          weight is on your lead foot. As you take the club back, that weight
+          doesn't shift to your trail side &mdash; it stays forward. At the top
+          of the backswing, you can still feel weight in your lead heel. From
+          the top, weight continues moving forward through impact. At the
+          finish, almost all your weight is on your lead foot and your chest
+          is facing the target.
+        </p>
+        <p>
+          The key feel: during the backswing, you should feel like you're
+          <em>leaving the ball behind you</em> &mdash; as if the ball is
+          slightly behind your center of mass at the top. That's the opposite
+          of the traditional feel (where the ball is &ldquo;in front of your
+          center&rdquo; at the top). It will feel wrong at first. Stay with it.
+        </p>
+
+        <div class="feel-pull">
+          &ldquo;The weight doesn't go back and then forward. It goes forward,
+          and then <em>more</em> forward.&rdquo;
+        </div>
+
+        <div class="mistake-box">
+          <div class="mb-title">Common misunderstanding</div>
+          <p style="margin:0 0 6px;">
+            "Weight forward means leaning forward over the ball."
+          </p>
+          <p style="margin:0;">
+            No. Weight <em>forward</em> means toward the target. Your weight
+            should still be balanced between the balls of your feet and your
+            heels. Lean over the ball and you fall off balance. Shift weight
+            toward the target and your spine angle stays intact.
+          </p>
+        </div>
+
+        <div class="drill-box">
+          <div class="db-title">Test yourself</div>
+          <p style="margin:0;">
+            Set up with an iron. Have someone film you face-on. Take a full
+            backswing and pause at the top. Did your head move backward? Did
+            your lead foot heel lift off the ground? Did your weight visibly
+            shift onto your trail side? If the answer to any is yes, you're in
+            the traditional pattern &mdash; and if you're an amateur struggling
+            with consistent contact, this is almost certainly the first thing
+            to fix. Work on staying centered over the ball at the top. Every
+            other fundamental becomes achievable once this one is in place.
+          </p>
+        </div>
+
+        <div class="bridge">
+          Keeping the sternum forward requires four coordinated moves. Those
+          are the fundamentals.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 4 ========== -->
+    <details class="chapter" id="ch4">
+      <summary>
+        <div class="num">4</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Four</div>
+          <h3>The four fundamentals</h3>
+          <div class="ch-teaser">Weight forward. Shoulder down. Arms straight. Hips tuck. In that order.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          There are hundreds of things a golf swing can do well or badly. After
+          many years of teaching adult club golfers, I've narrowed it to four
+          fundamentals that produce the highest rate of improvement for the
+          least amount of instruction. They're all in service of the ball-first
+          principle from the last chapter.
+        </p>
+
+        <div class="key-idea">
+          <b>The four fundamentals.</b>
+          <br><br>
+          <b>1. Weight forward.</b> More weight on your lead side at setup and
+          continuing forward through the swing. Produces ball-first contact.
+          <br><br>
+          <b>2. Shoulder down.</b> The lead shoulder moves <em>downward</em> in
+          the backswing, not around or inward. Keeps the head still and the
+          club on plane.
+          <br><br>
+          <b>3. Arms straight.</b> Arms stay extended through impact. Preserves
+          the radius of the swing and lets the club square up consistently.
+          <br><br>
+          <b>4. Hips tuck.</b> Through impact and into the finish, the pelvis
+          moves forward and up &mdash; not rotationally around a fixed center.
+          Delivers the club and produces a held finish.
+        </div>
+
+        <h4>Weight forward &mdash; the foundation</h4>
+        <p>
+          Covered in detail in Chapter 3. Every other fundamental depends on
+          this one. Without weight forward, the shoulder can't go down without
+          producing a reverse pivot. Without weight forward, the arms must bend
+          to compensate for a sternum behind the ball. Without weight forward,
+          the hips can't tuck &mdash; they can only rotate around a
+          mis-positioned center.
+        </p>
+        <p>
+          This is why weight forward is always first. Not because it's the most
+          important move &mdash; they're all important &mdash; but because
+          every other move becomes possible only when this one is in place.
+        </p>
+
+        <div class="source-box">
+          <div class="sb-title">Primary influence</div>
+          <b>Plummer and Bennett</b>'s <em>Stack &amp; Tilt</em> codified weight
+          forward as a teaching principle. Their book is the reference. Also
+          borrowed: <b>TPI</b>'s physical-screen work, which shows that
+          players with limited pelvic mobility physically cannot shift weight
+          to the trail side and back without losing posture &mdash; meaning
+          weight-forward is not just optional for them, it's the <em>only</em>
+          pattern their body can execute reliably.
+        </div>
+
+        <h4>Shoulder down &mdash; the backswing move</h4>
+        <p>
+          The lead shoulder moves <em>downward</em> in the backswing, not
+          around the body. This is counterintuitive for most amateurs, who've
+          been taught to "turn your shoulders" (which usually produces a
+          flat, baseball-style rotation). The shoulder-down pattern keeps the
+          head still during the backswing and tilts the shoulder plane toward
+          the ball, which in turn produces a more in-to-out club path on the
+          way down.
+        </p>
+        <p>
+          The geometric reason it works: if your shoulders rotate on a flat
+          plane, one shoulder has to pass through the space your head occupies.
+          Your body's only options are to move the head out of the way (sway)
+          or pivot backward (reverse pivot). Both break your center. But if
+          your lead shoulder goes <em>down</em>, neither shoulder passes
+          through the head's space &mdash; the body can turn a full 90 degrees
+          while the head stays put.
+        </p>
+
+        <div class="source-box">
+          <div class="sb-title">Primary influence</div>
+          <b>Plummer and Bennett</b>'s work, again. Also connects to <b>TPI</b>'s
+          research on spine-angle maintenance in the backswing.
+        </div>
+
+        <h4>Arms straight &mdash; the radius preserver</h4>
+        <p>
+          Arms stay extended through impact and into the finish. Not locked
+          &mdash; extended. The radius from your lead shoulder to the
+          clubhead stays constant. The moment your lead arm folds at the
+          elbow through impact (the "chicken wing"), the radius shortens,
+          the clubhead comes up off plane, and contact becomes random.
+        </p>
+        <p>
+          The chicken wing is almost always a <em>rescue move</em> &mdash; a
+          subconscious compensation for a sternum that's out of position.
+          Fix the weight and the chicken wing usually fixes itself. That's
+          why arms-straight is the fourth fundamental, not the first.
+        </p>
+
+        <div class="source-box">
+          <div class="sb-title">Primary influence</div>
+          <b>Ben Hogan</b>'s <em>Five Lessons</em> introduces the "pane of
+          glass" concept &mdash; a visual of the swing plane tilted so the
+          arms stay extended on it. It's his way of describing radius
+          preservation. The specific term "chicken wing" is modern shorthand
+          used by many instructors for the opposite.
+        </div>
+
+        <h4>Hips tuck &mdash; the delivery and the finish</h4>
+        <p>
+          Through impact and into the finish, the pelvis moves <em>laterally</em>
+          (toward the target) and <em>upward</em> (standing up into the post
+          leg), rather than rotationally around a fixed center. The motion is
+          a <em>tuck</em> &mdash; the pelvis moves forward and up, the lead
+          leg straightens, and the body finishes vertical. The test: can you
+          hold your finish position for three seconds without stumbling? Yes
+          means the hips tucked correctly. No means they didn't.
+        </p>
+
+        <div class="source-box">
+          <div class="sb-title">Primary influence</div>
+          The hip-tuck pattern is most clearly articulated in <b>Plummer and
+          Bennett</b>'s <em>Stack &amp; Tilt</em>. The biomechanical reason it
+          works &mdash; vertical ground-reaction force from the post leg
+          contributing to clubhead speed &mdash; is grounded in <b>TPI</b>'s
+          research and in modern launch-monitor data.
+        </div>
+
+        <h4>The order matters</h4>
+        <p>
+          These four fundamentals are listed in teaching order, not importance
+          order. They all matter. But you install them in the order above,
+          because each one depends on the previous. Try to fix the chicken
+          wing without fixing weight forward and you'll chase your tail for
+          years. Fix weight forward first and the arms often straighten out
+          without direct intervention.
+        </p>
+
+        <div class="mistake-box">
+          <div class="mb-title">Common misunderstanding</div>
+          <p style="margin:0 0 6px;">
+            "I'll work on all four at once so I improve faster."
+          </p>
+          <p style="margin:0;">
+            You won't. The human nervous system can only install one motor
+            pattern at a time. Work on weight forward for a month. When it's
+            reflexive, add shoulder down. Two at a time is already pushing
+            the brain's learning capacity &mdash; we'll cover why in Chapter 6.
+          </p>
+        </div>
+
+        <div class="bridge">
+          To know whether the fundamentals are actually installed, you need
+          checkpoints &mdash; which is where Jim McLean's work matters most.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 5 ========== -->
+    <details class="chapter" id="ch5">
+      <summary>
+        <div class="num">5</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Five</div>
+          <h3>The 8-position check</h3>
+          <div class="ch-teaser">Using McLean's framework as a diagnostic tool. Checkpoints, not prescriptions.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          Jim McLean's great contribution to modern golf instruction was not a
+          swing method &mdash; it was a <em>diagnostic framework</em>. He broke
+          the swing into eight positions and catalogued what tour players tend
+          to do at each. He called his book <em>The 8-Step Swing</em> (1994),
+          but the title is slightly misleading: he didn't teach eight steps.
+          He taught eight checkpoints for diagnosing where any swing is working
+          or breaking down.
+        </p>
+
+        <div class="key-idea">
+          <b>The key idea.</b> Pause the swing at each of eight positions and
+          you can see exactly where a swing is going wrong. The positions
+          themselves are not prescriptions &mdash; they're checkpoints. McLean's
+          framework is the vocabulary modern coaches use to talk about where
+          in the swing a problem actually lives.
+        </div>
+
+        <h4>The eight positions</h4>
+        <ol>
+          <li><strong>Address.</strong> How you stand to the ball. Grip, stance, posture, ball position.</li>
+          <li><strong>Takeaway.</strong> The first few feet of the club moving back from address.</li>
+          <li><strong>Halfway back.</strong> The club parallel to the ground on the way up.</li>
+          <li><strong>Top.</strong> The end of the backswing. Where the club is pointing, where the body is.</li>
+          <li><strong>Transition.</strong> The moment the swing changes direction &mdash; the first move down.</li>
+          <li><strong>Halfway down.</strong> The club parallel to the ground on the way down.</li>
+          <li><strong>Impact.</strong> The moment of contact.</li>
+          <li><strong>Finish.</strong> The end of the follow-through.</li>
+        </ol>
+
+        <div class="source-box">
+          <div class="sb-title">Where this comes from</div>
+          <b>Jim McLean</b>'s <em>The 8-Step Swing</em> (1994). McLean is one of
+          the most-published instructors in modern golf and a long-time Golf
+          Digest Top-Teacher. His eight-position framework is used, implicitly
+          or explicitly, in most video-based instruction today. The book is
+          still in print; an independent summary is available in the Teaching
+          Library as a separate primer.
+        </div>
+
+        <h4>Corridors of success</h4>
+        <p>
+          McLean's key insight is that each position has a <em>range</em> of
+          acceptable values, not a single correct one. He called these
+          "corridors of success." Tour players don't all look identical at
+          Position 4 (the top of the backswing) &mdash; Furyk's top is radically
+          different from Fowler's &mdash; but all of them fall within a
+          <em>corridor</em>, a range of positions that produce playable shots.
+          Outside the corridor, compensations become necessary; inside the
+          corridor, the swing can largely self-regulate.
+        </p>
+
+        <h4>The three positions that matter most for most amateurs</h4>
+        <p>
+          You don't have to master all eight positions to play good golf. In
+          my experience teaching club golfers, three positions do most of the
+          work:
+        </p>
+        <ul>
+          <li><strong>Position 4 &mdash; the top.</strong> Is your head still? Did your lead heel stay down? Are your shoulders fully turned? This is where most &ldquo;weight shift&rdquo; flaws show up on video.</li>
+          <li><strong>Position 7 &mdash; impact.</strong> Is your lead wrist flat? Is your sternum forward of the ball? Is your weight on your lead foot? This is the one that actually determines the shot.</li>
+          <li><strong>Position 8 &mdash; finish.</strong> Can you hold it for three seconds without stumbling? This is your retrospective test: a balanced finish proves the preceding seven positions held together.</li>
+        </ul>
+        <p>
+          If you film yourself and those three positions look right, the other
+          five will usually be close. If they don't, you've found your project
+          for the month.
+        </p>
+
+        <div class="feel-pull">
+          &ldquo;The 8 positions aren't a checklist you execute during a swing.
+          They're a map you use after the swing &mdash; when you freeze the
+          video and figure out where the thing actually broke down.&rdquo;
+        </div>
+
+        <div class="mistake-box">
+          <div class="mb-title">Common misunderstanding</div>
+          <p style="margin:0 0 6px;">
+            "I'm going to hit positions 1 through 8 during my swing."
+          </p>
+          <p style="margin:0;">
+            That's not how the brain works during a golf swing. The swing is
+            too fast for conscious position-checking. McLean's framework is a
+            <em>diagnostic</em> tool &mdash; for review after the swing &mdash;
+            not a <em>prescriptive</em> one during the swing. During the swing,
+            you focus on ONE feel (covered in Chapter 6 on motor learning). The
+            8 positions are for reviewing, not for executing.
+          </p>
+        </div>
+
+        <div class="bridge">
+          Reviewing your positions tells you <em>what</em> to fix. Installing
+          the fix &mdash; actually getting the brain to learn a new pattern
+          &mdash; is a different discipline. That's Michael Hebron's
+          territory.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 6 ========== -->
+    <details class="chapter" id="ch6">
+      <summary>
+        <div class="num">6</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Six</div>
+          <h3>How you actually install a swing</h3>
+          <div class="ch-teaser">Michael Hebron on motor learning. Why most practice doesn't produce change.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          Here's an uncomfortable truth about golf instruction: most of it
+          doesn't work. Not because the instruction itself is wrong &mdash;
+          most modern golf instruction is solid. It's because what we call
+          "practice" mostly violates how the human nervous system actually
+          learns motor skills. Michael Hebron's great contribution to golf
+          coaching was translating motor-learning research into teaching
+          practice.
+        </p>
+
+        <div class="key-idea">
+          <b>The key idea.</b> Learning a motor skill is a neurological process
+          with rules. Most amateur practice breaks those rules. Understanding
+          the rules &mdash; massed vs. distributed, block vs. random, feel vs.
+          real &mdash; turns a range session from a workout into a
+          <em>learning</em> session. Same hour on the range. Very different
+          outcome.
+        </div>
+
+        <h4>Massed vs. distributed practice</h4>
+        <p>
+          <strong>Massed practice</strong> is what most amateurs do: hit 100
+          balls in 30 minutes, once a week. Minimal rest between reps.
+          <strong>Distributed practice</strong> is the opposite: 20 balls at a
+          time, four times a week, spaced out.
+        </p>
+        <p>
+          The research is unambiguous: for <em>short-term performance</em>,
+          massed practice looks better &mdash; you get warmed up, you find a
+          groove, your last 20 balls of a 100-ball session are often your
+          best. But for <em>long-term retention</em>, distributed wins by a
+          wide margin. The skill sticks. A week later, you still have it.
+          After a massed session, you mostly don't.
+        </p>
+        <p>
+          Most amateurs practice massed and wonder why their range-session
+          improvements don't hold up on the course. The practice was visible;
+          the learning wasn't.
+        </p>
+
+        <h4>Block vs. random practice</h4>
+        <p>
+          <strong>Block practice</strong>: hit 20 straight 7-irons, then 20
+          straight 8-irons, then 20 straight 9-irons. <strong>Random
+          practice</strong>: alternate clubs every shot &mdash; 7-iron, pitching
+          wedge, driver, 6-iron, lob wedge, back to 7-iron, and so on.
+        </p>
+        <p>
+          Same asymmetry as before: block practice produces better immediate
+          results (you groove each club), random produces better transfer to
+          the course. On the course, you never hit the same club twice in a
+          row. Random practice trains the brain to adapt. Block practice trains
+          the brain to execute a single task it won't face again under those
+          conditions.
+        </p>
+        <p>
+          Most amateurs block-practice their whole lives and can't understand
+          why the ball-striking that felt great on the range evaporates on the
+          first tee. It's not a pressure problem. It's a practice problem.
+        </p>
+
+        <div class="source-box">
+          <div class="sb-title">Where this comes from</div>
+          <b>Michael Hebron</b> &mdash; a Long Island teacher and PGA of America
+          Teacher of the Year &mdash; translated decades of motor-learning
+          research (much of it originating with sports scientists like Richard
+          Schmidt and Gabriele Wulf) into golf teaching. His books <em>See and
+          Feel the Inside Move the Outside</em> and <em>The Art of Teaching
+          Golf</em> are written for coaches but are accessible to committed
+          amateurs. A dedicated Hebron primer may appear in the Teaching
+          Library later.
+        </div>
+
+        <h4>Feel vs. real</h4>
+        <p>
+          The single most important concept in Hebron's work, and in most good
+          motor-learning research: <strong>what a swing <em>feels like</em>
+          and what it <em>actually looks like</em> are often very different.</strong>
+        </p>
+        <p>
+          A student trying to feel "weight forward" for the first time will
+          often just stand more centrally &mdash; because their old pattern
+          was so weight-back that the new feel of "forward" is actually just
+          "not-as-back." The feel says &ldquo;way forward.&rdquo; The video
+          says &ldquo;neutral.&rdquo; The gap between feel and real is where
+          most lessons don't stick.
+        </p>
+        <p>
+          The fix: <strong>film every session</strong>. Use video as the
+          reality check against the feel. When you can reconcile the feel with
+          the video &mdash; when you can feel &ldquo;way forward&rdquo; and
+          the video confirms you're actually forward &mdash; the pattern is
+          installed.
+        </p>
+
+        <h4>What this means for your practice</h4>
+        <p>
+          If you want your practice to produce lasting improvement rather
+          than warm-up euphoria, use these rules:
+        </p>
+        <ol>
+          <li><strong>Spread your reps across the week.</strong> 15-20 balls four times a week beats 80 balls once a week.</li>
+          <li><strong>Change clubs every shot.</strong> Mirror what happens on the course.</li>
+          <li><strong>Film everything.</strong> Use the video to check whether what you feel and what you see are converging.</li>
+          <li><strong>Work on ONE thing per session.</strong> Not a checklist. One feel, one fundamental. The brain can only install one pattern at a time.</li>
+          <li><strong>Practice the uncomfortable pattern.</strong> If the old pattern feels good and the new pattern feels weird, keep practicing the new one until it feels normal. That's learning.</li>
+        </ol>
+
+        <div class="feel-pull">
+          &ldquo;Practice is what you do. Learning is what sticks. They're not
+          the same thing. You can practice for twenty years without learning
+          anything. Most amateur golfers do.&rdquo;
+        </div>
+
+        <div class="mistake-box">
+          <div class="mb-title">Common misunderstanding</div>
+          <p style="margin:0 0 6px;">
+            "I hit the ball well at the range last week, so I know the swing
+            change is installed."
+          </p>
+          <p style="margin:0;">
+            Range performance at the end of a massed practice session is not
+            evidence of learning. Evidence of learning is: can you take the
+            same swing to the course next weekend and still have it? If yes,
+            it's installed. If no &mdash; and for most amateurs, the answer is
+            no &mdash; you've been practicing, not learning.
+          </p>
+        </div>
+
+        <div class="bridge">
+          All of the above sits on a foundation Ben Hogan laid in 1957.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 7 ========== -->
+    <details class="chapter" id="ch7">
+      <summary>
+        <div class="num">7</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Seven</div>
+          <h3>Hogan's modern fundamentals</h3>
+          <div class="ch-teaser">Why a 1957 book is still the most-cited text in golf instruction.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          Ben Hogan's <em>Five Lessons: The Modern Fundamentals of Golf</em>
+          came out in 1957. Almost seventy years later, it remains the single
+          most-cited book in modern golf instruction. Every good coach I've
+          ever met has a dog-eared copy somewhere. That's not historical
+          accident. Hogan identified what the body had to do in the setup and
+          in the first two moves of the swing &mdash; and the physics of
+          those moves haven't changed since the book came out.
+        </p>
+
+        <div class="key-idea">
+          <b>The key idea.</b> Hogan broke the modern swing into five lessons:
+          the grip, the stance and posture, the first part of the swing
+          (through waist-high back), the second part (from waist-high back to
+          the top), and the actual impact/finish. Every modern instructor,
+          whether they cite Hogan or not, is teaching some version of his
+          five-part breakdown. Understanding Hogan's frame is understanding
+          the foundation the entire modern teaching tradition sits on.
+        </div>
+
+        <h4>The grip</h4>
+        <p>
+          Hogan's opening lesson. He considered the grip the most important
+          piece of the swing, because the hands are the only connection
+          between the body and the club. Two basics carry forward to today:
+          the hands work as a unit (not independently) and the grip pressure
+          is light enough to keep the wrists free but firm enough to prevent
+          the club from twisting in the hand at impact.
+        </p>
+        <p>
+          Modern biomechanics confirmed what Hogan felt. A grip that's too
+          tight produces tension all the way up the arms, which slows clubhead
+          speed and disrupts timing. A grip that's too loose produces clubface
+          rotation at impact that no compensation can fix.
+        </p>
+
+        <div class="source-box">
+          <div class="sb-title">Where this comes from</div>
+          <b>Ben Hogan</b>'s <em>Five Lessons: The Modern Fundamentals of
+          Golf</em>, co-written with Herbert Warren Wind, published 1957. The
+          book was originally serialized in <em>Sports Illustrated</em> as
+          a five-part series. It is still in print; the current edition is
+          widely available, and any amateur serious about the fundamentals
+          should own a copy.
+        </div>
+
+        <h4>Stance, posture, and balance</h4>
+        <p>
+          Hogan's second lesson was about how you stand to the ball. Stance
+          width, ball position, knee flex, spine tilt, weight distribution.
+          Every element is in service of <strong>balance</strong> &mdash; the
+          theme that runs through all five lessons. Without balance at setup,
+          nothing downstream of it can work reliably.
+        </p>
+        <p>
+          Modern teaching has refined Hogan's specific angles (his spine-tilt
+          recommendations are slightly steeper than most modern instruction)
+          but the principle is unchanged: a setup that doesn't produce balance
+          can't produce a reliable swing.
+        </p>
+
+        <h4>The waggle and the first move back</h4>
+        <p>
+          Hogan's third lesson covers the waggle (a pre-swing rehearsal
+          motion) and the first part of the backswing. The waggle is
+          under-taught today. Hogan considered it essential &mdash; a
+          neurological bridge between the static address position and the
+          dynamic swing. It's also a rhythm primer. Most tour players waggle;
+          most amateurs don't.
+        </p>
+        <p>
+          The first move back, in Hogan's framing, is a one-piece motion: the
+          shoulders, arms, and club move together. Not the hands alone, not
+          the body alone. He wrote about it in passive voice &mdash; "the
+          club is taken back" &mdash; which is deliberate. The hands don't
+          initiate; the body initiates, and the hands follow.
+        </p>
+
+        <h4>The first move down</h4>
+        <p>
+          Hogan's fifth lesson addresses transition and impact. The first move
+          down, he wrote, is initiated by the <strong>lower body</strong>,
+          not the arms and not the shoulders. Hips fire first, torso follows,
+          arms follow, club follows. Before the term "kinematic sequence"
+          existed, Hogan was teaching it. Every launch monitor today confirms
+          what he felt: the downswing must be initiated from the ground up,
+          or clubhead speed leaks out and impact becomes inconsistent.
+        </p>
+
+        <div class="feel-pull">
+          &ldquo;Hogan wrote about the swing before the measurement tools
+          existed to verify what he felt. When the tools finally arrived
+          &mdash; launch monitors, motion capture, force plates &mdash; they
+          confirmed almost everything he'd said. He was right. He just
+          couldn't prove it at the time.&rdquo;
+        </div>
+
+        <h4>Why Hogan still holds</h4>
+        <p>
+          Three reasons. First, the physics he described are the physics of
+          an object being swung around a fixed point &mdash; and those
+          physics haven't changed. Second, his writing is unusually precise
+          for a pre-biomechanics-era teacher. He describes what you should
+          <em>feel</em>, not just what you should do, and those feels map
+          remarkably well to what modern research shows is actually
+          happening. Third, Hogan himself was one of the greatest ball
+          strikers in history. He had earned the right to describe it.
+        </p>
+
+        <div class="mistake-box">
+          <div class="mb-title">Common misunderstanding</div>
+          <p style="margin:0 0 6px;">
+            "Hogan's book is old and the instruction is outdated."
+          </p>
+          <p style="margin:0;">
+            Parts of it (the specific degree-measurements, the swing-plane
+            description) have been refined by modern data. But the structural
+            framework &mdash; grip, stance, first move back, first move down
+            &mdash; is still the frame every modern teacher works from. Read
+            the book with the understanding that the big ideas hold; the
+            small numbers have been improved.
+          </p>
+        </div>
+
+        <div class="bridge">
+          Seven chapters in, we've got the theory. The final chapter is how I
+          put it all together in the first hour with a new student.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 8 ========== -->
+    <details class="chapter" id="ch8">
+      <summary>
+        <div class="num">8</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Eight</div>
+          <h3>The first-lesson sequence</h3>
+          <div class="ch-teaser">How I put all of it together in the first hour with a new student.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          I've taught a lot of first lessons. What I've learned from running
+          them is that the first hour is not about teaching all of the above.
+          It's about teaching one thing, deeply, in a sequence that produces
+          a noticeable improvement the student can take to the course
+          tomorrow. The framework below is the sequence I use. It works for
+          new students of every age, every handicap, every background.
+        </p>
+
+        <div class="key-idea">
+          <b>The first-lesson sequence.</b>
+          <br><br>
+          <b>1. Read the ball.</b> Twenty shots of diagnosis before I touch a thing.
+          <br><br>
+          <b>2. Find the low point.</b> Where is the clubhead bottoming out
+          relative to the ball? That's usually project number one.
+          <br><br>
+          <b>3. Identify the fundamental most broken.</b> Of the four &mdash;
+          weight forward, shoulder down, arms straight, hips tuck &mdash;
+          which is producing the ball-flight issue?
+          <br><br>
+          <b>4. Install one feel.</b> One. Not a checklist. Use a drill to
+          get the feel into the body.
+          <br><br>
+          <b>5. Confirm with video.</b> Before the student leaves, film a
+          swing. Verify that what felt different actually IS different.
+        </div>
+
+        <h4>Step 1: Read the ball</h4>
+        <p>
+          For the first 20 shots of any first lesson, I say almost nothing.
+          I watch the ball. What does the pattern look like? Does every miss
+          go left? Right? Fat? Thin? Is there a shape to the dispersion or
+          is it random? Without this data, no prescription is useful.
+        </p>
+        <p>
+          Students sometimes get anxious during the first twenty minutes
+          &mdash; they want me to start teaching. I tell them: if I start
+          teaching before I've finished diagnosing, I'll teach the wrong
+          thing, and we'll both waste the hour. Reading the ball is working.
+          Be patient.
+        </p>
+
+        <h4>Step 2: Find the low point</h4>
+        <p>
+          After the initial diagnostic, I look at where the clubhead is
+          bottoming out. Fat shots = low point before the ball. Thin shots =
+          low point before the ball with a compensation. Chunked iron shots
+          = low point way before the ball. For most struggling amateurs,
+          the low point is project number one, because fixing it fixes at
+          least three different ball-flight problems simultaneously.
+        </p>
+        <p>
+          A simple test: I put a tee in the ground a couple inches in front
+          of the ball. If you take the ball and the tee out in the same
+          divot, your low point is past the ball. If you take the ball but
+          not the tee, your low point is at or behind the ball.
+        </p>
+
+        <h4>Step 3: Identify the fundamental most broken</h4>
+        <p>
+          Given the ball-flight pattern and the low-point data, which of the
+          four fundamentals is producing the issue? Usually one, occasionally
+          two. Rarely all four. In my experience:
+        </p>
+        <ul>
+          <li><strong>Weight forward</strong> is broken in about 70 percent of new adult students I see.</li>
+          <li><strong>Shoulder down</strong> is broken in about 40 percent &mdash; often as a downstream consequence of weight-back.</li>
+          <li><strong>Arms straight</strong> is broken in about 30 percent, almost always as a rescue move for a sternum-back backswing.</li>
+          <li><strong>Hips tuck</strong> is broken in about 50 percent &mdash; visible in the finish, which is why finish-holding is a useful diagnostic.</li>
+        </ul>
+        <p>
+          The numbers don't sum to 100 because students often have more than
+          one. But usually one is dominant, and that's where the lesson focuses.
+        </p>
+
+        <h4>Step 4: Install one feel</h4>
+        <p>
+          Pick the dominant broken fundamental. Find a drill or a feel that
+          installs the correction. Give the student ONE cue to take away.
+          Not five. Not three. One.
+        </p>
+        <p>
+          This is where the motor-learning principles from Chapter 6 matter
+          most. The brain can install one pattern at a time. Overloading the
+          student with a checklist produces zero learning &mdash; they can't
+          hold five things in working memory during a swing. They can hold
+          one.
+        </p>
+        <p>
+          My named drills &mdash; The Wrench for the hip tuck, The Bowler for
+          transition, 90-90-90 as a position check &mdash; each target one
+          feel. In a first lesson I'll pick the one drill that matches the
+          broken fundamental and run it for most of the hour.
+        </p>
+
+        <h4>Step 5: Confirm with video</h4>
+        <p>
+          Before the student leaves, we film a swing on their phone. We look
+          at it together. What felt different? What actually looks different
+          on the video? The goal is that the feel and the visual are now
+          aligned &mdash; the student feels weight forward AND the video
+          confirms they're actually weight forward. When those two things
+          match, the pattern is installed and the student can go home and
+          practice it productively.
+        </p>
+        <p>
+          If they don't match &mdash; if the feel is way forward but the
+          video still shows weight back &mdash; that's the assignment for the
+          next two weeks. Keep practicing until the feel and the video agree.
+          Then we progress.
+        </p>
+
+        <div class="feel-pull">
+          &ldquo;A great first lesson produces a concrete improvement the
+          student can own. Not a list of five things to work on. One
+          feel, one cue, one drill. Everything else is ego and noise.&rdquo;
+        </div>
+
+        <h4>Between lessons</h4>
+        <p>
+          I send every student home with a practice plan built on the
+          motor-learning principles from Chapter 6: distributed (several
+          short sessions, not one long one), random (change clubs every
+          shot), and filmed (use your phone, check the feel against the
+          video). Fifteen to twenty balls, four times a week, working on
+          one thing. That pattern produces more improvement in a month than
+          a hundred-ball massed session on Saturday morning will produce
+          in a year.
+        </p>
+
+        <div class="drill-box">
+          <div class="db-title">If you're your own coach</div>
+          <p style="margin:0;">
+            Take the five-step sequence and run it on yourself. Record a
+            session with 20 shots. Read the ball &mdash; what's the pattern?
+            Look at the divots &mdash; where's the low point? Identify which
+            of the four fundamentals is most likely producing the pattern.
+            Pick ONE fundamental to work on. Install one feel. Film yourself
+            at the next session and check whether what you felt changed
+            actually changed. That's a solid self-coaching loop. It's slower
+            than working with a coach but it's real learning.
+          </p>
+        </div>
+
+        <div class="bridge">
+          That's Module 01. The framework that runs underneath everything I
+          teach. Other modules &mdash; Scoring Intelligence, The Body, The
+          Mental Game, The Short Game &mdash; sit on top of this foundation.
+          But none of them help if the fundamentals at impact aren't
+          there. Start here.
+        </div>
+      </div>
+    </details>
+
+  </div>
+
+  <!-- ===================== NEXT STEPS ===================== -->
+  <div class="next-steps">
+    <h2>What to do with this.</h2>
+    <p>
+      The framework above is only useful when you try it. In order from
+      highest-leverage to lowest:
+    </p>
+    <ol>
+      <li><strong>This week:</strong> Film yourself face-on with a 7-iron. Hit twenty shots. Read the pattern &mdash; what's the ball flight telling you? That's your project for the month.</li>
+      <li><strong>Next session:</strong> Check your low point. Put a tee in the ground in front of the ball; are you taking the tee with the divot? If not, weight forward is project one.</li>
+      <li><strong>Next month:</strong> Pick ONE fundamental &mdash; the most broken one &mdash; and work on it exclusively. Ignore the other three. Use the motor-learning rules: distributed, random, filmed.</li>
+      <li><strong>Next lesson:</strong> Bring your video and your data. Book a session with me, or with any good coach, and skip the diagnostic phase &mdash; show up with your own diagnosis.</li>
+      <li><strong>Eventually:</strong> Once one fundamental is installed, add the next. One at a time. Over a season, all four become part of you.</li>
+    </ol>
+  </div>
+
+  <!-- ===================== ATTRIBUTION ===================== -->
+  <div class="attribution">
+    <h3>Sources &amp; further reading</h3>
+    <p>
+      This module is Ryan Rinneard's framework. The ideas that shaped it come
+      from a small list of teachers whose work is foundational to modern golf
+      instruction. None of the books below can be replaced by this module;
+      every one of them rewards reading in full.
+    </p>
+    <ul>
+      <li><strong>John Jacobs &mdash; <em>Practical Golf</em> (1972).</strong> The book that made ball-flight diagnosis the starting point of modern instruction.</li>
+      <li><strong>Ben Hogan &mdash; <em>Five Lessons: The Modern Fundamentals of Golf</em> (1957).</strong> With Herbert Warren Wind. The foundational text of modern golf instruction.</li>
+      <li><strong>Michael Hebron &mdash; <em>See and Feel the Inside Move the Outside</em>, <em>The Art of Teaching Golf</em>.</strong> Motor-learning research translated into golf coaching.</li>
+      <li><strong>Jim McLean &mdash; <em>The 8-Step Swing</em> (1994).</strong> The eight-position diagnostic framework used by most modern coaches, explicitly or implicitly.</li>
+      <li><strong>Andy Plummer &amp; Mike Bennett &mdash; <em>The Stack &amp; Tilt Swing</em> (2009).</strong> Weight forward, codified. The four fundamentals in this module draw significantly on their work.</li>
+    </ul>
+    <p>
+      Independent summaries of several of these books are available in the
+      Teaching Library as separate primers, clearly marked as independent
+      interpretations. Each includes a direct link to buy the original. This
+      module is not a substitute for any of them.
+    </p>
+  </div>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  RRG.mountLibrary();
+</script>
+</body>
+</html>
