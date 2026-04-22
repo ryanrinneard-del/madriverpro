@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Basics — Plain-English Beginner Guide</title>
+<meta name="description" content="The simplest possible start to golf. Grip, stance, pace of play, first-tee nerves, why the ball curves, short game basics. Written for adult beginners and junior beginners alike.">
+<meta property="og:title" content="The Basics · RR Golf Performance">
+<meta property="og:description" content="The simplest possible start to golf. Grip, stance, pace, first-tee nerves, short game — in plain English.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://rrgolfperformance.com/improve/basics.html">
+<meta property="og:image" content="https://madriverpro.com/images/rr-logo.png">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  /* ============================================================
+     The Basics — shared beginner-level content used by both the
+     adult "Just Starting" hub and the junior "Just Starting" hub.
+     Designed to be simple-beyond-simple: short paragraphs, bullets
+     over prose, bold takeaways, warm coach voice.
+
+     8 sections, each with an anchor:
+       #grip · #stance · #pace · #first-tee · #ball-curve
+       #short-game · #practice · #what-to-bring
+     ============================================================ */
+
+  .basics-hero {
+    background: linear-gradient(135deg, #6B8B4E 0%, #4C6B30 100%);
+    color: #fff;
+    border-radius: 14px;
+    padding: 40px 32px;
+    margin-bottom: 28px;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .basics-hero::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--gold);
+  }
+  .basics-hero .kicker {
+    font-size: 11px; letter-spacing: 0.22em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 10px;
+  }
+  .basics-hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    color: #fff; font-size: clamp(32px, 5vw, 44px);
+    margin: 0; font-weight: 600; line-height: 1.15;
+  }
+  .basics-hero p {
+    color: rgba(255,255,255,0.92); font-size: 15.5px; line-height: 1.65;
+    margin: 14px auto 0; max-width: 560px;
+  }
+
+  .basics-toc {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--gold);
+    border-radius: 12px;
+    padding: 22px 26px;
+    margin-bottom: 32px;
+  }
+  .basics-toc .toc-label {
+    font-size: 10px; letter-spacing: 2px; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 10px;
+  }
+  .basics-toc h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 20px; color: var(--navy); margin: 0 0 14px; font-weight: 600;
+  }
+  .basics-toc ol {
+    list-style: none; margin: 0; padding: 0;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px 20px;
+  }
+  @media (max-width: 620px) { .basics-toc ol { grid-template-columns: 1fr; } }
+  .basics-toc ol li {
+    padding: 6px 0; font-size: 14px;
+    border-bottom: 1px dashed var(--rule);
+  }
+  .basics-toc ol li:last-child,
+  .basics-toc ol li:nth-last-child(2) { border-bottom: none; }
+  .basics-toc ol li a {
+    color: var(--navy); text-decoration: none; font-weight: 600;
+    display: flex; align-items: baseline; gap: 10px;
+  }
+  .basics-toc ol li a:hover { color: var(--gold); }
+  .basics-toc ol li .toc-num {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; color: var(--gold); font-weight: 400;
+    width: 22px; flex-shrink: 0;
+  }
+
+  .basics-section {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--gold);
+    border-radius: 10px;
+    padding: 28px 30px;
+    margin-bottom: 18px;
+    scroll-margin-top: 20px;
+  }
+  .basics-section .sec-kicker {
+    display: inline-block;
+    font-size: 10px; letter-spacing: 2px; color: var(--gold);
+    font-weight: 700; text-transform: uppercase;
+    background: #F7F2E8; padding: 4px 10px; border-radius: 999px;
+    margin-bottom: 10px;
+  }
+  .basics-section h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 26px; color: var(--navy); font-weight: 600;
+    margin: 0 0 12px; line-height: 1.2;
+  }
+  .basics-section p {
+    font-size: 15.5px; line-height: 1.7; color: var(--navy-mid);
+    margin: 0 0 12px;
+  }
+  .basics-section p strong { color: var(--navy); }
+  .basics-section ul, .basics-section ol {
+    margin: 10px 0 14px 22px; padding: 0;
+    font-size: 15px; line-height: 1.7; color: var(--navy-mid);
+  }
+  .basics-section ul li, .basics-section ol li { margin-bottom: 6px; }
+  .basics-section ul li strong, .basics-section ol li strong { color: var(--navy); }
+
+  /* Coach's quick-check callout — gold, warm */
+  .check-box {
+    background: #FBF7EC;
+    border-left: 3px solid var(--gold);
+    padding: 14px 18px; border-radius: 4px;
+    margin: 16px 0; font-size: 14.5px; line-height: 1.6;
+    color: var(--navy-mid);
+  }
+  .check-box .check-label {
+    font-size: 10px; letter-spacing: 1.6px; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 6px;
+  }
+  .check-box strong { color: var(--navy); }
+
+  /* Why-this-matters callout — green, encouragement */
+  .matters-box {
+    background: #F2F6EE;
+    border-left: 3px solid #6B8B4E;
+    padding: 14px 18px; border-radius: 4px;
+    margin: 16px 0; font-size: 14.5px; line-height: 1.6;
+    color: var(--navy-mid);
+  }
+  .matters-box .matters-label {
+    font-size: 10px; letter-spacing: 1.6px; color: #4C6B30;
+    font-weight: 700; text-transform: uppercase; margin-bottom: 6px;
+  }
+  .matters-box strong { color: #2F4520; }
+
+  .back-home {
+    text-align: center; margin: 30px 0 10px;
+    font-size: 13px;
+  }
+  .back-home a {
+    color: var(--gold); font-weight: 700;
+    text-decoration: underline; text-underline-offset: 3px;
+  }
+</style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container-narrow">
+
+  <div class="breadcrumb">
+    <a href="index.html">Library</a><span>›</span>The Basics
+  </div>
+
+  <div class="basics-hero">
+    <div class="kicker">Plain English &middot; For anyone just starting</div>
+    <h1>The Basics.</h1>
+    <p>Everything you need to know to get out on the course and not feel lost. No jargon. Short answers. Written for anyone &mdash; adults new to golf, juniors, kids, anyone.</p>
+  </div>
+
+  <div class="basics-toc">
+    <div class="toc-label">Tap any section</div>
+    <h2>What's in this guide</h2>
+    <ol>
+      <li><a href="#grip"><span class="toc-num">01</span>How to hold the club</a></li>
+      <li><a href="#stance"><span class="toc-num">02</span>How to stand to the ball</a></li>
+      <li><a href="#pace"><span class="toc-num">03</span>How to move at the right pace</a></li>
+      <li><a href="#first-tee"><span class="toc-num">04</span>When you're nervous on the first tee</a></li>
+      <li><a href="#ball-curve"><span class="toc-num">05</span>Why the ball curves</a></li>
+      <li><a href="#short-game"><span class="toc-num">06</span>The short game</a></li>
+      <li><a href="#practice"><span class="toc-num">07</span>How to practice</a></li>
+      <li><a href="#what-to-bring"><span class="toc-num">08</span>What to bring to the course</a></li>
+    </ol>
+  </div>
+
+  <!-- ========== 01 GRIP ========== -->
+  <section class="basics-section" id="grip">
+    <div class="sec-kicker">01 &middot; Grip</div>
+    <h2>How to hold the club</h2>
+    <p>The club is your connection to the ball. If you hold it wrong, nothing else matters. This is the single biggest reason new golfers slice &mdash; and the easiest thing to fix.</p>
+
+    <p><strong>Here's how, step by step:</strong></p>
+    <ol>
+      <li>Put the club on the ground in front of you, face pointing at your target.</li>
+      <li>Pick it up with your <strong>lead hand</strong> (left hand if you're right-handed). The grip rests in your <em>fingers</em>, not in your palm. Your thumb points down the shaft, slightly right of center.</li>
+      <li>Add your <strong>trail hand</strong> (right hand). The life line of your right palm covers your left thumb. Your two hands feel like one unit.</li>
+      <li>Grip pressure: like holding a tube of toothpaste with the cap off. Firm enough not to drop it. Soft enough not to squeeze any out.</li>
+    </ol>
+
+    <div class="check-box">
+      <div class="check-label">Quick check</div>
+      Look down at your hands. You should see <strong>2 knuckles</strong> (maybe 2.5) on your lead hand. If you see 3 or 4, your grip is too strong. If you see 1 or 0, it's too weak. Two knuckles is the sweet spot.
+    </div>
+
+    <div class="matters-box">
+      <div class="matters-label">Why this matters</div>
+      About 90% of beginner slices come from a weak grip (too few knuckles visible). Fix the grip, half your bad shots fix themselves.
+    </div>
+  </section>
+
+  <!-- ========== 02 STANCE ========== -->
+  <section class="basics-section" id="stance">
+    <div class="sec-kicker">02 &middot; Stance</div>
+    <h2>How to stand to the ball</h2>
+    <p>Your setup is half the shot. If you stand wrong, you can't swing right. This takes 30 seconds to learn and saves you years of guessing.</p>
+
+    <ul>
+      <li><strong>Feet:</strong> Shoulder-width apart for most clubs. A bit wider for the driver. A bit narrower for short wedges.</li>
+      <li><strong>Knees:</strong> A small bend. Not a squat. You should feel athletic, not crouched.</li>
+      <li><strong>Hips:</strong> Tilt forward from your hips (not your waist) until your arms hang naturally in front of you. Your chest is over the ball.</li>
+      <li><strong>Ball position:</strong> For short irons (pitching wedge, 9-iron), the ball is in the middle of your stance. For mid-irons, slightly forward. For the driver, just inside your lead heel.</li>
+      <li><strong>Shoulders:</strong> Parallel to your target line. Most amateurs aim their feet correctly but their shoulders point 20 yards right &mdash; that's the pulls and slices nobody can figure out.</li>
+    </ul>
+
+    <div class="check-box">
+      <div class="check-label">Quick check</div>
+      Hold a club across your shoulders like a bar. Look in a mirror from behind. If the club points at your target, you're square. If it points right of target, you're aimed right and don't know it.
+    </div>
+  </section>
+
+  <!-- ========== 03 PACE ========== -->
+  <section class="basics-section" id="pace">
+    <div class="sec-kicker">03 &middot; Pace of Play</div>
+    <h2>How to move at the right pace</h2>
+    <p>The single biggest complaint at every golf club in the world: slow play. Learn this now and you'll be welcome anywhere you go.</p>
+
+    <ul>
+      <li><strong>Be ready when it's your turn.</strong> Know your yardage. Pick your club. Walk to your ball while others are playing.</li>
+      <li><strong>Watch your ball. Watch others' balls.</strong> If a shot goes into the woods, help find it &mdash; even if it's not yours.</li>
+      <li><strong>Walk with purpose.</strong> If the cart is moving, move with it. Don't stand around waiting.</li>
+      <li><strong>4 hours is the target for 18 holes.</strong> 4.5 hours is the limit. Over 5 is a problem.</li>
+      <li><strong>If you're lost on a hole, pick up.</strong> Beginner max score is double bogey. Write it down, go to the next tee.</li>
+      <li><strong>Let faster groups play through.</strong> If the group behind is waiting more than once a hole, wave them up. It's not rude &mdash; it's polite.</li>
+    </ul>
+
+    <div class="matters-box">
+      <div class="matters-label">Why this matters</div>
+      Nobody remembers your score from your first round. Everyone remembers whether you held up the course. Be the player who moves.
+    </div>
+  </section>
+
+  <!-- ========== 04 FIRST TEE ========== -->
+  <section class="basics-section" id="first-tee">
+    <div class="sec-kicker">04 &middot; The First Tee</div>
+    <h2>When you're nervous on the first tee</h2>
+    <p>Everyone is nervous on the first tee. Tour pros. Tour winners. Your coach. It's normal. Here's what works.</p>
+
+    <ul>
+      <li><strong>Take one practice swing.</strong> Just one. Feel your balance. Feel the rhythm.</li>
+      <li><strong>Pick a big target, not a small one.</strong> Aim at the middle of the fairway, not at a pin. Big targets forgive misses.</li>
+      <li><strong>Breathe.</strong> Inhale for 4 counts, exhale for 6. Do it twice. It tells your nervous system you're fine.</li>
+      <li><strong>Commit to the swing.</strong> Whatever happens, happens. A fully committed bad swing beats a half-committed good swing every time.</li>
+    </ul>
+
+    <div class="matters-box">
+      <div class="matters-label">Important</div>
+      Nobody on the first tee is watching you. They're all thinking about their own shot. The person who cares most about your first-tee shot is <strong>you</strong>. And you can let that go.
+    </div>
+  </section>
+
+  <!-- ========== 05 BALL CURVE ========== -->
+  <section class="basics-section" id="ball-curve">
+    <div class="sec-kicker">05 &middot; Ball Flight</div>
+    <h2>Why the ball curves</h2>
+    <p>Golf balls don't fly perfectly straight. Ever. They always curve a little. Understanding <em>why</em> stops you from fighting the game.</p>
+
+    <p><strong>Simple rule:</strong> the ball mostly goes where the clubface points at impact.</p>
+
+    <ul>
+      <li><strong>Face open</strong> (pointing right of target, for a right-handed player) = ball starts right, curves right. That's a slice.</li>
+      <li><strong>Face closed</strong> (pointing left of target) = ball starts left, curves left. That's a hook.</li>
+      <li><strong>Face matched to your swing path</strong> = ball goes roughly straight.</li>
+    </ul>
+
+    <div class="check-box">
+      <div class="check-label">Fix a slice</div>
+      <strong>Strengthen your grip.</strong> Rotate both hands slightly to the right on the club (for a right-handed player). You'll now see 2&ndash;3 knuckles on your lead hand instead of 1. This pre-sets a more closed face and the slice fades.
+    </div>
+
+    <div class="check-box">
+      <div class="check-label">Fix a hook</div>
+      <strong>Weaken your grip.</strong> Rotate hands slightly to the left. You'll now see 1&ndash;2 knuckles instead of 3. Hook disappears.
+    </div>
+  </section>
+
+  <!-- ========== 06 SHORT GAME ========== -->
+  <section class="basics-section" id="short-game">
+    <div class="sec-kicker">06 &middot; Short Game</div>
+    <h2>The short game</h2>
+    <p>More strokes get saved from 50 yards and in than anywhere else on the course. Start practicing the short game early &mdash; it's where scores live.</p>
+
+    <h3 style="font-family:'Playfair Display',Georgia,serif; color:var(--navy); font-size:18px; margin:20px 0 8px; font-weight:600;">Chipping &mdash; when you're just off the green</h3>
+    <ul>
+      <li>Use a pitching wedge or 9-iron. Don't reach for a sand wedge unless you have to carry a bunker.</li>
+      <li>Narrow stance. Feet close together.</li>
+      <li>Ball slightly back of center.</li>
+      <li>Most of your weight on your lead foot &mdash; keep it there the whole swing.</li>
+      <li>Small backswing, small follow-through. Let the club do the work.</li>
+    </ul>
+
+    <h3 style="font-family:'Playfair Display',Georgia,serif; color:var(--navy); font-size:18px; margin:20px 0 8px; font-weight:600;">Putting</h3>
+    <ul>
+      <li>Eyes directly over the ball.</li>
+      <li>Ball in the middle of your stance.</li>
+      <li>Shoulders swing the club. Your hands are passengers.</li>
+      <li><strong>Speed, not line.</strong> A putt hit at the right speed that misses by 2 feet beats a putt on the perfect line that runs 10 feet past.</li>
+    </ul>
+
+    <div class="matters-box">
+      <div class="matters-label">Why this matters</div>
+      A beginner who can chip and putt shoots 10 strokes lower than a beginner who can't, without changing anything else. Short game is the fastest route to lower scores, period.
+    </div>
+  </section>
+
+  <!-- ========== 07 PRACTICE ========== -->
+  <section class="basics-section" id="practice">
+    <div class="sec-kicker">07 &middot; Practice</div>
+    <h2>How to practice so it actually sticks</h2>
+    <p>The hard truth: most amateur practice doesn't produce learning. Here's how to make every range visit count.</p>
+
+    <ul>
+      <li><strong>15 minutes beats 1 hour.</strong> Short sessions, spread across the week, work better than one big beat-the-ball session once a weekend.</li>
+      <li><strong>Change clubs every shot.</strong> The course isn't block practice &mdash; you never hit two of the same club in a row. Practice the way you'll play.</li>
+      <li><strong>Take breaks.</strong> Hit 5 balls. Pause. Hit 5 more. Your brain needs the space to absorb.</li>
+      <li><strong>Pick ONE thing.</strong> Not three. Not five. One. Stick with it for a week before moving on.</li>
+      <li><strong>Film yourself.</strong> What you feel and what you actually do are often wildly different. A phone on a tripod is the single best teaching tool in golf.</li>
+    </ul>
+  </section>
+
+  <!-- ========== 08 WHAT TO BRING ========== -->
+  <section class="basics-section" id="what-to-bring">
+    <div class="sec-kicker">08 &middot; Course Day</div>
+    <h2>What to bring to the course</h2>
+    <p>Going to a real course for the first time? Here's everything you'll want in your bag and your trunk.</p>
+
+    <ul>
+      <li><strong>Clubs.</strong> Any set works. You don't need the newest or most expensive.</li>
+      <li><strong>Balls &mdash; at least a dozen.</strong> You will lose some. It's completely fine. Everyone does.</li>
+      <li><strong>Tees.</strong> A pocketful. They disappear faster than you think.</li>
+      <li><strong>Glove.</strong> One per round, on your lead hand.</li>
+      <li><strong>Water and a snack.</strong> Four hours is a long time without food.</li>
+      <li><strong>Hat and sunglasses.</strong> Yes, even in Canada, even when it's cloudy.</li>
+      <li><strong>Sunscreen.</strong> You're outside for four hours. Please.</li>
+      <li><strong>Golf shoes if you have them.</strong> Running shoes work in a pinch.</li>
+      <li><strong>A collared shirt.</strong> Most courses require it. No denim, no t-shirts at most clubs.</li>
+      <li><strong>A few dollars cash.</strong> For snacks at the turn, a small tip, or extra balls in the pro shop.</li>
+    </ul>
+
+    <div class="matters-box">
+      <div class="matters-label">One more thing</div>
+      Bring patience with yourself. Your first real round will feel overwhelming &mdash; there's a lot going on, people watching, rules to remember. That's normal. Just play, keep moving, and enjoy being outside. Everything else gets easier.
+    </div>
+  </section>
+
+  <div class="back-home">
+    <a href="#top">Back to top &uarr;</a>
+  </div>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  RRG.mountLibrary();
+</script>
+</body>
+</html>
