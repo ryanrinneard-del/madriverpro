@@ -1442,7 +1442,8 @@ RRG.renderNav = function(user, active = '') {
   const initials = (user.name || user.email || 'RR')
     .split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
   const coachItem = user.role === 'coach'
-    ? `<li class="nav-coach"><a href="coach.html" class="${active==='coach'?'active':''}">Coach View</a></li>` : '';
+    ? `<li class="nav-coach"><a href="coach.html" class="${active==='coach'?'active':''}">Coach View</a></li>
+       <li class="nav-coach"><a href="tour.html" class="${active==='tour'?'active':''}">Portal Tour</a></li>` : '';
 
   const group = (label, key, items) => `
     <li class="nav-group" data-group="${key}">

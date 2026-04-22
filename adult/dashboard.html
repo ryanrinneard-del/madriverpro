@@ -382,10 +382,13 @@
     // Mount the appropriate progress widget based on skill tier.
     //   "just_starting" / "developing" → Milestones widget (celebrates progress)
     //   "player" (or unset)            → Path-to-Goal widget (stat gaps)
+    // Coach override: ?preview=X on the URL forces a tier for previewing.
     try {
       const pathMount = document.getElementById('path-mount');
       if (pathMount) {
-        const skill = (prof.s1_skill_level || prof.skill_level || 'player').toLowerCase();
+        const previewTier = (RRG.qs('preview') || '').toLowerCase();
+        const skill = previewTier
+          || (prof.s1_skill_level || prof.skill_level || 'player').toLowerCase();
         const isBeginner = (skill === 'just_starting' || skill === 'developing');
 
         if (isBeginner && RRG.milestones) {

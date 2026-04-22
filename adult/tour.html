@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<base href="/adult/">
+<title>Portal Tour — Coach Only</title>
+<meta name="description" content="Coach view of every surface in the portal, organized by audience. Preview dashboards as a Just Starting / Developing / Player without changing your profile.">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  /* Coach-only site map. Organized by audience + function. Each section is
+     a card with a label and a grid of links. Some links support a
+     ?preview=<tier> query param so Ryan can see the dashboard as a
+     different skill tier would see it, without touching his profile. */
+
+  .tour-hero {
+    background: linear-gradient(180deg, var(--navy) 0%, #162E54 100%);
+    color: #fff;
+    border-radius: 14px;
+    padding: 36px 36px 32px;
+    margin-bottom: 28px;
+    position: relative; overflow: hidden;
+  }
+  .tour-hero::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--gold);
+  }
+  .tour-hero .kicker {
+    font-size: 11px; letter-spacing: 0.22em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .tour-hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    color: #fff; font-size: 32px; margin: 0 0 8px; font-weight: 600;
+  }
+  .tour-hero p { color: #D8DEE8; font-size: 15px; line-height: 1.6; margin: 0; max-width: 720px; }
+
+  .tour-section {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--gold);
+    border-radius: 12px;
+    padding: 24px 26px;
+    margin-bottom: 18px;
+  }
+  .tour-section h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    color: var(--navy); font-size: 20px; font-weight: 600;
+    margin: 0 0 4px;
+  }
+  .tour-section .section-kicker {
+    font-size: 10px; letter-spacing: 1.8px; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 6px;
+  }
+  .tour-section > p {
+    font-size: 13.5px; color: var(--navy-mid); line-height: 1.55;
+    margin: 0 0 14px;
+  }
+
+  .tour-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  @media (max-width: 560px) { .tour-grid { grid-template-columns: 1fr; } }
+  .tour-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: 720px) { .tour-grid.cols-3 { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px) { .tour-grid.cols-3 { grid-template-columns: 1fr; } }
+
+  a.tour-link {
+    display: block;
+    padding: 12px 14px;
+    background: #F7F2E8;
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--gold);
+    border-radius: 6px;
+    text-decoration: none; color: inherit;
+    transition: all .15s ease;
+  }
+  a.tour-link:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(13,31,60,0.06);
+    border-left-color: var(--navy);
+  }
+  a.tour-link .tl-title {
+    font-size: 13.5px; font-weight: 600; color: var(--navy); line-height: 1.3;
+  }
+  a.tour-link .tl-sub {
+    font-size: 11.5px; color: var(--mid-grey); margin-top: 2px; line-height: 1.45;
+  }
+
+  /* Preview-tier cards — prominent and color-coded */
+  .preview-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+    margin-top: 10px;
+  }
+  @media (max-width: 720px) { .preview-grid { grid-template-columns: 1fr; } }
+  .preview-card {
+    padding: 16px 18px; border-radius: 10px;
+    text-decoration: none; color: inherit;
+    border: 2px solid transparent;
+    transition: all .15s ease;
+  }
+  .preview-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(13,31,60,0.12);
+  }
+  .preview-card .pc-label {
+    font-size: 10px; letter-spacing: 1.4px; font-weight: 700;
+    text-transform: uppercase; margin-bottom: 4px;
+  }
+  .preview-card h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 18px; margin: 0 0 6px; font-weight: 600; line-height: 1.2;
+  }
+  .preview-card p { font-size: 12.5px; line-height: 1.5; margin: 0; }
+  .preview-card.tier-starting {
+    background: #F2F6EE; border-color: #6B8B4E;
+  }
+  .preview-card.tier-starting .pc-label { color: #4C6B30; }
+  .preview-card.tier-starting h3 { color: #2F4520; }
+  .preview-card.tier-starting p { color: var(--navy-mid); }
+
+  .preview-card.tier-developing {
+    background: #FBF7EC; border-color: var(--gold);
+  }
+  .preview-card.tier-developing .pc-label { color: var(--gold); }
+  .preview-card.tier-developing h3 { color: var(--navy); }
+  .preview-card.tier-developing p { color: var(--navy-mid); }
+
+  .preview-card.tier-player {
+    background: linear-gradient(180deg, var(--navy) 0%, #162E54 100%);
+    border-color: var(--navy); color: #fff;
+  }
+  .preview-card.tier-player .pc-label { color: var(--gold); }
+  .preview-card.tier-player h3 { color: #fff; }
+  .preview-card.tier-player p { color: rgba(255,255,255,0.82); }
+
+  .coach-gate {
+    background: #FDF6F4;
+    border-left: 3px solid #C76757;
+    padding: 18px 22px;
+    border-radius: 4px;
+    margin-bottom: 22px;
+  }
+  .coach-gate b { color: #9A3D2F; }
+</style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container">
+
+  <div class="breadcrumb">
+    <a href="coach.html">Coach View</a><span>›</span>Portal Tour
+  </div>
+
+  <!-- ===================== HERO ===================== -->
+  <div class="tour-hero">
+    <div class="kicker">Coach-Only &middot; Every Surface</div>
+    <h1>Portal Tour.</h1>
+    <p>Every page in the portal, organized by audience. Preview the dashboards as a Just Starting or Developing player would see them &mdash; no profile changes needed. Use this as your map when a student asks where something is.</p>
+  </div>
+
+  <!-- Access warning if a non-coach somehow lands here -->
+  <div id="tour-body" style="display:none;">
+
+  <!-- ===================== PREVIEW DASHBOARDS ===================== -->
+  <div class="tour-section">
+    <div class="section-kicker">Preview</div>
+    <h2>See the dashboard through each audience's eyes</h2>
+    <p>These links force the dashboard into the named tier via a <code>?preview=</code> query param. Your own profile tier stays untouched. Works on Dashboard and My Rounds.</p>
+
+    <div class="preview-grid">
+      <a href="dashboard.html?preview=just_starting" class="preview-card tier-starting">
+        <div class="pc-label">Tier &middot; Beginner</div>
+        <h3>Just Starting</h3>
+        <p>Milestones widget, warm encouragement copy, simple log CTA. What a brand-new golfer would see on day one.</p>
+      </a>
+      <a href="dashboard.html?preview=developing" class="preview-card tier-developing">
+        <div class="pc-label">Tier &middot; Developing</div>
+        <h3>Developing</h3>
+        <p>Same milestones view for now. When split later, this will show a hybrid of milestones + simplified stats for 90–110 shooters.</p>
+      </a>
+      <a href="dashboard.html?preview=player" class="preview-card tier-player">
+        <div class="pc-label">Tier &middot; Serious Player</div>
+        <h3>Player</h3>
+        <p>The full stats-and-handicap view. Path-to-Goal, portal index, trend charts. The current default for anyone with a handicap.</p>
+      </a>
+    </div>
+  </div>
+
+  <!-- ===================== BEGINNER PATH ===================== -->
+  <div class="tour-section">
+    <div class="section-kicker">Beginner Audience</div>
+    <h2>What a brand-new golfer sees</h2>
+    <p>Start-here paths designed for players in their first year or still shooting 100+.</p>
+    <div class="tour-grid">
+      <a href="dashboard.html?preview=just_starting" class="tour-link">
+        <div class="tl-title">Dashboard (beginner preview)</div>
+        <div class="tl-sub">Milestones widget, warm CTAs, simple log</div>
+      </a>
+      <a href="log-simple.html" class="tour-link">
+        <div class="tl-title">Simple Log</div>
+        <div class="tl-sub">30-second round entry: score + mood + takeaway</div>
+      </a>
+      <a href="/improve/just-starting.html" class="tour-link">
+        <div class="tl-title">Just Starting · Library Hub</div>
+        <div class="tl-sub">Week one, first month, first season reading path</div>
+      </a>
+      <a href="/improve/beginner-golfer.html" class="tour-link">
+        <div class="tl-title">Beginner's Guide</div>
+        <div class="tl-sub">Grip, stance, alignment, etiquette</div>
+      </a>
+      <a href="/improve/first-tee-ready.html" class="tour-link">
+        <div class="tl-title">First-Tee Ready</div>
+        <div class="tl-sub">Social rules, etiquette, glossary</div>
+      </a>
+      <a href="history.html?preview=just_starting" class="tour-link">
+        <div class="tl-title">My Rounds (beginner preview)</div>
+        <div class="tl-sub">Milestones widget over the rounds table</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ===================== PLAYER PATH ===================== -->
+  <div class="tour-section">
+    <div class="section-kicker">Player Audience</div>
+    <h2>The full stats-and-handicap experience</h2>
+    <p>What a serious player sees &mdash; the current default for anyone who hasn't set a skill tier.</p>
+    <div class="tour-grid">
+      <a href="dashboard.html" class="tour-link">
+        <div class="tl-title">Dashboard (your live view)</div>
+        <div class="tl-sub">Path-to-Goal widget, portal index chip, today's plan</div>
+      </a>
+      <a href="my-plan.html" class="tour-link">
+        <div class="tl-title">My Plan</div>
+        <div class="tl-sub">Coach lesson-update banner + 6-Week Plan synopsis</div>
+      </a>
+      <a href="history.html" class="tour-link">
+        <div class="tl-title">My Rounds</div>
+        <div class="tl-sub">Trend sparklines + Path widget + rounds table</div>
+      </a>
+      <a href="handicap.html" class="tour-link">
+        <div class="tl-title">Handicap Index</div>
+        <div class="tl-sub">Portal-calculated index + differential history</div>
+      </a>
+      <a href="tiger5.html" class="tour-link">
+        <div class="tl-title">5 Errors to Avoid</div>
+        <div class="tl-sub">Live on-course tally + round history</div>
+      </a>
+      <a href="lessons.html" class="tour-link">
+        <div class="tl-title">My Lessons</div>
+        <div class="tl-sub">Upcoming + completed lesson log</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ===================== ROUND LOGGING ===================== -->
+  <div class="tour-section">
+    <div class="section-kicker">Round Logging</div>
+    <h2>Every way a player can log a round</h2>
+    <p>Four entry surfaces, each appropriate for a different audience or situation.</p>
+    <div class="tour-grid cols-3">
+      <a href="log-simple.html" class="tour-link">
+        <div class="tl-title">Simple Log</div>
+        <div class="tl-sub">30s: score + mood + takeaway. For beginners.</div>
+      </a>
+      <a href="submit-round.html" class="tour-link">
+        <div class="tl-title">Quick Entry</div>
+        <div class="tl-sub">Totals-based. FIR, GIR, putts, 5 Errors.</div>
+      </a>
+      <a href="scorecard.html" class="tour-link">
+        <div class="tl-title">Mad River Scorecard</div>
+        <div class="tl-sub">Hole-by-hole, CT's rich-stat scheme.</div>
+      </a>
+      <a href="scorecard-away.html" class="tour-link">
+        <div class="tl-title">Away Scorecard</div>
+        <div class="tl-sub">Generic: player enters course, rating, slope.</div>
+      </a>
+      <a href="scorecard-guide.html" class="tour-link">
+        <div class="tl-title">How to Track Your Round</div>
+        <div class="tl-sub">Pencil-and-paper 4-row guide for Mad River.</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ===================== TOOLS ===================== -->
+  <div class="tour-section">
+    <div class="section-kicker">Player Tools</div>
+    <h2>Gear, distances, fitting</h2>
+    <div class="tour-grid cols-3">
+      <a href="bag.html" class="tour-link">
+        <div class="tl-title">My Bag</div>
+        <div class="tl-sub">14-club loadout + wind calculator</div>
+      </a>
+      <a href="wedge-matrix.html" class="tour-link">
+        <div class="tl-title">Wedge Matrix</div>
+        <div class="tl-sub">Distance grid per wedge × swing length</div>
+      </a>
+      <a href="trackman.html" class="tour-link">
+        <div class="tl-title">TrackMan Sessions</div>
+        <div class="tl-sub">Log TM numbers, compare to Tour benchmarks</div>
+      </a>
+      <a href="profile.html" class="tour-link">
+        <div class="tl-title">Profile / KYG</div>
+        <div class="tl-sub">Know Your Game questionnaire + handicap + tier</div>
+      </a>
+      <a href="packages.html" class="tour-link">
+        <div class="tl-title">Packages</div>
+        <div class="tl-sub">Lesson-pack browse + Acuity booking</div>
+      </a>
+      <a href="how-to-use.html" class="tour-link">
+        <div class="tl-title">How to use this portal</div>
+        <div class="tl-sub">Orientation for new students</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ===================== LEARNING LIBRARY ===================== -->
+  <div class="tour-section">
+    <div class="section-kicker">Teaching Library</div>
+    <h2>Every piece of written content</h2>
+    <div class="tour-grid cols-3">
+      <a href="/improve/" class="tour-link">
+        <div class="tl-title">Library Root (categories)</div>
+        <div class="tl-sub">Topic-based index</div>
+      </a>
+      <a href="/improve/bookshelf.html" class="tour-link">
+        <div class="tl-title">Teaching Library (books)</div>
+        <div class="tl-sub">Module 01 + three primers + Just Starting</div>
+      </a>
+      <a href="/improve/just-starting.html" class="tour-link">
+        <div class="tl-title">Just Starting hub</div>
+        <div class="tl-sub">Three-phase beginner reading path</div>
+      </a>
+      <a href="/improve/module-01-fundamentals.html" class="tour-link">
+        <div class="tl-title">Module 01 · Swing Fundamentals</div>
+        <div class="tl-sub">Ryan's framework — Jacobs / Hogan / Hebron / McLean / P&amp;B</div>
+      </a>
+      <a href="/improve/book-8-step-swing.html" class="tour-link">
+        <div class="tl-title">8-Position Swing Map · McLean primer</div>
+        <div class="tl-sub">Independent educational primer</div>
+      </a>
+      <a href="/improve/book-golfing-machine.html" class="tour-link">
+        <div class="tl-title">Component Model · Kelley primer</div>
+        <div class="tl-sub">Independent educational primer</div>
+      </a>
+      <a href="/improve/book-stack-and-tilt.html" class="tour-link">
+        <div class="tl-title">Ball-First Swing · P&amp;B primer</div>
+        <div class="tl-sub">Independent educational primer</div>
+      </a>
+      <a href="/improve/long-game.html" class="tour-link">
+        <div class="tl-title">Long Game</div>
+        <div class="tl-sub">6 articles on driver, FW, long irons</div>
+      </a>
+      <a href="/improve/short-game.html" class="tour-link">
+        <div class="tl-title">Short Game</div>
+        <div class="tl-sub">5 articles on chip, pitch, putting</div>
+      </a>
+      <a href="/improve/mental-game.html" class="tour-link">
+        <div class="tl-title">Mental Game</div>
+        <div class="tl-sub">Vision54 routines + pressure + self-talk</div>
+      </a>
+      <a href="/improve/course-strategy.html" class="tour-link">
+        <div class="tl-title">Course Strategy · DECADE</div>
+        <div class="tl-sub">Scott Fawcett's decision framework</div>
+      </a>
+      <a href="/improve/science.html" class="tour-link">
+        <div class="tl-title">Golf Science</div>
+        <div class="tl-sub">Gear effect, wind physics, TPI</div>
+      </a>
+      <a href="/improve/practice.html" class="tour-link">
+        <div class="tl-title">Practice &amp; Speed</div>
+        <div class="tl-sub">How Rory practices, speed training</div>
+      </a>
+      <a href="/improve/first-tee-ready.html" class="tour-link">
+        <div class="tl-title">First-Tee Ready</div>
+        <div class="tl-sub">Private-club rhythms + etiquette + glossary</div>
+      </a>
+      <a href="/improve/beginner-golfer.html" class="tour-link">
+        <div class="tl-title">Beginner's Guide</div>
+        <div class="tl-sub">Grip, stance, alignment, day-one stuff</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ===================== EVENTS ===================== -->
+  <div class="tour-section">
+    <div class="section-kicker">Events</div>
+    <h2>Booking &amp; catalog</h2>
+    <div class="tour-grid cols-3">
+      <a href="events.html" class="tour-link">
+        <div class="tl-title">Ryan's Events</div>
+        <div class="tl-sub">Full catalog: Ladies Fridays, Thursday Nights, Short Game School, Mother's Day</div>
+      </a>
+      <a href="/mothers-day.html" class="tour-link">
+        <div class="tl-title">Mother's Day Landing Page</div>
+        <div class="tl-sub">Public-facing gift page</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ===================== COACH WORKSPACE ===================== -->
+  <div class="tour-section">
+    <div class="section-kicker">Coach-Only</div>
+    <h2>Your workspace</h2>
+    <div class="tour-grid cols-3">
+      <a href="coach.html" class="tour-link">
+        <div class="tl-title">Coach View</div>
+        <div class="tl-sub">Full roster, rounds, lessons, invites</div>
+      </a>
+      <a href="on-course.html" class="tour-link">
+        <div class="tl-title">On-Course mobile (no player)</div>
+        <div class="tl-sub">Opens with no user selected &mdash; shows the shell</div>
+      </a>
+      <a href="tour.html" class="tour-link">
+        <div class="tl-title">This page</div>
+        <div class="tl-sub">Portal Tour — your navigation map</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- ===================== JUNIOR PORTAL ===================== -->
+  <div class="tour-section">
+    <div class="section-kicker">Junior Audience</div>
+    <h2>Junior Elite portal</h2>
+    <p>Separate portal at <code>/portal/</code> for the junior_elite_2026 cohort. Different nav, different content emphasis.</p>
+    <div class="tour-grid cols-3">
+      <a href="/portal/" class="tour-link">
+        <div class="tl-title">Junior Portal Root</div>
+        <div class="tl-sub">Index / landing</div>
+      </a>
+      <a href="/portal/dashboard.html" class="tour-link">
+        <div class="tl-title">Junior Dashboard</div>
+        <div class="tl-sub">Their main view</div>
+      </a>
+      <a href="/portal/bag.html" class="tour-link">
+        <div class="tl-title">Junior Bag</div>
+        <div class="tl-sub">14-club loadout, cloud-synced</div>
+      </a>
+      <a href="/portal/wedge-matrix.html" class="tour-link">
+        <div class="tl-title">Junior Wedge Matrix</div>
+        <div class="tl-sub">Distance grid</div>
+      </a>
+      <a href="/portal/profile.html" class="tour-link">
+        <div class="tl-title">Junior Profile</div>
+        <div class="tl-sub">KYG questionnaire</div>
+      </a>
+    </div>
+  </div>
+
+  </div>
+
+  <!-- Non-coach access error -->
+  <div id="tour-blocked" style="display:none;">
+    <div class="coach-gate">
+      <p><b>Coach-only page.</b> This tour is for Ryan to navigate the portal as a coach. You should be on the <a href="dashboard.html">Dashboard</a>.</p>
+    </div>
+  </div>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  (async () => {
+    const user = await RRG.mount('tour');
+    if (!user) return;
+    if (user.role === 'coach') {
+      document.getElementById('tour-body').style.display = 'block';
+    } else {
+      document.getElementById('tour-blocked').style.display = 'block';
+    }
+  })();
+</script>
+</body>
+</html>
