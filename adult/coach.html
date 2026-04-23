@@ -168,7 +168,10 @@
       Custom one-off codes (for promos or special clients)
     </summary>
     <div id="custom-invites-wrap" style="margin-top:14px;"></div>
-    <button class="btn btn-ghost btn-sm" onclick="generateInvite()" style="margin-top:12px;">+ Generate one-off code</button>
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:12px;">
+      <button class="btn btn-ghost btn-sm" onclick="generateInvite()">+ Generate one-off code</button>
+      <button class="btn btn-primary btn-sm" onclick="openVipInvite()" style="background:var(--gold); color:var(--navy);">&#128081; + Create VIP Invite with pre-fill</button>
+    </div>
   </details>
 
   <!-- Roster -->
@@ -375,6 +378,82 @@
       <p class="muted small">Loading…</p>
     </div>
   </div>
+</div>
+
+<!-- VIP Invite Modal — create an invite code with pre-filled profile data
+     that gets merged into the player's portal the moment they sign up -->
+<div id="vip-modal" class="modal-scrim" style="display:none;">
+  <form id="vip-form" class="modal-card" autocomplete="off" style="max-width: 700px;">
+    <h3>&#128081; Create VIP Invite</h3>
+    <p style="font-size: 13px; color: var(--mid-grey); margin: 4px 0 18px; line-height: 1.5;">
+      An invite code with pre-filled data. Anything you enter below gets merged into the player's
+      portal the moment they redeem the code and log in for the first time. Great for clients
+      who did a session with you <em>before</em> they were in the portal &mdash; their wedge
+      matrix, skill tier, handicap, and goals are already waiting for them.
+    </p>
+
+    <label>Player name <span class="opt" style="color:var(--mid-grey);">for your reference</span></label>
+    <input type="text" name="vip_name" id="vip-name" required placeholder="e.g. Colin Thompson" style="width:100%; padding:10px; border:1px solid var(--rule); border-radius:6px; margin-bottom:12px;">
+
+    <label>Note <span class="opt" style="color:var(--mid-grey);">shows on the invites list</span></label>
+    <input type="text" name="note" id="vip-note" placeholder="e.g. Spring fitting — build to break 80" style="width:100%; padding:10px; border:1px solid var(--rule); border-radius:6px; margin-bottom:16px;">
+
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px;">
+      <div>
+        <label>Skill tier</label>
+        <select name="skill_level" id="vip-skill" style="width:100%; padding:10px; border:1px solid var(--rule); border-radius:6px;">
+          <option value="">— Pick one —</option>
+          <option value="just_starting">Just Starting</option>
+          <option value="developing">Developing</option>
+          <option value="player">Player</option>
+        </select>
+      </div>
+      <div>
+        <label>Current handicap</label>
+        <input type="number" step="0.1" min="-5" max="40" name="handicap" id="vip-handicap" placeholder="e.g. 8.3" style="width:100%; padding:10px; border:1px solid var(--rule); border-radius:6px;">
+      </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+      <div>
+        <label>Goal handicap</label>
+        <input type="number" step="0.1" min="-5" max="40" name="goal_handicap" id="vip-goal" placeholder="e.g. 4" style="width:100%; padding:10px; border:1px solid var(--rule); border-radius:6px;">
+      </div>
+      <div>
+        <label>Home club</label>
+        <input type="text" name="home_club" id="vip-club" placeholder="e.g. Mad River" style="width:100%; padding:10px; border:1px solid var(--rule); border-radius:6px;">
+      </div>
+    </div>
+
+    <details style="margin-bottom: 14px;">
+      <summary style="cursor: pointer; font-weight: 700; color: var(--navy); padding: 10px 0;">
+        &#9662; Wedge matrix <span style="font-weight: 400; color: var(--mid-grey); font-size: 13px;">&mdash; pre-fill from your TrackMan session (optional)</span>
+      </summary>
+      <p style="font-size: 12px; color: var(--mid-grey); margin: 6px 0 10px;">Carry distances (yards) for each wedge × swing length. Leave blank any you don't have.</p>
+      <table style="width:100%; border-collapse: collapse; font-size: 13px;">
+        <thead>
+          <tr style="background: var(--navy); color: #fff;">
+            <th style="padding: 6px 4px; font-size: 10px; letter-spacing: 1px;">Wedge</th>
+            <th style="padding: 6px 4px; font-size: 10px; letter-spacing: 1px;">Full</th>
+            <th style="padding: 6px 4px; font-size: 10px; letter-spacing: 1px;">&frac34;</th>
+            <th style="padding: 6px 4px; font-size: 10px; letter-spacing: 1px;">&frac12;</th>
+            <th style="padding: 6px 4px; font-size: 10px; letter-spacing: 1px;">Knockdown</th>
+          </tr>
+        </thead>
+        <tbody id="vip-wm-body">
+          <!-- filled by JS -->
+        </tbody>
+      </table>
+    </details>
+
+    <div id="vip-form-error" class="callout" style="display:none; color:var(--red-risk); border-left-color:var(--red-risk); background:#FDF0EE; margin-bottom:10px;"></div>
+
+    <div class="actions">
+      <span class="spacer"></span>
+      <button type="button" class="btn btn-ghost btn-sm" onclick="closeVipInviteModal()">Cancel</button>
+      <button type="submit" class="btn btn-primary btn-sm" id="vip-submit-btn">Create VIP Invite</button>
+    </div>
+  </form>
 </div>
 
 <!-- Plan Update Modal — post-lesson note, optionally with AI regen (Phase 3) -->
@@ -677,6 +756,7 @@
                       <a class="btn btn-primary btn-sm" href="on-course.html?userId=${p.id}" style="text-decoration:none; background: var(--gold); color: var(--navy);">On Course &rarr;</a>
                       <a class="btn btn-ghost btn-sm" href="my-plan.html?userId=${p.id}" style="text-decoration:none;">View Plan</a>
                       <button class="btn btn-primary btn-sm" onclick="openNewLessonFor('${p.id}')">+ Log Lesson</button>
+                      <a class="btn btn-ghost btn-sm" href="profile.html?userId=${p.id}" style="text-decoration:none;" title="Fill profile, bag, or wedge matrix on their behalf — great for VIP onboarding">&#128081; VIP Onboard</a>
                       <button class="btn btn-ghost btn-sm" onclick="openPathFor('${p.id}')">Path</button>
                       <a class="btn btn-ghost btn-sm" href="trackman.html?userId=${p.id}" style="text-decoration:none;">TrackMan</a>
                       <button class="btn btn-ghost btn-sm" onclick="openLessonUpdateFor('${p.id}')">Plan Update</button>
@@ -1183,6 +1263,130 @@
         await renderCustomInvites();
       } catch (err) { RRG.toast('Could not create: ' + (err.message || '')); }
     };
+
+    // ------------------------------------------------------------------
+    // VIP Invite — pre-fills skill tier / handicap / wedge matrix into
+    // the invite so it merges into the player's profile on signup
+    // ------------------------------------------------------------------
+    const vipModal = document.getElementById('vip-modal');
+    const vipForm  = document.getElementById('vip-form');
+
+    /* Build the 4x4 wedge-matrix input grid inside the VIP modal. */
+    function tmRenderVipWedgeMatrix() {
+      const wedges = RRG.WEDGE_CLUBS || ['PW', 'GW / 52°', 'SW / 56°', 'LW / 60°'];
+      const shots = RRG.WEDGE_SHOTS || ['Full', '¾ swing', '½ swing', 'Knockdown'];
+      const body = document.getElementById('vip-wm-body');
+      if (!body) return;
+      body.innerHTML = wedges.map((w, i) => `
+        <tr>
+          <td style="padding: 6px 4px; font-weight: 700; color: var(--navy); background: #F7F2E8;">${RRG.esc(w)}</td>
+          ${shots.map((s, j) => `
+            <td style="padding: 4px;">
+              <input type="number" min="0" max="200" step="1"
+                     class="vip-wm-cell"
+                     data-wedge-idx="${i}" data-wedge-name="${RRG.esc(w)}"
+                     data-shot-idx="${j}" data-shot-name="${RRG.esc(s)}"
+                     style="width:100%; padding:6px 4px; border:1px solid var(--rule); border-radius:4px; text-align:center; font-size:13px;">
+            </td>
+          `).join('')}
+        </tr>
+      `).join('');
+    }
+
+    window.openVipInvite = () => {
+      vipForm.reset();
+      tmRenderVipWedgeMatrix();
+      document.getElementById('vip-form-error').style.display = 'none';
+      vipModal.style.display = 'flex';
+      setTimeout(() => document.getElementById('vip-name').focus(), 60);
+    };
+    window.closeVipInviteModal = () => { vipModal.style.display = 'none'; };
+
+    vipModal.addEventListener('click', (e) => { if (e.target === vipModal) closeVipInviteModal(); });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && vipModal.style.display !== 'none') closeVipInviteModal();
+    });
+
+    vipForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const errBox = document.getElementById('vip-form-error');
+      errBox.style.display = 'none';
+
+      const name = document.getElementById('vip-name').value.trim();
+      const note = document.getElementById('vip-note').value.trim();
+      const skill = document.getElementById('vip-skill').value;
+      const hcp = document.getElementById('vip-handicap').value;
+      const goal = document.getElementById('vip-goal').value;
+      const club = document.getElementById('vip-club').value.trim();
+
+      if (!name) {
+        errBox.textContent = 'Player name is required.';
+        errBox.style.display = 'block';
+        return;
+      }
+
+      // Build pending_profile — only include filled-in values
+      const pendingProfile = {};
+      if (skill) pendingProfile.s1_skill_level = skill;
+      if (hcp !== '') pendingProfile.s1_handicap = hcp;
+      if (goal !== '') pendingProfile.s1_goal_handicap = goal;
+      if (club) pendingProfile.s1_homeClub = club;
+
+      // Wedge matrix — collect non-empty cells into the standard shape
+      const wedgeInputs = document.querySelectorAll('.vip-wm-cell');
+      const wedgeMap = new Map();
+      const yardages = {};
+      wedgeInputs.forEach(inp => {
+        if (inp.value === '') return;
+        const wedgeName = inp.dataset.wedgeName;
+        const wedgeIdx  = inp.dataset.wedgeIdx;
+        const shotName  = inp.dataset.shotName;
+        const wedgeId = 'w' + (wedgeIdx) + Date.now().toString(36);
+        if (!wedgeMap.has(wedgeName)) {
+          wedgeMap.set(wedgeName, { id: wedgeId, name: wedgeName });
+          yardages[wedgeId] = {};
+        }
+        const existing = wedgeMap.get(wedgeName);
+        yardages[existing.id][shotName] = inp.value;
+      });
+      if (wedgeMap.size > 0) {
+        pendingProfile.wedge_matrix = {
+          wedges: Array.from(wedgeMap.values()),
+          yardages,
+        };
+      }
+
+      // Full note carries the VIP name + coach's note for later reference
+      const fullNote = `VIP · ${name}` + (note ? ` · ${note}` : '');
+
+      const submitBtn = document.getElementById('vip-submit-btn');
+      submitBtn.disabled = true; submitBtn.textContent = 'Creating…';
+      try {
+        const inv = await RRG.invites.create({
+          note: fullNote,
+          pendingProfile,
+        });
+        if (navigator.clipboard) navigator.clipboard.writeText(inv.code);
+        const summary = [
+          'VIP invite created · code ' + inv.code,
+          'Copied to clipboard.',
+          skill || hcp || goal || wedgeMap.size ? 'Pre-filled: ' + [
+            skill && 'tier',
+            hcp && 'handicap',
+            goal && 'goal',
+            wedgeMap.size && (wedgeMap.size + ' wedges'),
+          ].filter(Boolean).join(', ') : '',
+        ].filter(Boolean).join(' · ');
+        RRG.toast(summary, 6000);
+        closeVipInviteModal();
+        await renderCustomInvites();
+      } catch (err) {
+        errBox.textContent = 'Could not create: ' + (err.message || err);
+        errBox.style.display = 'block';
+      } finally {
+        submitBtn.disabled = false; submitBtn.textContent = 'Create VIP Invite';
+      }
+    });
 
     window.copyCode = (code) => {
       if (navigator.clipboard) {

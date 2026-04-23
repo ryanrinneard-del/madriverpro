@@ -191,6 +191,38 @@ RRG.auth = {
       p_package_id: meta.pending_package_id || null,
     });
     if (error) throw error;
+
+    /* VIP pre-fill: if Ryan created this invite with a pending_profile
+       payload (via "+ Create VIP Invite" on Coach View), merge it into the
+       new player's profile_json. This is how wedge-matrix / skill tier /
+       handicap / goals carry from pre-signup to their first login. */
+    try {
+      const { data: inviteRow } = await RRG.sb
+        .from('invites')
+        .select('pending_profile')
+        .eq('code', meta.pending_invite_code)
+        .maybeSingle();
+      if (inviteRow && inviteRow.pending_profile && profile) {
+        const mergedJson = {
+          ...(profile.profile_json || {}),
+          ...inviteRow.pending_profile,
+        };
+        const { data: updated } = await RRG.sb
+          .from('profiles')
+          .update({ profile_json: mergedJson })
+          .eq('id', profile.id)
+          .select()
+          .maybeSingle();
+        if (updated) {
+          RRG.auth._profileCache = updated;
+          return updated;
+        }
+        profile.profile_json = mergedJson;
+      }
+    } catch (err) {
+      console.warn('VIP pending_profile merge failed', err);
+    }
+
     RRG.auth._profileCache = profile;
     return profile;
   },
@@ -330,7 +362,7 @@ RRG.invites = {
     return data || [];
   },
 
-  async create({ defaultPackage = null, note = '' } = {}) {
+  async create({ defaultPackage = null, note = '', pendingProfile = null } = {}) {
     await RRG._sbReady;
     const { data, error } = await RRG.sb.rpc('create_invite', {
       p_cohort: RRG.COHORT,
@@ -339,6 +371,19 @@ RRG.invites = {
       p_expires_at: null,
     });
     if (error) throw error;
+    /* VIP pre-fill: attach pending_profile to the freshly-created invite. The
+       RPC doesn't accept this parameter yet; we do it as a follow-up update
+       so the SQL function doesn't need to change. Merged into the player's
+       profile_json the moment they redeem the code. */
+    if (pendingProfile && data && data.code) {
+      try {
+        await RRG.sb.from('invites')
+          .update({ pending_profile: pendingProfile })
+          .eq('code', data.code);
+      } catch (err) {
+        console.warn('VIP invite pending_profile set failed', err);
+      }
+    }
     return data;
   },
 

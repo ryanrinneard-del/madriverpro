@@ -107,6 +107,14 @@
   (async () => {
     if (await RRG.auth.isLoggedIn()) { location.replace('dashboard.html'); return; }
 
+    // Support ?code=XYZ on the URL — pre-fills the invite code field so VIP
+    // clients get a one-click signup experience when Ryan sends them a link.
+    const preCode = RRG.qs('code');
+    if (preCode) {
+      const inviteInput = document.getElementById('inviteCode');
+      if (inviteInput) inviteInput.value = preCode.toUpperCase();
+    }
+
     const form = document.getElementById('signup-form');
     const errBox = document.getElementById('signup-error');
     const sentBox = document.getElementById('sent-state');
