@@ -157,6 +157,44 @@
     color: var(--gold); font-weight: 700;
     text-decoration: underline; text-underline-offset: 3px;
   }
+
+  /* Club anatomy — SVG diagram + labeled list */
+  .club-anatomy {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    align-items: center;
+    margin: 18px 0 10px;
+  }
+  @media (max-width: 640px) { .club-anatomy { grid-template-columns: 1fr; } }
+  .club-anatomy svg {
+    width: 100%; max-width: 280px; height: auto;
+    margin: 0 auto; display: block;
+  }
+  .club-anatomy .parts-list {
+    margin: 0; padding: 0; list-style: none;
+  }
+  .club-anatomy .parts-list li {
+    padding: 10px 12px;
+    background: #FBFAF5;
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--gold);
+    border-radius: 6px;
+    margin-bottom: 8px;
+    font-size: 14px; line-height: 1.5;
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 10px; align-items: baseline;
+  }
+  .club-anatomy .parts-list li .part-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px;
+    background: var(--navy); color: var(--gold);
+    border-radius: 50%;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 700; font-size: 14px;
+  }
+  .club-anatomy .parts-list li strong { color: var(--navy); }
 </style>
 </head>
 <body>
@@ -179,20 +217,101 @@
     <div class="toc-label">Tap any section</div>
     <h2>What's in this guide</h2>
     <ol>
-      <li><a href="#grip"><span class="toc-num">01</span>How to hold the club</a></li>
-      <li><a href="#stance"><span class="toc-num">02</span>How to stand to the ball</a></li>
-      <li><a href="#pace"><span class="toc-num">03</span>How to move at the right pace</a></li>
-      <li><a href="#first-tee"><span class="toc-num">04</span>When you're nervous on the first tee</a></li>
-      <li><a href="#ball-curve"><span class="toc-num">05</span>Why the ball curves</a></li>
-      <li><a href="#short-game"><span class="toc-num">06</span>The short game</a></li>
-      <li><a href="#practice"><span class="toc-num">07</span>How to practice</a></li>
-      <li><a href="#what-to-bring"><span class="toc-num">08</span>What to bring to the course</a></li>
+      <li><a href="#club-parts"><span class="toc-num">01</span>Parts of a golf club</a></li>
+      <li><a href="#grip"><span class="toc-num">02</span>How to hold the club</a></li>
+      <li><a href="#stance"><span class="toc-num">03</span>How to stand to the ball</a></li>
+      <li><a href="#pace"><span class="toc-num">04</span>How to move at the right pace</a></li>
+      <li><a href="#first-tee"><span class="toc-num">05</span>When you're nervous on the first tee</a></li>
+      <li><a href="#ball-curve"><span class="toc-num">06</span>Why the ball curves</a></li>
+      <li><a href="#short-game"><span class="toc-num">07</span>The short game</a></li>
+      <li><a href="#practice"><span class="toc-num">08</span>How to practice</a></li>
+      <li><a href="#what-to-bring"><span class="toc-num">09</span>What to bring to the course</a></li>
     </ol>
   </div>
 
-  <!-- ========== 01 GRIP ========== -->
+  <!-- ========== 01 CLUB PARTS ========== -->
+  <section class="basics-section" id="club-parts">
+    <div class="sec-kicker">01 &middot; The Club</div>
+    <h2>Parts of a golf club</h2>
+    <p>Before anything else, let's name the parts. You'll hear these words on the course and in lessons &mdash; worth knowing them so you're never lost in a conversation about gear.</p>
+
+    <div class="club-anatomy">
+      <svg viewBox="0 0 260 380" xmlns="http://www.w3.org/2000/svg" aria-label="Iron golf club with labeled parts">
+        <!-- Grip (thick top, darker) -->
+        <rect x="118" y="10" width="24" height="95" rx="6" fill="#2a2a2a" stroke="#1a1a1a" stroke-width="1"/>
+        <circle cx="130" cy="10" r="8" fill="#2a2a2a"/>
+        <!-- Grip number bubble -->
+        <circle cx="176" cy="55" r="12" fill="#0D1F3C"/>
+        <text x="176" y="59" text-anchor="middle" fill="#C9A84C" font-size="12" font-weight="700" font-family="'Playfair Display', Georgia, serif">1</text>
+        <line x1="142" y1="55" x2="164" y2="55" stroke="#0D1F3C" stroke-width="1"/>
+
+        <!-- Shaft (tapered slightly) -->
+        <rect x="126" y="105" width="8" height="175" fill="#c0c0c0" stroke="#888" stroke-width="0.5"/>
+        <circle cx="176" cy="195" r="12" fill="#0D1F3C"/>
+        <text x="176" y="199" text-anchor="middle" fill="#C9A84C" font-size="12" font-weight="700" font-family="'Playfair Display', Georgia, serif">2</text>
+        <line x1="134" y1="195" x2="164" y2="195" stroke="#0D1F3C" stroke-width="1"/>
+
+        <!-- Hosel (curved transition) -->
+        <path d="M 127 280 Q 130 300 155 315" stroke="#888" stroke-width="10" fill="none" stroke-linecap="round"/>
+        <circle cx="80" cy="295" r="12" fill="#0D1F3C"/>
+        <text x="80" y="299" text-anchor="middle" fill="#C9A84C" font-size="12" font-weight="700" font-family="'Playfair Display', Georgia, serif">3</text>
+        <line x1="92" y1="295" x2="120" y2="290" stroke="#0D1F3C" stroke-width="1"/>
+
+        <!-- Clubhead (iron shape) -->
+        <path d="M 150 315 L 232 300 L 240 340 L 220 355 L 160 360 Z" fill="#d8d8d8" stroke="#333" stroke-width="2" stroke-linejoin="round"/>
+        <!-- Face (slightly inset) -->
+        <path d="M 165 320 L 225 308 L 230 343 L 170 350 Z" fill="#eee" stroke="#444" stroke-width="0.5"/>
+        <!-- Face grooves -->
+        <line x1="172" y1="322" x2="224" y2="312" stroke="#999" stroke-width="0.6"/>
+        <line x1="172" y1="328" x2="224" y2="318" stroke="#999" stroke-width="0.6"/>
+        <line x1="172" y1="334" x2="224" y2="324" stroke="#999" stroke-width="0.6"/>
+        <line x1="172" y1="340" x2="224" y2="330" stroke="#999" stroke-width="0.6"/>
+        <line x1="172" y1="346" x2="224" y2="336" stroke="#999" stroke-width="0.6"/>
+        <!-- Face label (4) -->
+        <circle cx="210" cy="290" r="12" fill="#0D1F3C"/>
+        <text x="210" y="294" text-anchor="middle" fill="#C9A84C" font-size="12" font-weight="700" font-family="'Playfair Display', Georgia, serif">4</text>
+        <line x1="210" y1="302" x2="200" y2="315" stroke="#0D1F3C" stroke-width="1"/>
+        <!-- Sole (bottom edge label 5) -->
+        <circle cx="220" cy="378" r="12" fill="#0D1F3C"/>
+        <text x="220" y="382" text-anchor="middle" fill="#C9A84C" font-size="12" font-weight="700" font-family="'Playfair Display', Georgia, serif">5</text>
+        <line x1="220" y1="366" x2="215" y2="355" stroke="#0D1F3C" stroke-width="1"/>
+      </svg>
+
+      <ol class="parts-list">
+        <li>
+          <span class="part-num">1</span>
+          <div><strong>Grip.</strong> The rubbery top end where your hands go. Replaceable every season or two.</div>
+        </li>
+        <li>
+          <span class="part-num">2</span>
+          <div><strong>Shaft.</strong> The long middle part. Comes in different flexes (regular, stiff, senior) depending on swing speed.</div>
+        </li>
+        <li>
+          <span class="part-num">3</span>
+          <div><strong>Hosel.</strong> The small bent piece where the shaft meets the clubhead. Where lie angle gets adjusted.</div>
+        </li>
+        <li>
+          <span class="part-num">4</span>
+          <div><strong>Face.</strong> The flat front that strikes the ball. The grooves help spin the ball on contact.</div>
+        </li>
+        <li>
+          <span class="part-num">5</span>
+          <div><strong>Sole.</strong> The bottom that glides along the ground through impact.</div>
+        </li>
+      </ol>
+    </div>
+
+    <p style="margin-top:16px;">Two more words you'll hear without a picture: the <strong>toe</strong> (the end of the clubhead farthest from you) and the <strong>heel</strong> (the end closest to you, near the hosel). Hitting the ball off the toe or the heel is a mishit; hitting it off the middle of the face is called the <strong>sweet spot</strong>.</p>
+
+    <div class="matters-box">
+      <div class="matters-label">Different clubs, same parts</div>
+      Drivers, woods, hybrids, irons, wedges, and putters all share these same parts. The shape of the clubhead changes dramatically (a driver's huge vs. an iron's thin), but the grip, shaft, hosel, face, and sole are always there.
+    </div>
+  </section>
+
+  <!-- ========== 02 GRIP ========== -->
   <section class="basics-section" id="grip">
-    <div class="sec-kicker">01 &middot; Grip</div>
+    <div class="sec-kicker">02 &middot; Grip</div>
     <h2>How to hold the club</h2>
     <p>The club is your connection to the ball. If you hold it wrong, nothing else matters. This is the single biggest reason new golfers slice &mdash; and the easiest thing to fix.</p>
 
@@ -217,7 +336,7 @@
 
   <!-- ========== 02 STANCE ========== -->
   <section class="basics-section" id="stance">
-    <div class="sec-kicker">02 &middot; Stance</div>
+    <div class="sec-kicker">03 &middot; Stance</div>
     <h2>How to stand to the ball</h2>
     <p>Your setup is half the shot. If you stand wrong, you can't swing right. This takes 30 seconds to learn and saves you years of guessing.</p>
 
@@ -237,7 +356,7 @@
 
   <!-- ========== 03 PACE ========== -->
   <section class="basics-section" id="pace">
-    <div class="sec-kicker">03 &middot; Pace of Play</div>
+    <div class="sec-kicker">04 &middot; Pace of Play</div>
     <h2>How to move at the right pace</h2>
     <p>The single biggest complaint at every golf club in the world: slow play. Learn this now and you'll be welcome anywhere you go.</p>
 
@@ -258,7 +377,7 @@
 
   <!-- ========== 04 FIRST TEE ========== -->
   <section class="basics-section" id="first-tee">
-    <div class="sec-kicker">04 &middot; The First Tee</div>
+    <div class="sec-kicker">05 &middot; The First Tee</div>
     <h2>When you're nervous on the first tee</h2>
     <p>Everyone is nervous on the first tee. Tour pros. Tour winners. Your coach. It's normal. Here's what works.</p>
 
@@ -277,7 +396,7 @@
 
   <!-- ========== 05 BALL CURVE ========== -->
   <section class="basics-section" id="ball-curve">
-    <div class="sec-kicker">05 &middot; Ball Flight</div>
+    <div class="sec-kicker">06 &middot; Ball Flight</div>
     <h2>Why the ball curves</h2>
     <p>Golf balls don't fly perfectly straight. Ever. They always curve a little. Understanding <em>why</em> stops you from fighting the game.</p>
 
@@ -302,7 +421,7 @@
 
   <!-- ========== 06 SHORT GAME ========== -->
   <section class="basics-section" id="short-game">
-    <div class="sec-kicker">06 &middot; Short Game</div>
+    <div class="sec-kicker">07 &middot; Short Game</div>
     <h2>The short game</h2>
     <p>More strokes get saved from 50 yards and in than anywhere else on the course. Start practicing the short game early &mdash; it's where scores live.</p>
 
@@ -331,7 +450,7 @@
 
   <!-- ========== 07 PRACTICE ========== -->
   <section class="basics-section" id="practice">
-    <div class="sec-kicker">07 &middot; Practice</div>
+    <div class="sec-kicker">08 &middot; Practice</div>
     <h2>How to practice so it actually sticks</h2>
     <p>The hard truth: most amateur practice doesn't produce learning. Here's how to make every range visit count.</p>
 
@@ -346,7 +465,7 @@
 
   <!-- ========== 08 WHAT TO BRING ========== -->
   <section class="basics-section" id="what-to-bring">
-    <div class="sec-kicker">08 &middot; Course Day</div>
+    <div class="sec-kicker">09 &middot; Course Day</div>
     <h2>What to bring to the course</h2>
     <p>Going to a real course for the first time? Here's everything you'll want in your bag and your trunk.</p>
 

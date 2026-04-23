@@ -1263,6 +1263,49 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; }
   .gold, .page-label, .section-label, .week-card .week-num { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
 
+/* ===== INFO TOOLTIP ===== */
+.info-tip {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 16px; height: 16px;
+  border: 1.5px solid var(--gold);
+  border-radius: 50%;
+  color: var(--gold);
+  font-size: 10px; font-weight: 700; font-style: normal;
+  line-height: 1; cursor: help;
+  margin-left: 4px; vertical-align: baseline;
+  transform: translateY(1px); user-select: none;
+}
+.info-tip:hover { background: var(--gold); color: var(--white); }
+
+/* ===== CHIP-GROUP (multi-select) ===== */
+.chip-group {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px;
+}
+.chip-group .chip {
+  display: inline-flex; align-items: center;
+  padding: 9px 16px;
+  border: 1.5px solid var(--rule);
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 13.5px; color: var(--navy-mid);
+  background: var(--white);
+  transition: all .12s ease;
+  user-select: none; font-weight: 500;
+}
+.chip-group .chip:hover {
+  border-color: var(--gold); color: var(--navy);
+}
+.chip-group .chip input[type="checkbox"] {
+  position: absolute; opacity: 0; pointer-events: none;
+}
+.chip-group .chip:has(input[type="checkbox"]:checked) {
+  background: var(--navy); color: var(--gold);
+  border-color: var(--navy); font-weight: 700;
+}
+.chip-group .chip input[type="checkbox"]:focus-visible + span {
+  outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 4px;
+}
+
 /* =============================================================
    MILESTONES WIDGET (junior beginner / developing tiers)
    Warmer, slightly more playful styling than the adult version —

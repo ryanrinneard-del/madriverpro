@@ -72,6 +72,7 @@
       <label>Typical driver miss</label>
       <select name="s2_miss">
         <option value="">Select…</option>
+        <option>I don't miss — I hit it pretty straight</option>
         <option>Slice / fade right</option>
         <option>Hook / draw left</option>
         <option>Push right (straight)</option>
@@ -84,11 +85,11 @@
     </div>
     <div class="field-row">
       <div class="field">
-        <label>Driver carry (yards)</label>
+        <label>Driver distance &mdash; total (yards) <span class="info-tip" title="Total distance = how far the ball flies in the air (carry) PLUS how far it rolls after landing.">ⓘ</span></label>
         <input name="s2_carry" type="text" placeholder="e.g. 240">
       </div>
       <div class="field">
-        <label>Fairways hit %</label>
+        <label>Fairways hit % <span class="info-tip" title="Of your tee shots on par 4s and par 5s, what % end up in the fairway?">ⓘ</span></label>
         <input name="s2_fir" type="text" placeholder="e.g. 45%">
       </div>
     </div>
@@ -109,7 +110,7 @@
       </select>
     </div>
     <div class="field">
-      <label>Greens in Regulation per round (average)</label>
+      <label>Greens in Regulation per round (average) <span class="info-tip" title="GIR = reaching the green in par minus 2. Par 3: on green in 1. Par 4: on green in 2. Par 5: on green in 3.">ⓘ</span></label>
       <input name="s3_gir" type="text" placeholder="e.g. 5/18">
     </div>
     <div class="field-row">
@@ -131,16 +132,15 @@
       <div class="field"><label>Bunker confidence (1–10)</label><input name="s4_bunker" type="number" min="1" max="10"></div>
     </div>
     <div class="field">
-      <label>Your most common short-game mistake</label>
-      <select name="s4_mistake">
-        <option value="">Select…</option>
-        <option>Chunk / fat</option>
-        <option>Blade / thin</option>
-        <option>Poor distance control</option>
-        <option>Wrong club choice</option>
-        <option>Deceleration through impact</option>
-        <option>Can't get out of bunker first try</option>
-      </select>
+      <label>Your most common short-game mistakes <span class="opt" style="color:var(--mid-grey);">check any that apply</span></label>
+      <div class="chip-group" data-name="s4_mistake">
+        <label class="chip"><input type="checkbox" name="s4_mistake" value="Chunk / fat"><span>Chunk / fat</span></label>
+        <label class="chip"><input type="checkbox" name="s4_mistake" value="Blade / thin"><span>Blade / thin</span></label>
+        <label class="chip"><input type="checkbox" name="s4_mistake" value="Poor distance control"><span>Poor distance control</span></label>
+        <label class="chip"><input type="checkbox" name="s4_mistake" value="Wrong club choice"><span>Wrong club choice</span></label>
+        <label class="chip"><input type="checkbox" name="s4_mistake" value="Deceleration through impact"><span>Deceleration through impact</span></label>
+        <label class="chip"><input type="checkbox" name="s4_mistake" value="Bunker struggles"><span>Bunker struggles</span></label>
+      </div>
     </div>
     <div class="field">
       <label>Go-to club around the green</label>
@@ -155,21 +155,20 @@
       <div class="field"><label>25+ ft lag (1–10)</label><input name="s5_long" type="number" min="1" max="10"></div>
     </div>
     <div class="field">
-      <label>Biggest putting struggle</label>
-      <select name="s5_struggle">
-        <option value="">Select…</option>
-        <option>Distance control (3-putting)</option>
-        <option>Green reading</option>
-        <option>Short putts</option>
-        <option>Lack of consistent routine</option>
-        <option>All of the above</option>
-      </select>
+      <label>Biggest putting struggles <span class="opt" style="color:var(--mid-grey);">check any that apply</span></label>
+      <div class="chip-group" data-name="s5_struggle">
+        <label class="chip"><input type="checkbox" name="s5_struggle" value="Distance control (3-putting)"><span>Distance control (3-putting)</span></label>
+        <label class="chip"><input type="checkbox" name="s5_struggle" value="Green reading"><span>Green reading</span></label>
+        <label class="chip"><input type="checkbox" name="s5_struggle" value="Short putts"><span>Short putts (inside 5 ft)</span></label>
+        <label class="chip"><input type="checkbox" name="s5_struggle" value="Lack of consistent routine"><span>No consistent routine</span></label>
+        <label class="chip"><input type="checkbox" name="s5_struggle" value="Speed on quick greens"><span>Speed on fast greens</span></label>
+      </div>
     </div>
 
     <!-- Section 6: On-course behaviour -->
     <div class="section-label">SECTION 6 · ON-COURSE BEHAVIOUR &amp; STRATEGY</div>
     <div class="field">
-      <label>Do you think about risk/reward before each shot?</label>
+      <label>Do you think about risk/reward before each shot? <span class="info-tip" title="Risk/reward means asking 'what's the worst that can happen here?' before you swing. Example: do you go straight at a pin with water in front, or play safe to the fat part of the green? Great players pause. Most amateurs don't.">ⓘ</span></label>
       <select name="s6_risk">
         <option value="">Select…</option>
         <option>Always</option><option>Usually</option><option>Sometimes</option><option>Rarely</option>
@@ -184,14 +183,13 @@
       <textarea name="s6_pressureBad"></textarea>
     </div>
     <div class="field">
-      <label>Most frequent on-course mistake</label>
-      <select name="s6_mistake">
-        <option value="">Select…</option>
-        <option>Technical (execution failure)</option>
-        <option>Strategic (wrong decision)</option>
-        <option>Mental (lack of commitment)</option>
-        <option>Physical (fatigue / setup)</option>
-      </select>
+      <label>Most frequent on-course mistakes <span class="opt" style="color:var(--mid-grey);">check any that apply</span></label>
+      <div class="chip-group" data-name="s6_mistake">
+        <label class="chip"><input type="checkbox" name="s6_mistake" value="Technical (execution failure)"><span>Technical (execution failure)</span></label>
+        <label class="chip"><input type="checkbox" name="s6_mistake" value="Strategic (wrong decision)"><span>Strategic (wrong decision)</span></label>
+        <label class="chip"><input type="checkbox" name="s6_mistake" value="Mental (lack of commitment)"><span>Mental (lack of commitment)</span></label>
+        <label class="chip"><input type="checkbox" name="s6_mistake" value="Physical (fatigue / setup)"><span>Physical (fatigue / setup)</span></label>
+      </div>
     </div>
 
     <!-- Section 7: Strengths & goals -->
@@ -246,12 +244,39 @@
 
   const form = document.getElementById('profile-form');
 
+  // Multi-value chip fields — FormData returns each checked value separately.
+  const MULTI_FIELDS = new Set(['s4_mistake', 's5_struggle', 's6_mistake']);
+
+  function readFormData() {
+    const fd = new FormData(form);
+    const data = {};
+    for (const key of new Set(fd.keys())) {
+      if (MULTI_FIELDS.has(key)) {
+        data[key] = fd.getAll(key);
+      } else {
+        data[key] = fd.get(key);
+      }
+    }
+    for (const f of MULTI_FIELDS) {
+      if (!(f in data)) data[f] = [];
+    }
+    return data;
+  }
+
   // Load existing profile from profile_json (the real Supabase column).
   const existing = user.profile_json || user.profile || {};
   Object.entries(existing).forEach(([k, v]) => {
-    if (k.startsWith('_') || typeof v !== 'string') return;
+    if (k.startsWith('_')) return;
+    if (Array.isArray(v)) {
+      v.forEach(val => {
+        const chip = form.querySelector(`[name="${k}"][value="${String(val).replace(/"/g, '\\"')}"]`);
+        if (chip) chip.checked = true;
+      });
+      return;
+    }
+    if (typeof v !== 'string') return;
     const el = form.querySelector(`[name="${k}"]`);
-    if (el) el.value = v;
+    if (el && el.type !== 'checkbox') el.value = v;
   });
 
   // Elite tier is coach-gated. Unlock the option only if Ryan has flipped
@@ -294,7 +319,7 @@
   }
 
   window.saveDraft = async () => {
-    const data = Object.fromEntries(new FormData(form).entries());
+    const data = readFormData();
     const next = { ...(user.profile_json || {}), ...data,
                    _status: 'draft',
                    _savedAt: new Date().toISOString() };
@@ -312,7 +337,7 @@
     const submitBtn = form.querySelector('button[type="submit"]');
     if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Saving…'; }
 
-    const data = Object.fromEntries(new FormData(form).entries());
+    const data = readFormData();
     const next = { ...(user.profile_json || {}), ...data,
                    _status: 'complete',
                    _savedAt: new Date().toISOString() };
