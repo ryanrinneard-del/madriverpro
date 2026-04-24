@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<base href="/adult/">
+<title>Caddie — Plays-Like Distances</title>
+<meta name="description" content="Your on-course caddie. Enter yards to the pin, get the plays-like number with club recommendation based on wind, elevation, and temperature.">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  body { padding-bottom: env(safe-area-inset-bottom, 0); background: var(--cream); }
+
+  .cd-wrap { max-width: 520px; margin: 0 auto; padding: 16px 14px 80px; }
+
+  .cd-header {
+    background: linear-gradient(180deg, var(--navy) 0%, #162E54 100%);
+    color: #fff; border-radius: 14px; padding: 18px 20px 16px;
+    margin-bottom: 14px; position: relative; overflow: hidden;
+  }
+  .cd-header::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--gold); border-radius: 14px 14px 0 0;
+  }
+  .cd-header .back {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 11px; letter-spacing: 0.14em; color: rgba(255,255,255,0.65);
+    text-decoration: none; text-transform: uppercase;
+  }
+  .cd-header .back:hover { color: var(--gold); }
+  .cd-header .kicker {
+    font-size: 10px; letter-spacing: 0.22em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-top: 10px;
+  }
+  .cd-header h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 28px; color: #fff; margin: 4px 0 0; font-weight: 600;
+  }
+  .cd-header .sub { color: rgba(255,255,255,0.7); font-size: 13px; margin-top: 4px; }
+
+  .cd-card {
+    background: var(--white); border: 1px solid var(--rule);
+    border-top: 3px solid var(--gold); border-radius: 12px;
+    padding: 16px 18px; margin-bottom: 14px;
+  }
+  .cd-card h3 {
+    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--navy); font-weight: 700; margin: 0 0 12px;
+  }
+
+  /* Yards input — big, primary */
+  .yards-box {
+    display: flex; align-items: baseline; gap: 10px;
+    padding: 8px 0 4px;
+  }
+  .yards-box input {
+    flex: 1; font-family: 'Playfair Display', Georgia, serif;
+    font-size: 56px; font-weight: 600; color: var(--navy);
+    border: none; background: transparent; padding: 0; text-align: center;
+    width: 100%; -moz-appearance: textfield;
+  }
+  .yards-box input::-webkit-outer-spin-button,
+  .yards-box input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .yards-box .unit {
+    font-size: 18px; color: var(--mid-grey); letter-spacing: 1px;
+    text-transform: uppercase; font-weight: 600;
+  }
+
+  /* Plays-like result — hero */
+  .result-hero {
+    background: linear-gradient(180deg, var(--cream) 0%, #F7F0DF 100%);
+    border: 1px solid var(--gold); border-radius: 12px;
+    padding: 22px 20px; margin-bottom: 14px; text-align: center;
+  }
+  .result-hero .label {
+    font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--navy-mid); font-weight: 700; margin-bottom: 4px;
+  }
+  .result-hero .big {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 64px; font-weight: 600; color: var(--navy); line-height: 1;
+  }
+  .result-hero .big .unit {
+    font-size: 24px; color: var(--mid-grey); margin-left: 6px;
+  }
+  .result-hero .club-rec {
+    margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(201,168,76,0.35);
+  }
+  .result-hero .club-key {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 32px; font-weight: 600; color: var(--gold);
+    letter-spacing: 2px;
+  }
+  .result-hero .club-note {
+    font-size: 13px; color: var(--navy-mid); margin-top: 4px;
+  }
+  .result-hero .muted { font-size: 12px; color: var(--mid-grey); }
+
+  /* Adjustment breakdown — small table */
+  .adj-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px 16px;
+    margin-top: 6px;
+  }
+  .adj-cell .lbl {
+    font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--mid-grey); font-weight: 700;
+  }
+  .adj-cell .val {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 18px; font-weight: 600; color: var(--navy); margin-top: 2px;
+  }
+  .adj-cell .val.pos { color: #9C4A2D; }
+  .adj-cell .val.neg { color: #2D6B4C; }
+  .adj-cell .sub { font-size: 11px; color: var(--mid-grey); }
+
+  /* Weather row — compact */
+  .wx-row {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--cream); border: 1px solid var(--rule);
+    border-radius: 10px; padding: 10px 14px; margin-top: 10px;
+    font-size: 13px;
+  }
+  .wx-row .wx-item { display: flex; align-items: baseline; gap: 6px; }
+  .wx-row .wx-item b { color: var(--navy); font-weight: 600; }
+  .wx-row .wx-item span { color: var(--mid-grey); }
+  .wx-row .refresh {
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--gold); background: none; border: 1px solid var(--gold);
+    border-radius: 4px; padding: 4px 8px; cursor: pointer;
+  }
+  .wx-row .refresh:hover { background: var(--gold); color: var(--navy); }
+
+  /* Manual override grid */
+  .override-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px 14px;
+    margin-top: 4px;
+  }
+  .override-grid .ov-item { display: flex; flex-direction: column; gap: 3px; }
+  .override-grid .ov-item label {
+    font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--mid-grey); font-weight: 700;
+  }
+  .override-grid .ov-item input {
+    font-size: 16px; padding: 8px 10px; border: 1px solid var(--rule);
+    border-radius: 6px; background: var(--white); color: var(--navy);
+    font-weight: 600; text-align: center;
+  }
+  .override-grid .ov-item input:focus {
+    border-color: var(--gold); outline: none;
+  }
+
+  .fine-print {
+    font-size: 11px; color: var(--mid-grey); font-style: italic;
+    margin-top: 10px; line-height: 1.5;
+  }
+
+  /* Empty state — no club distances yet */
+  .empty-bag {
+    background: #FDF0EE; border-left: 3px solid var(--red-risk);
+    border-radius: 6px; padding: 12px 14px; margin-top: 12px;
+    font-size: 13px; color: var(--navy);
+  }
+  .empty-bag a {
+    color: var(--gold); font-weight: 600; text-decoration: none;
+    border-bottom: 1px solid currentColor;
+  }
+</style>
+</head>
+<body>
+
+<div class="cd-wrap">
+  <div class="cd-header">
+    <a class="back" href="dashboard.html">&larr; Dashboard</a>
+    <div class="kicker">YOUR CADDIE</div>
+    <h1>Plays Like.</h1>
+    <div class="sub">Real yards adjusted for wind, elevation, and temperature — then matched to your bag.</div>
+  </div>
+
+  <!-- Input: yards to target -->
+  <div class="cd-card">
+    <h3>Yards to the pin</h3>
+    <div class="yards-box">
+      <input id="yards-input" type="number" inputmode="decimal"
+             min="30" max="400" step="1" placeholder="150" autocomplete="off">
+      <span class="unit">yds</span>
+    </div>
+    <div class="fine-print">Read it off your rangefinder, GPS watch, or yardage book. Adjustments below apply automatically as you type.</div>
+  </div>
+
+  <!-- Result hero -->
+  <div id="result-hero" class="result-hero" style="display:none;">
+    <div class="label">PLAYS LIKE</div>
+    <div class="big"><span id="plays-like-val">—</span><span class="unit">yds</span></div>
+
+    <div id="club-rec-block" class="club-rec" style="display:none;">
+      <div class="club-key" id="club-rec-key">—</div>
+      <div class="club-note" id="club-rec-note">—</div>
+    </div>
+    <div id="club-rec-empty" class="club-rec" style="display:none;">
+      <div class="muted">Club recommendation needs your bag distances.</div>
+    </div>
+  </div>
+
+  <!-- Adjustment breakdown -->
+  <div id="adj-card" class="cd-card" style="display:none;">
+    <h3>Why it plays that way</h3>
+    <div class="adj-grid">
+      <div class="adj-cell">
+        <div class="lbl">Elevation</div>
+        <div class="val" id="adj-elev">—</div>
+        <div class="sub" id="sub-elev">—</div>
+      </div>
+      <div class="adj-cell">
+        <div class="lbl">Wind</div>
+        <div class="val" id="adj-wind">—</div>
+        <div class="sub" id="sub-wind">—</div>
+      </div>
+      <div class="adj-cell">
+        <div class="lbl">Temperature</div>
+        <div class="val" id="adj-temp">—</div>
+        <div class="sub" id="sub-temp">—</div>
+      </div>
+      <div class="adj-cell">
+        <div class="lbl">Altitude</div>
+        <div class="val" id="adj-alt">—</div>
+        <div class="sub" id="sub-alt">Mad River ~1,500 ft</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Conditions card -->
+  <div class="cd-card">
+    <h3>Conditions</h3>
+    <div class="wx-row" id="wx-row">
+      <div class="wx-item">
+        <b id="wx-temp">—°</b><span>temp</span>
+      </div>
+      <div class="wx-item">
+        <b id="wx-wind">—</b><span>wind</span>
+      </div>
+      <button type="button" class="refresh" id="wx-refresh">↻ Fetch</button>
+    </div>
+
+    <div style="margin-top:14px;">
+      <div class="form-label" style="margin-bottom:6px;">Manual override</div>
+      <div class="override-grid">
+        <div class="ov-item">
+          <label for="ov-elev">Elevation (ft)</label>
+          <input id="ov-elev" type="number" step="1" placeholder="+10 / -8">
+        </div>
+        <div class="ov-item">
+          <label for="ov-wind-head">Wind on shot (mph)</label>
+          <input id="ov-wind-head" type="number" step="1" placeholder="+ head, – tail">
+        </div>
+        <div class="ov-item">
+          <label for="ov-temp">Temp (°F)</label>
+          <input id="ov-temp" type="number" step="1" placeholder="auto">
+        </div>
+        <div class="ov-item">
+          <label for="ov-alt">Altitude (ft)</label>
+          <input id="ov-alt" type="number" step="10" value="1500">
+        </div>
+      </div>
+      <div class="fine-print">Fetch pulls your current location's temp + wind. For wind, positive = headwind, negative = tailwind.</div>
+    </div>
+  </div>
+
+  <div id="empty-bag-msg" class="empty-bag" style="display:none;">
+    To get personalized club recommendations, add your bag distances on
+    <a href="bag.html">your bag page</a>. Once Ryan has TrackMan numbers for you, they'll auto-fill.
+  </div>
+</div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js"></script>
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  (async () => {
+    const user = await RRG.auth.requireLogin();
+    if (!user) return;
+    const profile = await RRG.auth.completeSignupIfNeeded();
+
+    // Try to assemble the player's full-bag distances. Order of preference:
+    //   1. profile_json.club_distances   — explicit player-entered numbers
+    //   2. profile_json.trackman_sessions → latest carry per club
+    //   3. profile_json.wedge_matrix      → full yardages for PW/GW/SW/LW
+    const pj = (profile && profile.profile_json) || {};
+    const bag = {};
+
+    if (pj.club_distances) Object.assign(bag, pj.club_distances);
+
+    // Wedge matrix fallback — only populate wedges not already set by club_distances
+    if (pj.wedge_matrix) {
+      for (const [wedge, shots] of Object.entries(pj.wedge_matrix)) {
+        const k = wedge.toLowerCase();
+        if (!bag[k] && shots && shots.full) bag[k] = shots.full;
+      }
+    }
+
+    // TrackMan sessions — use most recent carry per club if still missing
+    if (Array.isArray(pj.trackman_sessions)) {
+      const latest = {};
+      for (const s of pj.trackman_sessions) {
+        if (!s.club || !s.carry) continue;
+        const k = s.club.toLowerCase();
+        if (!latest[k] || new Date(s.date || 0) > new Date(latest[k].date || 0)) {
+          latest[k] = s;
+        }
+      }
+      for (const [k, s] of Object.entries(latest)) {
+        if (!bag[k]) bag[k] = parseFloat(s.carry);
+      }
+    }
+
+    const hasBag = Object.keys(bag).length > 0;
+    if (!hasBag) document.getElementById('empty-bag-msg').style.display = 'block';
+
+    // --- Weather ---
+    const wxTemp = document.getElementById('wx-temp');
+    const wxWind = document.getElementById('wx-wind');
+    const ovTemp = document.getElementById('ov-temp');
+    const ovWindHead = document.getElementById('ov-wind-head');
+
+    // Current weather state — updated either by Fetch or manual override
+    const state = {
+      temp_f: 75,   // default baseline
+      wind_mph: 0,
+      wind_dir_deg: 0,
+      // Elevation + altitude default: Mad River ~1500 ft; elev delta 0 unless set
+      elev_ft: 0,
+      altitude_ft: 1500,
+    };
+
+    function renderWeather() {
+      wxTemp.textContent = (state.temp_f != null ? state.temp_f : '—') + '°F';
+      const compass = RRG.weather.compass(state.wind_dir_deg);
+      wxWind.textContent = state.wind_mph > 0
+        ? `${state.wind_mph} mph ${compass}`
+        : 'calm';
+    }
+
+    async function fetchWeather() {
+      if (!navigator.geolocation) {
+        alert('Location not available on this device. Use manual override.');
+        return;
+      }
+      document.getElementById('wx-refresh').textContent = '…';
+      navigator.geolocation.getCurrentPosition(async (pos) => {
+        const { latitude, longitude } = pos.coords;
+        const wx = await RRG.weather.fetchCurrent(latitude, longitude);
+        document.getElementById('wx-refresh').textContent = '↻ Fetch';
+        if (!wx) { alert('Weather fetch failed.'); return; }
+        state.temp_f = wx.temp_f;
+        state.wind_mph = wx.wind_mph;
+        state.wind_dir_deg = wx.wind_dir_deg;
+        if (wx.elev_ft_asl) state.altitude_ft = wx.elev_ft_asl;
+        // Clear manual overrides so auto values take over
+        ovTemp.value = '';
+        ovWindHead.value = '';
+        document.getElementById('ov-alt').value = state.altitude_ft;
+        renderWeather();
+        compute();
+      }, (err) => {
+        document.getElementById('wx-refresh').textContent = '↻ Fetch';
+        alert('Location denied. Use manual override.');
+      }, { enableHighAccuracy: false, timeout: 8000, maximumAge: 600000 });
+    }
+    document.getElementById('wx-refresh').addEventListener('click', fetchWeather);
+
+    // --- Compute + render ---
+    const yardsInput = document.getElementById('yards-input');
+    const resultHero = document.getElementById('result-hero');
+    const adjCard = document.getElementById('adj-card');
+
+    function compute() {
+      const yards = parseFloat(yardsInput.value);
+      if (!yards || yards < 30) {
+        resultHero.style.display = 'none';
+        adjCard.style.display = 'none';
+        return;
+      }
+
+      // Effective values: manual overrides win; else fall back to state
+      const elev_ft = ovElev.value !== '' ? parseFloat(ovElev.value) : state.elev_ft;
+      const manualHead = ovWindHead.value !== '' ? parseFloat(ovWindHead.value) : null;
+      const temp_f = ovTemp.value !== '' ? parseFloat(ovTemp.value) : state.temp_f;
+      const altitude_ft = ovAlt.value !== '' ? parseFloat(ovAlt.value) : state.altitude_ft;
+
+      let input;
+      if (manualHead != null) {
+        // User entered raw headwind in mph; synthesize wind_dir so cos(rel)=manualHead/wind_mph=1
+        input = {
+          yards, elev_ft, temp_f, altitude_ft,
+          wind_mph: Math.abs(manualHead),
+          // If positive (headwind) align wind-FROM with shot-TO = both 0
+          // If negative (tailwind) wind-FROM is opposite of shot-TO = 180
+          wind_dir_deg: manualHead >= 0 ? 0 : 180,
+          shot_dir_deg: 0,
+        };
+      } else {
+        // Auto wind from weather — we don't know shot direction without course GPS,
+        // so assume player has oriented themselves and the fetched wind direction
+        // IS already relative to their shot. In Sprint 2 we'll derive shot_dir from
+        // the hole layout so this becomes fully automatic.
+        input = {
+          yards, elev_ft, temp_f, altitude_ft,
+          wind_mph: state.wind_mph,
+          wind_dir_deg: state.wind_dir_deg,
+          shot_dir_deg: state.wind_dir_deg,  // assumes straight into/with wind until S2
+        };
+      }
+
+      const r = RRG.playsLike.compute(input);
+      document.getElementById('plays-like-val').textContent = r.plays_like;
+
+      // Club rec
+      if (hasBag) {
+        const rec = RRG.playsLike.recommendClub(bag, r.plays_like);
+        document.getElementById('club-rec-block').style.display = 'block';
+        document.getElementById('club-rec-empty').style.display = 'none';
+        if (rec && rec.primary) {
+          document.getElementById('club-rec-key').textContent = rec.primary.key.toUpperCase();
+          document.getElementById('club-rec-note').textContent = rec.note || '';
+        }
+      } else {
+        document.getElementById('club-rec-block').style.display = 'none';
+        document.getElementById('club-rec-empty').style.display = 'block';
+      }
+
+      // Adjustments
+      const fmt = (n) => (n > 0 ? '+' : '') + Math.round(n) + 'y';
+      const cls = (n) => n > 0.5 ? 'val pos' : n < -0.5 ? 'val neg' : 'val';
+      const a = r.adjustments;
+      const elevEl = document.getElementById('adj-elev');
+      elevEl.textContent = fmt(a.elev); elevEl.className = cls(a.elev);
+      document.getElementById('sub-elev').textContent = elev_ft
+        ? `${elev_ft > 0 ? '+' : ''}${elev_ft} ft`
+        : 'flat';
+      const windEl = document.getElementById('adj-wind');
+      windEl.textContent = fmt(a.wind); windEl.className = cls(a.wind);
+      const windNote = manualHead != null
+        ? `${Math.abs(manualHead)} mph ${manualHead > 0 ? 'head' : manualHead < 0 ? 'tail' : 'calm'}`
+        : `${state.wind_mph} mph ${RRG.weather.compass(state.wind_dir_deg)}`;
+      document.getElementById('sub-wind').textContent = windNote;
+      const tempEl = document.getElementById('adj-temp');
+      tempEl.textContent = fmt(a.temp); tempEl.className = cls(a.temp);
+      document.getElementById('sub-temp').textContent = `${temp_f}°F`;
+      const altEl = document.getElementById('adj-alt');
+      altEl.textContent = fmt(a.altitude); altEl.className = cls(a.altitude);
+      document.getElementById('sub-alt').textContent = `${altitude_ft} ft ASL`;
+
+      resultHero.style.display = 'block';
+      adjCard.style.display = 'block';
+    }
+
+    const ovElev = document.getElementById('ov-elev');
+    const ovAlt = document.getElementById('ov-alt');
+    [yardsInput, ovElev, ovWindHead, ovTemp, ovAlt].forEach(el => {
+      el.addEventListener('input', compute);
+    });
+
+    // Initial render
+    renderWeather();
+    compute();
+
+    // If we have geolocation permission already (common after first fetch),
+    // proactively fetch so numbers are live.
+    if (navigator.permissions) {
+      try {
+        const perm = await navigator.permissions.query({ name: 'geolocation' });
+        if (perm.state === 'granted') fetchWeather();
+      } catch (e) { /* permissions API unavailable — skip silent fetch */ }
+    }
+  })();
+</script>
+</body>
+</html>

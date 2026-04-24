@@ -1366,6 +1366,187 @@ Object.assign(RRG.path, {
 });
 
 /* =============================================================
+   PLAYS LIKE — Ponza-style distance adjustment math
+   Turns a raw yards-to-target into the "plays like" number a golfer
+   should actually club for. Adjusts for:
+     - elevation delta (uphill plays longer, downhill plays shorter)
+     - temperature (cool air = shorter ball flight)
+     - wind (headwind penalty > tailwind bonus, crosswind ≈ 0 distance)
+     - altitude above sea level (thinner air = longer carry)
+   Returns a breakdown object so the UI can show WHY a shot is
+   playing longer — teaching moment, not just a number.
+   ============================================================= */
+RRG.playsLike = {
+  /* Compute the plays-like distance.
+       input: {
+         yards        : number,  // raw distance to target
+         elev_ft      : number,  // green elevation MINUS tee elevation (+ = uphill)
+         temp_f       : number,  // ambient temperature in °F
+         wind_mph     : number,  // wind speed
+         wind_dir_deg : number,  // direction wind is BLOWING FROM (meteorological)
+         shot_dir_deg : number,  // direction shot is heading TO (0=N, 90=E, …)
+         altitude_ft  : number,  // course altitude above sea level
+       }
+     Any field may be null/undefined → that adjustment is skipped (zeroed).
+     Returns:
+       {
+         actual, plays_like, adjustments: { elev, temp, wind, altitude },
+         wind_component: { head_mph, cross_mph }
+       }
+     All values in yards unless otherwise noted. */
+  compute({ yards, elev_ft = 0, temp_f = 75, wind_mph = 0, wind_dir_deg = 0,
+            shot_dir_deg = 0, altitude_ft = 0 } = {}) {
+    const y = parseFloat(yards) || 0;
+    if (y <= 0) {
+      return { actual: 0, plays_like: 0,
+               adjustments: { elev: 0, temp: 0, wind: 0, altitude: 0 },
+               wind_component: { head_mph: 0, cross_mph: 0 } };
+    }
+
+    // Elevation: ~0.75 yd of adjustment per 1 ft of delta (industry rule of
+    // thumb that balances the naive "1 yd/ft" with Trackman's lower number).
+    const elev_adj = (parseFloat(elev_ft) || 0) * 0.75;
+
+    // Temperature: baseline 75°F. Every 10°F below → ~2 yd shorter.
+    const temp_adj = ((parseFloat(temp_f) || 75) - 75) * 0.2;
+
+    // Altitude: every 1000 ft above sea level → ~1% longer carry.
+    const alt_adj = y * ((parseFloat(altitude_ft) || 0) / 1000) * 0.01;
+
+    // Wind: decompose into head and cross components relative to the shot.
+    // Wind direction is where it's blowing FROM (meteorological convention),
+    // shot direction is where ball is heading TO. So a north wind
+    // (wind_dir_deg=0, wind FROM the north) is a headwind on a northbound shot
+    // (shot_dir_deg=0): relative angle = 0, cos = 1 → positive headwind.
+    let head_mph = 0, cross_mph = 0;
+    if ((parseFloat(wind_mph) || 0) > 0) {
+      // Relative angle between wind-FROM and shot-TO directions. If they match
+      // we're hitting into the wind (head). 180° apart = tailwind.
+      const rel = ((parseFloat(wind_dir_deg) || 0) - (parseFloat(shot_dir_deg) || 0)) * Math.PI / 180;
+      head_mph = (parseFloat(wind_mph) || 0) * Math.cos(rel);
+      cross_mph = (parseFloat(wind_mph) || 0) * Math.sin(rel);
+    }
+    // Headwind costs ~1% per mph, tailwind gains ~0.5% per mph.
+    const wind_pct = head_mph > 0 ? -head_mph * 0.01 : -head_mph * 0.005;
+    const wind_adj = y * wind_pct;
+
+    const plays_like = Math.round(y + elev_adj + temp_adj + alt_adj + wind_adj);
+
+    return {
+      actual: y,
+      plays_like,
+      adjustments: {
+        elev:     Math.round(elev_adj * 10) / 10,
+        temp:     Math.round(temp_adj * 10) / 10,
+        wind:     Math.round(wind_adj * 10) / 10,
+        altitude: Math.round(alt_adj * 10) / 10,
+      },
+      wind_component: {
+        head_mph: Math.round(head_mph * 10) / 10,
+        cross_mph: Math.round(cross_mph * 10) / 10,
+      },
+    };
+  },
+
+  /* Recommend a club from the player's personal bag distances.
+     bag: { driver: 250, '3w': 230, hybrid: 205, '4i': 195, ..., 'LW': 60 }
+         (full-carry yardages; keys match RRG.TRACKMAN_CLUBS.key casing)
+     target: the plays-like yardage.
+     Returns { primary, secondary, note } where primary is the closest club,
+     secondary is the next option up or down, note explains the gap. */
+  recommendClub(bag, target) {
+    if (!bag || typeof bag !== 'object' || !target || target <= 0) return null;
+    const entries = Object.entries(bag)
+      .map(([k, v]) => ({ key: k, yards: parseFloat(v) }))
+      .filter(e => !isNaN(e.yards) && e.yards > 0)
+      .sort((a, b) => b.yards - a.yards);
+    if (!entries.length) return null;
+
+    // Closest club by absolute delta
+    let primary = entries[0];
+    let bestDelta = Math.abs(entries[0].yards - target);
+    for (const e of entries) {
+      const d = Math.abs(e.yards - target);
+      if (d < bestDelta) { primary = e; bestDelta = d; }
+    }
+    const idx = entries.indexOf(primary);
+    // Secondary = the "other side" — if target is LONGER than primary's
+    // full-carry, offer the next-longer club; if SHORTER, next-shorter.
+    const secondary = target > primary.yards
+      ? (entries[idx - 1] || null)  // longer club
+      : (entries[idx + 1] || null); // shorter club
+    const delta = Math.round(target - primary.yards);
+    let note;
+    if (delta === 0) note = `${primary.key.toUpperCase()} stock — pure number.`;
+    else if (delta > 0) note = `${primary.key.toUpperCase()} +${delta}y — firm it or step up to ${secondary ? secondary.key.toUpperCase() : 'longer club'}.`;
+    else note = `${primary.key.toUpperCase()} ${delta}y — smooth it or step down to ${secondary ? secondary.key.toUpperCase() : 'shorter club'}.`;
+
+    return { primary, secondary, delta, note };
+  },
+};
+
+/* =============================================================
+   WEATHER — minimal wrapper around Open-Meteo's free forecast API.
+   No API key. No rate-limit concerns at our scale. Caches in
+   sessionStorage for 10 minutes per coarse grid cell so a round
+   doesn't hammer the endpoint hole-to-hole.
+   ============================================================= */
+RRG.weather = {
+  CACHE_MS: 10 * 60 * 1000,
+
+  /* Fetch current conditions at a lat/lng. Returns a promise resolving
+     to { temp_f, wind_mph, wind_dir_deg, elev_ft_asl, cached, fetched_at }.
+     On failure returns null — caller should fall back to manual entry. */
+  async fetchCurrent(lat, lng) {
+    if (lat == null || lng == null) return null;
+    // Cache key: round to ~1 km grid so nearby shots reuse the same fetch.
+    const gridLat = Math.round(lat * 100) / 100;
+    const gridLng = Math.round(lng * 100) / 100;
+    const cacheKey = `rrg_wx_${gridLat}_${gridLng}`;
+    try {
+      const cached = sessionStorage.getItem(cacheKey);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Date.now() - parsed.fetched_at < this.CACHE_MS) {
+          return { ...parsed, cached: true };
+        }
+      }
+    } catch (e) { /* sessionStorage may be unavailable — ignore */ }
+
+    try {
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}` +
+                  `&current=temperature_2m,wind_speed_10m,wind_direction_10m` +
+                  `&temperature_unit=fahrenheit&wind_speed_unit=mph`;
+      const res = await fetch(url);
+      if (!res.ok) return null;
+      const j = await res.json();
+      const c = j.current || {};
+      const out = {
+        temp_f:       Math.round(c.temperature_2m),
+        wind_mph:     Math.round(c.wind_speed_10m),
+        wind_dir_deg: Math.round(c.wind_direction_10m),
+        elev_ft_asl:  Math.round((j.elevation || 0) * 3.28084),
+        fetched_at:   Date.now(),
+        cached:       false,
+      };
+      try { sessionStorage.setItem(cacheKey, JSON.stringify(out)); } catch (e) { /* ignore */ }
+      return out;
+    } catch (err) {
+      console.warn('[weather] fetch failed', err);
+      return null;
+    }
+  },
+
+  /* Convert a wind-from-direction (0–360°, N=0) to a compass name. */
+  compass(deg) {
+    if (deg == null || isNaN(deg)) return '—';
+    const dirs = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE',
+                  'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
+    return dirs[Math.round(((deg % 360) + 360) % 360 / 22.5) % 16];
+  },
+};
+
+/* =============================================================
    CHARTS — minimal dependency-free SVG line / sparkline renderer.
    Used by the Handicap page + My Rounds trend cards. Inputs: an
    array of { date, value } points, plus options. Output: an SVG
@@ -1519,6 +1700,7 @@ RRG.renderNav = function(user, active = '') {
 
         ${group('My Game', 'mygame', `
           <li><a href="dashboard.html" class="${active==='dashboard'?'active':''}">Dashboard</a></li>
+          <li><a href="caddie.html"    class="${active==='caddie'?'active':''}"><strong>Caddie &middot; Plays Like</strong></a></li>
           <li><a href="my-plan.html"   class="${active==='plan'?'active':''}">My Plan</a></li>
           <li><a href="history.html"   class="${active==='history'?'active':''}">My Rounds</a></li>
           <li><a href="log-simple.html">Simple Log &middot; 30 seconds</a></li>
