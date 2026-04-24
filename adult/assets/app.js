@@ -1757,6 +1757,7 @@ RRG.renderNav = function(user, active = '') {
           <li><a href="/improve/just-starting.html"><strong>Just Starting &middot; Start Here</strong></a></li>
           <li class="nav-sublabel">Ryan's Framework</li>
           <li><a href="/improve/module-01-fundamentals.html">Module 01 &middot; Fundamentals</a></li>
+          <li><a href="/improve/module-02-practice-design.html">Module 02 &middot; Practice Design</a></li>
           <li><a href="/improve/module-03-short-game.html">Module 03 &middot; Short Game</a></li>
           <li class="nav-sublabel">Primers on the books that shaped it</li>
           <li><a href="/improve/book-8-step-swing.html">8-Position Swing Map &middot; McLean</a></li>

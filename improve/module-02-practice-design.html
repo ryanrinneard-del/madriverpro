@@ -1,0 +1,802 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Module 02 · Practice Design — Teaching Library</title>
+<meta name="description" content="Ryan Rinneard's framework for how to actually practice golf. Why most range time doesn't produce learning. The science of skill formation. Block vs. random vs. variable. Draws on Michael Hebron, Daniel Coyle, Anders Ericsson, and Gabriele Wulf.">
+<meta property="og:title" content="Module 02 · Practice Design · RR Golf Performance">
+<meta property="og:description" content="Why most practice doesn't produce learning, and what to do instead. Hebron/Coyle/Ericsson/Wulf.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://rrgolfperformance.com/improve/module-02-practice-design.html">
+<meta property="og:image" content="https://madriverpro.com/images/rr-logo.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Module 02 · Practice Design · RR Golf Performance">
+<meta name="twitter:description" content="Why most practice doesn't produce learning, and what to do instead.">
+<meta name="twitter:image" content="https://madriverpro.com/images/rr-logo.png">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  /* Module 02 — Practice Design. Same visual language as Modules 01 and 03
+     for library cohesion. This is Ryan's framework for how practice
+     actually works, not a book summary. Built on Hebron, Coyle, Ericsson,
+     and Wulf with every source cited in context and at the end. */
+
+  .book-hero {
+    background: linear-gradient(180deg, var(--navy) 0%, #162E54 100%);
+    color: #fff; border-radius: 14px;
+    padding: 56px 44px 48px; margin-bottom: 36px;
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .book-hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--gold); }
+  .book-hero::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent 0%, var(--gold) 30%, var(--gold) 70%, transparent 100%);
+    opacity: 0.4;
+  }
+  .book-hero .vol {
+    display: inline-block;
+    font-size: 11px; letter-spacing: 0.24em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase;
+    padding: 5px 16px; border: 1px solid var(--gold);
+    border-radius: 999px; margin-bottom: 20px;
+  }
+  .book-hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(44px, 7vw, 68px);
+    font-weight: 600; color: #fff;
+    margin: 0; line-height: 1.05; letter-spacing: -0.01em;
+  }
+  .book-hero .subtitle {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; font-size: 20px;
+    color: rgba(255,255,255,0.78);
+    margin: 14px auto 22px; max-width: 680px;
+  }
+  .book-hero .gold-dash { width: 60px; height: 2px; background: var(--gold); margin: 0 auto 22px; }
+  .book-hero .attrib {
+    font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(255,255,255,0.55); font-weight: 500;
+  }
+
+  .primer-disclaimer {
+    background: #FDF6F4; border: 1px solid #E5D0CB;
+    border-left: 4px solid #C76757; border-radius: 10px;
+    padding: 22px 28px; margin: 0 0 28px;
+  }
+  .primer-disclaimer .pd-label {
+    font-size: 11px; letter-spacing: 0.22em; color: #9A3D2F;
+    font-weight: 700; text-transform: uppercase; margin-bottom: 10px;
+  }
+  .primer-disclaimer p { margin: 0 0 10px; font-size: 14px; line-height: 1.65; color: var(--navy-mid); }
+  .primer-disclaimer p:last-child { margin-bottom: 0; }
+  .primer-disclaimer p strong { color: var(--navy); }
+
+  .coach-note {
+    background: #FAF6EC; border: 1px solid #E5DAB8;
+    border-radius: 10px; padding: 24px 30px 20px;
+    margin: 0 0 36px; position: relative;
+  }
+  .coach-note .cn-label {
+    font-size: 11px; letter-spacing: 0.22em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 12px;
+  }
+  .coach-note p {
+    margin: 0 0 14px; font-size: 15px; line-height: 1.7;
+    color: var(--navy-mid);
+    font-family: 'Playfair Display', Georgia, serif; font-weight: 400;
+  }
+  .coach-note p strong { color: var(--navy); font-weight: 600; }
+  .coach-note .sign-off {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; font-size: 16px; color: var(--navy);
+    text-align: right; margin-top: 6px;
+  }
+
+  .book-toc {
+    background: var(--white); border: 1px solid var(--rule);
+    border-radius: 10px; padding: 24px 28px; margin: 0 0 40px;
+  }
+  .book-toc h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 20px; color: var(--navy); margin: 0 0 14px;
+  }
+  .book-toc ol { list-style: none; padding: 0; margin: 0; }
+  .book-toc ol li {
+    display: flex; gap: 18px; padding: 10px 0;
+    border-bottom: 1px solid var(--rule);
+    font-size: 14px; line-height: 1.5;
+  }
+  .book-toc ol li:last-child { border-bottom: none; }
+  .book-toc .ch-num {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 18px; color: var(--gold);
+    font-weight: 700; min-width: 36px;
+  }
+  .book-toc .ch-body a { color: var(--navy); font-weight: 600; text-decoration: none; }
+  .book-toc .ch-body a:hover { color: var(--gold); }
+  .book-toc .ch-body span { color: var(--navy-mid); }
+
+  .chapter {
+    margin-bottom: 48px; padding-top: 20px;
+    border-top: 1px solid var(--rule);
+  }
+  .chapter:first-of-type { border-top: none; padding-top: 0; }
+  .chapter .ch-kicker {
+    font-size: 11px; letter-spacing: 0.22em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 10px;
+  }
+  .chapter h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 30px; color: var(--navy); margin: 0 0 10px;
+    line-height: 1.2; font-weight: 600;
+  }
+  .chapter .ch-lede {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; font-size: 17px;
+    color: var(--navy-mid); margin-bottom: 22px;
+    line-height: 1.6;
+  }
+  .chapter p { font-size: 15px; line-height: 1.7; color: var(--navy-mid); margin: 0 0 14px; }
+  .chapter p strong { color: var(--navy); }
+  .chapter h4 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 20px; color: var(--navy); margin: 22px 0 10px;
+    font-weight: 600;
+  }
+  .chapter ul, .chapter ol { font-size: 15px; line-height: 1.7; color: var(--navy-mid); margin: 10px 0 16px 22px; }
+  .chapter ul li, .chapter ol li { margin-bottom: 6px; }
+
+  .drill-card {
+    background: var(--cream); border: 1px solid var(--rule);
+    border-left: 3px solid var(--gold); border-radius: 8px;
+    padding: 18px 22px; margin: 18px 0;
+  }
+  .drill-card .dc-label {
+    font-size: 10px; letter-spacing: 0.2em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 6px;
+  }
+  .drill-card h5 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 18px; color: var(--navy); margin: 0 0 8px;
+    font-weight: 600;
+  }
+  .drill-card p { font-size: 14px; margin: 0 0 8px; }
+  .drill-card p:last-child { margin-bottom: 0; }
+
+  .callout {
+    background: #F0F6EC; border-left: 3px solid #6B8B4E;
+    border-radius: 8px; padding: 16px 20px; margin: 16px 0;
+    font-size: 14px; line-height: 1.6; color: var(--navy-mid);
+  }
+  .callout strong { color: #4C6B30; }
+
+  .plan-card {
+    background: var(--navy); color: #fff;
+    border-radius: 10px; padding: 24px 28px; margin: 20px 0;
+  }
+  .plan-card h5 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 20px; color: var(--gold); margin: 0 0 12px;
+    font-weight: 600;
+  }
+  .plan-card p { color: rgba(255,255,255,0.78); font-size: 14px; margin: 0 0 10px; }
+  .plan-card ol {
+    list-style: none; padding: 0; margin: 10px 0 0;
+    counter-reset: planstep;
+  }
+  .plan-card ol li {
+    position: relative; padding: 8px 0 8px 36px;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+    font-size: 14px; color: rgba(255,255,255,0.82); line-height: 1.6;
+  }
+  .plan-card ol li:last-child { border-bottom: none; }
+  .plan-card ol li::before {
+    counter-increment: planstep;
+    content: counter(planstep);
+    position: absolute; left: 0; top: 8px;
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--gold); color: var(--navy);
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 13px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .plan-card strong { color: #fff; }
+
+  .attribution {
+    margin-top: 44px; padding: 28px 30px;
+    background: var(--cream); border-radius: 10px;
+    border: 1px solid var(--rule);
+  }
+  .attribution h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 20px; color: var(--navy); margin: 0 0 12px;
+  }
+  .attribution p { font-size: 14px; line-height: 1.65; color: var(--navy-mid); margin: 0 0 10px; }
+  .attribution ul {
+    list-style: none; padding: 0; margin: 12px 0 0;
+    font-size: 14px; color: var(--navy-mid);
+  }
+  .attribution ul li { margin-bottom: 8px; }
+  .attribution ul li strong { color: var(--navy); }
+
+  .breadcrumb {
+    font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--mid-grey); margin-bottom: 18px;
+  }
+  .breadcrumb a { color: var(--mid-grey); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--gold); }
+  .breadcrumb span { margin: 0 8px; }
+</style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container">
+
+  <div class="breadcrumb">
+    <a href="index.html">Library</a><span>›</span><a href="bookshelf.html">Teaching Library</a><span>›</span>Module 02 · Practice Design
+  </div>
+
+  <!-- ===================== HERO ===================== -->
+  <div class="book-hero">
+    <span class="vol">Teaching Library · Module 02</span>
+    <h1>Practice Design.</h1>
+    <div class="subtitle">Why most range time doesn't produce learning &mdash; and what to do instead. Built on the work of Michael Hebron, Daniel Coyle, Anders Ericsson, and Gabriele Wulf.</div>
+    <div class="gold-dash"></div>
+    <div class="attrib">Ryan's framework &middot; influences credited throughout</div>
+  </div>
+
+  <!-- ===================== DISCLAIMER ===================== -->
+  <div class="primer-disclaimer">
+    <div class="pd-label">Ryan's Framework</div>
+    <p>
+      This module is Ryan Rinneard's original teaching framework for how
+      golf skill is built. It draws on the published work of multiple
+      researchers and instructors &mdash; <strong>Michael Hebron</strong>
+      (<em>See and Learn</em> and his teaching library), <strong>Daniel
+      Coyle</strong> (<em>The Talent Code</em>, <em>The Little Book of
+      Talent</em>), <strong>K. Anders Ericsson</strong> (<em>Peak</em>,
+      and the academic literature on deliberate practice), and
+      <strong>Gabriele Wulf</strong> (research on attentional focus in
+      motor learning). Every source referenced is in print; buy their
+      work for the full treatment.
+    </p>
+    <p>
+      <strong>This is not an authorized publication of any named author
+      or teacher.</strong> Michael Hebron's academy and Ericsson's estate
+      are separate entities from Ryan's coaching practice. Concepts below
+      are described in Ryan's own words with the original work cited as
+      the inspiration.
+    </p>
+  </div>
+
+  <!-- ===================== COACH NOTE ===================== -->
+  <div class="coach-note">
+    <div class="cn-label">From the coach</div>
+    <p>
+      Watch any range on a Saturday morning. Fifty people hitting balls.
+      Maybe three of them are practicing &mdash; the rest are rehearsing.
+      <strong>Rehearsal feels productive and produces almost no learning.</strong>
+      If you've spent years hitting balls without getting meaningfully
+      better, this is why.
+    </p>
+    <p>
+      I came to this framework the long way. I was a good player who hit
+      a million balls and wondered why my swing didn't change. Then I read
+      Michael Hebron, who told me that <em>knowing and doing are different
+      neurological processes</em>, and the way I practiced was only working
+      on the knowing. Then I read Daniel Coyle, who explained what actually
+      happens in the nervous system when a skill forms. Then I read Anders
+      Ericsson, who proved it with decades of data. Then Gabriele Wulf's
+      research landed on me &mdash; that <strong>where you point your
+      attention during a swing is more important than how many swings
+      you take.</strong>
+    </p>
+    <p>
+      This module is the synthesis. Seven chapters, each one a belief that
+      shifted my teaching. At the end is a practice-session template you
+      can actually use on Tuesday. Read it straight through the first time;
+      come back to the template every week.
+    </p>
+    <div class="sign-off">&mdash; Ryan</div>
+  </div>
+
+  <!-- ===================== TOC ===================== -->
+  <div class="book-toc">
+    <h2>In this module</h2>
+    <ol>
+      <li><div class="ch-num">01</div><div class="ch-body"><a href="#ch1">Why your range time isn't working</a> <span>&mdash; the difference between rehearsing and learning.</span></div></li>
+      <li><div class="ch-num">02</div><div class="ch-body"><a href="#ch2">What actually happens when a skill forms</a> <span>&mdash; Coyle's myelin, and why struggle is the signal.</span></div></li>
+      <li><div class="ch-num">03</div><div class="ch-body"><a href="#ch3">The deliberate-practice test</a> <span>&mdash; Ericsson's four conditions, and how to run the check on any drill.</span></div></li>
+      <li><div class="ch-num">04</div><div class="ch-body"><a href="#ch4">Block, random, variable — when each one works</a> <span>&mdash; and the most common mistake amateurs make.</span></div></li>
+      <li><div class="ch-num">05</div><div class="ch-body"><a href="#ch5">External attention beats internal attention</a> <span>&mdash; Wulf's research and why "hit at the target" is better than "rotate your hips."</span></div></li>
+      <li><div class="ch-num">06</div><div class="ch-body"><a href="#ch6">The range-to-course gap</a> <span>&mdash; why your range shots don't show up on hole 1, and how to close the gap.</span></div></li>
+      <li><div class="ch-num">07</div><div class="ch-body"><a href="#ch7">The 90-minute practice plan</a> <span>&mdash; a template for the session Ryan would build for you.</span></div></li>
+    </ol>
+  </div>
+
+  <!-- =========== CHAPTER 01 =========== -->
+  <section class="chapter" id="ch1">
+    <div class="ch-kicker">Section 01</div>
+    <h3>Why your range time isn't working.</h3>
+    <p class="ch-lede">Most range sessions are rehearsal, not practice. Rehearsal feels productive. Rehearsal does almost nothing.</p>
+
+    <p>
+      Here's the pattern: bucket of balls, pitching wedge first, warm up for
+      ten minutes, move to 9-iron, 7-iron, work up to the driver, hit twenty
+      drives, finish with the wedge again because it felt good. Go home.
+      Come back next week and nothing has changed.
+    </p>
+
+    <p>
+      <strong>Michael Hebron's argument</strong>, which runs through
+      everything he wrote from the 1980s onward, is that there are two
+      separate neurological processes at work: <em>explicit learning</em>
+      (consciously understanding something, like a coach telling you your
+      grip is strong) and <em>implicit learning</em> (the nervous system
+      quietly writing new motor patterns through feedback and repetition).
+      <strong>You can know something for years without being able to do
+      it.</strong> The reason is that knowing is a cortical activity and
+      doing is a subcortical one, and they don't talk to each other in the
+      way most teachers assume.
+    </p>
+
+    <p>
+      The range pattern above is mostly explicit. The player is thinking
+      about their swing, trying to feel positions, checking in with
+      technique thoughts. Cortical activity. Meanwhile the subcortical
+      motor system, which is what actually plays golf, is getting very
+      little to work on &mdash; because it learns from <strong>intent,
+      feedback, and contrast</strong>, not from thinking about positions.
+    </p>
+
+    <h4>The signal that you're rehearsing, not practicing</h4>
+    <ul>
+      <li><strong>No stated target for the shot.</strong> You're "working on your swing," not hitting a specific ball to a specific spot.</li>
+      <li><strong>No feedback loop.</strong> You hit the ball, it flies somewhere, you hit another. No check of where it went vs. where you wanted it to go.</li>
+      <li><strong>Same club, many balls in a row.</strong> The motor system adapts to the repetition and stops learning after the first 5–10.</li>
+      <li><strong>Comfort.</strong> You feel good. You're hitting it solid. This is the biggest warning sign &mdash; <strong>comfort is the opposite of learning</strong>.</li>
+    </ul>
+
+    <div class="callout">
+      <strong>Coyle's diagnostic, paraphrased from <em>The Little Book of
+      Talent</em>:</strong> if you feel smooth and confident during practice,
+      you're probably not improving. If you feel awkward and a little
+      frustrated &mdash; working at the edge of what you can do &mdash;
+      you're probably in the zone where the nervous system actually rewires.
+      Comfort is the enemy.
+    </div>
+  </section>
+
+  <!-- =========== CHAPTER 02 =========== -->
+  <section class="chapter" id="ch2">
+    <div class="ch-kicker">Section 02</div>
+    <h3>What actually happens when a skill forms.</h3>
+    <p class="ch-lede">Coyle's myelin, and why struggle is the signal.</p>
+
+    <p>
+      You've probably heard the "10,000 hours" number. It's been misused so
+      widely that Ericsson, who did the original research, spent the rest
+      of his career trying to correct the interpretation. The number isn't
+      important. What Ericsson and the researchers who followed him &mdash;
+      <strong>Daniel Coyle</strong> popularized their findings in
+      <em>The Talent Code</em> &mdash; discovered is that skill formation
+      has a biological fingerprint.
+    </p>
+
+    <p>
+      Every nerve in your body is wrapped in a substance called
+      <strong>myelin</strong>. It's a fatty insulator. The thicker the
+      myelin on a particular neural pathway, the faster and more accurate
+      the signal travels down it. <strong>Skill, at the tissue level, is
+      myelin.</strong> A tour player's hand-to-hip timing isn't a mystical
+      gift; it's a pathway that has been myelinated through thousands of
+      repetitions with feedback.
+    </p>
+
+    <p>
+      Here's the part most amateurs miss: <strong>myelin only wraps
+      pathways that fire under the specific condition of productive
+      struggle</strong>. Fire a pathway smoothly, on autopilot, and almost
+      no myelin is laid down. Fire a pathway while reaching slightly
+      beyond current ability &mdash; missing, adjusting, trying again
+      &mdash; and the nervous system interprets this as a call to improve
+      the pathway, and responds.
+    </p>
+
+    <p>
+      This is why Coyle calls it "deep practice" and the academic
+      literature calls it "desirable difficulty." Both point at the same
+      thing: <strong>the struggle zone is where learning happens</strong>.
+      If it doesn't feel a little awkward, you're probably not building
+      anything new.
+    </p>
+
+    <h4>How to tell you're in the struggle zone</h4>
+    <ul>
+      <li>You're making more mistakes than you would in comfort zone.</li>
+      <li>You're aware of what you're doing with one specific variable &mdash; not the whole swing.</li>
+      <li>The reps feel slower, more deliberate, less smooth.</li>
+      <li>You're adjusting between reps, not just repeating.</li>
+    </ul>
+
+    <div class="drill-card">
+      <div class="dc-label">Drill</div>
+      <h5>The three-in-a-row test</h5>
+      <p>
+        Pick one specific outcome: say, hit a 7-iron that lands within a
+        5-yard circle at 150 yards, three times in a row. Not "hit good
+        shots" &mdash; <em>three in a row</em> to a specific target with
+        a specific club. If you can't do it, you've found your struggle
+        zone.
+      </p>
+      <p>
+        What this builds: a forcing function that pulls you out of rehearsal
+        mode. If you hit two good ones and a miss, you're starting over.
+        The pressure of "don't break the streak" recreates the focused
+        intensity that produces myelination. <em>Credit: variant of
+        Coyle's "chunking and stretching" concept; the three-in-a-row
+        structure is Ryan's.</em>
+      </p>
+    </div>
+  </section>
+
+  <!-- =========== CHAPTER 03 =========== -->
+  <section class="chapter" id="ch3">
+    <div class="ch-kicker">Section 03</div>
+    <h3>The deliberate-practice test.</h3>
+    <p class="ch-lede">Ericsson's four conditions — and how to run the check on any drill you're doing.</p>
+
+    <p>
+      <strong>K. Anders Ericsson</strong> was the researcher behind the
+      10,000-hour finding. His actual claim was narrower: world-class
+      performers in skill-based domains reach world-class through a
+      specific kind of practice he called <em>deliberate practice</em>.
+      Not just hours. Not just repetition. Ericsson identified four
+      conditions that have to be present for hours to convert into skill.
+    </p>
+
+    <h4>The four conditions</h4>
+    <ol>
+      <li><strong>Well-defined, specific goals.</strong> Not "hit better shots" &mdash; "land the ball within 10 yards of the pin, 8 out of 10 times, with a 150-yard 7-iron."</li>
+      <li><strong>Focused attention.</strong> Not half-watching while you hit. Full cognitive engagement on one variable at a time.</li>
+      <li><strong>Immediate feedback.</strong> Did the ball do what you wanted? You need to know within seconds, not minutes. This is why range sessions without a target are half-practice at best.</li>
+      <li><strong>Repeated adjustment.</strong> The feedback has to result in a change on the next rep. If you hit a fade you didn't want, next ball has to try a fix. Same mistake twice in a row is a signal you're not actually adjusting.</li>
+    </ol>
+
+    <p>
+      <strong>The test:</strong> before any drill, can you name all four?
+      Goal? Attention? Feedback? Adjustment? If any one is missing, the
+      drill will produce less learning than you think it will. If all four
+      are clearly present, you're in deliberate practice.
+    </p>
+
+    <p>
+      Most range sessions fail the test on <strong>goal</strong> (vague)
+      and <strong>feedback</strong> (no reference point). Fix those two
+      and the other two often fall into place &mdash; if you have a
+      specific goal and know how you did, attention and adjustment
+      happen naturally.
+    </p>
+
+    <div class="callout">
+      <strong>Why golf is harder than other skills to practice well:</strong>
+      the feedback loop is delayed &mdash; the ball takes 4–8 seconds to
+      land &mdash; and the feedback is ambiguous (was that shot bad because
+      of the swing or because of the lie, the wind, my alignment?). This is
+      why real-time video, launch monitor data, and specific target-based
+      drills matter so much in golf. The sport is fighting you on feedback;
+      you have to engineer it back in.
+    </div>
+  </section>
+
+  <!-- =========== CHAPTER 04 =========== -->
+  <section class="chapter" id="ch4">
+    <div class="ch-kicker">Section 04</div>
+    <h3>Block, random, variable &mdash; when each one works.</h3>
+    <p class="ch-lede">The most common practice mistake is using the wrong mode for the wrong goal.</p>
+
+    <p>
+      Motor-learning research distinguishes three practice structures.
+      Each one is valuable. Each one is appropriate for a different
+      phase of skill development. Using the wrong one at the wrong time
+      is why your practice doesn't transfer to the course.
+    </p>
+
+    <h4>Block practice — grooving a movement</h4>
+    <p>
+      Same club, same shot, many repetitions in a row. Twenty 7-irons to
+      the 150-yard target. Block practice is where most amateurs live
+      because it feels productive (you get better at the specific shot
+      in the specific context). It's actually useful only in one case:
+      <strong>when you're installing a brand new movement pattern</strong>
+      and need volume to write the initial motor file. Once the pattern
+      is installed, block practice stops producing gains and starts
+      producing the false confidence that your swing is "there."
+    </p>
+
+    <h4>Random practice — transferring to the course</h4>
+    <p>
+      Different club, different shot, every ball. 7-iron, 52°, driver,
+      hybrid, 9-iron, 56°. Random practice is harder in the moment &mdash;
+      you'll hit worse shots than with block practice &mdash; but the
+      research is overwhelming that <strong>random practice transfers to
+      performance far better than block practice does</strong>. The golf
+      course is random. Your practice should be too, most of the time.
+    </p>
+
+    <h4>Variable practice — adapting the swing</h4>
+    <p>
+      Same club, different targets, different shots. 7-iron high, 7-iron
+      low, 7-iron draw, 7-iron fade, 7-iron punch. Variable practice
+      builds the player's ability to manipulate trajectory, curve, and
+      spin within one club. It's closer to random than block but focused
+      on one tool at a time.
+    </p>
+
+    <div class="callout">
+      <strong>The single most common practice mistake:</strong> amateurs
+      use block practice (20 7-irons in a row) when they should be using
+      random (mix of clubs and shots). Block feels productive because the
+      shots get better within the set. Random feels unproductive because
+      you hit worse shots. <strong>Feeling productive in the moment and
+      being productive across sessions are nearly opposite</strong>. The
+      research on "contextual interference" &mdash; the technical term for
+      this tradeoff &mdash; goes back forty years and has never been
+      overturned.
+    </div>
+
+    <div class="drill-card">
+      <div class="dc-label">Drill</div>
+      <h5>The ballistic-bucket rotation</h5>
+      <p>
+        Bucket of balls. Before each shot: write down (or say out loud)
+        the club and the target. Pick them randomly. 7-iron, 150 flag.
+        52°, 85 yard target. Driver, left-side fairway. 9-iron, 135 with
+        a fade. You're doing random practice with an extra step
+        &mdash; pre-committing to the target before the swing.
+      </p>
+      <p>
+        What this builds: course-like decision cycles, not just swings.
+        The mental component of golf &mdash; picking a shot, committing,
+        executing &mdash; doesn't get rehearsed in block practice and
+        gets heavily rehearsed here. <em>Credit: variant of random
+        practice that several tour coaches recommend; the pre-commit
+        step is Ryan's.</em>
+      </p>
+    </div>
+  </section>
+
+  <!-- =========== CHAPTER 05 =========== -->
+  <section class="chapter" id="ch5">
+    <div class="ch-kicker">Section 05</div>
+    <h3>External attention beats internal attention.</h3>
+    <p class="ch-lede">Wulf's research is thirty years old and still ignored by most range sessions.</p>
+
+    <p>
+      <strong>Gabriele Wulf</strong>, a motor-learning researcher at
+      UNLV, has published the most consistent body of work in the field
+      on a single question: where should you focus your attention during
+      a skilled movement? Her answer, tested across hundreds of studies
+      and many sports, is that <strong>external focus beats internal
+      focus, almost always</strong>.
+    </p>
+
+    <p>
+      <em>Internal focus</em> means paying attention to your body:
+      "rotate your hips," "keep your left arm straight," "shift your
+      weight forward." <em>External focus</em> means paying attention to
+      something outside your body: the target, the ball, the club, a
+      point on the ground. The research is brutal &mdash; across
+      subjects, across sports, across skill levels, external focus
+      produces better movement, better outcomes, and faster learning.
+    </p>
+
+    <p>
+      This flies directly in the face of how most golf instruction is
+      delivered. "Keep your head still." "Fire your right side." "Feel
+      your weight in your left heel." All internal. All making your
+      swing slightly worse, according to the evidence.
+    </p>
+
+    <h4>What this means for practice</h4>
+    <p>
+      <strong>During the swing</strong>, focus on an external cue:
+      the ball, the target, the shape of the shot you want, the sound
+      of impact you want to hear. <strong>Between swings</strong>, by
+      all means think about internal mechanics, diagnose, adjust,
+      understand. But when you step into the shot, your attention should
+      leave your body and land on something outside it.
+    </p>
+
+    <p>
+      This is also why <strong>Hebron's approach to teaching</strong>
+      works when it does: he teaches through tasks and outcomes, not
+      body positions. "Can you make the ball curve left?" not "rotate
+      your forearms." The task focuses attention externally; the body
+      solves the task subcortically.
+    </p>
+
+    <div class="drill-card">
+      <div class="dc-label">Drill</div>
+      <h5>The target-only swing</h5>
+      <p>
+        Pick a target. Stand to the ball. Before you start the swing,
+        say (out loud or in your head) only one thing: <em>what the
+        shot will look like</em>. "Low draw to the left side of the
+        green." Then swing without any body thought.
+      </p>
+      <p>
+        What this builds: the habit of going into the shot with an
+        external cue. Most amateurs step in with one body thought;
+        replacing it with one shot-picture cue, consistently, often
+        produces the biggest one-session swing improvement I see.
+        <em>Credit: variant of Wulf's external-focus research applied
+        to golf; described in this form by Fred Shoemaker in
+        </em>Extraordinary Golf<em>.</em>
+      </p>
+    </div>
+  </section>
+
+  <!-- =========== CHAPTER 06 =========== -->
+  <section class="chapter" id="ch6">
+    <div class="ch-kicker">Section 06</div>
+    <h3>The range-to-course gap.</h3>
+    <p class="ch-lede">Why your range shots don't show up on hole 1 — and how to close the gap.</p>
+
+    <p>
+      Every golfer has had the experience of hitting it beautifully on
+      the range and then losing it on the first tee. This isn't nerves
+      &mdash; at least, not mostly. It's a structural gap between how
+      you practiced and what the course asks you to do.
+    </p>
+
+    <h4>The five differences between range and course</h4>
+    <ol>
+      <li><strong>Flat lie vs. slope.</strong> The range is flat. The course has 15° uphill lies, downhill lies, ball-above-feet, ball-below-feet. If you've never practiced an uneven lie, your first one in the round will be bad.</li>
+      <li><strong>One shot vs. one attempt.</strong> On the range, miss, reload, try again. On the course, miss is a stroke. The stakes change the swing.</li>
+      <li><strong>Same club vs. different clubs.</strong> Block-practice range amateurs almost never switch clubs every shot. The course makes you switch constantly.</li>
+      <li><strong>Warm swing vs. cold swing.</strong> Range has you warmed up. The first tee &mdash; and the tee after a long walk or a long wait &mdash; doesn't.</li>
+      <li><strong>No consequence vs. consequence.</strong> A range fade goes nowhere. A course fade goes in a hazard.</li>
+    </ol>
+
+    <p>
+      <strong>Closing the gap is mostly about adding back what the
+      range takes away.</strong> Hit uneven lies. Switch clubs every
+      shot. Play imaginary holes in your head where the bad miss
+      matters. Practice the first tee shot specifically &mdash; cold,
+      without a warmup. These all feel worse than normal range
+      practice. They transfer.
+    </p>
+
+    <div class="plan-card">
+      <h5>The "play the course" range session</h5>
+      <p>Once a month, instead of a normal range session, play the first nine holes of your home course in your head. Hit only one ball per shot. No do-overs.</p>
+      <ol>
+        <li><strong>Tee shot on 1.</strong> Pick the club you'd hit on the course. Pick the target. One ball. Call where it lands (fairway left, rough right, etc.).</li>
+        <li><strong>Approach.</strong> Based on where you put it, what's the realistic distance to the pin? Pick that club. Hit it. One ball.</li>
+        <li><strong>If you miss the green</strong>, walk to the chipping area or hit a half-wedge from a bare spot on the range. Short-game shot counted as one stroke.</li>
+        <li><strong>Putt in your head.</strong> Realistic: 2 putts on a good approach, 3 on a poor one.</li>
+        <li><strong>Repeat for 9 holes.</strong> Track your score. Notice where it diverges from your typical round.</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- =========== CHAPTER 07 =========== -->
+  <section class="chapter" id="ch7">
+    <div class="ch-kicker">Section 07</div>
+    <h3>The 90-minute practice plan.</h3>
+    <p class="ch-lede">A template for the session Ryan would build for you.</p>
+
+    <p>
+      Here's the session I design for my students when they ask "what
+      should I do at the range this week." Not magic &mdash; just all
+      five ideas from this module applied in sequence. 90 minutes total.
+      If you only have 45, do the first two blocks.
+    </p>
+
+    <div class="plan-card">
+      <h5>The 90-minute deliberate practice session</h5>
+      <ol>
+        <li><strong>0&ndash;10 min &mdash; Warm-up with intent.</strong> Start with wedges, half-swing, focused on rhythm. No technique thoughts. Hit to a specific target starting at shot 5. Work up to 7-iron by shot 15. <em>(Block &mdash; this is the one time block is appropriate, because you're loading the motor system.)</em></li>
+        <li><strong>10&ndash;30 min &mdash; One technical focus.</strong> Pick <em>one</em> swing variable you're working on with your coach (grip, posture, takeaway &mdash; one thing). Work on it with 7-iron to a specific target. Use three-in-a-row constraint from Section 2. Feedback loop: target-based. <em>(Variable practice on one club.)</em></li>
+        <li><strong>30&ndash;55 min &mdash; Random-bucket rotation.</strong> Pre-commit to club + target + shot shape, pull the club, execute. Cycle through different clubs. No two balls in a row with the same club. External attention only. <em>(Random practice, matching Section 4.)</em></li>
+        <li><strong>55&ndash;70 min &mdash; Short game.</strong> 10 minutes chipping to specific landing spots (one-club, one-swing). 5 minutes bunker. <em>(Shift to short-game skills; Module 03 covers the content.)</em></li>
+        <li><strong>70&ndash;90 min &mdash; Play the first 4 holes in your head.</strong> One ball per shot. Track it. <em>(Course simulation, matching Section 6.)</em></li>
+      </ol>
+    </div>
+
+    <p>
+      <strong>A few notes:</strong>
+    </p>
+    <ul>
+      <li>Skip the "empty the bucket" instinct. If you hit 40 balls in 90 minutes, that's plenty if the 40 were deliberate. 120 casual balls is worse than 40 intentional ones.</li>
+      <li>If you have video or a launch monitor, build it into the technical-focus block (minutes 10–30). Feedback is what the golf course can't give you; technology can.</li>
+      <li>Once a month, replace the whole session with the "play the course" protocol from Section 6. It's worse for groove, better for scoring.</li>
+      <li>The best practice sessions end with you knowing something specific you couldn't do at the start. If that's not true, the session didn't work.</li>
+    </ul>
+
+    <div class="callout">
+      <strong>Last thing:</strong> practice isn't the goal &mdash;
+      playing better golf is. If a practice session makes you less
+      confident or more confused, it's too hard too fast. Come back to
+      comfort for a day. The struggle zone has to be uncomfortable,
+      not overwhelming. The difference is whether you're slightly
+      stretched or fundamentally lost. Stretched is where you grow;
+      lost is where you quit.
+    </div>
+  </section>
+
+  <!-- =========== ATTRIBUTION =========== -->
+  <div class="attribution">
+    <h3>Sources &amp; further reading</h3>
+    <p>
+      This module draws specifically on:
+    </p>
+    <ul>
+      <li>
+        <strong>Michael Hebron &mdash; <em>See and Learn</em> and the
+        Hebron Golf library.</strong> Primary source for the explicit-vs-implicit
+        learning distinction, the task-based teaching approach, and the
+        "knowing and doing are different processes" principle. Hebron was
+        teaching the modern motor-learning view of golf decades before it
+        was mainstream.
+      </li>
+      <li>
+        <strong>Daniel Coyle &mdash; <em>The Talent Code</em> (2009),
+        <em>The Little Book of Talent</em> (2012).</strong> Primary
+        source for myelin-as-skill, deep practice, and the struggle zone.
+        <em>The Little Book of Talent</em> is the most accessible entry
+        &mdash; 52 short tips you can apply immediately.
+      </li>
+      <li>
+        <strong>K. Anders Ericsson &mdash; <em>Peak</em> (2016) and the
+        academic literature on deliberate practice.</strong> Primary source
+        for the four conditions of deliberate practice. The academic work
+        goes back to the 1990s; <em>Peak</em> is Ericsson's own
+        accessible-for-non-academics book.
+      </li>
+      <li>
+        <strong>Gabriele Wulf &mdash; research papers on attentional
+        focus.</strong> Primary source for the external-vs-internal-focus
+        finding. Her 2013 review paper ("Attentional focus and motor
+        learning: a review of 15 years") is the canonical summary. Her
+        book <em>Attention and Motor Skill Learning</em> (2007) is more
+        technical but worth reading for anyone in coaching.
+      </li>
+      <li>
+        <strong>Fred Shoemaker &mdash; <em>Extraordinary Golf</em>
+        (1996).</strong> Supporting source for the awareness-based approach
+        to practice. Shoemaker was applying motor-learning principles to
+        golf twenty years before the research caught up to him.
+      </li>
+    </ul>
+    <p>
+      Where I've cited a specific concept, drill, or finding, I've named
+      the source in the text. Where I haven't, the idea is either common
+      in the motor-learning literature or is my synthesis of what these
+      authors collectively argue.
+    </p>
+  </div>
+
+  <p style="text-align:center; margin-top:40px;">
+    <a href="bookshelf.html" style="color:var(--gold); text-decoration:none; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; font-size:12px;">
+      &larr; Back to the Teaching Library
+    </a>
+  </p>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  RRG.mountLibrary();
+</script>
+</body>
+</html>
