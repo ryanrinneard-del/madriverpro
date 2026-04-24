@@ -81,6 +81,31 @@
     color: rgba(255,255,255,0.55); font-weight: 500;
   }
 
+  /* ---- INDEPENDENT-INTERPRETATION DISCLAIMER ---- */
+  .primer-disclaimer {
+    background: #FDF6F4;
+    border: 1px solid #E5D0CB;
+    border-left: 4px solid #C76757;
+    border-radius: 10px;
+    padding: 22px 28px;
+    margin: 0 0 28px;
+  }
+  .primer-disclaimer .pd-label {
+    font-size: 11px; letter-spacing: 0.22em; color: #9A3D2F;
+    font-weight: 700; text-transform: uppercase; margin-bottom: 10px;
+  }
+  .primer-disclaimer p {
+    font-size: 14px; line-height: 1.6; color: var(--navy-mid);
+    margin: 0 0 10px;
+  }
+  .primer-disclaimer p:last-child { margin-bottom: 0; }
+  .primer-disclaimer p strong { color: var(--navy); }
+  .primer-disclaimer a {
+    color: var(--gold); font-weight: 700;
+    text-decoration: underline; text-underline-offset: 3px;
+  }
+  .primer-disclaimer a:hover { color: var(--navy); }
+
   /* ---- FROM THE COACH NOTE ---- */
   .coach-note {
     background: #F7F2E8;
@@ -361,11 +386,30 @@
 
   <!-- ===================== BOOK HERO ===================== -->
   <div class="book-hero">
-    <span class="vol">Bookshelf · Volume 02 · Primer</span>
-    <h1>The Golfing Machine.</h1>
+    <span class="vol">Teaching Library · Volume 02 · Primer</span>
+    <h1>A Component-Based Model of the Golf Swing.</h1>
     <div class="subtitle">The most misunderstood golf book ever written &mdash; translated.</div>
     <div class="gold-dash"></div>
-    <div class="attrib">A primer on Homer Kelley's 1969 classic</div>
+    <div class="attrib">Inspired by Homer Kelley's <em>The Golfing Machine</em> (1969)</div>
+  </div>
+
+  <!-- ===================== DISCLAIMER ===================== -->
+  <div class="primer-disclaimer">
+    <div class="pd-label">Independent Interpretation</div>
+    <p>
+      This primer is Ryan Rinneard's independent educational summary of the
+      component-based swing framework published in Homer Kelley's 1969 book
+      <em>The Golfing Machine</em>. It is <strong>not an official publication</strong>
+      of Homer Kelley's estate, The Golfing Machine LLC, or the Authorized
+      Instructor network. Concepts below are described in Ryan's own words;
+      the original framework is attributed to Homer Kelley throughout.
+    </p>
+    <p>
+      <strong>Read the original.</strong> This primer covers roughly five
+      concepts from a 216-component catalog. The full book offers precision
+      and depth this summary cannot.
+      <a href="https://www.amazon.com/s?k=The+Golfing+Machine+Homer+Kelley" target="_blank" rel="noopener">Find it on Amazon &rarr;</a>
+    </p>
   </div>
 
   <!-- ===================== COACH NOTE ===================== -->

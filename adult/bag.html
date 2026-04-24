@@ -209,6 +209,9 @@
 <div id="nav-mount"></div>
 
 <main class="container">
+
+  <div id="coach-banner-mount"></div>
+
   <div class="page-header">
     <div class="page-label">MY BAG</div>
     <h1 class="page-title">Map My Bag</h1>
@@ -345,8 +348,34 @@
 <script src="assets/app.js"></script>
 <script>
   (async () => {
-    const user = await RRG.mount('bag');
-    if (!user) return;
+    const signedInUser = await RRG.mount('bag');
+    if (!signedInUser) return;
+
+  /* Coach-edit mode: ?userId=X + coach role → edit this player's bag. */
+  const requestedId = RRG.qs('userId');
+  const isCoachEditing = requestedId && signedInUser.role === 'coach' && requestedId !== signedInUser.id;
+  let user = signedInUser;
+  if (isCoachEditing) {
+    try {
+      const target = await RRG.users.get(requestedId);
+      if (target) {
+        user = target;
+        document.getElementById('coach-banner-mount').innerHTML = `
+          <div class="coach-banner">
+            <div>
+              <div class="cb-label">Coach Edit Mode · VIP Onboard</div>
+              <div class="cb-player">Bag for ${RRG.esc(target.name || target.email)}</div>
+            </div>
+            <div class="cb-nav">
+              <a href="profile.html?userId=${encodeURIComponent(target.id)}">Profile</a>
+              <a class="cb-current">Bag</a>
+              <a href="wedge-matrix.html?userId=${encodeURIComponent(target.id)}">Wedge Matrix</a>
+            </div>
+            <a href="coach.html" class="cb-exit">&larr; Back to roster</a>
+          </div>`;
+      }
+    } catch (err) { console.warn('coach edit: could not load target', err); }
+  }
 
   document.getElementById('player-name').value = user.name || '';
   document.getElementById('built-on').value = new Date().toLocaleDateString();
@@ -387,8 +416,8 @@
   if (Array.isArray(cloudBag) && cloudBag.length) {
     bag = cloudBag;
     hadCloud = true;
-  } else {
-    // 2. Legacy localStorage fallback — will get pushed to cloud on next save
+  } else if (!isCoachEditing) {
+    // 2. Legacy localStorage fallback — only for the player's own view
     try { bag = JSON.parse(localStorage.getItem(BAG_KEY) || '[]'); } catch {}
   }
 

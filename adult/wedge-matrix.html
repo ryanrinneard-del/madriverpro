@@ -259,6 +259,9 @@
 <div id="nav-mount"></div>
 
 <main class="container">
+
+  <div id="coach-banner-mount"></div>
+
   <div class="page-header">
     <div class="page-label">FITTING TOOL · FULLY EDITABLE</div>
     <h1 class="page-title">Your Wedge Matrix</h1>
@@ -462,8 +465,36 @@
 <script src="assets/app.js"></script>
 <script>
   (async () => {
-    const user = await RRG.mount('wedge');
-    if (!user) return;
+    const signedInUser = await RRG.mount('wedge');
+    if (!signedInUser) return;
+
+  /* Coach-edit mode: if ?userId=X is on the URL AND the signed-in user is
+     a coach, edit that player's wedge matrix on their behalf. Skip localStorage
+     entirely — the matrix belongs to the player, not this device. */
+  const requestedId = RRG.qs('userId');
+  const isCoachEditing = requestedId && signedInUser.role === 'coach' && requestedId !== signedInUser.id;
+  let user = signedInUser;
+  if (isCoachEditing) {
+    try {
+      const target = await RRG.users.get(requestedId);
+      if (target) {
+        user = target;
+        document.getElementById('coach-banner-mount').innerHTML = `
+          <div class="coach-banner">
+            <div>
+              <div class="cb-label">Coach Edit Mode · VIP Onboard</div>
+              <div class="cb-player">Wedge Matrix for ${RRG.esc(target.name || target.email)}</div>
+            </div>
+            <div class="cb-nav">
+              <a href="profile.html?userId=${encodeURIComponent(target.id)}">Profile</a>
+              <a href="bag.html?userId=${encodeURIComponent(target.id)}">Bag</a>
+              <a class="cb-current">Wedge Matrix</a>
+            </div>
+            <a href="coach.html" class="cb-exit">&larr; Back to roster</a>
+          </div>`;
+      }
+    } catch (err) { console.warn('coach edit: could not load target', err); }
+  }
 
   document.getElementById('player-name').value = user.name || '';
   document.getElementById('built-on').value = new Date().toLocaleDateString();
@@ -472,7 +503,9 @@
      Source of truth: profiles.profile_json.wedge_matrix = { wedges, yardages }
      localStorage acts as a warm cache only, so edits feel instant between page
      loads and the matrix survives a bad network moment. On first load we
-     migrate any legacy localStorage data into the cloud automatically. */
+     migrate any legacy localStorage data into the cloud automatically.
+     When in coach-edit mode, localStorage is bypassed — we read and write
+     cloud only, so we never mix the player's data with the coach's device. */
   const WEDGE_LS_KEY = 'rrg_wedges_v2_' + user.id;
   const YARD_LS_KEY  = 'rrg_wedge_yd_v2_' + user.id;
 
@@ -486,8 +519,8 @@
     wedges = cloud.wedges;
     yardages = cloud.yardages || {};
     hadCloud = true;
-  } else {
-    // 2. Legacy localStorage fallback (will get pushed to cloud on next save)
+  } else if (!isCoachEditing) {
+    // 2. Legacy localStorage fallback (only for the player's own view)
     try { wedges = JSON.parse(localStorage.getItem(WEDGE_LS_KEY) || '[]'); } catch {}
     try { yardages = JSON.parse(localStorage.getItem(YARD_LS_KEY) || '{}'); } catch {}
   }

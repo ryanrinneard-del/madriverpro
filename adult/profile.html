@@ -14,6 +14,8 @@
 
 <main class="container-narrow">
 
+  <div id="coach-banner-mount"></div>
+
   <div class="page-header">
     <div class="page-label">CONFIDENTIAL PROFILE</div>
     <h1 class="page-title">Know Your Game</h1>
@@ -266,8 +268,35 @@
 <script src="assets/app.js"></script>
 <script>
   (async () => {
-    const user = await RRG.mount('profile');
-    if (!user) return;
+    const signedInUser = await RRG.mount('profile');
+    if (!signedInUser) return;
+
+  /* Coach-edit mode: ?userId=X + coach role → transcribe this player's profile
+     (paper KYG, handicap, tier, etc.) on their behalf. */
+  const requestedId = RRG.qs('userId');
+  const isCoachEditing = requestedId && signedInUser.role === 'coach' && requestedId !== signedInUser.id;
+  let user = signedInUser;
+  if (isCoachEditing) {
+    try {
+      const target = await RRG.users.get(requestedId);
+      if (target) {
+        user = target;
+        document.getElementById('coach-banner-mount').innerHTML = `
+          <div class="coach-banner">
+            <div>
+              <div class="cb-label">Coach Edit Mode · VIP Onboard</div>
+              <div class="cb-player">Profile for ${RRG.esc(target.name || target.email)}</div>
+            </div>
+            <div class="cb-nav">
+              <a class="cb-current">Profile</a>
+              <a href="bag.html?userId=${encodeURIComponent(target.id)}">Bag</a>
+              <a href="wedge-matrix.html?userId=${encodeURIComponent(target.id)}">Wedge Matrix</a>
+            </div>
+            <a href="coach.html" class="cb-exit">&larr; Back to roster</a>
+          </div>`;
+      }
+    } catch (err) { console.warn('coach edit: could not load target', err); }
+  }
 
   if (RRG.qs('welcome')) {
     document.getElementById('welcome-note').style.display = 'block';

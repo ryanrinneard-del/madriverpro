@@ -207,20 +207,27 @@ RRG.auth = {
           ...(profile.profile_json || {}),
           ...inviteRow.pending_profile,
         };
-        const { data: updated } = await RRG.sb
+        console.log('[VIP] Merging pending_profile keys:', Object.keys(inviteRow.pending_profile));
+        const { data: updated, error: updateErr } = await RRG.sb
           .from('profiles')
           .update({ profile_json: mergedJson })
           .eq('id', profile.id)
           .select()
           .maybeSingle();
+        if (updateErr) {
+          console.warn('[VIP] profile update error:', updateErr);
+        }
         if (updated) {
+          console.log('[VIP] pending_profile merge OK → profile_json keys:', Object.keys(updated.profile_json || {}));
           RRG.auth._profileCache = updated;
           return updated;
         }
         profile.profile_json = mergedJson;
+      } else {
+        console.log('[VIP] No pending_profile for code', meta.pending_invite_code, '(regular signup)');
       }
     } catch (err) {
-      console.warn('VIP pending_profile merge failed', err);
+      console.warn('[VIP] pending_profile merge failed', err);
     }
 
     RRG.auth._profileCache = profile;

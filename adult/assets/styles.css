@@ -196,6 +196,70 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; }
 }
 .path-missing-hint a:hover { color: var(--navy); }
 
+/* ===== COACH EDIT BANNER =====
+   Shown at the top of any page where a coach is editing on behalf of a
+   player (via ?userId=X). Prominent so there's no confusion about whose
+   data you're touching. */
+.coach-banner {
+  background: linear-gradient(180deg, var(--navy) 0%, #162E54 100%);
+  color: #fff;
+  border-radius: 12px;
+  padding: 16px 22px;
+  margin-bottom: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  border-top: 3px solid var(--gold);
+}
+.coach-banner .cb-label {
+  font-size: 10px;
+  letter-spacing: 2.4px;
+  color: var(--gold);
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+.coach-banner .cb-player {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 18px;
+  color: #fff;
+  font-weight: 600;
+  line-height: 1.2;
+}
+.coach-banner .cb-nav {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.coach-banner .cb-nav a {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 700;
+  text-decoration: none;
+  padding: 6px 12px;
+  border: 1px solid var(--gold);
+  border-radius: 999px;
+}
+.coach-banner .cb-nav a:hover {
+  background: var(--gold);
+  color: var(--navy);
+}
+.coach-banner .cb-nav a.cb-current {
+  background: var(--gold);
+  color: var(--navy);
+}
+.coach-banner .cb-exit {
+  font-size: 12px;
+  color: rgba(255,255,255,0.7);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.coach-banner .cb-exit:hover { color: #fff; }
+
 /* ===== INFO TOOLTIP (ⓘ with hover title) ===== */
 .info-tip {
   display: inline-flex;
