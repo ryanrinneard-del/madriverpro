@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Putting — Module 03 · Short Game</title>
+<meta name="description" content="Ryan Rinneard's framework for putting: green reading, lag control, 6-foot-and-in, and why the stroke-shape debate is the wrong argument. Draws on Stan Utley and Dave Pelz.">
+<meta property="og:title" content="Putting · Module 03 · RR Golf Performance">
+<meta property="og:description" content="Ryan's putting framework — green reading, lag control, and 6-foot-and-in. Draws on Utley and Pelz.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://rrgolfperformance.com/improve/sg-putting.html">
+<meta property="og:image" content="https://madriverpro.com/images/rr-logo.png">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  .book-hero {
+    background: linear-gradient(180deg, var(--navy) 0%, #162E54 100%);
+    color: #fff; border-radius: 14px;
+    padding: 56px 44px 48px; margin-bottom: 36px;
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .book-hero::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--gold);
+  }
+  .book-hero .vol {
+    display: inline-block;
+    font-size: 11px; letter-spacing: 0.24em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase;
+    padding: 5px 16px; border: 1px solid var(--gold);
+    border-radius: 999px; margin-bottom: 20px;
+  }
+  .book-hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(44px, 7vw, 68px);
+    font-weight: 600; color: #fff;
+    margin: 0; line-height: 1.05; letter-spacing: -0.01em;
+  }
+  .book-hero .subtitle {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; font-size: 20px;
+    color: rgba(255,255,255,0.78);
+    margin: 14px auto 22px; max-width: 680px;
+  }
+  .book-hero .gold-dash {
+    width: 60px; height: 2px; background: var(--gold); margin: 0 auto 22px;
+  }
+  .book-hero .attrib {
+    font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(255,255,255,0.55); font-weight: 500;
+  }
+
+  .primer-disclaimer {
+    background: #FDF6F4; border: 1px solid #E5D0CB;
+    border-left: 4px solid #C76757; border-radius: 10px;
+    padding: 22px 28px; margin: 0 0 28px;
+  }
+  .primer-disclaimer .pd-label {
+    font-size: 11px; letter-spacing: 0.22em; color: #9A3D2F;
+    font-weight: 700; text-transform: uppercase; margin-bottom: 10px;
+  }
+  .primer-disclaimer p { margin: 0 0 10px; font-size: 14px; line-height: 1.65; color: var(--navy-mid); }
+  .primer-disclaimer p:last-child { margin-bottom: 0; }
+  .primer-disclaimer p strong { color: var(--navy); }
+
+  .coach-note {
+    background: #FAF6EC; border: 1px solid #E5DAB8;
+    border-radius: 10px; padding: 24px 30px 20px;
+    margin: 0 0 36px; position: relative;
+  }
+  .coach-note .cn-label {
+    font-size: 11px; letter-spacing: 0.22em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 12px;
+  }
+  .coach-note p {
+    margin: 0 0 14px; font-size: 15px; line-height: 1.7;
+    color: var(--navy-mid);
+    font-family: 'Playfair Display', Georgia, serif; font-weight: 400;
+  }
+  .coach-note p strong { color: var(--navy); font-weight: 600; }
+  .coach-note .sign-off {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; font-size: 16px; color: var(--navy);
+    text-align: right; margin-top: 6px;
+  }
+
+  .book-toc {
+    background: var(--white); border: 1px solid var(--rule);
+    border-radius: 10px; padding: 24px 28px; margin: 0 0 40px;
+  }
+  .book-toc h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 20px; color: var(--navy); margin: 0 0 14px;
+  }
+  .book-toc ol { list-style: none; padding: 0; margin: 0; counter-reset: ch; }
+  .book-toc ol li {
+    display: flex; gap: 18px; padding: 10px 0;
+    border-bottom: 1px solid var(--rule);
+    font-size: 14px; line-height: 1.5;
+  }
+  .book-toc ol li:last-child { border-bottom: none; }
+  .book-toc .ch-num {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 18px; color: var(--gold);
+    font-weight: 700; min-width: 36px;
+  }
+  .book-toc .ch-body a { color: var(--navy); font-weight: 600; text-decoration: none; }
+  .book-toc .ch-body a:hover { color: var(--gold); }
+  .book-toc .ch-body span { color: var(--navy-mid); }
+
+  .chapter {
+    margin-bottom: 48px; padding-top: 20px;
+    border-top: 1px solid var(--rule);
+  }
+  .chapter:first-of-type { border-top: none; padding-top: 0; }
+  .chapter .ch-kicker {
+    font-size: 11px; letter-spacing: 0.22em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 10px;
+  }
+  .chapter h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 30px; color: var(--navy); margin: 0 0 10px;
+    line-height: 1.2; font-weight: 600;
+  }
+  .chapter .ch-lede {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; font-size: 17px;
+    color: var(--navy-mid); margin-bottom: 22px;
+    line-height: 1.6;
+  }
+  .chapter p { font-size: 15px; line-height: 1.7; color: var(--navy-mid); margin: 0 0 14px; }
+  .chapter p strong { color: var(--navy); }
+  .chapter h4 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 20px; color: var(--navy); margin: 22px 0 10px;
+    font-weight: 600;
+  }
+  .chapter ul, .chapter ol { font-size: 15px; line-height: 1.7; color: var(--navy-mid); margin: 10px 0 16px 22px; }
+  .chapter ul li, .chapter ol li { margin-bottom: 6px; }
+
+  .drill-card {
+    background: var(--cream); border: 1px solid var(--rule);
+    border-left: 3px solid var(--gold); border-radius: 8px;
+    padding: 18px 22px; margin: 18px 0;
+  }
+  .drill-card .dc-label {
+    font-size: 10px; letter-spacing: 0.2em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 6px;
+  }
+  .drill-card h5 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 18px; color: var(--navy); margin: 0 0 8px;
+    font-weight: 600;
+  }
+  .drill-card p { font-size: 14px; margin: 0 0 8px; }
+  .drill-card p:last-child { margin-bottom: 0; }
+
+  .callout {
+    background: #F0F6EC; border-left: 3px solid #6B8B4E;
+    border-radius: 8px; padding: 16px 20px; margin: 16px 0;
+    font-size: 14px; line-height: 1.6; color: var(--navy-mid);
+  }
+  .callout strong { color: #4C6B30; }
+
+  .cite {
+    font-size: 13px; color: var(--mid-grey); font-style: italic;
+    margin-top: 6px;
+  }
+
+  .attribution {
+    margin-top: 44px; padding: 28px 30px;
+    background: var(--cream); border-radius: 10px;
+    border: 1px solid var(--rule);
+  }
+  .attribution h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 20px; color: var(--navy); margin: 0 0 12px;
+  }
+  .attribution p { font-size: 14px; line-height: 1.65; color: var(--navy-mid); margin: 0 0 10px; }
+  .attribution ul {
+    list-style: none; padding: 0; margin: 12px 0 0;
+    font-size: 14px; color: var(--navy-mid);
+  }
+  .attribution ul li { margin-bottom: 8px; }
+  .attribution ul li strong { color: var(--navy); }
+
+  .breadcrumb {
+    font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--mid-grey); margin-bottom: 18px;
+  }
+  .breadcrumb a { color: var(--mid-grey); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--gold); }
+  .breadcrumb span { margin: 0 8px; }
+</style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container">
+
+  <div class="breadcrumb">
+    <a href="index.html">Library</a><span>›</span><a href="bookshelf.html">Teaching Library</a><span>›</span><a href="module-03-short-game.html">Module 03 · Short Game</a><span>›</span>Putting
+  </div>
+
+  <div class="book-hero">
+    <span class="vol">Module 03 · Skill 01</span>
+    <h1>Putting.</h1>
+    <div class="subtitle">The stroke is easier than the read. Lag control is harder than anybody admits. And 6-foot-and-in wins tournaments.</div>
+    <div class="gold-dash"></div>
+    <div class="attrib">Primary source: Stan Utley &middot; supporting: Dave Pelz</div>
+  </div>
+
+  <div class="primer-disclaimer">
+    <div class="pd-label">Independent interpretation</div>
+    <p>
+      This page is Ryan's teaching framework for putting, written in his own
+      words. It draws on the published work of <strong>Stan Utley</strong> (<em>The
+      Art of Putting</em>, 2006) and <strong>Dave Pelz</strong> (<em>Putt Like the
+      Pros</em>, 1989; <em>The Short Game Bible</em>, 1999). Both authors are
+      cited specifically where their ideas appear.
+    </p>
+    <p>
+      <strong>This is not an authorized publication of Stan Utley, Dave Pelz,
+      or any instruction system bearing their names.</strong> If the concepts
+      below land for you, buy the original books &mdash; each author has spent
+      a lifetime teaching what fits here in a few paragraphs.
+    </p>
+  </div>
+
+  <div class="coach-note">
+    <div class="cn-label">From the coach</div>
+    <p>
+      Putting is the skill with the highest ratio of complaining to practicing.
+      Students tell me their putting is costing them shots and then they spend
+      45 minutes on full swing and five minutes on the practice green. If
+      you read one skill page in this module all the way through, make it
+      this one &mdash; and then go roll balls.
+    </p>
+    <p>
+      The arc-vs-straight debate is the wrong argument. Both work. Tour
+      players have won majors with both. What matters is that the face is
+      square to the target line at impact and the speed is right. Speed more
+      than line &mdash; <strong>a perfect-line putt with bad speed misses; a
+      slightly-mis-read putt with good speed gets close.</strong> Utley writes
+      this in his first chapter, and a decade of strokes-gained data has
+      confirmed it.
+    </p>
+    <p>
+      There are three things I want you to get better at, in order: <strong>lag
+      control from distance, six-foot-and-in, and green reading</strong>.
+      That's the whole module. Five sections below, one drill per section.
+    </p>
+    <div class="sign-off">&mdash; Ryan</div>
+  </div>
+
+  <div class="book-toc">
+    <h2>In this section</h2>
+    <ol>
+      <li><div class="ch-num">01</div><div class="ch-body"><a href="#ch1">Why the stroke debate doesn't matter</a> <span>&mdash; arc vs. straight, and the two things that actually count.</span></div></li>
+      <li><div class="ch-num">02</div><div class="ch-body"><a href="#ch2">The setup that lets the stroke happen</a> <span>&mdash; eyes, hands, ball position, posture.</span></div></li>
+      <li><div class="ch-num">03</div><div class="ch-body"><a href="#ch3">Lag control — the skill that actually lowers scores</a> <span>&mdash; why distance from 25+ feet is the biggest scoring lever.</span></div></li>
+      <li><div class="ch-num">04</div><div class="ch-body"><a href="#ch4">Six-foot-and-in — the make rate that matters</a> <span>&mdash; the short putts that forgive everything else.</span></div></li>
+      <li><div class="ch-num">05</div><div class="ch-body"><a href="#ch5">Green reading as a discipline</a> <span>&mdash; why most amateurs under-read break and what to do about it.</span></div></li>
+    </ol>
+  </div>
+
+  <!-- =========== CHAPTER 01 =========== -->
+  <section class="chapter" id="ch1">
+    <div class="ch-kicker">Section 01</div>
+    <h3>Why the stroke debate doesn't matter.</h3>
+    <p class="ch-lede">Arc or straight? Both work. Both have won majors. Here's what actually matters.</p>
+
+    <p>
+      Walk into a golf shop and someone will try to sell you a putter that
+      promises a pure-straight-back-straight-through stroke. Walk onto a tour
+      range and you'll see twenty different strokes, most of them arced, all
+      of them good. The question "which stroke is right?" is the wrong
+      question.
+    </p>
+
+    <p>
+      <strong>Stan Utley's argument</strong> &mdash; and this is his core
+      insight from <em>The Art of Putting</em> &mdash; is that the putter naturally
+      wants to swing on an arc because the shaft is angled, not vertical.
+      Forcing the putter to travel straight back and straight through
+      requires manipulation with the hands, and hands are what produce face
+      rotation, which is what produces misses. <strong>Let the arc happen,
+      let the face rotate with the arc, and you've got a stroke you can
+      repeat under pressure.</strong>
+    </p>
+
+    <p>
+      <strong>Dave Pelz's data</strong> from <em>Putt Like the Pros</em> says
+      something similar but from a different angle: the two variables that
+      determine whether a putt goes in are <strong>face angle at impact</strong>
+      (the biggest factor &mdash; about 83% of your direction) and
+      <strong>path</strong> (the remaining 17%). Speed is separate and governs
+      distance. Everything else &mdash; stance, grip, posture, eye position
+      &mdash; exists to help you repeat a square face at impact.
+    </p>
+
+    <p>
+      Put those two teachers together and the answer is: <strong>pick a
+      stroke you can repeat, and check two things only on every putt &mdash;
+      face square at impact, speed matched to the read.</strong> If the face
+      is square and the speed is right, the line is right. Everything else
+      is preference.
+    </p>
+
+    <div class="callout">
+      <strong>The one thing to practice:</strong> line up a putt, close your
+      eyes before the stroke, putt it, then open your eyes. Check how square
+      your finish is to the target line. If your finish is square, your impact
+      almost certainly was too. If it finishes left or right, that's the fault
+      to chase. This drill is attributed to Utley and it reveals more about
+      your stroke in five minutes than any video lesson.
+    </div>
+  </section>
+
+  <!-- =========== CHAPTER 02 =========== -->
+  <section class="chapter" id="ch2">
+    <div class="ch-kicker">Section 02</div>
+    <h3>The setup that lets the stroke happen.</h3>
+    <p class="ch-lede">You can't fix a bad stroke. You can fix the setup that causes the bad stroke.</p>
+
+    <p>
+      Most putting misses start before the stroke does. If your eyes are
+      inside the ball line, you'll pull putts. If your eyes are outside,
+      you'll push them. If your ball is too far forward, you'll hit up on it
+      with an open face. If it's too far back, you'll hit down on it and
+      skid the ball instead of rolling it.
+    </p>
+
+    <h4>The four check-points</h4>
+    <ul>
+      <li><strong>Eyes directly over the ball.</strong> Drop a ball from the bridge of your nose and it should land on or just inside the ball at address. Utley's test; still the best one.</li>
+      <li><strong>Ball position just forward of center.</strong> About one ball width. Forward enough to catch the ball on a slight upstroke &mdash; which gets the ball rolling immediately instead of skidding &mdash; but not so far forward that you have to manipulate the face closed at impact.</li>
+      <li><strong>Hands neutral, slight forward lean.</strong> The grip pressure stays light (Utley: "hold it like a small bird"). The shaft leans slightly toward the target so the loft of the putter is working correctly. Not a big forward press &mdash; a small one.</li>
+      <li><strong>Feet and shoulders parallel to the target line.</strong> Not the hole &mdash; the target line, which on a breaking putt is several inches to one side of the hole. Where you aim your shoulders is where the putter naturally travels. If your shoulders are open, your path is out-to-in and you'll pull it.</li>
+    </ul>
+
+    <p>
+      <strong>Here's the thing most players miss:</strong> the setup is not
+      the same for every putter. A face-balanced mallet and a toe-hanging
+      blade want slightly different things from your hands. If you've never
+      had someone look at how your putter matches your stroke, ask me
+      &mdash; it's a five-minute conversation that often saves five strokes.
+    </p>
+
+    <div class="drill-card">
+      <div class="dc-label">Drill</div>
+      <h5>The alignment-stick rails</h5>
+      <p>
+        Lay two alignment sticks on the practice green, parallel to each
+        other, just wider than your putter head. Set your ball in the middle,
+        a hole about 6 feet away on the target line. Stroke putts in the rail.
+      </p>
+      <p>
+        What you'll feel: if your stroke is cutting across the ball
+        (out-to-in), the putter will hit the outer rail at some point.
+        If it's too in-to-out, the heel catches the inner rail. Adjust
+        setup and alignment, not stroke, until the putter swings freely
+        inside the rails. <em>Credit: this drill is ubiquitous; both Utley
+        and Pelz describe versions of it.</em>
+      </p>
+    </div>
+  </section>
+
+  <!-- =========== CHAPTER 03 =========== -->
+  <section class="chapter" id="ch3">
+    <div class="ch-kicker">Section 03</div>
+    <h3>Lag control &mdash; the skill that actually lowers scores.</h3>
+    <p class="ch-lede">Make fewer three-putts and your handicap drops. Here's how.</p>
+
+    <p>
+      <strong>Pelz's data</strong> from years of pro-am measurement: a
+      scratch golfer makes roughly 5% of putts from 25 feet. A 20-handicap
+      makes roughly 3%. The difference at the scoring level isn't in the
+      make rate &mdash; both groups mostly miss &mdash; it's in the miss
+      distance. Pros leave themselves a tap-in. Amateurs leave themselves
+      another 4-foot putt.
+    </p>
+
+    <p>
+      <strong>Three-putts are the single biggest hidden leak in a mid-handicap
+      round.</strong> If you can reduce three-putts by half, you pick up two
+      to three strokes per round without getting better at anything except
+      distance control.
+    </p>
+
+    <h4>How to actually get better at distance</h4>
+    <p>
+      Speed is a feel &mdash; but feel is built through calibration, not
+      imagination. The mistake most amateurs make is putting at a hole from
+      30 feet and using the hole as their only feedback loop. That's too
+      noisy. Green speed varies hole to hole. Slope adds confusion.
+      <strong>Take the hole out of the equation.</strong>
+    </p>
+
+    <div class="drill-card">
+      <div class="dc-label">Drill</div>
+      <h5>The gate-to-gate ladder</h5>
+      <p>
+        Set up three tees on the practice green: one at 10 paces (roughly
+        30 feet), one at 15 paces (45 feet), one at 20 paces (60 feet). Put a
+        ball at your feet. Stroke one putt to each distance, trying to stop
+        within a 3-foot circle of each tee. Repeat until you hit all three
+        distances back-to-back without missing the circle.
+      </p>
+      <p>
+        What this builds: a library of <em>three lengths of stroke</em> that
+        you can trust on the course. When you get to a 45-foot lag putt on
+        hole 7 with a 5% slope, you're not computing &mdash; you're pulling
+        up the "middle stroke" and adjusting for slope. <em>Credit: variant
+        of Pelz's distance-calibration system; the specific 10/15/20
+        structure is Ryan's.</em>
+      </p>
+    </div>
+
+    <div class="callout">
+      <strong>The rule of thumb that matters:</strong> aim to hit lag putts
+      so they would finish 12–18 inches past the hole with no hole in the
+      ground. Pelz's research found this is the speed at which break is
+      most predictable and the percentage of putts that go in on a true
+      read is highest. A putt that dies at the hole wobbles off-line;
+      a putt that races 4 feet past takes too much of the hole out.
+    </div>
+  </section>
+
+  <!-- =========== CHAPTER 04 =========== -->
+  <section class="chapter" id="ch4">
+    <div class="ch-kicker">Section 04</div>
+    <h3>Six-foot-and-in &mdash; the make rate that matters.</h3>
+    <p class="ch-lede">The short putts that forgive everything else.</p>
+
+    <p>
+      A tour pro makes roughly 70% of putts from 6 feet. A scratch amateur
+      makes about 60%. A 15-handicap makes about 45%. The gap from scratch
+      to tour is real but smaller than the gap from mid-handicap to scratch.
+      <strong>If your short-putt percentage goes from 45% to 55%, you save
+      roughly two strokes per round.</strong> That's bigger than most
+      full-swing fixes.
+    </p>
+
+    <p>
+      Short putts fail for three reasons, in descending order of frequency:
+    </p>
+    <ol>
+      <li><strong>Deceleration.</strong> The player gets tentative, slows the putter through impact, and the face wobbles. Miss left or miss right depending on which hand is dominant.</li>
+      <li><strong>Bad line read.</strong> Most amateurs play too straight inside 6 feet. Small breaks on fast greens matter more at short distance than long.</li>
+      <li><strong>Flinch.</strong> The yips. Mental pattern where the player subconsciously expects to miss and their body delivers. Real. Fixable. Different problem.</li>
+    </ol>
+
+    <h4>The fix for the first two</h4>
+    <p>
+      Commit to the line. Make a decision about where the ball starts and
+      accept you could be wrong. If you're wrong, you're wrong &mdash; roll
+      the putt with conviction and move on. The putter-head pace through
+      impact should be <strong>noticeably faster than the pace going back</strong>.
+      Utley calls this "accelerating through the ball"; Pelz's data confirms
+      that a faster-than-takeaway follow-through produces the most repeatable
+      face angle.
+    </p>
+
+    <div class="drill-card">
+      <div class="dc-label">Drill</div>
+      <h5>The 20-in-a-row</h5>
+      <p>
+        Place 20 balls in a circle around the hole, all at 3 feet. Make all
+        20 before you can go home. If you miss any, start over. First
+        time might take 45 minutes. Third time takes 6 minutes.
+      </p>
+      <p>
+        What this builds: unconscious trust at 3 feet, which is the distance
+        that reveals deceleration and flinch fastest. Once 3 feet is
+        automatic, move to 4 feet. Then 5. Then 6. <em>Credit: this drill
+        appears in both Pelz and Utley, with minor variations. The
+        "can't-go-home-until-done" variant is on me.</em>
+      </p>
+    </div>
+  </section>
+
+  <!-- =========== CHAPTER 05 =========== -->
+  <section class="chapter" id="ch5">
+    <div class="ch-kicker">Section 05</div>
+    <h3>Green reading as a discipline.</h3>
+    <p class="ch-lede">Most amateurs under-read break by about half. Here's why and what to do.</p>
+
+    <p>
+      <strong>Pelz's research</strong> from the 1990s &mdash; still cited by
+      every modern instructor &mdash; found that amateurs systematically
+      under-read break on slow greens and under-speed on fast ones. Your
+      eye sees less slope than is actually there. A putt that looks like
+      it breaks 6 inches probably breaks 10. This matters most on breaking
+      putts from 15–30 feet where the amateur plays 4 inches of break, the
+      putt breaks 12 inches, and the ball finishes on the low side of the
+      hole every time.
+    </p>
+
+    <h4>Three things to do every time</h4>
+    <ol>
+      <li><strong>Read from low to high, not high to low.</strong> From below the hole you can see the slope most clearly. The uphill side lies to your eye.</li>
+      <li><strong>Pick an apex, not a line.</strong> The apex is the highest point the ball will travel on the way to the hole. Aim at the apex and let the ball fall into the cup. Thinking about the ball's entire curve is too many decisions; committing to one point is one decision.</li>
+      <li><strong>Play more break than you think.</strong> If your first instinct says 6 inches, play 9. Miss on the high side. A high-side miss has two ways to go in (edge and top of cup); a low-side miss has one way (edge only) and usually rolls further past because the ball has accelerated down the slope.</li>
+    </ol>
+
+    <p>
+      <strong>Utley's addition</strong> to Pelz's framework: the last three
+      feet of the putt matter more than the first twenty. That's where the
+      ball is slowest and most affected by slope. Read the area around the
+      hole first; the rest of the line comes from there.
+    </p>
+
+    <div class="callout">
+      <strong>On AimPoint and other systems:</strong> modern green-reading
+      systems &mdash; AimPoint Express, ZenRead &mdash; are all useful
+      tools. They work by giving you a consistent procedure to compute
+      break from slope percentage and putt length. If you're curious and
+      methodical, a half-day AimPoint clinic is a good investment. It's
+      not magic; it's discipline applied to reading. The methods in this
+      module are what works for most of my students without adding a
+      formal system on top.
+    </div>
+  </section>
+
+  <!-- =========== ATTRIBUTION =========== -->
+  <div class="attribution">
+    <h3>Sources &amp; further reading</h3>
+    <p>
+      This section draws specifically on:
+    </p>
+    <ul>
+      <li>
+        <strong>Stan Utley, <em>The Art of Putting</em> (2006).</strong> Primary
+        source for the stroke-is-an-arc principle, the eyes-over-ball setup
+        test, the closed-eye finish drill, and the acceleration-through-the-ball
+        teaching. Utley's voice is warmer than Pelz's; if you want one
+        putting book, this is the one I'd recommend to an amateur.
+      </li>
+      <li>
+        <strong>Dave Pelz, <em>Putt Like the Pros</em> (1989) and
+        <em>The Short Game Bible</em> (1999).</strong> Primary source for the
+        face-vs-path impact data, the lag-distance rule-of-thumb
+        (12–18 inches past), the under-read-break research, and the
+        distance-calibration drill structure. Pelz's writing is dense and
+        engineer-y; read it if you want the data behind the feel.
+      </li>
+    </ul>
+    <p>
+      Where I've cited a specific drill or concept, I've named the source
+      in the text. Where I haven't, the idea is mine or is common knowledge
+      in teaching &mdash; arriving on a putting green and being told to keep
+      your eyes over the ball predates both of these authors by decades.
+    </p>
+  </div>
+
+  <p style="text-align:center; margin-top:40px;">
+    <a href="module-03-short-game.html" style="color:var(--gold); text-decoration:none; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; font-size:12px;">
+      &larr; Back to Module 03 overview
+    </a>
+  </p>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  RRG.mountLibrary();
+</script>
+</body>
+</html>

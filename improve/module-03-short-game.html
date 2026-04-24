@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Module 03 · Short Game — Teaching Library</title>
+<meta name="description" content="Ryan Rinneard's short-game framework. Organized by skill — putting, chipping, pitching, bunker, lob — not by book. Draws on the published work of Dave Pelz, Stan Utley, and James Sieckmann with every influence credited.">
+<meta property="og:title" content="Module 03 · Short Game · RR Golf Performance">
+<meta property="og:description" content="Ryan's short-game framework. By skill, not by book. Draws on Pelz, Utley, and Sieckmann.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://rrgolfperformance.com/improve/module-03-short-game.html">
+<meta property="og:image" content="https://madriverpro.com/images/rr-logo.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Module 03 · Short Game · RR Golf Performance">
+<meta name="twitter:description" content="Ryan's short-game framework. By skill, not by book. Draws on Pelz, Utley, and Sieckmann.">
+<meta name="twitter:image" content="https://madriverpro.com/images/rr-logo.png">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  /* Module 03 hub. Matches Module 01's visual language but structured
+     as a skill-area map rather than a chapter list, because the
+     short game is five different motions not one. */
+
+  .book-hero {
+    background: linear-gradient(180deg, var(--navy) 0%, #162E54 100%);
+    color: #fff; border-radius: 14px;
+    padding: 56px 44px 48px; margin-bottom: 36px;
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .book-hero::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--gold);
+  }
+  .book-hero::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent 0%, var(--gold) 30%, var(--gold) 70%, transparent 100%);
+    opacity: 0.4;
+  }
+  .book-hero .vol {
+    display: inline-block;
+    font-size: 11px; letter-spacing: 0.24em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase;
+    padding: 5px 16px; border: 1px solid var(--gold);
+    border-radius: 999px; margin-bottom: 20px;
+  }
+  .book-hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(44px, 7vw, 68px);
+    font-weight: 600; color: #fff;
+    margin: 0; line-height: 1.05; letter-spacing: -0.01em;
+  }
+  .book-hero .subtitle {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; font-size: 20px;
+    color: rgba(255,255,255,0.78);
+    margin: 14px auto 22px; max-width: 680px;
+  }
+  .book-hero .gold-dash {
+    width: 60px; height: 2px; background: var(--gold); margin: 0 auto 22px;
+  }
+  .book-hero .attrib {
+    font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(255,255,255,0.55); font-weight: 500;
+  }
+
+  .primer-disclaimer {
+    background: #FDF6F4;
+    border: 1px solid #E5D0CB;
+    border-left: 4px solid #C76757;
+    border-radius: 10px;
+    padding: 22px 28px;
+    margin: 0 0 28px;
+  }
+  .primer-disclaimer .pd-label {
+    font-size: 11px; letter-spacing: 0.22em; color: #9A3D2F;
+    font-weight: 700; text-transform: uppercase; margin-bottom: 10px;
+  }
+  .primer-disclaimer p { margin: 0 0 10px; font-size: 14px; line-height: 1.65; color: var(--navy-mid); }
+  .primer-disclaimer p:last-child { margin-bottom: 0; }
+  .primer-disclaimer p strong { color: var(--navy); }
+
+  .coach-note {
+    background: #FAF6EC;
+    border: 1px solid #E5DAB8;
+    border-radius: 10px;
+    padding: 24px 30px 20px;
+    margin: 0 0 36px;
+    position: relative;
+  }
+  .coach-note .cn-label {
+    font-size: 11px; letter-spacing: 0.22em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 12px;
+  }
+  .coach-note p {
+    margin: 0 0 14px;
+    font-size: 15px; line-height: 1.7;
+    color: var(--navy-mid);
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 400;
+  }
+  .coach-note p strong { color: var(--navy); font-weight: 600; }
+  .coach-note .sign-off {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; font-size: 16px; color: var(--navy);
+    text-align: right; margin-top: 6px;
+  }
+
+  /* Skill grid */
+  .skill-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;
+    margin-bottom: 36px;
+  }
+  @media (max-width: 760px) { .skill-grid { grid-template-columns: 1fr; } }
+
+  .skill-card {
+    display: block; text-decoration: none; color: inherit;
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--gold);
+    border-radius: 12px;
+    padding: 22px 26px;
+    transition: transform .2s ease, box-shadow .2s ease;
+    position: relative;
+  }
+  .skill-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 32px rgba(13,31,60,0.10);
+  }
+  .skill-card.coming-soon { opacity: 0.78; border-left-color: var(--mid-grey); }
+  .skill-card.coming-soon::after {
+    content: 'COMING SOON'; position: absolute; top: 14px; right: 16px;
+    font-size: 9px; letter-spacing: 0.16em; color: var(--mid-grey);
+    font-weight: 700;
+  }
+  .skill-card .skill-num {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 12px; letter-spacing: 0.18em;
+    color: var(--gold); font-weight: 700; text-transform: uppercase;
+  }
+  .skill-card h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 24px; color: var(--navy);
+    margin: 4px 0 6px; font-weight: 600; line-height: 1.2;
+  }
+  .skill-card .skill-attrib {
+    font-size: 12px; color: var(--mid-grey); font-style: italic;
+    margin-bottom: 10px;
+  }
+  .skill-card p {
+    font-size: 14px; line-height: 1.55; color: var(--navy-mid);
+    margin: 0 0 10px;
+  }
+  .skill-card .open-link {
+    font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--gold); font-weight: 700;
+  }
+
+  .attribution {
+    margin-top: 44px; padding: 28px 30px;
+    background: var(--cream); border-radius: 10px;
+    border: 1px solid var(--rule);
+  }
+  .attribution h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 20px; color: var(--navy); margin: 0 0 12px;
+  }
+  .attribution p { font-size: 14px; line-height: 1.65; color: var(--navy-mid); margin: 0 0 10px; }
+  .attribution ul {
+    list-style: none; padding: 0; margin: 12px 0 0;
+    font-size: 14px; color: var(--navy-mid);
+  }
+  .attribution ul li { margin-bottom: 8px; }
+  .attribution ul li strong { color: var(--navy); }
+
+  .breadcrumb {
+    font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--mid-grey); margin-bottom: 18px;
+  }
+  .breadcrumb a { color: var(--mid-grey); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--gold); }
+  .breadcrumb span { margin: 0 8px; }
+</style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container">
+
+  <div class="breadcrumb">
+    <a href="index.html">Library</a><span>›</span><a href="bookshelf.html">Teaching Library</a><span>›</span>Module 03 · Short Game
+  </div>
+
+  <!-- ===================== HERO ===================== -->
+  <div class="book-hero">
+    <span class="vol">Teaching Library · Module 03</span>
+    <h1>The Short Game.</h1>
+    <div class="subtitle">How I teach the scoring game &mdash; by skill, not by book. Built on the shoulders of Dave Pelz, Stan Utley, and James Sieckmann.</div>
+    <div class="gold-dash"></div>
+    <div class="attrib">Ryan's framework &middot; influences credited throughout</div>
+  </div>
+
+  <!-- ===================== DISCLAIMER ===================== -->
+  <div class="primer-disclaimer">
+    <div class="pd-label">Ryan's Framework</div>
+    <p>
+      This module is Ryan Rinneard's original teaching framework for the short
+      game. It is organized by skill &mdash; putting, chipping, pitching, bunker,
+      lob &mdash; rather than by book, because that is how the short game is
+      actually taught and played. It draws on the published work of Dave Pelz,
+      Stan Utley, and James Sieckmann. Every source referenced is in print;
+      links to buy their books are provided in each skill page.
+    </p>
+    <p>
+      <strong>This is not an authorized publication of any named teacher or
+      system.</strong> The Pelz Golf Institute, Stan Utley's teaching practice,
+      and James Sieckmann's short-game school are separate entities from
+      Ryan's coaching practice. Concepts below are described in Ryan's own
+      words with the original work of each teacher cited as the inspiration.
+    </p>
+  </div>
+
+  <!-- ===================== COACH NOTE ===================== -->
+  <div class="coach-note">
+    <div class="cn-label">From the coach</div>
+    <p>
+      Half your shots happen inside 100 yards. Lower that number to inside 50
+      and you get closer to two-thirds. Most amateurs spend 90 percent of
+      their range time on full swings and wonder why their scores won't move.
+      <strong>If you want to get better, work on the five skills below in the
+      proportions they actually show up in your round.</strong>
+    </p>
+    <p>
+      I could have written five separate book primers &mdash; one for Pelz's
+      <em>Short Game Bible</em>, one for Utley's <em>Art of the Short Game</em>,
+      one for Sieckmann's <em>Your Short Game Solution</em>. Instead I wrote
+      this. The short game is five different motions, and every good teacher
+      has something to say about each one. Some teachers are better on putting;
+      some on wedges; some on bunker. <strong>You deserve the best thinking on
+      each skill, not three competing takes on all of it.</strong>
+    </p>
+    <p>
+      Read the skill page that matches what's costing you strokes right now.
+      Take one drill to the practice green this week. Come back for the next
+      one when it starts to hold.
+    </p>
+    <div class="sign-off">&mdash; Ryan</div>
+  </div>
+
+  <!-- ===================== SKILL GRID ===================== -->
+  <div class="skill-grid">
+
+    <a href="sg-putting.html" class="skill-card">
+      <div class="skill-num">Skill 01</div>
+      <h2>Putting</h2>
+      <div class="skill-attrib">Primary: Utley &middot; supporting: Pelz</div>
+      <p>
+        The arc vs. straight-back-straight-through debate, and why it doesn't
+        actually matter for most amateurs. Green reading as a discipline.
+        Lag control as the thing that actually lowers handicap. Six-foot-and-in
+        as the skill that makes everything else forgiveable.
+      </p>
+      <div class="open-link">Open putting &rarr;</div>
+    </a>
+
+    <a href="sg-chipping.html" class="skill-card coming-soon">
+      <div class="skill-num">Skill 02</div>
+      <h2>Chipping</h2>
+      <div class="skill-attrib">Primary: Sieckmann &middot; supporting: Pelz</div>
+      <p>
+        The low-running shot every amateur should own before they ever learn
+        to flop. One club, one swing, lots of different landing spots.
+        Sieckmann's ball-first strike pattern applied to short shots.
+      </p>
+      <div class="open-link">Open chipping &rarr;</div>
+    </a>
+
+    <a href="sg-pitching.html" class="skill-card coming-soon">
+      <div class="skill-num">Skill 03</div>
+      <h2>Pitching</h2>
+      <div class="skill-attrib">Primary: Sieckmann &middot; supporting: Pelz</div>
+      <p>
+        The partial-wedge distance matrix &mdash; how to build three reliable
+        numbers with each wedge in your bag. Why trying to "feel" a 40-yard
+        shot doesn't work and what to do instead. Pelz's arm-clock system
+        meets Sieckmann's face-control patterns.
+      </p>
+      <div class="open-link">Open pitching &rarr;</div>
+    </a>
+
+    <a href="sg-bunker.html" class="skill-card coming-soon">
+      <div class="skill-num">Skill 04</div>
+      <h2>Greenside Bunker</h2>
+      <div class="skill-attrib">Primary: Pelz &middot; supporting: Sieckmann</div>
+      <p>
+        The shot most amateurs fear and most good players welcome. Pelz's
+        splash technique, why the club hits the sand and not the ball, and
+        the shocking truth that bunker shots are easier than short pitches
+        off tight lies once you know the motion.
+      </p>
+      <div class="open-link">Open bunker &rarr;</div>
+    </a>
+
+    <a href="sg-lob.html" class="skill-card coming-soon">
+      <div class="skill-num">Skill 05</div>
+      <h2>The Lob Shot</h2>
+      <div class="skill-attrib">Primary: Pelz &middot; supporting: Sieckmann</div>
+      <p>
+        The shot you should hit last, not first. When a high-soft shot is the
+        only answer &mdash; over a bunker to a tight pin, off a firm lie to
+        an elevated green &mdash; and how to execute it without the fear that
+        most amateurs carry. Lie reading and club selection first; technique
+        second.
+      </p>
+      <div class="open-link">Open lob &rarr;</div>
+    </a>
+
+  </div>
+
+  <!-- ===================== ATTRIBUTION ===================== -->
+  <div class="attribution">
+    <h3>Sources &amp; further reading</h3>
+    <p>
+      Every skill page below lists specific chapters and concepts by author.
+      If any of these ideas land for you, buy the original work. Each author
+      has spent a lifetime teaching what fits in my summary in a paragraph.
+    </p>
+    <ul>
+      <li><strong>Dave Pelz</strong> &mdash; <em>The Short Game Bible</em> (1999), <em>Putt Like the Pros</em> (1989). Engineer-turned-teacher who applied research methodology to scoring shots. The short-game-is-most-of-scoring data is his.</li>
+      <li><strong>Stan Utley</strong> &mdash; <em>The Art of Putting</em> (2006), <em>The Art of the Short Game</em> (2007). Tour putter and coach; taught the modern face-rotation approach to putting and a feel-based short game.</li>
+      <li><strong>James Sieckmann</strong> &mdash; <em>Your Short Game Solution</em> (2016). Tour short-game coach; built the distance-control system that many top players now use for wedges.</li>
+    </ul>
+  </div>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  RRG.mountLibrary();
+</script>
+</body>
+</html>
