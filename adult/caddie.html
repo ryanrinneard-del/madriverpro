@@ -237,7 +237,10 @@
       <div class="wx-item">
         <b id="wx-wind">—</b><span>wind</span>
       </div>
-      <button type="button" class="refresh" id="wx-refresh">↻ Fetch</button>
+      <div style="display:flex; gap:6px;">
+        <button type="button" class="refresh" id="wx-madriver" title="Pull current weather at Mad River — no location permission needed">⛳ Mad River</button>
+        <button type="button" class="refresh" id="wx-refresh" title="Use your current location">↻ Fetch</button>
+      </div>
     </div>
 
     <div style="margin-top:14px;">
@@ -339,33 +342,85 @@
         : 'calm';
     }
 
-    async function fetchWeather() {
-      if (!navigator.geolocation) {
-        alert('Location not available on this device. Use manual override.');
+    // Inline status line below the conditions row — replaces the
+    // disappearing-alert UX so users can actually read what went wrong.
+    function setWxStatus(msg, kind) {
+      let el = document.getElementById('wx-status');
+      if (!el) {
+        el = document.createElement('div');
+        el.id = 'wx-status';
+        el.style.cssText = 'font-size: 12px; line-height: 1.5; padding: 8px 12px; margin-top: 8px; border-radius: 6px;';
+        document.getElementById('wx-row').insertAdjacentElement('afterend', el);
+      }
+      if (!msg) { el.style.display = 'none'; return; }
+      el.style.display = 'block';
+      el.textContent = msg;
+      const palette = {
+        error:   ['#FDF0EE', '#9A3D2F', '#C76757'],
+        info:    ['#EEF4FB', 'var(--navy)', '#5A7BA5'],
+        success: ['#F0F6EC', '#4C6B30', '#6B8B4E'],
+      }[kind] || palette;
+      const [bg, fg, bd] = palette;
+      el.style.background = bg;
+      el.style.color = fg;
+      el.style.borderLeft = `3px solid ${bd}`;
+    }
+
+    async function applyCoords(latitude, longitude, sourceLabel) {
+      const wx = await RRG.weather.fetchCurrent(latitude, longitude);
+      document.getElementById('wx-refresh').textContent = '↻ Fetch';
+      if (!wx) {
+        setWxStatus('Could not reach the weather service. Use the manual override below.', 'error');
         return;
       }
+      state.temp_f = wx.temp_f;
+      state.wind_mph = wx.wind_mph;
+      state.wind_dir_deg = wx.wind_dir_deg;
+      if (wx.elev_ft_asl) state.altitude_ft = wx.elev_ft_asl;
+      ovTemp.value = '';
+      ovWindHead.value = '';
+      document.getElementById('ov-alt').value = state.altitude_ft;
+      renderWeather();
+      compute();
+      setWxStatus(`Updated from ${sourceLabel} · ${wx.temp_f}°F · ${wx.wind_mph} mph ${RRG.weather.compass(wx.wind_dir_deg)}`, 'success');
+    }
+
+    async function fetchWeather() {
+      if (!navigator.geolocation) {
+        setWxStatus('Your device does not support geolocation. Use the manual override below.', 'error');
+        return;
+      }
+      setWxStatus('Asking your device for location…', 'info');
       document.getElementById('wx-refresh').textContent = '…';
       navigator.geolocation.getCurrentPosition(async (pos) => {
         const { latitude, longitude } = pos.coords;
-        const wx = await RRG.weather.fetchCurrent(latitude, longitude);
-        document.getElementById('wx-refresh').textContent = '↻ Fetch';
-        if (!wx) { alert('Weather fetch failed.'); return; }
-        state.temp_f = wx.temp_f;
-        state.wind_mph = wx.wind_mph;
-        state.wind_dir_deg = wx.wind_dir_deg;
-        if (wx.elev_ft_asl) state.altitude_ft = wx.elev_ft_asl;
-        // Clear manual overrides so auto values take over
-        ovTemp.value = '';
-        ovWindHead.value = '';
-        document.getElementById('ov-alt').value = state.altitude_ft;
-        renderWeather();
-        compute();
+        await applyCoords(latitude, longitude, 'your location');
       }, (err) => {
         document.getElementById('wx-refresh').textContent = '↻ Fetch';
-        alert('Location denied. Use manual override.');
+        const codes = { 1: 'denied', 2: 'unavailable', 3: 'timeout' };
+        const reason = codes[err.code] || 'unknown';
+        if (reason === 'denied') {
+          setWxStatus('Location is blocked for this site. Tap the lock icon in your browser bar to allow it — or use “Mad River conditions” / manual override below.', 'error');
+        } else if (reason === 'timeout') {
+          setWxStatus('Location request timed out. Try again, or use “Mad River conditions” / manual override.', 'error');
+        } else {
+          setWxStatus('Location is unavailable right now. Use “Mad River conditions” or the manual override.', 'error');
+        }
       }, { enableHighAccuracy: false, timeout: 8000, maximumAge: 600000 });
     }
     document.getElementById('wx-refresh').addEventListener('click', fetchWeather);
+
+    // Mad River fallback — pulls weather for the course directly, no
+    // geolocation needed. Useful when a player has location blocked or is
+    // on Wi-Fi without GPS.
+    const madRiverBtn = document.getElementById('wx-madriver');
+    if (madRiverBtn) {
+      madRiverBtn.addEventListener('click', async () => {
+        document.getElementById('wx-refresh').textContent = '…';
+        setWxStatus('Pulling current Mad River conditions…', 'info');
+        await applyCoords(44.292, -80.082, 'Mad River');
+      });
+    }
 
     // --- Compute + render ---
     const yardsInput = document.getElementById('yards-input');
