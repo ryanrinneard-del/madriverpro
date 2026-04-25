@@ -276,7 +276,7 @@
 <script src="assets/app.js"></script>
 <script>
   (async () => {
-    const user = await RRG.auth.requireLogin();
+    const user = await RRG.mount('caddie');
     if (!user) return;
     const profile = await RRG.auth.completeSignupIfNeeded();
 
