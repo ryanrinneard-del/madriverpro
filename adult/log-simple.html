@@ -250,6 +250,14 @@
     const errBox = document.getElementById('ls-form-error');
     const submitBtn = document.getElementById('ls-submit-btn');
 
+    // Prevent Enter from accidentally submitting mid-entry — same fix as the
+    // hole-by-hole scorecard. Only the explicit Submit button submits.
+    form.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && e.target.type !== 'submit' && e.target.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+      }
+    });
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       errBox.style.display = 'none';

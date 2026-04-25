@@ -250,6 +250,13 @@
     const errBox = document.getElementById('ls-form-error');
     const submitBtn = document.getElementById('ls-submit-btn');
 
+    // Prevent Enter from accidentally submitting mid-entry (mirrors adult fix).
+    form.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && e.target.type !== 'submit' && e.target.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+      }
+    });
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       errBox.style.display = 'none';

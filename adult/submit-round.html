@@ -410,6 +410,15 @@
     const errBox = document.getElementById('form-error');
     const submitBtn = document.getElementById('submit-btn');
 
+    // Prevent Enter from submitting the form mid-entry. CT lost data on the
+    // hole-by-hole scorecard hitting Enter on hole 16; same risk here. Only
+    // the explicit Submit button should trigger submission.
+    form.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && e.target.type !== 'submit' && e.target.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+      }
+    });
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       errBox.style.display = 'none';

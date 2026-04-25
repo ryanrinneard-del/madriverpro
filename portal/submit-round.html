@@ -238,6 +238,14 @@
   // Submit
   const form = document.getElementById('round-form');
   const errBox = document.getElementById('form-error');
+
+  // Prevent Enter from accidentally submitting mid-entry (mirrors adult fix).
+  form.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && e.target.type !== 'submit' && e.target.tagName !== 'TEXTAREA') {
+      e.preventDefault();
+    }
+  });
+
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     errBox.style.display = 'none';
