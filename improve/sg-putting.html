@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Putting — Module 03 · Short Game</title>
-<meta name="description" content="Ryan Rinneard's framework for putting: green reading, lag control, 6-foot-and-in, and why the stroke-shape debate is the wrong argument. Draws on Stan Utley and Dave Pelz.">
+<meta name="description" content="Ryan Rinneard's framework for putting — built on SAM PuttLab biomechanics data and Phil Kenyon's Visio methodology. Putter fitting, diagnosing your weak distance, and the drills that actually work.">
 <meta property="og:title" content="Putting · Module 03 · RR Golf Performance">
-<meta property="og:description" content="Ryan's putting framework — green reading, lag control, and 6-foot-and-in. Draws on Utley and Pelz.">
+<meta property="og:description" content="Modern putting — SAM PuttLab measured, Visio-trained. Fitted before practiced. Ryan is SAM-certified.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://rrgolfperformance.com/improve/sg-putting.html">
 <meta property="og:image" content="https://madriverpro.com/images/rr-logo.png">
@@ -18,10 +18,7 @@
     padding: 56px 44px 48px; margin-bottom: 36px;
     text-align: center; position: relative; overflow: hidden;
   }
-  .book-hero::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-    background: var(--gold);
-  }
+  .book-hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--gold); }
   .book-hero .vol {
     display: inline-block;
     font-size: 11px; letter-spacing: 0.24em; color: var(--gold);
@@ -32,8 +29,7 @@
   .book-hero h1 {
     font-family: 'Playfair Display', Georgia, serif;
     font-size: clamp(44px, 7vw, 68px);
-    font-weight: 600; color: #fff;
-    margin: 0; line-height: 1.05; letter-spacing: -0.01em;
+    font-weight: 600; color: #fff; margin: 0; line-height: 1.05; letter-spacing: -0.01em;
   }
   .book-hero .subtitle {
     font-family: 'Playfair Display', Georgia, serif;
@@ -41,9 +37,7 @@
     color: rgba(255,255,255,0.78);
     margin: 14px auto 22px; max-width: 680px;
   }
-  .book-hero .gold-dash {
-    width: 60px; height: 2px; background: var(--gold); margin: 0 auto 22px;
-  }
+  .book-hero .gold-dash { width: 60px; height: 2px; background: var(--gold); margin: 0 auto 22px; }
   .book-hero .attrib {
     font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
     color: rgba(255,255,255,0.55); font-weight: 500;
@@ -91,7 +85,7 @@
     font-family: 'Playfair Display', Georgia, serif;
     font-size: 20px; color: var(--navy); margin: 0 0 14px;
   }
-  .book-toc ol { list-style: none; padding: 0; margin: 0; counter-reset: ch; }
+  .book-toc ol { list-style: none; padding: 0; margin: 0; }
   .book-toc ol li {
     display: flex; gap: 18px; padding: 10px 0;
     border-bottom: 1px solid var(--rule);
@@ -161,10 +155,54 @@
   }
   .callout strong { color: #4C6B30; }
 
-  .cite {
-    font-size: 13px; color: var(--mid-grey); font-style: italic;
-    margin-top: 6px;
+  .data-card {
+    background: var(--white); border: 1px solid var(--navy);
+    border-left: 4px solid var(--navy); border-radius: 8px;
+    padding: 18px 22px; margin: 16px 0;
   }
+  .data-card .dc-tag {
+    display: inline-block;
+    font-size: 10px; letter-spacing: 0.18em; color: var(--navy);
+    font-weight: 700; text-transform: uppercase;
+    background: #E8EEF8; padding: 3px 10px; border-radius: 999px;
+    margin-bottom: 8px;
+  }
+  .data-card h5 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 18px; color: var(--navy); margin: 0 0 8px;
+    font-weight: 600;
+  }
+  .data-card p { font-size: 14px; margin: 0 0 6px; }
+  .data-card p:last-child { margin-bottom: 0; }
+
+  .clinic-cta {
+    background: linear-gradient(180deg, var(--navy) 0%, #162E54 100%);
+    color: #fff; border-radius: 12px;
+    padding: 28px 32px; margin: 32px 0;
+    position: relative; overflow: hidden;
+  }
+  .clinic-cta::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: var(--gold);
+  }
+  .clinic-cta .cta-label {
+    font-size: 11px; letter-spacing: 0.22em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 10px;
+  }
+  .clinic-cta h4 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px; color: #fff; margin: 0 0 10px;
+    font-weight: 600;
+  }
+  .clinic-cta p { color: rgba(255,255,255,0.78); font-size: 14px; line-height: 1.6; margin: 0 0 14px; }
+  .clinic-cta .cta-btn {
+    display: inline-block;
+    font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--navy); background: var(--gold);
+    padding: 10px 20px; border-radius: 6px;
+    text-decoration: none; font-weight: 700;
+  }
+  .clinic-cta .cta-btn:hover { background: #D4B85F; }
 
   .attribution {
     margin-top: 44px; padding: 28px 30px;
@@ -205,50 +243,57 @@
   <div class="book-hero">
     <span class="vol">Module 03 · Skill 01</span>
     <h1>Putting.</h1>
-    <div class="subtitle">The stroke is easier than the read. Lag control is harder than anybody admits. And 6-foot-and-in wins tournaments.</div>
+    <div class="subtitle">The most measurable skill in golf &mdash; and the one most amateurs still guess at. Modern putting is built on data, not opinion.</div>
     <div class="gold-dash"></div>
-    <div class="attrib">Primary source: Stan Utley &middot; supporting: Dave Pelz</div>
+    <div class="attrib">Ryan's framework &middot; SAM PuttLab science &middot; Visio / Phil Kenyon methodology</div>
   </div>
 
   <div class="primer-disclaimer">
-    <div class="pd-label">Independent interpretation</div>
+    <div class="pd-label">Ryan's Framework</div>
     <p>
-      This page is Ryan's teaching framework for putting, written in his own
-      words. It draws on the published work of <strong>Stan Utley</strong> (<em>The
-      Art of Putting</em>, 2006) and <strong>Dave Pelz</strong> (<em>Putt Like the
-      Pros</em>, 1989; <em>The Short Game Bible</em>, 1999). Both authors are
-      cited specifically where their ideas appear.
+      Ryan is fully certified through <strong>Science and Motion (SAM
+      PuttLab)</strong> &mdash; the biomechanics measurement system used by
+      most tour players and elite putting coaches worldwide. This page
+      reflects how he teaches putting in his own studio, grounded in
+      what SAM measures and what <strong>Phil Kenyon's Visio system</strong>
+      has demonstrated across the world's best players.
     </p>
     <p>
-      <strong>This is not an authorized publication of Stan Utley, Dave Pelz,
-      or any instruction system bearing their names.</strong> If the concepts
-      below land for you, buy the original books &mdash; each author has spent
-      a lifetime teaching what fits here in a few paragraphs.
+      <strong>The names matter because the methods matter.</strong> SAM
+      PuttLab and Visio Putting are independent commercial entities;
+      Ryan's coaching practice draws on their tools and findings without
+      claiming to represent either company.
     </p>
   </div>
 
   <div class="coach-note">
     <div class="cn-label">From the coach</div>
     <p>
-      Putting is the skill with the highest ratio of complaining to practicing.
-      Students tell me their putting is costing them shots and then they spend
-      45 minutes on full swing and five minutes on the practice green. If
-      you read one skill page in this module all the way through, make it
-      this one &mdash; and then go roll balls.
+      I've been coaching putting since I was certified on SAM PuttLab,
+      and the equipment changed how I teach. Before SAM, every putting
+      lesson was opinion versus opinion &mdash; the player thinks they
+      pulled it, the coach says it was open, neither has data. After
+      SAM, you put a sensor on the putter, you make the stroke, the
+      software tells you exactly how the face was angled at impact, how
+      the path moved, how consistent your tempo was, how your eyes were
+      positioned. <strong>Putting becomes measurable. And once it's
+      measurable, it gets fixable.</strong>
     </p>
     <p>
-      The arc-vs-straight debate is the wrong argument. Both work. Tour
-      players have won majors with both. What matters is that the face is
-      square to the target line at impact and the speed is right. Speed more
-      than line &mdash; <strong>a perfect-line putt with bad speed misses; a
-      slightly-mis-read putt with good speed gets close.</strong> Utley writes
-      this in his first chapter, and a decade of strokes-gained data has
-      confirmed it.
+      A lot of the older putting literature was guessing &mdash; smart
+      guessing by smart people, but guessing. The straight-back-straight-through
+      argument that ran through golf magazines for two decades has been
+      put to bed by the data: <strong>good strokes are slight arcs, and
+      the face is what dictates where the ball goes &mdash; about 95
+      percent of direction.</strong> Path matters, but it's the smaller
+      lever. SAM measures both, every stroke.
     </p>
     <p>
-      There are three things I want you to get better at, in order: <strong>lag
-      control from distance, six-foot-and-in, and green reading</strong>.
-      That's the whole module. Five sections below, one drill per section.
+      This page is how I teach it. Five sections. Get the putter fit
+      first, find where you actually struggle, then practice the way
+      tour players practice with the tools tour players use. If you
+      want to skip the page and just come work on it, my putting clinics
+      run all season &mdash; details below.
     </p>
     <div class="sign-off">&mdash; Ryan</div>
   </div>
@@ -256,112 +301,146 @@
   <div class="book-toc">
     <h2>In this section</h2>
     <ol>
-      <li><div class="ch-num">01</div><div class="ch-body"><a href="#ch1">Why the stroke debate doesn't matter</a> <span>&mdash; arc vs. straight, and the two things that actually count.</span></div></li>
-      <li><div class="ch-num">02</div><div class="ch-body"><a href="#ch2">The setup that lets the stroke happen</a> <span>&mdash; eyes, hands, ball position, posture.</span></div></li>
-      <li><div class="ch-num">03</div><div class="ch-body"><a href="#ch3">Lag control — the skill that actually lowers scores</a> <span>&mdash; why distance from 25+ feet is the biggest scoring lever.</span></div></li>
-      <li><div class="ch-num">04</div><div class="ch-body"><a href="#ch4">Six-foot-and-in — the make rate that matters</a> <span>&mdash; the short putts that forgive everything else.</span></div></li>
-      <li><div class="ch-num">05</div><div class="ch-body"><a href="#ch5">Green reading as a discipline</a> <span>&mdash; why most amateurs under-read break and what to do about it.</span></div></li>
+      <li><div class="ch-num">01</div><div class="ch-body"><a href="#ch1">What the data actually says about your stroke</a> <span>&mdash; face vs. path, the slight arc, what SAM measures.</span></div></li>
+      <li><div class="ch-num">02</div><div class="ch-body"><a href="#ch2">Get fit before you practice</a> <span>&mdash; length, lie, mallet vs. blade, why the wrong putter is sabotaging you.</span></div></li>
+      <li><div class="ch-num">03</div><div class="ch-body"><a href="#ch3">Find where your putting actually breaks</a> <span>&mdash; my own number is 5&ndash;6 feet. What's yours?</span></div></li>
+      <li><div class="ch-num">04</div><div class="ch-body"><a href="#ch4">The drills that actually work</a> <span>&mdash; Visio Black Mat, the 3-6-9-12-15, distance ladders.</span></div></li>
+      <li><div class="ch-num">05</div><div class="ch-body"><a href="#ch5">When to come to a clinic</a> <span>&mdash; what you can't fix from a web page.</span></div></li>
     </ol>
   </div>
 
   <!-- =========== CHAPTER 01 =========== -->
   <section class="chapter" id="ch1">
     <div class="ch-kicker">Section 01</div>
-    <h3>Why the stroke debate doesn't matter.</h3>
-    <p class="ch-lede">Arc or straight? Both work. Both have won majors. Here's what actually matters.</p>
+    <h3>What the data actually says about your stroke.</h3>
+    <p class="ch-lede">Face vs. path is roughly 95/5. The stroke is a slight arc, not a straight line. Both points are settled by measurement, not opinion.</p>
 
     <p>
-      Walk into a golf shop and someone will try to sell you a putter that
-      promises a pure-straight-back-straight-through stroke. Walk onto a tour
-      range and you'll see twenty different strokes, most of them arced, all
-      of them good. The question "which stroke is right?" is the wrong
-      question.
+      For two decades there was a public argument in golf about whether
+      the putter should travel straight back and straight through, or
+      on an arc. Both camps were missing the point. <strong>Modern
+      biomechanics measurement &mdash; SAM PuttLab and similar systems
+      &mdash; has shown two things repeatedly:</strong>
     </p>
+
+    <ul>
+      <li><strong>The stroke is a slight arc.</strong> Not a big arc, not a straight line &mdash; a gentle arc that follows naturally from the angle of the putter shaft and the rotation of the shoulders. Trying to force the putter dead-straight requires hand manipulation, which destroys face control.</li>
+      <li><strong>The face dictates direction &mdash; about 95% of it.</strong> Where the face points at impact is where the ball starts. Path, the direction the putter is moving through impact, accounts for the remaining 5% (and influences how much the ball curves, not where it starts).</li>
+    </ul>
 
     <p>
-      <strong>Stan Utley's argument</strong> &mdash; and this is his core
-      insight from <em>The Art of Putting</em> &mdash; is that the putter naturally
-      wants to swing on an arc because the shaft is angled, not vertical.
-      Forcing the putter to travel straight back and straight through
-      requires manipulation with the hands, and hands are what produce face
-      rotation, which is what produces misses. <strong>Let the arc happen,
-      let the face rotate with the arc, and you've got a stroke you can
-      repeat under pressure.</strong>
+      That second number is the one that should change how you think
+      about every putt. <strong>If you miss left, your face was almost
+      certainly closed at impact &mdash; not open, not "blocked path,"
+      not your alignment. The face was closed.</strong> If you miss
+      right, the face was open. The path matters, but not the way the
+      old teaching said it did.
     </p>
 
-    <p>
-      <strong>Dave Pelz's data</strong> from <em>Putt Like the Pros</em> says
-      something similar but from a different angle: the two variables that
-      determine whether a putt goes in are <strong>face angle at impact</strong>
-      (the biggest factor &mdash; about 83% of your direction) and
-      <strong>path</strong> (the remaining 17%). Speed is separate and governs
-      distance. Everything else &mdash; stance, grip, posture, eye position
-      &mdash; exists to help you repeat a square face at impact.
-    </p>
-
-    <p>
-      Put those two teachers together and the answer is: <strong>pick a
-      stroke you can repeat, and check two things only on every putt &mdash;
-      face square at impact, speed matched to the read.</strong> If the face
-      is square and the speed is right, the line is right. Everything else
-      is preference.
-    </p>
-
-    <div class="callout">
-      <strong>The one thing to practice:</strong> line up a putt, close your
-      eyes before the stroke, putt it, then open your eyes. Check how square
-      your finish is to the target line. If your finish is square, your impact
-      almost certainly was too. If it finishes left or right, that's the fault
-      to chase. This drill is attributed to Utley and it reveals more about
-      your stroke in five minutes than any video lesson.
+    <div class="data-card">
+      <div class="dc-tag">SAM PuttLab measurement</div>
+      <h5>What gets measured every stroke</h5>
+      <p>
+        When I run a player through a SAM PuttLab session, the system
+        captures &mdash; at thousands of frames per second &mdash; the
+        following per stroke:
+      </p>
+      <p>
+        <strong>Face angle at address, takeaway, and impact.</strong>
+        <strong>Path direction</strong> (where the putter is travelling
+        at impact). <strong>Tempo ratio</strong> (back vs through swing time).
+        <strong>Rotation pattern</strong> (does the face open during takeaway
+        and close through impact &mdash; or does it stay shut?). <strong>Loft
+        delivery</strong> (is the putter adding or losing loft at impact?).
+        <strong>Stroke length symmetry.</strong> <strong>Eye position</strong>
+        relative to the ball.
+      </p>
+      <p>
+        After ten strokes the report is unambiguous. You see exactly what
+        your stroke is doing &mdash; and exactly which two things to fix.
+      </p>
     </div>
+
+    <p>
+      <strong>Here's why this matters for you, even without coming to
+      see me on SAM:</strong> when you miss a putt, stop guessing about
+      whether it was your read, your speed, or your stroke. The face is
+      almost certainly the cause. Look at where the ball started rolling
+      relative to your intended start line. If it started left, your face
+      was closed. Right, open. That's the diagnosis. The fix is in
+      Sections 2 through 4.
+    </p>
   </section>
 
   <!-- =========== CHAPTER 02 =========== -->
   <section class="chapter" id="ch2">
     <div class="ch-kicker">Section 02</div>
-    <h3>The setup that lets the stroke happen.</h3>
-    <p class="ch-lede">You can't fix a bad stroke. You can fix the setup that causes the bad stroke.</p>
+    <h3>Get fit before you practice.</h3>
+    <p class="ch-lede">The wrong putter undoes any amount of practice. Length, lie, head style — all measurable, all worth it.</p>
 
     <p>
-      Most putting misses start before the stroke does. If your eyes are
-      inside the ball line, you'll pull putts. If your eyes are outside,
-      you'll push them. If your ball is too far forward, you'll hit up on it
-      with an open face. If it's too far back, you'll hit down on it and
-      skid the ball instead of rolling it.
+      I see students every season who have practiced putting hard and
+      gotten worse. The reason isn't always their stroke. Often it's the
+      putter. Most amateurs are using a putter they bought because it
+      looked nice or because it was on sale, and the geometry doesn't
+      match their stroke pattern or their body.
     </p>
 
-    <h4>The four check-points</h4>
-    <ul>
-      <li><strong>Eyes directly over the ball.</strong> Drop a ball from the bridge of your nose and it should land on or just inside the ball at address. Utley's test; still the best one.</li>
-      <li><strong>Ball position just forward of center.</strong> About one ball width. Forward enough to catch the ball on a slight upstroke &mdash; which gets the ball rolling immediately instead of skidding &mdash; but not so far forward that you have to manipulate the face closed at impact.</li>
-      <li><strong>Hands neutral, slight forward lean.</strong> The grip pressure stays light (Utley: "hold it like a small bird"). The shaft leans slightly toward the target so the loft of the putter is working correctly. Not a big forward press &mdash; a small one.</li>
-      <li><strong>Feet and shoulders parallel to the target line.</strong> Not the hole &mdash; the target line, which on a breaking putt is several inches to one side of the hole. Where you aim your shoulders is where the putter naturally travels. If your shoulders are open, your path is out-to-in and you'll pull it.</li>
-    </ul>
+    <h4>The three measurements that matter</h4>
 
     <p>
-      <strong>Here's the thing most players miss:</strong> the setup is not
-      the same for every putter. A face-balanced mallet and a toe-hanging
-      blade want slightly different things from your hands. If you've never
-      had someone look at how your putter matches your stroke, ask me
-      &mdash; it's a five-minute conversation that often saves five strokes.
+      <strong>Length.</strong> Most putters off the rack are 34 or 35
+      inches. Most amateurs need shorter than that. If your eyes don't
+      sit directly over (or just inside) the ball at address, the putter
+      is the wrong length. A putter that's too long forces your eyes
+      inside the line, which causes a pull pattern. A putter too short
+      bunches you over the ball and locks your shoulders.
     </p>
+
+    <p>
+      <strong>Lie angle.</strong> When the putter sits naturally on the
+      ground in your stance, the toe should be very slightly raised &mdash;
+      neither flat on the ground nor heel-up. A lie angle that's wrong
+      will cause heel/toe contact issues that mimic stroke problems but
+      can't be fixed by stroke work.
+    </p>
+
+    <p>
+      <strong>Head style: mallet vs. blade.</strong> This is where SAM
+      data changes the conversation. A player whose stroke shows
+      <em>strong rotation</em> (the face opens significantly going back
+      and closes through impact) needs a putter that allows that rotation
+      &mdash; usually a toe-balanced blade. A player with <em>minimal
+      rotation</em> (face stays close to square through the stroke) needs
+      a face-balanced mallet that resists rotation. Putting a strong-arc
+      player on a face-balanced mallet, or a square-stroke player on a
+      toe-balanced blade, is putting them on the wrong tool. Practice
+      doesn't fix mismatched equipment.
+    </p>
+
+    <div class="callout">
+      <strong>How I figure out which one you need:</strong> I put you on
+      SAM and watch your natural rotation pattern across ten strokes. The
+      software shows the face angle through the stroke as a curve. If
+      the curve has big openings and closings, you need a blade. If it's
+      nearly flat, you need a mallet. Five-minute conversation that
+      saves you from a year of wrong-putter practice.
+    </div>
 
     <div class="drill-card">
-      <div class="dc-label">Drill</div>
-      <h5>The alignment-stick rails</h5>
+      <div class="dc-label">Self-check</div>
+      <h5>Eyes-over-the-ball test</h5>
       <p>
-        Lay two alignment sticks on the practice green, parallel to each
-        other, just wider than your putter head. Set your ball in the middle,
-        a hole about 6 feet away on the target line. Stroke putts in the rail.
+        Stand to the ball with your putter as you normally would. Hold
+        a second ball at the bridge of your nose and let it drop. If it
+        lands on or just inside the ball at your feet, your putter
+        length and posture are working. If it lands well inside, the
+        putter is too long for your stance. If it lands outside, you're
+        bent over too far and probably need to stand taller.
       </p>
       <p>
-        What you'll feel: if your stroke is cutting across the ball
-        (out-to-in), the putter will hit the outer rail at some point.
-        If it's too in-to-out, the heel catches the inner rail. Adjust
-        setup and alignment, not stroke, until the putter swings freely
-        inside the rails. <em>Credit: this drill is ubiquitous; both Utley
-        and Pelz describe versions of it.</em>
+        This is the simplest fitting check that works without me. If it
+        fails, come see me &mdash; we'll measure it properly.
       </p>
     </div>
   </section>
@@ -369,157 +448,199 @@
   <!-- =========== CHAPTER 03 =========== -->
   <section class="chapter" id="ch3">
     <div class="ch-kicker">Section 03</div>
-    <h3>Lag control &mdash; the skill that actually lowers scores.</h3>
-    <p class="ch-lede">Make fewer three-putts and your handicap drops. Here's how.</p>
+    <h3>Find where your putting actually breaks.</h3>
+    <p class="ch-lede">Every player has a distance where their make rate falls off a cliff. Mine is 5–6 feet. What's yours?</p>
 
     <p>
-      <strong>Pelz's data</strong> from years of pro-am measurement: a
-      scratch golfer makes roughly 5% of putts from 25 feet. A 20-handicap
-      makes roughly 3%. The difference at the scoring level isn't in the
-      make rate &mdash; both groups mostly miss &mdash; it's in the miss
-      distance. Pros leave themselves a tap-in. Amateurs leave themselves
-      another 4-foot putt.
+      Putting practice is most useful when it's targeted at the distance
+      band where you're actually leaking strokes. Most amateurs spread
+      their practice evenly &mdash; some short, some medium, some long
+      &mdash; and never get systematically better at any of it.
+      <strong>Find your weak distance and pour practice into it.</strong>
     </p>
 
     <p>
-      <strong>Three-putts are the single biggest hidden leak in a mid-handicap
-      round.</strong> If you can reduce three-putts by half, you pick up two
-      to three strokes per round without getting better at anything except
-      distance control.
+      My own weak distance is 5&ndash;6 feet. Long enough that I have to
+      commit to a line and a speed, short enough that there's no excuse
+      for missing &mdash; which means short enough that the pressure
+      shows up. I know this because I've measured it. You should know
+      yours.
     </p>
 
-    <h4>How to actually get better at distance</h4>
+    <h4>How to find your weak distance</h4>
+
     <p>
-      Speed is a feel &mdash; but feel is built through calibration, not
-      imagination. The mistake most amateurs make is putting at a hole from
-      30 feet and using the hole as their only feedback loop. That's too
-      noisy. Green speed varies hole to hole. Slope adds confusion.
-      <strong>Take the hole out of the equation.</strong>
+      Spend one round paying attention to <em>where your missed putts
+      came from</em>. Don't track makes; track misses. Three feet, six
+      feet, ten feet, fifteen, thirty. After 18 holes you'll have a
+      pattern. Most amateurs find one of three:
     </p>
 
-    <div class="drill-card">
-      <div class="dc-label">Drill</div>
-      <h5>The gate-to-gate ladder</h5>
-      <p>
-        Set up three tees on the practice green: one at 10 paces (roughly
-        30 feet), one at 15 paces (45 feet), one at 20 paces (60 feet). Put a
-        ball at your feet. Stroke one putt to each distance, trying to stop
-        within a 3-foot circle of each tee. Repeat until you hit all three
-        distances back-to-back without missing the circle.
-      </p>
-      <p>
-        What this builds: a library of <em>three lengths of stroke</em> that
-        you can trust on the course. When you get to a 45-foot lag putt on
-        hole 7 with a 5% slope, you're not computing &mdash; you're pulling
-        up the "middle stroke" and adjusting for slope. <em>Credit: variant
-        of Pelz's distance-calibration system; the specific 10/15/20
-        structure is Ryan's.</em>
-      </p>
-    </div>
+    <ul>
+      <li><strong>3&ndash;5 foot misses.</strong> Almost always a face issue under pressure. Decel, flinch, or open face from a too-soft grip.</li>
+      <li><strong>6&ndash;12 foot misses.</strong> Mostly read, sometimes face. The distance where commitment to a line matters most.</li>
+      <li><strong>20&ndash;40 foot lag misses.</strong> Distance control. Speed, not direction. Most three-putts originate here.</li>
+    </ul>
+
+    <p>
+      <strong>If you don't know which one is yours, you're guessing in
+      practice.</strong> Once you know it, the drills in Section 4 are
+      targeted &mdash; you spend 70% of your practice time on the band
+      where strokes are leaking, not on the band that already feels good.
+    </p>
 
     <div class="callout">
-      <strong>The rule of thumb that matters:</strong> aim to hit lag putts
-      so they would finish 12–18 inches past the hole with no hole in the
-      ground. Pelz's research found this is the speed at which break is
-      most predictable and the percentage of putts that go in on a true
-      read is highest. A putt that dies at the hole wobbles off-line;
-      a putt that races 4 feet past takes too much of the hole out.
+      <strong>The diagnostic version on SAM:</strong> in a clinic, I'll
+      put you on the system at three different distances and read the
+      data. SAM tells me whether your face control falls apart at 6 feet,
+      whether your tempo gets shaky at 20, whether your eye position
+      changes when you're nervous about a 3-footer. The "where's your
+      weak distance" question becomes a measurement, not a guess.
     </div>
   </section>
 
   <!-- =========== CHAPTER 04 =========== -->
   <section class="chapter" id="ch4">
     <div class="ch-kicker">Section 04</div>
-    <h3>Six-foot-and-in &mdash; the make rate that matters.</h3>
-    <p class="ch-lede">The short putts that forgive everything else.</p>
+    <h3>The drills that actually work.</h3>
+    <p class="ch-lede">If tour pros are using these tools, you should be using them too. Three drills, one piece of equipment, the rest of your career.</p>
 
+    <h4>The Visio Black Mat &mdash; the foundation</h4>
     <p>
-      A tour pro makes roughly 70% of putts from 6 feet. A scratch amateur
-      makes about 60%. A 15-handicap makes about 45%. The gap from scratch
-      to tour is real but smaller than the gap from mid-handicap to scratch.
-      <strong>If your short-putt percentage goes from 45% to 55%, you save
-      roughly two strokes per round.</strong> That's bigger than most
-      full-swing fixes.
+      <strong>Phil Kenyon's Visio Putting</strong> is the methodology
+      behind a long list of major champions. The <strong>Visio Black
+      Mat #1 or #2</strong> is the practice tool I recommend more than
+      any other. It's a low-profile alignment mat with an integrated
+      gate system that gives the putter feedback every stroke &mdash;
+      face square at impact, path correct, ball started on the right
+      line. <strong>If tour pros are using it, you should be too.</strong>
     </p>
 
     <p>
-      Short putts fail for three reasons, in descending order of frequency:
+      The mat costs around the price of a putting lesson and lasts you
+      forever. You set it up at home or on the practice green, you stroke
+      putts through the gate, and the gate tells you immediately when
+      your face is off-square. The feedback loop closes from "did the
+      ball go in" (which depends on read, speed, and execution) to "did
+      the face deliver square" (which is just the stroke). That tighter
+      feedback loop is why it works.
     </p>
-    <ol>
-      <li><strong>Deceleration.</strong> The player gets tentative, slows the putter through impact, and the face wobbles. Miss left or miss right depending on which hand is dominant.</li>
-      <li><strong>Bad line read.</strong> Most amateurs play too straight inside 6 feet. Small breaks on fast greens matter more at short distance than long.</li>
-      <li><strong>Flinch.</strong> The yips. Mental pattern where the player subconsciously expects to miss and their body delivers. Real. Fixable. Different problem.</li>
-    </ol>
 
-    <h4>The fix for the first two</h4>
     <p>
-      Commit to the line. Make a decision about where the ball starts and
-      accept you could be wrong. If you're wrong, you're wrong &mdash; roll
-      the putt with conviction and move on. The putter-head pace through
-      impact should be <strong>noticeably faster than the pace going back</strong>.
-      Utley calls this "accelerating through the ball"; Pelz's data confirms
-      that a faster-than-takeaway follow-through produces the most repeatable
-      face angle.
+      You can find the mats at <strong>visioputting.com</strong>. Mat
+      #1 is the standard alignment and gate trainer. Mat #2 adds a
+      stroke-path indicator. Either works. If you're a member at Mad
+      River and you want to try one before you buy one, ask me &mdash;
+      I have one in the studio.
     </p>
 
     <div class="drill-card">
-      <div class="dc-label">Drill</div>
-      <h5>The 20-in-a-row</h5>
+      <div class="dc-label">Drill 01</div>
+      <h5>The 3 &middot; 6 &middot; 9 &middot; 12 &middot; 15 &mdash; flat putt, miss-and-restart</h5>
       <p>
-        Place 20 balls in a circle around the hole, all at 3 feet. Make all
-        20 before you can go home. If you miss any, start over. First
-        time might take 45 minutes. Third time takes 6 minutes.
+        On a flat section of the practice green, set up five tees in a
+        line: 3, 6, 9, 12, and 15 feet from a hole. Make all five putts
+        in order. <strong>Miss any &mdash; back to 3 feet.</strong>
+        That's the rule. No second chances at any distance, no skipping
+        ahead.
       </p>
       <p>
-        What this builds: unconscious trust at 3 feet, which is the distance
-        that reveals deceleration and flinch fastest. Once 3 feet is
-        automatic, move to 4 feet. Then 5. Then 6. <em>Credit: this drill
-        appears in both Pelz and Utley, with minor variations. The
-        "can't-go-home-until-done" variant is on me.</em>
+        First time most players try this, it takes 20 minutes. Third
+        time, it takes 6. The pressure builds as you progress &mdash;
+        making the 12-footer knowing one miss sends you back to the
+        start is exactly the kind of pressure that exposes your weak
+        spots. The drill scales: when 3-15 is too easy, run 6-12-18 or
+        4-8-12. <em>The flat-putt-with-restart structure is mine; the
+        progressive-distance idea is borrowed from the way tour
+        practice greens are set up.</em>
       </p>
+    </div>
+
+    <div class="drill-card">
+      <div class="dc-label">Drill 02</div>
+      <h5>The 10 &middot; 15 &middot; 20 ladder &mdash; mid-range commitment</h5>
+      <p>
+        Set up three tees at 10, 15, and 20 feet on the practice green.
+        Three balls per distance. The goal isn't to make them &mdash;
+        it's to <strong>finish each putt within an 18-inch circle of the
+        hole</strong>. Make the circle visible by placing tees around
+        it for the first sessions until your eye trains.
+      </p>
+      <p>
+        What this builds: speed control at the distances where most of
+        your second putts originate. The 10-15-20 band is where good
+        lag putting becomes routine three-putt prevention.
+      </p>
+    </div>
+
+    <div class="drill-card">
+      <div class="dc-label">Drill 03</div>
+      <h5>The 30 &middot; 40 &middot; 50 ladder &mdash; long-range distance</h5>
+      <p>
+        Three tees, much further out: 30, 40, 50 feet. Three balls per
+        distance. The target now is finishing within a <strong>3-foot
+        circle</strong> of the hole. From 50 feet, this is realistic
+        excellence; lag putts that finish within 3 feet rarely become
+        three-putts.
+      </p>
+      <p>
+        This is the drill I'd run for any player whose miss pattern in
+        Section 3 was 20&ndash;40 foot lag misses. If three-putts are
+        your leak, this drill is the patch.
+      </p>
+    </div>
+
+    <div class="callout">
+      <strong>Practice math:</strong> 70% of your putting practice should
+      be on your weak distance from Section 3. The other 30% maintains
+      the bands that already work. If you don't know your weak distance
+      yet, run the diagnostic in a round before you redesign your practice.
     </div>
   </section>
 
   <!-- =========== CHAPTER 05 =========== -->
   <section class="chapter" id="ch5">
     <div class="ch-kicker">Section 05</div>
-    <h3>Green reading as a discipline.</h3>
-    <p class="ch-lede">Most amateurs under-read break by about half. Here's why and what to do.</p>
+    <h3>When to come to a clinic.</h3>
+    <p class="ch-lede">Some things you can fix from a web page. Some things you really can't.</p>
 
     <p>
-      <strong>Pelz's research</strong> from the 1990s &mdash; still cited by
-      every modern instructor &mdash; found that amateurs systematically
-      under-read break on slow greens and under-speed on fast ones. Your
-      eye sees less slope than is actually there. A putt that looks like
-      it breaks 6 inches probably breaks 10. This matters most on breaking
-      putts from 15–30 feet where the amateur plays 4 inches of break, the
-      putt breaks 12 inches, and the ball finishes on the low side of the
-      hole every time.
+      Everything above is real and works on its own. But there's a ceiling
+      on what you can diagnose without measurement, and there's a ceiling
+      on what you can adjust without a coach watching. <strong>If
+      you've read this page, run the drills, and your putting hasn't
+      shifted in a month &mdash; come see me on SAM.</strong>
     </p>
-
-    <h4>Three things to do every time</h4>
-    <ol>
-      <li><strong>Read from low to high, not high to low.</strong> From below the hole you can see the slope most clearly. The uphill side lies to your eye.</li>
-      <li><strong>Pick an apex, not a line.</strong> The apex is the highest point the ball will travel on the way to the hole. Aim at the apex and let the ball fall into the cup. Thinking about the ball's entire curve is too many decisions; committing to one point is one decision.</li>
-      <li><strong>Play more break than you think.</strong> If your first instinct says 6 inches, play 9. Miss on the high side. A high-side miss has two ways to go in (edge and top of cup); a low-side miss has one way (edge only) and usually rolls further past because the ball has accelerated down the slope.</li>
-    </ol>
 
     <p>
-      <strong>Utley's addition</strong> to Pelz's framework: the last three
-      feet of the putt matter more than the first twenty. That's where the
-      ball is slowest and most affected by slope. Read the area around the
-      hole first; the rest of the line comes from there.
+      What a SAM session reveals in 30 minutes:
+    </p>
+    <ul>
+      <li>Whether your face is closed at impact (and by how many degrees) on your typical miss</li>
+      <li>Whether your putter geometry is fighting your stroke pattern</li>
+      <li>Whether your eye line over the ball is actually where it needs to be</li>
+      <li>Whether your tempo is consistent &mdash; or whether your back-swing varies in ways you can't feel</li>
+      <li>Where on the green (distance, slope, pressure) your numbers fall apart</li>
+    </ul>
+
+    <p>
+      That same 30 minutes, without SAM, would be us on the practice green
+      guessing at the same questions. With SAM, the answers are on the
+      screen. One session usually shows me two things to fix that I can
+      put on a weekly practice plan you can actually run.
     </p>
 
-    <div class="callout">
-      <strong>On AimPoint and other systems:</strong> modern green-reading
-      systems &mdash; AimPoint Express, ZenRead &mdash; are all useful
-      tools. They work by giving you a consistent procedure to compute
-      break from slope percentage and putt length. If you're curious and
-      methodical, a half-day AimPoint clinic is a good investment. It's
-      not magic; it's discipline applied to reading. The methods in this
-      module are what works for most of my students without adding a
-      formal system on top.
+    <div class="clinic-cta">
+      <div class="cta-label">Putting Clinics &middot; All season</div>
+      <h4>Come work on it with me on SAM PuttLab.</h4>
+      <p>
+        Mad River members get priority access to my putting clinics
+        throughout the season &mdash; small groups, SAM-measured strokes,
+        targeted drills based on what your data shows. If putting is
+        what's costing you strokes, this is the highest-leverage thing
+        you can do for your handicap this year.
+      </p>
+      <a href="../adult/events.html" class="cta-btn">See clinic dates &rarr;</a>
     </div>
   </section>
 
@@ -527,30 +648,40 @@
   <div class="attribution">
     <h3>Sources &amp; further reading</h3>
     <p>
-      This section draws specifically on:
+      The methods on this page are grounded in modern measurement-based
+      putting instruction:
     </p>
     <ul>
       <li>
-        <strong>Stan Utley, <em>The Art of Putting</em> (2006).</strong> Primary
-        source for the stroke-is-an-arc principle, the eyes-over-ball setup
-        test, the closed-eye finish drill, and the acceleration-through-the-ball
-        teaching. Utley's voice is warmer than Pelz's; if you want one
-        putting book, this is the one I'd recommend to an amateur.
+        <strong>Science and Motion Sports &mdash; SAM PuttLab.</strong>
+        Biomechanics measurement system used by most tour players and
+        elite putting coaches worldwide. Ryan is fully certified on the
+        system. The face-vs-path findings, the stroke-pattern-and-putter-fit
+        framework, and most of the diagnostic specifics on this page come
+        from the body of measurement that SAM has produced. More:
+        <strong>scienceandmotion.com</strong>.
       </li>
       <li>
-        <strong>Dave Pelz, <em>Putt Like the Pros</em> (1989) and
-        <em>The Short Game Bible</em> (1999).</strong> Primary source for the
-        face-vs-path impact data, the lag-distance rule-of-thumb
-        (12–18 inches past), the under-read-break research, and the
-        distance-calibration drill structure. Pelz's writing is dense and
-        engineer-y; read it if you want the data behind the feel.
+        <strong>Phil Kenyon &middot; Visio Putting.</strong> UK-based
+        putting coach to a long list of major champions. The Visio Black
+        Mat #1 and #2 are the practice tools Ryan recommends most. The
+        path-and-face-feedback methodology behind the mats has shaped
+        how Ryan teaches stroke pattern at any level. More:
+        <strong>visioputting.com</strong>.
       </li>
     </ul>
     <p>
-      Where I've cited a specific drill or concept, I've named the source
-      in the text. Where I haven't, the idea is mine or is common knowledge
-      in teaching &mdash; arriving on a putting green and being told to keep
-      your eyes over the ball predates both of these authors by decades.
+      The drills described above are how Ryan structures his own students'
+      putting practice. Several of them are common in elite putting
+      instruction with regional variations; where Ryan has added a
+      specific structure or rule (the 3-6-9-12-15 with miss-and-restart,
+      for example), it's noted in the drill itself.
+    </p>
+    <p>
+      <strong>If you want to do this work properly, the highest-leverage
+      step is a SAM session followed by targeted practice on a Visio
+      mat.</strong> That's how the world's best putters practice. There's
+      no reason an amateur shouldn't.
     </p>
   </div>
 
