@@ -615,6 +615,25 @@ RRG.renderNav = function(user, active = '') {
   const coachItem = user.role === 'coach'
     ? `<li class="nav-coach"><a href="coach.html" class="${active==='coach'?'active':''}">Coach View</a></li>` : '';
 
+  // Elite-tier check — pulls from the profile cache populated by
+  // RRG.auth.completeSignupIfNeeded(). Coaches always see the Elite items.
+  const profile = (RRG.auth && RRG.auth._profileCache) || null;
+  const pj = (profile && profile.profile_json) || {};
+  const tier = (pj.s1_skill_level || pj.skill_level || '').toLowerCase();
+  const isElite = user.role === 'coach' ||
+    ((tier === 'elite' || pj.junior_elite_accepted) &&
+     tier !== 'just_starting' && tier !== 'developing');
+
+  // Elite-only nav block — hole-by-hole scorecard, TrackMan sessions,
+  // handicap index. Hidden entirely for non-Elite players so the nav
+  // doesn't tease features they don't have.
+  const eliteItems = isElite ? `
+    <li class="nav-sublabel">Elite tier</li>
+    <li><a href="scorecard.html" class="${active==='scorecard'?'active':''}">Scorecard &middot; Hole by Hole</a></li>
+    <li><a href="trackman.html"  class="${active==='trackman'?'active':''}">TrackMan Sessions</a></li>
+    <li><a href="handicap.html"  class="${active==='handicap'?'active':''}">Handicap Index</a></li>
+  ` : '';
+
   const group = (label, key, items) => `
     <li class="nav-group" data-group="${key}">
       <button class="nav-group-toggle" type="button"
@@ -641,6 +660,7 @@ RRG.renderNav = function(user, active = '') {
           <li><a href="history.html"    class="${active==='history'?'active':''}">My Rounds</a></li>
           <li><a href="tiger5.html"     class="${active==='tiger5'?'active':''}">5 Errors to Avoid</a></li>
           <li><a href="profile.html"    class="${active==='profile'?'active':''}">Profile</a></li>
+          ${eliteItems}
         `)}
 
         ${group('Tools', 'tools', `

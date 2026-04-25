@@ -70,6 +70,9 @@
     </a>
   </div>
 
+  <!-- Elite-only tools row — only mounted by JS for Elite tier -->
+  <div id="elite-tools-mount"></div>
+
   <!-- Week grid -->
   <div class="page-header">
     <div class="page-label">15-WEEK ARC</div>
@@ -119,6 +122,37 @@
     const tier = (pj.s1_skill_level || pj.skill_level || '').toLowerCase();
     const isElite = (tier === 'elite' || pj.junior_elite_accepted) && tier !== 'just_starting' && tier !== 'developing';
     const isBeginner = (tier === 'just_starting' || tier === 'developing');
+
+    // Mount Elite-tier tool tiles
+    if (isElite) {
+      const eliteMount = document.getElementById('elite-tools-mount');
+      if (eliteMount) {
+        eliteMount.innerHTML = `
+          <div class="page-header" style="margin-top:6px;">
+            <div class="page-label" style="color:var(--gold);">ELITE TIER</div>
+            <h2 class="page-title" style="font-size:22px;">Your Elite Tools</h2>
+            <hr class="gold-rule">
+          </div>
+          <div class="grid grid-3 mb-5">
+            <a class="card" href="scorecard.html" style="cursor:pointer; text-decoration:none; border-left: 4px solid var(--gold);">
+              <div class="page-label" style="color:var(--gold);">ELITE</div>
+              <h3 style="color:var(--navy); margin-top:4px;">Scorecard · Hole by Hole</h3>
+              <p class="muted small mt-2">Full hole-by-hole entry with rich stats — fairways, GIR, scrambling, three-putts, the 5 Errors auto-rollup. Counts toward your handicap when rating + slope are entered.</p>
+            </a>
+            <a class="card" href="trackman.html" style="cursor:pointer; text-decoration:none; border-left: 4px solid var(--gold);">
+              <div class="page-label" style="color:var(--gold);">ELITE</div>
+              <h3 style="color:var(--navy); margin-top:4px;">TrackMan Sessions</h3>
+              <p class="muted small mt-2">Log clubhead speed, ball speed, smash, launch, spin, and carry per club. Compare against PGA, LPGA, Scratch, and Mid-Handicap benchmarks.</p>
+            </a>
+            <a class="card" href="handicap.html" style="cursor:pointer; text-decoration:none; border-left: 4px solid var(--gold);">
+              <div class="page-label" style="color:var(--gold);">ELITE</div>
+              <h3 style="color:var(--navy); margin-top:4px;">Handicap Index</h3>
+              <p class="muted small mt-2">Your portal-computed index from every rated round you've logged. Trend chart, differentials, and which 8 of 20 are counting.</p>
+            </a>
+          </div>`;
+      }
+    }
+
     if (isBeginner && RRG.milestones) {
       // Use the same rounds-table feed. If RRG.subs.forUser returns localStorage
       // rounds only, milestones still work — they just look at score/date/holes.

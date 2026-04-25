@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<base href="/portal/">
+<title>Handicap Index — Junior Elite — RR Golf Performance</title>
+<meta name="description" content="Your portal-computed handicap index, calculated from every round you've logged. Not an official Golf Canada index — a personal tracker built from your scorecard data.">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  .hcp-card {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--gold);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 22px;
+  }
+  .hcp-card h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 20px; color: var(--navy); margin: 0 0 6px; font-weight: 600;
+  }
+  .hcp-card .hcp-sub {
+    font-size: 13px; color: var(--navy-mid); margin: 0 0 16px; line-height: 1.5;
+  }
+  .hcp-method-list {
+    margin: 8px 0 0 18px; padding: 0; color: var(--navy-mid);
+    font-size: 13px; line-height: 1.6;
+  }
+  .hcp-method-list li { margin-bottom: 4px; }
+</style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container-narrow">
+
+  <div class="breadcrumb">
+    <a href="dashboard.html">Dashboard</a><span>›</span>Handicap Index
+  </div>
+
+  <div id="hcp-hero-mount"></div>
+
+  <div id="hcp-trend-wrap"></div>
+
+  <div id="hcp-diff-wrap"></div>
+
+  <!-- Always-visible explainer on how the index is calculated -->
+  <div class="hcp-card">
+    <h2>How this is calculated</h2>
+    <p class="hcp-sub">
+      This is a <strong>portal index</strong> — a personal handicap tracker built from
+      the rounds you've logged here. It mirrors the Golf Canada / World Handicap System
+      formula closely but is not an official index. For that, post the same rounds on
+      Golf Canada.
+    </p>
+    <ul class="hcp-method-list">
+      <li><b>Per-round differential</b> = (113 &divide; slope) &times; (score &minus; rating)</li>
+      <li><b>Your index</b> = average of your best N differentials from the last 20 rounds, where N depends on how many rounds you've posted (3 rounds: best 1 minus 2.0 &middot; 6 rounds: best 2 minus 1.0 &middot; 20 rounds: best 8)</li>
+      <li><b>Rounds need course rating + slope</b> to count. Mad River scorecard rounds capture this automatically; other rounds need you to enter rating + slope on the totals form</li>
+      <li>Simplifications vs. official WHS: no Playing Conditions Calculation (PCC), no net-double-bogey adjustments. Close enough for self-tracking; off by a stroke or two at most</li>
+    </ul>
+  </div>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js"></script>
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  (async () => {
+    const user = await RRG.mount('handicap');
+    if (!user) return;
+
+    // ELITE-ONLY GATE
+    if (user.role !== 'coach') {
+      const profile = await RRG.auth.completeSignupIfNeeded();
+      const pj = (profile && profile.profile_json) || {};
+      const tier = (pj.s1_skill_level || pj.skill_level || '').toLowerCase();
+      const isElite = (tier === 'elite' || pj.junior_elite_accepted) &&
+                      tier !== 'just_starting' && tier !== 'developing';
+      if (!isElite) {
+        document.querySelector('main').innerHTML = `
+          <div class="card-cream" style="text-align:center; padding: 40px 32px; max-width: 560px; margin: 40px auto;">
+            <h2 style="font-family:'Playfair Display',serif; color:var(--navy); margin: 0 0 12px;">Elite tier only</h2>
+            <p style="color:var(--navy-mid); line-height: 1.6;">
+              The handicap index is part of the Elite tier — calculated from rounds you log
+              with course rating and slope. Once you're playing those kinds of events
+              regularly, this is where you'll see your trend.
+            </p>
+            <p style="margin-top: 18px;">
+              <a href="dashboard.html" class="btn btn-primary">Back to dashboard</a>
+            </p>
+          </div>`;
+        return;
+      }
+    }
+
+    let rounds = [];
+    try {
+      rounds = await RRG.subs.forUser(user.id);
+    } catch (err) { console.warn('rounds fetch failed', err); }
+
+    // ============ HERO — big index number ============
+    const res = RRG.path.calcIndex(rounds);
+    const heroMount = document.getElementById('hcp-hero-mount');
+    if (res.index == null) {
+      heroMount.innerHTML = `
+        <div class="hcp-empty">
+          <h3>Not enough rounds yet</h3>
+          <p>Log at least <b>3 rounds with course rating + slope</b> to see your portal index.</p>
+          <p>The Mad River Scorecard captures rating + slope automatically. On the quick-entry form, add them in the Advanced section.</p>
+          <p style="margin-top:14px;">
+            <a href="scorecard.html" class="btn btn-primary btn-sm">+ Open Mad River Scorecard</a>
+            <a href="submit-round.html" class="btn btn-ghost btn-sm" style="margin-left:6px;">Or quick-entry</a>
+          </p>
+        </div>`;
+    } else {
+      const adjNote = res.adjustment !== 0 ? ` (includes ${res.adjustment > 0 ? '+' : ''}${res.adjustment} WHS adjustment for low round count)` : '';
+      heroMount.innerHTML = `
+        <div class="hcp-hero">
+          <div class="kicker">Portal Index</div>
+          <div class="index-num">${res.index.toFixed(1)}</div>
+          <div class="index-label">Built from your best ${res.used} of ${res.posted} most-recent eligible rounds</div>
+          <div class="index-sub">${res.eligible} total rounds with rating + slope${adjNote}</div>
+        </div>`;
+    }
+
+    // ============ TREND — index history line chart ============
+    const history = RRG.path.indexHistory(rounds);
+    const trendWrap = document.getElementById('hcp-trend-wrap');
+    if (history.length >= 2) {
+      trendWrap.innerHTML = `
+        <div class="hcp-card">
+          <h2>Index over time</h2>
+          <p class="hcp-sub">Your portal index recomputed after each round. Lower is better.</p>
+          ${RRG.charts.sparkline(history, { valueKey: 'index', height: 130, lowerBetter: true, title: '' })}
+        </div>`;
+    } else {
+      trendWrap.innerHTML = '';
+    }
+
+    // ============ DIFFERENTIALS TABLE ============
+    const diffWrap = document.getElementById('hcp-diff-wrap');
+    if (res.differentials && res.differentials.length) {
+      const rows = res.differentials.map(d => {
+        const dateStr = d.round_date ? RRG.fmtDate(d.round_date) : '—';
+        return `
+          <tr class="${d.used ? 'used' : ''}">
+            <td>${RRG.esc(dateStr)}</td>
+            <td>${RRG.esc(d.course || '—')}</td>
+            <td>${RRG.esc(d.score ?? '')}</td>
+            <td>${d.rating}</td>
+            <td>${d.slope}</td>
+            <td class="diff-val">${d.diff.toFixed(1)}</td>
+            <td class="used-chip">${d.used ? '<span class="used-badge">Used</span>' : ''}</td>
+          </tr>`;
+      }).join('');
+      diffWrap.innerHTML = `
+        <div class="hcp-card">
+          <h2>Last ${res.differentials.length} eligible round${res.differentials.length === 1 ? '' : 's'}</h2>
+          <p class="hcp-sub">Gold-highlighted rows are the best ${res.used} that your current index is built from.</p>
+          <table class="hcp-diff-table">
+            <thead>
+              <tr>
+                <th>Date</th><th>Course</th><th>Score</th><th>Rating</th><th>Slope</th><th>Diff</th><th></th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>`;
+    } else {
+      diffWrap.innerHTML = '';
+    }
+  })();
+</script>
+</body>
+</html>

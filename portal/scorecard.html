@@ -3,18 +3,22 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<base href="/adult/">
-<title>Mad River Scorecard — RR Golf Performance</title>
-<meta name="description" content="Log a round at Mad River hole-by-hole. Tee selection, per-hole score, putts, and fairways — every derived stat (GIR, scrambling, doubles+) auto-computed.">
+<base href="/portal/">
+<title>Scorecard — Junior Elite — RR Golf Performance</title>
+<meta name="description" content="Hole-by-hole scorecard for junior Elite players. Enter course rating and slope and the round counts toward your portal handicap index.">
 <link rel="stylesheet" href="assets/styles.css">
 <style>
   /* ============================================================
-     MAD RIVER SCORECARD — hole-by-hole round entry. Uses the
-     course data from RRG.COURSES.madriver (7 tees, par per hole,
-     stroke index, yardage per tee). Live-computes every derived
-     stat the Path widget consumes. Submit creates a single round
-     record matching the submit-round.html payload shape so both
-     entry paths are interchangeable.
+     AWAY SCORECARD — generic hole-by-hole entry for any course.
+     Player enters course name, tees, rating, slope, and per-hole
+     par. All the CT-scheme fields (tee direction, 1st putt,
+     difficulty, commitment, scoring club, penalty) capture the
+     same rich stats as the Mad River scorecard. Derived totals
+     and submit payload are identical.
+
+     Not using RRG.COURSES — all course info entered manually.
+     Phase 2 (Option B from roadmap) adds save-for-next-time course
+     library so players don't re-enter the same course twice.
      ============================================================ */
 
   .sc-hero {
@@ -58,18 +62,13 @@
     color: var(--navy); font-size: 20px; margin: 0 0 14px; font-weight: 600;
   }
 
-  /* Setup grid */
   .sc-setup {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: 14px;
   }
-  @media (max-width: 720px) {
-    .sc-setup { grid-template-columns: 1fr 1fr; }
-  }
-  @media (max-width: 460px) {
-    .sc-setup { grid-template-columns: 1fr; }
-  }
+  @media (max-width: 720px) { .sc-setup { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 460px) { .sc-setup { grid-template-columns: 1fr; } }
   .sc-setup label {
     display: block; font-size: 10px; letter-spacing: 1px;
     color: var(--navy); text-transform: uppercase; font-weight: 700;
@@ -85,25 +84,20 @@
     border-color: var(--gold); outline: none;
     box-shadow: 0 0 0 2px rgba(201,168,76,0.15);
   }
-
-  .sc-tee-info {
-    margin-top: 14px;
-    padding: 10px 14px;
-    background: #F7F2E8;
-    border: 1px solid var(--rule);
-    border-left: 3px solid var(--gold);
-    border-radius: 6px;
-    display: flex; gap: 22px; flex-wrap: wrap;
-    font-size: 13px; color: var(--navy-mid);
+  .sc-setup .hint {
+    font-size: 12px; color: var(--mid-grey);
+    margin-top: 4px; grid-column: 1 / -1;
+    padding: 8px 12px; background: #F7F2E8;
+    border-left: 3px solid var(--gold); border-radius: 4px;
   }
-  .sc-tee-info b { color: var(--navy); }
+  .sc-setup .hint b { color: var(--navy); }
 
   /* Hole table */
   .sc-holes-wrap { overflow-x: auto; margin-bottom: 6px; }
   table.sc-holes {
     width: 100%; border-collapse: collapse;
     font-size: 13px; color: var(--navy);
-    min-width: 980px;
+    min-width: 860px;
   }
   table.sc-holes thead th {
     background: var(--navy); color: #fff;
@@ -122,15 +116,11 @@
     font-weight: 700; color: var(--navy); background: #FCF9F2;
     font-family: 'Playfair Display', Georgia, serif; font-size: 16px;
   }
-  table.sc-holes tbody td.h-par  { color: var(--mid-grey); font-weight: 600; }
-  table.sc-holes tbody td.h-si   { color: var(--mid-grey); font-size: 11px; }
-  table.sc-holes tbody td.h-yd   { color: var(--navy-mid); font-size: 12px; }
   table.sc-holes tbody td.h-in-out {
     background: #F7F2E8; font-weight: 700;
   }
   table.sc-holes tbody tr.row-turn td { border-top: 2px solid var(--gold); }
-  table.sc-holes input[type="number"],
-  table.sc-holes input[type="text"] {
+  table.sc-holes input[type="number"] {
     width: 46px; padding: 5px 4px;
     text-align: center;
     border: 1px solid var(--rule); border-radius: 4px;
@@ -160,20 +150,23 @@
     border-color: var(--gold); outline: none;
     box-shadow: 0 0 0 2px rgba(201,168,76,0.15);
   }
-  td.fw-na, td.sc-na {
-    color: var(--mid-grey); font-size: 12px; text-align: center;
+  /* Par picker — slightly narrower */
+  table.sc-holes select.par-pick {
+    width: 44px; padding: 4px 2px;
+    border: 1px solid var(--rule); border-radius: 4px;
+    font-family: inherit; font-size: 13px; color: var(--navy);
+    background: var(--white);
+    text-align: center; font-weight: 600;
   }
 
-  /* Totals strip */
+  /* Totals strip (same as Mad River scorecard) */
   .sc-totals {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 10px;
     margin: 14px 0 4px;
   }
-  @media (max-width: 720px) {
-    .sc-totals { grid-template-columns: repeat(2, 1fr); }
-  }
+  @media (max-width: 720px) { .sc-totals { grid-template-columns: repeat(2, 1fr); } }
   .sc-tstat {
     background: #F7F2E8;
     border: 1px solid var(--rule);
@@ -208,35 +201,42 @@
 <main class="container-narrow">
 
   <div class="sc-hero">
-    <div class="kicker">SCORECARD · MAD RIVER</div>
-    <h1>Log your round, hole by hole.</h1>
-    <p>Enter score, putts, fairways hit, and penalties for each hole — greens in regulation, scrambling, doubles, and your par-type splits all compute automatically.</p>
-    <a href="scorecard-guide.html" class="quick-link" style="color: var(--gold);">New to this? Read the "how to track your round" guide &rarr;</a>
-    <br>
-    <a href="scorecard-away.html" class="quick-link">Playing somewhere else? Use the Away Scorecard &rarr;</a>
-    <br>
-    <a href="submit-round.html" class="quick-link">Prefer to just enter totals? Quick-entry form &rarr;</a>
+    <div class="kicker">Scorecard &middot; Junior Elite</div>
+    <h1>Log a round, hole by hole.</h1>
+    <p>Enter the course, tees, rating, and slope, then your score and putts per hole. Greens in regulation, scrambling, fairways, and your par-type splits all compute automatically. If you include rating and slope, the round counts toward your handicap index.</p>
+    <a href="submit-round.html" class="quick-link">Just want to enter totals? Use the quick-entry form &rarr;</a>
   </div>
 
   <div style="background:#F0F6EC; border:1px solid #C8DAB6; border-left:3px solid #6B8B4E; border-radius:8px; padding:10px 14px; margin: 0 0 14px; font-size:13px; line-height:1.5; color:#3D5A24;">
-    <strong>Your work is auto-saved.</strong> Every field saves to this device as you type — switch tees, close the page, even reload the browser, and your data comes back. Only "Submit round" finalizes it.
+    <strong>Your work is auto-saved.</strong> Every field saves to this device as you type. Reload, switch apps, even close the browser — your data comes back. Only "Submit round" finalizes it.
   </div>
 
   <form id="sc-form" autocomplete="off">
 
-    <!-- ========== SETUP ========== -->
+    <!-- ========== COURSE SETUP ========== -->
     <div class="sc-card">
-      <div class="card-label">Setup</div>
+      <div class="card-label">Course setup</div>
       <div class="sc-setup">
+        <div>
+          <label>Course name</label>
+          <input type="text" name="course" id="sc-course" required placeholder="e.g. Turnberry">
+        </div>
+        <div>
+          <label>Tees played</label>
+          <input type="text" name="tees" id="sc-tees" required placeholder="e.g. Blue">
+        </div>
         <div>
           <label>Date</label>
           <input type="date" name="round_date" id="sc-date" required>
         </div>
+
         <div>
-          <label>Tees</label>
-          <select name="tee_key" id="sc-tees" required>
-            <!-- populated by JS -->
-          </select>
+          <label>Course rating</label>
+          <input type="number" name="course_rating" id="sc-rating" step="0.1" min="50" max="80" placeholder="71.2">
+        </div>
+        <div>
+          <label>Slope</label>
+          <input type="number" name="course_slope" id="sc-slope" step="1" min="55" max="155" placeholder="129">
         </div>
         <div>
           <label>Format</label>
@@ -248,22 +248,27 @@
             <option value="Prep Round">Prep Round</option>
           </select>
         </div>
-      </div>
-      <div class="sc-tee-info" id="sc-tee-info">
-        <span>Pick your tees to see yardage and course rating.</span>
+
+        <div class="hint">
+          <b>Rating + slope are printed on the scorecard</b> &mdash; look near the bottom. Entering them lets this round count toward your portal handicap index. Leave blank if you don't have them handy; you can still log the round, it just won't update your index.
+        </div>
       </div>
     </div>
 
-    <!-- ========== HOLES ========== -->
+    <!-- ========== PAR LAYOUT ========== -->
     <div class="sc-card">
-      <div class="card-label">Front 9</div>
+      <div class="card-label">Holes</div>
+      <h2>Per-hole par + scoring</h2>
+      <p style="font-size:13px; color:var(--mid-grey); margin:0 0 12px; line-height:1.5;">
+        Default is par 4 on every hole (total par 72). Adjust each hole's par as needed. Everything else works the same as the Mad River scorecard: score, tee direction, first putt distance, putts, scramble difficulty, commitment grade, scoring club, penalty.
+      </p>
       <div class="sc-holes-wrap">
         <table class="sc-holes" id="sc-front">
           <thead>
             <tr>
-              <th>Hole</th><th>Par</th><th>SI</th><th>Yd</th>
+              <th>Hole</th><th>Par</th>
               <th>Score</th><th>Tee</th><th>1st putt</th><th>Putts</th>
-              <th title="Chip difficulty when you missed the green: Esy (simple chip) or Hrd (short-sided / awkward lie)">Chip</th><th title="Did you commit to this shot? Y or N">Commit</th><th title="Did you have a wedge or 9-iron approach into this green in regulation? Tap if yes — this is a scoring opportunity.">Wedge</th><th>Pen.</th>
+              <th title="Chip difficulty when you missed the green: Esy or Hrd">Chip</th><th title="Did you commit to this shot? Y or N">Commit</th><th title="Did you have a wedge or 9-iron approach into this green in regulation? Tap if yes — this is a scoring opportunity.">Wedge</th><th>Pen.</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -277,9 +282,9 @@
         <table class="sc-holes" id="sc-back">
           <thead>
             <tr>
-              <th>Hole</th><th>Par</th><th>SI</th><th>Yd</th>
+              <th>Hole</th><th>Par</th>
               <th>Score</th><th>Tee</th><th>1st putt</th><th>Putts</th>
-              <th title="Chip difficulty when you missed the green: Esy (simple chip) or Hrd (short-sided / awkward lie)">Chip</th><th title="Did you commit to this shot? Y or N">Commit</th><th title="Did you have a wedge or 9-iron approach into this green in regulation? Tap if yes — this is a scoring opportunity.">Wedge</th><th>Pen.</th>
+              <th title="Chip difficulty: Esy or Hrd">Chip</th><th title="Committed: Y or N">Commit</th><th title="Wedge or 9-iron approach in regulation">Wedge</th><th>Pen.</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -290,7 +295,7 @@
     <!-- ========== TOTALS ========== -->
     <div class="sc-card">
       <div class="card-label">Live totals</div>
-      <h2 id="sc-total-head">Total: <span id="sc-total">—</span></h2>
+      <h2 id="sc-total-head">Total: <span id="sc-total">—</span> <small style="font-weight:400; color:var(--mid-grey); font-size:14px; font-family:inherit;" id="sc-par-sub"></small></h2>
       <div class="sc-totals">
         <div class="sc-tstat">
           <div class="lbl">Out / In</div>
@@ -299,7 +304,7 @@
         <div class="sc-tstat">
           <div class="lbl">Fairways</div>
           <div class="val" id="sc-fw">—</div>
-          <div class="sub" id="sc-fw-sub">of 14</div>
+          <div class="sub" id="sc-fw-sub">—</div>
         </div>
         <div class="sc-tstat">
           <div class="lbl">GIR</div>
@@ -348,24 +353,11 @@
           <div class="val" id="sc-t5-total" style="color: var(--gold);">—</div>
           <div class="sub" id="sc-t5-breakdown" style="font-size: 10px; letter-spacing: 0.04em;">—</div>
         </div>
-      </div>
-      <div class="sc-totals" style="margin-top: 10px;">
         <div class="sc-tstat">
-          <div class="lbl">Par 3 Avg</div>
-          <div class="val" id="sc-p3">—</div>
-        </div>
-        <div class="sc-tstat">
-          <div class="lbl">Par 4 Avg</div>
-          <div class="val" id="sc-p4">—</div>
-        </div>
-        <div class="sc-tstat">
-          <div class="lbl">Par 5 Avg</div>
-          <div class="val" id="sc-p5">—</div>
-        </div>
-        <div class="sc-tstat">
-          <div class="lbl">First hole</div>
-          <div class="val" id="sc-first">—</div>
-          <div class="sub" id="sc-first-sub">—</div>
+          <div class="lbl">Par 3 / 4 / 5 avg</div>
+          <div class="val" style="font-size:16px;">
+            <span id="sc-p3">—</span> / <span id="sc-p4">—</span> / <span id="sc-p5">—</span>
+          </div>
         </div>
       </div>
     </div>
@@ -427,11 +419,32 @@
 <script src="assets/app.js"></script>
 <script>
   (async () => {
-    const user = await RRG.mount('history');
+    const user = await RRG.mount('scorecard');
     if (!user) return;
 
-    const course = RRG.COURSES.madriver;
-    if (!course) return;
+    // ELITE-ONLY GATE — full hole-by-hole scorecard is reserved for the
+    // Elite junior tier. Just Starting / Developing juniors get the simple
+    // log instead. The flag lives on profile_json and is set by Ryan.
+    const profile = await RRG.auth.completeSignupIfNeeded();
+    const pj = (profile && profile.profile_json) || {};
+    const tier = (pj.s1_skill_level || pj.skill_level || '').toLowerCase();
+    const isElite = (tier === 'elite' || pj.junior_elite_accepted) &&
+                    tier !== 'just_starting' && tier !== 'developing';
+    if (!isElite) {
+      // Show a friendly redirect message rather than just punting to dashboard
+      document.querySelector('main').innerHTML = `
+        <div class="card-cream" style="text-align:center; padding: 40px 32px; max-width: 560px; margin: 40px auto;">
+          <h2 style="font-family:'Playfair Display',serif; color:var(--navy); margin: 0 0 12px;">Elite tier only</h2>
+          <p style="color:var(--navy-mid); line-height: 1.6;">
+            The full hole-by-hole scorecard is part of the Elite tier. If you'd like access,
+            ask Ryan about moving up — or use the quick log on your dashboard for now.
+          </p>
+          <p style="margin-top: 18px;">
+            <a href="dashboard.html" class="btn btn-primary">Back to dashboard</a>
+          </p>
+        </div>`;
+      return;
+    }
 
     // Default date to today
     const today = new Date();
@@ -439,49 +452,35 @@
     document.getElementById('sc-date').value =
       `${today.getFullYear()}-${pad(today.getMonth()+1)}-${pad(today.getDate())}`;
 
-    // Populate tee selector
-    const teeSelect = document.getElementById('sc-tees');
-    teeSelect.innerHTML = '<option value="">— select —</option>' +
-      course.tees.map(t => {
-        const out = t.yards.slice(0, 9).reduce((a, b) => a + b, 0);
-        const tot = t.yards.reduce((a, b) => a + b, 0);
-        return `<option value="${t.key}">${t.label} &middot; ${tot} yd</option>`;
-      }).join('');
-
-    // Render 18 hole rows per CT's 4-row scheme: score + tee direction
-    // (F/L/R/X), first putt distance, total putts, scramble difficulty
-    // (S/T, relevant only on missed greens), commitment grade (C/W), penalties.
+    // Render 18 rows with editable par (default 4), score, tee, first putt,
+    // putts, difficulty, commitment, scoring club, penalty.
     function renderHoles() {
-      const tee = course.tees.find(t => t.key === teeSelect.value);
       ['front', 'back'].forEach((half, halfIdx) => {
         const tbody = document.querySelector('#sc-' + half + ' tbody');
         const start = halfIdx * 9;
         const rows = [];
         for (let i = 0; i < 9; i++) {
           const hole = start + i + 1;
-          const par = course.par[start + i];
-          const si = course.mens_si[start + i];
-          const yd = tee ? tee.yards[start + i] : '—';
-
-          // Tee-shot direction picker — only meaningful on par 4/5.
-          // F = fairway hit, L = missed left, R = missed right, X = penalty/lost.
-          const teeCell = (par >= 4) ? `
-            <select class="sc-pick tee-in" data-hole="${hole}" onchange="scRecalc()">
-              <option value="">—</option>
-              <option value="F">F</option>
-              <option value="L">L</option>
-              <option value="R">R</option>
-              <option value="X">X</option>
-            </select>` : `<span class="sc-na">—</span>`;
-
           rows.push(`
-            <tr data-hole="${hole}" data-par="${par}">
+            <tr data-hole="${hole}">
               <td class="h-num">${hole}</td>
-              <td class="h-par">${par}</td>
-              <td class="h-si">${si}</td>
-              <td class="h-yd">${yd}</td>
+              <td>
+                <select class="par-pick par-in" data-hole="${hole}" onchange="scRecalc()">
+                  <option value="3">3</option>
+                  <option value="4" selected>4</option>
+                  <option value="5">5</option>
+                </select>
+              </td>
               <td><input type="number" min="1" max="15" class="score-in" data-hole="${hole}" oninput="scRecalc()"></td>
-              <td>${teeCell}</td>
+              <td>
+                <select class="sc-pick tee-in" data-hole="${hole}" onchange="scRecalc()">
+                  <option value="">—</option>
+                  <option value="F">F</option>
+                  <option value="L">L</option>
+                  <option value="R">R</option>
+                  <option value="X">X</option>
+                </select>
+              </td>
               <td><input type="number" min="0" max="120" class="firstputt-in" data-hole="${hole}" placeholder="ft" style="width:54px;" oninput="scRecalc()"></td>
               <td><input type="number" min="0" max="8" class="putts-in" data-hole="${hole}" oninput="scRecalc()"></td>
               <td>
@@ -498,24 +497,17 @@
                   <option value="W">N</option>
                 </select>
               </td>
-              <td>
-                <input type="checkbox" class="fw-chk scoringclub-chk" data-hole="${hole}"
-                       onchange="scRecalc()" title="Check if you had a wedge or 9-iron approach into this green in regulation. Bogey from this position counts as a 5 Errors leak.">
-              </td>
+              <td><input type="checkbox" class="fw-chk scoringclub-chk" data-hole="${hole}" onchange="scRecalc()" title="Check if you had a wedge or 9-iron approach into this green in regulation. Bogey from this position = 5 Errors leak."></td>
               <td><input type="number" min="0" max="5" class="pen-in" data-hole="${hole}" oninput="scRecalc()" placeholder="0"></td>
             </tr>
           `);
         }
-        // OUT / IN row — just score/putts/pen subtotals, the rest spans
+        // OUT/IN subtotal row
         const subtotalLabel = half === 'front' ? 'OUT' : 'IN';
-        const parSub = course.par.slice(start, start + 9).reduce((a,b)=>a+b, 0);
-        const ydSub  = tee ? tee.yards.slice(start, start + 9).reduce((a,b)=>a+b, 0) : '—';
         rows.push(`
           <tr class="row-turn">
             <td class="h-num h-in-out">${subtotalLabel}</td>
-            <td class="h-par h-in-out">${parSub}</td>
-            <td></td>
-            <td class="h-yd h-in-out">${ydSub}</td>
+            <td class="h-in-out" id="sc-${half}-par">—</td>
             <td class="h-in-out" id="sc-${half}-score">—</td>
             <td></td>
             <td></td>
@@ -528,63 +520,27 @@
         `);
         tbody.innerHTML = rows.join('');
       });
-      updateTeeInfo();
       scRecalc();
     }
 
-    // Show rating / slope under the tee picker
-    function updateTeeInfo() {
-      const tee = course.tees.find(t => t.key === teeSelect.value);
-      const box = document.getElementById('sc-tee-info');
-      if (!tee) {
-        box.innerHTML = '<span>Pick your tees to see yardage and course rating.</span>';
-        return;
-      }
-      const tot = tee.yards.reduce((a,b)=>a+b, 0);
-      const mens = tee.mens_rating ? `<span><b>Men's</b> ${tee.mens_rating} / ${tee.mens_slope}</span>` : '';
-      const wom  = tee.womens_rating ? `<span><b>Ladies</b> ${tee.womens_rating} / ${tee.womens_slope}</span>` : '';
-      box.innerHTML = `
-        <span><b>${tee.label}</b></span>
-        <span><b>Total</b> ${tot} yd</span>
-        ${mens} ${wom}
-      `;
-    }
-
-    /* DATA-PRESERVATION: changing the tee USED to wipe everything because
-       renderHoles() rebuilds the hole table from scratch. Now we snapshot
-       inputs first, render, then restore — so the user can change tees
-       mid-round without losing any data they've already entered. */
-    teeSelect.addEventListener('change', () => {
-      const snapshot = gatherHoleInputs();
-      renderHoles();
-      applyHoleInputs(snapshot);
-      saveDraft();   // also persist the change immediately
-    });
-
     // =========== LIVE RECALC ===========
-    /* Called on every keystroke. Computes every derived stat and writes to
-       the totals strip + OUT/IN subtotals. Everything here is idempotent. */
     window.scRecalc = function() {
       let outScore = 0, inScore = 0, outPutts = 0, inPutts = 0, outPen = 0, inPen = 0;
-      // Tee direction counts (par 4/5 only)
+      let outPar = 0, inPar = 0, totalPar = 0;
       let fwHit = 0, teeLeft = 0, teeRight = 0, teeX = 0, teeEligible = 0;
       let girCount = 0;
       let threePutts = 0;
       let scrAttempts = 0, scrMade = 0;
-      let toughMisses = 0;  // CT's short-sided flag: missed green AND marked Tough
-      let easySavesBlown = 0;  // missed green, Simple difficulty, still made bogey+
-      let scoringClubBogeys = 0;  // scoring-club hole, bogey or worse
-      let par5Bogeys = 0;  // 5 Errors #1: bogey or worse on a par 5
+      let toughMisses = 0, easySavesBlown = 0, scoringClubBogeys = 0;
+      let par5Bogeys = 0;  // 5 Errors #1
       let birdies = 0, doublesPlus = 0;
       let penalties = 0;
-      // Commitment audit
       let committedN = 0, weakN = 0;
-      // First putt distance — sum + count for average
       let fpSum = 0, fpCount = 0;
       const pByType = { 3: { n: 0, sum: 0 }, 4: { n: 0, sum: 0 }, 5: { n: 0, sum: 0 } };
-      let firstScore = null, firstPar = null;
 
       for (let h = 1; h <= 18; h++) {
+        const parIn       = document.querySelector('.par-in[data-hole="' + h + '"]');
         const scoreIn     = document.querySelector('.score-in[data-hole="' + h + '"]');
         const puttsIn     = document.querySelector('.putts-in[data-hole="' + h + '"]');
         const penIn       = document.querySelector('.pen-in[data-hole="' + h + '"]');
@@ -593,7 +549,10 @@
         const diffIn      = document.querySelector('.diff-in[data-hole="' + h + '"]');
         const commitIn    = document.querySelector('.commit-in[data-hole="' + h + '"]');
         const scClubChk   = document.querySelector('.scoringclub-chk[data-hole="' + h + '"]');
-        const par = parseInt(document.querySelector('tr[data-hole="' + h + '"]').dataset.par, 10);
+
+        const par = parIn ? parseInt(parIn.value, 10) : 4;
+        totalPar += par;
+        if (h <= 9) outPar += par; else inPar += par;
 
         const score     = scoreIn     && scoreIn.value     !== '' ? parseInt(scoreIn.value, 10)     : null;
         const putts     = puttsIn     && puttsIn.value     !== '' ? parseInt(puttsIn.value, 10)     : null;
@@ -605,18 +564,12 @@
         const scoringClub = !!(scClubChk && scClubChk.checked);
 
         if (score != null) {
-          if (h <= 9)  outScore += score; else inScore += score;
-
+          if (h <= 9) outScore += score; else inScore += score;
           const delta = score - par;
           if (delta <= -1) birdies++;
           if (delta >= 2)  doublesPlus++;
-          if (par === 5 && delta >= 1) par5Bogeys++;  // 5 Errors #1: bogey+ on par 5
-
+          if (par === 5 && delta >= 1) par5Bogeys++;  // 5 Errors #1
           if (pByType[par]) { pByType[par].n++; pByType[par].sum += score; }
-
-          if (h === 1) { firstScore = score; firstPar = par; }
-
-          // GIR derivation: shotsToReachGreen = score - putts; GIR if <= par-2
           if (putts != null) {
             const reach = score - putts;
             const gir = reach <= (par - 2);
@@ -624,11 +577,10 @@
             else {
               scrAttempts++;
               if (score <= par) scrMade++;
-              if (diff === 'T') toughMisses++;    // missed green AND short-sided
-              if (diff === 'S' && score > par) easySavesBlown++;  // 5 Errors: Easy Save Blown
+              if (diff === 'T') toughMisses++;
+              if (diff === 'S' && score > par) easySavesBlown++;
             }
           }
-          // 5 Errors: Scoring Club Bogey — player flagged a scoring club AND made bogey+
           if (scoringClub && score > par) scoringClubBogeys++;
         }
         if (putts != null) {
@@ -654,10 +606,14 @@
       const totalScore = outScore + inScore;
       document.getElementById('sc-total').textContent =
         (outScore || inScore) ? totalScore : '—';
-      document.getElementById('sc-out').textContent   = outScore || '—';
-      document.getElementById('sc-in').textContent    = inScore || '—';
+      document.getElementById('sc-par-sub').textContent =
+        totalPar ? (' · par ' + totalPar + ((outScore || inScore) ? ' · ' + ((totalScore - totalPar) > 0 ? '+' : '') + (totalScore - totalPar) : '')) : '';
+      document.getElementById('sc-out').textContent = outScore || '—';
+      document.getElementById('sc-in').textContent  = inScore || '—';
 
       const setSub = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+      setSub('sc-front-par',   outPar);
+      setSub('sc-back-par',    inPar);
       setSub('sc-front-score', outScore || '—');
       setSub('sc-back-score',  inScore || '—');
       setSub('sc-front-putts', outPutts || '—');
@@ -681,7 +637,7 @@
         ? Math.round(100 * scrMade / scrAttempts) + '% saved'
           + (toughMisses ? ' · ' + toughMisses + ' tough' : '')
         : '—';
-      document.getElementById('sc-pen').textContent    = penalties;
+      document.getElementById('sc-pen').textContent     = penalties;
       document.getElementById('sc-birdies').textContent = birdies;
       document.getElementById('sc-doubles').textContent = doublesPlus;
 
@@ -689,59 +645,33 @@
       document.getElementById('sc-p4').textContent = pByType[4].n ? (pByType[4].sum / pByType[4].n).toFixed(2) : '—';
       document.getElementById('sc-p5').textContent = pByType[5].n ? (pByType[5].sum / pByType[5].n).toFixed(2) : '—';
 
-      if (firstScore != null) {
-        const diff = firstScore - firstPar;
-        const label = diff === 0 ? 'Par' : diff > 0 ? `+${diff}` : `${diff}`;
-        document.getElementById('sc-first').textContent = firstScore;
-        document.getElementById('sc-first-sub').textContent = label + ' (par ' + firstPar + ')';
-      } else {
-        document.getElementById('sc-first').textContent = '—';
-        document.getElementById('sc-first-sub').textContent = '—';
-      }
-
-      // Commitment card
       const commitTotal = committedN + weakN;
-      const commitEl = document.getElementById('sc-commit');
-      if (commitEl) {
-        commitEl.textContent = commitTotal ? Math.round(100 * committedN / commitTotal) + '%' : '—';
-        const subEl = document.getElementById('sc-commit-sub');
-        if (subEl) subEl.textContent = commitTotal ? (committedN + ' of ' + commitTotal + ' committed') : '—';
-      }
-      // 5 Errors auto-counts
-      const esbEl = document.getElementById('sc-esb');
-      if (esbEl) esbEl.textContent = easySavesBlown;
-      const scbEl = document.getElementById('sc-scb');
-      if (scbEl) scbEl.textContent = scoringClubBogeys;
+      document.getElementById('sc-commit').textContent    = commitTotal ? Math.round(100 * committedN / commitTotal) + '%' : '—';
+      document.getElementById('sc-commit-sub').textContent = commitTotal ? (committedN + ' of ' + commitTotal + ' committed') : '—';
+      document.getElementById('sc-esb').textContent = easySavesBlown;
+      document.getElementById('sc-scb').textContent = scoringClubBogeys;
 
-      // 5 Errors TOTAL — single number plus per-error breakdown.
-      // CT asked for a clear at-a-glance total instead of having to add up
-      // the individual error counts manually.
+      // 5 Errors total (auto from inputs — CT's request)
       const t5Total = par5Bogeys + doublesPlus + easySavesBlown + threePutts + scoringClubBogeys;
       const t5TotalEl = document.getElementById('sc-t5-total');
       if (t5TotalEl) t5TotalEl.textContent = t5Total || '—';
       const t5BreakdownEl = document.getElementById('sc-t5-breakdown');
       if (t5BreakdownEl) {
-        // Compact breakdown: P5=par5 bogeys, Dbl=doubles+, EzS=easy saves blown, 3P=three-putts, SC=scoring-club bogeys
         t5BreakdownEl.textContent = t5Total
           ? `${par5Bogeys} P5 · ${doublesPlus} Dbl · ${easySavesBlown} EzS · ${threePutts} 3P · ${scoringClubBogeys} SC`
           : '—';
       }
     };
 
-    // Initial render (no tee selected → placeholder row yardages)
     renderHoles();
 
     /* =================================================================
-       AUTO-SAVE — persist the entire form state to localStorage on every
-       keystroke. If the page reloads, the browser crashes, the user
-       navigates away, or anything else interrupts entry, the draft is
-       restored automatically on next visit. Only cleared on successful
-       submit. This was added after a real player-experience failure
-       (validation error scrolled to top + tee-change wiped 8 minutes of
-       hole-by-hole entry). Never again.
+       AUTO-SAVE — same protection as scorecard.html. Persists to
+       localStorage on every keystroke, restores on page load, clears
+       only on successful submit.
        ================================================================= */
-    const DRAFT_KEY = 'rrgA_sc_madriver_draft_' + user.id;
-    const SAVED_LBL_ID = 'sc-saved-indicator';
+    const form = document.getElementById('sc-form');
+    const DRAFT_KEY = 'rrgJr_sc_draft_' + user.id;
 
     function gatherHoleInputs() {
       const out = {};
@@ -753,6 +683,7 @@
           return el.value;
         };
         out[h] = {
+          par:        get('par-in'),
           score:      get('score-in'),
           tee:        get('tee-in'),
           firstPutt:  get('firstputt-in'),
@@ -765,7 +696,6 @@
       }
       return out;
     }
-
     function applyHoleInputs(snapshot) {
       if (!snapshot) return;
       for (let h = 1; h <= 18; h++) {
@@ -777,6 +707,7 @@
           if (el.type === 'checkbox') el.checked = !!val;
           else el.value = val;
         };
+        set('par-in',          row.par);
         set('score-in',        row.score);
         set('tee-in',          row.tee);
         set('firstputt-in',    row.firstPutt);
@@ -786,48 +717,37 @@
         set('scoringclub-chk', row.sc);
         set('pen-in',          row.pen);
       }
-      // Re-run derived totals after restoring
       if (typeof window.scRecalc === 'function') window.scRecalc();
     }
-
     function gatherDraft() {
-      const fd = (name) => {
-        const el = document.querySelector(`[name="${name}"]`);
-        return el ? el.value : '';
-      };
+      const fd = (n) => { const el = form.querySelector(`[name="${n}"]`); return el ? el.value : ''; };
       return {
-        v: 1,
-        ts: Date.now(),
-        date:           fd('round_date'),
-        tee_key:        fd('tee_key'),
-        format:         fd('format'),
-        sand_saves:     fd('sand_saves'),
-        drive_dist:     fd('drive_dist'),
-        routine_score:  fd('routine_score'),
+        v: 1, ts: Date.now(),
+        date: fd('round_date'),
+        course: fd('course'),
+        tees: fd('tees'),
+        format: fd('format'),
+        course_rating: fd('course_rating'),
+        course_slope: fd('course_slope'),
+        sand_saves: fd('sand_saves'),
+        drive_dist: fd('drive_dist'),
+        routine_score: fd('routine_score'),
         reflection_good: fd('reflection_good'),
-        reflection_bad:  fd('reflection_bad'),
-        one_thing:       fd('one_thing'),
+        reflection_bad: fd('reflection_bad'),
+        one_thing: fd('one_thing'),
         holes: gatherHoleInputs(),
       };
     }
-
     function applyDraft(d) {
       if (!d) return;
-      const set = (name, val) => {
-        const el = document.querySelector(`[name="${name}"]`);
-        if (el && val != null && val !== '') el.value = val;
-      };
-      // Top-of-form first — including tee, which triggers renderHoles via change
-      // listener. We restore holes AFTER the tee-driven re-render runs.
-      if (d.date) set('round_date', d.date);
-      if (d.format) set('format', d.format);
-      if (d.tee_key) {
-        teeSelect.value = d.tee_key;
-        renderHoles();          // rebuild with the saved tee's yardages
-      }
-      // Holes
+      const set = (n, v) => { const el = form.querySelector(`[name="${n}"]`); if (el && v != null && v !== '') el.value = v; };
+      set('round_date', d.date);
+      set('course', d.course);
+      set('tees', d.tees);
+      set('format', d.format);
+      set('course_rating', d.course_rating);
+      set('course_slope', d.course_slope);
       applyHoleInputs(d.holes);
-      // Extras
       set('sand_saves', d.sand_saves);
       set('drive_dist', d.drive_dist);
       set('routine_score', d.routine_score);
@@ -835,10 +755,9 @@
       set('reflection_bad', d.reflection_bad);
       set('one_thing', d.one_thing);
     }
-
     let saveTimer = null;
     function flagSavedIndicator(state) {
-      const el = document.getElementById(SAVED_LBL_ID);
+      const el = document.getElementById('sc-saved-indicator');
       if (!el) return;
       if (state === 'saving') { el.textContent = 'Saving…'; el.style.color = 'var(--mid-grey)'; }
       else if (state === 'saved') { el.textContent = '✓ Draft saved'; el.style.color = '#4C6B30'; }
@@ -848,47 +767,27 @@
       flagSavedIndicator('saving');
       clearTimeout(saveTimer);
       saveTimer = setTimeout(() => {
-        try {
-          localStorage.setItem(DRAFT_KEY, JSON.stringify(gatherDraft()));
-          flagSavedIndicator('saved');
-        } catch (e) {
-          console.warn('[scorecard] draft save failed', e);
-        }
+        try { localStorage.setItem(DRAFT_KEY, JSON.stringify(gatherDraft())); flagSavedIndicator('saved'); }
+        catch (e) { console.warn('[scorecard-away] draft save failed', e); }
       }, 400);
     }
-    function clearDraft() {
-      try { localStorage.removeItem(DRAFT_KEY); } catch {}
-    }
+    function clearDraft() { try { localStorage.removeItem(DRAFT_KEY); } catch {} }
 
-    // Restore any prior draft, then bind auto-save listeners
     let restored = false;
     try {
       const raw = localStorage.getItem(DRAFT_KEY);
-      if (raw) {
-        const d = JSON.parse(raw);
-        if (d && d.v === 1) {
-          applyDraft(d);
-          restored = true;
-        }
-      }
-    } catch (e) { console.warn('[scorecard] draft restore failed', e); }
-
-    // Auto-save on any input/change anywhere in the form
-    const form = document.getElementById('sc-form');
+      if (raw) { const d = JSON.parse(raw); if (d && d.v === 1) { applyDraft(d); restored = true; } }
+    } catch (e) { console.warn('[scorecard-away] draft restore failed', e); }
     form.addEventListener('input',  saveDraft);
     form.addEventListener('change', saveDraft);
-
     if (restored) flagSavedIndicator('restored');
 
-    /* =================================================================
-       SUBMIT
-       ================================================================= */
+    // =========== SUBMIT ===========
     const errBox = document.getElementById('sc-form-error');
     const submitBtn = document.getElementById('sc-submit-btn');
 
     // Prevent Enter (including the number-pad Enter) from submitting the
-    // round mid-entry. CT lost a round on hole 16 because Enter fired
-    // submit. Only the explicit Submit button should do that.
+    // round mid-entry. CT lost a round on hole 16 because Enter fired submit.
     form.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' && e.target.type !== 'submit' && e.target.tagName !== 'TEXTAREA') {
         e.preventDefault();
@@ -899,24 +798,10 @@
       e.preventDefault();
       errBox.style.display = 'none';
 
-      const tee = course.tees.find(t => t.key === teeSelect.value);
-      if (!tee) {
-        // Important: do NOT lose data here. The error box is right above the
-        // submit button — scroll IT into view, not the top of the page. The
-        // user picks a tee, hits submit again, and everything is intact.
-        errBox.textContent = 'Pick a tee at the top of the page before submitting. Your data is safe and auto-saved.';
-        errBox.style.display = 'block';
-        errBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        // Also flash the tee selector so they see where to look
-        teeSelect.focus();
-        teeSelect.style.outline = '2px solid var(--gold)';
-        setTimeout(() => { teeSelect.style.outline = ''; }, 2000);
-        return;
-      }
-
       // Gather per-hole data
       const holeRows = [];
       let total = 0, totalPutts = 0, totalPen = 0;
+      let totalPar = 0;
       let fwHit = 0, teeElig = 0, teeLeft = 0, teeRight = 0, teeX = 0;
       let girCount = 0, threePutts = 0;
       let scrAtt = 0, scrMade = 0, birdies = 0, doublesPlus = 0;
@@ -924,9 +809,9 @@
       let easySavesBlown = 0, scoringClubBogeys = 0, par5Bogeys = 0;
       let fpSum = 0, fpCount = 0;
       const pByType = { 3: { n: 0, sum: 0 }, 4: { n: 0, sum: 0 }, 5: { n: 0, sum: 0 } };
-      let firstScore = null, firstPar = null;
 
       for (let h = 1; h <= 18; h++) {
+        const parIn       = document.querySelector('.par-in[data-hole="' + h + '"]');
         const scoreIn     = document.querySelector('.score-in[data-hole="' + h + '"]');
         const puttsIn     = document.querySelector('.putts-in[data-hole="' + h + '"]');
         const penIn       = document.querySelector('.pen-in[data-hole="' + h + '"]');
@@ -935,10 +820,11 @@
         const diffIn      = document.querySelector('.diff-in[data-hole="' + h + '"]');
         const commitIn    = document.querySelector('.commit-in[data-hole="' + h + '"]');
         const scClubChk   = document.querySelector('.scoringclub-chk[data-hole="' + h + '"]');
-        const par = parseInt(document.querySelector('tr[data-hole="' + h + '"]').dataset.par, 10);
 
-        const s  = scoreIn && scoreIn.value !== '' ? parseInt(scoreIn.value, 10) : null;
-        const p  = puttsIn && puttsIn.value !== '' ? parseInt(puttsIn.value, 10) : null;
+        const par = parIn ? parseInt(parIn.value, 10) : 4;
+        totalPar += par;
+        const s = scoreIn && scoreIn.value !== '' ? parseInt(scoreIn.value, 10) : null;
+        const p = puttsIn && puttsIn.value !== '' ? parseInt(puttsIn.value, 10) : null;
         const pn = penIn && penIn.value !== '' ? parseInt(penIn.value, 10) : 0;
         const tDir = teeIn && teeIn.value !== '' ? teeIn.value : null;
         const fp = firstPuttIn && firstPuttIn.value !== '' ? parseFloat(firstPuttIn.value) : null;
@@ -972,7 +858,6 @@
           if (delta >= 2) doublesPlus++;
           if (par === 5 && delta >= 1) par5Bogeys++;  // 5 Errors #1
           if (pByType[par]) { pByType[par].n++; pByType[par].sum += s; }
-          if (h === 1) { firstScore = s; firstPar = par; }
           if (p != null) {
             const reach = s - p;
             if (reach <= (par - 2)) girCount++;
@@ -1006,11 +891,10 @@
 
       const commitTotal = committedN + weakN;
       const commitPct = commitTotal ? Math.round(100 * committedN / commitTotal) : null;
+      const rating = fd.course_rating ? parseFloat(fd.course_rating) : null;
+      const slope  = fd.course_slope  ? parseInt(fd.course_slope, 10) : null;
 
-      // 5 Errors — auto-computed from hole-by-hole entry. Mirrors RRG.TIGER5
-      // numbering 1..5: par5 bogeys, doubles+, easy saves blown, three-putts,
-      // scoring-club bogeys. CT's note was that these had to be entered
-      // manually before — now they roll up automatically.
+      // 5 Errors auto-rollup
       const t5 = {
         1: par5Bogeys,
         2: doublesPlus,
@@ -1023,9 +907,11 @@
       const payload = {
         user_id: user.id,
         round_date: fd.round_date || null,
-        course: course.name,
-        tees: tee.label,
+        course: toText(fd.course),
+        tees: toText(fd.tees),
         format: toText(fd.format) || 'Stroke Play',
+        course_rating: rating,
+        course_slope: slope,
         holes: 18,
         score: total,
         fir: teeElig ? (fwHit + ' / ' + teeElig) : null,
@@ -1033,38 +919,29 @@
         putts: totalPutts || null,
         up_down: scrAtt ? (scrMade + ' / ' + scrAtt) : null,
         sand_saves: toText(fd.sand_saves),
-        bad_misses: toughMisses || null,       // tough = short-sided = bad miss
+        bad_misses: toughMisses || null,
         penalties: totalPen,
         birdies: birdies,
         doubles_plus: doublesPlus,
         drive_dist: toInt(fd.drive_dist),
-        // 5 Errors auto-rollup — populates dashboard tiger5_total badge + history stats
         tiger5: t5,
         tiger5_total: t5Total,
         routine_score:   toInt(fd.routine_score),
         reflection_good: toText(fd.reflection_good),
         reflection_bad:  toText(fd.reflection_bad),
         one_thing:       toText(fd.one_thing),
-        // Hole-by-hole detail + CT's mental-audit + tee-direction stats
         hole_detail: {
-          tee_key: tee.key,
-          tee_label: tee.label,
-          total_yards: tee.yards.reduce((a,b)=>a+b, 0),
-          rating: tee.mens_rating,
-          slope: tee.mens_slope,
+          tee_label: toText(fd.tees),
+          rating, slope,
+          total_par: totalPar,
           rows: holeRows,
           par3_avg: pByType[3].n ? pByType[3].sum / pByType[3].n : null,
           par4_avg: pByType[4].n ? pByType[4].sum / pByType[4].n : null,
           par5_avg: pByType[5].n ? pByType[5].sum / pByType[5].n : null,
-          first_score: firstScore,
-          first_par: firstPar,
-          // CT's tee-direction pattern — diagnostic for face/path issues
           tee_pattern: { F: fwHit, L: teeLeft, R: teeRight, X: teeX },
-          // CT's mental audit
           commitment_pct: commitPct,
           committed_n: committedN,
           weak_n: weakN,
-          // First-putt distance average (Mad-River-specific rich data)
           avg_first_putt: fpCount ? fpSum / fpCount : null,
           first_putt_count: fpCount,
           tough_misses: toughMisses,
@@ -1077,7 +954,7 @@
 
       try {
         await RRG.subs.create(payload);
-        clearDraft();   // round is saved server-side — purge the local draft
+        clearDraft();   // round saved server-side — purge local draft
         location.replace('history.html?new=1');
       } catch (err) {
         errBox.textContent = 'Could not submit: ' + (err.message || err);

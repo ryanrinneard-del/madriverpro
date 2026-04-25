@@ -268,7 +268,7 @@
             <tr>
               <th>Hole</th><th>Par</th>
               <th>Score</th><th>Tee</th><th>1st putt</th><th>Putts</th>
-              <th title="Chip difficulty when you missed the green: Esy or Hrd">Chip</th><th title="Did you commit to this shot? Y or N">Commit</th><th title="Scoring Club — did you have a wedge or short iron into this green in regulation?">SC</th><th>Pen.</th>
+              <th title="Chip difficulty when you missed the green: Esy or Hrd">Chip</th><th title="Did you commit to this shot? Y or N">Commit</th><th title="Did you have a wedge or 9-iron approach into this green in regulation? Tap if yes — this is a scoring opportunity.">Wedge</th><th>Pen.</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -284,7 +284,7 @@
             <tr>
               <th>Hole</th><th>Par</th>
               <th>Score</th><th>Tee</th><th>1st putt</th><th>Putts</th>
-              <th title="Chip difficulty: Esy or Hrd">Chip</th><th title="Committed: Y or N">Commit</th><th>SC</th><th>Pen.</th>
+              <th title="Chip difficulty: Esy or Hrd">Chip</th><th title="Committed: Y or N">Commit</th><th title="Wedge or 9-iron approach in regulation">Wedge</th><th>Pen.</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -344,7 +344,7 @@
           <div class="sub">5 Errors</div>
         </div>
         <div class="sc-tstat">
-          <div class="lbl">Scoring Club Bogeys</div>
+          <div class="lbl">Wedge Bogeys</div>
           <div class="val" id="sc-scb">—</div>
           <div class="sub">5 Errors</div>
         </div>
@@ -473,7 +473,7 @@
                   <option value="W">N</option>
                 </select>
               </td>
-              <td><input type="checkbox" class="fw-chk scoringclub-chk" data-hole="${hole}" onchange="scRecalc()" title="Check if you had a wedge or short iron into the green in regulation"></td>
+              <td><input type="checkbox" class="fw-chk scoringclub-chk" data-hole="${hole}" onchange="scRecalc()" title="Check if you had a wedge or 9-iron approach into this green in regulation. Bogey from this position = 5 Errors leak."></td>
               <td><input type="number" min="0" max="5" class="pen-in" data-hole="${hole}" oninput="scRecalc()" placeholder="0"></td>
             </tr>
           `);
