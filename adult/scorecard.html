@@ -218,6 +218,10 @@
     <a href="submit-round.html" class="quick-link">Prefer to just enter totals? Quick-entry form &rarr;</a>
   </div>
 
+  <div style="background:#F0F6EC; border:1px solid #C8DAB6; border-left:3px solid #6B8B4E; border-radius:8px; padding:10px 14px; margin: 0 0 14px; font-size:13px; line-height:1.5; color:#3D5A24;">
+    <strong>Your work is auto-saved.</strong> Every field saves to this device as you type — switch tees, close the page, even reload the browser, and your data comes back. Only "Submit round" finalizes it.
+  </div>
+
   <form id="sc-form" autocomplete="off">
 
     <!-- ========== SETUP ========== -->
@@ -406,9 +410,10 @@
 
     <div id="sc-form-error" class="callout" style="display:none; color:var(--red-risk); border-left-color:var(--red-risk); background:#FDF0EE;"></div>
 
-    <div class="sc-submit-bar">
+    <div class="sc-submit-bar" style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
       <a href="history.html" class="btn btn-ghost">Cancel</a>
       <button type="submit" class="btn btn-primary" id="sc-submit-btn">Submit round &rarr;</button>
+      <span id="sc-saved-indicator" style="font-size:12px; color:var(--mid-grey); letter-spacing:0.04em;">Auto-saving as you type</span>
     </div>
   </form>
 
@@ -545,7 +550,16 @@
       `;
     }
 
-    teeSelect.addEventListener('change', renderHoles);
+    /* DATA-PRESERVATION: changing the tee USED to wipe everything because
+       renderHoles() rebuilds the hole table from scratch. Now we snapshot
+       inputs first, render, then restore — so the user can change tees
+       mid-round without losing any data they've already entered. */
+    teeSelect.addEventListener('change', () => {
+      const snapshot = gatherHoleInputs();
+      renderHoles();
+      applyHoleInputs(snapshot);
+      saveDraft();   // also persist the change immediately
+    });
 
     // =========== LIVE RECALC ===========
     /* Called on every keystroke. Computes every derived stat and writes to
@@ -717,8 +731,158 @@
     // Initial render (no tee selected → placeholder row yardages)
     renderHoles();
 
-    // =========== SUBMIT ===========
+    /* =================================================================
+       AUTO-SAVE — persist the entire form state to localStorage on every
+       keystroke. If the page reloads, the browser crashes, the user
+       navigates away, or anything else interrupts entry, the draft is
+       restored automatically on next visit. Only cleared on successful
+       submit. This was added after a real player-experience failure
+       (validation error scrolled to top + tee-change wiped 8 minutes of
+       hole-by-hole entry). Never again.
+       ================================================================= */
+    const DRAFT_KEY = 'rrgA_sc_madriver_draft_' + user.id;
+    const SAVED_LBL_ID = 'sc-saved-indicator';
+
+    function gatherHoleInputs() {
+      const out = {};
+      for (let h = 1; h <= 18; h++) {
+        const get = (sel) => {
+          const el = document.querySelector(`.${sel}[data-hole="${h}"]`);
+          if (!el) return null;
+          if (el.type === 'checkbox') return el.checked;
+          return el.value;
+        };
+        out[h] = {
+          score:      get('score-in'),
+          tee:        get('tee-in'),
+          firstPutt:  get('firstputt-in'),
+          putts:      get('putts-in'),
+          diff:       get('diff-in'),
+          commit:     get('commit-in'),
+          sc:         get('scoringclub-chk'),
+          pen:        get('pen-in'),
+        };
+      }
+      return out;
+    }
+
+    function applyHoleInputs(snapshot) {
+      if (!snapshot) return;
+      for (let h = 1; h <= 18; h++) {
+        const row = snapshot[h];
+        if (!row) continue;
+        const set = (sel, val) => {
+          const el = document.querySelector(`.${sel}[data-hole="${h}"]`);
+          if (!el || val == null) return;
+          if (el.type === 'checkbox') el.checked = !!val;
+          else el.value = val;
+        };
+        set('score-in',        row.score);
+        set('tee-in',          row.tee);
+        set('firstputt-in',    row.firstPutt);
+        set('putts-in',        row.putts);
+        set('diff-in',         row.diff);
+        set('commit-in',       row.commit);
+        set('scoringclub-chk', row.sc);
+        set('pen-in',          row.pen);
+      }
+      // Re-run derived totals after restoring
+      if (typeof window.scRecalc === 'function') window.scRecalc();
+    }
+
+    function gatherDraft() {
+      const fd = (name) => {
+        const el = document.querySelector(`[name="${name}"]`);
+        return el ? el.value : '';
+      };
+      return {
+        v: 1,
+        ts: Date.now(),
+        date:           fd('round_date'),
+        tee_key:        fd('tee_key'),
+        format:         fd('format'),
+        sand_saves:     fd('sand_saves'),
+        drive_dist:     fd('drive_dist'),
+        routine_score:  fd('routine_score'),
+        reflection_good: fd('reflection_good'),
+        reflection_bad:  fd('reflection_bad'),
+        one_thing:       fd('one_thing'),
+        holes: gatherHoleInputs(),
+      };
+    }
+
+    function applyDraft(d) {
+      if (!d) return;
+      const set = (name, val) => {
+        const el = document.querySelector(`[name="${name}"]`);
+        if (el && val != null && val !== '') el.value = val;
+      };
+      // Top-of-form first — including tee, which triggers renderHoles via change
+      // listener. We restore holes AFTER the tee-driven re-render runs.
+      if (d.date) set('round_date', d.date);
+      if (d.format) set('format', d.format);
+      if (d.tee_key) {
+        teeSelect.value = d.tee_key;
+        renderHoles();          // rebuild with the saved tee's yardages
+      }
+      // Holes
+      applyHoleInputs(d.holes);
+      // Extras
+      set('sand_saves', d.sand_saves);
+      set('drive_dist', d.drive_dist);
+      set('routine_score', d.routine_score);
+      set('reflection_good', d.reflection_good);
+      set('reflection_bad', d.reflection_bad);
+      set('one_thing', d.one_thing);
+    }
+
+    let saveTimer = null;
+    function flagSavedIndicator(state) {
+      const el = document.getElementById(SAVED_LBL_ID);
+      if (!el) return;
+      if (state === 'saving') { el.textContent = 'Saving…'; el.style.color = 'var(--mid-grey)'; }
+      else if (state === 'saved') { el.textContent = '✓ Draft saved'; el.style.color = '#4C6B30'; }
+      else if (state === 'restored') { el.textContent = '✓ Draft restored'; el.style.color = '#4C6B30'; }
+    }
+    function saveDraft() {
+      flagSavedIndicator('saving');
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(() => {
+        try {
+          localStorage.setItem(DRAFT_KEY, JSON.stringify(gatherDraft()));
+          flagSavedIndicator('saved');
+        } catch (e) {
+          console.warn('[scorecard] draft save failed', e);
+        }
+      }, 400);
+    }
+    function clearDraft() {
+      try { localStorage.removeItem(DRAFT_KEY); } catch {}
+    }
+
+    // Restore any prior draft, then bind auto-save listeners
+    let restored = false;
+    try {
+      const raw = localStorage.getItem(DRAFT_KEY);
+      if (raw) {
+        const d = JSON.parse(raw);
+        if (d && d.v === 1) {
+          applyDraft(d);
+          restored = true;
+        }
+      }
+    } catch (e) { console.warn('[scorecard] draft restore failed', e); }
+
+    // Auto-save on any input/change anywhere in the form
     const form = document.getElementById('sc-form');
+    form.addEventListener('input',  saveDraft);
+    form.addEventListener('change', saveDraft);
+
+    if (restored) flagSavedIndicator('restored');
+
+    /* =================================================================
+       SUBMIT
+       ================================================================= */
     const errBox = document.getElementById('sc-form-error');
     const submitBtn = document.getElementById('sc-submit-btn');
 
@@ -737,8 +901,16 @@
 
       const tee = course.tees.find(t => t.key === teeSelect.value);
       if (!tee) {
-        errBox.textContent = 'Pick a tee before submitting.';
+        // Important: do NOT lose data here. The error box is right above the
+        // submit button — scroll IT into view, not the top of the page. The
+        // user picks a tee, hits submit again, and everything is intact.
+        errBox.textContent = 'Pick a tee at the top of the page before submitting. Your data is safe and auto-saved.';
         errBox.style.display = 'block';
+        errBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Also flash the tee selector so they see where to look
+        teeSelect.focus();
+        teeSelect.style.outline = '2px solid var(--gold)';
+        setTimeout(() => { teeSelect.style.outline = ''; }, 2000);
         return;
       }
 
@@ -905,6 +1077,7 @@
 
       try {
         await RRG.subs.create(payload);
+        clearDraft();   // round is saved server-side — purge the local draft
         location.replace('history.html?new=1');
       } catch (err) {
         errBox.textContent = 'Could not submit: ' + (err.message || err);

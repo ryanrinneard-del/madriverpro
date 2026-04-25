@@ -207,6 +207,10 @@
     <a href="scorecard.html" class="quick-link">Playing Mad River? Use the dedicated Mad River scorecard &rarr;</a>
   </div>
 
+  <div style="background:#F0F6EC; border:1px solid #C8DAB6; border-left:3px solid #6B8B4E; border-radius:8px; padding:10px 14px; margin: 0 0 14px; font-size:13px; line-height:1.5; color:#3D5A24;">
+    <strong>Your work is auto-saved.</strong> Every field saves to this device as you type. Reload, switch apps, even close the browser — your data comes back. Only "Submit round" finalizes it.
+  </div>
+
   <form id="sc-form" autocomplete="off">
 
     <!-- ========== COURSE SETUP ========== -->
@@ -398,9 +402,10 @@
 
     <div id="sc-form-error" class="callout" style="display:none; color:var(--red-risk); border-left-color:var(--red-risk); background:#FDF0EE;"></div>
 
-    <div class="sc-submit-bar">
+    <div class="sc-submit-bar" style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
       <a href="history.html" class="btn btn-ghost">Cancel</a>
       <button type="submit" class="btn btn-primary" id="sc-submit-btn">Submit round &rarr;</button>
+      <span id="sc-saved-indicator" style="font-size:12px; color:var(--mid-grey); letter-spacing:0.04em;">Auto-saving as you type</span>
     </div>
   </form>
 
@@ -636,8 +641,124 @@
 
     renderHoles();
 
-    // =========== SUBMIT ===========
+    /* =================================================================
+       AUTO-SAVE — same protection as scorecard.html. Persists to
+       localStorage on every keystroke, restores on page load, clears
+       only on successful submit.
+       ================================================================= */
     const form = document.getElementById('sc-form');
+    const DRAFT_KEY = 'rrgA_sc_away_draft_' + user.id;
+
+    function gatherHoleInputs() {
+      const out = {};
+      for (let h = 1; h <= 18; h++) {
+        const get = (sel) => {
+          const el = document.querySelector(`.${sel}[data-hole="${h}"]`);
+          if (!el) return null;
+          if (el.type === 'checkbox') return el.checked;
+          return el.value;
+        };
+        out[h] = {
+          par:        get('par-in'),
+          score:      get('score-in'),
+          tee:        get('tee-in'),
+          firstPutt:  get('firstputt-in'),
+          putts:      get('putts-in'),
+          diff:       get('diff-in'),
+          commit:     get('commit-in'),
+          sc:         get('scoringclub-chk'),
+          pen:        get('pen-in'),
+        };
+      }
+      return out;
+    }
+    function applyHoleInputs(snapshot) {
+      if (!snapshot) return;
+      for (let h = 1; h <= 18; h++) {
+        const row = snapshot[h];
+        if (!row) continue;
+        const set = (sel, val) => {
+          const el = document.querySelector(`.${sel}[data-hole="${h}"]`);
+          if (!el || val == null) return;
+          if (el.type === 'checkbox') el.checked = !!val;
+          else el.value = val;
+        };
+        set('par-in',          row.par);
+        set('score-in',        row.score);
+        set('tee-in',          row.tee);
+        set('firstputt-in',    row.firstPutt);
+        set('putts-in',        row.putts);
+        set('diff-in',         row.diff);
+        set('commit-in',       row.commit);
+        set('scoringclub-chk', row.sc);
+        set('pen-in',          row.pen);
+      }
+      if (typeof window.scRecalc === 'function') window.scRecalc();
+    }
+    function gatherDraft() {
+      const fd = (n) => { const el = form.querySelector(`[name="${n}"]`); return el ? el.value : ''; };
+      return {
+        v: 1, ts: Date.now(),
+        date: fd('round_date'),
+        course: fd('course'),
+        tees: fd('tees'),
+        format: fd('format'),
+        course_rating: fd('course_rating'),
+        course_slope: fd('course_slope'),
+        sand_saves: fd('sand_saves'),
+        drive_dist: fd('drive_dist'),
+        routine_score: fd('routine_score'),
+        reflection_good: fd('reflection_good'),
+        reflection_bad: fd('reflection_bad'),
+        one_thing: fd('one_thing'),
+        holes: gatherHoleInputs(),
+      };
+    }
+    function applyDraft(d) {
+      if (!d) return;
+      const set = (n, v) => { const el = form.querySelector(`[name="${n}"]`); if (el && v != null && v !== '') el.value = v; };
+      set('round_date', d.date);
+      set('course', d.course);
+      set('tees', d.tees);
+      set('format', d.format);
+      set('course_rating', d.course_rating);
+      set('course_slope', d.course_slope);
+      applyHoleInputs(d.holes);
+      set('sand_saves', d.sand_saves);
+      set('drive_dist', d.drive_dist);
+      set('routine_score', d.routine_score);
+      set('reflection_good', d.reflection_good);
+      set('reflection_bad', d.reflection_bad);
+      set('one_thing', d.one_thing);
+    }
+    let saveTimer = null;
+    function flagSavedIndicator(state) {
+      const el = document.getElementById('sc-saved-indicator');
+      if (!el) return;
+      if (state === 'saving') { el.textContent = 'Saving…'; el.style.color = 'var(--mid-grey)'; }
+      else if (state === 'saved') { el.textContent = '✓ Draft saved'; el.style.color = '#4C6B30'; }
+      else if (state === 'restored') { el.textContent = '✓ Draft restored'; el.style.color = '#4C6B30'; }
+    }
+    function saveDraft() {
+      flagSavedIndicator('saving');
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(() => {
+        try { localStorage.setItem(DRAFT_KEY, JSON.stringify(gatherDraft())); flagSavedIndicator('saved'); }
+        catch (e) { console.warn('[scorecard-away] draft save failed', e); }
+      }, 400);
+    }
+    function clearDraft() { try { localStorage.removeItem(DRAFT_KEY); } catch {} }
+
+    let restored = false;
+    try {
+      const raw = localStorage.getItem(DRAFT_KEY);
+      if (raw) { const d = JSON.parse(raw); if (d && d.v === 1) { applyDraft(d); restored = true; } }
+    } catch (e) { console.warn('[scorecard-away] draft restore failed', e); }
+    form.addEventListener('input',  saveDraft);
+    form.addEventListener('change', saveDraft);
+    if (restored) flagSavedIndicator('restored');
+
+    // =========== SUBMIT ===========
     const errBox = document.getElementById('sc-form-error');
     const submitBtn = document.getElementById('sc-submit-btn');
 
@@ -809,6 +930,7 @@
 
       try {
         await RRG.subs.create(payload);
+        clearDraft();   // round saved server-side — purge local draft
         location.replace('history.html?new=1');
       } catch (err) {
         errBox.textContent = 'Could not submit: ' + (err.message || err);
