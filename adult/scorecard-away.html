@@ -264,7 +264,7 @@
             <tr>
               <th>Hole</th><th>Par</th>
               <th>Score</th><th>Tee</th><th>1st putt</th><th>Putts</th>
-              <th>Diff</th><th>Commit</th><th title="Scoring Club — wedge or short iron">SC</th><th>Pen.</th>
+              <th title="Chip difficulty when you missed the green: Esy or Hrd">Chip</th><th title="Did you commit to this shot? Y or N">Commit</th><th title="Scoring Club — did you have a wedge or short iron into this green in regulation?">SC</th><th>Pen.</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -280,7 +280,7 @@
             <tr>
               <th>Hole</th><th>Par</th>
               <th>Score</th><th>Tee</th><th>1st putt</th><th>Putts</th>
-              <th>Diff</th><th>Commit</th><th>SC</th><th>Pen.</th>
+              <th title="Chip difficulty: Esy or Hrd">Chip</th><th title="Committed: Y or N">Commit</th><th>SC</th><th>Pen.</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -343,6 +343,11 @@
           <div class="lbl">Scoring Club Bogeys</div>
           <div class="val" id="sc-scb">—</div>
           <div class="sub">5 Errors</div>
+        </div>
+        <div class="sc-tstat" style="background: var(--cream); border: 1px solid var(--gold);">
+          <div class="lbl" style="color: var(--navy);">5 Errors Total</div>
+          <div class="val" id="sc-t5-total" style="color: var(--gold);">—</div>
+          <div class="sub" id="sc-t5-breakdown" style="font-size: 10px; letter-spacing: 0.04em;">—</div>
         </div>
         <div class="sc-tstat">
           <div class="lbl">Par 3 / 4 / 5 avg</div>
@@ -450,21 +455,21 @@
               <td><input type="number" min="0" max="120" class="firstputt-in" data-hole="${hole}" placeholder="ft" style="width:54px;" oninput="scRecalc()"></td>
               <td><input type="number" min="0" max="8" class="putts-in" data-hole="${hole}" oninput="scRecalc()"></td>
               <td>
-                <select class="sc-pick diff-in" data-hole="${hole}" onchange="scRecalc()">
+                <select class="sc-pick diff-in" data-hole="${hole}" onchange="scRecalc()" title="Only fill in if you missed the green and chipped">
                   <option value="">—</option>
-                  <option value="S">S</option>
-                  <option value="T">T</option>
+                  <option value="S">Esy</option>
+                  <option value="T">Hrd</option>
                 </select>
               </td>
               <td>
-                <select class="sc-pick commit-in" data-hole="${hole}" onchange="scRecalc()">
+                <select class="sc-pick commit-in" data-hole="${hole}" onchange="scRecalc()" title="Did you commit to this shot?">
                   <option value="">—</option>
-                  <option value="C">C</option>
-                  <option value="W">W</option>
+                  <option value="C">Y</option>
+                  <option value="W">N</option>
                 </select>
               </td>
-              <td><input type="checkbox" class="fw-chk scoringclub-chk" data-hole="${hole}" onchange="scRecalc()"></td>
-              <td><input type="number" min="0" max="5" class="pen-in" data-hole="${hole}" oninput="scRecalc()" value="0"></td>
+              <td><input type="checkbox" class="fw-chk scoringclub-chk" data-hole="${hole}" onchange="scRecalc()" title="Check if you had a wedge or short iron into the green in regulation"></td>
+              <td><input type="number" min="0" max="5" class="pen-in" data-hole="${hole}" oninput="scRecalc()" placeholder="0"></td>
             </tr>
           `);
         }
@@ -498,6 +503,7 @@
       let threePutts = 0;
       let scrAttempts = 0, scrMade = 0;
       let toughMisses = 0, easySavesBlown = 0, scoringClubBogeys = 0;
+      let par5Bogeys = 0;  // 5 Errors #1
       let birdies = 0, doublesPlus = 0;
       let penalties = 0;
       let committedN = 0, weakN = 0;
@@ -533,6 +539,7 @@
           const delta = score - par;
           if (delta <= -1) birdies++;
           if (delta >= 2)  doublesPlus++;
+          if (par === 5 && delta >= 1) par5Bogeys++;  // 5 Errors #1
           if (pByType[par]) { pByType[par].n++; pByType[par].sum += score; }
           if (putts != null) {
             const reach = score - putts;
@@ -614,6 +621,17 @@
       document.getElementById('sc-commit-sub').textContent = commitTotal ? (committedN + ' of ' + commitTotal + ' committed') : '—';
       document.getElementById('sc-esb').textContent = easySavesBlown;
       document.getElementById('sc-scb').textContent = scoringClubBogeys;
+
+      // 5 Errors total (auto from inputs — CT's request)
+      const t5Total = par5Bogeys + doublesPlus + easySavesBlown + threePutts + scoringClubBogeys;
+      const t5TotalEl = document.getElementById('sc-t5-total');
+      if (t5TotalEl) t5TotalEl.textContent = t5Total || '—';
+      const t5BreakdownEl = document.getElementById('sc-t5-breakdown');
+      if (t5BreakdownEl) {
+        t5BreakdownEl.textContent = t5Total
+          ? `${par5Bogeys} P5 · ${doublesPlus} Dbl · ${easySavesBlown} EzS · ${threePutts} 3P · ${scoringClubBogeys} SC`
+          : '—';
+      }
     };
 
     renderHoles();
@@ -622,6 +640,14 @@
     const form = document.getElementById('sc-form');
     const errBox = document.getElementById('sc-form-error');
     const submitBtn = document.getElementById('sc-submit-btn');
+
+    // Prevent Enter (including the number-pad Enter) from submitting the
+    // round mid-entry. CT lost a round on hole 16 because Enter fired submit.
+    form.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && e.target.type !== 'submit' && e.target.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+      }
+    });
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -635,7 +661,7 @@
       let girCount = 0, threePutts = 0;
       let scrAtt = 0, scrMade = 0, birdies = 0, doublesPlus = 0;
       let toughMisses = 0, committedN = 0, weakN = 0;
-      let easySavesBlown = 0, scoringClubBogeys = 0;
+      let easySavesBlown = 0, scoringClubBogeys = 0, par5Bogeys = 0;
       let fpSum = 0, fpCount = 0;
       const pByType = { 3: { n: 0, sum: 0 }, 4: { n: 0, sum: 0 }, 5: { n: 0, sum: 0 } };
 
@@ -685,6 +711,7 @@
           const delta = s - par;
           if (delta <= -1) birdies++;
           if (delta >= 2) doublesPlus++;
+          if (par === 5 && delta >= 1) par5Bogeys++;  // 5 Errors #1
           if (pByType[par]) { pByType[par].n++; pByType[par].sum += s; }
           if (p != null) {
             const reach = s - p;
@@ -722,6 +749,16 @@
       const rating = fd.course_rating ? parseFloat(fd.course_rating) : null;
       const slope  = fd.course_slope  ? parseInt(fd.course_slope, 10) : null;
 
+      // 5 Errors auto-rollup
+      const t5 = {
+        1: par5Bogeys,
+        2: doublesPlus,
+        3: easySavesBlown,
+        4: threePutts,
+        5: scoringClubBogeys,
+      };
+      const t5Total = par5Bogeys + doublesPlus + easySavesBlown + threePutts + scoringClubBogeys;
+
       const payload = {
         user_id: user.id,
         round_date: fd.round_date || null,
@@ -742,6 +779,8 @@
         birdies: birdies,
         doubles_plus: doublesPlus,
         drive_dist: toInt(fd.drive_dist),
+        tiger5: t5,
+        tiger5_total: t5Total,
         routine_score:   toInt(fd.routine_score),
         reflection_good: toText(fd.reflection_good),
         reflection_bad:  toText(fd.reflection_bad),
@@ -764,6 +803,7 @@
           three_putts: threePutts,
           easy_saves_blown: easySavesBlown,
           scoring_club_bogeys: scoringClubBogeys,
+          par5_bogeys: par5Bogeys,
         },
       };
 
