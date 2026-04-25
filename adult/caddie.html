@@ -222,7 +222,7 @@
       <div class="adj-cell">
         <div class="lbl">Altitude</div>
         <div class="val" id="adj-alt">—</div>
-        <div class="sub" id="sub-alt">Mad River ~1,500 ft</div>
+        <div class="sub" id="sub-alt">Mad River ~457 m</div>
       </div>
     </div>
   </div>
@@ -247,20 +247,20 @@
       <div class="form-label" style="margin-bottom:6px;">Manual override</div>
       <div class="override-grid">
         <div class="ov-item">
-          <label for="ov-elev">Elevation (ft)</label>
-          <input id="ov-elev" type="number" step="1" placeholder="+10 / -8">
+          <label for="ov-elev">Elevation (m)</label>
+          <input id="ov-elev" type="number" step="0.5" placeholder="+3 / -2">
         </div>
         <div class="ov-item">
-          <label for="ov-wind-head">Wind on shot (mph)</label>
+          <label for="ov-wind-head">Wind on shot (km/h)</label>
           <input id="ov-wind-head" type="number" step="1" placeholder="+ head, – tail">
         </div>
         <div class="ov-item">
-          <label for="ov-temp">Temp (°F)</label>
-          <input id="ov-temp" type="number" step="1" placeholder="auto">
+          <label for="ov-temp">Temp (°C)</label>
+          <input id="ov-temp" type="number" step="0.5" placeholder="auto">
         </div>
         <div class="ov-item">
-          <label for="ov-alt">Altitude (ft)</label>
-          <input id="ov-alt" type="number" step="10" value="1500">
+          <label for="ov-alt">Altitude (m)</label>
+          <input id="ov-alt" type="number" step="5" value="457">
         </div>
       </div>
       <div class="fine-print">Fetch pulls your current location's temp + wind. For wind, positive = headwind, negative = tailwind.</div>
@@ -324,21 +324,20 @@
     const ovTemp = document.getElementById('ov-temp');
     const ovWindHead = document.getElementById('ov-wind-head');
 
-    // Current weather state — updated either by Fetch or manual override
+    // Current weather state — METRIC. Updated by Fetch / Mad River / overrides.
     const state = {
-      temp_f: 75,   // default baseline
-      wind_mph: 0,
+      temp_c: 24,            // baseline (~75°F equivalent)
+      wind_kmh: 0,
       wind_dir_deg: 0,
-      // Elevation + altitude default: Mad River ~1500 ft; elev delta 0 unless set
-      elev_ft: 0,
-      altitude_ft: 1500,
+      elev_m: 0,             // green-vs-tee delta in meters
+      altitude_m: 457,       // Mad River ≈ 457 m above sea level
     };
 
     function renderWeather() {
-      wxTemp.textContent = (state.temp_f != null ? state.temp_f : '—') + '°F';
+      wxTemp.textContent = (state.temp_c != null ? state.temp_c : '—') + '°C';
       const compass = RRG.weather.compass(state.wind_dir_deg);
-      wxWind.textContent = state.wind_mph > 0
-        ? `${state.wind_mph} mph ${compass}`
+      wxWind.textContent = state.wind_kmh > 0
+        ? `${state.wind_kmh} km/h ${compass}`
         : 'calm';
     }
 
@@ -373,16 +372,16 @@
         setWxStatus('Could not reach the weather service. Use the manual override below.', 'error');
         return;
       }
-      state.temp_f = wx.temp_f;
-      state.wind_mph = wx.wind_mph;
+      state.temp_c = wx.temp_c;
+      state.wind_kmh = wx.wind_kmh;
       state.wind_dir_deg = wx.wind_dir_deg;
-      if (wx.elev_ft_asl) state.altitude_ft = wx.elev_ft_asl;
+      if (wx.elev_m_asl) state.altitude_m = wx.elev_m_asl;
       ovTemp.value = '';
       ovWindHead.value = '';
-      document.getElementById('ov-alt').value = state.altitude_ft;
+      document.getElementById('ov-alt').value = state.altitude_m;
       renderWeather();
       compute();
-      setWxStatus(`Updated from ${sourceLabel} · ${wx.temp_f}°F · ${wx.wind_mph} mph ${RRG.weather.compass(wx.wind_dir_deg)}`, 'success');
+      setWxStatus(`Updated from ${sourceLabel} · ${wx.temp_c}°C · ${wx.wind_kmh} km/h ${RRG.weather.compass(wx.wind_dir_deg)}`, 'success');
     }
 
     async function fetchWeather() {
@@ -435,33 +434,31 @@
         return;
       }
 
-      // Effective values: manual overrides win; else fall back to state
-      const elev_ft = ovElev.value !== '' ? parseFloat(ovElev.value) : state.elev_ft;
+      // Effective values: manual overrides win; else fall back to state.
+      // All metric: meters / Celsius / km/h.
+      const elev_m = ovElev.value !== '' ? parseFloat(ovElev.value) : state.elev_m;
       const manualHead = ovWindHead.value !== '' ? parseFloat(ovWindHead.value) : null;
-      const temp_f = ovTemp.value !== '' ? parseFloat(ovTemp.value) : state.temp_f;
-      const altitude_ft = ovAlt.value !== '' ? parseFloat(ovAlt.value) : state.altitude_ft;
+      const temp_c = ovTemp.value !== '' ? parseFloat(ovTemp.value) : state.temp_c;
+      const altitude_m = ovAlt.value !== '' ? parseFloat(ovAlt.value) : state.altitude_m;
 
       let input;
       if (manualHead != null) {
-        // User entered raw headwind in mph; synthesize wind_dir so cos(rel)=manualHead/wind_mph=1
+        // User entered raw headwind (km/h, signed); synthesize wind_dir so
+        // cos(rel) = ±1 to map cleanly to head/tail components.
         input = {
-          yards, elev_ft, temp_f, altitude_ft,
-          wind_mph: Math.abs(manualHead),
-          // If positive (headwind) align wind-FROM with shot-TO = both 0
-          // If negative (tailwind) wind-FROM is opposite of shot-TO = 180
+          yards, elev_m, temp_c, altitude_m,
+          wind_kmh: Math.abs(manualHead),
           wind_dir_deg: manualHead >= 0 ? 0 : 180,
           shot_dir_deg: 0,
         };
       } else {
-        // Auto wind from weather — we don't know shot direction without course GPS,
-        // so assume player has oriented themselves and the fetched wind direction
-        // IS already relative to their shot. In Sprint 2 we'll derive shot_dir from
-        // the hole layout so this becomes fully automatic.
+        // Auto wind from weather — without course GPS we assume the fetched
+        // wind direction is already relative to the player's shot line.
         input = {
-          yards, elev_ft, temp_f, altitude_ft,
-          wind_mph: state.wind_mph,
+          yards, elev_m, temp_c, altitude_m,
+          wind_kmh: state.wind_kmh,
           wind_dir_deg: state.wind_dir_deg,
-          shot_dir_deg: state.wind_dir_deg,  // assumes straight into/with wind until S2
+          shot_dir_deg: state.wind_dir_deg,
         };
       }
 
@@ -488,21 +485,21 @@
       const a = r.adjustments;
       const elevEl = document.getElementById('adj-elev');
       elevEl.textContent = fmt(a.elev); elevEl.className = cls(a.elev);
-      document.getElementById('sub-elev').textContent = elev_ft
-        ? `${elev_ft > 0 ? '+' : ''}${elev_ft} ft`
+      document.getElementById('sub-elev').textContent = elev_m
+        ? `${elev_m > 0 ? '+' : ''}${elev_m} m`
         : 'flat';
       const windEl = document.getElementById('adj-wind');
       windEl.textContent = fmt(a.wind); windEl.className = cls(a.wind);
       const windNote = manualHead != null
-        ? `${Math.abs(manualHead)} mph ${manualHead > 0 ? 'head' : manualHead < 0 ? 'tail' : 'calm'}`
-        : `${state.wind_mph} mph ${RRG.weather.compass(state.wind_dir_deg)}`;
+        ? `${Math.abs(manualHead)} km/h ${manualHead > 0 ? 'head' : manualHead < 0 ? 'tail' : 'calm'}`
+        : `${state.wind_kmh} km/h ${RRG.weather.compass(state.wind_dir_deg)}`;
       document.getElementById('sub-wind').textContent = windNote;
       const tempEl = document.getElementById('adj-temp');
       tempEl.textContent = fmt(a.temp); tempEl.className = cls(a.temp);
-      document.getElementById('sub-temp').textContent = `${temp_f}°F`;
+      document.getElementById('sub-temp').textContent = `${temp_c}°C`;
       const altEl = document.getElementById('adj-alt');
       altEl.textContent = fmt(a.altitude); altEl.className = cls(a.altitude);
-      document.getElementById('sub-alt').textContent = `${altitude_ft} ft ASL`;
+      document.getElementById('sub-alt').textContent = `${altitude_m} m ASL`;
 
       resultHero.style.display = 'block';
       adjCard.style.display = 'block';
