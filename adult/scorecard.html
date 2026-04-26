@@ -239,6 +239,14 @@
           </select>
         </div>
         <div>
+          <label>Holes</label>
+          <select name="holes_played" id="sc-holes-played">
+            <option value="18" selected>18 Holes</option>
+            <option value="front9">Front 9 only</option>
+            <option value="back9">Back 9 only</option>
+          </select>
+        </div>
+        <div>
           <label>Format</label>
           <select name="format">
             <option value="Stroke Play" selected>Stroke Play</option>
@@ -255,7 +263,7 @@
     </div>
 
     <!-- ========== HOLES ========== -->
-    <div class="sc-card">
+    <div class="sc-card" id="sc-front-card">
       <div class="card-label">Front 9</div>
       <div class="sc-holes-wrap">
         <table class="sc-holes" id="sc-front">
@@ -271,7 +279,7 @@
       </div>
     </div>
 
-    <div class="sc-card">
+    <div class="sc-card" id="sc-back-card">
       <div class="card-label">Back 9</div>
       <div class="sc-holes-wrap">
         <table class="sc-holes" id="sc-back">
@@ -448,9 +456,31 @@
         return `<option value="${t.key}">${t.label} &middot; ${tot} yd</option>`;
       }).join('');
 
+    /* HOLES PLAYED — Front 9 / Back 9 / 18. Returns the inclusive range
+       of holes the player is logging. activeRange() is the single source
+       of truth used by render, recalc, submit, and auto-save. */
+    const holesPlayedSelect = document.getElementById('sc-holes-played');
+    function activeRange() {
+      const v = holesPlayedSelect ? holesPlayedSelect.value : '18';
+      if (v === 'front9') return { start: 1, end: 9, halves: ['front'] };
+      if (v === 'back9')  return { start: 10, end: 18, halves: ['back'] };
+      return { start: 1, end: 18, halves: ['front', 'back'] };
+    }
+    function applyHolesPlayedVisibility() {
+      const r = activeRange();
+      const showFront = r.halves.includes('front');
+      const showBack  = r.halves.includes('back');
+      const fc = document.getElementById('sc-front-card');
+      const bc = document.getElementById('sc-back-card');
+      if (fc) fc.style.display = showFront ? '' : 'none';
+      if (bc) bc.style.display = showBack ? '' : 'none';
+    }
+
     // Render 18 hole rows per CT's 4-row scheme: score + tee direction
     // (F/L/R/X), first putt distance, total putts, scramble difficulty
     // (S/T, relevant only on missed greens), commitment grade (C/W), penalties.
+    // Always renders all 18 row tbodies — visibility is controlled by the
+    // Front 9 / Back 9 / 18 selector via applyHolesPlayedVisibility().
     function renderHoles() {
       const tee = course.tees.find(t => t.key === teeSelect.value);
       ['front', 'back'].forEach((half, halfIdx) => {
@@ -528,8 +558,20 @@
         `);
         tbody.innerHTML = rows.join('');
       });
+      applyHolesPlayedVisibility();
       updateTeeInfo();
       scRecalc();
+    }
+
+    /* HOLES PLAYED CHANGE — same snapshot/restore pattern as the tee
+       selector. Switching from 18 → Front 9 → Back 9 → 18 mid-entry
+       does NOT wipe any data the player has entered. */
+    if (holesPlayedSelect) {
+      holesPlayedSelect.addEventListener('change', () => {
+        applyHolesPlayedVisibility();
+        scRecalc();
+        if (typeof saveDraft === 'function') saveDraft();
+      });
     }
 
     // Show rating / slope under the tee picker
@@ -563,8 +605,11 @@
 
     // =========== LIVE RECALC ===========
     /* Called on every keystroke. Computes every derived stat and writes to
-       the totals strip + OUT/IN subtotals. Everything here is idempotent. */
+       the totals strip + OUT/IN subtotals. Everything here is idempotent.
+       Honors the Front 9 / Back 9 / 18 selector — only counts holes in
+       the active range, so a 9-hole round shows the right totals. */
     window.scRecalc = function() {
+      const range = activeRange();
       let outScore = 0, inScore = 0, outPutts = 0, inPutts = 0, outPen = 0, inPen = 0;
       // Tee direction counts (par 4/5 only)
       let fwHit = 0, teeLeft = 0, teeRight = 0, teeX = 0, teeEligible = 0;
@@ -584,7 +629,7 @@
       const pByType = { 3: { n: 0, sum: 0 }, 4: { n: 0, sum: 0 }, 5: { n: 0, sum: 0 } };
       let firstScore = null, firstPar = null;
 
-      for (let h = 1; h <= 18; h++) {
+      for (let h = range.start; h <= range.end; h++) {
         const scoreIn     = document.querySelector('.score-in[data-hole="' + h + '"]');
         const puttsIn     = document.querySelector('.putts-in[data-hole="' + h + '"]');
         const penIn       = document.querySelector('.pen-in[data-hole="' + h + '"]');
@@ -614,7 +659,7 @@
 
           if (pByType[par]) { pByType[par].n++; pByType[par].sum += score; }
 
-          if (h === 1) { firstScore = score; firstPar = par; }
+          if (h === range.start) { firstScore = score; firstPar = par; }
 
           // GIR derivation: shotsToReachGreen = score - putts; GIR if <= par-2
           if (putts != null) {
@@ -800,6 +845,7 @@
         ts: Date.now(),
         date:           fd('round_date'),
         tee_key:        fd('tee_key'),
+        holes_played:   fd('holes_played'),     // 18 / front9 / back9
         format:         fd('format'),
         sand_saves:     fd('sand_saves'),
         drive_dist:     fd('drive_dist'),
@@ -821,6 +867,10 @@
       // listener. We restore holes AFTER the tee-driven re-render runs.
       if (d.date) set('round_date', d.date);
       if (d.format) set('format', d.format);
+      if (d.holes_played && holesPlayedSelect) {
+        holesPlayedSelect.value = d.holes_played;
+        applyHolesPlayedVisibility();
+      }
       if (d.tee_key) {
         teeSelect.value = d.tee_key;
         renderHoles();          // rebuild with the saved tee's yardages
@@ -914,7 +964,9 @@
         return;
       }
 
-      // Gather per-hole data
+      // Gather per-hole data — only over the active range (Front 9 / Back 9 / 18)
+      const submitRange = activeRange();
+      const holesPlayed = submitRange.end - submitRange.start + 1;   // 9 or 18
       const holeRows = [];
       let total = 0, totalPutts = 0, totalPen = 0;
       let fwHit = 0, teeElig = 0, teeLeft = 0, teeRight = 0, teeX = 0;
@@ -926,7 +978,7 @@
       const pByType = { 3: { n: 0, sum: 0 }, 4: { n: 0, sum: 0 }, 5: { n: 0, sum: 0 } };
       let firstScore = null, firstPar = null;
 
-      for (let h = 1; h <= 18; h++) {
+      for (let h = submitRange.start; h <= submitRange.end; h++) {
         const scoreIn     = document.querySelector('.score-in[data-hole="' + h + '"]');
         const puttsIn     = document.querySelector('.putts-in[data-hole="' + h + '"]');
         const penIn       = document.querySelector('.pen-in[data-hole="' + h + '"]');
@@ -972,7 +1024,7 @@
           if (delta >= 2) doublesPlus++;
           if (par === 5 && delta >= 1) par5Bogeys++;  // 5 Errors #1
           if (pByType[par]) { pByType[par].n++; pByType[par].sum += s; }
-          if (h === 1) { firstScore = s; firstPar = par; }
+          if (h === submitRange.start) { firstScore = s; firstPar = par; }
           if (p != null) {
             const reach = s - p;
             if (reach <= (par - 2)) girCount++;
@@ -1026,10 +1078,10 @@
         course: course.name,
         tees: tee.label,
         format: toText(fd.format) || 'Stroke Play',
-        holes: 18,
+        holes: holesPlayed,                     // 9 or 18, from the active range
         score: total,
         fir: teeElig ? (fwHit + ' / ' + teeElig) : null,
-        gir: girCount != null ? (girCount + ' / 18') : null,
+        gir: girCount != null ? (girCount + ' / ' + holesPlayed) : null,
         putts: totalPutts || null,
         up_down: scrAtt ? (scrMade + ' / ' + scrAtt) : null,
         sand_saves: toText(fd.sand_saves),

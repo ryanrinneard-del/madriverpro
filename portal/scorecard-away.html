@@ -250,6 +250,14 @@
             <option value="Prep Round">Prep Round</option>
           </select>
         </div>
+        <div>
+          <label>Holes</label>
+          <select name="holes_played" id="sc-holes-played">
+            <option value="18" selected>18 Holes</option>
+            <option value="front9">Front 9 only</option>
+            <option value="back9">Back 9 only</option>
+          </select>
+        </div>
 
         <div class="hint">
           <b>Rating + slope are printed on the scorecard</b> &mdash; look near the bottom. Entering them lets this round count toward your portal handicap index. Leave blank if you don't have them handy; you can still log the round, it just won't update your index.
@@ -258,8 +266,8 @@
     </div>
 
     <!-- ========== PAR LAYOUT ========== -->
-    <div class="sc-card">
-      <div class="card-label">Holes</div>
+    <div class="sc-card" id="sc-front-card">
+      <div class="card-label">Front 9</div>
       <h2>Per-hole par + scoring</h2>
       <p style="font-size:13px; color:var(--mid-grey); margin:0 0 12px; line-height:1.5;">
         Default is par 4 on every hole (total par 72). Adjust each hole's par as needed. Everything else works the same as the Mad River scorecard: score, tee direction, first putt distance, putts, scramble difficulty, commitment grade, scoring club, penalty.
@@ -278,7 +286,7 @@
       </div>
     </div>
 
-    <div class="sc-card">
+    <div class="sc-card" id="sc-back-card">
       <div class="card-label">Back 9</div>
       <div class="sc-holes-wrap">
         <table class="sc-holes" id="sc-back">
@@ -454,8 +462,22 @@
     document.getElementById('sc-date').value =
       `${today.getFullYear()}-${pad(today.getMonth()+1)}-${pad(today.getDate())}`;
 
-    // Render 18 rows with editable par (default 4), score, tee, first putt,
-    // putts, difficulty, commitment, scoring club, penalty.
+    /* HOLES PLAYED — Front 9 / Back 9 / 18 (single source of truth). */
+    const holesPlayedSelect = document.getElementById('sc-holes-played');
+    function activeRange() {
+      const v = holesPlayedSelect ? holesPlayedSelect.value : '18';
+      if (v === 'front9') return { start: 1, end: 9, halves: ['front'] };
+      if (v === 'back9')  return { start: 10, end: 18, halves: ['back'] };
+      return { start: 1, end: 18, halves: ['front', 'back'] };
+    }
+    function applyHolesPlayedVisibility() {
+      const r = activeRange();
+      const fc = document.getElementById('sc-front-card');
+      const bc = document.getElementById('sc-back-card');
+      if (fc) fc.style.display = r.halves.includes('front') ? '' : 'none';
+      if (bc) bc.style.display = r.halves.includes('back')  ? '' : 'none';
+    }
+
     function renderHoles() {
       ['front', 'back'].forEach((half, halfIdx) => {
         const tbody = document.querySelector('#sc-' + half + ' tbody');
@@ -522,11 +544,21 @@
         `);
         tbody.innerHTML = rows.join('');
       });
+      applyHolesPlayedVisibility();
       scRecalc();
+    }
+
+    if (holesPlayedSelect) {
+      holesPlayedSelect.addEventListener('change', () => {
+        applyHolesPlayedVisibility();
+        scRecalc();
+        if (typeof saveDraft === 'function') saveDraft();
+      });
     }
 
     // =========== LIVE RECALC ===========
     window.scRecalc = function() {
+      const range = activeRange();
       let outScore = 0, inScore = 0, outPutts = 0, inPutts = 0, outPen = 0, inPen = 0;
       let outPar = 0, inPar = 0, totalPar = 0;
       let fwHit = 0, teeLeft = 0, teeRight = 0, teeX = 0, teeEligible = 0;
@@ -541,7 +573,7 @@
       let fpSum = 0, fpCount = 0;
       const pByType = { 3: { n: 0, sum: 0 }, 4: { n: 0, sum: 0 }, 5: { n: 0, sum: 0 } };
 
-      for (let h = 1; h <= 18; h++) {
+      for (let h = range.start; h <= range.end; h++) {
         const parIn       = document.querySelector('.par-in[data-hole="' + h + '"]');
         const scoreIn     = document.querySelector('.score-in[data-hole="' + h + '"]');
         const puttsIn     = document.querySelector('.putts-in[data-hole="' + h + '"]');
@@ -728,6 +760,7 @@
         date: fd('round_date'),
         course: fd('course'),
         tees: fd('tees'),
+        holes_played: fd('holes_played'),
         format: fd('format'),
         course_rating: fd('course_rating'),
         course_slope: fd('course_slope'),
@@ -749,6 +782,10 @@
       set('format', d.format);
       set('course_rating', d.course_rating);
       set('course_slope', d.course_slope);
+      if (d.holes_played && holesPlayedSelect) {
+        holesPlayedSelect.value = d.holes_played;
+        applyHolesPlayedVisibility();
+      }
       applyHoleInputs(d.holes);
       set('sand_saves', d.sand_saves);
       set('drive_dist', d.drive_dist);
@@ -812,7 +849,10 @@
       let fpSum = 0, fpCount = 0;
       const pByType = { 3: { n: 0, sum: 0 }, 4: { n: 0, sum: 0 }, 5: { n: 0, sum: 0 } };
 
-      for (let h = 1; h <= 18; h++) {
+      // Submit only iterates the active range
+      const submitRange = activeRange();
+      const holesPlayed = submitRange.end - submitRange.start + 1;
+      for (let h = submitRange.start; h <= submitRange.end; h++) {
         const parIn       = document.querySelector('.par-in[data-hole="' + h + '"]');
         const scoreIn     = document.querySelector('.score-in[data-hole="' + h + '"]');
         const puttsIn     = document.querySelector('.putts-in[data-hole="' + h + '"]');
@@ -914,10 +954,10 @@
         format: toText(fd.format) || 'Stroke Play',
         course_rating: rating,
         course_slope: slope,
-        holes: 18,
+        holes: holesPlayed,
         score: total,
         fir: teeElig ? (fwHit + ' / ' + teeElig) : null,
-        gir: girCount != null ? (girCount + ' / 18') : null,
+        gir: girCount != null ? (girCount + ' / ' + holesPlayed) : null,
         putts: totalPutts || null,
         up_down: scrAtt ? (scrMade + ' / ' + scrAtt) : null,
         sand_saves: toText(fd.sand_saves),
