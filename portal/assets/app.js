@@ -624,14 +624,15 @@ RRG.renderNav = function(user, active = '') {
     ((tier === 'elite' || pj.junior_elite_accepted) &&
      tier !== 'just_starting' && tier !== 'developing');
 
-  // Elite-only nav block — hole-by-hole scorecard, TrackMan sessions,
-  // handicap index. Hidden entirely for non-Elite players so the nav
-  // doesn't tease features they don't have.
+  // Elite-only nav block — hole-by-hole scorecards (Mad River + Away),
+  // TrackMan sessions, handicap index. Hidden entirely for non-Elite
+  // players so the nav doesn't tease features they don't have.
   const eliteItems = isElite ? `
     <li class="nav-sublabel">Elite tier</li>
-    <li><a href="scorecard.html" class="${active==='scorecard'?'active':''}">Scorecard &middot; Hole by Hole</a></li>
-    <li><a href="trackman.html"  class="${active==='trackman'?'active':''}">TrackMan Sessions</a></li>
-    <li><a href="handicap.html"  class="${active==='handicap'?'active':''}">Handicap Index</a></li>
+    <li><a href="scorecard.html"      class="${active==='scorecard-madriver'?'active':''}">Mad River Scorecard</a></li>
+    <li><a href="scorecard-away.html" class="${active==='scorecard-away'?'active':''}">Away Scorecard</a></li>
+    <li><a href="trackman.html"       class="${active==='trackman'?'active':''}">TrackMan Sessions</a></li>
+    <li><a href="handicap.html"       class="${active==='handicap'?'active':''}">Handicap Index</a></li>
   ` : '';
 
   const group = (label, key, items) => `
