@@ -666,6 +666,7 @@ RRG.renderNav = function(user, active = '') {
         ${group('Tools', 'tools', `
           <li><a href="bag.html"          class="${active==='bag'?'active':''}">My Bag</a></li>
           <li><a href="wedge-matrix.html" class="${active==='wedge'?'active':''}">Wedge Matrix</a></li>
+          <li><a href="games.html"        class="${active==='games'?'active':''}"><strong>🎲 Games &amp; Drills</strong></a></li>
         `)}
 
         ${group('Learn', 'learn', `

@@ -1,0 +1,1060 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<base href="/portal/">
+<title>Games & Drills — Junior Portal — RR Golf Performance</title>
+<meta name="description" content="A library of golf games and practice drills for juniors. From Scramble and Skins to Around the Clock and the 9-Shot Challenge — fun on the course and in practice, solo or with friends.">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  /* =============================================================
+     GAMES & DRILLS LIBRARY — junior portal
+     One long browsable page with anchor-jump nav at top. Each
+     category has its own header and a grid of game cards. Tone is
+     warm + playful but information-dense — juniors should be able
+     to read a card, walk to the practice green, and play.
+     ============================================================= */
+
+  .gl-hero {
+    background: linear-gradient(135deg, var(--navy) 0%, #162E54 60%, var(--gold) 200%);
+    color: #fff; border-radius: 14px;
+    padding: 36px 32px 30px; margin: 0 0 24px;
+    position: relative; overflow: hidden;
+  }
+  .gl-hero::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--gold);
+  }
+  .gl-hero .kicker {
+    font-size: 11px; letter-spacing: 0.22em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase;
+  }
+  .gl-hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(32px, 5vw, 44px);
+    color: #fff; margin: 8px 0 8px; font-weight: 600; line-height: 1.1;
+  }
+  .gl-hero p {
+    color: rgba(255,255,255,0.78); font-size: 15px; line-height: 1.55;
+    margin: 0; max-width: 640px;
+  }
+
+  /* Quick jump bar */
+  .gl-jump {
+    background: var(--cream); border: 1px solid var(--rule);
+    border-radius: 10px; padding: 14px 18px; margin: 0 0 28px;
+    display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+  }
+  .gl-jump .jl-label {
+    font-size: 11px; letter-spacing: 0.18em; color: var(--mid-grey);
+    font-weight: 700; text-transform: uppercase; margin-right: 4px;
+  }
+  .gl-jump a {
+    background: var(--white); border: 1px solid var(--rule);
+    border-radius: 999px; padding: 6px 12px;
+    font-size: 13px; color: var(--navy); font-weight: 600;
+    text-decoration: none; transition: all .15s ease;
+  }
+  .gl-jump a:hover {
+    background: var(--gold); color: var(--navy); border-color: var(--gold);
+  }
+
+  /* Section header */
+  .gl-section {
+    margin: 32px 0 20px;
+    padding-top: 8px;
+    scroll-margin-top: 80px;
+  }
+  .gl-section h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 28px; color: var(--navy); margin: 0 0 6px; font-weight: 600;
+    display: flex; align-items: baseline; gap: 12px;
+  }
+  .gl-section h2 .gl-emoji {
+    font-size: 28px; line-height: 1;
+  }
+  .gl-section .gl-section-sub {
+    color: var(--navy-mid); font-size: 14px; line-height: 1.55;
+    margin: 0 0 18px; max-width: 720px;
+  }
+  .gl-divider {
+    height: 2px; background: var(--gold); width: 60px; border-radius: 2px;
+    margin: 0 0 18px;
+  }
+
+  /* Game cards grid */
+  .gl-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;
+  }
+  @media (max-width: 720px) { .gl-grid { grid-template-columns: 1fr; } }
+
+  .gl-card {
+    background: var(--white); border: 1px solid var(--rule);
+    border-left: 4px solid var(--gold); border-radius: 10px;
+    padding: 18px 22px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .gl-card h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 19px; color: var(--navy); margin: 0; font-weight: 600;
+    line-height: 1.2;
+  }
+  .gl-card .gl-meta {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    font-size: 11px; color: var(--mid-grey); letter-spacing: 0.04em;
+  }
+  .gl-card .gl-meta .gl-tag {
+    background: var(--cream); border: 1px solid var(--rule);
+    border-radius: 999px; padding: 2px 8px;
+    text-transform: uppercase; font-weight: 700; font-size: 10px;
+  }
+  .gl-card .gl-meta .gl-tag.players { background: #E8EEF8; color: var(--navy); border-color: #C6D3E5; }
+  .gl-card .gl-meta .gl-tag.format { background: #FAF6EC; color: #8E7228; border-color: #E5DAB8; }
+  .gl-card .gl-meta .gl-tag.skill { background: #F0F6EC; color: #4C6B30; border-color: #C8DAB6; }
+  .gl-card p { font-size: 14px; line-height: 1.6; color: var(--navy-mid); margin: 0; }
+  .gl-card p strong { color: var(--navy); }
+
+  .gl-howto {
+    background: var(--cream); border-radius: 6px;
+    padding: 10px 14px; margin-top: 6px;
+  }
+  .gl-howto .gl-howto-label {
+    font-size: 10px; letter-spacing: 0.18em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .gl-howto ol, .gl-howto ul {
+    margin: 0; padding-left: 18px;
+    font-size: 13.5px; line-height: 1.55; color: var(--navy-mid);
+  }
+  .gl-howto ol li, .gl-howto ul li { margin-bottom: 3px; }
+
+  .gl-coachtip {
+    background: #FDF6F4; border-left: 3px solid #C76757;
+    border-radius: 6px; padding: 8px 12px;
+    font-size: 13px; line-height: 1.55; color: var(--navy-mid);
+    margin-top: 4px;
+  }
+  .gl-coachtip strong { color: #9A3D2F; }
+
+  /* Section accent — left border per category */
+  .gl-section.cat-on-course-solo  .gl-card { border-left-color: #5A7BA5; }
+  .gl-section.cat-on-course-match .gl-card { border-left-color: #C76757; }
+  .gl-section.cat-on-course-team  .gl-card { border-left-color: #6B8B4E; }
+  .gl-section.cat-team-match      .gl-card { border-left-color: #8B5C8E; }
+  .gl-section.cat-putting         .gl-card { border-left-color: #2D6B4C; }
+  .gl-section.cat-chipping        .gl-card { border-left-color: #C9893E; }
+  .gl-section.cat-short-game      .gl-card { border-left-color: #B8714B; }
+  .gl-section.cat-iron-play       .gl-card { border-left-color: #4C6B30; }
+  .gl-section.cat-driver          .gl-card { border-left-color: #2D5077; }
+  .gl-section.cat-mixed           .gl-card { border-left-color: var(--gold); }
+
+  .breadcrumb {
+    font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--mid-grey); margin-bottom: 18px;
+  }
+  .breadcrumb a { color: var(--mid-grey); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--gold); }
+  .breadcrumb span { margin: 0 8px; }
+
+  .gl-callout {
+    background: #FAF6EC; border: 1px solid #E5DAB8;
+    border-left: 4px solid var(--gold); border-radius: 8px;
+    padding: 14px 18px; font-size: 14px; line-height: 1.6;
+    color: var(--navy-mid); margin: 14px 0 4px;
+  }
+  .gl-callout strong { color: var(--navy); }
+</style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container">
+
+  <div class="breadcrumb">
+    <a href="dashboard.html">Dashboard</a><span>›</span>Games &amp; Drills
+  </div>
+
+  <!-- ============ HERO ============ -->
+  <div class="gl-hero">
+    <div class="kicker">Games &amp; Drills · Junior Portal</div>
+    <h1>Practice should be fun. So should the round.</h1>
+    <p>
+      A library of games and drills you can play with friends or by yourself
+      &mdash; on the course, on the practice green, in the bunker, on the range.
+      Find one. Try it this week. Beat your score next week.
+    </p>
+  </div>
+
+  <!-- ============ QUICK JUMP NAV ============ -->
+  <div class="gl-jump">
+    <span class="jl-label">Jump to</span>
+    <a href="#oncourse-solo">⛳ Solo on Course</a>
+    <a href="#oncourse-match">🥇 Match Play</a>
+    <a href="#oncourse-team">🤝 Team Games</a>
+    <a href="#oncourse-team-match">🏆 Team Match Play</a>
+    <a href="#putting">🎯 Putting</a>
+    <a href="#chipping">🪁 Chipping</a>
+    <a href="#shortgame">⚡ Short Game</a>
+    <a href="#irons">🎳 Iron Play</a>
+    <a href="#driver">🚀 Driver</a>
+    <a href="#mixed">🎲 Mixed Practice</a>
+  </div>
+
+  <!-- ============================================================
+       ON-COURSE — SOLO (stroke-play variations + individual scoring formats)
+       ============================================================ -->
+  <section id="oncourse-solo" class="gl-section cat-on-course-solo">
+    <h2><span class="gl-emoji">⛳</span> On the Course &mdash; Solo</h2>
+    <div class="gl-divider"></div>
+    <p class="gl-section-sub">
+      Games you can play during a stroke-play round, by yourself or against the
+      course. Most of these change how you score so a bad hole doesn't ruin
+      everything &mdash; you keep playing aggressive, smart golf.
+    </p>
+
+    <div class="gl-grid">
+
+      <div class="gl-card">
+        <h3>Stableford</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">1+ players</span>
+          <span class="gl-tag format">Stroke Play</span>
+          <span class="gl-tag skill">Course play</span>
+        </div>
+        <p>The classic points-based scoring system. Instead of counting strokes, you earn points based on your score relative to par. <strong>Bad holes can't kill your round</strong> &mdash; you just get zero points and move on.</p>
+        <div class="gl-howto">
+          <div class="gl-howto-label">How to score</div>
+          <ul>
+            <li><strong>Eagle or better</strong> &mdash; 4 points</li>
+            <li><strong>Birdie</strong> &mdash; 3 points</li>
+            <li><strong>Par</strong> &mdash; 2 points</li>
+            <li><strong>Bogey</strong> &mdash; 1 point</li>
+            <li><strong>Double or worse</strong> &mdash; 0 points (pick up!)</li>
+          </ul>
+        </div>
+        <div class="gl-coachtip"><strong>Why play it:</strong> teaches you to attack, not protect. A 36-point round = a "good day."</div>
+      </div>
+
+      <div class="gl-card">
+        <h3>Modified Stableford</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">1+ players</span>
+          <span class="gl-tag format">Stroke Play</span>
+          <span class="gl-tag skill">Aggressive scoring</span>
+        </div>
+        <p>The PGA Tour version (used at the Barracuda Championship). <strong>Eagles count more, doubles count negative.</strong> Pushes you to swing for it on par-5s and play smart on tough holes.</p>
+        <div class="gl-howto">
+          <div class="gl-howto-label">How to score</div>
+          <ul>
+            <li><strong>Eagle</strong> &mdash; +5 points</li>
+            <li><strong>Birdie</strong> &mdash; +2 points</li>
+            <li><strong>Par</strong> &mdash; 0 points</li>
+            <li><strong>Bogey</strong> &mdash; −1 point</li>
+            <li><strong>Double or worse</strong> &mdash; −3 points</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="gl-card">
+        <h3>Quota</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">1+ players</span>
+          <span class="gl-tag format">Handicap-based</span>
+          <span class="gl-tag skill">Course play</span>
+        </div>
+        <p>Each player gets a points target based on handicap. Use the same Stableford scoring above &mdash; <strong>did you hit your quota?</strong> Beat it = good round. Miss = practice harder.</p>
+        <div class="gl-howto">
+          <div class="gl-howto-label">Sample quotas</div>
+          <ul>
+            <li>10 handicap → quota of 30</li>
+            <li>20 handicap → quota of 22</li>
+            <li>30 handicap → quota of 14</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="gl-card">
+        <h3>Bingo Bango Bongo</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">2-4 players</span>
+          <span class="gl-tag format">Hole-by-hole</span>
+          <span class="gl-tag skill">All-around</span>
+        </div>
+        <p>Three points up for grabs on every hole. <strong>Even higher-handicap players can compete with low handicaps</strong> because the points are about position and order, not just score.</p>
+        <div class="gl-howto">
+          <div class="gl-howto-label">The 3 points</div>
+          <ol>
+            <li><strong>Bingo</strong> &mdash; first ball on the green</li>
+            <li><strong>Bango</strong> &mdash; closest to the pin once everyone is on</li>
+            <li><strong>Bongo</strong> &mdash; first ball in the cup</li>
+          </ol>
+        </div>
+        <div class="gl-coachtip"><strong>Etiquette:</strong> always play the player furthest from the pin first &mdash; that's how you actually get a chance at Bingo.</div>
+      </div>
+
+      <div class="gl-card">
+        <h3>Worst Ball</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">1 player</span>
+          <span class="gl-tag format">Solo practice round</span>
+          <span class="gl-tag skill">Mental toughness</span>
+        </div>
+        <p>Hit two balls on every shot. <strong>Always play the worse one.</strong> A brutal solo training round &mdash; expect to shoot 10-20 strokes more than usual. Forces clean execution because every mistake stays.</p>
+        <div class="gl-coachtip"><strong>When to use:</strong> a quiet weekday afternoon with no group behind. Builds nerves and consistency fast.</div>
+      </div>
+
+      <div class="gl-card">
+        <h3>Maximum Score</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">1+ players</span>
+          <span class="gl-tag format">USGA-recognized</span>
+          <span class="gl-tag skill">Pace of play</span>
+        </div>
+        <p>Cap your score on each hole at, say, double bogey. Once you hit the cap, <strong>pick up and move on</strong>. Keeps the round moving and your head up. The USGA's "Maximum Score" format is exactly this.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       ON-COURSE — MATCH PLAY (1v1)
+       ============================================================ -->
+  <section id="oncourse-match" class="gl-section cat-on-course-match">
+    <h2><span class="gl-emoji">🥇</span> Match Play &mdash; 1 v 1</h2>
+    <div class="gl-divider"></div>
+    <p class="gl-section-sub">
+      Match Play is hole-by-hole, not stroke-by-stroke. Every hole resets &mdash;
+      a triple-bogey on hole 1 only loses you that hole, not the round. Match
+      Play is how you'll play in club championships, tournaments like the
+      Ryder Cup, and most fun bets among friends.
+    </p>
+
+    <div class="gl-grid">
+
+      <div class="gl-card">
+        <h3>Standard Match Play</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">2 players</span>
+          <span class="gl-tag format">Head-to-head</span>
+          <span class="gl-tag skill">Clutch play</span>
+        </div>
+        <p>Win the hole, lose the hole, halve the hole. <strong>Score is reported as "X up" or "all square."</strong> If you're 3 up with 2 holes to go, the match is over &mdash; "3 &amp; 2".</p>
+        <div class="gl-howto">
+          <div class="gl-howto-label">Key terms</div>
+          <ul>
+            <li><strong>Up</strong> &mdash; how many holes ahead you are</li>
+            <li><strong>All square</strong> &mdash; tied</li>
+            <li><strong>Dormie</strong> &mdash; up by exactly the holes remaining</li>
+            <li><strong>"3 &amp; 2"</strong> &mdash; won 3 up with 2 to play</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="gl-card">
+        <h3>Skins</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">2-4 players</span>
+          <span class="gl-tag format">Hole-by-hole prize</span>
+          <span class="gl-tag skill">Aggressive play</span>
+        </div>
+        <p>Each hole is worth a "skin." <strong>Outright low score</strong> wins the skin. Tie? It carries to the next hole. A run of ties can pile up and one big shot wins them all back.</p>
+        <div class="gl-coachtip"><strong>Strategy:</strong> when the carryover is big, aggressive play pays. When it's just one skin, smart pars often win.</div>
+      </div>
+
+      <div class="gl-card">
+        <h3>Nassau</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">2 players</span>
+          <span class="gl-tag format">Three matches in one</span>
+          <span class="gl-tag skill">Mental resilience</span>
+        </div>
+        <p>Three separate matches in one round: <strong>front 9, back 9, total 18</strong>. Lose the front and you can still win the back and the overall. Most common bet structure on the planet.</p>
+        <div class="gl-howto">
+          <div class="gl-howto-label">Pressing</div>
+          <ul>
+            <li>If you fall behind, you can "press" — start a NEW match for the remaining holes at the same stake</li>
+            <li>Multiple presses can stack on the same nine — careful or you'll lose more than you bargained for</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="gl-card">
+        <h3>Wolf (1 v 1)</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">2 players</span>
+          <span class="gl-tag format">Stack-the-deck</span>
+          <span class="gl-tag skill">Decision making</span>
+        </div>
+        <p>One player is the Wolf each hole, alternating. The Wolf hits first, then watches the other player tee off. If the Wolf likes the opponent's drive, they pair up; if not, the Wolf goes "Lone Wolf" for double points.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       ON-COURSE — TEAM (Stroke Play / Team Stroke)
+       ============================================================ -->
+  <section id="oncourse-team" class="gl-section cat-on-course-team">
+    <h2><span class="gl-emoji">🤝</span> Team Games &mdash; On the Course</h2>
+    <div class="gl-divider"></div>
+    <p class="gl-section-sub">
+      The fun stuff. Pair up with a friend, a parent, a partner. Some of these
+      let everyone hit every shot; others split it up so the team is genuinely a
+      team. All of them turn the round into something bigger than your own
+      score.
+    </p>
+
+    <div class="gl-grid">
+
+      <div class="gl-card">
+        <h3>Scramble</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">2-4 players</span>
+          <span class="gl-tag format">Best ball, all play</span>
+          <span class="gl-tag skill">Team / fun</span>
+        </div>
+        <p>The most popular charity-event format. <strong>Everyone tees off, pick the best one, everyone plays from there. Repeat until in the cup.</strong> Friendly to mixed-skill groups; everyone contributes.</p>
+        <div class="gl-howto">
+          <div class="gl-howto-label">Common rule</div>
+          <ul>
+            <li>Each player must contribute at least 3 (or 4) drives over the round &mdash; keeps it fair</li>
+            <li>Mark the chosen ball spot &mdash; play within one club length, no closer to the hole</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="gl-card">
+        <h3>Shamble</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">2-4 players</span>
+          <span class="gl-tag format">Scramble + own ball</span>
+          <span class="gl-tag skill">Team / individual mix</span>
+        </div>
+        <p><strong>Scramble off the tee, then everyone plays their own ball</strong> from there to the hole. Lowest score on the team counts. Rewards a good drive AND clean approach play.</p>
+      </div>
+
+      <div class="gl-card">
+        <h3>Best Ball (a.k.a. Four-Ball)</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">2 teams of 2</span>
+          <span class="gl-tag format">Stroke play</span>
+          <span class="gl-tag skill">Team scoring</span>
+        </div>
+        <p>Each player plays their own ball the whole round. <strong>The lower of each team's two scores</strong> on each hole is the team's score. No one gives up &mdash; either partner can save it.</p>
+      </div>
+
+      <div class="gl-card">
+        <h3>Foursomes (Alternate Shot)</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">2 teams of 2</span>
+          <span class="gl-tag format">One ball per team</span>
+          <span class="gl-tag skill">Communication</span>
+        </div>
+        <p>One ball, two players, alternating shots. <strong>Player A tees off, Player B hits the second shot, A hits the third</strong>, etc. Players also alternate tee shots: A on odd holes, B on even.</p>
+        <div class="gl-coachtip"><strong>Toughest of all formats</strong> — a missed shot is on your partner. Communicate everything beforehand.</div>
+      </div>
+
+      <div class="gl-card">
+        <h3>Greensomes / Chapman</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">2 teams of 2</span>
+          <span class="gl-tag format">Tee both, then alternate</span>
+          <span class="gl-tag skill">Team strategy</span>
+        </div>
+        <p><strong>Both players tee off. Pick the better drive. Then alternate shots from there to the hole.</strong> Less brutal than pure foursomes &mdash; you always have a tee shot to fall back on.</p>
+      </div>
+
+      <div class="gl-card">
+        <h3>Texas Scramble</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">3-4 players</span>
+          <span class="gl-tag format">Scramble variation</span>
+          <span class="gl-tag skill">Team strategy</span>
+        </div>
+        <p>Like a scramble, but a player whose drive is chosen <strong>can't have their drive used again until everyone else's has been used</strong>. Forces teams to use everybody's strengths, not just the long hitter.</p>
+      </div>
+
+      <div class="gl-card">
+        <h3>6-6-6 (Three Stooges)</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">2 teams of 2</span>
+          <span class="gl-tag format">Mixed formats</span>
+          <span class="gl-tag skill">All formats in one</span>
+        </div>
+        <p>An 18-hole round split into three formats: <strong>6 holes Best Ball, 6 holes Scramble, 6 holes Alternate Shot</strong>. Tests the whole team. The most fun way to discover what your partnership is good at.</p>
+      </div>
+
+      <div class="gl-card">
+        <h3>Pinehurst (Modified Chapman)</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">2 teams of 2</span>
+          <span class="gl-tag format">Cross-shot</span>
+          <span class="gl-tag skill">Team strategy</span>
+        </div>
+        <p>Both players tee off. Each plays their partner's ball as the second shot. Then choose the better second-shot ball. <strong>From there, alternate shots to the hole.</strong> Sounds wild, plays great.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       ON-COURSE — TEAM MATCH PLAY
+       ============================================================ -->
+  <section id="oncourse-team-match" class="gl-section cat-team-match">
+    <h2><span class="gl-emoji">🏆</span> Team Match Play</h2>
+    <div class="gl-divider"></div>
+    <p class="gl-section-sub">
+      The Ryder Cup formats — and the Solheim Cup, the Walker Cup, the Curtis
+      Cup. These are the games that decide international team golf. They're also
+      what your high-school team will play in matches.
+    </p>
+
+    <div class="gl-grid">
+
+      <div class="gl-card">
+        <h3>Four-Ball Match Play</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">2 teams of 2</span>
+          <span class="gl-tag format">Match play, lowest of pair</span>
+          <span class="gl-tag skill">Strategy</span>
+        </div>
+        <p>Each player plays their own ball. <strong>The team's score on each hole is their lower of the two.</strong> Compare team scores hole by hole &mdash; standard match play after that. The fastest, most aggressive team format.</p>
+      </div>
+
+      <div class="gl-card">
+        <h3>Foursomes Match Play</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">2 teams of 2</span>
+          <span class="gl-tag format">Alternate shot, match</span>
+          <span class="gl-tag skill">Composure under pressure</span>
+        </div>
+        <p>Same as Foursomes (alternate shot, one ball per team) but scored as match play hole by hole. <strong>The hardest team format in golf.</strong> One bad shot from your partner means you have to save it.</p>
+      </div>
+
+      <div class="gl-card">
+        <h3>Skins (Group)</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">3-4 players</span>
+          <span class="gl-tag format">Hole-by-hole prize</span>
+          <span class="gl-tag skill">Aggressive play</span>
+        </div>
+        <p>Each hole is one skin. <strong>You must outright win the hole</strong> &mdash; tie any other player and the skin carries. With 4 players, ties are common, so big carryovers happen often. Drama on every hole.</p>
+      </div>
+
+      <div class="gl-card">
+        <h3>Wolf (Group)</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">4 players</span>
+          <span class="gl-tag format">Rotating partner</span>
+          <span class="gl-tag skill">Decision making</span>
+        </div>
+        <p>The Wolf rotates each hole. After each player tees off, the Wolf can pick that player as a partner. If the Wolf passes everyone, they go "Lone Wolf" against all three for double points.</p>
+        <div class="gl-coachtip"><strong>Pro move:</strong> "Blind Wolf" — you can declare you're going Lone Wolf BEFORE anyone tees off, for triple points. High risk, high reward.</div>
+      </div>
+
+      <div class="gl-card">
+        <h3>Vegas</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">2 teams of 2</span>
+          <span class="gl-tag format">Combined two-digit score</span>
+          <span class="gl-tag skill">Team play</span>
+        </div>
+        <p>Combine your team's two scores into a <strong>two-digit number</strong>: lower score is the tens place, higher is the ones. Team A makes 4 and 5 = 45. Team B makes 4 and 6 = 46. Lower number wins. <strong>One bad hole can blow up</strong> (a 7 + 5 = 57, not 75). High variance, high fun.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       PRACTICE — PUTTING
+       ============================================================ -->
+  <section id="putting" class="gl-section cat-putting">
+    <h2><span class="gl-emoji">🎯</span> Putting Games</h2>
+    <div class="gl-divider"></div>
+    <p class="gl-section-sub">
+      Putting is the easiest skill to practice with intent because the feedback
+      is instant: it goes in or it doesn't. These games make repetition feel
+      like a contest. Run any of them on the practice green for 20 minutes
+      and your score will move.
+    </p>
+
+    <div class="gl-grid">
+
+      <div class="gl-card">
+        <h3>The 21 Game (Around the World)</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">1-2 players</span>
+          <span class="gl-tag format">Race to 21</span>
+          <span class="gl-tag skill">Pressure putting</span>
+        </div>
+        <p>Place tees in a circle around a hole at <strong>3, 4, 5, 6, 7, and 8 feet</strong>. Make a putt = +1 point. Miss = lose all your points. <strong>First to 21 wins.</strong> Putting under pressure with something on the line.</p>
+      </div>
+
+      <div class="gl-card">
+        <h3>Around the Clock</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">1 player</span>
+          <span class="gl-tag format">12-putt circuit</span>
+          <span class="gl-tag skill">Short-putt consistency</span>
+        </div>
+        <p>Place 12 tees in a circle around the hole at <strong>3 feet</strong>. <strong>Make all 12 in a row.</strong> Miss = start over. The classic short-putt confidence builder. Most amateurs need 3-5 attempts the first time.</p>
+        <div class="gl-coachtip"><strong>Variation:</strong> after you make 12 at 3 feet, move to 4 feet. Then 5. Then 6. Build a short-putt streak that travels.</div>
+      </div>
+
+      <div class="gl-card">
+        <h3>Lag Ladder (3-6-9-12-15)</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">1 player</span>
+          <span class="gl-tag format">Progressive distance</span>
+          <span class="gl-tag skill">Lag control</span>
+        </div>
+        <p>Place tees at 3, 6, 9, 12, and 15 feet from a hole. <strong>Make all five in order. Miss any &mdash; start over at 3 feet.</strong> Pressure builds with every distance because one miss costs you progress.</p>
+      </div>
+
+      <div class="gl-card">
+        <h3>The Snake</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">2-4 players</span>
+          <span class="gl-tag format">Worst-putter trophy</span>
+          <span class="gl-tag skill">Mental toughness</span>
+        </div>
+        <p>Whoever <strong>three-putts most recently holds the snake</strong>. The snake is a small toy or a marker passed around the green. Whoever has the snake at the end of practice (or after 18 holes) buys the snacks. Brutal social pressure. Effective.</p>
+      </div>
+
+      <div class="gl-card">
+        <h3>Worst Ball Putting</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">1 player</span>
+          <span class="gl-tag format">Two-ball drill</span>
+          <span class="gl-tag skill">Lag-and-tap</span>
+        </div>
+        <p>Hit two putts on every roll. <strong>Always play the worse one.</strong> Long putt that finishes 4 feet long? Now play the next putt from there. Forces clean lag putting.</p>
+      </div>
+
+      <div class="gl-card">
+        <h3>Long-Putt Lag Game (30/40/50)</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">1 player</span>
+          <span class="gl-tag format">Lag distance</span>
+          <span class="gl-tag skill">Speed control</span>
+        </div>
+        <p>Three tees at 30, 40, 50 feet from a hole. Three balls each. <strong>Goal: finish every putt within a 3-foot circle of the hole.</strong> Cuts three-putts more than any other drill.</p>
+      </div>
+
+      <div class="gl-card">
+        <h3>Closest to the Tee</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">2-4 players</span>
+          <span class="gl-tag format">Lag contest</span>
+          <span class="gl-tag skill">Distance touch</span>
+        </div>
+        <p>Drop a tee on the green 30+ feet from where you're putting. <strong>Lag putt to the tee, not a hole.</strong> Closest to the tee wins the point. No "in or out" reward &mdash; pure distance touch.</p>
+      </div>
+
+      <div class="gl-card">
+        <h3>Putt-Out Race</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">2 players</span>
+          <span class="gl-tag format">Speed round</span>
+          <span class="gl-tag skill">Confidence</span>
+        </div>
+        <p>Two players, same hole. <strong>First to make 5 putts in a row from 5 feet wins.</strong> Reset to zero if you miss. Recreates the rhythm of a tournament putting practice round.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       PRACTICE — CHIPPING
+       ============================================================ -->
+  <section id="chipping" class="gl-section cat-chipping">
+    <h2><span class="gl-emoji">🪁</span> Chipping Games</h2>
+    <div class="gl-divider"></div>
+    <p class="gl-section-sub">
+      Chipping practice without a target is just hitting balls. These games
+      give you a target, a score, and a reason to commit to every shot. Spend
+      20 minutes on one of them and your up-and-down rate will jump.
+    </p>
+
+    <div class="gl-grid">
+
+      <div class="gl-card">
+        <h3>Up &amp; Down Tournament</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">1-4 players</span>
+          <span class="gl-tag format">Score-based</span>
+          <span class="gl-tag skill">Save percentage</span>
+        </div>
+        <p>10 chips from around the green &mdash; mix of lies, distances, lie quality. After each chip, putt out. <strong>Score: 2 points for an up-and-down, 1 for two-putt save, 0 for three-putt or worse.</strong> 20 = perfect score.</p>
+      </div>
+
+      <div class="gl-card">
+        <h3>Tic-Tac-Toe Chipping</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">1+ players</span>
+          <span class="gl-tag format">Landing zone</span>
+          <span class="gl-tag skill">Trajectory control</span>
+        </div>
+        <p>Place 9 tees on the green in a 3x3 grid pattern at different distances. <strong>Hit a chip that lands in each square.</strong> Forces you to vary trajectory and roll-out for different distances.</p>
+      </div>
+
+      <div class="gl-card">
+        <h3>Four-Club Chipping</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">1 player</span>
+          <span class="gl-tag format">Same shot, different clubs</span>
+          <span class="gl-tag skill">Versatility</span>
+        </div>
+        <p>From one spot off the green, hit the SAME chip with <strong>four different clubs</strong> &mdash; PW, 9-iron, 8-iron, 7-iron. Watch how each one releases. Builds a feel for "which club for which job."</p>
+        <div class="gl-coachtip"><strong>Try it:</strong> 30 feet of green to work with, the higher-lofted club lands closer and stops; the lower-lofted releases and runs to the hole.</div>
+      </div>
+
+      <div class="gl-card">
+        <h3>Random Lies</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">1+ players</span>
+          <span class="gl-tag format">Real-world prep</span>
+          <span class="gl-tag skill">Course transfer</span>
+        </div>
+        <p>Drop balls into <strong>10 random spots</strong> around a chipping green &mdash; rough, fringe, sand, hardpan, downhill lie, sidehill lie. Play each shot once. No do-overs. Mirrors what the course actually gives you.</p>
+      </div>
+
+      <div class="gl-card">
+        <h3>Closest to the Hole</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">2-4 players</span>
+          <span class="gl-tag format">One-shot contest</span>
+          <span class="gl-tag skill">Shot selection</span>
+        </div>
+        <p>Pick a chipping spot. <strong>Each player hits one chip.</strong> Closest to the hole wins the round. Best of 9 rounds (or first to 5). Forces commitment because you only get one swing.</p>
+      </div>
+
+      <div class="gl-card">
+        <h3>Chip-In Challenge</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">1+ players</span>
+          <span class="gl-tag format">Make-a-chip</span>
+          <span class="gl-tag skill">Aim and commitment</span>
+        </div>
+        <p>Pick a spot. Hit chips until you <strong>hole one</strong>. Track how many tries it took. Try to beat the count next session. Beats "just chip some balls" because there's a clear goal.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       PRACTICE — SHORT GAME (50 yards in)
+       ============================================================ -->
+  <section id="shortgame" class="gl-section cat-short-game">
+    <h2><span class="gl-emoji">⚡</span> Short Game Games (50 Yards In)</h2>
+    <div class="gl-divider"></div>
+    <p class="gl-section-sub">
+      Pitches and partial wedges &mdash; the shots that decide tournaments.
+      Most amateurs guess at these. Tour players have specific yardages and
+      specific shots. These games help you build your own.
+    </p>
+
+    <div class="gl-grid">
+
+      <div class="gl-card">
+        <h3>Three-Yardage Test</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">1 player</span>
+          <span class="gl-tag format">Distance calibration</span>
+          <span class="gl-tag skill">Wedge yardage</span>
+        </div>
+        <p>Pick three yardages with your most-used wedge: <strong>full, three-quarter, half</strong>. Hit 5 balls at each. <strong>Score: a point for any ball within 3 yards of the target line and the right depth.</strong> 15 = perfect.</p>
+      </div>
+
+      <div class="gl-card">
+        <h3>50-100 Ladder</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">1 player</span>
+          <span class="gl-tag format">Progressive distance</span>
+          <span class="gl-tag skill">Wedge ladder</span>
+        </div>
+        <p>Hit one shot at <strong>50, 60, 70, 80, 90, 100 yards</strong> &mdash; in order. Each shot must land closer to its target than the previous one missed. <strong>Reset on a wild miss.</strong> Builds pure distance ladder.</p>
+      </div>
+
+      <div class="gl-card">
+        <h3>Trouble Shot Series</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">1+ players</span>
+          <span class="gl-tag format">Skill rotation</span>
+          <span class="gl-tag skill">Versatility</span>
+        </div>
+        <p>Hit 5 shots from each: <strong>fairway, light rough, deep rough, fairway bunker, hardpan</strong>. Score: par or better = 1 point per shot. Total 25 = world-class. 15 = solid recovery skills.</p>
+      </div>
+
+      <div class="gl-card">
+        <h3>Bunker Confidence Drill</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">1+ players</span>
+          <span class="gl-tag format">Sand only</span>
+          <span class="gl-tag skill">Bunker</span>
+        </div>
+        <p>Drop 10 balls in the practice bunker. <strong>Hit until 5 land within 6 feet of the pin.</strong> Track how many balls it takes. Best score wins. Removes the fear of bunker shots through repetition.</p>
+      </div>
+
+      <div class="gl-card">
+        <h3>Phil Mickelson's "Around the World"</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">1 player</span>
+          <span class="gl-tag format">8-station rotation</span>
+          <span class="gl-tag skill">Variety</span>
+        </div>
+        <p>Set up 8 stations around the green, each different: short pitch, lob, bunker, flop, bump-and-run, downhill chip, uphill chip, uneven lie. <strong>Hit one shot from each, putt out.</strong> Total score, lowest wins.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       PRACTICE — IRON PLAY
+       ============================================================ -->
+  <section id="irons" class="gl-section cat-iron-play">
+    <h2><span class="gl-emoji">🎳</span> Iron Play Games</h2>
+    <div class="gl-divider"></div>
+    <p class="gl-section-sub">
+      Hitting greens in regulation is the single biggest predictor of low
+      scores. These games make iron practice feel like a contest, not a
+      chore. They also reveal which clubs in your bag actually do what
+      you think they do.
+    </p>
+
+    <div class="gl-grid">
+
+      <div class="gl-card">
+        <h3>Closest to Target</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">2-4 players</span>
+          <span class="gl-tag format">Iron contest</span>
+          <span class="gl-tag skill">Shot accuracy</span>
+        </div>
+        <p>Pick a target on the range &mdash; a flag, a yardage marker, a tree. Each player hits one ball. <strong>Closest to the target wins.</strong> Rotate clubs every round. Best of 7 wins.</p>
+      </div>
+
+      <div class="gl-card">
+        <h3>The Ladder</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">1+ players</span>
+          <span class="gl-tag format">Progressive distance</span>
+          <span class="gl-tag skill">Distance control</span>
+        </div>
+        <p>Pick three targets at <strong>increasing distances</strong>. Hit a ball at the closest target. Then the middle. Then the farthest. <strong>Each ball must travel further than the last but still hit close to its target.</strong> Trains carry distance precision.</p>
+      </div>
+
+      <div class="gl-card">
+        <h3>Bigger or Smaller</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">2 players</span>
+          <span class="gl-tag format">Call-your-shot</span>
+          <span class="gl-tag skill">Shot shaping</span>
+        </div>
+        <p>Player A hits a shot. Player B has to <strong>predict the next shot's flight</strong> &mdash; bigger draw, smaller fade, higher, lower. Player A executes. If B was right, B gets a point. Switch. First to 10.</p>
+      </div>
+
+      <div class="gl-card">
+        <h3>The 9-Shot Challenge</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">1 player</span>
+          <span class="gl-tag format">Trajectory matrix</span>
+          <span class="gl-tag skill">Shot variety</span>
+        </div>
+        <p>One club. Hit <strong>9 different shots</strong>: low draw, low straight, low fade, mid draw, mid straight, mid fade, high draw, high straight, high fade. <strong>Score: a point per shape you hit cleanly.</strong> Pros score 9. Most amateurs: 3-4.</p>
+        <div class="gl-coachtip"><strong>Why pros do this:</strong> Tiger has talked about it. Real shot variety beats repeating one swing forever.</div>
+      </div>
+
+      <div class="gl-card">
+        <h3>Iron Quota</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">1 player</span>
+          <span class="gl-tag format">Hit-the-zone</span>
+          <span class="gl-tag skill">Carry consistency</span>
+        </div>
+        <p>Pick a target zone on the range &mdash; say, between two flags 10 yards apart at 150 yards. <strong>Hit 10 balls with your 7-iron. Goal: 7 of 10 in the zone.</strong> Calibrates your stock yardage.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       PRACTICE — DRIVER / LONG GAME
+       ============================================================ -->
+  <section id="driver" class="gl-section cat-driver">
+    <h2><span class="gl-emoji">🚀</span> Driver &amp; Long Game</h2>
+    <div class="gl-divider"></div>
+    <p class="gl-section-sub">
+      The driver is the most fun club to hit and the easiest to abuse. Every
+      golfer thinks they need to bomb it. Most need to keep it in play. These
+      games train both &mdash; speed when it matters, accuracy always.
+    </p>
+
+    <div class="gl-grid">
+
+      <div class="gl-card">
+        <h3>Fairway Gates</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">1+ players</span>
+          <span class="gl-tag format">Accuracy</span>
+          <span class="gl-tag skill">Fairway-finding</span>
+        </div>
+        <p>Imagine a 30-yard-wide fairway between two range markers. <strong>Hit 10 drivers.</strong> Score: 1 point per ball that finds the gate. 7+ = tour-level fairway accuracy. 5 = solid. Below 5 = work to do.</p>
+      </div>
+
+      <div class="gl-card">
+        <h3>Carry Distance Contest</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">2-4 players</span>
+          <span class="gl-tag format">Distance only</span>
+          <span class="gl-tag skill">Speed</span>
+        </div>
+        <p><strong>Longest carry wins.</strong> 5 swings each. Drop the lowest. Best of remaining 4 carries counted. Roll-out doesn't count &mdash; carry only. Best with a launch monitor or a flat range with markers.</p>
+      </div>
+
+      <div class="gl-card">
+        <h3>Two-Ball Driving</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">1+ players</span>
+          <span class="gl-tag format">Hit-vs-roll</span>
+          <span class="gl-tag skill">Sequencing</span>
+        </div>
+        <p>Hit two drivers per "hole." <strong>The first ball must be a hard swing &mdash; bomb it. The second must be a soft 3/4 swing for placement.</strong> Score: 1 point per swing that finishes in the imagined fairway.</p>
+      </div>
+
+      <div class="gl-card">
+        <h3>Risk-Reward Driving</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">1+ players</span>
+          <span class="gl-tag format">Strategic</span>
+          <span class="gl-tag skill">Course management</span>
+        </div>
+        <p>Imagine the hardest hole at your home course. <strong>Pick the safe target line and the aggressive one</strong>. Hit 5 drivers. Score: aggressive line + in fairway = 3 points. Safe line + in fairway = 2 points. Out of bounds = −2 points.</p>
+      </div>
+
+      <div class="gl-card">
+        <h3>9-Tee Driver</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">1 player</span>
+          <span class="gl-tag format">Multi-club rotation</span>
+          <span class="gl-tag skill">Off-the-tee versatility</span>
+        </div>
+        <p>Set up 9 imagined "tee shots" with different demands: tight fairway, wide fairway, short par 4, par 5 to bomb, dogleg left, dogleg right, etc. <strong>Pick the right club for each &mdash; driver, 3-wood, hybrid, even an iron</strong>. Score 1 point per shot in play.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       MIXED PRACTICE / FUN GAMES
+       ============================================================ -->
+  <section id="mixed" class="gl-section cat-mixed">
+    <h2><span class="gl-emoji">🎲</span> Mixed Practice &amp; Range Games</h2>
+    <div class="gl-divider"></div>
+    <p class="gl-section-sub">
+      Practice doesn't have to be boring. These games turn the range or the
+      practice course into actual rounds &mdash; with stakes, scores, and
+      something to beat next time. Use them when motivation is low or you
+      want to make practice feel like play.
+    </p>
+
+    <div class="gl-grid">
+
+      <div class="gl-card">
+        <h3>King of the Hill</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">2-4 players</span>
+          <span class="gl-tag format">Elimination</span>
+          <span class="gl-tag skill">All-around pressure</span>
+        </div>
+        <p>Pick a target. Each player hits one shot. <strong>Worst shot is eliminated.</strong> Repeat until one player remains. Reset, repeat. Build pressure into every swing because the worst one's out.</p>
+      </div>
+
+      <div class="gl-card">
+        <h3>Range "Course"</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">1 player</span>
+          <span class="gl-tag format">Imagined round</span>
+          <span class="gl-tag skill">Course transfer</span>
+        </div>
+        <p>Play 9 imagined holes on the range. <strong>Pick a tee shot target, hit it. Pick an approach target based on where you "landed," hit that. Then a chip and putt</strong> if you missed the green. Track the score.</p>
+        <div class="gl-coachtip"><strong>This is the single highest-leverage practice for transferring range form to the course.</strong> Most amateurs never do it.</div>
+      </div>
+
+      <div class="gl-card">
+        <h3>3-Shot Cycle</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">1 player</span>
+          <span class="gl-tag format">Driver / iron / wedge</span>
+          <span class="gl-tag skill">Rhythm</span>
+        </div>
+        <p>Hit one driver, one mid-iron, one wedge. <strong>Repeat 10 times.</strong> Don't hit two of the same club back-to-back. Forces switching focus and prevents the boredom of grooving one swing.</p>
+      </div>
+
+      <div class="gl-card">
+        <h3>One Ball Round</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">1 player</span>
+          <span class="gl-tag format">Solo course</span>
+          <span class="gl-tag skill">Mental discipline</span>
+        </div>
+        <p>Play 9 holes with <strong>only one ball</strong>. No mulligans. No second tries. If you lose it, hole's over. <strong>Worst-case golf training.</strong> Every shot matters because there's no recovery.</p>
+      </div>
+
+      <div class="gl-card">
+        <h3>The Caddie Game</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">2 players</span>
+          <span class="gl-tag format">Decision practice</span>
+          <span class="gl-tag skill">Course strategy</span>
+        </div>
+        <p>One player is the player. The other is the caddie. <strong>The caddie picks every club</strong> &mdash; including off the tee. Both players have to live with the choices. Switch roles after 9 holes.</p>
+      </div>
+
+      <div class="gl-card">
+        <h3>Pin-Pointing</h3>
+        <div class="gl-meta">
+          <span class="gl-tag players">1+ players</span>
+          <span class="gl-tag format">Imagine pins</span>
+          <span class="gl-tag skill">Target focus</span>
+        </div>
+        <p>Pick a single small target on the range &mdash; a flag, a divot, a yardage stake. <strong>Hit 5 balls at it.</strong> Mark them. Pick a different target. Hit 5 more. Cycle through 6 targets per session. Better target acquisition transfers directly to the course.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FOOTER CTA
+       ============================================================ -->
+  <div class="gl-callout" style="margin-top: 36px;">
+    <strong>Got a favorite game we missed?</strong> Tell Ryan next lesson — if it
+    teaches a real skill or builds confidence under pressure, it's going on the
+    list. This library grows.
+  </div>
+
+  <p style="text-align:center; margin: 30px 0 14px;">
+    <a href="dashboard.html" style="color:var(--gold); text-decoration:none; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; font-size:12px;">
+      &larr; Back to Dashboard
+    </a>
+  </p>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js"></script>
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  (async () => {
+    const user = await RRG.mount('games');
+    if (!user) return;
+    // No data fetching — pure content page. Just mount the nav.
+  })();
+</script>
+</body>
+</html>
