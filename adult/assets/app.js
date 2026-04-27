@@ -1698,7 +1698,6 @@ RRG.renderNav = function(user, active = '') {
 
         ${group('My Game', 'mygame', `
           <li><a href="dashboard.html" class="${active==='dashboard'?'active':''}">Dashboard</a></li>
-          <li><a href="caddie.html"    class="${active==='caddie'?'active':''}"><strong>Caddie &middot; Plays Like</strong></a></li>
           <li><a href="my-plan.html"   class="${active==='plan'?'active':''}">My Plan</a></li>
           <li><a href="history.html"   class="${active==='history'?'active':''}">My Rounds</a></li>
           <li><a href="log-simple.html">Simple Log &middot; 30 seconds</a></li>

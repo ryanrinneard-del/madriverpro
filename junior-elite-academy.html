@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Junior Elite Academy 2026 — RR Golf Performance</title>
+<meta name="description" content="A 15-week tournament-development arc at Mad River Golf Club for junior players. TrackMan, TPI, Stack Golf System, weekly Performance Doc, full portal access. Tuition $995 + HST.">
+<meta property="og:title" content="Junior Elite Academy 2026 · RR Golf Performance">
+<meta property="og:description" content="A 15-week tournament-development arc at Mad River Golf Club. TrackMan, TPI, Stack Golf System, weekly Performance Doc, full portal access.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://rrgolfperformance.com/junior-elite-academy.html">
+<meta property="og:image" content="https://madriverpro.com/images/rr-logo.png">
+<style>
+  :root {
+    --navy: #0D1F3C;
+    --navy-mid: #2C3A57;
+    --gold: #C9A84C;
+    --gold-light: #E5C988;
+    --cream: #F7F2E8;
+    --rule: #E2DDD0;
+    --mid-grey: #828A99;
+    --white: #FFFFFF;
+    --text-body: #3F4659;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    color: var(--navy);
+    background: var(--white);
+    line-height: 1.55;
+    font-size: 15px;
+  }
+  .page { max-width: 1040px; margin: 0 auto; padding: 32px 24px 60px; }
+  @media (min-width: 720px) { .page { padding: 40px 36px 80px; } }
+
+  a { color: var(--navy); }
+  a:hover { color: var(--gold); }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--navy) 0%, #162E54 60%, #1F3666 100%);
+    color: #fff; border-radius: 14px;
+    padding: 38px 32px 32px;
+    position: relative; overflow: hidden;
+    margin-bottom: 32px;
+  }
+  .hero::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--gold);
+  }
+  .hero .brand {
+    font-size: 11px; letter-spacing: 0.22em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(34px, 6vw, 52px); font-weight: 600;
+    color: #fff; margin: 12px 0 8px; line-height: 1.05;
+  }
+  .hero .sub {
+    color: rgba(255,255,255,0.78); font-size: 17px; margin: 0;
+    max-width: 720px; line-height: 1.55;
+  }
+  .hero .year {
+    position: absolute; top: 28px; right: 32px;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 36px; color: var(--gold); font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+
+  /* Section heading */
+  .section { margin: 36px 0 18px; }
+  .section .label {
+    font-size: 11px; letter-spacing: 0.22em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase;
+  }
+  .section h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 28px; color: var(--navy);
+    margin: 6px 0 10px; font-weight: 600; line-height: 1.15;
+  }
+  .section .gold-rule {
+    width: 100%; height: 2px; background: var(--gold); border-radius: 2px;
+  }
+
+  /* Essentials */
+  .essentials {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    border: 1px solid var(--rule); border-radius: 10px;
+    overflow: hidden;
+    background: var(--cream);
+    margin-top: 6px;
+  }
+  @media (max-width: 720px) {
+    .essentials { grid-template-columns: repeat(2, 1fr); }
+  }
+  .essentials .cell {
+    padding: 22px 16px; text-align: center;
+    border-right: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+  .essentials .cell:last-child { border-right: none; }
+  .essentials .num {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 38px; font-weight: 600;
+    color: var(--gold); line-height: 1;
+  }
+  .essentials .num.sm { font-size: 26px; }
+  .essentials .lbl {
+    font-size: 10px; letter-spacing: 0.18em; color: var(--navy);
+    text-transform: uppercase; font-weight: 700;
+    margin-top: 10px;
+  }
+  .essentials-tag {
+    text-align: center; font-style: italic; color: var(--navy-mid);
+    font-size: 14px; margin-top: 16px; line-height: 1.6;
+    max-width: 760px; margin-left: auto; margin-right: auto;
+  }
+
+  /* Body paragraphs */
+  p.body { font-size: 15px; line-height: 1.7; color: var(--text-body); margin: 0 0 14px; }
+  p.body strong { color: var(--navy); }
+
+  /* Phase card */
+  .phase-card {
+    background: var(--white); border: 1px solid var(--rule);
+    border-left: 4px solid var(--gold); border-radius: 10px;
+    padding: 22px 26px; margin-bottom: 14px;
+  }
+  .phase-card .phase-tag {
+    display: inline-block;
+    font-size: 11px; letter-spacing: 0.18em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase;
+    background: var(--cream); padding: 4px 12px; border-radius: 999px;
+  }
+  .phase-card h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px; color: var(--navy);
+    margin: 12px 0 8px; font-weight: 600; line-height: 1.2;
+  }
+  .phase-card .phase-meta {
+    font-size: 14px; color: var(--navy-mid); margin: 6px 0 10px;
+    line-height: 1.6;
+  }
+  .phase-card .phase-meta b { color: var(--navy); }
+  .phase-card p { font-size: 14.5px; line-height: 1.6; color: var(--text-body); margin: 0; }
+
+  /* Tools grid */
+  .tools-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+    margin-top: 6px;
+  }
+  @media (max-width: 920px) { .tools-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px) { .tools-grid { grid-template-columns: 1fr; } }
+  .tool {
+    background: var(--white); border: 1px solid var(--rule);
+    border-radius: 10px; padding: 18px 20px;
+  }
+  .tool .t-label {
+    font-size: 10px; letter-spacing: 0.18em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase;
+  }
+  .tool h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 17px; color: var(--navy);
+    margin: 6px 0 8px; font-weight: 600; line-height: 1.2;
+  }
+  .tool p { font-size: 13.5px; line-height: 1.55; color: var(--text-body); margin: 0; }
+
+  /* Step grid */
+  .step-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px;
+    margin-top: 8px;
+  }
+  @media (max-width: 720px) { .step-grid { grid-template-columns: 1fr; } }
+  .step {
+    background: var(--cream); border: 1px solid var(--rule);
+    border-radius: 10px; padding: 18px 20px;
+  }
+  .step .step-num {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 28px; color: var(--gold); font-weight: 600; line-height: 1;
+  }
+  .step h4 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 16px; color: var(--navy); margin: 8px 0 6px; font-weight: 600;
+  }
+  .step p { font-size: 13.5px; line-height: 1.55; color: var(--text-body); margin: 0; }
+
+  /* Detail card */
+  .detail-card {
+    background: var(--cream); border: 1px solid var(--rule);
+    border-left: 4px solid var(--gold); border-radius: 10px;
+    padding: 22px 26px; margin-top: 6px;
+  }
+  .detail-card.navy-accent { border-left-color: var(--navy); background: var(--white); }
+  .detail-card .row {
+    display: grid; grid-template-columns: 130px 1fr;
+    gap: 8px 16px; padding: 6px 0;
+    font-size: 14px; line-height: 1.6;
+    border-bottom: 1px solid var(--rule);
+  }
+  .detail-card .row:last-child { border-bottom: none; }
+  .detail-card .row b { color: var(--navy); }
+  .detail-card .row .v { color: var(--text-body); }
+  @media (max-width: 480px) {
+    .detail-card .row { grid-template-columns: 1fr; gap: 2px; }
+  }
+
+  .code-display {
+    font-family: 'Courier New', monospace;
+    font-size: 17px; font-weight: 700;
+    color: var(--gold); letter-spacing: 0.05em;
+    background: var(--navy); padding: 6px 14px;
+    border-radius: 6px; display: inline-block;
+  }
+
+  .cta-row {
+    display: flex; gap: 12px; flex-wrap: wrap; margin-top: 14px;
+  }
+  .btn {
+    display: inline-block;
+    padding: 12px 22px; border-radius: 8px;
+    font-size: 14px; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; text-decoration: none;
+    transition: all .15s ease;
+  }
+  .btn-primary {
+    background: var(--gold); color: var(--navy);
+    border: 2px solid var(--gold);
+  }
+  .btn-primary:hover { background: #D4B85F; color: var(--navy); }
+  .btn-ghost {
+    background: transparent; color: var(--navy);
+    border: 2px solid var(--navy);
+  }
+  .btn-ghost:hover { background: var(--navy); color: var(--white); }
+
+  /* Footer */
+  .foot {
+    text-align: center; color: var(--mid-grey);
+    font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+    margin-top: 40px; padding-top: 20px;
+    border-top: 1px solid var(--rule);
+  }
+  .foot a { color: var(--mid-grey); text-decoration: none; }
+  .foot a:hover { color: var(--gold); }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- =================== HERO =================== -->
+  <div class="hero">
+    <div class="year">2026</div>
+    <div class="brand">RR GOLF PERFORMANCE</div>
+    <h1>Junior Elite Academy</h1>
+    <p class="sub">A 15-week tournament-development arc at Mad River Golf Club &mdash; five weeks longer than last year, built around TrackMan, TPI, Stack, Vision54, and on-course coaching.</p>
+  </div>
+
+  <!-- =================== ESSENTIALS =================== -->
+  <div class="section">
+    <div class="label">Program at a Glance</div>
+    <h2>The Essentials</h2>
+    <div class="gold-rule"></div>
+  </div>
+  <div class="essentials">
+    <div class="cell"><div class="num">15</div><div class="lbl">Weeks</div></div>
+    <div class="cell"><div class="num">6&ndash;8</div><div class="lbl">Players / Cohort</div></div>
+    <div class="cell"><div class="num">2&ndash;3h</div><div class="lbl">Per Week</div></div>
+    <div class="cell"><div class="num sm">U14&ndash;U19</div><div class="lbl">Age Range</div></div>
+    <div class="cell"><div class="num">$995</div><div class="lbl">Tuition</div></div>
+  </div>
+  <p class="essentials-tag">
+    Built for the tournament player or the aspiring tournament player &mdash;
+    six Saturdays during the school term, then nine weeks of Tuesday and
+    Thursday mornings once school is out. 15 weeks total. Strive for 10 of 15.
+  </p>
+
+  <!-- =================== SCHEDULE =================== -->
+  <div class="section">
+    <div class="label">Schedule</div>
+    <h2>How the Season Runs</h2>
+    <div class="gold-rule"></div>
+  </div>
+  <p class="body">
+    The season is split into two phases that match how serious junior players
+    actually live their year. Saturdays during the school term, then Tuesdays
+    and Thursdays once school is out and tournament season is in full swing.
+  </p>
+
+  <div class="phase-card">
+    <span class="phase-tag">Phase One &middot; School Term</span>
+    <h3>Saturdays at 9:30 AM &middot; 2 hours of coaching</h3>
+    <div class="phase-meta">
+      <b>Dates</b> &middot; May 23, May 30, Jun 6, Jun 13, Jun 20, Jun 27 (six Saturdays) &nbsp;&middot;&nbsp;
+      <b>Format</b> &middot; 90 min coaching block + 30 min targeted skill work
+    </div>
+    <p>The boys book their own tee times after the session &mdash; weekend tee times at Mad River are a member-lottery system, so lining the group up at one set time isn't realistic. Each player gets a specific on-course assignment and tracks the round in the portal once they're done.</p>
+  </div>
+
+  <div class="phase-card">
+    <span class="phase-tag">Phase Two &middot; Summer</span>
+    <h3>Tuesdays &amp; Thursdays at 10:00&ndash;11:30 AM &middot; 3 hours per week</h3>
+    <div class="phase-meta">
+      <b>Dates</b> &middot; Jul 7 onward, nine weeks through Sep 3 (one-week Canada Day gap) &nbsp;&middot;&nbsp;
+      <b>Format</b> &middot; 90 min Tuesday + 90 min Thursday + on-course assignment
+    </div>
+    <p>School is out, tournaments are running, the work compresses. Two sessions a week split between range coaching and short-game / putting blocks. Players complete a self-guided 9 or 18 holes the same day and submit the round in the portal.</p>
+  </div>
+
+  <p class="body" style="margin-top: 14px;">
+    <strong>Attendance.</strong> Fifteen weeks total &mdash; five more than
+    last year. Players are not expected to attend every session. Tournaments,
+    school commitments, family travel, and life will mean missing some.
+    <strong>Aim for ten weeks of the fifteen.</strong> Each session is
+    self-contained, so missing a week doesn't break the arc.
+  </p>
+
+  <!-- =================== TOOLS =================== -->
+  <div class="section">
+    <div class="label">Tools &amp; Technology</div>
+    <h2>What We Teach With</h2>
+    <div class="gold-rule"></div>
+  </div>
+  <div class="tools-grid">
+    <div class="tool">
+      <div class="t-label">TrackMan</div>
+      <h3>Ball Flight &amp; Launch</h3>
+      <p>Every full-swing session tracks club path, face angle, strike location, launch, spin, and carry. No guessing.</p>
+    </div>
+    <div class="tool">
+      <div class="t-label">TPI Level 3</div>
+      <h3>Physical Screen + App</h3>
+      <p>Full Week 1 movement screen is mandatory. Every player installs the TPI app and commits to the assigned mobility / stability program between sessions.</p>
+    </div>
+    <div class="tool">
+      <div class="t-label">Stack System</div>
+      <h3>Speed Training</h3>
+      <p>The Stack Golf System drives all deliberate speed work. Progressive protocols, app-tracked, logged alongside the scorecard each week.</p>
+    </div>
+    <div class="tool">
+      <div class="t-label">Vision54</div>
+      <h3>Mental &amp; Emotional</h3>
+      <p>The Human Skills framework drives the routine, commitment, and composure work through Phase 2.</p>
+    </div>
+    <div class="tool">
+      <div class="t-label">DECADE</div>
+      <h3>Course Management</h3>
+      <p>Scott Fawcett's strokes-gained-based strategy system is the backbone of the Tiger 5 work and all on-course decision training.</p>
+    </div>
+    <div class="tool">
+      <div class="t-label">Know Your Game</div>
+      <h3>Confidential Profile</h3>
+      <p>Every player completes the questionnaire at rrgolfperformance.com with absolute honesty. Confidential &mdash; only Ryan sees it.</p>
+    </div>
+    <div class="tool">
+      <div class="t-label">The Portal</div>
+      <h3>Weekly Playbook</h3>
+      <p>Week-by-week content, scorecard submission, wedge matrix, Tiger 5 card, and drill library on rrgolfperformance.com.</p>
+    </div>
+    <div class="tool">
+      <div class="t-label">Performance Doc</div>
+      <h3>Handout Each Session</h3>
+      <p>Before each session, Ryan reviews every submission and hands the player a one-page Performance Doc at the tee sheet &mdash; trend, hot spots, and the drill of the week.</p>
+    </div>
+  </div>
+
+  <!-- =================== ON-COURSE =================== -->
+  <div class="section">
+    <div class="label">The Round Itself</div>
+    <h2>The On-Course Arm of the Program</h2>
+    <div class="gold-rule"></div>
+  </div>
+  <p class="body">
+    Each session is 90 minutes of coaching followed by the real work: playing
+    the golf course. Players leave each session with a specific on-course
+    assignment &mdash; a focus, a constraint, a stat to chase. The coach is
+    not on the course with them; the structure is. This is how tournament
+    skill is built.
+  </p>
+  <p class="body">
+    <strong>The portal is the tracking system.</strong> No paper sheet
+    needed &mdash; rrgolfperformance.com has the full hole-by-hole scorecard
+    pre-loaded with Mad River yardages, tees, ratings, and the Wedge / 5
+    Errors frameworks.
+  </p>
+
+  <!-- =================== ROUND SUBMISSION =================== -->
+  <div class="section">
+    <div class="label">After Every Round</div>
+    <h2>Round Submission</h2>
+    <div class="gold-rule"></div>
+  </div>
+  <p class="body">
+    Every round during the program goes into rrgolfperformance.com. The
+    Junior Elite scorecard captures the data Ryan needs to coach off, and
+    the auto-rollups mean players don't have to compute anything.
+  </p>
+  <div class="step-grid">
+    <div class="step">
+      <div class="step-num">01</div>
+      <h4>Pick the Course &amp; Tees</h4>
+      <p>Mad River scorecard for home rounds (all 7 tees, ratings, slope pre-loaded). Away scorecard for any other course &mdash; just enter rating + slope.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <h4>Hole-by-Hole Entry</h4>
+      <p>Per hole the player logs: score &amp; putts, tee direction (F/L/R/X), 1st putt distance, chip difficulty (Esy/Hrd), commit (Y/N), wedge approach (yes/no), penalty strokes.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <h4>Submit &amp; Auto-Roll-Up</h4>
+      <p>Computed automatically: FIR, GIR, total putts, three-putts, scrambling, fairway pattern, commitment %, and the <b>5 Errors Total</b>. Auto-saves as you type. Front 9, Back 9, or 18.</p>
+    </div>
+  </div>
+
+  <!-- =================== TUITION =================== -->
+  <div class="section">
+    <div class="label">Program Details</div>
+    <h2>Tuition &amp; Logistics</h2>
+    <div class="gold-rule"></div>
+  </div>
+  <div class="detail-card">
+    <div class="row"><b>Tuition</b><div class="v">$995 + HST &mdash; full 15-week program</div></div>
+    <div class="row"><b>Cohort size</b><div class="v">6&ndash;8 players per group</div></div>
+    <div class="row"><b>Ages</b><div class="v">U14 to U19</div></div>
+    <div class="row"><b>Location</b><div class="v">Mad River Golf Club, Creemore Ontario</div></div>
+    <div class="row"><b>Start</b><div class="v">Saturday, May 23, 2026 &mdash; 9:30 AM</div></div>
+    <div class="row"><b>End</b><div class="v">Thursday, September 3, 2026</div></div>
+    <div class="row"><b>Includes</b><div class="v">TrackMan, TPI Level 3 screen + TPI app program, Stack Golf System, weekly Performance Doc, full portal access on rrgolfperformance.com</div></div>
+  </div>
+
+  <!-- =================== PORTAL ACCESS =================== -->
+  <div class="section">
+    <div class="label">Portal Access</div>
+    <h2>Activate Your Junior</h2>
+    <div class="gold-rule"></div>
+  </div>
+  <div class="detail-card navy-accent">
+    <div class="row"><b>Portal</b><div class="v"><a href="https://rrgolfperformance.com/portal/" style="font-weight:600;">rrgolfperformance.com/portal/</a></div></div>
+    <div class="row"><b>Activate</b><div class="v"><a href="https://rrgolfperformance.com/portal/signup.html?code=RRG-ELITE-2026" style="font-weight:600;">rrgolfperformance.com/portal/signup.html?code=RRG-ELITE-2026</a></div></div>
+    <div class="row"><b>Invite code</b><div class="v"><span class="code-display">RRG-ELITE-2026</span></div></div>
+    <div class="row"><b>How it works</b><div class="v">Your junior taps the activate link, enters their email, and we send a one-click sign-in. No password to remember. Works on any device. Once they're in, they get the full Junior Elite portal &mdash; scorecard, TrackMan, handicap index, drills library, and the weekly Performance Doc.</div></div>
+  </div>
+
+  <div class="cta-row" style="justify-content: center; margin-top: 24px;">
+    <a class="btn btn-primary" href="https://rrgolfperformance.com/portal/signup.html?code=RRG-ELITE-2026">Activate Now</a>
+    <a class="btn btn-ghost" href="mailto:ryan@rrgolfperformance.com?subject=Junior%20Elite%20Academy%202026%20Question">Ask Ryan a Question</a>
+  </div>
+
+  <div class="foot">
+    Ryan Rinneard &middot; Director of Instruction &middot; Mad River Golf Club &middot; <a href="mailto:ryan@rrgolfperformance.com">ryan@rrgolfperformance.com</a>
+  </div>
+
+</div>
+
+</body>
+</html>

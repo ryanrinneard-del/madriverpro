@@ -191,6 +191,46 @@ RRG.auth = {
       p_package_id: meta.pending_package_id || null,
     });
     if (error) throw error;
+
+    /* ELITE / VIP PRE-FILL — if Ryan created this invite with a
+       pending_profile payload (e.g. RRG-ELITE-2026 with
+       junior_elite_accepted=true), merge it into the new player's
+       profile_json so the Elite tier and any other pre-set fields
+       take effect on first login. */
+    try {
+      const { data: inviteRow } = await RRG.sb
+        .from('invites')
+        .select('pending_profile')
+        .eq('code', meta.pending_invite_code)
+        .maybeSingle();
+      if (inviteRow && inviteRow.pending_profile && profile) {
+        const mergedJson = {
+          ...(profile.profile_json || {}),
+          ...inviteRow.pending_profile,
+        };
+        // Top-level junior_elite_accepted column lives on profiles itself
+        // (not inside profile_json) — pull it out if present so the column
+        // gets set correctly.
+        const topLevelPatch = { profile_json: mergedJson };
+        if (Object.prototype.hasOwnProperty.call(inviteRow.pending_profile, 'junior_elite_accepted')) {
+          topLevelPatch.junior_elite_accepted = !!inviteRow.pending_profile.junior_elite_accepted;
+        }
+        const { data: updated } = await RRG.sb
+          .from('profiles')
+          .update(topLevelPatch)
+          .eq('id', profile.id)
+          .select()
+          .maybeSingle();
+        if (updated) {
+          RRG.auth._profileCache = updated;
+          return updated;
+        }
+        profile.profile_json = mergedJson;
+      }
+    } catch (err) {
+      console.warn('[invite] pending_profile merge failed', err);
+    }
+
     RRG.auth._profileCache = profile;
     return profile;
   },
