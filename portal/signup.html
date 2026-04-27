@@ -107,6 +107,16 @@
   (async () => {
     if (await RRG.auth.isLoggedIn()) { location.replace('dashboard.html'); return; }
 
+    // Support ?code=XYZ on the URL — pre-fills the invite code field so
+    // shared signup links (e.g. RRG-JUNIOR-2026 in the Academy doc)
+    // give families a one-click activation experience.
+    const preCode = (RRG.qs && RRG.qs('code')) ||
+      new URLSearchParams(location.search).get('code');
+    if (preCode) {
+      const inviteInput = document.getElementById('inviteCode');
+      if (inviteInput) inviteInput.value = preCode.toUpperCase();
+    }
+
     const form = document.getElementById('signup-form');
     const errBox = document.getElementById('signup-error');
     const sentBox = document.getElementById('sent-state');
