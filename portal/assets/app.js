@@ -196,7 +196,9 @@ RRG.auth = {
        pending_profile payload (e.g. RRG-ELITE-2026 with
        junior_elite_accepted=true), merge it into the new player's
        profile_json so the Elite tier and any other pre-set fields
-       take effect on first login. */
+       take effect on first login.
+       NOTE: junior_elite_accepted lives INSIDE profile_json — not as
+       a top-level column on profiles. Don't try to write it as one. */
     try {
       const { data: inviteRow } = await RRG.sb
         .from('invites')
@@ -208,19 +210,15 @@ RRG.auth = {
           ...(profile.profile_json || {}),
           ...inviteRow.pending_profile,
         };
-        // Top-level junior_elite_accepted column lives on profiles itself
-        // (not inside profile_json) — pull it out if present so the column
-        // gets set correctly.
-        const topLevelPatch = { profile_json: mergedJson };
-        if (Object.prototype.hasOwnProperty.call(inviteRow.pending_profile, 'junior_elite_accepted')) {
-          topLevelPatch.junior_elite_accepted = !!inviteRow.pending_profile.junior_elite_accepted;
-        }
-        const { data: updated } = await RRG.sb
+        const { data: updated, error: updErr } = await RRG.sb
           .from('profiles')
-          .update(topLevelPatch)
+          .update({ profile_json: mergedJson })
           .eq('id', profile.id)
           .select()
           .maybeSingle();
+        if (updErr) {
+          console.warn('[invite] profile update failed', updErr);
+        }
         if (updated) {
           RRG.auth._profileCache = updated;
           return updated;
@@ -715,14 +713,27 @@ RRG.renderNav = function(user, active = '') {
           <li><a href="/improve/basics.html">The Basics (plain English)</a></li>
           <li class="nav-sublabel">Deeper reference</li>
           <li><a href="/improve/" class="${active==='library'?'active':''}">Library (all topics)</a></li>
+          <li><a href="/improve/long-game.html">Long Game</a></li>
+          <li><a href="/improve/short-game.html">Short Game</a></li>
+          <li><a href="/improve/mental-game.html">Mental Game</a></li>
+          <li><a href="/improve/course-strategy.html">Course Strategy (DECADE)</a></li>
           <li><a href="/improve/first-tee-ready.html">First-Tee Ready</a></li>
           <li><a href="how-to-use.html" class="${active==='how-to-use'?'active':''}">How to use this portal</a></li>
         `)}
 
         ${group('Library', 'library-books', `
           <li><a href="/improve/bookshelf.html"><strong>Teaching Library</strong></a></li>
-          <li class="nav-sublabel">Primers on the books that shaped Ryan's teaching</li>
+          <li class="nav-sublabel">Ryan's Framework</li>
           <li><a href="/improve/module-01-fundamentals.html">Module 01 &middot; Swing Fundamentals</a></li>
+          <li><a href="/improve/module-02-practice-design.html">Module 02 &middot; Practice Design</a></li>
+          <li><a href="/improve/module-03-short-game.html">Module 03 &middot; Short Game</a></li>
+          <li class="nav-sublabel">Short Game skill pages</li>
+          <li><a href="/improve/sg-putting.html">Putting</a></li>
+          <li><a href="/improve/sg-chipping.html">Chipping</a></li>
+          <li><a href="/improve/sg-pitching.html">Pitching</a></li>
+          <li><a href="/improve/sg-bunker.html">Greenside Bunker</a></li>
+          <li><a href="/improve/sg-lob.html">The Lob Shot</a></li>
+          <li class="nav-sublabel">Primers on the books that shaped Ryan's teaching</li>
           <li><a href="/improve/book-8-step-swing.html">8-Position Map &middot; McLean</a></li>
           <li><a href="/improve/book-golfing-machine.html">Component Model &middot; Kelley</a></li>
           <li><a href="/improve/book-stack-and-tilt.html">Ball-First Swing &middot; P&amp;B</a></li>
