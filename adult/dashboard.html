@@ -333,6 +333,9 @@
   <!-- PATH TO YOUR GOAL — compact gap analysis, populated by JS -->
   <div id="path-mount"></div>
 
+  <!-- BOOK A LESSON CARD — populated by JS based on package state -->
+  <div id="lesson-cta-card" class="mb-5" style="display:none;"></div>
+
   <!-- QUICK ACTIONS — 3 pill-tiles; everything else lives in the nav -->
   <div class="quick-actions mb-5">
     <a href="submit-round.html" class="quick-action">
@@ -565,6 +568,72 @@
       wrap.style.display = 'block';
     }
     renderTopErrors();
+
+    /* ============================================================
+       BOOK A LESSON CTA CARD — two states based on active package
+       ============================================================ */
+    (function renderLessonCTA() {
+      const card = document.getElementById('lesson-cta-card');
+      if (!card) return;
+
+      // Profile fields can live on the user object (older flow) or in
+      // profile_json (current). Check both.
+      const profSrc = user.profile_json || user.profile || user;
+      const lessonsLeft = parseInt(profSrc.package_lessons || user.package_lessons || 0, 10);
+      const packageId   = (profSrc.package_id   || user.package_id   || '').toString().toLowerCase();
+
+      const PKG_LABEL = { single: 'Single Lesson', p5: 'P5', p10: 'P10', p20: 'P20' };
+      const ACUITY_BOOK = 'https://madriverpro.as.me/?appointmentType=category:Adult%20Private%20Lessons';
+
+      const SHARED = `
+        background: linear-gradient(135deg, #0D1F3C 0%, #1F3666 100%);
+        color: #F7F2E8;
+        border-left: 4px solid #C9A84C;
+        border-radius: 10px;
+        padding: 22px 26px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        flex-wrap: wrap;
+      `;
+
+      if (lessonsLeft > 0 && packageId && packageId !== 'single') {
+        // ACTIVE PACKAGE — re-engagement
+        const pkgLabel = PKG_LABEL[packageId] || packageId.toUpperCase();
+        card.innerHTML = `
+          <div style="${SHARED}">
+            <div style="flex:1; min-width:240px;">
+              <div style="font-size:11px; letter-spacing:0.22em; color:#C9A84C; font-weight:700; text-transform:uppercase; margin-bottom:4px;">Your Package</div>
+              <div style="font-family:'Playfair Display',Georgia,serif; font-size:26px; color:#FFFFFF; line-height:1.2; margin-bottom:4px; font-weight:600;">
+                ${lessonsLeft} lesson${lessonsLeft === 1 ? '' : 's'} remaining in your ${pkgLabel}
+              </div>
+              <div style="color:#cdd5e4; font-size:14.5px; line-height:1.5;">Book your next session &mdash; Ryan&rsquo;s calendar fills fast through the season.</div>
+            </div>
+            <a href="${ACUITY_BOOK}" target="_blank" rel="noopener"
+               style="background:#C9A84C; color:#0D1F3C; padding:14px 24px; border-radius:6px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; font-size:13px; text-decoration:none; display:inline-block; white-space:nowrap;">
+              Book Next Session &rarr;
+            </a>
+          </div>`;
+      } else {
+        // NO ACTIVE PACKAGE — sell
+        card.innerHTML = `
+          <div style="${SHARED}">
+            <div style="flex:1; min-width:240px;">
+              <div style="font-size:11px; letter-spacing:0.22em; color:#C9A84C; font-weight:700; text-transform:uppercase; margin-bottom:4px;">Take Your Game Further</div>
+              <div style="font-family:'Playfair Display',Georgia,serif; font-size:26px; color:#FFFFFF; line-height:1.2; margin-bottom:6px; font-weight:600;">
+                Private coaching with Ryan
+              </div>
+              <div style="color:#cdd5e4; font-size:14.5px; line-height:1.5;">TrackMan-driven, portal-tracked, built around your 6-Week Plan. The fastest way to move what you&rsquo;re working on.</div>
+            </div>
+            <a href="packages.html"
+               style="background:#C9A84C; color:#0D1F3C; padding:14px 24px; border-radius:6px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; font-size:13px; text-decoration:none; display:inline-block; white-space:nowrap;">
+              Browse Packages &rarr;
+            </a>
+          </div>`;
+      }
+      card.style.display = 'block';
+    })();
 
   })();
 </script>

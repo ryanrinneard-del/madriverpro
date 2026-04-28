@@ -1714,7 +1714,6 @@ RRG.renderNav = function(user, active = '') {
           <li><a href="bag.html"          class="${active==='bag'?'active':''}">My Bag</a></li>
           <li><a href="wedge-matrix.html" class="${active==='wedge'?'active':''}">Wedge Matrix</a></li>
           <li><a href="trackman.html"     class="${active==='trackman'?'active':''}">TrackMan Sessions</a></li>
-          <li><a href="packages.html"     class="${active==='packages'?'active':''}">Packages</a></li>
         `)}
 
         ${group('Events', 'events', `
@@ -1761,6 +1760,14 @@ RRG.renderNav = function(user, active = '') {
           <li><a href="/improve/book-golfing-machine.html">Component Model &middot; Kelley</a></li>
           <li><a href="/improve/book-stack-and-tilt.html">Ball-First Swing &middot; Plummer &amp; Bennett</a></li>
         `)}
+
+        <li class="nav-book">
+          <a href="packages.html"
+             class="nav-book-cta ${active==='packages'?'active':''}"
+             style="display:inline-block; background:#C9A84C; color:#0D1F3C; padding:8px 16px; border-radius:6px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; font-size:12.5px; text-decoration:none; border:2px solid #C9A84C; transition:all .15s ease;">
+            Book a Lesson &rarr;
+          </a>
+        </li>
 
         ${coachItem}
 
