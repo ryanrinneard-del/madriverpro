@@ -249,6 +249,17 @@ RRG.users = {
     return data || [];
   },
 
+  // Coach-only: returns ALL profiles across all cohorts (adult + junior).
+  // RLS already restricts non-coach callers to their own row.
+  async allCohorts() {
+    await RRG._sbReady;
+    const { data, error } = await RRG.sb.from('profiles')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if (error) throw error;
+    return data || [];
+  },
+
   async get(userId) {
     const { data, error } = await RRG.sb.from('profiles').select('*').eq('id', userId).maybeSingle();
     if (error) throw error;
@@ -262,6 +273,27 @@ RRG.users = {
     if (error) throw error;
     RRG.auth._profileCache = null; // force refresh on next currentUser()
     return data;
+  },
+};
+
+/* ============================================================
+   PUBLIC SUBMISSIONS — Know Your Game form fills that haven't
+   yet been signed up via invite code. Coach-only (RLS).
+   ============================================================ */
+RRG.submissions = {
+  async pending() {
+    await RRG._sbReady;
+    const { data, error } = await RRG.sb.from('public_submissions')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if (error) throw error;
+    return data || [];
+  },
+
+  async remove(id) {
+    await RRG._sbReady;
+    const { error } = await RRG.sb.from('public_submissions').delete().eq('id', id);
+    if (error) throw error;
   },
 };
 

@@ -174,13 +174,32 @@
     </div>
   </details>
 
-  <!-- Roster -->
+  <!-- Roster — Adult Players -->
   <div class="page-header mt-6">
     <div class="page-label">ROSTER</div>
     <h2 class="page-title" style="font-size:20px;">Your Adult Players</h2>
     <hr class="gold-rule">
   </div>
-  <div id="roster-wrap"></div>
+  <div id="adult-roster-wrap"></div>
+
+  <!-- Roster — Junior Players -->
+  <div class="page-header mt-6">
+    <div class="page-label">ROSTER</div>
+    <h2 class="page-title" style="font-size:20px;">Your Junior Players</h2>
+    <hr class="gold-rule">
+  </div>
+  <div id="junior-roster-wrap"></div>
+
+  <!-- Pending Junior Submissions (public Know Your Game form fills) -->
+  <div class="page-header mt-6">
+    <div class="page-label">PENDING</div>
+    <h2 class="page-title" style="font-size:20px;">Pending Junior Submissions</h2>
+    <hr class="gold-rule">
+    <p class="small muted" style="margin-top:6px;">
+      Public Know Your Game submissions that haven't claimed an invite yet. Send them a code to convert them into a signed-up Junior Player.
+    </p>
+  </div>
+  <div id="pending-submissions-wrap"></div>
 
   <!-- Upcoming lessons -->
   <div class="page-header mt-6">
@@ -546,6 +565,7 @@
     let lessonsMap = {};   // user_id -> lesson[]
     let roundsMap  = {};   // user_id -> round[]
     let allRounds  = [];   // flat list across all players, most-recent first
+    let pendingSubmissions = [];   // public Know Your Game form fills not yet signed up
 
     /* Tiger 5 taxonomy (mirrors RRG.TIGER5 for short display). Keyed by number
        because the rounds.tiger5 JSONB column is stored as {1..5: count}. */
@@ -590,12 +610,14 @@
     // ------------------------------------------------------------------
     async function loadAll() {
       try {
-        const players = await RRG.users.all();
+        // Coach view shows BOTH cohorts (adult + junior) plus pending public-form submissions.
+        const players = await RRG.users.allCohorts();
         playersList = players.filter(u => u.role === 'player');
-        // Fetch lessons (per-player) and rounds (one bulk call — RLS does the filter) in parallel.
-        const [lessonArrays, roundsFlat] = await Promise.all([
+        // Fetch lessons, rounds, and pending submissions in parallel.
+        const [lessonArrays, roundsFlat, pending] = await Promise.all([
           Promise.all(playersList.map(p => RRG.lessons.forUser(p.id))),
           RRG.subs.all(),
+          RRG.submissions.pending().catch(() => []),
         ]);
         lessonsMap = {};
         playersList.forEach((p, i) => { lessonsMap[p.id] = lessonArrays[i] || []; });
@@ -605,6 +627,7 @@
           (roundsMap[r.user_id] ||= []).push(r);
         });
         allRounds = roundsFlat || [];
+        pendingSubmissions = pending || [];
       } catch (err) {
         showError('Could not load coach data: ' + (err.message || err));
         throw err;
@@ -721,17 +744,55 @@
       } catch (err) { showError('Could not load invites: ' + err.message); }
     }
 
-    function renderRoster() {
-      const wrap = document.getElementById('roster-wrap');
-      if (playersList.length === 0) {
-        wrap.innerHTML = `
-          <div class="history-empty">
-            <h3 class="navy">No players yet.</h3>
-            <p class="muted mt-2">Text <code>RRA-ADULT-2026</code> to your first client to get started.</p>
-          </div>`;
-        return;
-      }
-      wrap.innerHTML = `
+    // Build a single roster row (shared by Adult + Junior renderers).
+    function rosterRowHtml(p) {
+      const pkg = (RRG.PACKAGES || []).find(x => x.id === p.package_id);
+      const pkgName = pkg ? pkg.name : '—';
+      const total = p.package_lessons || 0;
+      const used = p.lessons_used || 0;
+      const completed = (lessonsMap[p.id] || []).filter(l => l.completed_at);
+      const lastLessonDate = completed.length
+        ? RRG.fmtDate(completed[0].completed_at)
+        : null;
+
+      const pRounds = roundsMap[p.id] || [];
+      const scores = pRounds.map(r => +r.score).filter(n => !isNaN(n) && n > 0);
+      const avgScore = scores.length
+        ? (scores.reduce((a,b) => a+b, 0) / scores.length).toFixed(1)
+        : '—';
+      const t5agg = t5Totals(pRounds);
+      const hasT5 = Object.values(t5agg).some(v => v > 0);
+
+      return `
+        <tr>
+          <td>
+            <div class="player-name">${RRG.esc(p.name || p.email)}</div>
+            <div class="player-email">${RRG.esc(p.email)}</div>
+            ${lastLessonDate ? `<div class="player-email">Last session: ${lastLessonDate}</div>` : ''}
+          </td>
+          <td>${RRG.esc(pkgName)}</td>
+          <td>${used}${total ? ' / ' + total : ''}</td>
+          <td><b>${pRounds.length}</b></td>
+          <td>${avgScore}</td>
+          <td>${hasT5 ? t5ChipsHtml(t5agg, {hotThreshold: 5}) : '<span class="muted small">—</span>'}</td>
+          <td style="text-align:right;">
+            <div style="display:flex; gap:6px; justify-content:flex-end; flex-wrap:wrap;">
+              <a class="btn btn-primary btn-sm" href="on-course.html?userId=${p.id}" style="text-decoration:none; background: var(--gold); color: var(--navy);">On Course &rarr;</a>
+              <a class="btn btn-ghost btn-sm" href="my-plan.html?userId=${p.id}" style="text-decoration:none;">View Plan</a>
+              <button class="btn btn-primary btn-sm" onclick="openNewLessonFor('${p.id}')">+ Log Lesson</button>
+              <a class="btn btn-ghost btn-sm" href="profile.html?userId=${p.id}" style="text-decoration:none;" title="Fill profile, bag, or wedge matrix on their behalf — great for VIP onboarding">&#128081; VIP Onboard</a>
+              <button class="btn btn-ghost btn-sm" onclick="openPathFor('${p.id}')">Path</button>
+              <a class="btn btn-ghost btn-sm" href="trackman.html?userId=${p.id}" style="text-decoration:none;">TrackMan</a>
+              <button class="btn btn-ghost btn-sm" onclick="openLessonUpdateFor('${p.id}')">Plan Update</button>
+              <button class="btn btn-ghost btn-sm" onclick="openSnapshotFor('${p.id}')">Snapshot</button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }
+
+    function rosterTableHtml(rows) {
+      return `
         <table class="roster-table">
           <thead>
             <tr>
@@ -744,47 +805,85 @@
               <th style="text-align:right;">Action</th>
             </tr>
           </thead>
+          <tbody>${rows.join('')}</tbody>
+        </table>
+      `;
+    }
+
+    function renderAdultRoster() {
+      const wrap = document.getElementById('adult-roster-wrap');
+      const adults = playersList.filter(p => p.cohort === 'adult_coaching_2026');
+      if (adults.length === 0) {
+        wrap.innerHTML = `
+          <div class="history-empty">
+            <h3 class="navy">No adult players yet.</h3>
+            <p class="muted mt-2">Text <code>RRA-ADULT-2026</code> to your first client to get started.</p>
+          </div>`;
+        return;
+      }
+      wrap.innerHTML = rosterTableHtml(adults.map(rosterRowHtml));
+    }
+
+    function renderJuniorRoster() {
+      const wrap = document.getElementById('junior-roster-wrap');
+      const juniors = playersList.filter(p => p.cohort === 'junior_elite_2026');
+      if (juniors.length === 0) {
+        wrap.innerHTML = `
+          <div class="history-empty">
+            <h3 class="navy">No junior players signed up yet.</h3>
+            <p class="muted mt-2">Text <code>RRG-JR-FLEX-2026</code> or <code>RRG-JR-FULL-2026</code> to a junior to get them in.</p>
+          </div>`;
+        return;
+      }
+      wrap.innerHTML = rosterTableHtml(juniors.map(rosterRowHtml));
+    }
+
+    function renderPendingSubmissions() {
+      const wrap = document.getElementById('pending-submissions-wrap');
+      if (!pendingSubmissions.length) {
+        wrap.innerHTML = `
+          <div class="history-empty">
+            <p class="muted">No pending submissions. Public Know Your Game form submissions will appear here.</p>
+          </div>`;
+        return;
+      }
+      wrap.innerHTML = `
+        <table class="roster-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Submitted</th>
+              <th>Snapshot</th>
+              <th style="text-align:right;">Action</th>
+            </tr>
+          </thead>
           <tbody>
-            ${playersList.map(p => {
-              const pkg = (RRG.PACKAGES || []).find(x => x.id === p.package_id);
-              const pkgName = pkg ? pkg.name : '—';
-              const total = p.package_lessons || 0;
-              const used = p.lessons_used || 0;
-              const completed = (lessonsMap[p.id] || []).filter(l => l.completed_at);
-              const lastLessonDate = completed.length
-                ? RRG.fmtDate(completed[0].completed_at)
-                : null;
-
-              const pRounds = roundsMap[p.id] || [];
-              const scores = pRounds.map(r => +r.score).filter(n => !isNaN(n) && n > 0);
-              const avgScore = scores.length
-                ? (scores.reduce((a,b) => a+b, 0) / scores.length).toFixed(1)
+            ${pendingSubmissions.map(s => {
+              const d = s.submission_data || {};
+              // Pull a few key fields for the snapshot column.
+              const snap = [
+                d['S1 Age'] || d.age ? `Age ${d['S1 Age'] || d.age}` : null,
+                d['S1 Years'] ? `${d['S1 Years']} yrs playing` : null,
+                d['S2 Carry'] ? `Carry ${d['S2 Carry']}y` : null,
+                d['S1 BestRound'] ? `Best ${d['S1 BestRound']}` : null,
+              ].filter(Boolean).join(' · ');
+              const submittedAt = s.created_at
+                ? RRG.fmtDate(s.created_at)
                 : '—';
-              const t5agg = t5Totals(pRounds);
-              const hasT5 = Object.values(t5agg).some(v => v > 0);
-
               return `
                 <tr>
-                  <td>
-                    <div class="player-name">${RRG.esc(p.name || p.email)}</div>
-                    <div class="player-email">${RRG.esc(p.email)}</div>
-                    ${lastLessonDate ? `<div class="player-email">Last session: ${lastLessonDate}</div>` : ''}
-                  </td>
-                  <td>${RRG.esc(pkgName)}</td>
-                  <td>${used}${total ? ' / ' + total : ''}</td>
-                  <td><b>${pRounds.length}</b></td>
-                  <td>${avgScore}</td>
-                  <td>${hasT5 ? t5ChipsHtml(t5agg, {hotThreshold: 5}) : '<span class="muted small">—</span>'}</td>
+                  <td><div class="player-name">${RRG.esc(s.full_name)}</div></td>
+                  <td><div class="player-email">${RRG.esc(s.email)}</div></td>
+                  <td><span class="small muted">${submittedAt}</span></td>
+                  <td><span class="small">${RRG.esc(snap || '—')}</span></td>
                   <td style="text-align:right;">
                     <div style="display:flex; gap:6px; justify-content:flex-end; flex-wrap:wrap;">
-                      <a class="btn btn-primary btn-sm" href="on-course.html?userId=${p.id}" style="text-decoration:none; background: var(--gold); color: var(--navy);">On Course &rarr;</a>
-                      <a class="btn btn-ghost btn-sm" href="my-plan.html?userId=${p.id}" style="text-decoration:none;">View Plan</a>
-                      <button class="btn btn-primary btn-sm" onclick="openNewLessonFor('${p.id}')">+ Log Lesson</button>
-                      <a class="btn btn-ghost btn-sm" href="profile.html?userId=${p.id}" style="text-decoration:none;" title="Fill profile, bag, or wedge matrix on their behalf — great for VIP onboarding">&#128081; VIP Onboard</a>
-                      <button class="btn btn-ghost btn-sm" onclick="openPathFor('${p.id}')">Path</button>
-                      <a class="btn btn-ghost btn-sm" href="trackman.html?userId=${p.id}" style="text-decoration:none;">TrackMan</a>
-                      <button class="btn btn-ghost btn-sm" onclick="openLessonUpdateFor('${p.id}')">Plan Update</button>
-                      <button class="btn btn-ghost btn-sm" onclick="openSnapshotFor('${p.id}')">Snapshot</button>
+                      <button class="btn btn-primary btn-sm" onclick="emailInvite('RRG-JR-FLEX-2026','junior','${RRG.esc(s.email)}','${RRG.esc(s.full_name)}')" style="background: var(--gold); color: var(--navy);">✉ Invite as Junior (Flex)</button>
+                      <button class="btn btn-ghost btn-sm" onclick="emailInvite('RRG-JR-FULL-2026','junior','${RRG.esc(s.email)}','${RRG.esc(s.full_name)}')">✉ Invite as Junior (Full)</button>
+                      <button class="btn btn-ghost btn-sm" onclick="emailInvite('RRA-ADULT-2026','adult','${RRG.esc(s.email)}','${RRG.esc(s.full_name)}')">✉ Invite as Adult</button>
+                      <button class="btn btn-ghost btn-sm" onclick="viewSubmissionDetail('${s.id}')">View Profile</button>
+                      <button class="btn btn-ghost btn-sm" onclick="dismissSubmission('${s.id}')" title="Remove from pending list">Dismiss</button>
                     </div>
                   </td>
                 </tr>
@@ -794,6 +893,38 @@
         </table>
       `;
     }
+
+    // Show full Know Your Game data in a modal.
+    window.viewSubmissionDetail = function (id) {
+      const s = pendingSubmissions.find(x => x.id === id);
+      if (!s) return;
+      const d = s.submission_data || {};
+      const lines = Object.entries(d)
+        .filter(([k]) => k !== 'website')
+        .map(([k, v]) => {
+          const pretty = String(k).replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+          const val = Array.isArray(v) ? v.join(', ') : (v || '—');
+          return `<tr><td style="padding:4px 12px 4px 0;font-weight:600;vertical-align:top;white-space:nowrap;">${RRG.esc(pretty)}</td><td style="padding:4px 0;vertical-align:top;">${RRG.esc(String(val))}</td></tr>`;
+        }).join('');
+      document.getElementById('round-modal-title').textContent = `${s.full_name} — Know Your Game`;
+      document.getElementById('round-modal-body').innerHTML = `
+        <div style="margin-bottom:12px;color:var(--navy-mid);">${RRG.esc(s.email)}</div>
+        <table style="border-collapse:collapse;font-size:13px;width:100%;">${lines}</table>
+      `;
+      document.getElementById('round-modal').style.display = 'flex';
+    };
+
+    window.dismissSubmission = async function (id) {
+      if (!confirm('Remove this submission from the pending list? (The original email is still in your inbox.)')) return;
+      try {
+        await RRG.submissions.remove(id);
+        pendingSubmissions = pendingSubmissions.filter(s => s.id !== id);
+        renderPendingSubmissions();
+        RRG.toast('Submission dismissed');
+      } catch (err) {
+        showError('Could not dismiss: ' + (err.message || err));
+      }
+    };
 
     function renderRounds() {
       const wrap = document.getElementById('rounds-wrap');
@@ -937,7 +1068,9 @@
     async function refreshAll() {
       await loadAll();
       renderStats();
-      renderRoster();
+      renderAdultRoster();
+      renderJuniorRoster();
+      renderPendingSubmissions();
       renderUpcoming();
       renderRecent();
       renderRounds();
@@ -1430,12 +1563,13 @@
         : 'https://rrgolfperformance.com/adult/signup.html';
     }
 
-    window.emailInvite = (code, track) => {
+    window.emailInvite = (code, track, prefilledEmail = '', prefilledName = '') => {
       const url = inviteSignupUrl(track);
       const program = track === 'junior' ? 'Junior Elite' : 'Adult Coaching';
+      const greeting = prefilledName ? `Hi ${prefilledName.split(' ')[0]},` : 'Hi,';
       const subject = 'Welcome to Ryan Rinneard Golf — your portal invite';
       const body =
-`Hi,
+`${greeting}
 
 Welcome to Ryan Rinneard Golf Performance. Your access to the ${program} portal is ready.
 
@@ -1460,7 +1594,8 @@ Ryan Rinneard
 CPGA Class A · Director of Instruction, Mad River Golf Club
 ryan@rrgolfperformance.com`;
 
-      location.href = 'mailto:?subject=' + encodeURIComponent(subject) +
+      const to = prefilledEmail ? encodeURIComponent(prefilledEmail) : '';
+      location.href = 'mailto:' + to + '?subject=' + encodeURIComponent(subject) +
                       '&body='    + encodeURIComponent(body);
     };
 

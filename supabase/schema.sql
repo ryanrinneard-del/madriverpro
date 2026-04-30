@@ -103,6 +103,22 @@ create table lessons (
 
 create index lessons_user_scheduled_idx on lessons(user_id, scheduled_at);
 
+-- ---------- public_submissions ----------
+-- Public Know Your Game form fills that haven't yet claimed an invite code
+-- (and therefore have no auth.users row / no profiles row).
+-- Coach-only read / delete via RLS. INSERTs come from the server-side API
+-- handler (api/process-profile.js) using the service-role key.
+create table public_submissions (
+  id                 uuid primary key default gen_random_uuid(),
+  full_name          text not null,
+  email              text not null,
+  submission_data    jsonb not null default '{}'::jsonb,
+  created_at         timestamptz not null default now()
+);
+
+create index public_submissions_created_idx on public_submissions(created_at desc);
+create index public_submissions_email_idx   on public_submissions(lower(email));
+
 -- =====================================================================
 -- TRIGGER: keep updated_at fresh on profiles
 -- =====================================================================
@@ -271,10 +287,11 @@ grant execute on function create_invite(cohort_type, package_id, text, timestamp
 -- ROW LEVEL SECURITY
 -- =====================================================================
 
-alter table profiles enable row level security;
-alter table invites  enable row level security;
-alter table rounds   enable row level security;
-alter table lessons  enable row level security;
+alter table profiles            enable row level security;
+alter table invites             enable row level security;
+alter table rounds              enable row level security;
+alter table lessons             enable row level security;
+alter table public_submissions  enable row level security;
 
 -- ---------- profiles ----------
 -- Players: read + update their OWN profile
@@ -309,6 +326,16 @@ create policy "lessons_self_select" on lessons for select
 create policy "lessons_coach_all" on lessons for all
   using (is_coach(auth.uid()));
 -- Players: read-only, debrief updates via a dedicated RPC (added in Phase 2).
+
+-- ---------- public_submissions ----------
+-- Coach-only: read + delete (clean up after invite is sent).
+-- INSERTs happen from the server-side API handler with the service-role key,
+-- which bypasses RLS — no public-anon insert policy is needed (and would be
+-- a spam vector if added).
+create policy "public_submissions_coach_select" on public_submissions for select
+  using (is_coach(auth.uid()));
+create policy "public_submissions_coach_delete" on public_submissions for delete
+  using (is_coach(auth.uid()));
 
 -- =====================================================================
 -- PHASE 1 TRUST FIXES (run once against production)

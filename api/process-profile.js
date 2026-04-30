@@ -7,10 +7,25 @@
 // and the split endpoints (process-arc.js, test-arc.js, test-dossier.js).
 
 import { Resend } from 'resend';
+import { createClient } from '@supabase/supabase-js';
 
 export const config = { maxDuration: 15 };
 
 const RYAN_EMAIL = 'ryan@rrgolfperformance.com';
+
+// Lazy-init Supabase admin client (uses service-role key, bypasses RLS).
+// Returns null if env vars aren't set so we degrade gracefully to email-only.
+let _supabaseAdmin = null;
+function getSupabaseAdmin() {
+    if (_supabaseAdmin) return _supabaseAdmin;
+    const url = process.env.SUPABASE_URL;
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (!url || !key) return null;
+    _supabaseAdmin = createClient(url, key, {
+        auth: { autoRefreshToken: false, persistSession: false },
+    });
+    return _supabaseAdmin;
+}
 
 // Simple per-instance rate limiter.
 const rateLimit = new Map();
@@ -102,6 +117,28 @@ export default async function handler(req, res) {
         if (result.error) {
             console.error('Email send error:', result.error);
             return res.status(502).json({ error: 'Failed to send profile. Please try again.' });
+        }
+
+        // Persist to Supabase so the submission shows up in the coach
+        // dashboard's "Pending Junior Submissions" panel. This is best-effort —
+        // we never fail the request just because the DB write failed; the
+        // student already got their confirmation and Ryan got the email.
+        const admin = getSupabaseAdmin();
+        if (admin) {
+            try {
+                const { error: dbErr } = await admin
+                    .from('public_submissions')
+                    .insert({
+                        full_name: studentName,
+                        email: studentEmail,
+                        submission_data: data,
+                    });
+                if (dbErr) console.error('public_submissions insert error:', dbErr);
+            } catch (dbErr) {
+                console.error('public_submissions insert threw:', dbErr);
+            }
+        } else {
+            console.warn('SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY not set — submission emailed only.');
         }
 
         return res.status(200).json({ success: true });
