@@ -99,6 +99,22 @@
     <tbody id="scjgt-body"></tbody>
   </table>
 
+  <!-- STROKES GAINED — 4-category card, top leak, practice prescription -->
+  <div id="sg-card" class="card mt-6" style="display:none;">
+    <div class="page-header" style="margin:0 0 8px;">
+      <div class="page-label">YOUR LATEST ROUND</div>
+      <h2 class="page-title" style="font-size:22px;">Where the strokes went</h2>
+      <hr class="gold-rule">
+    </div>
+    <div id="sg-headline" style="text-align:center; margin:8px 0 16px;">
+      <div id="sg-total-num" style="font-family:'Playfair Display',Georgia,serif; font-size:42px; line-height:1; color:var(--navy); font-weight:600;">—</div>
+      <div id="sg-total-label" class="small muted" style="margin-top:4px;">strokes vs your tier</div>
+    </div>
+    <div id="sg-bars" style="display:flex; flex-direction:column; gap:10px; margin:0 0 18px;"></div>
+    <div id="sg-leak" class="small" style="margin:14px 0 8px; padding:12px 14px; background:#FDF6E3; border-left:3px solid var(--gold); border-radius:4px; line-height:1.5;"></div>
+    <div id="sg-prescription" class="small" style="margin:8px 0 0; padding:14px; border:1px solid var(--rule); border-radius:6px; background:#fff; line-height:1.5;"></div>
+  </div>
+
   <!-- WHERE YOU'RE LOSING STROKES BY DISTANCE — spider chart from approach data -->
   <div id="approach-chart-card" class="card mt-6" style="display:none;">
     <div class="page-header" style="margin:0 0 8px;">
@@ -272,15 +288,66 @@
     </tr>
   `).join('');
 
-  // Approach spider chart — "Where you're losing strokes by distance".
-  // Loads independently of the rest so a slow Supabase fetch doesn't block
-  // the rest of the dashboard from rendering.
+  // SG card + Approach spider chart — load both off the same rounds fetch.
+  let approachRounds = [];
   try {
-    let approachRounds = [];
     if (RRG.subs && RRG.subs.forUser) {
       const r = RRG.subs.forUser(user.id);
       approachRounds = (r && typeof r.then === 'function') ? await r : (r || []);
     }
+  } catch (_) {}
+
+  // Strokes Gained card — 4-category breakdown + top leak + prescription
+  try {
+    const sgCard = document.getElementById('sg-card');
+    const sg = approachRounds && approachRounds[0] && approachRounds[0].strokes_gained;
+    if (sgCard && sg && sg.total != null) {
+      const totalEl = document.getElementById('sg-total-num');
+      const labelEl = document.getElementById('sg-total-label');
+      const sign = sg.total > 0 ? '+' : (sg.total < 0 ? '' : '');
+      totalEl.textContent = sign + sg.total;
+      totalEl.style.color = sg.total > 0 ? '#2d6a4f' : (sg.total < -0.5 ? '#9A2A22' : '#0D1B2A');
+      labelEl.textContent = `strokes vs ${sg.tier ? sg.tier.replace('-', ' ') : 'your tier'} this round`;
+
+      const cats = [
+        { key: 'ott',  label: 'Off the Tee'      },
+        { key: 'app',  label: 'Approach'         },
+        { key: 'arg',  label: 'Around the Green' },
+        { key: 'putt', label: 'Putting'          },
+      ];
+      const maxAbs = Math.max(2, ...cats.map(c => Math.abs((sg.categories?.[c.key]?.value) || 0)));
+      const bars = cats.map(c => {
+        const v = sg.categories?.[c.key]?.value;
+        if (v == null) {
+          return `<div style="display:flex; align-items:center; gap:10px;"><div style="width:120px; font-size:13px; color:var(--mid-grey);">${c.label}</div><div style="flex:1; font-size:12px; color:var(--mid-grey); font-style:italic;">No data this round</div></div>`;
+        }
+        const sign2 = v > 0 ? '+' : (v < 0 ? '' : '');
+        const widthPct = Math.min(50, Math.abs(v) / maxAbs * 50);
+        const isPos = v > 0;
+        const colour = isPos ? '#2d6a4f' : (v < -0.3 ? '#9A2A22' : '#7a8b9c');
+        return `<div style="display:flex; align-items:center; gap:10px;"><div style="width:120px; font-size:13px; color:var(--navy);">${c.label}</div><div style="flex:1; position:relative; height:18px; background:rgba(13,27,42,0.04); border-radius:3px;"><div style="position:absolute; top:0; bottom:0; left:50%; width:1px; background:rgba(13,27,42,0.2);"></div><div style="position:absolute; top:2px; bottom:2px; ${isPos ? 'left:50%' : 'right:50%'}; width:${widthPct}%; background:${colour}; border-radius:2px;"></div></div><div style="width:48px; text-align:right; font-weight:600; font-size:13px; color:${colour};">${sign2}${v}</div></div>`;
+      }).join('');
+      document.getElementById('sg-bars').innerHTML = bars;
+
+      const leakEl = document.getElementById('sg-leak');
+      if (sg.top_leak) {
+        leakEl.innerHTML = `<b>Top Leak — ${sg.top_leak.label}:</b> you lost ${sg.top_leak.deficit} strokes here this round. That's the highest-leverage area to attack this week.`;
+      } else {
+        leakEl.innerHTML = `<b>No clear leak this round.</b> Your strokes were spread evenly across categories — keep the foundations strong.`;
+      }
+
+      const presEl = document.getElementById('sg-prescription');
+      if (sg.prescription) {
+        const p = sg.prescription;
+        presEl.innerHTML = `<div style="font-size:11px; letter-spacing:0.08em; color:var(--gold); font-weight:600; margin-bottom:6px;">PRACTICE PRESCRIPTION</div><div style="font-weight:600; color:var(--navy); margin-bottom:6px;">${p.title}</div><div style="margin-bottom:4px;"><b>Drill:</b> ${p.drill}</div><div style="margin-bottom:4px;"><b>Goal:</b> ${p.goal}</div><div style="font-style:italic; color:var(--mid-grey); margin-top:8px;">${p.why}</div>`;
+      }
+
+      sgCard.style.display = '';
+    }
+  } catch (err) { console.warn('SG card render failed', err); }
+
+  // Approach spider chart — same rounds source.
+  try {
     const card = document.getElementById('approach-chart-card');
     if (card && RRG.approach && approachRounds.length) {
       const seasonAgg    = RRG.approach.aggregate(approachRounds);

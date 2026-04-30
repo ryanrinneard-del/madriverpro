@@ -1169,6 +1169,21 @@
         },
       };
 
+      // Strokes Gained — call the server-side compute endpoint to get the
+      // four-category breakdown + top leak + practice prescription. Best-effort:
+      // if it fails (network, endpoint down), we still save the round without SG.
+      try {
+        const sgRes = await fetch('/api/compute-sg', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ round: payload, profile: { handicap: user.handicap } }),
+        });
+        if (sgRes.ok) {
+          const sgJson = await sgRes.json();
+          if (sgJson && sgJson.strokes_gained) payload.strokes_gained = sgJson.strokes_gained;
+        }
+      } catch (sgErr) { console.warn('SG compute skipped:', sgErr); }
+
       try {
         await RRG.subs.create(payload);
         clearDraft();   // round is saved server-side — purge the local draft
