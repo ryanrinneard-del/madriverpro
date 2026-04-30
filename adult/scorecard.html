@@ -270,7 +270,9 @@
           <thead>
             <tr>
               <th>Hole</th><th>Par</th><th>SI</th><th>Yd</th>
-              <th>Score</th><th>Tee</th><th>1st putt</th><th>Putts</th>
+              <th>Score</th><th>Tee</th>
+              <th title="Distance you hit your approach FROM (yards). Used to surface where you're losing strokes by distance.">Approach</th>
+              <th>1st putt</th><th>Putts</th>
               <th title="Chip difficulty when you missed the green: Esy (simple chip) or Hrd (short-sided / awkward lie)">Chip</th><th title="Did you commit to this shot? Y or N">Commit</th><th title="Did you have a wedge or 9-iron approach into this green in regulation? Tap if yes — this is a scoring opportunity.">Wedge</th><th>Pen.</th>
             </tr>
           </thead>
@@ -286,7 +288,9 @@
           <thead>
             <tr>
               <th>Hole</th><th>Par</th><th>SI</th><th>Yd</th>
-              <th>Score</th><th>Tee</th><th>1st putt</th><th>Putts</th>
+              <th>Score</th><th>Tee</th>
+              <th title="Distance you hit your approach FROM (yards). Used to surface where you're losing strokes by distance.">Approach</th>
+              <th>1st putt</th><th>Putts</th>
               <th title="Chip difficulty when you missed the green: Esy (simple chip) or Hrd (short-sided / awkward lie)">Chip</th><th title="Did you commit to this shot? Y or N">Commit</th><th title="Did you have a wedge or 9-iron approach into this green in regulation? Tap if yes — this is a scoring opportunity.">Wedge</th><th>Pen.</th>
             </tr>
           </thead>
@@ -512,6 +516,19 @@
               <td class="h-yd">${yd}</td>
               <td><input type="number" min="1" max="15" class="score-in" data-hole="${hole}" oninput="scRecalc()"></td>
               <td>${teeCell}</td>
+              <td>
+                <select class="sc-pick approach-in" data-hole="${hole}" onchange="scRecalc()" title="Distance you hit your approach FROM (yards)">
+                  <option value="">—</option>
+                  <option value="50-75">50–75</option>
+                  <option value="75-100">75–100</option>
+                  <option value="100-125">100–125</option>
+                  <option value="125-150">125–150</option>
+                  <option value="150-175">150–175</option>
+                  <option value="175-200">175–200</option>
+                  <option value="200-225">200–225</option>
+                  <option value="225+">225+</option>
+                </select>
+              </td>
               <td><input type="number" min="0" max="120" class="firstputt-in" data-hole="${hole}" placeholder="ft" style="width:54px;" oninput="scRecalc()"></td>
               <td><input type="number" min="0" max="8" class="putts-in" data-hole="${hole}" oninput="scRecalc()"></td>
               <td>
@@ -547,6 +564,7 @@
             <td></td>
             <td class="h-yd h-in-out">${ydSub}</td>
             <td class="h-in-out" id="sc-${half}-score">—</td>
+            <td></td>
             <td></td>
             <td></td>
             <td class="h-in-out" id="sc-${half}-putts">—</td>
@@ -800,6 +818,7 @@
         out[h] = {
           score:      get('score-in'),
           tee:        get('tee-in'),
+          approach:   get('approach-in'),
           firstPutt:  get('firstputt-in'),
           putts:      get('putts-in'),
           diff:       get('diff-in'),
@@ -824,6 +843,7 @@
         };
         set('score-in',        row.score);
         set('tee-in',          row.tee);
+        set('approach-in',     row.approach);
         set('firstputt-in',    row.firstPutt);
         set('putts-in',        row.putts);
         set('diff-in',         row.diff);
@@ -987,6 +1007,7 @@
         const diffIn      = document.querySelector('.diff-in[data-hole="' + h + '"]');
         const commitIn    = document.querySelector('.commit-in[data-hole="' + h + '"]');
         const scClubChk   = document.querySelector('.scoringclub-chk[data-hole="' + h + '"]');
+        const approachIn  = document.querySelector('.approach-in[data-hole="' + h + '"]');
         const par = parseInt(document.querySelector('tr[data-hole="' + h + '"]').dataset.par, 10);
 
         const s  = scoreIn && scoreIn.value !== '' ? parseInt(scoreIn.value, 10) : null;
@@ -997,6 +1018,7 @@
         const diff = diffIn && diffIn.value !== '' ? diffIn.value : null;
         const commit = commitIn && commitIn.value !== '' ? commitIn.value : null;
         const scoringClub = !!(scClubChk && scClubChk.checked);
+        const approachDist = approachIn && approachIn.value !== '' ? approachIn.value : null;
 
         holeRows.push({
           hole: h, par,
@@ -1005,6 +1027,7 @@
           difficulty: diff, commit: commit,
           scoring_club: scoringClub,
           fw_hit: tDir === 'F' ? true : (tDir ? false : null),
+          approach_dist: approachDist,
         });
 
         if (s != null) total += s;
@@ -1072,6 +1095,22 @@
       };
       const t5Total = par5Bogeys + doublesPlus + easySavesBlown + threePutts + scoringClubBogeys;
 
+      // Approach-distance rollup — per-bucket GIR% for the dashboard chart.
+      // Buckets are PGA-standard 25y from 50–225+. Skipped holes (no approach
+      // distance entered) don't count toward either numerator or denominator.
+      const APPROACH_BUCKETS = ['50-75','75-100','100-125','125-150','150-175','175-200','200-225','225+'];
+      const approachByBucket = {};
+      APPROACH_BUCKETS.forEach(b => { approachByBucket[b] = { attempts: 0, gir: 0 }; });
+      holeRows.forEach(hr => {
+        if (!hr.approach_dist || hr.score == null || hr.putts == null) return;
+        const reach = hr.score - hr.putts;
+        const isGir = reach <= (hr.par - 2);
+        const b = approachByBucket[hr.approach_dist];
+        if (!b) return;
+        b.attempts += 1;
+        if (isGir) b.gir += 1;
+      });
+
       const payload = {
         user_id: user.id,
         round_date: fd.round_date || null,
@@ -1090,6 +1129,9 @@
         birdies: birdies,
         doubles_plus: doublesPlus,
         drive_dist: toInt(fd.drive_dist),
+        // Approach rollup — round-level per-bucket attempts/GIR for the
+        // "Where you're losing strokes by distance" spider chart.
+        approach_data: approachByBucket,
         // 5 Errors auto-rollup — populates dashboard tiger5_total badge + history stats
         tiger5: t5,
         tiger5_total: t5Total,
