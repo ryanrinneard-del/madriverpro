@@ -99,11 +99,29 @@
     <tbody id="scjgt-body"></tbody>
   </table>
 
+  <!-- WHERE YOU'RE LOSING STROKES BY DISTANCE — spider chart from approach data -->
+  <div id="approach-chart-card" class="card mt-6" style="display:none;">
+    <div class="page-header" style="margin:0 0 8px;">
+      <div class="page-label">APPROACH SHOTS</div>
+      <h2 class="page-title" style="font-size:22px;">Where you're losing strokes by distance</h2>
+      <hr class="gold-rule">
+    </div>
+    <p id="approach-chart-leak" class="small muted" style="margin:6px 0 12px; line-height:1.5;"></p>
+    <div style="position:relative; height:340px; max-width:520px; margin:0 auto;">
+      <canvas id="approach-chart"></canvas>
+    </div>
+    <p class="small muted" style="margin-top:10px; text-align:center; font-style:italic;">
+      Each axis is a distance bucket. The further your line pulls inward, the more strokes you're leaving on the course from that distance.
+      Fill in the Approach column on your scorecards to see this chart light up.
+    </p>
+  </div>
+
 </main>
 
 <div id="footer-mount"></div>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 <script src="assets/supabase-config.js"></script>
 <script src="assets/data.js"></script>
 <script src="assets/app.js"></script>
@@ -253,6 +271,36 @@
       <td class="muted">${RRG.esc(e.deadline)}</td>
     </tr>
   `).join('');
+
+  // Approach spider chart — "Where you're losing strokes by distance".
+  // Loads independently of the rest so a slow Supabase fetch doesn't block
+  // the rest of the dashboard from rendering.
+  try {
+    let approachRounds = [];
+    if (RRG.subs && RRG.subs.forUser) {
+      const r = RRG.subs.forUser(user.id);
+      approachRounds = (r && typeof r.then === 'function') ? await r : (r || []);
+    }
+    const card = document.getElementById('approach-chart-card');
+    if (card && RRG.approach && approachRounds.length) {
+      const seasonAgg    = RRG.approach.aggregate(approachRounds);
+      const seasonHasAny = RRG.approach.BUCKETS.some(b => seasonAgg[b].attempts > 0);
+      if (seasonHasAny) {
+        const latest       = approachRounds[0];
+        const thisRoundAgg = RRG.approach.aggregate([latest]);
+        const leak         = RRG.approach.biggestLeak(seasonAgg);
+        const leakEl       = document.getElementById('approach-chart-leak');
+        if (leak && leakEl) {
+          leakEl.innerHTML = `Your biggest leak this season: <b>${leak.label}</b> — you're hitting ${leak.playerPct}% of greens from this distance vs the tour's ${leak.tourPct}%. That's where the most strokes are sitting.`;
+        } else if (leakEl) {
+          leakEl.textContent = 'Keep filling in approach distances on your scorecard — once you have enough data, your biggest leak shows up here.';
+        }
+        const canvas = document.getElementById('approach-chart');
+        RRG.approach.renderSpider(canvas, { thisRoundAgg, seasonAgg, showTour: true });
+        card.style.display = '';
+      }
+    }
+  } catch (err) { console.warn('approach chart render failed', err); }
 
   })();
 </script>

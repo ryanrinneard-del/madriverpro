@@ -265,6 +265,162 @@ RRG.users = {
 };
 
 /* ============================================================
+   APPROACH ANALYSIS — "Where you're losing strokes by distance"
+   Mirrors the same RRG.approach utility in adult/assets/app.js so
+   both portals share the same buckets, benchmarks, and rendering.
+   ============================================================ */
+RRG.approach = {
+  BUCKETS: ['50-75','75-100','100-125','125-150','150-175','175-200','200-225','225+'],
+
+  LABELS: {
+    '50-75': '50–75y', '75-100': '75–100y', '100-125': '100–125y', '125-150': '125–150y',
+    '150-175': '150–175y', '175-200': '175–200y', '200-225': '200–225y', '225+': '225+y',
+  },
+
+  // Approximate PGA Tour GIR% by approach distance bucket. Faded overlay.
+  TOUR_GIR_PCT: {
+    '50-75': 95, '75-100': 91, '100-125': 86, '125-150': 78,
+    '150-175': 70, '175-200': 62, '200-225': 54, '225+': 45,
+  },
+
+  aggregate(rounds) {
+    const out = {};
+    this.BUCKETS.forEach(b => { out[b] = { attempts: 0, gir: 0, pct: null }; });
+    (rounds || []).forEach(r => {
+      const ad = r && r.approach_data;
+      if (!ad) return;
+      this.BUCKETS.forEach(b => {
+        const e = ad[b];
+        if (!e) return;
+        out[b].attempts += (Number(e.attempts) || 0);
+        out[b].gir      += (Number(e.gir)      || 0);
+      });
+    });
+    this.BUCKETS.forEach(b => {
+      out[b].pct = out[b].attempts > 0
+        ? Math.round(100 * out[b].gir / out[b].attempts)
+        : null;
+    });
+    return out;
+  },
+
+  biggestLeak(agg, { minAttempts = 4 } = {}) {
+    let worst = null;
+    let worstDeficit = -Infinity;
+    this.BUCKETS.forEach(b => {
+      const a = agg[b];
+      if (!a || a.attempts < minAttempts || a.pct == null) return;
+      const tour = this.TOUR_GIR_PCT[b];
+      const deficit = tour - a.pct;
+      if (deficit > worstDeficit) {
+        worstDeficit = deficit;
+        worst = {
+          bucket: b, label: this.LABELS[b],
+          playerPct: a.pct, tourPct: tour,
+          deficit, attempts: a.attempts,
+        };
+      }
+    });
+    return worst;
+  },
+
+  biggestStrength(agg, { minAttempts = 4 } = {}) {
+    let best = null;
+    let bestSurplus = -Infinity;
+    this.BUCKETS.forEach(b => {
+      const a = agg[b];
+      if (!a || a.attempts < minAttempts || a.pct == null) return;
+      const tour = this.TOUR_GIR_PCT[b];
+      const surplus = a.pct - tour;
+      if (surplus > bestSurplus) {
+        bestSurplus = surplus;
+        best = {
+          bucket: b, label: this.LABELS[b],
+          playerPct: a.pct, tourPct: tour,
+          surplus, attempts: a.attempts,
+        };
+      }
+    });
+    return best;
+  },
+
+  renderSpider(canvasEl, opts = {}) {
+    if (typeof Chart === 'undefined') {
+      console.warn('Chart.js not loaded — spider chart skipped');
+      return null;
+    }
+    const labels = this.BUCKETS.map(b => this.LABELS[b]);
+    const datasets = [];
+
+    if (opts.thisRoundAgg) {
+      datasets.push({
+        label: 'This Round',
+        data: this.BUCKETS.map(b => opts.thisRoundAgg[b]?.pct ?? null),
+        backgroundColor: 'rgba(201, 168, 76, 0.18)',
+        borderColor:     'rgba(201, 168, 76, 1)',
+        borderWidth: 2,
+        pointBackgroundColor: 'rgba(201, 168, 76, 1)',
+        pointRadius: 4,
+        spanGaps: false,
+      });
+    }
+    if (opts.seasonAgg) {
+      datasets.push({
+        label: 'Your Season Average',
+        data: this.BUCKETS.map(b => opts.seasonAgg[b]?.pct ?? null),
+        backgroundColor: 'rgba(13, 27, 42, 0.05)',
+        borderColor:     'rgba(13, 27, 42, 0.55)',
+        borderWidth: 1.5,
+        borderDash: [6, 4],
+        pointBackgroundColor: 'rgba(13, 27, 42, 0.7)',
+        pointRadius: 3,
+        spanGaps: false,
+      });
+    }
+    if (opts.showTour !== false) {
+      datasets.push({
+        label: 'PGA Tour Average',
+        data: this.BUCKETS.map(b => this.TOUR_GIR_PCT[b]),
+        backgroundColor: 'rgba(150, 150, 150, 0.04)',
+        borderColor:     'rgba(150, 150, 150, 0.5)',
+        borderWidth: 1,
+        borderDash: [2, 4],
+        pointBackgroundColor: 'rgba(150, 150, 150, 0.6)',
+        pointRadius: 2,
+        spanGaps: false,
+      });
+    }
+
+    return new Chart(canvasEl, {
+      type: 'radar',
+      data: { labels, datasets },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          r: {
+            min: 0, max: 100,
+            ticks: { stepSize: 25, color: '#94a3b8', backdropColor: 'transparent' },
+            grid:  { color: 'rgba(13,27,42,0.08)' },
+            angleLines: { color: 'rgba(13,27,42,0.08)' },
+            pointLabels: { color: '#0D1B2A', font: { size: 11, weight: '600' } },
+          },
+        },
+        plugins: {
+          legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => `${ctx.dataset.label}: ${ctx.raw == null ? '—' : ctx.raw + '% GIR'}`,
+            },
+          },
+          title: opts.title ? { display: true, text: opts.title, color: '#0D1B2A' } : { display: false },
+        },
+      },
+    });
+  },
+};
+
+/* ============================================================
    INVITES
    ============================================================ */
 RRG.invites = {

@@ -243,6 +243,24 @@
   </div>
 </div>
 
+<!-- Approach (spider chart) modal — per-player view of where they're losing strokes -->
+<div id="approach-modal" class="modal-scrim" style="display:none;">
+  <div class="modal-card" style="max-width:620px;">
+    <h3 id="approach-modal-title">Approach — where they're losing strokes by distance</h3>
+    <p id="approach-modal-leak" class="small muted" style="margin:8px 0 12px; line-height:1.5;"></p>
+    <div style="position:relative; height:380px;">
+      <canvas id="approach-modal-chart"></canvas>
+    </div>
+    <p class="small muted" style="margin-top:10px; font-style:italic;">
+      Based on this player's submitted scorecards (Approach column). Pulls inward = strokes leaking from that distance.
+      Faded outer line is PGA Tour benchmark for context.
+    </p>
+    <div class="flex gap-3 mt-4">
+      <button class="btn btn-ghost" onclick="closeApproachModal()">Close</button>
+    </div>
+  </div>
+</div>
+
 <style>
   /* Coach view rounds UI */
   .t5-chips { display:inline-flex; gap:6px; flex-wrap:wrap; }
@@ -542,6 +560,7 @@
 <div id="footer-mount"></div>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 <script src="assets/supabase-config.js"></script>
 <script src="assets/data.js"></script>
 <script src="assets/app.js"></script>
@@ -783,6 +802,7 @@
               <a class="btn btn-ghost btn-sm" href="profile.html?userId=${p.id}" style="text-decoration:none;" title="Fill profile, bag, or wedge matrix on their behalf — great for VIP onboarding">&#128081; VIP Onboard</a>
               <button class="btn btn-ghost btn-sm" onclick="openPathFor('${p.id}')">Path</button>
               <a class="btn btn-ghost btn-sm" href="trackman.html?userId=${p.id}" style="text-decoration:none;">TrackMan</a>
+              <button class="btn btn-ghost btn-sm" onclick="openApproachFor('${p.id}')" title="Where this player is losing strokes by distance — spider chart from on-course approach data">Approach</button>
               <button class="btn btn-ghost btn-sm" onclick="openLessonUpdateFor('${p.id}')">Plan Update</button>
               <button class="btn btn-ghost btn-sm" onclick="openSnapshotFor('${p.id}')">Snapshot</button>
             </div>
@@ -1262,6 +1282,67 @@
         RRG.toast('Could not save snapshot: ' + (err.message || ''));
       }
     });
+
+    // ------------------------------------------------------------------
+    // Approach modal — per-player spider chart of where they're losing
+    // strokes by distance. Pulls their rounds, runs RRG.approach.aggregate,
+    // surfaces the biggest leak in plain English, renders the radar.
+    // ------------------------------------------------------------------
+    let _approachChartInstance = null;
+    window.closeApproachModal = function () {
+      document.getElementById('approach-modal').style.display = 'none';
+      if (_approachChartInstance) { _approachChartInstance.destroy(); _approachChartInstance = null; }
+    };
+
+    window.openApproachFor = function (userId) {
+      const p = playersList.find(pp => pp.id === userId);
+      const playerRounds = roundsMap[userId] || [];
+      const titleEl = document.getElementById('approach-modal-title');
+      const leakEl  = document.getElementById('approach-modal-leak');
+      const canvas  = document.getElementById('approach-modal-chart');
+
+      titleEl.textContent = `${p ? (p.name || p.email) : 'Player'} — Approach distance`;
+
+      // Clean up any prior chart instance
+      if (_approachChartInstance) { _approachChartInstance.destroy(); _approachChartInstance = null; }
+
+      if (!RRG.approach || !playerRounds.length) {
+        leakEl.textContent = 'No rounds submitted yet — once they log a round with the Approach column filled in, the chart appears here.';
+        document.getElementById('approach-modal').style.display = 'flex';
+        return;
+      }
+
+      const seasonAgg = RRG.approach.aggregate(playerRounds);
+      const hasAny    = RRG.approach.BUCKETS.some(b => seasonAgg[b].attempts > 0);
+      if (!hasAny) {
+        leakEl.textContent = 'This player has logged rounds but hasn\'t filled in any approach distances yet. Encourage them to use the Approach column on the scorecard — once they do, this chart lights up.';
+        document.getElementById('approach-modal').style.display = 'flex';
+        return;
+      }
+
+      const latest       = playerRounds[0];
+      const thisRoundAgg = RRG.approach.aggregate([latest]);
+      const leak         = RRG.approach.biggestLeak(seasonAgg);
+      const strength     = RRG.approach.biggestStrength(seasonAgg);
+
+      const parts = [];
+      if (leak) {
+        parts.push(`<b>Biggest leak:</b> ${leak.label} — ${leak.playerPct}% GIR vs tour ${leak.tourPct}% (${leak.attempts} attempts).`);
+      }
+      if (strength && strength.surplus > 0) {
+        parts.push(`<b>Biggest strength:</b> ${strength.label} — ${strength.playerPct}% vs tour ${strength.tourPct}%.`);
+      }
+      leakEl.innerHTML = parts.join(' ');
+
+      document.getElementById('approach-modal').style.display = 'flex';
+
+      // Defer until the modal is visible so canvas measures correctly
+      setTimeout(() => {
+        _approachChartInstance = RRG.approach.renderSpider(canvas, {
+          thisRoundAgg, seasonAgg, showTour: true,
+        });
+      }, 60);
+    };
 
     // ------------------------------------------------------------------
     // Path modal — opens the Path-to-Goal gap analysis for a single
