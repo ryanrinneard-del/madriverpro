@@ -23,9 +23,9 @@
 //   400 if request is malformed
 //   500 if compute throws
 
-const { computeStrokesGained } = require('./_lib/sg-compute.js');
+import { computeStrokesGained } from './_lib/sg-compute.js';
 
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }

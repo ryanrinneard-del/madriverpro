@@ -21,10 +21,10 @@
 function tierForHandicap(h) {
   const n = (h == null || h === '') ? null : Number(h);
   if (n == null || Number.isNaN(n)) return '10-handicap';
-  if (n <= 9)  return 'single-digit';
-  if (n <= 15) return '10-handicap';
-  if (n <= 20) return '15-handicap';
-  return '20-plus';
+  if (n <= 9)  return 'single-digit';   // 0-9
+  if (n <= 14) return '10-handicap';    // 10-14
+  if (n <= 19) return '15-handicap';    // 15-19
+  return '20-plus';                      // 20+
 }
 
 // --- SG-Approach: expected GIR% by distance bucket × tier ---------------
@@ -159,7 +159,7 @@ function threePuttRate(distanceFt, tier) {
   return Math.min(0.45, base * tierMult);
 }
 
-module.exports = {
+export {
   tierForHandicap,
   APPROACH_EXPECTED_GIR,
   APPROACH_TOUR_GIR,

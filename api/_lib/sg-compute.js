@@ -25,8 +25,8 @@
 //   }
 // (top_leak / prescription get filled in by sg-prescriptions.js.)
 
-const B = require('./sg-baselines.js');
-const { applyPrescription } = require('./sg-prescriptions.js');
+import * as B from './sg-baselines.js';
+import { applyPrescription } from './sg-prescriptions.js';
 
 // --- SG-Off-the-Tee -----------------------------------------------------
 // Counts only par 4/5 tee shots. Components: FIR delta, penalty rate
@@ -56,7 +56,10 @@ function computeSgOtt(round, tier) {
   const distDelta = driveYards != null ? (driveYards - expected.driveYards) / 10 : 0;
 
   const sgFir = firDelta * v.perFirGain;
-  const sgPen = penDelta * v.perPenaltyMiss * -1;  // penDelta positive = bad
+  // perPenaltyMiss is already negative (-0.65). Positive penDelta means more
+  // penalties than expected, which directly multiplies to a negative SG.
+  // (Earlier draft had a stray * -1 that flipped the sign — subtle bug.)
+  const sgPen = penDelta * v.perPenaltyMiss;
   const sgDist = distDelta * v.perTenYards;
 
   const value = round2(sgFir + sgPen + sgDist);
@@ -148,7 +151,7 @@ function computeSgArg(round, tier) {
 
   let easyAttempts = 0, easySaves = 0;
   let hardAttempts = 0, hardSaves = 0;
-  let unknownAttempts = 0, unknownSaves = 0;
+  let skippedNoDifficulty = 0;   // missed greens where the kid didn't mark E/H — excluded from SG to avoid penalizing data laziness
 
   scrambleHoles.forEach(r => {
     const saved = r.score <= r.par;
@@ -157,21 +160,28 @@ function computeSgArg(round, tier) {
     } else if (r.difficulty === 'T') {    // 'Hrd' = tough/short-sided
       hardAttempts++; if (saved) hardSaves++;
     } else {
-      unknownAttempts++; if (saved) unknownSaves++;
+      skippedNoDifficulty++;
     }
   });
 
-  // Compute deltas for each lie type
+  // If they marked NO difficulties at all, don't fabricate an ARG number.
+  if (easyAttempts === 0 && hardAttempts === 0) {
+    return {
+      value: null,
+      components: {
+        reason: 'no chip-difficulty marks on missed greens',
+        missed_greens: scrambleHoles.length,
+        skipped_no_difficulty: skippedNoDifficulty,
+      },
+    };
+  }
+
   const easyExp = easyAttempts * expected.easyPct;
   const hardExp = hardAttempts * expected.hardPct;
-  // Treat unknown lie as "average of easy and hard"
-  const avgPct = (expected.easyPct + expected.hardPct) / 2;
-  const unknownExp = unknownAttempts * avgPct;
 
   const totalDeltaSaves =
     (easySaves - easyExp) +
-    (hardSaves - hardExp) +
-    (unknownSaves - unknownExp);
+    (hardSaves - hardExp);
 
   const value = round2(totalDeltaSaves * B.ARG_STROKE_VALUES.perSaveDelta);
 
@@ -179,9 +189,10 @@ function computeSgArg(round, tier) {
     value,
     components: {
       missed_greens: scrambleHoles.length,
+      scored_attempts: easyAttempts + hardAttempts,
       easy: { attempts: easyAttempts, saves: easySaves, expected: round2(easyExp), expected_pct: round2(expected.easyPct * 100) },
       hard: { attempts: hardAttempts, saves: hardSaves, expected: round2(hardExp), expected_pct: round2(expected.hardPct * 100) },
-      unknown_difficulty: { attempts: unknownAttempts, saves: unknownSaves },
+      skipped_no_difficulty: skippedNoDifficulty,
       total_delta_saves: round2(totalDeltaSaves),
     },
   };
@@ -290,7 +301,7 @@ function round2(n) {
   return Math.round(n * 100) / 100;
 }
 
-module.exports = {
+export {
   computeStrokesGained,
   computeSgOtt,
   computeSgApp,

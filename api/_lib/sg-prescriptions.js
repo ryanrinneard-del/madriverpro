@@ -197,4 +197,4 @@ const MAINTENANCE_PRESCRIPTION = {
   why: 'Your round was balanced — no big leak. Don\'t fix what isn\'t broken. Maintain.',
 };
 
-module.exports = { applyPrescription, MAINTENANCE_PRESCRIPTION };
+export { applyPrescription, MAINTENANCE_PRESCRIPTION };
