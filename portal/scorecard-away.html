@@ -94,6 +94,27 @@
 
   /* Hole table */
   .sc-holes-wrap { overflow-x: auto; margin-bottom: 6px; }
+  .sc-help {
+    background: #FDF6E3;
+    border-left: 3px solid var(--gold);
+    border-radius: 4px;
+    padding: 10px 14px;
+    margin: 0 0 14px;
+    font-size: 13px;
+  }
+  .sc-help summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--navy);
+    list-style: none;
+    padding: 4px 0;
+  }
+  .sc-help summary::-webkit-details-marker { display: none; }
+  .sc-help summary::before { content: '▸ '; color: var(--gold); display: inline-block; transition: transform .15s; }
+  .sc-help[open] summary::before { content: '▾ '; }
+  .sc-help ul { margin: 8px 0 4px; padding-left: 20px; line-height: 1.55; color: var(--navy-mid); }
+  .sc-help ul li { margin-bottom: 4px; }
+  .sc-help b { color: var(--navy); }
   table.sc-holes {
     width: 100%; border-collapse: collapse;
     font-size: 13px; color: var(--navy);
@@ -266,6 +287,23 @@
     </div>
 
     <!-- ========== PAR LAYOUT ========== -->
+    <!-- iOS-friendly column help — works on touch (no hover required) -->
+    <details class="sc-help">
+      <summary>What does each column mean? <span style="color:var(--gold); font-weight:600;">(tap)</span></summary>
+      <ul>
+        <li><b>Par</b> — pick the par for each hole (default is par 4)</li>
+        <li><b>Score</b> — how many strokes you took on the hole</li>
+        <li><b>Tee shot</b> — where your tee shot finished: Fairway, Left, Right, or OB / Penalty</li>
+        <li><b>Approach distance</b> — how far away you were when you hit your shot into the green (in yards)</li>
+        <li><b>First putt (ft)</b> — how far away your first putt was, in feet</li>
+        <li><b>Putts</b> — how many putts you took on the green</li>
+        <li><b>Chip difficulty</b> — if you missed the green: Easy (open chip) or Tough (short-sided / awkward lie)</li>
+        <li><b>Committed?</b> — were you fully committed to that shot, or wavering?</li>
+        <li><b>9 iron or less</b> — tap if you had a 9-iron or shorter club for this approach (these are your scoring chances)</li>
+        <li><b>Penalty</b> — number of penalty strokes on this hole</li>
+      </ul>
+    </details>
+
     <div class="sc-card" id="sc-front-card">
       <div class="card-label">Front 9</div>
       <h2>Per-hole par + scoring</h2>
@@ -282,7 +320,7 @@
               <th title="How far away were you when you hit your shot into the green? (yards)">Approach distance</th>
               <th title="How far was your first putt? (in feet)">First putt (ft)</th>
               <th>Putts</th>
-              <th title="If you missed the green, was the chip easy (open chip) or tough (short-sided / awkward lie)?">Chip difficulty</th><th title="Did you commit to that shot, or were you wavering?">Committed?</th><th title="Did you have a wedge or 9-iron in your hand for this approach? (these are your scoring chances)">Wedge in?</th><th>Penalty</th>
+              <th title="If you missed the green, was the chip easy (open chip) or tough (short-sided / awkward lie)?">Chip difficulty</th><th title="Did you commit to that shot, or were you wavering?">Committed?</th><th title="Did you have a 9-iron or shorter club in your hand for this approach? (these are your scoring chances)">9 iron or less</th><th>Penalty</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -302,7 +340,7 @@
               <th title="How far away were you when you hit your shot into the green? (yards)">Approach distance</th>
               <th title="How far was your first putt? (in feet)">First putt (ft)</th>
               <th>Putts</th>
-              <th title="If you missed the green, was the chip easy or tough?">Chip difficulty</th><th title="Did you commit to that shot, or were you wavering?">Committed?</th><th title="Did you have a wedge or 9-iron in your hand for this approach?">Wedge in?</th><th>Penalty</th>
+              <th title="If you missed the green, was the chip easy or tough?">Chip difficulty</th><th title="Did you commit to that shot, or were you wavering?">Committed?</th><th title="Did you have a 9-iron or shorter club in your hand for this approach?">9 iron or less</th><th>Penalty</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -542,7 +580,7 @@
                   <option value="W">No</option>
                 </select>
               </td>
-              <td><input type="checkbox" class="fw-chk scoringclub-chk" data-hole="${hole}" onchange="scRecalc()" title="Check if you had a wedge or 9-iron approach into this green in regulation. Bogey from this position = 5 Errors leak."></td>
+              <td><input type="checkbox" class="fw-chk scoringclub-chk" data-hole="${hole}" onchange="scRecalc()" title="Tap if you had a 9-iron or shorter club in your hand for this approach. These are your scoring chances."></td>
               <td><input type="number" min="0" max="5" class="pen-in" data-hole="${hole}" oninput="scRecalc()" placeholder="0"></td>
             </tr>
           `);
