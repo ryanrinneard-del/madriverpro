@@ -354,7 +354,7 @@ RRG.approach = {
 
     if (opts.thisRoundAgg) {
       datasets.push({
-        label: 'This Round',
+        label: 'Your latest round',
         data: this.BUCKETS.map(b => opts.thisRoundAgg[b]?.pct ?? null),
         backgroundColor: 'rgba(201, 168, 76, 0.18)',
         borderColor:     'rgba(201, 168, 76, 1)',
@@ -366,7 +366,7 @@ RRG.approach = {
     }
     if (opts.seasonAgg) {
       datasets.push({
-        label: 'Your Season Average',
+        label: 'Your season average',
         data: this.BUCKETS.map(b => opts.seasonAgg[b]?.pct ?? null),
         backgroundColor: 'rgba(13, 27, 42, 0.05)',
         borderColor:     'rgba(13, 27, 42, 0.55)',
@@ -379,7 +379,7 @@ RRG.approach = {
     }
     if (opts.showTour !== false) {
       datasets.push({
-        label: 'PGA Tour Average',
+        label: 'Best players in the world',
         data: this.BUCKETS.map(b => this.TOUR_GIR_PCT[b]),
         backgroundColor: 'rgba(150, 150, 150, 0.04)',
         borderColor:     'rgba(150, 150, 150, 0.5)',

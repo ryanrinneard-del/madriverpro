@@ -267,11 +267,16 @@
         <table class="sc-holes" id="sc-front">
           <thead>
             <tr>
-              <th>Hole</th><th>Par</th><th>SI</th><th>Yd</th>
-              <th>Score</th><th>Tee</th>
-              <th title="Distance you hit your approach FROM (yards). Used to surface where you're losing strokes by distance.">Approach</th>
-              <th>1st putt</th><th>Putts</th>
-              <th title="Chip difficulty when you missed the green: Esy (simple chip) or Hrd (short-sided / awkward lie)">Chip</th><th title="Did you commit to this shot? Y or N">Commit</th><th title="Did you have a wedge or 9-iron approach into this green in regulation? Tap if yes — this is a scoring opportunity.">Wedge</th><th>Pen.</th>
+              <th>Hole</th><th>Par</th><th>SI</th><th>Yards</th>
+              <th>Score</th>
+              <th title="Where did your tee shot finish?">Tee shot</th>
+              <th title="How far away were you when you hit your shot into the green? (yards)">Approach distance</th>
+              <th title="How far was your first putt? (in feet)">First putt (ft)</th>
+              <th>Putts</th>
+              <th title="If you missed the green, was the chip easy (open chip) or tough (short-sided / awkward lie)?">Chip difficulty</th>
+              <th title="Did you commit to that shot, or were you wavering?">Committed?</th>
+              <th title="Did you have a wedge or 9-iron in your hand for this approach? (these are your scoring chances)">Wedge in?</th>
+              <th>Penalty</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -285,11 +290,16 @@
         <table class="sc-holes" id="sc-back">
           <thead>
             <tr>
-              <th>Hole</th><th>Par</th><th>SI</th><th>Yd</th>
-              <th>Score</th><th>Tee</th>
-              <th title="Distance you hit your approach FROM (yards). Used to surface where you're losing strokes by distance.">Approach</th>
-              <th>1st putt</th><th>Putts</th>
-              <th title="Chip difficulty when you missed the green: Esy (simple chip) or Hrd (short-sided / awkward lie)">Chip</th><th title="Did you commit to this shot? Y or N">Commit</th><th title="Did you have a wedge or 9-iron approach into this green in regulation? Tap if yes — this is a scoring opportunity.">Wedge</th><th>Pen.</th>
+              <th>Hole</th><th>Par</th><th>SI</th><th>Yards</th>
+              <th>Score</th>
+              <th title="Where did your tee shot finish?">Tee shot</th>
+              <th title="How far away were you when you hit your shot into the green? (yards)">Approach distance</th>
+              <th title="How far was your first putt? (in feet)">First putt (ft)</th>
+              <th>Putts</th>
+              <th title="If you missed the green, was the chip easy (open chip) or tough (short-sided / awkward lie)?">Chip difficulty</th>
+              <th title="Did you commit to that shot, or were you wavering?">Committed?</th>
+              <th title="Did you have a wedge or 9-iron in your hand for this approach? (these are your scoring chances)">Wedge in?</th>
+              <th>Penalty</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -515,14 +525,14 @@
           const yd = tee ? tee.yards[start + i] : '—';
 
           // Tee-shot direction picker — only meaningful on par 4/5.
-          // F = fairway hit, L = missed left, R = missed right, X = penalty/lost.
+          // Saved values stay as F/L/R/X for backwards compatibility.
           const teeCell = (par >= 4) ? `
             <select class="sc-pick tee-in" data-hole="${hole}" onchange="scRecalc()">
               <option value="">—</option>
-              <option value="F">F</option>
-              <option value="L">L</option>
-              <option value="R">R</option>
-              <option value="X">X</option>
+              <option value="F">Fairway</option>
+              <option value="L">Left</option>
+              <option value="R">Right</option>
+              <option value="X">OB / Penalty</option>
             </select>` : `<span class="sc-na">—</span>`;
 
           rows.push(`
@@ -551,15 +561,15 @@
               <td>
                 <select class="sc-pick diff-in" data-hole="${hole}" onchange="scRecalc()" title="Only fill in if you missed the green and chipped">
                   <option value="">—</option>
-                  <option value="S">Esy</option>
-                  <option value="T">Hrd</option>
+                  <option value="S">Easy</option>
+                  <option value="T">Tough</option>
                 </select>
               </td>
               <td>
-                <select class="sc-pick commit-in" data-hole="${hole}" onchange="scRecalc()" title="Did you commit to this shot?">
+                <select class="sc-pick commit-in" data-hole="${hole}" onchange="scRecalc()" title="Did you commit to this shot, or were you wavering?">
                   <option value="">—</option>
-                  <option value="C">Y</option>
-                  <option value="W">N</option>
+                  <option value="C">Yes</option>
+                  <option value="W">No</option>
                 </select>
               </td>
               <td>

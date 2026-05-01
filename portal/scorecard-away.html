@@ -277,10 +277,12 @@
           <thead>
             <tr>
               <th>Hole</th><th>Par</th>
-              <th>Score</th><th>Tee</th>
-              <th title="Distance you hit your approach FROM (yards). Used to surface where you're losing strokes by distance.">Approach</th>
-              <th>1st putt</th><th>Putts</th>
-              <th title="Chip difficulty when you missed the green: Esy or Hrd">Chip</th><th title="Did you commit to this shot? Y or N">Commit</th><th title="Did you have a wedge or 9-iron approach into this green in regulation? Tap if yes — this is a scoring opportunity.">Wedge</th><th>Pen.</th>
+              <th>Score</th>
+              <th title="Where did your tee shot finish?">Tee shot</th>
+              <th title="How far away were you when you hit your shot into the green? (yards)">Approach distance</th>
+              <th title="How far was your first putt? (in feet)">First putt (ft)</th>
+              <th>Putts</th>
+              <th title="If you missed the green, was the chip easy (open chip) or tough (short-sided / awkward lie)?">Chip difficulty</th><th title="Did you commit to that shot, or were you wavering?">Committed?</th><th title="Did you have a wedge or 9-iron in your hand for this approach? (these are your scoring chances)">Wedge in?</th><th>Penalty</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -295,10 +297,12 @@
           <thead>
             <tr>
               <th>Hole</th><th>Par</th>
-              <th>Score</th><th>Tee</th>
-              <th title="Distance you hit your approach FROM (yards). Used to surface where you're losing strokes by distance.">Approach</th>
-              <th>1st putt</th><th>Putts</th>
-              <th title="Chip difficulty: Esy or Hrd">Chip</th><th title="Committed: Y or N">Commit</th><th title="Wedge or 9-iron approach in regulation">Wedge</th><th>Pen.</th>
+              <th>Score</th>
+              <th title="Where did your tee shot finish?">Tee shot</th>
+              <th title="How far away were you when you hit your shot into the green? (yards)">Approach distance</th>
+              <th title="How far was your first putt? (in feet)">First putt (ft)</th>
+              <th>Putts</th>
+              <th title="If you missed the green, was the chip easy or tough?">Chip difficulty</th><th title="Did you commit to that shot, or were you wavering?">Committed?</th><th title="Did you have a wedge or 9-iron in your hand for this approach?">Wedge in?</th><th>Penalty</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -503,10 +507,10 @@
               <td>
                 <select class="sc-pick tee-in" data-hole="${hole}" onchange="scRecalc()">
                   <option value="">—</option>
-                  <option value="F">F</option>
-                  <option value="L">L</option>
-                  <option value="R">R</option>
-                  <option value="X">X</option>
+                  <option value="F">Fairway</option>
+                  <option value="L">Left</option>
+                  <option value="R">Right</option>
+                  <option value="X">OB / Penalty</option>
                 </select>
               </td>
               <td>
@@ -527,15 +531,15 @@
               <td>
                 <select class="sc-pick diff-in" data-hole="${hole}" onchange="scRecalc()" title="Only fill in if you missed the green and chipped">
                   <option value="">—</option>
-                  <option value="S">Esy</option>
-                  <option value="T">Hrd</option>
+                  <option value="S">Easy</option>
+                  <option value="T">Tough</option>
                 </select>
               </td>
               <td>
-                <select class="sc-pick commit-in" data-hole="${hole}" onchange="scRecalc()" title="Did you commit to this shot?">
+                <select class="sc-pick commit-in" data-hole="${hole}" onchange="scRecalc()" title="Did you commit to this shot, or were you wavering?">
                   <option value="">—</option>
-                  <option value="C">Y</option>
-                  <option value="W">N</option>
+                  <option value="C">Yes</option>
+                  <option value="W">No</option>
                 </select>
               </td>
               <td><input type="checkbox" class="fw-chk scoringclub-chk" data-hole="${hole}" onchange="scRecalc()" title="Check if you had a wedge or 9-iron approach into this green in regulation. Bogey from this position = 5 Errors leak."></td>
