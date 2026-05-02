@@ -818,16 +818,22 @@ RRG.renderNav = function(user, active = '') {
     ((tier === 'elite' || pj.junior_elite_accepted) &&
      tier !== 'just_starting' && tier !== 'developing');
 
-  // Elite-only nav block — hole-by-hole scorecards (Mad River + Away),
-  // TrackMan sessions, handicap index. Hidden entirely for non-Elite
-  // players so the nav doesn't tease features they don't have.
+  // Elite-only nav block — Away scorecard, TrackMan sessions, handicap index.
+  // Hidden for non-Elite players. Mad River Scorecard is now a top-level
+  // nav item (rendered separately below) so it gets one-tap access on every page.
   const eliteItems = isElite ? `
     <li class="nav-sublabel">Elite tier</li>
-    <li><a href="scorecard.html"      class="${active==='scorecard-madriver'?'active':''}">Mad River Scorecard</a></li>
     <li><a href="scorecard-away.html" class="${active==='scorecard-away'?'active':''}">Away Scorecard</a></li>
     <li><a href="trackman.html"       class="${active==='trackman'?'active':''}">TrackMan Sessions</a></li>
     <li><a href="handicap.html"       class="${active==='handicap'?'active':''}">Handicap Index</a></li>
   ` : '';
+
+  // Top-level Scorecard link — Elite-only. One-tap access from anywhere
+  // in the portal, since logging a round is the highest-frequency player action.
+  const scorecardTopLevel = isElite ? `
+    <li class="nav-top-link">
+      <a href="scorecard.html" class="${active==='scorecard-madriver'?'active':''}">Scorecard</a>
+    </li>` : '';
 
   const group = (label, key, items) => `
     <li class="nav-group" data-group="${key}">
@@ -848,6 +854,8 @@ RRG.renderNav = function(user, active = '') {
         <span></span><span></span><span></span>
       </button>
       <ul class="nav-links" id="rrg-nav-drawer">
+
+        ${scorecardTopLevel}
 
         ${group('My Game', 'mygame', `
           <li><a href="dashboard.html"  class="${active==='dashboard'?'active':''}">Dashboard</a></li>

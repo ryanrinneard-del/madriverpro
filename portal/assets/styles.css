@@ -120,6 +120,22 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; }
 .nav-group-toggle .caret { font-size: 9px; transition: transform .15s ease; opacity: 0.8; }
 .nav-group.open > .nav-group-toggle .caret { transform: rotate(180deg); }
 
+/* Top-level nav link (no dropdown) — matches nav-group-toggle visually,
+   plus a subtle gold underline so it reads as the primary CTA in the nav. */
+.nav-top-link { list-style: none; }
+.nav-top-link > a {
+  color: var(--gold); font-weight: 700; letter-spacing: 0.3px;
+  font-size: 13px;
+  padding: 6px 0;
+  border-bottom: 2px solid var(--gold);
+  display: inline-flex; align-items: center;
+  text-decoration: none;
+  font-family: inherit; line-height: 1;
+  transition: opacity .12s ease;
+}
+.nav-top-link > a:hover { opacity: 0.85; }
+.nav-top-link > a.active { color: var(--gold); }
+
 .nav-group-items {
   position: absolute;
   top: calc(100% + 6px); left: -14px;
@@ -1015,6 +1031,21 @@ button, input, select, textarea { font-family: inherit; font-size: inherit; }
     background: rgba(201,168,76,0.06);
   }
   .nav-group-toggle .caret { font-size: 11px; opacity: 0.9; }
+
+  /* Mobile: top-level nav link gets the same row treatment as dropdown
+     headers, but with gold text + a left accent bar to mark it as primary. */
+  .nav-top-link > a {
+    display: flex; width: 100%;
+    padding: 16px 22px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    border-left: 3px solid var(--gold);
+    background: rgba(201,168,76,0.08);
+    color: var(--gold);
+    font-size: 11px; letter-spacing: 2px;
+    text-transform: uppercase; font-weight: 700;
+    text-decoration: none;
+  }
+  .nav-top-link > a.active { background: rgba(201,168,76,0.15); }
 
   .nav-group-items {
     position: static;
