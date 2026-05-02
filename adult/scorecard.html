@@ -1256,7 +1256,22 @@
       try {
         await RRG.subs.create(payload);
         clearDraft();   // round is saved server-side — purge the local draft
-        location.replace('history.html?new=1');
+
+        // Show the Good / Bad / Ugly summary inline.
+        const formEl = document.getElementById('sc-form');
+        const mountEl = document.createElement('div');
+        mountEl.id = 'sc-summary-mount';
+        if (formEl && formEl.parentNode) {
+          formEl.style.display = 'none';
+          formEl.parentNode.insertBefore(mountEl, formEl);
+        } else {
+          document.querySelector('main').appendChild(mountEl);
+        }
+        if (typeof RRG.renderRoundSummary === 'function') {
+          RRG.renderRoundSummary(payload, mountEl, { historyUrl: 'history.html', dashboardUrl: 'dashboard.html' });
+        } else {
+          location.replace('history.html?new=1');
+        }
       } catch (err) {
         errBox.textContent = 'Could not submit: ' + (err.message || err);
         errBox.style.display = 'block';

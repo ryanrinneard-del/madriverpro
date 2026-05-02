@@ -1046,6 +1046,112 @@ RRG.path = {
 };
 
 /* ============================================================
+   ROUND SUMMARY — Good / Bad / Ugly post-submit panel.
+   Categorizes the just-saved round into three buckets so the player
+   gets instant feedback. Same logic used across all four scorecards
+   (adult home/away + portal home/away).
+   ============================================================ */
+RRG.renderRoundSummary = function(payload, mountEl, opts) {
+  opts = opts || {};
+  const historyUrl   = opts.historyUrl   || 'history.html';
+  const dashboardUrl = opts.dashboardUrl || 'dashboard.html';
+
+  const d = (payload && payload.derived) || {};
+  const sg = payload && payload.strokes_gained;
+  const score = payload && payload.score;
+  const totalPar = (payload && payload.total_par) || null;
+
+  const good = [], bad = [], ugly = [];
+
+  if (score != null && totalPar) {
+    const overUnder = score - totalPar;
+    const overUnderStr = overUnder === 0 ? 'E' : (overUnder > 0 ? `+${overUnder}` : `${overUnder}`);
+    if (overUnder <= 0) good.push({ n: score, label: `Even or under par (${overUnderStr})`, sub: 'Mark this round.' });
+    else if (overUnder <= 8) good.push({ n: score, label: `Score ${score} (${overUnderStr})`, sub: 'Solid round overall.' });
+    else if (overUnder >= 18) ugly.push({ n: score, label: `Score ${score} (${overUnderStr})`, sub: 'A grind. Tomorrow is new.' });
+    else bad.push({ n: score, label: `Score ${score} (${overUnderStr})`, sub: 'Room to tighten.' });
+  } else if (score != null) {
+    good.push({ n: score, label: `Total: ${score}`, sub: 'Round logged.' });
+  }
+
+  if (d.birdies && d.birdies >= 1) good.push({ n: d.birdies, label: `Birdie${d.birdies > 1 ? 's' : ''}`, sub: 'Always celebrate the birdie.' });
+
+  if (d.doubles_plus === 0) good.push({ n: 0, label: 'No doubles+', sub: 'Tiger 5 #2 in the green.' });
+  else if (d.doubles_plus >= 3) ugly.push({ n: d.doubles_plus, label: 'Double bogey or worse', sub: 'These cost the round.' });
+  else if (d.doubles_plus >= 1) bad.push({ n: d.doubles_plus, label: 'Double bogey or worse', sub: 'Limit these next time.' });
+
+  if (d.three_putts === 0) good.push({ n: 0, label: 'No 3-putts', sub: 'Putting held up.' });
+  else if (d.three_putts >= 3) ugly.push({ n: d.three_putts, label: '3-putts', sub: 'Lag distance control needs work.' });
+  else if (d.three_putts >= 1) bad.push({ n: d.three_putts, label: '3-putt' + (d.three_putts > 1 ? 's' : ''), sub: 'Tighten the lag putts.' });
+
+  const fwPct = (typeof payload.fw_pct === 'number') ? payload.fw_pct : null;
+  if (fwPct !== null) {
+    if (fwPct >= 60) good.push({ n: `${fwPct}%`, label: 'Fairways hit', sub: 'In play off the tee.' });
+    else if (fwPct < 30) ugly.push({ n: `${fwPct}%`, label: 'Fairways hit', sub: 'Driver was the leak today.' });
+    else bad.push({ n: `${fwPct}%`, label: 'Fairways hit', sub: 'Costing yourself approach options.' });
+  }
+
+  if (typeof payload.gir === 'number') {
+    if (payload.gir >= 9) good.push({ n: payload.gir, label: 'Greens in regulation', sub: 'Approach work paid off.' });
+    else if (payload.gir <= 2) ugly.push({ n: payload.gir, label: 'Greens in regulation', sub: 'Approaches missed all day.' });
+  }
+
+  const obCount = (d.tee_pattern && d.tee_pattern.X) || 0;
+  if (obCount >= 3) ugly.push({ n: obCount, label: 'OB / penalty tee shots', sub: 'Disasters off the tee.' });
+  else if (obCount >= 1) bad.push({ n: obCount, label: 'OB / penalty tee shot' + (obCount > 1 ? 's' : ''), sub: 'Cost you strokes you should have had.' });
+
+  if (d.par5_bogeys >= 2) ugly.push({ n: d.par5_bogeys, label: 'Bogey-or-worse on par 5s', sub: 'Tiger 5 #1 — the scoring holes hurt.' });
+  else if (d.par5_bogeys === 1) bad.push({ n: 1, label: 'Bogey on a par 5', sub: 'Par 5s are scoring chances.' });
+
+  if (d.scoring_club_bogeys >= 2) ugly.push({ n: d.scoring_club_bogeys, label: 'Bogey with 9ir or less in hand', sub: 'Tiger 5 #5 — the unforced errors.' });
+  else if (d.scoring_club_bogeys === 1) bad.push({ n: 1, label: 'Bogey with 9ir or less in hand', sub: 'Strategic / mental, not a swing fault.' });
+
+  if (d.easy_saves_blown >= 2) ugly.push({ n: d.easy_saves_blown, label: 'Blown easy saves', sub: 'Tiger 5 #3 — strokes given away around the green.' });
+  else if (d.easy_saves_blown === 1) bad.push({ n: 1, label: 'Blown easy save', sub: 'Up-and-down was there.' });
+
+  if (d.commitment_pct >= 80) good.push({ n: `${d.commitment_pct}%`, label: 'Fully committed shots', sub: 'Mental game stayed sharp.' });
+  else if (d.commitment_pct < 50 && (d.committed_n + d.weak_n) >= 3) bad.push({ n: `${d.commitment_pct}%`, label: 'Fully committed shots', sub: 'Pre-shot routine slipping.' });
+
+  if (sg && sg.top_leak) {
+    const leak = sg.top_leak;
+    const def = (leak.deficit != null) ? `−${Number(leak.deficit).toFixed(1)} strokes` : '';
+    ugly.push({ n: def || '!', label: `Biggest leak: ${leak.label || leak.category}`, sub: leak.summary || 'See your dashboard for the full breakdown + drill.' });
+  }
+
+  if (good.length === 0) good.push({ n: '✓', label: 'Round logged', sub: 'Data captured. That\'s the foundation.' });
+
+  const renderItems = (items, emptyMsg) => {
+    if (!items.length) return `<p class="rs-empty">${emptyMsg}</p>`;
+    return '<ul class="rs-items">' + items.slice(0, 4).map(it => `
+      <li><span class="rs-n">${it.n}</span><div><div class="rs-label">${it.label}</div><div class="rs-sub">${it.sub || ''}</div></div></li>
+    `).join('') + '</ul>';
+  };
+
+  mountEl.innerHTML = `
+    <div class="round-summary">
+      <div class="rs-header">
+        <div class="rs-kicker">Round complete</div>
+        <h2>The Good, The Bad, The Ugly</h2>
+        <p class="rs-subhead">Quick read on the round you just logged. Full numbers and trends live on your dashboard.</p>
+      </div>
+      <div class="rs-grid">
+        <section class="rs-col rs-good"><h3>The Good</h3>${renderItems(good, 'Nothing stood out as a clear win — log another round and we\'ll find one.')}</section>
+        <section class="rs-col rs-bad"><h3>The Bad</h3>${renderItems(bad, 'Nothing in the bad column — clean round.')}</section>
+        <section class="rs-col rs-ugly"><h3>The Ugly</h3>${renderItems(ugly, 'No disasters today. Nice.')}</section>
+      </div>
+      <div class="rs-where-note">
+        <strong>Where to find this later:</strong> every round you log gets its own breakdown. Open <a href="${historyUrl}">My Rounds</a> and tap any round to pull this same Good / Bad / Ugly view back up. Your <a href="${dashboardUrl}">Dashboard</a> shows the running trends across all rounds.
+      </div>
+      <div class="rs-actions">
+        <a href="${historyUrl}?new=1" class="btn btn-primary">View all my rounds &rarr;</a>
+        <a href="${dashboardUrl}" class="btn">Go to dashboard</a>
+      </div>
+    </div>`;
+
+  if (mountEl.scrollIntoView) mountEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
+
+/* ============================================================
    MILESTONES — progressive goals for beginners + developing players
 
    Replaces the Path-to-Goal widget for players in "just_starting" or
