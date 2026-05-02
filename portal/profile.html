@@ -59,11 +59,11 @@
         <option value="">Pick one…</option>
         <option value="just_starting">Just Starting — first year or two, learning the basics</option>
         <option value="developing">Developing — playing regularly, working on breaking 100</option>
-        <option value="elite" id="opt-elite-jr" disabled>Elite — invitation only (ask Ryan)</option>
+        <option value="elite" id="opt-elite-jr">Elite — competitive junior / tournament player</option>
       </select>
     </div>
     <div class="hint" style="margin-top:-8px; font-size:12px; color:var(--mid-grey);">
-      This changes what shows on your dashboard. Elite is unlocked when Ryan invites you &mdash; keep playing and it'll come.
+      This changes what shows on your dashboard. Pick the level that fits your game today &mdash; you can always update it as you progress.
     </div>
 
     <!-- Section 2: Long game -->
@@ -279,13 +279,8 @@
     if (el && el.type !== 'checkbox') el.value = v;
   });
 
-  // Elite tier is coach-gated. Unlock the option only if Ryan has flipped
-  // the profile_json.junior_elite_accepted flag.
-  const eliteOpt = document.getElementById('opt-elite-jr');
-  if (eliteOpt && existing.junior_elite_accepted) {
-    eliteOpt.disabled = false;
-    eliteOpt.textContent = 'Elite — Ryan has accepted you into the Elite tier';
-  }
+  // Elite tier is now self-selectable by the player. Coach-acceptance flag
+  // (profile_json.junior_elite_accepted) is no longer used to gate selection.
 
   async function emailToCoach(data) {
     try {
