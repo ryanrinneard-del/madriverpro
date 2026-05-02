@@ -290,11 +290,12 @@
         <li><b>Hdcp</b> — how hard the hole is, ranked 1 (hardest) to 18 (easiest)</li>
         <li><b>Score</b> — how many strokes you took on the hole</li>
         <li><b>Tee shot</b> — where your tee shot finished: Fairway, Left, Right, or OB / Penalty</li>
-        <li><b>Approach distance</b> — how far away you were when you hit your shot into the green (in yards)</li>
+        <li><b>Second shot (Par 5)</b> — only on par 5s: distance you hit your second shot FROM. Greyed out on par 3s and 4s.</li>
+        <li><b>Approach distance</b> — how far away you were when you hit your shot INTO the green (in yards). Greyed out on par 3s — your tee shot IS the approach.</li>
         <li><b>First putt (ft)</b> — how far away your first putt was, in feet</li>
         <li><b>Putts</b> — how many putts you took on the green</li>
         <li><b>Chip difficulty</b> — if you missed the green: Easy (open chip) or Tough (short-sided / awkward lie)</li>
-        <li><b>Committed?</b> — were you fully committed to that shot, or wavering?</li>
+        <li><b>Committed?</b> — were you fully committed to the shot, or did you have doubts?</li>
         <li><b>9 iron or less</b> — tap if you had a 9-iron or shorter club for this approach (these are your scoring chances)</li>
         <li><b>Penalty</b> — number of penalty strokes on this hole</li>
       </ul>
@@ -310,7 +311,8 @@
               <th>Hole</th><th>Par</th><th title="How hard the hole is, ranked 1 (hardest) to 18 (easiest)">Hdcp</th><th>Yards</th>
               <th>Score</th>
               <th title="Where did your tee shot finish?">Tee shot</th>
-              <th title="How far away were you when you hit your shot into the green? (yards)">Approach distance</th>
+              <th title="Par 5s only — distance you hit your second shot FROM. Greyed out on par 3s and 4s.">Second shot (Par 5)</th>
+              <th title="How far away were you when you hit your shot into the green? (yards). Greyed out on par 3s — your tee shot IS the approach.">Approach distance</th>
               <th title="How far was your first putt? (in feet)">First putt (ft)</th>
               <th>Putts</th>
               <th title="If you missed the green, was the chip easy (open chip) or tough (short-sided / awkward lie)?">Chip difficulty</th>
@@ -333,7 +335,8 @@
               <th>Hole</th><th>Par</th><th title="How hard the hole is, ranked 1 (hardest) to 18 (easiest)">Hdcp</th><th>Yards</th>
               <th>Score</th>
               <th title="Where did your tee shot finish?">Tee shot</th>
-              <th title="How far away were you when you hit your shot into the green? (yards)">Approach distance</th>
+              <th title="Par 5s only — distance you hit your second shot FROM. Greyed out on par 3s and 4s.">Second shot (Par 5)</th>
+              <th title="How far away were you when you hit your shot into the green? (yards). Greyed out on par 3s — your tee shot IS the approach.">Approach distance</th>
               <th title="How far was your first putt? (in feet)">First putt (ft)</th>
               <th>Putts</th>
               <th title="If you missed the green, was the chip easy (open chip) or tough (short-sided / awkward lie)?">Chip difficulty</th>
@@ -566,8 +569,17 @@
               <td><input type="number" min="1" max="15" class="score-in" data-hole="${hole}" oninput="scRecalc()"></td>
               <td>${teeCell}</td>
               <td>
-                <select class="sc-pick approach-in" data-hole="${hole}" onchange="scRecalc()" title="Distance you hit your approach FROM (yards)">
-                  <option value="">—</option>
+                <select class="sc-pick second-shot-in" data-hole="${hole}" onchange="scRecalc()" title="Par 5 second shot — distance you hit your second shot FROM (yards)" ${par === 5 ? '' : 'disabled'}>
+                  <option value="">${par === 5 ? '—' : 'N/A'}</option>
+                  <option value="100-150">100–150</option>
+                  <option value="150-200">150–200</option>
+                  <option value="200-250">200–250</option>
+                  <option value="250+">250+</option>
+                </select>
+              </td>
+              <td>
+                <select class="sc-pick approach-in" data-hole="${hole}" onchange="scRecalc()" title="Distance you hit your approach FROM (yards)" ${par === 3 ? 'disabled' : ''}>
+                  <option value="">${par === 3 ? 'N/A' : '—'}</option>
                   <option value="50-75">50–75</option>
                   <option value="75-100">75–100</option>
                   <option value="100-125">100–125</option>
@@ -590,8 +602,8 @@
               <td>
                 <select class="sc-pick commit-in" data-hole="${hole}" onchange="scRecalc()" title="Did you commit to this shot, or were you wavering?">
                   <option value="">—</option>
-                  <option value="C">Yes</option>
-                  <option value="W">No</option>
+                  <option value="C">Fully committed</option>
+                  <option value="W">Had doubts</option>
                 </select>
               </td>
               <td>
@@ -613,6 +625,7 @@
             <td></td>
             <td class="h-yd h-in-out">${ydSub}</td>
             <td class="h-in-out" id="sc-${half}-score">—</td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -1068,6 +1081,8 @@
         const commit = commitIn && commitIn.value !== '' ? commitIn.value : null;
         const scoringClub = !!(scClubChk && scClubChk.checked);
         const approachDist = approachIn && approachIn.value !== '' ? approachIn.value : null;
+        const secondShotIn = tr.querySelector('.second-shot-in');
+        const secondShotDist = secondShotIn && secondShotIn.value !== '' ? secondShotIn.value : null;
 
         holeRows.push({
           hole: h, par,
@@ -1077,6 +1092,7 @@
           scoring_club: scoringClub,
           fw_hit: tDir === 'F' ? true : (tDir ? false : null),
           approach_dist: approachDist,
+          second_shot_dist: secondShotDist,
         });
 
         if (s != null) total += s;
