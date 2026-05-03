@@ -54,7 +54,7 @@ rrgolfperformance.com
 **Auth:** Supabase magic-link via `signInWithOtp`. Shared session across all cohorts.
 **Storage:** Supabase tables for rounds, lessons, profiles, invites. localStorage as
 warm cache for some tools (wedge matrix). Videos still local (cloud migration pending).
-**Booking:** Acuity (madriverpro.as.me + the catalog). Portal links out; never duplicates
+**Booking:** Acuity (rrgolfperformance.as.me + the catalog). Portal links out; never duplicates
 booking state.
 
 ---
