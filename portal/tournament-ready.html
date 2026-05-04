@@ -1,0 +1,1107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<base href="/portal/">
+<title>Tournament Ready — Junior Portal</title>
+<meta name="description" content="The complete pathway for a junior golfer in Ontario — from your first tournament to a college golf program. Every step, every event, every checklist.">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  /* ==========================================================
+     Tournament Ready hub — color-coded phase cards by age tier,
+     comprehensive pathway from first event to college roster.
+     Voice is direct and honest. Designed for older juniors (12+)
+     and the parents reading over their shoulder.
+     ========================================================== */
+
+  /* Hero with a competitive feel */
+  .tr-hero {
+    background: linear-gradient(135deg, #0D1F3C 0%, #1A2E5C 50%, #243B73 100%);
+    color: #fff;
+    border-radius: 18px;
+    padding: 44px 32px;
+    margin-bottom: 26px;
+    position: relative; overflow: hidden;
+    text-align: center;
+  }
+  .tr-hero::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px;
+    background: linear-gradient(90deg, var(--gold) 0%, #F4D17C 50%, var(--gold) 100%);
+  }
+  .tr-hero .crest {
+    font-size: 64px; line-height: 1; display: block;
+    margin: 4px 0 16px; filter: drop-shadow(0 6px 14px rgba(0,0,0,0.25));
+  }
+  .tr-hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(34px, 6.5vw, 50px);
+    margin: 0 0 10px; color: #fff; font-weight: 600; line-height: 1.1;
+    letter-spacing: -0.5px;
+  }
+  .tr-hero .tagline {
+    font-size: 17px; color: rgba(255,255,255,0.92);
+    max-width: 600px; margin: 12px auto 0; line-height: 1.55;
+  }
+  .tr-hero .crumbs {
+    margin-top: 18px;
+    font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--gold); font-weight: 700;
+  }
+
+  /* Honest intro / reality card */
+  .tr-intro {
+    background: #FBF7EC;
+    border: 2px dashed var(--gold);
+    border-radius: 14px;
+    padding: 26px 30px;
+    margin-bottom: 28px;
+    font-size: 15.5px; line-height: 1.7; color: var(--navy-mid);
+  }
+  .tr-intro b { color: var(--navy); }
+  .tr-intro .who-this-is {
+    margin-top: 16px; padding-top: 16px;
+    border-top: 1px solid rgba(212,175,55,0.4);
+    font-size: 14px;
+  }
+
+  /* Quick TOC chips */
+  .tr-toc {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin: 0 0 32px;
+  }
+  .tr-toc a {
+    display: inline-block;
+    padding: 8px 14px;
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    font-size: 13px; font-weight: 600;
+    color: var(--navy); text-decoration: none;
+    transition: all .15s ease;
+  }
+  .tr-toc a:hover {
+    background: var(--navy); color: #fff; border-color: var(--navy);
+    transform: translateY(-1px);
+  }
+
+  /* Phase cards — color-coded by age tier */
+  .tr-phase {
+    background: var(--white);
+    border: 2px solid var(--rule);
+    border-radius: 16px;
+    padding: 30px 32px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .tr-phase .phase-tag {
+    display: inline-block;
+    font-size: 11px; letter-spacing: 1.5px;
+    padding: 6px 14px; border-radius: 999px;
+    font-weight: 700; text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .tr-phase .phase-mascot {
+    font-size: 44px; position: absolute; top: 26px; right: 28px;
+    filter: drop-shadow(0 3px 6px rgba(13,31,60,0.12));
+  }
+  .tr-phase h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 25px; color: var(--navy); margin: 0 0 8px; font-weight: 600;
+    max-width: calc(100% - 70px);
+    line-height: 1.2;
+  }
+  .tr-phase .phase-age {
+    font-size: 14px; color: var(--mid-grey);
+    font-style: italic; margin: 0 0 14px;
+  }
+  .tr-phase > p {
+    font-size: 14.5px; line-height: 1.7; color: var(--navy-mid);
+    margin: 0 0 16px;
+  }
+  .tr-phase h3 {
+    font-size: 16px; color: var(--navy); margin: 22px 0 8px;
+    font-weight: 700;
+  }
+  .tr-phase ul {
+    margin: 0 0 14px; padding-left: 22px;
+    font-size: 14.5px; line-height: 1.7; color: var(--navy-mid);
+  }
+  .tr-phase ul li { margin-bottom: 6px; }
+  .tr-phase ul li b { color: var(--navy); }
+
+  /* Phase color variants — escalating intensity */
+  .tr-phase.phase-green  { border-color: #6B8B4E; }
+  .tr-phase.phase-green  .phase-tag { background: #F2F6EE; color: #4C6B30; }
+  .tr-phase.phase-blue   { border-color: #4A7C9E; }
+  .tr-phase.phase-blue   .phase-tag { background: #EAF2F7; color: #2E5876; }
+  .tr-phase.phase-amber  { border-color: #C28D2C; }
+  .tr-phase.phase-amber  .phase-tag { background: #FBF1D9; color: #845B12; }
+  .tr-phase.phase-crimson{ border-color: #8B2E3C; }
+  .tr-phase.phase-crimson .phase-tag { background: #F7E3E5; color: #6B1F2A; }
+
+  /* Section headers */
+  .tr-section-header {
+    margin: 40px 0 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--gold);
+  }
+  .tr-section-header .label {
+    font-size: 11px; letter-spacing: 1.5px;
+    color: var(--gold); font-weight: 700; text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .tr-section-header h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 28px; color: var(--navy); margin: 0; font-weight: 600;
+  }
+
+  /* Tournament ladder table */
+  .tr-ladder {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+  .tr-ladder .lad-tier {
+    padding: 14px 20px;
+    background: linear-gradient(90deg, var(--navy) 0%, #1A2E5C 100%);
+    color: #fff;
+    font-size: 13px; letter-spacing: 1px; text-transform: uppercase;
+    font-weight: 700;
+  }
+  .tr-ladder .lad-tier .gold { color: var(--gold); }
+  .tr-ladder .lad-event {
+    padding: 16px 22px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .tr-ladder .lad-event:last-child { border-bottom: none; }
+  .tr-ladder .lad-event h4 {
+    font-size: 16px; color: var(--navy); margin: 0 0 4px; font-weight: 700;
+  }
+  .tr-ladder .lad-event .lad-meta {
+    font-size: 12px; color: var(--mid-grey);
+    text-transform: uppercase; letter-spacing: 0.5px;
+    margin-bottom: 8px; font-weight: 600;
+  }
+  .tr-ladder .lad-event p {
+    font-size: 14px; line-height: 1.6; color: var(--navy-mid); margin: 0;
+  }
+  .tr-ladder .lad-event a {
+    display: inline-block; margin-top: 6px;
+    font-size: 13px; color: var(--navy); font-weight: 700;
+    text-decoration: none; border-bottom: 1px solid var(--gold);
+  }
+
+  /* Generic content card */
+  .tr-card {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 26px 30px;
+    margin-bottom: 18px;
+  }
+  .tr-card h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 20px; color: var(--navy); margin: 0 0 10px; font-weight: 600;
+  }
+  .tr-card p, .tr-card ul li {
+    font-size: 14.5px; line-height: 1.7; color: var(--navy-mid);
+  }
+  .tr-card ul { padding-left: 22px; margin: 0 0 12px; }
+  .tr-card ul li { margin-bottom: 6px; }
+  .tr-card b { color: var(--navy); }
+
+  /* Email template box */
+  .tr-template {
+    background: #FAF8F2;
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--gold);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 14px 0;
+    font-family: Georgia, serif;
+    font-size: 14px; line-height: 1.7; color: var(--navy);
+  }
+  .tr-template .label {
+    display: block;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 10px; letter-spacing: 1.5px;
+    color: var(--gold); font-weight: 700; text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  /* Honest-talk callout */
+  .tr-honest {
+    background: linear-gradient(135deg, #F7E3E5 0%, #FAEEF0 100%);
+    border: 2px solid #8B2E3C;
+    border-radius: 14px;
+    padding: 26px 30px;
+    margin: 28px 0;
+    font-size: 15px; line-height: 1.7; color: #6B1F2A;
+  }
+  .tr-honest .honest-emoji {
+    font-size: 36px; display: block; margin-bottom: 8px;
+  }
+  .tr-honest h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    color: #6B1F2A; font-size: 22px; margin: 0 0 12px; font-weight: 600;
+  }
+  .tr-honest p { margin: 0 0 12px; }
+  .tr-honest b { color: #4A1219; }
+
+  /* Self-assessment checklist */
+  .tr-check {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 26px 30px;
+    margin-bottom: 18px;
+  }
+  .tr-check h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 20px; color: var(--navy); margin: 0 0 14px; font-weight: 600;
+  }
+  .tr-check label {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 0;
+    font-size: 14.5px; line-height: 1.5; color: var(--navy-mid);
+    cursor: pointer;
+    border-bottom: 1px solid #F0EBE0;
+  }
+  .tr-check label:last-child { border-bottom: none; }
+  .tr-check input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px; height: 18px;
+    accent-color: var(--navy);
+    cursor: pointer;
+  }
+  .tr-check .check-section {
+    margin: 18px 0 6px;
+    font-size: 12px; letter-spacing: 1px; text-transform: uppercase;
+    font-weight: 700; color: var(--gold);
+  }
+  .tr-check .check-section:first-child { margin-top: 0; }
+
+  /* Resources grid */
+  .tr-resources {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .tr-resources a {
+    display: block;
+    padding: 16px 18px;
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--navy);
+    border-radius: 8px;
+    text-decoration: none; color: inherit;
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .tr-resources a:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(13,31,60,0.08);
+  }
+  .tr-resources a .res-title {
+    font-size: 14px; font-weight: 700; color: var(--navy);
+    margin-bottom: 4px;
+  }
+  .tr-resources a .res-desc {
+    font-size: 12.5px; color: var(--navy-mid); line-height: 1.5;
+  }
+  .tr-resources a .res-host {
+    font-size: 11px; color: var(--mid-grey);
+    text-transform: uppercase; letter-spacing: 0.5px;
+    margin-top: 6px;
+  }
+
+  /* Final CTA — coach me through this */
+  .tr-cta {
+    background: linear-gradient(180deg, var(--navy) 0%, #162E54 100%);
+    color: #fff;
+    border-radius: 14px;
+    padding: 32px 32px;
+    margin: 30px 0 20px;
+    text-align: center;
+  }
+  .tr-cta h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    color: var(--gold); font-size: 24px; margin: 0 0 12px; font-weight: 600;
+  }
+  .tr-cta p { color: rgba(255,255,255,0.9); font-size: 15px; line-height: 1.65; margin: 0 0 18px; }
+  .tr-cta .btn {
+    background: var(--gold); color: var(--navy);
+    padding: 12px 28px; border-radius: 8px; font-weight: 700;
+    text-decoration: none; display: inline-block;
+  }
+
+  @media (max-width: 540px) {
+    .tr-phase .phase-mascot { font-size: 32px; top: 22px; right: 18px; }
+    .tr-phase h2 { font-size: 21px; max-width: calc(100% - 50px); }
+    .tr-phase, .tr-card, .tr-check, .tr-honest { padding: 22px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container-narrow">
+
+  <div class="breadcrumb">
+    <a href="dashboard.html">Dashboard</a><span>&rsaquo;</span>Tournament Ready
+  </div>
+
+  <!-- HERO -->
+  <div class="tr-hero">
+    <span class="crest" role="img" aria-label="Trophy">&#127942;</span>
+    <h1>Tournament Ready.</h1>
+    <p class="tagline">The complete pathway from your first junior event to the day you sign with a college program. Built for Ontario juniors, by a coach who's walked players through every step.</p>
+    <div class="crumbs">First event &rsaquo; Provincials &rsaquo; National rankings &rsaquo; College roster</div>
+  </div>
+
+  <!-- HONEST INTRO -->
+  <div class="tr-intro">
+    <p>
+      <b>Let's start with the truth.</b> Most kids who play tournament golf will never play in college. That's not pessimism &mdash; it's just the math. There are about 35,000 high-school golfers in Canada and roughly 800 spots on Canadian university teams. Across the border, NCAA Division I women's golf has about 1,500 roster spots total in the entire United States. Division I men's has around 2,000.
+    </p>
+    <p>
+      <b>But here's the other truth.</b> The kids who do make it almost never get there by accident. There's a path. It has stages. There's a tournament ladder you climb, a ranking system that scouts watch, a recruiting calendar that resets every year, and a stack of paperwork that disqualifies players who don't get it right. None of it is hidden. Most families just don't know where to look.
+    </p>
+    <p>
+      <b>This page is the map.</b> Read it once with a parent. Bookmark it. Come back to it before each tournament season and again before each recruiting milestone. If you take the path seriously starting at age 12 or 13, you give yourself a real shot. Starting later is harder &mdash; not impossible, just harder.
+    </p>
+    <div class="who-this-is">
+      <b>Who this is for:</b> a junior golfer in Ontario who already plays regularly, can break 100 (or is close), and is willing to put in deliberate practice for several years. If you're earlier than that, start with <a href="just-starting.html">Just Starting</a> and come back when you're ready to sign up for your first event.
+    </div>
+  </div>
+
+  <!-- QUICK NAV -->
+  <div class="tr-toc">
+    <a href="#pathway">The pathway by age</a>
+    <a href="#ladder">Ontario tournament ladder</a>
+    <a href="#rankings">Handicap &amp; rankings</a>
+    <a href="#prep">Tournament prep</a>
+    <a href="#college">College pathway</a>
+    <a href="#recruiting">Recruiting timeline</a>
+    <a href="#emailing">Emailing coaches</a>
+    <a href="#ncaa">NCAA paperwork</a>
+    <a href="#honest">The honest talk</a>
+    <a href="#checklist">Am I ready?</a>
+    <a href="#resources">Resources</a>
+  </div>
+
+  <!-- ============================================================
+       SECTION 1 — THE PATHWAY BY AGE
+       ============================================================ -->
+  <div class="tr-section-header" id="pathway">
+    <div class="label">Section 1</div>
+    <h2>The pathway, by age</h2>
+  </div>
+
+  <p style="font-size:14.5px; color:var(--navy-mid); line-height:1.7; margin-bottom:22px;">
+    Four phases, roughly mapped to age tiers. You don't have to hit every milestone exactly when listed, but if you're more than a year behind, the next phase gets harder. Read the phase you're in, plus the one above it &mdash; that's where you're heading next.
+  </p>
+
+  <!-- PHASE 1 -->
+  <div class="tr-phase phase-green">
+    <span class="phase-mascot" role="img" aria-label="Sprout">&#127793;</span>
+    <div class="phase-tag">Phase 1 &middot; The Build</div>
+    <h2>Get the bug. Build a real game.</h2>
+    <p class="phase-age">Ages 8&ndash;13 &middot; pre-tournament foundation</p>
+    <p>Before you ever sign up for a competitive event, you need to actually love this game and own a swing that holds together for 18 holes. This phase is about reps, not results. Get out, play often, and let the love grow.</p>
+
+    <h3>What to focus on</h3>
+    <ul>
+      <li><b>Play 30+ rounds a year</b> &mdash; nine-hole rounds count. Casual rounds with parents and friends matter more than perfect range time at this age.</li>
+      <li><b>Get a swing built right from the start</b> &mdash; junior-specific lessons every 4&ndash;6 weeks. Bad habits learned at 10 are still costing players strokes at 18.</li>
+      <li><b>Know your bag</b> &mdash; how far each club goes, fully customizable on the <a href="bag.html">My Bag</a> tool.</li>
+      <li><b>Short game first</b> &mdash; juniors who putt and chip well climb fastest. Spend half your practice time inside 50 yards.</li>
+      <li><b>Play your first events</b> &mdash; U.S. Kids Local Tour or junior club championships. Pure exposure. Don't track scores, just learn what tournament day feels like.</li>
+    </ul>
+
+    <h3>Events to look at</h3>
+    <ul>
+      <li><b>U.S. Kids Golf Local Tour &mdash; Toronto / GTA / Niagara</b> &mdash; age-grouped, modified yardages, low pressure. The single best on-ramp for kids 7&ndash;12.</li>
+      <li><b>Your home club's junior championship</b> &mdash; if you're a member or your parents are, just play it.</li>
+      <li><b>Maple Leaf Junior Tour Bantam events</b> &mdash; for the ambitious 11&ndash;13 crowd ready to step up.</li>
+    </ul>
+  </div>
+
+  <!-- PHASE 2 -->
+  <div class="tr-phase phase-blue">
+    <span class="phase-mascot" role="img" aria-label="Compass">&#129517;</span>
+    <div class="phase-tag">Phase 2 &middot; The Climb</div>
+    <h2>Get a handicap. Earn ranking points. Show up in fields.</h2>
+    <p class="phase-age">Ages 13&ndash;15 &middot; junior tour years</p>
+    <p>Now we're playing for real. You sign up for sanctioned events, post scores to a handicap, and your name starts appearing on leaderboards. The whole point of this phase is to learn what tournament golf actually demands &mdash; not just shooting your number, but doing it under pressure, on a course you didn't pick, against players you don't know.</p>
+
+    <h3>What to focus on</h3>
+    <ul>
+      <li><b>Get a Golf Canada handicap index</b> &mdash; this is non-negotiable from age 13 forward. Most events require it. Sign up through your home club, or directly with Golf Canada.</li>
+      <li><b>Play 6&ndash;10 sanctioned events per season</b> &mdash; mix of one-day and multi-day. Mix close-to-home and travel.</li>
+      <li><b>Start tracking everything</b> &mdash; use the portal's <a href="scorecard.html">Scorecard</a> on every round. The data tells you what to work on.</li>
+      <li><b>Build a pre-shot routine you can repeat under pressure</b> &mdash; before, during, and after the shot. This is the single biggest swing-saving habit at this age.</li>
+      <li><b>Travel with your parents to one event you can't quite handle yet</b> &mdash; getting humbled is part of the curriculum.</li>
+    </ul>
+
+    <h3>Events to look at</h3>
+    <ul>
+      <li><b>Maple Leaf Junior Tour (MJT) &mdash; Ontario stops</b> &mdash; the workhorse of the Canadian junior calendar. Affordable, well-run, age divisions from peewee through U19.</li>
+      <li><b>Future Links Driven by Acura &mdash; Ontario Championship</b> &mdash; Golf Canada's regional series. A step up in competition.</li>
+      <li><b>Investors Group Junior Golf Tour</b> &mdash; if you're west-end Ontario, another solid local series.</li>
+      <li><b>Ontario Junior Spring Classic</b> &mdash; Golf Ontario's early-season event. Great early-year benchmark.</li>
+    </ul>
+  </div>
+
+  <!-- PHASE 3 -->
+  <div class="tr-phase phase-amber">
+    <span class="phase-mascot" role="img" aria-label="Target">&#127919;</span>
+    <div class="phase-tag">Phase 3 &middot; The Stretch</div>
+    <h2>Provincials. National events. The recruiting prep starts now.</h2>
+    <p class="phase-age">Ages 15&ndash;17 &middot; the years that build a r&eacute;sum&eacute;</p>
+    <p>This is the phase where coaches start watching. Your scores from these years are the ones that go on your tournament r&eacute;sum&eacute;. Your ranking on Junior Golf Scoreboard is built mostly from events played at 15, 16, and 17. The kids who will play college golf separate from the kids who won't right here.</p>
+
+    <h3>What to focus on</h3>
+    <ul>
+      <li><b>Qualify for and play in provincial championships</b> &mdash; Ontario Junior Boys / Girls Championship. This is the headline event of the Ontario calendar.</li>
+      <li><b>Add at least one cross-border event per year</b> &mdash; AJGA qualifier, U.S. junior invitational, or a southern winter event. American coaches need to see U.S.-soil performance.</li>
+      <li><b>Earn a Junior Golf Scoreboard ranking</b> &mdash; this requires playing in JGS-rated events. Most MJT, Future Links, and Golf Ontario championships qualify. Check the JGS event database before you commit your schedule.</li>
+      <li><b>Shoot in the 70s consistently</b> &mdash; for a path to NCAA Division I, you need scoring averages around 73 (boys) / 76 (girls) by age 16. D2 / D3 / NAIA pathways have lower thresholds but still require sub-80 stability.</li>
+      <li><b>Build the recruiting kit</b> &mdash; tournament r&eacute;sum&eacute; PDF, swing video, transcripts, NCAA Eligibility Center registration (Grade 10).</li>
+      <li><b>Make a target school list</b> &mdash; 30 schools at first, narrowed to 10&ndash;15 by Grade 11. Mix reach, fit, and safety. Include Canadian universities, NCAA D1/D2/D3, NAIA, and JUCO. <b>Fit beats prestige every single time.</b></li>
+    </ul>
+
+    <h3>Events to look at</h3>
+    <ul>
+      <li><b>Ontario Junior Boys / Girls Championship</b> &mdash; Golf Ontario's flagship junior event.</li>
+      <li><b>Future Links Driven by Acura &mdash; National Championship qualifying</b> &mdash; advance from regional to national.</li>
+      <li><b>AJGA (American Junior Golf Association) qualifiers</b> &mdash; the gold standard for U.S. college recruiting. Hard to get into. Even one start counts.</li>
+      <li><b>Canadian Junior Golf Association (CJGA) marquee events</b> &mdash; high-quality fields, JGS-rated.</li>
+      <li><b>Doral-Publix / Junior Heritage / IMG Junior World qualifiers</b> &mdash; international invitationals with serious recruiting eyes on them.</li>
+    </ul>
+  </div>
+
+  <!-- PHASE 4 -->
+  <div class="tr-phase phase-crimson">
+    <span class="phase-mascot" role="img" aria-label="Handshake">&#129309;</span>
+    <div class="phase-tag">Phase 4 &middot; The Commit</div>
+    <h2>Sign with a school. Finish strong. Don't drop the ball on paperwork.</h2>
+    <p class="phase-age">Ages 17&ndash;19 &middot; senior year &amp; commitment</p>
+    <p>By Grade 12, your tournament r&eacute;sum&eacute; is mostly written. The work now is closing the deal &mdash; conversations with coaches, official visits, and getting every form filed correctly. The number-one reason eligible players miss out at this stage isn't golf. It's paperwork they didn't realize they needed.</p>
+
+    <h3>What to focus on</h3>
+    <ul>
+      <li><b>Finalize your NCAA Eligibility Center file</b> &mdash; transcripts, test scores (where required), amateurism verification. Submit by January of senior year at the latest.</li>
+      <li><b>Take official visits</b> &mdash; one per school, paid for by the school, allowed once recruiting opens (currently June 15 after sophomore year for D1 men's and women's golf).</li>
+      <li><b>Sign your National Letter of Intent (NLI)</b> &mdash; early signing period in November of senior year, late period in April. Don't sign before you've visited campus.</li>
+      <li><b>Keep your grades up</b> &mdash; coaches pull offers when GPAs slip. NCAA D1 requires a minimum core-course GPA (currently 2.3); most rosters expect well above that.</li>
+      <li><b>Don't peak too early</b> &mdash; play your senior summer and fall like every event matters, because some coaches make late-cycle adjustments based on it.</li>
+    </ul>
+
+    <h3>Events to look at</h3>
+    <ul>
+      <li><b>Canadian Junior Boys / Girls Championship</b> &mdash; Golf Canada's national junior. The biggest stage in Canada.</li>
+      <li><b>AJGA Invitationals</b> &mdash; if you've earned starts, the late-summer events are full of recruiters.</li>
+      <li><b>Provincial team selection</b> &mdash; Team Ontario at Canada Summer Games, inter-provincial team events. Coaches notice.</li>
+      <li><b>R&amp;A Junior Open or international team representation</b> &mdash; rare, but transformative if you earn it.</li>
+    </ul>
+  </div>
+
+  <!-- ============================================================
+       SECTION 2 — ONTARIO TOURNAMENT LADDER
+       ============================================================ -->
+  <div class="tr-section-header" id="ladder">
+    <div class="label">Section 2</div>
+    <h2>The Ontario tournament ladder</h2>
+  </div>
+
+  <p style="font-size:14.5px; color:var(--navy-mid); line-height:1.7; margin-bottom:22px;">
+    Junior tournaments in Canada sit on a ladder. Bottom rungs are entry-level fields with low handicaps allowed; top rungs require a national ranking just to enter. You climb the ladder by earning your way up. Don't skip rungs &mdash; you'll get embarrassed in fields you weren't ready for.
+  </p>
+
+  <!-- TIER 1 -->
+  <div class="tr-ladder">
+    <div class="lad-tier">Tier 1 &middot; <span class="gold">Entry-level / Local</span></div>
+    <div class="lad-event">
+      <h4>U.S. Kids Golf Local Tour</h4>
+      <div class="lad-meta">Ages 5&ndash;14 &middot; Toronto, GTA, Niagara, Ottawa regions</div>
+      <p>Age-divided fields, modified yardages, low entry fees. The single most-recommended starting point for kids 7&ndash;12 in Ontario.</p>
+      <a href="https://www.uskidsgolf.com/tournaments" target="_blank" rel="noopener">U.S. Kids Tournament Schedule &rarr;</a>
+    </div>
+    <div class="lad-event">
+      <h4>Local club junior championships</h4>
+      <div class="lad-meta">Varies by club &middot; usually mid-summer</div>
+      <p>If your home club has a junior championship, play it. No travel, supportive crowd, and a great way to get tournament reps in a setting that's familiar.</p>
+    </div>
+    <div class="lad-event">
+      <h4>Junior Linkster Tour (GTA)</h4>
+      <div class="lad-meta">Ages 7&ndash;18 &middot; GTA-area courses</div>
+      <p>Affordable Saturday events. Good first-step beyond U.S. Kids.</p>
+    </div>
+  </div>
+
+  <!-- TIER 2 -->
+  <div class="tr-ladder">
+    <div class="lad-tier">Tier 2 &middot; <span class="gold">Provincial Junior Tours</span></div>
+    <div class="lad-event">
+      <h4>Maple Leaf Junior Tour (MJT)</h4>
+      <div class="lad-meta">Ages 7&ndash;18 &middot; multi-event Canadian tour</div>
+      <p>The Canadian junior workhorse. Stops across Ontario every weekend in season, age divisions from Peewee through U19. Most juniors who go on to play college golf cut their teeth here.</p>
+      <a href="https://www.maplejt.com" target="_blank" rel="noopener">Maple Leaf Junior Tour &rarr;</a>
+    </div>
+    <div class="lad-event">
+      <h4>Investors Group Junior Golf Tour</h4>
+      <div class="lad-meta">Ages 6&ndash;19 &middot; Western Ontario / GTA</div>
+      <p>Long-running provincial tour, lower entry barrier than MJT, good for stacking event reps.</p>
+    </div>
+    <div class="lad-event">
+      <h4>Canadian Junior Golf Association (CJGA)</h4>
+      <div class="lad-meta">Ages 7&ndash;19 &middot; National series with strong Ontario presence</div>
+      <p>Higher-quality fields than MJT in many events. JGS-rated, which matters for ranking.</p>
+      <a href="https://cjga.com" target="_blank" rel="noopener">CJGA &rarr;</a>
+    </div>
+  </div>
+
+  <!-- TIER 3 -->
+  <div class="tr-ladder">
+    <div class="lad-tier">Tier 3 &middot; <span class="gold">Provincial Championships &amp; National Qualifiers</span></div>
+    <div class="lad-event">
+      <h4>Future Links Driven by Acura &mdash; Ontario Championship</h4>
+      <div class="lad-meta">Golf Canada / Golf Ontario &middot; Regional qualifier for nationals</div>
+      <p>Top finishers earn invitations to the National Championship. A real step-up in field quality.</p>
+      <a href="https://www.golfcanada.ca/future-links" target="_blank" rel="noopener">Future Links series &rarr;</a>
+    </div>
+    <div class="lad-event">
+      <h4>Ontario Junior Boys / Girls Championship</h4>
+      <div class="lad-meta">Golf Ontario &middot; The Provincial title</div>
+      <p>The flagship junior event in the province. Winning or top-10ing here puts you on the national radar.</p>
+      <a href="https://gao.ca" target="_blank" rel="noopener">Golf Ontario &rarr;</a>
+    </div>
+    <div class="lad-event">
+      <h4>Ontario Junior Spring Classic / Fall Classic</h4>
+      <div class="lad-meta">Golf Ontario &middot; Season bookends</div>
+      <p>Great benchmark events at the start and end of each season.</p>
+    </div>
+  </div>
+
+  <!-- TIER 4 -->
+  <div class="tr-ladder">
+    <div class="lad-tier">Tier 4 &middot; <span class="gold">National &amp; International</span></div>
+    <div class="lad-event">
+      <h4>Canadian Junior Boys / Girls Championship</h4>
+      <div class="lad-meta">Golf Canada &middot; National title</div>
+      <p>Qualification varies by region. The biggest junior stage in the country. College coaches pay attention.</p>
+      <a href="https://www.golfcanada.ca" target="_blank" rel="noopener">Golf Canada &rarr;</a>
+    </div>
+    <div class="lad-event">
+      <h4>AJGA (American Junior Golf Association)</h4>
+      <div class="lad-meta">USA-based &middot; ages 12&ndash;19 &middot; the gold standard for U.S. recruiting</div>
+      <p>The single most important tour for U.S. college recruiting exposure. Hard to get into &mdash; you start by qualifying or earning Performance Based Entry stars. Even one or two AJGA starts on a r&eacute;sum&eacute; opens doors.</p>
+      <a href="https://www.ajga.org" target="_blank" rel="noopener">AJGA &rarr;</a>
+    </div>
+    <div class="lad-event">
+      <h4>IMG Junior World Championships</h4>
+      <div class="lad-meta">San Diego, CA &middot; July annually</div>
+      <p>One of the most prestigious junior fields on Earth. Qualification varies by age group; Canadian players often earn spots through the Canadian Junior Golf Association.</p>
+    </div>
+    <div class="lad-event">
+      <h4>Optimist International Junior Championship</h4>
+      <div class="lad-meta">Florida &middot; July annually</div>
+      <p>International field, qualifies through district events. A great target for top Ontario juniors aged 14&ndash;18.</p>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SECTION 3 — HANDICAP & RANKINGS
+       ============================================================ -->
+  <div class="tr-section-header" id="rankings">
+    <div class="label">Section 3</div>
+    <h2>Handicap and rankings</h2>
+  </div>
+
+  <div class="tr-card">
+    <h3>1. Get a Golf Canada handicap index</h3>
+    <p>This is the foundation. Most sanctioned junior events require a current handicap to enter. You get one of two ways:</p>
+    <ul>
+      <li><b>Through your home club</b> &mdash; if you're a junior member, your club almost certainly registers you with Golf Canada automatically. Confirm with the pro shop.</li>
+      <li><b>Direct membership</b> &mdash; if you're not a club member, sign up directly at <a href="https://www.golfcanada.ca/score-centre/handicap-membership/" target="_blank" rel="noopener">golfcanada.ca</a>. Around $50/year.</li>
+    </ul>
+    <p>Once you have it, post every score &mdash; the World Handicap System needs at least 5 rounds to give you an index, and 20 rounds for accuracy. Use the <a href="handicap.html">Handicap</a> page in this portal to track yours.</p>
+  </div>
+
+  <div class="tr-card">
+    <h3>2. Junior Golf Scoreboard (JGS)</h3>
+    <p>This is the ranking U.S. college coaches actually look at. It's separate from your handicap. JGS only counts scores from rated tournaments (most MJT, Future Links, Golf Ontario championships, AJGA, and CJGA marquee events qualify). Casual rounds don't count.</p>
+    <p>To get on the board you need at least <b>five rated event rounds</b> from a 12-month period. Rankings refresh weekly. Coaches sort by class year (2026, 2027, etc.) and look at average score, top-10 finishes, and head-to-head record.</p>
+    <p><b>What to know:</b> the JGS Top 1,500 nationally is roughly the recruitable pool for NCAA D1 men. Top 600 for D1 women. Below that, focus shifts to D2, D3, NAIA, and Canadian university programs &mdash; all of which are great places to play.</p>
+    <p><a href="https://www.juniorgolfscoreboard.com" target="_blank" rel="noopener">Junior Golf Scoreboard &rarr;</a></p>
+  </div>
+
+  <div class="tr-card">
+    <h3>3. Golf Ontario Order of Merit</h3>
+    <p>The provincial ranking. Determines selection for Team Ontario events, provincial championships, and inter-provincial competitions. Points come from finishes at Golf Ontario sanctioned events. If you want to wear a Team Ontario uniform, this is the list to be on.</p>
+    <p><a href="https://gao.ca" target="_blank" rel="noopener">Golf Ontario &rarr;</a></p>
+  </div>
+
+  <div class="tr-card">
+    <h3>4. World Amateur Golf Ranking (WAGR)</h3>
+    <p>The international ranking. Mostly relevant for top-tier juniors aiming at NCAA D1 powerhouse programs. To even appear on WAGR, you need finishes in WAGR-rated events &mdash; almost always national championships and major international invitationals. If you're in the WAGR conversation, you already know.</p>
+  </div>
+
+  <!-- ============================================================
+       SECTION 4 — TOURNAMENT PREP
+       ============================================================ -->
+  <div class="tr-section-header" id="prep">
+    <div class="label">Section 4</div>
+    <h2>How to prepare for a tournament</h2>
+  </div>
+
+  <div class="tr-card">
+    <h3>The week before</h3>
+    <ul>
+      <li><b>Look up the course online</b> &mdash; flyovers, scorecard, hole maps. Know which holes are short and reachable, which are long, and where the water is.</li>
+      <li><b>If you can, play a practice round</b> &mdash; ideally 4&ndash;7 days before the event. Walk it. Note pin positions, run-out areas, and trouble.</li>
+      <li><b>Build a yardage book or mark up the printed scorecard</b> &mdash; carry distances off the tee, layup numbers, sucker pin locations.</li>
+      <li><b>Rest the body</b> &mdash; back off heavy practice volume 3&ndash;4 days out. The work is done; now the system needs to recover.</li>
+      <li><b>Sharpen the short game</b> &mdash; greenside chipping and lag putting in the final week. Those are the shots that save the round when you miss.</li>
+    </ul>
+  </div>
+
+  <div class="tr-card">
+    <h3>The day before</h3>
+    <ul>
+      <li><b>Light range session</b> &mdash; 25&ndash;30 balls maximum. Confirm your stock shot and your warm-up routine. Don't try to fix anything new today.</li>
+      <li><b>Putt for 30 minutes</b> &mdash; speed only. From three distances: 5 feet, 20 feet, 40 feet. Get the greens in your hands.</li>
+      <li><b>Eat well, hydrate, sleep early</b> &mdash; most kids don't sleep enough the night before. The night TWO nights before matters more, but Wednesday-night-before-Thursday-tournament is the one to nail.</li>
+      <li><b>Set out everything for the morning</b> &mdash; clothes, shoes, hat, gloves, balls, tees, snacks, water bottle, sunscreen, rain jacket. Pack the bag.</li>
+    </ul>
+  </div>
+
+  <div class="tr-card">
+    <h3>Tournament morning</h3>
+    <ul>
+      <li><b>Arrive 60&ndash;75 minutes early</b> &mdash; check in, get the pin sheet, walk to the range with time to spare. Rushed warm-ups mean rushed first tees.</li>
+      <li><b>Eat something with protein and slow carbs</b> &mdash; oatmeal with peanut butter, eggs, a smoothie. Skip the sugary breakfast. You don't want a crash on hole 6.</li>
+      <li><b>Warm up the body before the swing</b> &mdash; 5 minutes of dynamic stretches and rotations before you grab a club.</li>
+      <li><b>Range session: 30 balls, 30 minutes</b> &mdash; 5 wedges, 5 mid-irons, 5 long irons, 10 driver, 5 wedges. Build to full speed gradually. Don't grind.</li>
+      <li><b>Putting and chipping: 20 minutes</b> &mdash; speed putts first, then 4-foot pressure putts. Few chips to confirm spin.</li>
+      <li><b>Quiet time: 10 minutes</b> &mdash; before the first tee. Headphones if it helps. Run your routine, see your first tee shot, breathe.</li>
+    </ul>
+  </div>
+
+  <div class="tr-card">
+    <h3>Mental game on the course</h3>
+    <ul>
+      <li><b>One shot at a time, every time</b> &mdash; future shots and past shots both ruin the present one. Stay between the ropes.</li>
+      <li><b>Have a routine and use it on every full shot</b> &mdash; same number of looks, same waggle, same trigger. Routine is the only thing you control when nerves spike.</li>
+      <li><b>Make friends with bogey</b> &mdash; on tough holes, par is a bonus. A bogey-bogey-par stretch beats triple-double-birdie every time.</li>
+      <li><b>Reset between holes</b> &mdash; the walk between green and next tee is your buffer. Bad hole? Process it, dump it, walk to the next tee with a clean head.</li>
+      <li><b>The 10-second rule for bad shots</b> &mdash; you get 10 seconds to be mad. Then it's done. Move on.</li>
+    </ul>
+  </div>
+
+  <div class="tr-card">
+    <h3>The parent's role</h3>
+    <ul>
+      <li><b>Be a driver, not a coach</b> &mdash; on the way to the course and on the way home, talk about anything except the round. Let the player decompress.</li>
+      <li><b>Don't rebuild the swing during the tournament</b> &mdash; ever. Even if you see something obvious. Save it for the post-event lesson.</li>
+      <li><b>Know the spectator rules</b> &mdash; most tournaments require parents to stay on cart paths, no distance assistance, no club selection input. Know the rules; getting your kid disqualified is a long ride home.</li>
+      <li><b>Cheer claps, not commentary</b> &mdash; "great shot" is fine. "You should have hit a 7" is not.</li>
+      <li><b>Ask one question after the round</b> &mdash; "what'd you learn today?" Then listen. That's it.</li>
+    </ul>
+  </div>
+
+  <!-- ============================================================
+       SECTION 5 — COLLEGE PATHWAY
+       ============================================================ -->
+  <div class="tr-section-header" id="college">
+    <div class="label">Section 5</div>
+    <h2>The college pathway</h2>
+  </div>
+
+  <p style="font-size:14.5px; color:var(--navy-mid); line-height:1.7; margin-bottom:22px;">
+    "College golf" isn't one thing. There are several distinct pathways with very different rules, scholarship structures, recruiting calendars, and competitive levels. Knowing the lay of the land is half the battle.
+  </p>
+
+  <div class="tr-card">
+    <h3>NCAA Division I</h3>
+    <p><b>The top tier in U.S. college golf.</b> About 295 men's programs and 265 women's programs. Full scholarships are limited (4.5 max for men's golf, 6 for women's), so most rosters mix full, partial, and walk-on positions.</p>
+    <p><b>Realistic scoring threshold:</b> 73 average for men, 76 for women, by senior year of high school. Top programs (Stanford, Texas, Oklahoma State, etc.) recruit players already shooting in the 60s.</p>
+    <p><b>Recruiting calendar:</b> No contact allowed until <b>June 15 after sophomore year</b> for both men's and women's golf (current rule, subject to NCAA updates).</p>
+    <p><b>Realistic for an Ontario junior?</b> Yes, but you need to be in the JGS Top 1,500 nationally (men) or Top 600 (women) to be a serious recruit. Plenty of Canadians on D1 rosters &mdash; mostly juniors who played at least 4&ndash;5 AJGA events.</p>
+  </div>
+
+  <div class="tr-card">
+    <h3>NCAA Division II</h3>
+    <p>About 230 men's programs, 165 women's. More partial scholarships available, recruiting rules slightly more flexible. Strong programs in California, Florida, Texas, North Carolina.</p>
+    <p><b>Realistic scoring threshold:</b> 75 average for men, 78 for women.</p>
+    <p>Don't think of D2 as a step down &mdash; many D2 programs have schedules and competition rivaling lower-tier D1.</p>
+  </div>
+
+  <div class="tr-card">
+    <h3>NCAA Division III</h3>
+    <p>About 220 men's programs, 165 women's. <b>No athletic scholarships</b> &mdash; all aid is need- or merit-based academic aid. Generally smaller schools, often academically excellent.</p>
+    <p><b>Realistic scoring threshold:</b> 78 average for men, 82 for women.</p>
+    <p>D3 is often the smartest path for academically strong players who want a serious team experience without the commitment level of D1. NESCAC schools (Williams, Amherst, Middlebury) and the UAA conference are competitive at a high level.</p>
+  </div>
+
+  <div class="tr-card">
+    <h3>NAIA (National Association of Intercollegiate Athletics)</h3>
+    <p>About 220 men's, 175 women's programs. Looser recruiting rules, athletic scholarships available, often great team cultures. Strong in the south and midwest.</p>
+    <p><b>Realistic scoring threshold:</b> 76 average for men, 80 for women.</p>
+    <p>Often overlooked by Canadian families. Worth a hard look.</p>
+  </div>
+
+  <div class="tr-card">
+    <h3>NJCAA (Junior College / JUCO)</h3>
+    <p>Two-year programs at junior colleges, mostly in the southern U.S. Strong golf programs at places like Daytona State, Eastern Florida State, Indian Hills.</p>
+    <p>The <b>JUCO route</b> is a powerful path for late developers and players who need to improve their scores or grades before going to a four-year school. Many D1 stars started at JUCO.</p>
+  </div>
+
+  <div class="tr-card">
+    <h3>U Sports / OUA (Canadian university)</h3>
+    <p>Canadian university golf is structured very differently. <b>No athletic scholarships in most provinces</b>; financial aid is academic-based. Schools include Western, Queen's, McMaster, Toronto, Waterloo, Guelph, Brock, plus Quebec, Maritimes, and western universities.</p>
+    <p>Season is short &mdash; usually a fall championship (CIS / U Sports) and limited spring competition. Less travel, lower commitment than NCAA, but a real and competitive pathway. <b>Tuition stays in Canada and you graduate without U.S.-sized loans.</b></p>
+    <p><a href="https://usports.ca" target="_blank" rel="noopener">U Sports &rarr;</a></p>
+  </div>
+
+  <!-- ============================================================
+       SECTION 6 — RECRUITING TIMELINE
+       ============================================================ -->
+  <div class="tr-section-header" id="recruiting">
+    <div class="label">Section 6</div>
+    <h2>The recruiting timeline (Grade 9&ndash;12)</h2>
+  </div>
+
+  <div class="tr-card">
+    <h3>Grade 9 &middot; The foundation year</h3>
+    <ul>
+      <li>Get your Golf Canada handicap if you don't already have one.</li>
+      <li>Build the habit of posting every score.</li>
+      <li>Play as many MJT and Future Links events as you can &mdash; this is volume year.</li>
+      <li>Take the schoolwork seriously. Coaches see your transcript and many cut players whose academics slip.</li>
+      <li>Start a target school list. 30 schools, broad. Mix Canadian and U.S. Mix divisions.</li>
+    </ul>
+  </div>
+
+  <div class="tr-card">
+    <h3>Grade 10 &middot; The visibility year</h3>
+    <ul>
+      <li><b>Register with the NCAA Eligibility Center</b> &mdash; you can do this any time after starting Grade 9, but Grade 10 is the practical year. <a href="https://web3.ncaa.org/ecwr3/" target="_blank" rel="noopener">eligibilitycenter.org &rarr;</a></li>
+      <li>Add at least one cross-border event &mdash; an AJGA qualifier or U.S. junior invitational.</li>
+      <li>Build your tournament r&eacute;sum&eacute; PDF (template later in this page).</li>
+      <li>Shoot a swing video from 4 angles (face-on, down-the-line, behind, follow-through) on a phone with a tripod. Update annually.</li>
+      <li>Take the SAT/ACT once for practice. Score-sending is optional at most schools now but some still want it.</li>
+      <li><b>Note: D1 men's and women's golf coaches can begin contact June 15 after sophomore year.</b> Be ready for emails to start arriving.</li>
+    </ul>
+  </div>
+
+  <div class="tr-card">
+    <h3>Grade 11 &middot; The recruitment year</h3>
+    <ul>
+      <li>Narrow target school list to 10&ndash;15.</li>
+      <li>Reach out to coaches at every school on your list (template later in this page). Coach-initiated contact opens June 15 after sophomore year, but you can reach out any time.</li>
+      <li>Send updated tournament r&eacute;sum&eacute; and recent scoring data after every major event.</li>
+      <li>Take unofficial visits &mdash; you can visit any school any time at your own expense.</li>
+      <li>Take SAT/ACT (final attempt typically October of senior year, work backwards).</li>
+      <li>Play your strongest events of the year. This is the season that ends up most heavily weighted on your tournament r&eacute;sum&eacute;.</li>
+    </ul>
+  </div>
+
+  <div class="tr-card">
+    <h3>Grade 12 &middot; The commit year</h3>
+    <ul>
+      <li>Take official visits (paid by the school). One per program, max five total in D1. Don't commit before visiting.</li>
+      <li>Sign the National Letter of Intent (NLI) &mdash; <b>early signing in November</b>, late signing in April.</li>
+      <li>Finalize NCAA Eligibility Center file &mdash; final transcripts, amateurism certification, test scores.</li>
+      <li>Keep playing. Senior summer matters more than people think &mdash; some scholarship offers shift based on it.</li>
+      <li>Apply for academic scholarships and bursaries separately. Athletic money is rarely the whole package.</li>
+    </ul>
+  </div>
+
+  <!-- ============================================================
+       SECTION 7 — EMAILING COACHES
+       ============================================================ -->
+  <div class="tr-section-header" id="emailing">
+    <div class="label">Section 7</div>
+    <h2>How to reach out to college coaches</h2>
+  </div>
+
+  <div class="tr-card">
+    <h3>What coaches want from a first email</h3>
+    <ul>
+      <li><b>Specific to their program</b> &mdash; if they can tell you sent the same email to 30 coaches, it goes in the trash.</li>
+      <li><b>Short</b> &mdash; under 250 words. They get hundreds of these a week.</li>
+      <li><b>Verifiable</b> &mdash; Junior Golf Scoreboard link, swing video link, transcript info.</li>
+      <li><b>Honest about scoring</b> &mdash; don't inflate. Coaches cross-reference everything.</li>
+      <li><b>Sent by you, not a parent</b> &mdash; coaches read for the player's voice. If a parent writes the email, it's obvious.</li>
+    </ul>
+  </div>
+
+  <div class="tr-card">
+    <h3>The first email template</h3>
+    <div class="tr-template">
+      <span class="label">Subject line</span>
+      2027 Recruit &middot; Sarah Chen &middot; 73.2 avg, JGS #842 &middot; Interested in [School] Golf
+      <br><br>
+      <span class="label">Body</span>
+      Coach [Last Name],<br><br>
+      My name is Sarah Chen. I'm a Grade 11 student at [school name] in Collingwood, Ontario, and I'm strongly interested in [School Name]'s golf program for the Class of 2027.<br><br>
+      I'm writing because [specific, honest reason &mdash; "I watched your team win the conference championship last fall and noticed your players talked about how much they value the team culture," or "your roster includes two Ontario juniors I've competed against and they've spoken highly of the program," or "I'm planning to study Environmental Science and your program's academic reputation in that area is a major draw"]. Generic praise gets ignored; specifics get read.<br><br>
+      Quick snapshot:<br>
+      &middot; Scoring average: 73.2 (current season, 14 rounds)<br>
+      &middot; Junior Golf Scoreboard ranking: #842 (Class of 2027)<br>
+      &middot; Recent results: T-3 Ontario Junior Championship 2025, T-7 MJT Provincial<br>
+      &middot; GPA: 92% (unweighted) &middot; Working on prerequisites for [intended major]<br><br>
+      Links:<br>
+      &middot; Junior Golf Scoreboard profile: [url]<br>
+      &middot; Swing video (face-on / down-the-line, June 2025): [url]<br>
+      &middot; Tournament r&eacute;sum&eacute; (PDF): [attached]<br><br>
+      I'd love to know what your recruiting priorities are for 2027 and whether there's a fit. I'll be at [upcoming event] in [month] if you're scouting.<br><br>
+      Thank you for the time.<br><br>
+      Sarah Chen<br>
+      [phone] &middot; [email]
+    </div>
+  </div>
+
+  <div class="tr-card">
+    <h3>Tournament r&eacute;sum&eacute; template</h3>
+    <p>One-page PDF. Update after every major event. Always carry a few printed copies in your bag.</p>
+    <div class="tr-template">
+      <span class="label">Header (top of page)</span>
+      Sarah Chen &middot; Class of 2027 &middot; Collingwood, Ontario<br>
+      Phone &middot; Email &middot; Junior Golf Scoreboard URL &middot; Date of birth<br><br>
+      <span class="label">Section 1: Snapshot</span>
+      Scoring average (last 12 months) &middot; Best 18 &middot; Best 36 &middot; Best 72<br>
+      Handicap index &middot; JGS rank (class) &middot; Golf Ontario OoM rank<br><br>
+      <span class="label">Section 2: Recent results (last 12 months, reverse chronological)</span>
+      Date &middot; Event name &middot; Course &middot; Field size &middot; Finish &middot; Round scores<br>
+      List 8&ndash;12 events. Be honest. Don't cherry-pick.<br><br>
+      <span class="label">Section 3: Academics</span>
+      School &middot; GPA &middot; Class rank if known &middot; Test scores if taken &middot; Intended major<br><br>
+      <span class="label">Section 4: Coach references</span>
+      Swing coach: name, phone, email<br>
+      Mental coach (if applicable): name, phone, email<br><br>
+      <span class="label">Section 5: Photo &amp; video links</span>
+      Headshot URL &middot; Swing video URL (specify date)
+    </div>
+  </div>
+
+  <div class="tr-card">
+    <h3>Following up</h3>
+    <ul>
+      <li><b>If you don't hear back in 2 weeks</b> &mdash; one polite follow-up. After that, move on. No response is a response.</li>
+      <li><b>After every major event</b> &mdash; brief update email to coaches who've shown interest. New scoring, new ranking, results. 4 sentences max.</li>
+      <li><b>Bench the cold email if a coach replies with interest</b> &mdash; switch to phone calls and visit planning. Email is the door; the conversation is the room.</li>
+      <li><b>Don't ghost</b> &mdash; if you decide a school isn't a fit, send a brief polite note thanking the coach and explaining you've decided to focus elsewhere. The college coaching community is small; respect carries.</li>
+    </ul>
+  </div>
+
+  <!-- ============================================================
+       SECTION 8 — NCAA PAPERWORK
+       ============================================================ -->
+  <div class="tr-section-header" id="ncaa">
+    <div class="label">Section 8</div>
+    <h2>The NCAA paperwork (don't skip this section)</h2>
+  </div>
+
+  <div class="tr-card">
+    <h3>NCAA Eligibility Center registration</h3>
+    <p>Required for D1 and D2. Without it, you can't compete, regardless of how good you are. Register at <a href="https://web3.ncaa.org/ecwr3/" target="_blank" rel="noopener">eligibilitycenter.org</a>. Cost: $135 USD for international students.</p>
+    <p><b>What you submit:</b></p>
+    <ul>
+      <li>Personal info, school history, sports history</li>
+      <li>Official transcripts from every high school attended</li>
+      <li>Test scores (where required &mdash; check current rules; many schools test-optional)</li>
+      <li><b>Amateurism certification</b> &mdash; this is the key one for golfers. Any prize money you've accepted, any sponsorship deals, any pro instruction relationship that crosses certain lines &mdash; declared here.</li>
+    </ul>
+  </div>
+
+  <div class="tr-card">
+    <h3>Amateurism &mdash; the rule that trips up the most juniors</h3>
+    <p>Many junior tournaments offer prize money or merchandise as awards. <b>Accepting cash prizes can permanently end your NCAA eligibility.</b> Check every event's purse before you play. If there's a cash prize and you might win, decline the prize or take credit / merchandise instead (rules vary &mdash; verify with each tournament).</p>
+    <p>Sponsorships are similar. A free set of clubs from a manufacturer is usually fine. A paid social-media post for that manufacturer is not. <b>When in doubt, ask the NCAA Eligibility Center before you accept anything.</b></p>
+  </div>
+
+  <div class="tr-card">
+    <h3>Core-course GPA</h3>
+    <p>NCAA requires a minimum core-course GPA in 16 specified academic subjects. Current minimum is 2.3 for D1, 2.2 for D2. Most golf rosters expect significantly higher &mdash; coaches see academic risk as a red flag.</p>
+    <p>Canadian high school transcripts get translated by the Eligibility Center. Make sure your guidance counsellor sends transcripts in the format NCAA expects. <a href="https://web3.ncaa.org/ecwr3/" target="_blank" rel="noopener">Step-by-step guide on the Eligibility Center site</a>.</p>
+  </div>
+
+  <div class="tr-card">
+    <h3>The Letter of Intent (NLI)</h3>
+    <p>The binding agreement between you and a school. Once signed, no other NCAA program can recruit you. You sign it after you've committed verbally. Two windows:</p>
+    <ul>
+      <li><b>Early signing period</b> &mdash; mid-November of senior year</li>
+      <li><b>Regular signing period</b> &mdash; mid-April of senior year</li>
+    </ul>
+    <p>Most golf signings happen in November. Don't sign before you've taken your official visit.</p>
+  </div>
+
+  <!-- ============================================================
+       SECTION 9 — THE HONEST TALK
+       ============================================================ -->
+  <div class="tr-honest" id="honest">
+    <span class="honest-emoji" role="img" aria-label="Heart">&#9829;&#65039;</span>
+    <h3>The honest talk</h3>
+    <p>
+      <b>Most kids who play tournament golf don't get a college scholarship.</b> The ones who do mostly get partial money, not full rides. A "full ride" in golf almost doesn't exist outside the Top 50 men's and Top 30 women's recruits in the entire continent. Plan accordingly. Apply for academic aid, bursaries, and need-based grants in parallel. Athletic money is a piece of the pie, not the pie.
+    </p>
+    <p>
+      <b>Fit beats prestige.</b> A miserable four years at a Top 25 program is a worse outcome than a happy four years at a small Division III school where you start every event, love your teammates, and graduate without debt. Recruit yourself to the school, not the rank.
+    </p>
+    <p>
+      <b>The path is long and slow.</b> Players who sprint through Phase 1 burn out by Phase 3. The ones who quietly stack good rounds, take care of their body, and stay in love with the game at age 16 &mdash; those are the ones who make rosters. Patience compounds.
+    </p>
+    <p>
+      <b>You don't have to play in college to have done this right.</b> If you played junior tournaments, learned to handle pressure, traveled with a team, made friends through golf, and graduated high school as a happier and more capable person &mdash; that is the win. The roster spot is a bonus.
+    </p>
+  </div>
+
+  <!-- ============================================================
+       SECTION 10 — SELF-ASSESSMENT
+       ============================================================ -->
+  <div class="tr-section-header" id="checklist">
+    <div class="label">Section 10</div>
+    <h2>Am I tournament ready?</h2>
+  </div>
+
+  <p style="font-size:14.5px; color:var(--navy-mid); line-height:1.7; margin-bottom:18px;">
+    Run through this checklist with a parent. Not every box has to be checked &mdash; this is a snapshot, not a pass/fail. The unchecked boxes tell you what to work on next.
+  </p>
+
+  <div class="tr-check">
+    <h3>Self-assessment checklist</h3>
+
+    <div class="check-section">Game</div>
+    <label><input type="checkbox"> I can break 90 consistently from the appropriate set of tees for my age.</label>
+    <label><input type="checkbox"> I have a Golf Canada handicap index, and I post every score.</label>
+    <label><input type="checkbox"> I know the carry distance of every club in my bag (within 5 yards).</label>
+    <label><input type="checkbox"> I have a stock shot off the tee that I can reproduce under pressure.</label>
+    <label><input type="checkbox"> I can get up-and-down from greenside more than 1 in 3 times.</label>
+    <label><input type="checkbox"> I can read greens for break and speed without help.</label>
+
+    <div class="check-section">Tournament habits</div>
+    <label><input type="checkbox"> I have a pre-shot routine I use on every full shot.</label>
+    <label><input type="checkbox"> I have a post-shot reset I use after bad shots.</label>
+    <label><input type="checkbox"> I know the rules of golf well enough to call a penalty on myself or a playing partner.</label>
+    <label><input type="checkbox"> I can keep my own scorecard accurately and check a partner's card.</label>
+    <label><input type="checkbox"> I've played at least one multi-day event.</label>
+    <label><input type="checkbox"> I've played in at least one event where I didn't know any of the other players.</label>
+
+    <div class="check-section">Logistics</div>
+    <label><input type="checkbox"> I'm registered with at least one junior tour (MJT, CJGA, U.S. Kids, etc.).</label>
+    <label><input type="checkbox"> My parents and I have a calendar of events for the season.</label>
+    <label><input type="checkbox"> I have my own travel checklist (clubs, balls, clothes, snacks, water).</label>
+    <label><input type="checkbox"> I know how to enter a tournament online and pay the entry fee.</label>
+
+    <div class="check-section">College pathway (if applicable)</div>
+    <label><input type="checkbox"> I have a current Junior Golf Scoreboard ranking.</label>
+    <label><input type="checkbox"> I'm registered with the NCAA Eligibility Center (Grade 10 or later).</label>
+    <label><input type="checkbox"> I have a current swing video (less than 6 months old).</label>
+    <label><input type="checkbox"> I have a one-page tournament r&eacute;sum&eacute; PDF, current within 30 days.</label>
+    <label><input type="checkbox"> I have a target school list of 10&ndash;30 programs.</label>
+    <label><input type="checkbox"> I'm taking grades and standardized tests seriously.</label>
+  </div>
+
+  <!-- ============================================================
+       SECTION 11 — RESOURCES
+       ============================================================ -->
+  <div class="tr-section-header" id="resources">
+    <div class="label">Section 11</div>
+    <h2>Resources &amp; links</h2>
+  </div>
+
+  <div class="tr-resources">
+    <a href="https://www.golfcanada.ca" target="_blank" rel="noopener">
+      <div class="res-title">Golf Canada</div>
+      <div class="res-desc">National governing body. Handicap registration, national championships, ranking systems.</div>
+      <div class="res-host">golfcanada.ca</div>
+    </a>
+    <a href="https://gao.ca" target="_blank" rel="noopener">
+      <div class="res-title">Golf Ontario</div>
+      <div class="res-desc">Provincial body. Ontario championships, Order of Merit, junior development pathway.</div>
+      <div class="res-host">gao.ca</div>
+    </a>
+    <a href="https://www.maplejt.com" target="_blank" rel="noopener">
+      <div class="res-title">Maple Leaf Junior Tour</div>
+      <div class="res-desc">Canada's largest junior tour. Schedule, registration, tour standings.</div>
+      <div class="res-host">maplejt.com</div>
+    </a>
+    <a href="https://cjga.com" target="_blank" rel="noopener">
+      <div class="res-title">CJGA</div>
+      <div class="res-desc">Canadian Junior Golf Association. JGS-rated events, national series.</div>
+      <div class="res-host">cjga.com</div>
+    </a>
+    <a href="https://www.golfcanada.ca/future-links" target="_blank" rel="noopener">
+      <div class="res-title">Future Links Driven by Acura</div>
+      <div class="res-desc">Golf Canada's national junior development program.</div>
+      <div class="res-host">golfcanada.ca/future-links</div>
+    </a>
+    <a href="https://www.uskidsgolf.com/tournaments" target="_blank" rel="noopener">
+      <div class="res-title">U.S. Kids Golf</div>
+      <div class="res-desc">Entry-level junior tour with strong Ontario presence.</div>
+      <div class="res-host">uskidsgolf.com</div>
+    </a>
+    <a href="https://www.ajga.org" target="_blank" rel="noopener">
+      <div class="res-title">AJGA</div>
+      <div class="res-desc">American Junior Golf Association. The single most-watched junior tour for U.S. college recruiting.</div>
+      <div class="res-host">ajga.org</div>
+    </a>
+    <a href="https://www.juniorgolfscoreboard.com" target="_blank" rel="noopener">
+      <div class="res-title">Junior Golf Scoreboard</div>
+      <div class="res-desc">The ranking U.S. college coaches actually use.</div>
+      <div class="res-host">juniorgolfscoreboard.com</div>
+    </a>
+    <a href="https://web3.ncaa.org/ecwr3/" target="_blank" rel="noopener">
+      <div class="res-title">NCAA Eligibility Center</div>
+      <div class="res-desc">Required registration for D1 / D2 athletes. Don't skip this.</div>
+      <div class="res-host">eligibilitycenter.org</div>
+    </a>
+    <a href="https://www.ncaa.org/sports/2014/10/6/recruiting-calendars.aspx" target="_blank" rel="noopener">
+      <div class="res-title">NCAA Recruiting Calendars</div>
+      <div class="res-desc">Current contact rules and recruiting windows by sport and division.</div>
+      <div class="res-host">ncaa.org</div>
+    </a>
+    <a href="https://usports.ca" target="_blank" rel="noopener">
+      <div class="res-title">U Sports</div>
+      <div class="res-desc">Canadian university athletics governing body.</div>
+      <div class="res-host">usports.ca</div>
+    </a>
+    <a href="https://www.naia.org" target="_blank" rel="noopener">
+      <div class="res-title">NAIA</div>
+      <div class="res-desc">National Association of Intercollegiate Athletics. Often-overlooked U.S. pathway.</div>
+      <div class="res-host">naia.org</div>
+    </a>
+  </div>
+
+  <!-- ============================================================
+       FINAL CTA
+       ============================================================ -->
+  <div class="tr-cta">
+    <h3>Want a coach who walks every step with you?</h3>
+    <p>This page is the map. The journey is easier with someone who's done it before. Book a 1-on-1 with Ryan to build your specific pathway, talk through your target school list, and start the recruiting work.</p>
+    <a class="btn" href="https://rrgolfperformance.as.me/schedule/1b9d2f26" target="_blank" rel="noopener">Book a Tournament Ready Consult &rarr;</a>
+  </div>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js"></script>
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  (async () => {
+    await RRG.mount('tournament-ready');
+  })();
+</script>
+
+</body>
+</html>

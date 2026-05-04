@@ -976,6 +976,13 @@ RRG.renderNav = function(user, active = '') {
       <a href="scorecard.html" class="${active==='scorecard-madriver'?'active':''}">Scorecard</a>
     </li>` : '';
 
+  // Top-level Tournament Ready link — visible to all tiers. The pathway
+  // hub for any junior aspiring to competitive / college golf in Ontario.
+  const tournamentReadyTopLevel = `
+    <li class="nav-top-link">
+      <a href="tournament-ready.html" class="${active==='tournament-ready'?'active':''}">&#127942; Tournament Ready</a>
+    </li>`;
+
   const group = (label, key, items) => `
     <li class="nav-group" data-group="${key}">
       <button class="nav-group-toggle" type="button"
@@ -997,6 +1004,7 @@ RRG.renderNav = function(user, active = '') {
       <ul class="nav-links" id="rrg-nav-drawer">
 
         ${scorecardTopLevel}
+        ${tournamentReadyTopLevel}
 
         ${group('My Game', 'mygame', `
           <li><a href="dashboard.html"  class="${active==='dashboard'?'active':''}">Dashboard</a></li>
