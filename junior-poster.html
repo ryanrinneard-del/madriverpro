@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mad River Junior Programs 2026 — Poster</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Bowlby+One+SC&family=Caveat:wght@500;700&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     MAD RIVER JUNIOR PROGRAMS 2026 — Print Poster v4
+     Print: 24" wide × 30" tall.
+     No mascots. Rainbow arc behind hero. Real Girls Only dates.
+     ============================================================ */
+
+  :root {
+    --navy:      #0E2A47;
+    --navy-mid:  #18406E;
+    --gold:      #F5C547;
+    --sky:       #4FC3F7;
+    --sun:       #FFD93D;
+    --grass:     #7BD389;
+    --grass-dk:  #4FAE5F;
+    --coral:     #FF8A75;
+    --berry:     #E84A8C;
+    --berry-dk:  #B5236B;
+    --plum:      #8E5BCC;
+    --cream:     #FFF8E7;
+    --cream-2:   #FFEFC9;
+    --paper:     #FFFAF0;
+    --ink:       #1B2A41;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  html, body {
+    background: #DCEFF7;
+    font-family: 'Nunito', system-ui, sans-serif;
+    color: var(--ink);
+    line-height: 1.4;
+  }
+
+  @page { size: 24in 30in; margin: 0; }
+
+  .poster {
+    width: 24in;
+    height: 30in;
+    margin: 0 auto;
+    background:
+      radial-gradient(ellipse at 95% 95%, #C9F4D2 0 18%, transparent 40%),
+      radial-gradient(ellipse at 8% 96%, #FFD4C9 0 16%, transparent 38%),
+      linear-gradient(180deg, #EAF6FB 0%, #FFF6E0 100%);
+    position: relative;
+    overflow: hidden;
+    padding: 0.6in 0.8in 0.55in 0.8in;
+  }
+
+  /* RAINBOW ARC (behind hero, decorative) */
+  .rainbow {
+    position: absolute;
+    top: -4in;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 32in;
+    height: 24in;
+    pointer-events: none;
+    opacity: 0.55;
+  }
+  .rainbow svg { width: 100%; height: 100%; display: block; }
+
+  /* Confetti dots */
+  .dot { position: absolute; border-radius: 50%; opacity: 0.85; }
+  .d1 { width: 0.55in; height: 0.55in; background: var(--coral); top: 4.2in; left: 0.35in; }
+  .d2 { width: 0.4in; height: 0.4in; background: var(--grass); top: 1.4in; right: 1.5in; }
+  .d3 { width: 0.5in; height: 0.5in; background: var(--berry); top: 14.5in; left: 0.25in; }
+  .d4 { width: 0.55in; height: 0.55in; background: var(--sun); top: 17in; right: 0.4in; }
+  .d5 { width: 0.35in; height: 0.35in; background: var(--plum); top: 23.5in; left: 0.5in; }
+  .d6 { width: 0.5in; height: 0.5in; background: var(--sky); top: 25in; right: 0.45in; }
+
+  /* HEADER */
+  .header { text-align: center; margin-bottom: 0.3in; position: relative; z-index: 2; }
+  .logo-img {
+    width: 1.8in;
+    height: 1.8in;
+    object-fit: contain;
+    margin: 0 auto 0.18in;
+    display: block;
+    filter: drop-shadow(0 0.06in 0 rgba(14,42,71,0.18));
+  }
+  .club-name {
+    font-family: 'Bowlby One SC', sans-serif; color: var(--navy);
+    font-size: 0.36in; letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  .club-sub {
+    font-family: 'Fredoka', sans-serif; color: var(--navy-mid);
+    font-size: 0.22in; margin-top: 0.05in; font-weight: 500;
+  }
+
+  /* HERO */
+  .hero { text-align: center; margin: 0.2in 0 0.4in; position: relative; z-index: 2; }
+  .hero-eyebrow {
+    display: inline-block; background: var(--sun); color: var(--navy);
+    font-family: 'Fredoka', sans-serif; font-weight: 700;
+    font-size: 0.24in; padding: 0.08in 0.36in; border-radius: 0.5in;
+    transform: rotate(-2deg); box-shadow: 0 0.06in 0 rgba(0,0,0,0.12);
+    letter-spacing: 0.05em; text-transform: uppercase;
+  }
+  .hero-title {
+    font-family: 'Bowlby One SC', sans-serif;
+    font-size: 2.1in; line-height: 0.95; color: var(--navy);
+    margin-top: 0.15in;
+    text-shadow:
+      0.04in 0.04in 0 var(--sun),
+      0.08in 0.08in 0 var(--coral),
+      0.12in 0.12in 0 var(--sky);
+    letter-spacing: -0.02em;
+  }
+  .hero-tag {
+    font-family: 'Fredoka', sans-serif; font-size: 0.3in;
+    color: var(--navy-mid); margin-top: 0.35in; font-weight: 500;
+    max-width: 17in; margin-left: auto; margin-right: auto; line-height: 1.3;
+  }
+
+  /* SECTION BAND */
+  .section-band {
+    background: var(--navy); color: var(--cream); text-align: center;
+    padding: 0.16in 0.45in; border-radius: 0.4in;
+    margin: 0.3in auto 0.35in; display: inline-block;
+    font-family: 'Bowlby One SC', sans-serif; font-size: 0.36in;
+    letter-spacing: 0.04em; box-shadow: 0 0.07in 0 var(--gold);
+  }
+  .section-wrap { text-align: center; position: relative; z-index: 2; }
+
+  /* GRID */
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.3in; margin-top: 0.3in; position: relative; z-index: 2; }
+
+  /* CARD */
+  .card {
+    background: #fff; border-radius: 0.3in;
+    padding: 0.4in 0.4in 0.35in;
+    position: relative;
+    box-shadow: 0 0.09in 0 rgba(14,42,71,0.12);
+    border: 0.04in solid #fff;
+    overflow: hidden;
+    min-height: 4.6in;
+  }
+  .card-band {
+    position: absolute; top: 0; left: 0; right: 0; height: 0.4in;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 0.4in; color: #fff;
+    font-family: 'Fredoka', sans-serif; font-weight: 700;
+    font-size: 0.18in; letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .card-age-pill {
+    display: inline-block; background: var(--cream-2); color: var(--navy);
+    font-family: 'Fredoka', sans-serif; font-weight: 700;
+    font-size: 0.18in; padding: 0.06in 0.18in; border-radius: 0.25in;
+    margin-top: 0.55in;
+  }
+  .card-title {
+    font-family: 'Bowlby One SC', sans-serif; font-size: 0.42in;
+    color: var(--navy); margin-top: 0.1in; line-height: 1.05;
+  }
+  .card-meta {
+    margin-top: 0.16in;
+    font-family: 'Fredoka', sans-serif; font-weight: 500;
+    color: var(--navy-mid); font-size: 0.2in; line-height: 1.45;
+  }
+  .card-meta strong { color: var(--navy); font-weight: 700; }
+  .card-desc {
+    margin-top: 0.16in; font-size: 0.18in;
+    color: #4A5772; line-height: 1.45;
+  }
+  .card-bottom {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 0.32in; gap: 0.18in;
+  }
+  .price-tag { display: inline-flex; flex-direction: column; align-items: flex-start; }
+  .price-tag .amt {
+    font-family: 'Bowlby One SC', sans-serif;
+    font-size: 0.6in; color: var(--navy); line-height: 1;
+  }
+  .price-tag .lbl {
+    font-family: 'Fredoka', sans-serif; font-weight: 600;
+    font-size: 0.16in; color: var(--navy-mid);
+    margin-top: 0.04in; letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  .qr {
+    width: 1.3in; height: 1.3in;
+    background: #fff; border: 0.04in solid var(--navy);
+    border-radius: 0.12in; display: flex; align-items: center; justify-content: center;
+    overflow: hidden; flex-shrink: 0;
+  }
+  .qr img { width: 100%; height: 100%; display: block; }
+  .qr-label {
+    text-align: right;
+    font-family: 'Fredoka', sans-serif; font-weight: 700;
+    font-size: 0.14in; color: var(--navy);
+    letter-spacing: 0.04em; text-transform: uppercase; margin-top: 0.05in;
+  }
+
+  /* COLOR VARIANTS */
+  .c-active { box-shadow: 0 0.09in 0 #C9543E; }
+  .c-active .card-band { background: var(--coral); }
+  .c-fun    { box-shadow: 0 0.09in 0 #2D7E3C; }
+  .c-fun    .card-band { background: var(--grass-dk); }
+  .c-learn  { box-shadow: 0 0.09in 0 #1F86B0; }
+  .c-learn  .card-band { background: var(--sky); }
+  .c-train  { box-shadow: 0 0.09in 0 #5C32A1; }
+  .c-train  .card-band { background: var(--plum); }
+
+  /* GIRLS ONLY CLUB */
+  .girls-feature {
+    grid-column: 1 / -1;
+    background:
+      radial-gradient(circle at 8% 18%, rgba(255,255,255,0.18) 0 0.4in, transparent 0.45in),
+      radial-gradient(circle at 92% 75%, rgba(255,255,255,0.15) 0 0.5in, transparent 0.55in),
+      linear-gradient(135deg, #FF4FA3 0%, #E84A8C 50%, #FF8AB7 100%);
+    border-radius: 0.4in;
+    padding: 0.55in 0.6in;
+    color: #fff;
+    box-shadow: 0 0.1in 0 #93194A, inset 0 0 0 0.04in rgba(255,255,255,0.4);
+    position: relative;
+    overflow: hidden;
+    margin-top: 0.15in;
+  }
+
+  .girls-title {
+    font-family: 'Bowlby One SC', sans-serif;
+    font-size: 1.45in; line-height: 0.95;
+    letter-spacing: -0.01em;
+    text-shadow: 0.05in 0.05in 0 rgba(0,0,0,0.18);
+  }
+  .girls-title span { display: inline-block; }
+  .gl-c1 { color: #FFFFFF; }
+  .gl-c2 { color: #FFE85C; }
+  .gl-c3 { color: #5DEFFF; }
+  .gl-c4 { color: #FFB0E5; }
+  .gl-c5 { color: #BAFFB0; }
+  .gl-c6 { color: #FFD27A; }
+  .gl-c7 { color: #FFFFFF; }
+  .gl-c8 { color: #FFE85C; }
+  .gl-c9 { color: #C9B0FF; }
+  .gl-c10 { color: #FFB0E5; }
+
+  .girls-handwrite {
+    font-family: 'Caveat', cursive;
+    font-size: 0.55in; color: #FFE85C;
+    margin-top: 0.12in; line-height: 1.1;
+    text-shadow: 0.03in 0.03in 0 rgba(0,0,0,0.18);
+  }
+
+  .girls-body {
+    display: grid; grid-template-columns: 1fr auto;
+    gap: 0.45in; align-items: center;
+    margin-top: 0.3in;
+  }
+  .girls-tag {
+    font-family: 'Fredoka', sans-serif; font-weight: 600;
+    font-size: 0.28in; line-height: 1.4;
+    color: #fff; max-width: 12in;
+  }
+
+  .girls-dates {
+    background: rgba(255,255,255,0.18);
+    border-radius: 0.25in;
+    padding: 0.3in 0.4in;
+    margin-top: 0.28in;
+    border: 0.03in dashed rgba(255,255,255,0.55);
+  }
+  .girls-dates-h {
+    font-family: 'Fredoka', sans-serif; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    font-size: 0.18in; color: #FFE85C; margin-bottom: 0.18in;
+  }
+  .girls-date-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: 'Fredoka', sans-serif; font-weight: 600;
+    color: #fff; font-size: 0.25in;
+    padding: 0.08in 0;
+    border-bottom: 0.02in dashed rgba(255,255,255,0.25);
+  }
+  .girls-date-row:last-child { border-bottom: none; }
+  .girls-date-row .date { color: #fff; font-weight: 700; }
+  .girls-date-row .meta { color: rgba(255,255,255,0.85); font-size: 0.2in; font-weight: 500; }
+  .girls-date-row .price { color: #FFE85C; font-weight: 700; }
+  .girls-note {
+    margin-top: 0.18in;
+    font-family: 'Fredoka', sans-serif; font-weight: 500;
+    font-size: 0.18in; color: rgba(255,255,255,0.95);
+    line-height: 1.4; font-style: italic;
+  }
+  .girls-qr-block { text-align: center; }
+
+  /* FOOTER */
+  .footer {
+    margin-top: 0.4in;
+    background: var(--navy); border-radius: 0.36in;
+    padding: 0.5in 0.65in;
+    color: var(--cream);
+    border: 0.04in solid var(--gold);
+    position: relative; z-index: 2;
+  }
+  .footer-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.35in; text-align: center;
+  }
+  .footer-step {
+    background: rgba(255,255,255,0.05);
+    border-radius: 0.2in;
+    padding: 0.28in 0.22in;
+  }
+  .step-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 0.55in; height: 0.55in; border-radius: 50%;
+    background: var(--gold); color: var(--navy);
+    font-family: 'Bowlby One SC', sans-serif; font-size: 0.32in;
+    margin-bottom: 0.1in;
+  }
+  .step-title {
+    font-family: 'Fredoka', sans-serif; font-weight: 700;
+    font-size: 0.22in; color: var(--gold);
+    margin-bottom: 0.06in; text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .step-text {
+    font-size: 0.17in; line-height: 1.4;
+    color: rgba(255,255,255,0.92);
+    font-family: 'Fredoka', sans-serif; font-weight: 500;
+  }
+  .pro-shop-bar {
+    text-align: center; margin-top: 0.4in; padding-top: 0.3in;
+    border-top: 0.02in dashed rgba(255,255,255,0.3);
+  }
+  .pro-shop-eyebrow {
+    font-family: 'Fredoka', sans-serif; font-weight: 700;
+    font-size: 0.18in; color: var(--gold);
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .pro-shop-num {
+    font-family: 'Bowlby One SC', sans-serif;
+    font-size: 0.65in; color: var(--cream); margin-top: 0.06in;
+  }
+  .footer-foot {
+    text-align: center; margin-top: 0.35in;
+    font-family: 'Fredoka', sans-serif; font-weight: 600;
+    color: var(--gold); font-size: 0.2in;
+    letter-spacing: 0.06em; text-transform: uppercase;
+  }
+
+  /* Screen scaling */
+  @media screen {
+    body { padding: 24px; }
+    .poster { transform: scale(0.4); transform-origin: top center; margin-bottom: -60%; }
+    @media (min-width: 1100px) { .poster { transform: scale(0.5); margin-bottom: -50%; } }
+    @media (min-width: 1500px) { .poster { transform: scale(0.6); margin-bottom: -40%; } }
+  }
+</style>
+</head>
+<body>
+
+<div class="poster">
+
+  <!-- RAINBOW ARC behind hero -->
+  <div class="rainbow" aria-hidden="true">
+    <svg viewBox="0 0 1000 750" preserveAspectRatio="xMidYMid meet">
+      <!-- Each arc band; outer to inner -->
+      <path d="M 50 700 A 450 450 0 0 1 950 700"  stroke="#FF6B6B" stroke-width="50" fill="none" stroke-linecap="round"/>
+      <path d="M 110 700 A 390 390 0 0 1 890 700" stroke="#FF8A75" stroke-width="50" fill="none" stroke-linecap="round"/>
+      <path d="M 170 700 A 330 330 0 0 1 830 700" stroke="#FFD93D" stroke-width="50" fill="none" stroke-linecap="round"/>
+      <path d="M 230 700 A 270 270 0 0 1 770 700" stroke="#7BD389" stroke-width="50" fill="none" stroke-linecap="round"/>
+      <path d="M 290 700 A 210 210 0 0 1 710 700" stroke="#4FC3F7" stroke-width="50" fill="none" stroke-linecap="round"/>
+      <path d="M 350 700 A 150 150 0 0 1 650 700" stroke="#8E5BCC" stroke-width="50" fill="none" stroke-linecap="round"/>
+      <path d="M 410 700 A  90  90 0 0 1 590 700" stroke="#FF8AB7" stroke-width="50" fill="none" stroke-linecap="round"/>
+
+      <!-- Cloud 1 (left base) -->
+      <g transform="translate(60 680)">
+        <ellipse cx="40" cy="30" rx="50" ry="22" fill="#FFFFFF"/>
+        <ellipse cx="80" cy="20" rx="35" ry="20" fill="#FFFFFF"/>
+        <ellipse cx="115" cy="32" rx="30" ry="18" fill="#FFFFFF"/>
+      </g>
+      <!-- Cloud 2 (right base) -->
+      <g transform="translate(800 680)">
+        <ellipse cx="40" cy="30" rx="50" ry="22" fill="#FFFFFF"/>
+        <ellipse cx="80" cy="20" rx="35" ry="20" fill="#FFFFFF"/>
+        <ellipse cx="115" cy="32" rx="30" ry="18" fill="#FFFFFF"/>
+      </g>
+    </svg>
+  </div>
+
+  <span class="dot d1"></span>
+  <span class="dot d2"></span>
+  <span class="dot d3"></span>
+  <span class="dot d4"></span>
+  <span class="dot d5"></span>
+  <span class="dot d6"></span>
+
+  <!-- HEADER -->
+  <header class="header">
+    <img class="logo-img" src="https://madriver.ca/SiteDesign/Images/logo.aspx" alt="Mad River Golf Club">
+    <div class="club-name">Mad River Golf Club</div>
+    <div class="club-sub">Junior Golf Academy &middot; Creemore, Ontario</div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <span class="hero-eyebrow">Summer 2026 Programs</span>
+    <h1 class="hero-title">JUNIOR GOLF<br>STARTS&nbsp;HERE</h1>
+    <p class="hero-tag">Five fun-packed programs for ages 5 to 18. Friends, swings, scrambles, and the most fun you'll have all summer.</p>
+  </section>
+
+  <!-- SECTION BAND -->
+  <div class="section-wrap">
+    <div class="section-band">SUMMER CAMPS &middot; PICK YOUR WEEK</div>
+  </div>
+
+  <!-- CARDS -->
+  <div class="grid">
+
+    <!-- ACTIVE START -->
+    <article class="card c-active">
+      <div class="card-band"><span>Camp 01</span><span>Ages 5 &ndash; 6</span></div>
+      <span class="card-age-pill">Ages 5–6 · Brand new to golf</span>
+      <h2 class="card-title">Active Start Camp</h2>
+      <div class="card-meta">
+        <strong>June 29 – July 3, 2026</strong><br>
+        9:00 AM &middot; 5 days &middot; 10 hours total
+      </div>
+      <p class="card-desc">Short, fun-filled sessions with games and basic golf moves. The perfect first taste of the game.</p>
+      <div class="card-bottom">
+        <div class="price-tag">
+          <span class="amt">$275</span>
+          <span class="lbl">5-Day Camp</span>
+        </div>
+        <div>
+          <div class="qr">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=600x600&format=png&margin=10&data=https%3A%2F%2Fapp.acuityscheduling.com%2Fschedule%2F1b9d2f26%2F%3Fcategories%5B%5D%3DJuniors%20Camps%202026" alt="QR — Active Start Camp">
+          </div>
+          <div class="qr-label">Scan to book</div>
+        </div>
+      </div>
+    </article>
+
+    <!-- FUNDAMENTALS -->
+    <article class="card c-fun">
+      <div class="card-band"><span>Camp 02</span><span>Ages 7 &ndash; 9</span></div>
+      <span class="card-age-pill">Ages 7–9 · Building skills</span>
+      <h2 class="card-title">FUNdamentals</h2>
+      <div class="card-meta">
+        <strong>August 3 – 7, 2026</strong><br>
+        10:00 AM &middot; 5 days &middot; 15 hours total
+      </div>
+      <p class="card-desc">Real golf skills, kid-friendly games, and tons of action. Optional on-course sessions add real-play experience.</p>
+      <div class="card-bottom">
+        <div class="price-tag">
+          <span class="amt">$425</span>
+          <span class="lbl">5-Day Camp</span>
+        </div>
+        <div>
+          <div class="qr">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=600x600&format=png&margin=10&data=https%3A%2F%2Fapp.acuityscheduling.com%2Fschedule%2F1b9d2f26%2F%3Fcategories%5B%5D%3DJuniors%20Camps%202026" alt="QR — FUNdamentals">
+          </div>
+          <div class="qr-label">Scan to book</div>
+        </div>
+      </div>
+    </article>
+
+    <!-- LEARN TO PLAY -->
+    <article class="card c-learn">
+      <div class="card-band"><span>Camp 03</span><span>Ages 10 &ndash; 12</span></div>
+      <span class="card-age-pill">Ages 10–12 · Learning the game</span>
+      <h2 class="card-title">Learn to Play</h2>
+      <div class="card-meta">
+        <strong>August 17 – 21, 2026</strong><br>
+        10:00 AM &middot; 5 days &middot; 20 hours total
+      </div>
+      <p class="card-desc">Full-swing, short game, putting, and on-course basics. Walk away ready to play 9 holes confidently.</p>
+      <div class="card-bottom">
+        <div class="price-tag">
+          <span class="amt">$425</span>
+          <span class="lbl">5-Day Camp</span>
+        </div>
+        <div>
+          <div class="qr">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=600x600&format=png&margin=10&data=https%3A%2F%2Fapp.acuityscheduling.com%2Fschedule%2F1b9d2f26%2F%3Fcategories%5B%5D%3DJuniors%20Camps%202026" alt="QR — Learn to Play">
+          </div>
+          <div class="qr-label">Scan to book</div>
+        </div>
+      </div>
+    </article>
+
+    <!-- TRAIN TO PLAY -->
+    <article class="card c-train">
+      <div class="card-band"><span>Camp 04</span><span>Ages 13 &ndash; 18</span></div>
+      <span class="card-age-pill">Ages 13–18 · Going deeper</span>
+      <h2 class="card-title">Train to Play</h2>
+      <div class="card-meta">
+        <strong>June 29 – July 3, 2026</strong><br>
+        11:00 AM &middot; 5 days &middot; 22.5 hours total
+      </div>
+      <p class="card-desc">Athletic development, mobility work, swing fundamentals, and tournament prep — the works. Best for kids who want to compete.</p>
+      <div class="card-bottom">
+        <div class="price-tag">
+          <span class="amt">$595</span>
+          <span class="lbl">5-Day Camp</span>
+        </div>
+        <div>
+          <div class="qr">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=600x600&format=png&margin=10&data=https%3A%2F%2Fapp.acuityscheduling.com%2Fschedule%2F1b9d2f26%2F%3Fcategories%5B%5D%3DJuniors%20Camps%202026" alt="QR — Train to Play">
+          </div>
+          <div class="qr-label">Scan to book</div>
+        </div>
+      </div>
+    </article>
+
+    <!-- ============== GIRLS ONLY CLUB ============== -->
+    <article class="girls-feature">
+      <h2 class="girls-title">
+        <span class="gl-c1">G</span><span class="gl-c2">I</span><span class="gl-c3">R</span><span class="gl-c4">L</span><span class="gl-c5">S</span>
+        &nbsp;
+        <span class="gl-c6">O</span><span class="gl-c7">N</span><span class="gl-c8">L</span><span class="gl-c9">Y</span>
+        &nbsp;
+        <span class="gl-c10">C</span><span class="gl-c1">L</span><span class="gl-c2">U</span><span class="gl-c3">B</span><span class="gl-c4">!</span>
+      </h2>
+
+      <div class="girls-handwrite">A space made for girls who love to play.</div>
+
+      <div class="girls-body">
+        <div>
+          <p class="girls-tag">Weekend programs designed to be fun and exciting for junior girls of all ages — develop golf skills, build friendships, and start a life-long love for the game.</p>
+
+          <div class="girls-dates">
+            <div class="girls-dates-h">Mark Your Calendar &middot; Saturdays at 1:00 PM</div>
+
+            <div class="girls-date-row">
+              <span class="date">June 27 &amp; 28</span>
+              <span class="meta">2 days · 6 hours total</span>
+              <span class="price">$245</span>
+            </div>
+            <div class="girls-date-row">
+              <span class="date">July 18 &amp; 19</span>
+              <span class="meta">2 days · 6 hours total</span>
+              <span class="price">$245</span>
+            </div>
+            <div class="girls-date-row">
+              <span class="date">September 5 &amp; 6</span>
+              <span class="meta">2 days · 6 hours total</span>
+              <span class="price">$245</span>
+            </div>
+
+            <div class="girls-note">To book or ask questions, contact Stephanie directly.</div>
+          </div>
+        </div>
+
+        <div class="girls-qr-block">
+          <div class="qr" style="border-color:#fff;">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=600x600&format=png&margin=10&data=mailto%3Astucker%40madriver.ca" alt="QR — Email Stephanie">
+          </div>
+          <div class="qr-label" style="color:#fff;">Scan to email Stephanie</div>
+          <div style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:0.18in;color:#fff;margin-top:0.1in;">stucker@madriver.ca</div>
+        </div>
+      </div>
+
+    </article>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="section-wrap" style="margin-bottom:0.3in;">
+      <div class="section-band" style="background: var(--gold); color: var(--navy); box-shadow: 0 0.07in 0 rgba(255,255,255,0.4);">HOW TO BOOK</div>
+    </div>
+
+    <div class="footer-grid">
+      <div class="footer-step">
+        <div class="step-num">1</div>
+        <div class="step-title">Pick Your Camp</div>
+        <div class="step-text">Match your age and the dates that work. Camps fill quickly &mdash; book early.</div>
+      </div>
+      <div class="footer-step">
+        <div class="step-num">2</div>
+        <div class="step-title">Scan or Call</div>
+        <div class="step-text">Scan the QR on the camp card to book online, or call the Pro Shop.</div>
+      </div>
+      <div class="footer-step">
+        <div class="step-num">3</div>
+        <div class="step-title">Show Up &amp; Play</div>
+        <div class="step-text">Bring sneakers, sunscreen, and a smile. We'll handle the rest.</div>
+      </div>
+    </div>
+
+    <div class="pro-shop-bar">
+      <div class="pro-shop-eyebrow">Questions? Call the Mad River Pro Shop</div>
+      <div class="pro-shop-num">(705) 428-3673</div>
+    </div>
+
+    <div class="footer-foot">Mad River Golf Club &middot; 2008 Airport Road, Creemore ON &middot; madriver.ca</div>
+  </footer>
+
+</div>
+
+</body>
+</html>
