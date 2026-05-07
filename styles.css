@@ -598,7 +598,10 @@ ul { list-style: none; }
     .nav-cta { margin-top: 16px; text-align: center; width: 100%; background: var(--white) !important; color: var(--navy) !important; }
     .nav-cta:hover { background: var(--gray-100) !important; }
     .dropdown-menu { position: static; transform: none; box-shadow: none; opacity: 1; visibility: visible; padding: 0 0 0 20px; background: transparent; display: none; }
-    .nav-book-dropdown.open .dropdown-menu { display: block; }
+    /* On mobile, override the desktop .open transform — otherwise the menu
+       gets shifted off-screen by translateX(-50%) which is meant for the
+       absolutely-positioned desktop variant. */
+    .nav-book-dropdown.open .dropdown-menu { display: block; transform: none; opacity: 1; visibility: visible; }
 
     .hero-container { grid-template-columns: 1fr; padding: 48px 24px; text-align: center; }
     .hero-subtitle { margin-left: auto; margin-right: auto; }

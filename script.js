@@ -35,9 +35,12 @@ navToggle.addEventListener('click', () => {
 // Close mobile menu on link click — but NOT when the link is a dropdown
 // parent (e.g. "Player Portal", "Book Now"). Those don't navigate; they
 // expand a sub-menu, and we want the menu to stay open while that happens.
+// Uses closest() rather than parentElement so we're robust against any
+// markup change (extra wrappers, etc.).
 navLinks.querySelectorAll('a').forEach(link => {
+    const isDropdownParent = link.matches('.nav-book-dropdown > a');
     link.addEventListener('click', () => {
-        if (link.parentElement.classList.contains('nav-book-dropdown')) return;
+        if (isDropdownParent) return;
         navLinks.classList.remove('active');
         navToggle.classList.remove('active');
     });
