@@ -95,6 +95,16 @@
       "source": "/portal/scorecard-away.html",
       "destination": "/portal/scorecard-away-v3.html",
       "permanent": false
+    },
+    {
+      "source": "/adult/scorecard.html",
+      "destination": "/adult/scorecard-v3.html",
+      "permanent": false
+    },
+    {
+      "source": "/adult/scorecard-away.html",
+      "destination": "/adult/scorecard-away-v3.html",
+      "permanent": false
     }
   ]
 }

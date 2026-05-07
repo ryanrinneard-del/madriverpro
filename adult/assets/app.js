@@ -2013,7 +2013,7 @@ RRG.renderNav = function(user, active = '') {
       <ul class="nav-links" id="rrg-nav-drawer">
 
         <li class="nav-top-link">
-          <a href="scorecard.html" class="${active==='scorecard'?'active':''}">Scorecard</a>
+          <a href="scorecard-v3.html" class="${active==='scorecard'?'active':''}">Scorecard</a>
         </li>
 
         ${group('My Game', 'mygame', `
@@ -2021,7 +2021,7 @@ RRG.renderNav = function(user, active = '') {
           <li><a href="my-plan.html"   class="${active==='plan'?'active':''}">My Plan</a></li>
           <li><a href="history.html"   class="${active==='history'?'active':''}">My Rounds</a></li>
           <li><a href="log-simple.html">Simple Log &middot; 30 seconds</a></li>
-          <li><a href="scorecard-away.html" class="${active==='scorecard-away'?'active':''}">Away Scorecard</a></li>
+          <li><a href="scorecard-away-v3.html" class="${active==='scorecard-away'?'active':''}">Away Scorecard</a></li>
           <li><a href="scorecard-guide.html">How to Track Your Round</a></li>
           <li><a href="handicap.html"  class="${active==='handicap'?'active':''}">Handicap Index</a></li>
           <li><a href="lessons.html"   class="${active==='lessons'?'active':''}">My Lessons</a></li>
