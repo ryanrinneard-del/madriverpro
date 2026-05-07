@@ -297,6 +297,7 @@
         <li><b>Second shot (Par 5)</b> — only on par 5s: distance you hit your second shot FROM. Greyed out on par 3s and 4s.</li>
         <li><b>Approach distance</b> — how far away you were when you hit your shot INTO the green (in yards). Greyed out on par 3s — your tee shot IS the approach.</li>
         <li><b>First putt (ft)</b> — how far away your first putt was, in feet</li>
+        <li><b>2nd putt (ft)</b> — how far away your <em>second</em> putt was — i.e. how far the first putt left you. Diagnostic for lag putting. Leave blank if you 1-putted.</li>
         <li><b>Putts</b> — how many putts you took on the green</li>
         <li><b>Chip difficulty</b> — if you missed the green: Easy (open chip) or Tough (short-sided / awkward lie)</li>
         <li><b>Committed?</b> — were you fully committed to the shot, or did you have doubts?</li>
@@ -321,6 +322,7 @@
               <th title="Par 5s only — distance you hit your second shot FROM. Greyed out on par 3s and 4s.">Second shot (Par 5)</th>
               <th title="How far away were you when you hit your shot into the green? (yards). Greyed out on par 3s — your tee shot IS the approach.">Approach distance</th>
               <th title="How far was your first putt? (in feet)">First putt (ft)</th>
+              <th title="How far was your second putt? — i.e. how far did your first putt leave you. Empty if you 1-putted.">2nd putt (ft)</th>
               <th>Putts</th>
               <th title="If you missed the green, was the chip easy (open chip) or tough (short-sided / awkward lie)?">Chip difficulty</th><th title="Did you commit to that shot, or were you wavering?">Committed?</th><th title="Did you have a 9-iron or shorter club in your hand for this approach? (these are your scoring chances)">9ir or less on apprch</th><th>Penalty</th>
             </tr>
@@ -342,6 +344,7 @@
               <th title="Par 5s only — distance you hit your second shot FROM. Greyed out on par 3s and 4s.">Second shot (Par 5)</th>
               <th title="How far away were you when you hit your shot into the green? (yards). Greyed out on par 3s — your tee shot IS the approach.">Approach distance</th>
               <th title="How far was your first putt? (in feet)">First putt (ft)</th>
+              <th title="How far was your second putt? — i.e. how far did your first putt leave you. Empty if you 1-putted.">2nd putt (ft)</th>
               <th>Putts</th>
               <th title="If you missed the green, was the chip easy or tough?">Chip difficulty</th><th title="Did you commit to that shot, or were you wavering?">Committed?</th><th title="Did you have a 9-iron or shorter club in your hand for this approach?">9ir or less on apprch</th><th>Penalty</th>
             </tr>
@@ -581,6 +584,7 @@
                 </select>
               </td>
               <td><input type="number" min="0" max="120" class="firstputt-in" data-hole="${hole}" placeholder="ft" style="width:54px;" oninput="scRecalc()"></td>
+              <td><input type="number" min="0" max="120" class="secondputt-in" data-hole="${hole}" placeholder="ft" style="width:54px;" oninput="scRecalc()" title="How far was your 2nd putt? Leave blank if you 1-putted."></td>
               <td><input type="number" min="0" max="8" class="putts-in" data-hole="${hole}" oninput="scRecalc()"></td>
               <td>
                 <select class="sc-pick diff-in" data-hole="${hole}" onchange="scRecalc()" title="Only fill in if you missed the green and chipped">
@@ -608,6 +612,7 @@
             <td class="h-num h-in-out">${subtotalLabel}</td>
             <td class="h-in-out" id="sc-${half}-par">—</td>
             <td class="h-in-out" id="sc-${half}-score">—</td>
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
@@ -669,6 +674,7 @@
       let penalties = 0;
       let committedN = 0, weakN = 0;
       let fpSum = 0, fpCount = 0;
+      let spSum = 0, spCount = 0;       // 2nd-putt distance — avg "leave"
       const pByType = { 3: { n: 0, sum: 0 }, 4: { n: 0, sum: 0 }, 5: { n: 0, sum: 0 } };
 
       for (let h = range.start; h <= range.end; h++) {
@@ -678,6 +684,7 @@
         const penIn       = document.querySelector('.pen-in[data-hole="' + h + '"]');
         const teeIn       = document.querySelector('.tee-in[data-hole="' + h + '"]');
         const firstPuttIn = document.querySelector('.firstputt-in[data-hole="' + h + '"]');
+        const secondPuttIn= document.querySelector('.secondputt-in[data-hole="' + h + '"]');
         const diffIn      = document.querySelector('.diff-in[data-hole="' + h + '"]');
         const commitIn    = document.querySelector('.commit-in[data-hole="' + h + '"]');
         const scClubChk   = document.querySelector('.scoringclub-chk[data-hole="' + h + '"]');
@@ -691,6 +698,7 @@
         const pen       = penIn       && penIn.value       !== '' ? parseInt(penIn.value, 10)       : 0;
         const teeDir    = teeIn && teeIn.value !== '' ? teeIn.value : null;
         const firstPutt = firstPuttIn && firstPuttIn.value !== '' ? parseFloat(firstPuttIn.value)   : null;
+        const secondPutt= secondPuttIn && secondPuttIn.value !== '' ? parseFloat(secondPuttIn.value): null;
         const diff      = diffIn && diffIn.value !== '' ? diffIn.value : null;
         const commit    = commitIn && commitIn.value !== '' ? commitIn.value : null;
         const scoringClub = !!(scClubChk && scClubChk.checked);
@@ -731,6 +739,7 @@
           else if (teeDir === 'X') teeX++;
         }
         if (firstPutt != null) { fpSum += firstPutt; fpCount++; }
+        if (secondPutt != null) { spSum += secondPutt; spCount++; }
         if (commit === 'C') committedN++;
         if (commit === 'W') weakN++;
       }
@@ -763,7 +772,8 @@
       document.getElementById('sc-gir').textContent    = girCount;
       document.getElementById('sc-putts').textContent  = (outPutts + inPutts) || '—';
       document.getElementById('sc-3putts-sub').textContent = threePutts + ' three-putts'
-        + (fpCount ? ' · avg 1st putt ' + (fpSum / fpCount).toFixed(0) + ' ft' : '');
+        + (fpCount ? ' · 1st putt ' + (fpSum / fpCount).toFixed(0) + 'ft' : '')
+        + (spCount ? ' · leave ' + (spSum / spCount).toFixed(1) + 'ft' : '');
       document.getElementById('sc-scr').textContent    = scrAttempts ? (scrMade + ' / ' + scrAttempts) : '—';
       document.getElementById('sc-scr-sub').textContent = scrAttempts
         ? Math.round(100 * scrMade / scrAttempts) + '% saved'
@@ -820,6 +830,7 @@
           tee:        get('tee-in'),
           approach:   get('approach-in'),
           firstPutt:  get('firstputt-in'),
+          secondPutt: get('secondputt-in'),
           putts:      get('putts-in'),
           diff:       get('diff-in'),
           commit:     get('commit-in'),
@@ -845,6 +856,7 @@
         set('tee-in',          row.tee);
         set('approach-in',     row.approach);
         set('firstputt-in',    row.firstPutt);
+        set('secondputt-in',   row.secondPutt);
         set('putts-in',        row.putts);
         set('diff-in',         row.diff);
         set('commit-in',       row.commit);
@@ -947,6 +959,7 @@
       let toughMisses = 0, committedN = 0, weakN = 0;
       let easySavesBlown = 0, scoringClubBogeys = 0, par5Bogeys = 0;
       let fpSum = 0, fpCount = 0;
+      let spSum = 0, spCount = 0;       // 2nd-putt distance — avg "leave"
       const pByType = { 3: { n: 0, sum: 0 }, 4: { n: 0, sum: 0 }, 5: { n: 0, sum: 0 } };
 
       // Submit only iterates the active range
@@ -959,6 +972,7 @@
         const penIn       = document.querySelector('.pen-in[data-hole="' + h + '"]');
         const teeIn       = document.querySelector('.tee-in[data-hole="' + h + '"]');
         const firstPuttIn = document.querySelector('.firstputt-in[data-hole="' + h + '"]');
+        const secondPuttIn= document.querySelector('.secondputt-in[data-hole="' + h + '"]');
         const diffIn      = document.querySelector('.diff-in[data-hole="' + h + '"]');
         const commitIn    = document.querySelector('.commit-in[data-hole="' + h + '"]');
         const scClubChk   = document.querySelector('.scoringclub-chk[data-hole="' + h + '"]');
@@ -971,6 +985,7 @@
         const pn = penIn && penIn.value !== '' ? parseInt(penIn.value, 10) : 0;
         const tDir = teeIn && teeIn.value !== '' ? teeIn.value : null;
         const fp = firstPuttIn && firstPuttIn.value !== '' ? parseFloat(firstPuttIn.value) : null;
+        const sp = secondPuttIn && secondPuttIn.value !== '' ? parseFloat(secondPuttIn.value) : null;
         const diff = diffIn && diffIn.value !== '' ? diffIn.value : null;
         const commit = commitIn && commitIn.value !== '' ? commitIn.value : null;
         const scoringClub = !!(scClubChk && scClubChk.checked);
@@ -984,7 +999,9 @@
         holeRows.push({
           hole: h, par,
           score: s, putts: p, penalties: pn,
-          tee_dir: tDir, first_putt: fp,
+          tee_dir: tDir,
+          first_putt: fp,
+          second_putt: sp,            // distance of the 2nd putt — "leave" diagnostic
           difficulty: diff, commit: commit,
           scoring_club: scoringClub,
           fw_hit: tDir === 'F' ? true : (tDir ? false : null),
@@ -1023,6 +1040,7 @@
         }
         if (p != null && p >= 3) threePutts++;
         if (fp != null) { fpSum += fp; fpCount++; }
+        if (sp != null) { spSum += sp; spCount++; }
         if (commit === 'C') committedN++;
         if (commit === 'W') weakN++;
       }
@@ -1110,6 +1128,9 @@
           weak_n: weakN,
           avg_first_putt: fpCount ? fpSum / fpCount : null,
           first_putt_count: fpCount,
+          // 2nd-putt distance — avg "leave" diagnostic for 3-putt risk
+          avg_second_putt: spCount ? spSum / spCount : null,
+          second_putt_count: spCount,
           tough_misses: toughMisses,
           three_putts: threePutts,
           easy_saves_blown: easySavesBlown,
@@ -1131,8 +1152,34 @@
         }
       } catch (sgErr) { console.warn('SG compute skipped:', sgErr); }
 
+      // Retry the create up to 3 times with exponential backoff so flaky
+      // network or transient backend blips never surface to the player.
+      const wait = (ms) => new Promise(r => setTimeout(r, ms));
+      let lastErr = null;
+      let submitted = false;
+      for (let attempt = 1; attempt <= 3; attempt++) {
+        try {
+          if (attempt > 1) {
+            submitBtn.textContent = 'Retrying… (' + attempt + '/3)';
+            await wait(1000 * Math.pow(2, attempt - 2));
+          }
+          await RRG.subs.create(payload);
+          submitted = true;
+          break;
+        } catch (err) {
+          lastErr = err;
+          console.warn('[scorecard-away] submit attempt ' + attempt + ' failed:', err);
+        }
+      }
+      if (!submitted) {
+        errBox.textContent = 'Could not submit your round after 3 tries: ' + (lastErr && lastErr.message ? lastErr.message : lastErr) + '. Your data is safe and auto-saved — try again in a minute.';
+        errBox.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit round →';
+        return;
+      }
+
       try {
-        await RRG.subs.create(payload);
         clearDraft();   // round saved server-side — purge local draft
 
         // Show the Good / Bad / Ugly summary inline.
@@ -1151,10 +1198,9 @@
           location.replace('history.html?new=1');
         }
       } catch (err) {
-        errBox.textContent = 'Could not submit: ' + (err.message || err);
-        errBox.style.display = 'block';
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Submit round →';
+        // Round IS saved — summary render failed. Fall back to history.
+        console.warn('[scorecard-away] summary render failed (round already saved):', err);
+        location.replace('history.html?new=1');
       }
     });
 
