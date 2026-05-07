@@ -6,7 +6,7 @@
 <base href="/portal/">
 <title>Mad River Scorecard — Junior Elite — RR Golf Performance</title>
 <meta name="description" content="Log a round at Mad River hole-by-hole. Tee selection, per-hole score, putts, and fairways — every derived stat (GIR, scrambling, doubles+) auto-computed.">
-<link rel="stylesheet" href="assets/styles.css?v=20260507c">
+<link rel="stylesheet" href="assets/styles.css?v=20260507e">
 <style>
   /* ============================================================
      MAD RIVER SCORECARD — hole-by-hole round entry. Uses the
@@ -257,13 +257,25 @@
     display: none; margin: 0 0 14px;
   }
   .sc-error-banner.show { display: block; }
+
+  /* Debug build stamp — visible at bottom-right so we can immediately tell
+     which version of this page iOS Safari has loaded. If the stamp says
+     anything OTHER than the latest BUILD value below, iOS is showing a
+     cached copy and the user needs to clear Safari data or hard-refresh. */
+  .build-stamp {
+    position: fixed; bottom: 8px; right: 10px;
+    font-size: 10px; color: rgba(0,0,0,0.45);
+    font-family: monospace; pointer-events: none;
+    background: rgba(255,255,255,0.85);
+    padding: 2px 6px; border-radius: 3px; z-index: 1;
+  }
 </style>
+<meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="expires" content="0">
 <script>
   // iOS Safari bfcache buster — when this page is restored from the
-  // back-forward cache, force a fresh reload from the server. Without this,
-  // iOS shows the old version of the page (with old columns / old code)
-  // even after a deploy because the page was kept in memory from a prior
-  // visit. Vercel's no-cache headers don't help against bfcache.
+  // back-forward cache, force a fresh reload from the server.
   window.addEventListener('pageshow', function(e) {
     if (e.persisted) location.reload();
   });
@@ -540,9 +552,9 @@
 <div id="footer-mount"></div>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="assets/supabase-config.js?v=20260507c"></script>
-<script src="assets/data.js?v=20260507c"></script>
-<script src="assets/app.js?v=20260507c"></script>
+<script src="assets/supabase-config.js?v=20260507e"></script>
+<script src="assets/data.js?v=20260507e"></script>
+<script src="assets/app.js?v=20260507e"></script>
 <script>
   (async () => {
     const user = await RRG.mount('scorecard-madriver');
@@ -1507,5 +1519,10 @@
 
   })();
 </script>
+
+<!-- VISIBLE BUILD STAMP — when iOS shows the old version, this won't say "20260507e".
+     If you see anything else, it's a stale cache: clear Safari data or hard-refresh. -->
+<div class="build-stamp">build 20260507e · scorecard v3</div>
+
 </body>
 </html>

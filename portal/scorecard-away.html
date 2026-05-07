@@ -6,7 +6,7 @@
 <base href="/portal/">
 <title>Scorecard — Junior Elite — RR Golf Performance</title>
 <meta name="description" content="Hole-by-hole scorecard for junior Elite players. Enter course rating and slope and the round counts toward your portal handicap index.">
-<link rel="stylesheet" href="assets/styles.css?v=20260507c">
+<link rel="stylesheet" href="assets/styles.css?v=20260507e">
 <style>
   /* ============================================================
      AWAY SCORECARD — generic hole-by-hole entry for any course.
@@ -213,7 +213,12 @@
     margin-top: 18px; padding-top: 16px;
     border-top: 1px solid var(--rule);
   }
+  /* Build-stamp visibility */
+  .build-stamp { position: fixed; bottom: 8px; right: 10px; font-size: 10px; color: rgba(0,0,0,0.45); font-family: monospace; pointer-events: none; background: rgba(255,255,255,0.85); padding: 2px 6px; border-radius: 3px; z-index: 1; }
 </style>
+<meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="expires" content="0">
 <script>window.addEventListener("pageshow",function(e){if(e.persisted)location.reload();});</script>
 </head>
 <body>
@@ -477,9 +482,9 @@
 <div id="footer-mount"></div>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="assets/supabase-config.js?v=20260507c"></script>
-<script src="assets/data.js?v=20260507c"></script>
-<script src="assets/app.js?v=20260507c"></script>
+<script src="assets/supabase-config.js?v=20260507e"></script>
+<script src="assets/data.js?v=20260507e"></script>
+<script src="assets/app.js?v=20260507e"></script>
 <script>
   (async () => {
     const user = await RRG.mount('scorecard-away');
@@ -1207,5 +1212,7 @@
 
   })();
 </script>
+
+<div class="build-stamp">build 20260507e · scorecard-away v3</div>
 </body>
 </html>
