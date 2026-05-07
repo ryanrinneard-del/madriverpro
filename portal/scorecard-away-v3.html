@@ -1,0 +1,1218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<base href="/portal/">
+<title>Scorecard — Junior Elite — RR Golf Performance</title>
+<meta name="description" content="Hole-by-hole scorecard for junior Elite players. Enter course rating and slope and the round counts toward your portal handicap index.">
+<link rel="stylesheet" href="assets/styles.css?v=20260507e">
+<style>
+  /* ============================================================
+     AWAY SCORECARD — generic hole-by-hole entry for any course.
+     Player enters course name, tees, rating, slope, and per-hole
+     par. All the CT-scheme fields (tee direction, 1st putt,
+     difficulty, commitment, scoring club, penalty) capture the
+     same rich stats as the Mad River scorecard. Derived totals
+     and submit payload are identical.
+
+     Not using RRG.COURSES — all course info entered manually.
+     Phase 2 (Option B from roadmap) adds save-for-next-time course
+     library so players don't re-enter the same course twice.
+     ============================================================ */
+
+  .sc-hero {
+    background: var(--navy); color: #fff;
+    padding: 28px 32px; border-radius: 14px;
+    margin-bottom: 22px;
+    position: relative; overflow: hidden;
+  }
+  .sc-hero::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--gold);
+  }
+  .sc-hero .kicker {
+    font-size: 11px; letter-spacing: 0.22em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .sc-hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    color: #fff; font-size: 28px; margin: 0; font-weight: 600; line-height: 1.15;
+  }
+  .sc-hero p { color: #D8DEE8; margin: 6px 0 0; font-size: 14px; line-height: 1.5; }
+  .sc-hero .quick-link {
+    display: inline-block; margin-top: 12px;
+    font-size: 12px; letter-spacing: 0.08em; color: rgba(255,255,255,0.78);
+    text-decoration: underline; text-underline-offset: 3px;
+  }
+
+  .sc-card {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-radius: 12px;
+    padding: 22px 26px;
+    margin-bottom: 18px;
+  }
+  .sc-card .card-label {
+    font-size: 10px; letter-spacing: 0.2em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 6px;
+  }
+  .sc-card h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    color: var(--navy); font-size: 20px; margin: 0 0 14px; font-weight: 600;
+  }
+
+  .sc-setup {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  @media (max-width: 720px) { .sc-setup { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 460px) { .sc-setup { grid-template-columns: 1fr; } }
+  .sc-setup label {
+    display: block; font-size: 10px; letter-spacing: 1px;
+    color: var(--navy); text-transform: uppercase; font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .sc-setup input, .sc-setup select {
+    width: 100%; padding: 9px 11px;
+    border: 1px solid var(--rule); border-radius: 6px;
+    font-family: inherit; font-size: 14px; color: var(--navy);
+    background: var(--white);
+  }
+  .sc-setup input:focus, .sc-setup select:focus {
+    border-color: var(--gold); outline: none;
+    box-shadow: 0 0 0 2px rgba(201,168,76,0.15);
+  }
+  .sc-setup .hint {
+    font-size: 12px; color: var(--mid-grey);
+    margin-top: 4px; grid-column: 1 / -1;
+    padding: 8px 12px; background: #F7F2E8;
+    border-left: 3px solid var(--gold); border-radius: 4px;
+  }
+  .sc-setup .hint b { color: var(--navy); }
+
+  /* Hole table */
+  .sc-holes-wrap { overflow-x: auto; margin-bottom: 6px; }
+  .sc-help {
+    background: #FDF6E3;
+    border-left: 3px solid var(--gold);
+    border-radius: 4px;
+    padding: 10px 14px;
+    margin: 0 0 14px;
+    font-size: 13px;
+  }
+  .sc-help summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--navy);
+    list-style: none;
+    padding: 4px 0;
+  }
+  .sc-help summary::-webkit-details-marker { display: none; }
+  .sc-help summary::before { content: '▸ '; color: var(--gold); display: inline-block; transition: transform .15s; }
+  .sc-help[open] summary::before { content: '▾ '; }
+  .sc-help ul { margin: 8px 0 4px; padding-left: 20px; line-height: 1.55; color: var(--navy-mid); }
+  .sc-help ul li { margin-bottom: 4px; }
+  .sc-help b { color: var(--navy); }
+  table.sc-holes {
+    width: 100%; border-collapse: collapse;
+    font-size: 13px; color: var(--navy);
+    min-width: 860px;
+  }
+  table.sc-holes thead th {
+    background: var(--navy); color: #fff;
+    font-size: 10px; letter-spacing: 1px;
+    padding: 8px 6px; font-weight: 700;
+    text-transform: uppercase;
+    border-right: 1px solid rgba(255,255,255,0.08);
+  }
+  table.sc-holes thead th:first-child { border-radius: 6px 0 0 0; }
+  table.sc-holes thead th:last-child { border-right: none; border-radius: 0 6px 0 0; }
+  table.sc-holes tbody td {
+    padding: 7px 6px; border-bottom: 1px solid var(--rule);
+    text-align: center;
+  }
+  table.sc-holes tbody td.h-num {
+    font-weight: 700; color: var(--navy); background: #FCF9F2;
+    font-family: 'Playfair Display', Georgia, serif; font-size: 16px;
+  }
+  table.sc-holes tbody td.h-in-out {
+    background: #F7F2E8; font-weight: 700;
+  }
+  table.sc-holes tbody tr.row-turn td { border-top: 2px solid var(--gold); }
+  table.sc-holes input[type="number"] {
+    width: 46px; padding: 5px 4px;
+    text-align: center;
+    border: 1px solid var(--rule); border-radius: 4px;
+    font-family: inherit; font-size: 14px; color: var(--navy);
+    background: var(--white);
+    -moz-appearance: textfield;
+  }
+  table.sc-holes input[type="number"]::-webkit-outer-spin-button,
+  table.sc-holes input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none; margin: 0;
+  }
+  table.sc-holes input:focus {
+    border-color: var(--gold); outline: none;
+    box-shadow: 0 0 0 2px rgba(201,168,76,0.15);
+  }
+  table.sc-holes input.fw-chk {
+    width: 18px; height: 18px; accent-color: var(--gold);
+  }
+  table.sc-holes select.sc-pick {
+    width: 52px; padding: 4px 2px;
+    border: 1px solid var(--rule); border-radius: 4px;
+    font-family: inherit; font-size: 13px; color: var(--navy);
+    background: var(--white);
+    text-align: center;
+  }
+  table.sc-holes select.sc-pick:focus {
+    border-color: var(--gold); outline: none;
+    box-shadow: 0 0 0 2px rgba(201,168,76,0.15);
+  }
+  /* Par picker — slightly narrower */
+  table.sc-holes select.par-pick {
+    width: 44px; padding: 4px 2px;
+    border: 1px solid var(--rule); border-radius: 4px;
+    font-family: inherit; font-size: 13px; color: var(--navy);
+    background: var(--white);
+    text-align: center; font-weight: 600;
+  }
+
+  /* Totals strip (same as Mad River scorecard) */
+  .sc-totals {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin: 14px 0 4px;
+  }
+  @media (max-width: 720px) { .sc-totals { grid-template-columns: repeat(2, 1fr); } }
+  .sc-tstat {
+    background: #F7F2E8;
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--gold);
+    border-radius: 6px;
+    padding: 10px 14px;
+  }
+  .sc-tstat .lbl {
+    font-size: 10px; letter-spacing: 1.2px; color: var(--gold);
+    text-transform: uppercase; font-weight: 700;
+  }
+  .sc-tstat .val {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 24px; font-weight: 700; color: var(--navy); line-height: 1;
+    margin-top: 4px;
+  }
+  .sc-tstat .sub {
+    font-size: 11px; color: var(--mid-grey); margin-top: 2px;
+  }
+
+  .sc-submit-bar {
+    display: flex; justify-content: flex-end; gap: 10px;
+    margin-top: 18px; padding-top: 16px;
+    border-top: 1px solid var(--rule);
+  }
+  /* Build-stamp visibility */
+  .build-stamp { position: fixed; bottom: 8px; right: 10px; font-size: 10px; color: rgba(0,0,0,0.45); font-family: monospace; pointer-events: none; background: rgba(255,255,255,0.85); padding: 2px 6px; border-radius: 3px; z-index: 1; }
+</style>
+<meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="expires" content="0">
+<script>window.addEventListener("pageshow",function(e){if(e.persisted)location.reload();});</script>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container-narrow">
+
+  <div class="sc-hero">
+    <div class="kicker">Away Scorecard &middot; Any course</div>
+    <h1>Log a round, hole by hole.</h1>
+    <p>Enter the course, tees, rating, and slope, then your score and putts per hole. Greens in regulation, scrambling, fairways, and your par-type splits all compute automatically. If you include rating and slope, the round counts toward your handicap index.</p>
+    <a href="scorecard-v3.html" class="quick-link" style="color: var(--gold);">Playing Mad River? Use the dedicated Mad River scorecard &rarr;</a>
+    <br>
+    <a href="submit-round.html" class="quick-link">Just want to enter totals? Use the quick-entry form &rarr;</a>
+  </div>
+
+  <div style="background:#F0F6EC; border:1px solid #C8DAB6; border-left:3px solid #6B8B4E; border-radius:8px; padding:10px 14px; margin: 0 0 14px; font-size:13px; line-height:1.5; color:#3D5A24;">
+    <strong>Your work is auto-saved.</strong> Every field saves to this device as you type. Reload, switch apps, even close the browser — your data comes back. Only "Submit round" finalizes it.
+  </div>
+
+  <form id="sc-form" autocomplete="off">
+
+    <!-- ========== COURSE SETUP ========== -->
+    <div class="sc-card">
+      <div class="card-label">Course setup</div>
+      <div class="sc-setup">
+        <div>
+          <label>Course name</label>
+          <input type="text" name="course" id="sc-course" required placeholder="e.g. Turnberry">
+        </div>
+        <div>
+          <label>Tees played</label>
+          <input type="text" name="tees" id="sc-tees" required placeholder="e.g. Blue">
+        </div>
+        <div>
+          <label>Date</label>
+          <input type="date" name="round_date" id="sc-date" required>
+        </div>
+
+        <div>
+          <label>Course rating</label>
+          <input type="number" name="course_rating" id="sc-rating" step="0.1" min="50" max="80" placeholder="71.2">
+        </div>
+        <div>
+          <label>Slope</label>
+          <input type="number" name="course_slope" id="sc-slope" step="1" min="55" max="155" placeholder="129">
+        </div>
+        <div>
+          <label>Format</label>
+          <select name="format">
+            <option value="Stroke Play" selected>Stroke Play</option>
+            <option value="Matchplay">Matchplay</option>
+            <option value="Tournament">Tournament</option>
+            <option value="Playing Lesson">Playing Lesson</option>
+            <option value="Prep Round">Prep Round</option>
+          </select>
+        </div>
+        <div>
+          <label>Holes</label>
+          <select name="holes_played" id="sc-holes-played">
+            <option value="18" selected>18 Holes</option>
+            <option value="front9">Front 9 only</option>
+            <option value="back9">Back 9 only</option>
+          </select>
+        </div>
+
+        <div class="hint">
+          <b>Rating + slope are printed on the scorecard</b> &mdash; look near the bottom. Entering them lets this round count toward your portal handicap index. Leave blank if you don't have them handy; you can still log the round, it just won't update your index.
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== PAR LAYOUT ========== -->
+    <!-- iOS-friendly column help — works on touch (no hover required) -->
+    <details class="sc-help">
+      <summary>What does each column mean? <span style="color:var(--gold); font-weight:600;">(tap)</span></summary>
+      <ul>
+        <li><b>Par</b> — pick the par for each hole (default is par 4)</li>
+        <li><b>Score</b> — how many strokes you took on the hole</li>
+        <li><b>Tee shot</b> — where your tee shot finished: Fairway, Left, Right, or OB / Penalty</li>
+        <li><b>Second shot (Par 5)</b> — only on par 5s: distance you hit your second shot FROM. Greyed out on par 3s and 4s.</li>
+        <li><b>Approach distance</b> — how far away you were when you hit your shot INTO the green (in yards). Greyed out on par 3s — your tee shot IS the approach.</li>
+        <li><b>First putt (ft)</b> — how far away your first putt was, in feet</li>
+        <li><b>2nd putt (ft)</b> — how far away your <em>second</em> putt was — i.e. how far the first putt left you. Diagnostic for lag putting. Leave blank if you 1-putted.</li>
+        <li><b>Putts</b> — how many putts you took on the green</li>
+        <li><b>Chip difficulty</b> — if you missed the green: Easy (open chip) or Tough (short-sided / awkward lie)</li>
+        <li><b>Committed?</b> — were you fully committed to the shot, or did you have doubts?</li>
+        <li><b>9ir or less on apprch</b> — tap if you had a 9-iron or shorter club for this approach (these are your scoring chances)</li>
+        <li><b>Penalty</b> — number of penalty strokes on this hole</li>
+      </ul>
+    </details>
+
+    <div class="sc-card" id="sc-front-card">
+      <div class="card-label">Front 9</div>
+      <h2>Per-hole par + scoring</h2>
+      <p style="font-size:13px; color:var(--mid-grey); margin:0 0 12px; line-height:1.5;">
+        Default is par 4 on every hole (total par 72). Adjust each hole's par as needed. Everything else works the same as the Mad River scorecard: score, tee direction, first putt distance, putts, scramble difficulty, commitment grade, scoring club, penalty.
+      </p>
+      <div class="sc-holes-wrap">
+        <table class="sc-holes" id="sc-front">
+          <thead>
+            <tr>
+              <th>Hole</th><th>Par</th>
+              <th>Score</th>
+              <th title="Where did your tee shot finish?">Tee shot</th>
+              <th title="Par 5s only — distance you hit your second shot FROM. Greyed out on par 3s and 4s.">Second shot (Par 5)</th>
+              <th title="How far away were you when you hit your shot into the green? (yards). Greyed out on par 3s — your tee shot IS the approach.">Approach distance</th>
+              <th title="How far was your first putt? (in feet)">First putt (ft)</th>
+              <th title="How far was your second putt? — i.e. how far did your first putt leave you. Empty if you 1-putted.">2nd putt (ft)</th>
+              <th>Putts</th>
+              <th title="If you missed the green, was the chip easy (open chip) or tough (short-sided / awkward lie)?">Chip difficulty</th><th title="Did you commit to that shot, or were you wavering?">Committed?</th><th title="Did you have a 9-iron or shorter club in your hand for this approach? (these are your scoring chances)">9ir or less on apprch</th><th>Penalty</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sc-card" id="sc-back-card">
+      <div class="card-label">Back 9</div>
+      <div class="sc-holes-wrap">
+        <table class="sc-holes" id="sc-back">
+          <thead>
+            <tr>
+              <th>Hole</th><th>Par</th>
+              <th>Score</th>
+              <th title="Where did your tee shot finish?">Tee shot</th>
+              <th title="Par 5s only — distance you hit your second shot FROM. Greyed out on par 3s and 4s.">Second shot (Par 5)</th>
+              <th title="How far away were you when you hit your shot into the green? (yards). Greyed out on par 3s — your tee shot IS the approach.">Approach distance</th>
+              <th title="How far was your first putt? (in feet)">First putt (ft)</th>
+              <th title="How far was your second putt? — i.e. how far did your first putt leave you. Empty if you 1-putted.">2nd putt (ft)</th>
+              <th>Putts</th>
+              <th title="If you missed the green, was the chip easy or tough?">Chip difficulty</th><th title="Did you commit to that shot, or were you wavering?">Committed?</th><th title="Did you have a 9-iron or shorter club in your hand for this approach?">9ir or less on apprch</th><th>Penalty</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ========== TOTALS ========== -->
+    <div class="sc-card">
+      <div class="card-label">Live totals</div>
+      <h2 id="sc-total-head">Total: <span id="sc-total">—</span> <small style="font-weight:400; color:var(--mid-grey); font-size:14px; font-family:inherit;" id="sc-par-sub"></small></h2>
+      <div class="sc-totals">
+        <div class="sc-tstat">
+          <div class="lbl">Out / In</div>
+          <div class="val"><span id="sc-out">—</span> / <span id="sc-in">—</span></div>
+        </div>
+        <div class="sc-tstat">
+          <div class="lbl">Fairways</div>
+          <div class="val" id="sc-fw">—</div>
+          <div class="sub" id="sc-fw-sub">—</div>
+        </div>
+        <div class="sc-tstat">
+          <div class="lbl">GIR</div>
+          <div class="val" id="sc-gir">—</div>
+          <div class="sub">of 18</div>
+        </div>
+        <div class="sc-tstat">
+          <div class="lbl">Putts</div>
+          <div class="val" id="sc-putts">—</div>
+          <div class="sub" id="sc-3putts-sub">—</div>
+        </div>
+        <div class="sc-tstat">
+          <div class="lbl">Scrambling</div>
+          <div class="val" id="sc-scr">—</div>
+          <div class="sub" id="sc-scr-sub">—</div>
+        </div>
+        <div class="sc-tstat">
+          <div class="lbl">Penalties</div>
+          <div class="val" id="sc-pen">—</div>
+        </div>
+        <div class="sc-tstat">
+          <div class="lbl">Birdies or Better</div>
+          <div class="val" id="sc-birdies">—</div>
+        </div>
+        <div class="sc-tstat">
+          <div class="lbl">Doubles or Worse</div>
+          <div class="val" id="sc-doubles">—</div>
+        </div>
+        <div class="sc-tstat">
+          <div class="lbl">Commitment</div>
+          <div class="val" id="sc-commit">—</div>
+          <div class="sub" id="sc-commit-sub">—</div>
+        </div>
+        <div class="sc-tstat">
+          <div class="lbl">Easy Saves Blown</div>
+          <div class="val" id="sc-esb">—</div>
+          <div class="sub">5 Errors</div>
+        </div>
+        <div class="sc-tstat">
+          <div class="lbl">Wedge Bogeys</div>
+          <div class="val" id="sc-scb">—</div>
+          <div class="sub">5 Errors</div>
+        </div>
+        <div class="sc-tstat" style="background: var(--cream); border: 1px solid var(--gold);">
+          <div class="lbl" style="color: var(--navy);">5 Errors Total</div>
+          <div class="val" id="sc-t5-total" style="color: var(--gold);">—</div>
+          <div class="sub" id="sc-t5-breakdown" style="font-size: 10px; letter-spacing: 0.04em;">—</div>
+        </div>
+        <div class="sc-tstat">
+          <div class="lbl">Par 3 / 4 / 5 avg</div>
+          <div class="val" style="font-size:16px;">
+            <span id="sc-p3">—</span> / <span id="sc-p4">—</span> / <span id="sc-p5">—</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== OPTIONAL EXTRAS ========== -->
+    <details class="sr-details" id="sc-extras-details" style="margin-bottom: 14px;">
+      <summary>
+        <span>
+          Optional extras
+          <div class="details-hint">Sand saves, avg drive, pre-shot routine, and reflection prompts.</div>
+        </span>
+      </summary>
+
+      <div class="sr-grid cols-3" style="margin: 14px 0;">
+        <div class="sr-field">
+          <label>Sand saves</label>
+          <input type="text" name="sand_saves" placeholder="1 / 2">
+        </div>
+        <div class="sr-field">
+          <label>Avg drive (yd) <span class="opt" style="color:var(--mid-grey);">optional</span></label>
+          <input type="number" name="drive_dist" min="100" max="360" placeholder="230">
+        </div>
+        <div class="sr-field">
+          <label>Pre-shot routine (1&ndash;10)</label>
+          <input type="number" name="routine_score" min="1" max="10" placeholder="—">
+        </div>
+      </div>
+
+      <div class="sr-field" style="margin-bottom: 14px;">
+        <label>What went well?</label>
+        <textarea name="reflection_good" placeholder="Be specific. One moment beats a generalization."></textarea>
+      </div>
+      <div class="sr-field" style="margin-bottom: 14px;">
+        <label>What needs work?</label>
+        <textarea name="reflection_bad" placeholder="Where did strokes leak?"></textarea>
+      </div>
+      <div class="sr-field">
+        <label>One thing to work on before next session</label>
+        <textarea name="one_thing" placeholder="Pick ONE — not five."></textarea>
+      </div>
+    </details>
+
+    <div id="sc-form-error" class="callout" style="display:none; color:var(--red-risk); border-left-color:var(--red-risk); background:#FDF0EE;"></div>
+
+    <div class="sc-submit-bar" style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+      <a href="history.html" class="btn btn-ghost">Cancel</a>
+      <button type="submit" class="btn btn-primary" id="sc-submit-btn">Submit round &rarr;</button>
+      <span id="sc-saved-indicator" style="font-size:12px; color:var(--mid-grey); letter-spacing:0.04em;">Auto-saving as you type</span>
+    </div>
+  </form>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js?v=20260507e"></script>
+<script src="assets/data.js?v=20260507e"></script>
+<script src="assets/app.js?v=20260507e"></script>
+<script>
+  (async () => {
+    const user = await RRG.mount('scorecard-away');
+    if (!user) return;
+
+    // ELITE-ONLY GATE — full hole-by-hole scorecard is reserved for the
+    // Elite junior tier. Just Starting / Developing juniors get the simple
+    // log instead. The flag lives on profile_json and is set by Ryan.
+    const profile = await RRG.auth.completeSignupIfNeeded();
+    const pj = (profile && profile.profile_json) || {};
+    const tier = (pj.s1_skill_level || pj.skill_level || '').toLowerCase();
+    const isElite = (tier === 'elite' || pj.junior_elite_accepted) &&
+                    tier !== 'just_starting' && tier !== 'developing';
+    if (!isElite) {
+      // Show a friendly redirect message rather than just punting to dashboard
+      document.querySelector('main').innerHTML = `
+        <div class="card-cream" style="text-align:center; padding: 40px 32px; max-width: 560px; margin: 40px auto;">
+          <h2 style="font-family:'Playfair Display',serif; color:var(--navy); margin: 0 0 12px;">Elite tier only</h2>
+          <p style="color:var(--navy-mid); line-height: 1.6;">
+            The full hole-by-hole scorecard is part of the Elite tier. If you'd like access,
+            ask Ryan about moving up — or use the quick log on your dashboard for now.
+          </p>
+          <p style="margin-top: 18px;">
+            <a href="dashboard.html" class="btn btn-primary">Back to dashboard</a>
+          </p>
+        </div>`;
+      return;
+    }
+
+    // Default date to today
+    const today = new Date();
+    const pad = n => String(n).padStart(2, '0');
+    document.getElementById('sc-date').value =
+      `${today.getFullYear()}-${pad(today.getMonth()+1)}-${pad(today.getDate())}`;
+
+    /* HOLES PLAYED — Front 9 / Back 9 / 18 (single source of truth). */
+    const holesPlayedSelect = document.getElementById('sc-holes-played');
+    function activeRange() {
+      const v = holesPlayedSelect ? holesPlayedSelect.value : '18';
+      if (v === 'front9') return { start: 1, end: 9, halves: ['front'] };
+      if (v === 'back9')  return { start: 10, end: 18, halves: ['back'] };
+      return { start: 1, end: 18, halves: ['front', 'back'] };
+    }
+    function applyHolesPlayedVisibility() {
+      const r = activeRange();
+      const fc = document.getElementById('sc-front-card');
+      const bc = document.getElementById('sc-back-card');
+      if (fc) fc.style.display = r.halves.includes('front') ? '' : 'none';
+      if (bc) bc.style.display = r.halves.includes('back')  ? '' : 'none';
+    }
+
+    function renderHoles() {
+      ['front', 'back'].forEach((half, halfIdx) => {
+        const tbody = document.querySelector('#sc-' + half + ' tbody');
+        const start = halfIdx * 9;
+        const rows = [];
+        for (let i = 0; i < 9; i++) {
+          const hole = start + i + 1;
+          rows.push(`
+            <tr data-hole="${hole}">
+              <td class="h-num">${hole}</td>
+              <td>
+                <select class="par-pick par-in" data-hole="${hole}" onchange="scAwayParChange(this); scRecalc();">
+                  <option value="3">3</option>
+                  <option value="4" selected>4</option>
+                  <option value="5">5</option>
+                </select>
+              </td>
+              <td><input type="number" min="1" max="15" class="score-in" data-hole="${hole}" oninput="scRecalc()"></td>
+              <td>
+                <select class="sc-pick tee-in" data-hole="${hole}" onchange="scRecalc()">
+                  <option value="">—</option>
+                  <option value="F">Fairway</option>
+                  <option value="L">Left</option>
+                  <option value="R">Right</option>
+                  <option value="X">OB / Penalty</option>
+                </select>
+              </td>
+              <td>
+                <select class="sc-pick second-shot-in" data-hole="${hole}" onchange="scRecalc()" title="Par 5 second shot — distance you hit your second shot FROM (yards)" disabled>
+                  <option value="">N/A</option>
+                  <option value="75-100">75–100</option>
+                  <option value="100-125">100–125</option>
+                  <option value="125-150">125–150</option>
+                  <option value="150-175">150–175</option>
+                  <option value="175-200">175–200</option>
+                  <option value="200-225">200–225</option>
+                  <option value="225-250">225–250</option>
+                  <option value="250+">250+</option>
+                </select>
+              </td>
+              <td>
+                <select class="sc-pick approach-in" data-hole="${hole}" onchange="scRecalc()" title="Distance you hit your approach FROM (yards)">
+                  <option value="">—</option>
+                  <option value="50-75">50–75</option>
+                  <option value="75-100">75–100</option>
+                  <option value="100-125">100–125</option>
+                  <option value="125-150">125–150</option>
+                  <option value="150-175">150–175</option>
+                  <option value="175-200">175–200</option>
+                  <option value="200-225">200–225</option>
+                  <option value="225+">225+</option>
+                </select>
+              </td>
+              <td><input type="number" min="0" max="120" class="firstputt-in" data-hole="${hole}" placeholder="ft" style="width:54px;" oninput="scRecalc()"></td>
+              <td><input type="number" min="0" max="120" class="secondputt-in" data-hole="${hole}" placeholder="ft" style="width:54px;" oninput="scRecalc()" title="How far was your 2nd putt? Leave blank if you 1-putted."></td>
+              <td><input type="number" min="0" max="8" class="putts-in" data-hole="${hole}" oninput="scRecalc()"></td>
+              <td>
+                <select class="sc-pick diff-in" data-hole="${hole}" onchange="scRecalc()" title="Only fill in if you missed the green and chipped">
+                  <option value="">—</option>
+                  <option value="S">Easy</option>
+                  <option value="T">Tough</option>
+                </select>
+              </td>
+              <td>
+                <select class="sc-pick commit-in" data-hole="${hole}" onchange="scRecalc()" title="Did you commit to this shot, or were you wavering?">
+                  <option value="">—</option>
+                  <option value="C">Fully committed</option>
+                  <option value="W">Had doubts</option>
+                </select>
+              </td>
+              <td><input type="checkbox" class="fw-chk scoringclub-chk" data-hole="${hole}" onchange="scRecalc()" title="Tap if you had a 9-iron or shorter club in your hand for this approach. These are your scoring chances."></td>
+              <td><input type="number" min="0" max="5" class="pen-in" data-hole="${hole}" oninput="scRecalc()" placeholder="0"></td>
+            </tr>
+          `);
+        }
+        // OUT/IN subtotal row
+        const subtotalLabel = half === 'front' ? 'OUT' : 'IN';
+        rows.push(`
+          <tr class="row-turn">
+            <td class="h-num h-in-out">${subtotalLabel}</td>
+            <td class="h-in-out" id="sc-${half}-par">—</td>
+            <td class="h-in-out" id="sc-${half}-score">—</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="h-in-out" id="sc-${half}-putts">—</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="h-in-out" id="sc-${half}-pen">—</td>
+          </tr>
+        `);
+        tbody.innerHTML = rows.join('');
+      });
+      applyHolesPlayedVisibility();
+      scRecalc();
+    }
+
+    /* PAR CHANGE handler — toggle the second-shot and approach selects
+       based on the new par for that hole. Par 3 = approach disabled,
+       par 5 = second-shot enabled. */
+    window.scAwayParChange = function(parSelect) {
+      const tr = parSelect.closest('tr');
+      if (!tr) return;
+      const par = parseInt(parSelect.value, 10);
+      const secondShot = tr.querySelector('.second-shot-in');
+      const approach   = tr.querySelector('.approach-in');
+      if (secondShot) {
+        secondShot.disabled = (par !== 5);
+        secondShot.querySelector('option[value=""]').textContent = (par === 5) ? '—' : 'N/A';
+        if (par !== 5) secondShot.value = '';
+      }
+      if (approach) {
+        approach.disabled = (par === 3);
+        approach.querySelector('option[value=""]').textContent = (par === 3) ? 'N/A' : '—';
+        if (par === 3) approach.value = '';
+      }
+    };
+
+    if (holesPlayedSelect) {
+      holesPlayedSelect.addEventListener('change', () => {
+        applyHolesPlayedVisibility();
+        scRecalc();
+        if (typeof saveDraft === 'function') saveDraft();
+      });
+    }
+
+    // =========== LIVE RECALC ===========
+    window.scRecalc = function() {
+      const range = activeRange();
+      let outScore = 0, inScore = 0, outPutts = 0, inPutts = 0, outPen = 0, inPen = 0;
+      let outPar = 0, inPar = 0, totalPar = 0;
+      let fwHit = 0, teeLeft = 0, teeRight = 0, teeX = 0, teeEligible = 0;
+      let girCount = 0;
+      let threePutts = 0;
+      let scrAttempts = 0, scrMade = 0;
+      let toughMisses = 0, easySavesBlown = 0, scoringClubBogeys = 0;
+      let par5Bogeys = 0;  // 5 Errors #1
+      let birdies = 0, doublesPlus = 0;
+      let penalties = 0;
+      let committedN = 0, weakN = 0;
+      let fpSum = 0, fpCount = 0;
+      let spSum = 0, spCount = 0;       // 2nd-putt distance — avg "leave"
+      const pByType = { 3: { n: 0, sum: 0 }, 4: { n: 0, sum: 0 }, 5: { n: 0, sum: 0 } };
+
+      for (let h = range.start; h <= range.end; h++) {
+        const parIn       = document.querySelector('.par-in[data-hole="' + h + '"]');
+        const scoreIn     = document.querySelector('.score-in[data-hole="' + h + '"]');
+        const puttsIn     = document.querySelector('.putts-in[data-hole="' + h + '"]');
+        const penIn       = document.querySelector('.pen-in[data-hole="' + h + '"]');
+        const teeIn       = document.querySelector('.tee-in[data-hole="' + h + '"]');
+        const firstPuttIn = document.querySelector('.firstputt-in[data-hole="' + h + '"]');
+        const secondPuttIn= document.querySelector('.secondputt-in[data-hole="' + h + '"]');
+        const diffIn      = document.querySelector('.diff-in[data-hole="' + h + '"]');
+        const commitIn    = document.querySelector('.commit-in[data-hole="' + h + '"]');
+        const scClubChk   = document.querySelector('.scoringclub-chk[data-hole="' + h + '"]');
+
+        const par = parIn ? parseInt(parIn.value, 10) : 4;
+        totalPar += par;
+        if (h <= 9) outPar += par; else inPar += par;
+
+        const score     = scoreIn     && scoreIn.value     !== '' ? parseInt(scoreIn.value, 10)     : null;
+        const putts     = puttsIn     && puttsIn.value     !== '' ? parseInt(puttsIn.value, 10)     : null;
+        const pen       = penIn       && penIn.value       !== '' ? parseInt(penIn.value, 10)       : 0;
+        const teeDir    = teeIn && teeIn.value !== '' ? teeIn.value : null;
+        const firstPutt = firstPuttIn && firstPuttIn.value !== '' ? parseFloat(firstPuttIn.value)   : null;
+        const secondPutt= secondPuttIn && secondPuttIn.value !== '' ? parseFloat(secondPuttIn.value): null;
+        const diff      = diffIn && diffIn.value !== '' ? diffIn.value : null;
+        const commit    = commitIn && commitIn.value !== '' ? commitIn.value : null;
+        const scoringClub = !!(scClubChk && scClubChk.checked);
+
+        if (score != null) {
+          if (h <= 9) outScore += score; else inScore += score;
+          const delta = score - par;
+          if (delta <= -1) birdies++;
+          if (delta >= 2)  doublesPlus++;
+          if (par === 5 && delta >= 1) par5Bogeys++;  // 5 Errors #1
+          if (pByType[par]) { pByType[par].n++; pByType[par].sum += score; }
+          if (putts != null) {
+            const reach = score - putts;
+            const gir = reach <= (par - 2);
+            if (gir) girCount++;
+            else {
+              scrAttempts++;
+              if (score <= par) scrMade++;
+              if (diff === 'T') toughMisses++;
+              if (diff === 'S' && score > par) easySavesBlown++;
+            }
+          }
+          if (scoringClub && score > par) scoringClubBogeys++;
+        }
+        if (putts != null) {
+          if (h <= 9) outPutts += putts; else inPutts += putts;
+          if (putts >= 3) threePutts++;
+        }
+        if (pen != null) {
+          penalties += pen;
+          if (h <= 9) outPen += pen; else inPen += pen;
+        }
+        if (par >= 4 && teeDir) {
+          teeEligible++;
+          if (teeDir === 'F') fwHit++;
+          else if (teeDir === 'L') teeLeft++;
+          else if (teeDir === 'R') teeRight++;
+          else if (teeDir === 'X') teeX++;
+        }
+        if (firstPutt != null) { fpSum += firstPutt; fpCount++; }
+        if (secondPutt != null) { spSum += secondPutt; spCount++; }
+        if (commit === 'C') committedN++;
+        if (commit === 'W') weakN++;
+      }
+
+      const totalScore = outScore + inScore;
+      document.getElementById('sc-total').textContent =
+        (outScore || inScore) ? totalScore : '—';
+      document.getElementById('sc-par-sub').textContent =
+        totalPar ? (' · par ' + totalPar + ((outScore || inScore) ? ' · ' + ((totalScore - totalPar) > 0 ? '+' : '') + (totalScore - totalPar) : '')) : '';
+      document.getElementById('sc-out').textContent = outScore || '—';
+      document.getElementById('sc-in').textContent  = inScore || '—';
+
+      const setSub = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+      setSub('sc-front-par',   outPar);
+      setSub('sc-back-par',    inPar);
+      setSub('sc-front-score', outScore || '—');
+      setSub('sc-back-score',  inScore || '—');
+      setSub('sc-front-putts', outPutts || '—');
+      setSub('sc-back-putts',  inPutts || '—');
+      setSub('sc-front-pen',   outPen || 0);
+      setSub('sc-back-pen',    inPen || 0);
+
+      document.getElementById('sc-fw').textContent     = fwHit + ' / ' + teeEligible;
+      document.getElementById('sc-fw-sub').textContent = teeEligible
+        ? Math.round(100 * fwHit / teeEligible) + '% hit · '
+          + (teeLeft ? teeLeft + 'L ' : '')
+          + (teeRight ? teeRight + 'R ' : '')
+          + (teeX ? teeX + 'X' : '')
+        : '—';
+      document.getElementById('sc-gir').textContent    = girCount;
+      document.getElementById('sc-putts').textContent  = (outPutts + inPutts) || '—';
+      document.getElementById('sc-3putts-sub').textContent = threePutts + ' three-putts'
+        + (fpCount ? ' · 1st putt ' + (fpSum / fpCount).toFixed(0) + 'ft' : '')
+        + (spCount ? ' · leave ' + (spSum / spCount).toFixed(1) + 'ft' : '');
+      document.getElementById('sc-scr').textContent    = scrAttempts ? (scrMade + ' / ' + scrAttempts) : '—';
+      document.getElementById('sc-scr-sub').textContent = scrAttempts
+        ? Math.round(100 * scrMade / scrAttempts) + '% saved'
+          + (toughMisses ? ' · ' + toughMisses + ' tough' : '')
+        : '—';
+      document.getElementById('sc-pen').textContent     = penalties;
+      document.getElementById('sc-birdies').textContent = birdies;
+      document.getElementById('sc-doubles').textContent = doublesPlus;
+
+      document.getElementById('sc-p3').textContent = pByType[3].n ? (pByType[3].sum / pByType[3].n).toFixed(2) : '—';
+      document.getElementById('sc-p4').textContent = pByType[4].n ? (pByType[4].sum / pByType[4].n).toFixed(2) : '—';
+      document.getElementById('sc-p5').textContent = pByType[5].n ? (pByType[5].sum / pByType[5].n).toFixed(2) : '—';
+
+      const commitTotal = committedN + weakN;
+      document.getElementById('sc-commit').textContent    = commitTotal ? Math.round(100 * committedN / commitTotal) + '%' : '—';
+      document.getElementById('sc-commit-sub').textContent = commitTotal ? (committedN + ' of ' + commitTotal + ' committed') : '—';
+      document.getElementById('sc-esb').textContent = easySavesBlown;
+      document.getElementById('sc-scb').textContent = scoringClubBogeys;
+
+      // 5 Errors total (auto from inputs — CT's request)
+      const t5Total = par5Bogeys + doublesPlus + easySavesBlown + threePutts + scoringClubBogeys;
+      const t5TotalEl = document.getElementById('sc-t5-total');
+      if (t5TotalEl) t5TotalEl.textContent = t5Total || '—';
+      const t5BreakdownEl = document.getElementById('sc-t5-breakdown');
+      if (t5BreakdownEl) {
+        t5BreakdownEl.textContent = t5Total
+          ? `${par5Bogeys} P5 · ${doublesPlus} Dbl · ${easySavesBlown} EzS · ${threePutts} 3P · ${scoringClubBogeys} SC`
+          : '—';
+      }
+    };
+
+    renderHoles();
+
+    /* =================================================================
+       AUTO-SAVE — same protection as scorecard.html. Persists to
+       localStorage on every keystroke, restores on page load, clears
+       only on successful submit.
+       ================================================================= */
+    const form = document.getElementById('sc-form');
+    const DRAFT_KEY = 'rrgJr_sc_away_draft_' + user.id;
+
+    function gatherHoleInputs() {
+      const out = {};
+      for (let h = 1; h <= 18; h++) {
+        const get = (sel) => {
+          const el = document.querySelector(`.${sel}[data-hole="${h}"]`);
+          if (!el) return null;
+          if (el.type === 'checkbox') return el.checked;
+          return el.value;
+        };
+        out[h] = {
+          par:        get('par-in'),
+          score:      get('score-in'),
+          tee:        get('tee-in'),
+          approach:   get('approach-in'),
+          firstPutt:  get('firstputt-in'),
+          secondPutt: get('secondputt-in'),
+          putts:      get('putts-in'),
+          diff:       get('diff-in'),
+          commit:     get('commit-in'),
+          sc:         get('scoringclub-chk'),
+          pen:        get('pen-in'),
+        };
+      }
+      return out;
+    }
+    function applyHoleInputs(snapshot) {
+      if (!snapshot) return;
+      for (let h = 1; h <= 18; h++) {
+        const row = snapshot[h];
+        if (!row) continue;
+        const set = (sel, val) => {
+          const el = document.querySelector(`.${sel}[data-hole="${h}"]`);
+          if (!el || val == null) return;
+          if (el.type === 'checkbox') el.checked = !!val;
+          else el.value = val;
+        };
+        set('par-in',          row.par);
+        set('score-in',        row.score);
+        set('tee-in',          row.tee);
+        set('approach-in',     row.approach);
+        set('firstputt-in',    row.firstPutt);
+        set('secondputt-in',   row.secondPutt);
+        set('putts-in',        row.putts);
+        set('diff-in',         row.diff);
+        set('commit-in',       row.commit);
+        set('scoringclub-chk', row.sc);
+        set('pen-in',          row.pen);
+      }
+      if (typeof window.scRecalc === 'function') window.scRecalc();
+    }
+    function gatherDraft() {
+      const fd = (n) => { const el = form.querySelector(`[name="${n}"]`); return el ? el.value : ''; };
+      return {
+        v: 1, ts: Date.now(),
+        date: fd('round_date'),
+        course: fd('course'),
+        tees: fd('tees'),
+        holes_played: fd('holes_played'),
+        format: fd('format'),
+        course_rating: fd('course_rating'),
+        course_slope: fd('course_slope'),
+        sand_saves: fd('sand_saves'),
+        drive_dist: fd('drive_dist'),
+        routine_score: fd('routine_score'),
+        reflection_good: fd('reflection_good'),
+        reflection_bad: fd('reflection_bad'),
+        one_thing: fd('one_thing'),
+        holes: gatherHoleInputs(),
+      };
+    }
+    function applyDraft(d) {
+      if (!d) return;
+      const set = (n, v) => { const el = form.querySelector(`[name="${n}"]`); if (el && v != null && v !== '') el.value = v; };
+      set('round_date', d.date);
+      set('course', d.course);
+      set('tees', d.tees);
+      set('format', d.format);
+      set('course_rating', d.course_rating);
+      set('course_slope', d.course_slope);
+      if (d.holes_played && holesPlayedSelect) {
+        holesPlayedSelect.value = d.holes_played;
+        applyHolesPlayedVisibility();
+      }
+      applyHoleInputs(d.holes);
+      set('sand_saves', d.sand_saves);
+      set('drive_dist', d.drive_dist);
+      set('routine_score', d.routine_score);
+      set('reflection_good', d.reflection_good);
+      set('reflection_bad', d.reflection_bad);
+      set('one_thing', d.one_thing);
+    }
+    let saveTimer = null;
+    function flagSavedIndicator(state) {
+      const el = document.getElementById('sc-saved-indicator');
+      if (!el) return;
+      if (state === 'saving') { el.textContent = 'Saving…'; el.style.color = 'var(--mid-grey)'; }
+      else if (state === 'saved') { el.textContent = '✓ Draft saved'; el.style.color = '#4C6B30'; }
+      else if (state === 'restored') { el.textContent = '✓ Draft restored'; el.style.color = '#4C6B30'; }
+    }
+    function saveDraft() {
+      flagSavedIndicator('saving');
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(() => {
+        try { localStorage.setItem(DRAFT_KEY, JSON.stringify(gatherDraft())); flagSavedIndicator('saved'); }
+        catch (e) { console.warn('[scorecard-away] draft save failed', e); }
+      }, 400);
+    }
+    function clearDraft() { try { localStorage.removeItem(DRAFT_KEY); } catch {} }
+
+    let restored = false;
+    try {
+      const raw = localStorage.getItem(DRAFT_KEY);
+      if (raw) { const d = JSON.parse(raw); if (d && d.v === 1) { applyDraft(d); restored = true; } }
+    } catch (e) { console.warn('[scorecard-away] draft restore failed', e); }
+    form.addEventListener('input',  saveDraft);
+    form.addEventListener('change', saveDraft);
+    if (restored) flagSavedIndicator('restored');
+
+    // =========== SUBMIT ===========
+    const errBox = document.getElementById('sc-form-error');
+    const submitBtn = document.getElementById('sc-submit-btn');
+
+    // Prevent Enter (including the number-pad Enter) from submitting the
+    // round mid-entry. CT lost a round on hole 16 because Enter fired submit.
+    form.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && e.target.type !== 'submit' && e.target.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+      }
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errBox.style.display = 'none';
+
+      // Gather per-hole data
+      const holeRows = [];
+      let total = 0, totalPutts = 0, totalPen = 0;
+      let totalPar = 0;
+      let fwHit = 0, teeElig = 0, teeLeft = 0, teeRight = 0, teeX = 0;
+      let girCount = 0, threePutts = 0;
+      let scrAtt = 0, scrMade = 0, birdies = 0, doublesPlus = 0;
+      let toughMisses = 0, committedN = 0, weakN = 0;
+      let easySavesBlown = 0, scoringClubBogeys = 0, par5Bogeys = 0;
+      let fpSum = 0, fpCount = 0;
+      let spSum = 0, spCount = 0;       // 2nd-putt distance — avg "leave"
+      const pByType = { 3: { n: 0, sum: 0 }, 4: { n: 0, sum: 0 }, 5: { n: 0, sum: 0 } };
+
+      // Submit only iterates the active range
+      const submitRange = activeRange();
+      const holesPlayed = submitRange.end - submitRange.start + 1;
+      for (let h = submitRange.start; h <= submitRange.end; h++) {
+        const parIn       = document.querySelector('.par-in[data-hole="' + h + '"]');
+        const scoreIn     = document.querySelector('.score-in[data-hole="' + h + '"]');
+        const puttsIn     = document.querySelector('.putts-in[data-hole="' + h + '"]');
+        const penIn       = document.querySelector('.pen-in[data-hole="' + h + '"]');
+        const teeIn       = document.querySelector('.tee-in[data-hole="' + h + '"]');
+        const firstPuttIn = document.querySelector('.firstputt-in[data-hole="' + h + '"]');
+        const secondPuttIn= document.querySelector('.secondputt-in[data-hole="' + h + '"]');
+        const diffIn      = document.querySelector('.diff-in[data-hole="' + h + '"]');
+        const commitIn    = document.querySelector('.commit-in[data-hole="' + h + '"]');
+        const scClubChk   = document.querySelector('.scoringclub-chk[data-hole="' + h + '"]');
+        const approachIn  = document.querySelector('.approach-in[data-hole="' + h + '"]');
+
+        const par = parIn ? parseInt(parIn.value, 10) : 4;
+        totalPar += par;
+        const s = scoreIn && scoreIn.value !== '' ? parseInt(scoreIn.value, 10) : null;
+        const p = puttsIn && puttsIn.value !== '' ? parseInt(puttsIn.value, 10) : null;
+        const pn = penIn && penIn.value !== '' ? parseInt(penIn.value, 10) : 0;
+        const tDir = teeIn && teeIn.value !== '' ? teeIn.value : null;
+        const fp = firstPuttIn && firstPuttIn.value !== '' ? parseFloat(firstPuttIn.value) : null;
+        const sp = secondPuttIn && secondPuttIn.value !== '' ? parseFloat(secondPuttIn.value) : null;
+        const diff = diffIn && diffIn.value !== '' ? diffIn.value : null;
+        const commit = commitIn && commitIn.value !== '' ? commitIn.value : null;
+        const scoringClub = !!(scClubChk && scClubChk.checked);
+        const approachDist = approachIn && approachIn.value !== '' ? approachIn.value : null;
+        // BUG FIX (May 2026): same `tr is not defined` ReferenceError as the
+        // home scorecard had — submit threw silently and the round appeared
+        // to fail. Using the consistent document.querySelector pattern.
+        const secondShotIn = document.querySelector('.second-shot-in[data-hole="' + h + '"]');
+        const secondShotDist = secondShotIn && secondShotIn.value !== '' ? secondShotIn.value : null;
+
+        holeRows.push({
+          hole: h, par,
+          score: s, putts: p, penalties: pn,
+          tee_dir: tDir,
+          first_putt: fp,
+          second_putt: sp,            // distance of the 2nd putt — "leave" diagnostic
+          difficulty: diff, commit: commit,
+          scoring_club: scoringClub,
+          fw_hit: tDir === 'F' ? true : (tDir ? false : null),
+          approach_dist: approachDist,
+          second_shot_dist: secondShotDist,
+        });
+
+        if (s != null) total += s;
+        if (p != null) totalPutts += p;
+        totalPen += pn;
+
+        if (par >= 4 && tDir) {
+          teeElig++;
+          if (tDir === 'F') fwHit++;
+          else if (tDir === 'L') teeLeft++;
+          else if (tDir === 'R') teeRight++;
+          else if (tDir === 'X') teeX++;
+        }
+        if (s != null) {
+          const delta = s - par;
+          if (delta <= -1) birdies++;
+          if (delta >= 2) doublesPlus++;
+          if (par === 5 && delta >= 1) par5Bogeys++;  // 5 Errors #1
+          if (pByType[par]) { pByType[par].n++; pByType[par].sum += s; }
+          if (p != null) {
+            const reach = s - p;
+            if (reach <= (par - 2)) girCount++;
+            else {
+              scrAtt++;
+              if (s <= par) scrMade++;
+              if (diff === 'T') toughMisses++;
+              if (diff === 'S' && s > par) easySavesBlown++;
+            }
+          }
+          if (scoringClub && s > par) scoringClubBogeys++;
+        }
+        if (p != null && p >= 3) threePutts++;
+        if (fp != null) { fpSum += fp; fpCount++; }
+        if (sp != null) { spSum += sp; spCount++; }
+        if (commit === 'C') committedN++;
+        if (commit === 'W') weakN++;
+      }
+
+      if (!total) {
+        errBox.textContent = 'Enter at least some hole scores before submitting.';
+        errBox.style.display = 'block';
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting…';
+
+      const fd = Object.fromEntries(new FormData(form).entries());
+      const toInt  = v => (v === '' || v == null ? null : parseInt(v, 10));
+      const toText = v => (v === '' || v == null ? null : String(v));
+
+      const commitTotal = committedN + weakN;
+      const commitPct = commitTotal ? Math.round(100 * committedN / commitTotal) : null;
+      const rating = fd.course_rating ? parseFloat(fd.course_rating) : null;
+      const slope  = fd.course_slope  ? parseInt(fd.course_slope, 10) : null;
+
+      // 5 Errors auto-rollup
+      const t5 = {
+        1: par5Bogeys,
+        2: doublesPlus,
+        3: easySavesBlown,
+        4: threePutts,
+        5: scoringClubBogeys,
+      };
+      const t5Total = par5Bogeys + doublesPlus + easySavesBlown + threePutts + scoringClubBogeys;
+
+      const payload = {
+        user_id: user.id,
+        round_date: fd.round_date || null,
+        course: toText(fd.course),
+        tees: toText(fd.tees),
+        format: toText(fd.format) || 'Stroke Play',
+        course_rating: rating,
+        course_slope: slope,
+        holes: holesPlayed,
+        score: total,
+        fir: teeElig ? (fwHit + ' / ' + teeElig) : null,
+        gir: girCount != null ? (girCount + ' / ' + holesPlayed) : null,
+        putts: totalPutts || null,
+        up_down: scrAtt ? (scrMade + ' / ' + scrAtt) : null,
+        sand_saves: toText(fd.sand_saves),
+        bad_misses: toughMisses || null,
+        penalties: totalPen,
+        birdies: birdies,
+        doubles_plus: doublesPlus,
+        drive_dist: toInt(fd.drive_dist),
+        approach_data: (() => {
+          const APPROACH_BUCKETS = ['50-75','75-100','100-125','125-150','150-175','175-200','200-225','225+'];
+          const out = {};
+          APPROACH_BUCKETS.forEach(b => { out[b] = { attempts: 0, gir: 0 }; });
+          holeRows.forEach(hr => {
+            if (!hr.approach_dist || hr.score == null || hr.putts == null) return;
+            const reach = hr.score - hr.putts;
+            const isGir = reach <= (hr.par - 2);
+            const b = out[hr.approach_dist];
+            if (!b) return;
+            b.attempts += 1;
+            if (isGir) b.gir += 1;
+          });
+          return out;
+        })(),
+        tiger5: t5,
+        tiger5_total: t5Total,
+        routine_score:   toInt(fd.routine_score),
+        reflection_good: toText(fd.reflection_good),
+        reflection_bad:  toText(fd.reflection_bad),
+        one_thing:       toText(fd.one_thing),
+        hole_detail: {
+          tee_label: toText(fd.tees),
+          rating, slope,
+          total_par: totalPar,
+          rows: holeRows,
+          par3_avg: pByType[3].n ? pByType[3].sum / pByType[3].n : null,
+          par4_avg: pByType[4].n ? pByType[4].sum / pByType[4].n : null,
+          par5_avg: pByType[5].n ? pByType[5].sum / pByType[5].n : null,
+          tee_pattern: { F: fwHit, L: teeLeft, R: teeRight, X: teeX },
+          commitment_pct: commitPct,
+          committed_n: committedN,
+          weak_n: weakN,
+          avg_first_putt: fpCount ? fpSum / fpCount : null,
+          first_putt_count: fpCount,
+          // 2nd-putt distance — avg "leave" diagnostic for 3-putt risk
+          avg_second_putt: spCount ? spSum / spCount : null,
+          second_putt_count: spCount,
+          tough_misses: toughMisses,
+          three_putts: threePutts,
+          easy_saves_blown: easySavesBlown,
+          scoring_club_bogeys: scoringClubBogeys,
+          par5_bogeys: par5Bogeys,
+        },
+      };
+
+      // Strokes Gained — server-side compute. Best-effort.
+      try {
+        const sgRes = await fetch('/api/compute-sg', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ round: payload, profile: { handicap: user.handicap } }),
+        });
+        if (sgRes.ok) {
+          const sgJson = await sgRes.json();
+          if (sgJson && sgJson.strokes_gained) payload.strokes_gained = sgJson.strokes_gained;
+        }
+      } catch (sgErr) { console.warn('SG compute skipped:', sgErr); }
+
+      // Retry the create up to 3 times with exponential backoff so flaky
+      // network or transient backend blips never surface to the player.
+      const wait = (ms) => new Promise(r => setTimeout(r, ms));
+      let lastErr = null;
+      let submitted = false;
+      for (let attempt = 1; attempt <= 3; attempt++) {
+        try {
+          if (attempt > 1) {
+            submitBtn.textContent = 'Retrying… (' + attempt + '/3)';
+            await wait(1000 * Math.pow(2, attempt - 2));
+          }
+          await RRG.subs.create(payload);
+          submitted = true;
+          break;
+        } catch (err) {
+          lastErr = err;
+          console.warn('[scorecard-away] submit attempt ' + attempt + ' failed:', err);
+        }
+      }
+      if (!submitted) {
+        errBox.textContent = 'Could not submit your round after 3 tries: ' + (lastErr && lastErr.message ? lastErr.message : lastErr) + '. Your data is safe and auto-saved — try again in a minute.';
+        errBox.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit round →';
+        return;
+      }
+
+      try {
+        clearDraft();   // round saved server-side — purge local draft
+
+        // Show the Good / Bad / Ugly summary inline.
+        const formEl = document.getElementById('sc-form');
+        const mountEl = document.createElement('div');
+        mountEl.id = 'sc-summary-mount';
+        if (formEl && formEl.parentNode) {
+          formEl.style.display = 'none';
+          formEl.parentNode.insertBefore(mountEl, formEl);
+        } else {
+          document.querySelector('main').appendChild(mountEl);
+        }
+        if (typeof RRG.renderRoundSummary === 'function') {
+          RRG.renderRoundSummary(payload, mountEl, { historyUrl: 'history.html', dashboardUrl: 'dashboard.html' });
+        } else {
+          location.replace('history.html?new=1');
+        }
+      } catch (err) {
+        // Round IS saved — summary render failed. Fall back to history.
+        console.warn('[scorecard-away] summary render failed (round already saved):', err);
+        location.replace('history.html?new=1');
+      }
+    });
+
+  })();
+</script>
+
+<div class="build-stamp">build 20260507e · scorecard-away v3</div>
+</body>
+</html>

@@ -964,7 +964,7 @@ RRG.renderNav = function(user, active = '') {
   // nav item (rendered separately below) so it gets one-tap access on every page.
   const eliteItems = isElite ? `
     <li class="nav-sublabel">Elite tier</li>
-    <li><a href="scorecard-away.html" class="${active==='scorecard-away'?'active':''}">Away Scorecard</a></li>
+    <li><a href="scorecard-away-v3.html" class="${active==='scorecard-away'?'active':''}">Away Scorecard</a></li>
     <li><a href="trackman.html"       class="${active==='trackman'?'active':''}">TrackMan Sessions</a></li>
     <li><a href="handicap.html"       class="${active==='handicap'?'active':''}">Handicap Index</a></li>
   ` : '';
@@ -973,7 +973,7 @@ RRG.renderNav = function(user, active = '') {
   // in the portal, since logging a round is the highest-frequency player action.
   const scorecardTopLevel = isElite ? `
     <li class="nav-top-link">
-      <a href="scorecard.html" class="${active==='scorecard-madriver'?'active':''}">Scorecard</a>
+      <a href="scorecard-v3.html" class="${active==='scorecard-madriver'?'active':''}">Scorecard</a>
     </li>` : '';
 
   // Top-level Tournament Ready link — visible to all tiers. The pathway

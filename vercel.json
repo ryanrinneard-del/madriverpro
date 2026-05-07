@@ -85,6 +85,16 @@
       "source": "/improve",
       "destination": "/improve/",
       "permanent": true
+    },
+    {
+      "source": "/portal/scorecard.html",
+      "destination": "/portal/scorecard-v3.html",
+      "permanent": false
+    },
+    {
+      "source": "/portal/scorecard-away.html",
+      "destination": "/portal/scorecard-away-v3.html",
+      "permanent": false
     }
   ]
 }
