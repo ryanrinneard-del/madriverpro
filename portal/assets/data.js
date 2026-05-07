@@ -321,7 +321,9 @@ RRG.COURSES.madriver = {
   architect: 'Bob Cupp',
   established: 1991,
 
-  par:           [5, 4, 3, 5, 4, 4, 3, 4, 4,   4, 3, 4, 5, 3, 5, 3, 5, 4],
+  /* Hole 6 is temporarily playing as par 3 (May 2026 — until the green is
+     reopened). Revert to par 4 once the green is back in play. */
+  par:           [5, 4, 3, 5, 4, 3, 3, 4, 4,   4, 3, 4, 5, 3, 5, 3, 5, 4],
   mens_si:       [5, 7, 13, 1, 11, 15, 17, 9, 3,   12, 18, 2, 6, 14, 10, 16, 4, 8],
   womens_si:     [7, 5, 15, 1, 11, 13, 17, 9, 3,   10, 16, 6, 8, 18, 2, 14, 4, 12],
 
@@ -344,15 +346,28 @@ RRG.COURSES.madriver = {
   ],
 
   /* Hybrid / combo tees from Mad River's "Hybrid Scorecard". Alternates tee
-     boxes per hole to vary length and challenge. Used in Phase 2.
-     Ratings are as published on Mad River's hybrid scorecard. */
+     boxes per hole to vary length and challenge. Yardages and ratings as
+     published on Mad River's printed hybrid scorecard. Marked is_hybrid so
+     the UI can render them in their own dropdown group. */
   hybrids: [
-    { key: 'gold_blue',   label: 'Gold/Blue',   mens_rating: 73.3, mens_slope: 136, womens_rating: null,  womens_slope: null },
-    { key: 'blue_green',  label: 'Blue/Green',  mens_rating: 71.4, mens_slope: 130, womens_rating: 77.3, womens_slope: 138 },
-    { key: 'green_white', label: 'Green/White', mens_rating: 69.7, mens_slope: 126, womens_rating: 74.8, womens_slope: 134 },
-    { key: 'white_purple',label: 'White/Purple',mens_rating: 67.2, mens_slope: 121, womens_rating: 72.5, womens_slope: 129 },
-    { key: 'purple_red',  label: 'Purple/Red',  mens_rating: 65.3, mens_slope: 119, womens_rating: 70.5, womens_slope: 126 },
-    { key: 'red_yellow',  label: 'Red/Yellow',  mens_rating: 63.2, mens_slope: 116, womens_rating: 67.6, womens_slope: 119 },
+    { key: 'gold_blue',   label: 'Gold/Blue',   is_hybrid: true,
+      mens_rating: 73.3, mens_slope: 136, womens_rating: null,  womens_slope: null,
+      yards: [533, 414, 170, 567, 383, 287, 136, 424, 425,   386, 180, 423, 515, 200, 544, 233, 577, 438] },
+    { key: 'blue_green',  label: 'Blue/Green',  is_hybrid: true,
+      mens_rating: 71.4, mens_slope: 130, womens_rating: 77.3, womens_slope: 138,
+      yards: [500, 396, 170, 541, 373, 267, 136, 392, 394,   343, 180, 380, 476, 180, 479, 215, 550, 425] },
+    { key: 'green_white', label: 'Green/White', is_hybrid: true,
+      mens_rating: 69.7, mens_slope: 126, womens_rating: 74.8, womens_slope: 134,
+      yards: [500, 367, 159, 474, 373, 259, 121, 348, 394,   311, 159, 334, 455, 180, 446, 190, 491, 343] },
+    { key: 'white_purple',label: 'White/Purple',is_hybrid: true,
+      mens_rating: 67.2, mens_slope: 121, womens_rating: 72.5, womens_slope: 129,
+      yards: [427, 337, 130, 474, 341, 245, 103, 348, 353,   294, 138, 334, 382, 157, 410, 169, 491, 343] },
+    { key: 'purple_red',  label: 'Purple/Red',  is_hybrid: true,
+      mens_rating: 65.3, mens_slope: 119, womens_rating: 70.5, womens_slope: 126,
+      yards: [427, 337, 118, 434, 264, 245, 103, 303, 353,   266, 138, 334, 348, 143, 410, 126, 459, 318] },
+    { key: 'red_yellow',  label: 'Red/Yellow',  is_hybrid: true,
+      mens_rating: 63.2, mens_slope: 116, womens_rating: 67.6, womens_slope: 119,
+      yards: [339, 286,  90, 325, 264, 225,  79, 270, 276,   266, 122, 295, 348, 143, 330, 126, 325, 318] },
   ],
 };
 

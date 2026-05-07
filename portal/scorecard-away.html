@@ -975,7 +975,10 @@
         const commit = commitIn && commitIn.value !== '' ? commitIn.value : null;
         const scoringClub = !!(scClubChk && scClubChk.checked);
         const approachDist = approachIn && approachIn.value !== '' ? approachIn.value : null;
-        const secondShotIn = tr.querySelector('.second-shot-in');
+        // BUG FIX (May 2026): same `tr is not defined` ReferenceError as the
+        // home scorecard had — submit threw silently and the round appeared
+        // to fail. Using the consistent document.querySelector pattern.
+        const secondShotIn = document.querySelector('.second-shot-in[data-hole="' + h + '"]');
         const secondShotDist = secondShotIn && secondShotIn.value !== '' ? secondShotIn.value : null;
 
         holeRows.push({

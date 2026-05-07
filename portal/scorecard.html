@@ -220,6 +220,43 @@
     margin-top: 18px; padding-top: 16px;
     border-top: 1px solid var(--rule);
   }
+
+  /* === Closed-hole toggle ============================================== */
+  .closed-toggle {
+    display: inline-flex; align-items: center; gap: 4px;
+    cursor: pointer; user-select: none;
+    font-size: 11px; color: var(--mid-grey); letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .closed-toggle input { margin: 0; transform: scale(1.1); }
+  tr.row-closed {
+    background: #F4F1EC !important;
+    opacity: 0.55;
+  }
+  tr.row-closed td:not(.h-closed) input,
+  tr.row-closed td:not(.h-closed) select {
+    background: #ECE7DE !important;
+    color: var(--mid-grey) !important;
+    pointer-events: none;
+  }
+  tr.row-closed .h-num,
+  tr.row-closed .h-par,
+  tr.row-closed .h-yd { text-decoration: line-through; }
+  tr.row-closed .h-closed .closed-toggle {
+    color: var(--red-risk); font-weight: 700;
+  }
+
+  /* === Sticky error banner ============================================= */
+  .sc-error-banner {
+    position: sticky; top: 8px; z-index: 50;
+    background: #FDF0EE; border: 2px solid var(--red-risk);
+    color: var(--red-risk);
+    padding: 12px 16px; border-radius: 8px;
+    font-weight: 600; font-size: 14px;
+    box-shadow: 0 4px 14px rgba(178, 34, 34, 0.18);
+    display: none; margin: 0 0 14px;
+  }
+  .sc-error-banner.show { display: block; }
 </style>
 </head>
 <body>
@@ -240,6 +277,11 @@
   <div style="background:#F0F6EC; border:1px solid #C8DAB6; border-left:3px solid #6B8B4E; border-radius:8px; padding:10px 14px; margin: 0 0 14px; font-size:13px; line-height:1.5; color:#3D5A24;">
     <strong>Your work is auto-saved.</strong> Every field saves to this device as you type — switch tees, close the page, even reload the browser, and your data comes back. Only "Submit round" finalizes it.
   </div>
+
+  <!-- Sticky error banner — appears at top of viewport when submit fails so the
+       user can never miss it (per CT's bug report — submit silently failed when
+       no tee was selected and the user couldn't see the error message) -->
+  <div id="sc-top-error" class="sc-error-banner" role="alert" aria-live="assertive"></div>
 
   <form id="sc-form" autocomplete="off">
 
@@ -307,6 +349,7 @@
           <thead>
             <tr>
               <th>Hole</th><th>Par</th><th title="How hard the hole is, ranked 1 (hardest) to 18 (easiest)">Hdcp</th><th>Yards</th>
+              <th title="Tap if this hole was closed / out of play. The hole is excluded from your totals, GIR, FIR, and Strokes Gained.">Closed?</th>
               <th>Score</th>
               <th title="Where did your tee shot finish?">Tee shot</th>
               <th title="Par 5s only — distance you hit your second shot FROM. Greyed out on par 3s and 4s.">Second shot (Par 5)</th>
@@ -331,6 +374,7 @@
           <thead>
             <tr>
               <th>Hole</th><th>Par</th><th title="How hard the hole is, ranked 1 (hardest) to 18 (easiest)">Hdcp</th><th>Yards</th>
+              <th title="Tap if this hole was closed / out of play. The hole is excluded from your totals, GIR, FIR, and Strokes Gained.">Closed?</th>
               <th>Score</th>
               <th title="Where did your tee shot finish?">Tee shot</th>
               <th title="Par 5s only — distance you hit your second shot FROM. Greyed out on par 3s and 4s.">Second shot (Par 5)</th>
@@ -524,14 +568,28 @@
     document.getElementById('sc-date').value =
       `${today.getFullYear()}-${pad(today.getMonth()+1)}-${pad(today.getDate())}`;
 
-    // Populate tee selector
+    // Helper — look up a tee in either standard or hybrid arrays
+    function findTee(key) {
+      if (!key) return null;
+      return course.tees.find(t => t.key === key)
+          || (course.hybrids || []).find(t => t.key === key)
+          || null;
+    }
+
+    // Populate tee selector — standard tees + hybrid combos in their own group
     const teeSelect = document.getElementById('sc-tees');
-    teeSelect.innerHTML = '<option value="">— select —</option>' +
-      course.tees.map(t => {
-        const out = t.yards.slice(0, 9).reduce((a, b) => a + b, 0);
-        const tot = t.yards.reduce((a, b) => a + b, 0);
-        return `<option value="${t.key}">${t.label} &middot; ${tot} yd</option>`;
-      }).join('');
+    const stdOpts = course.tees.map(t => {
+      const tot = t.yards.reduce((a, b) => a + b, 0);
+      return `<option value="${t.key}">${t.label} &middot; ${tot} yd</option>`;
+    }).join('');
+    const hybridOpts = (course.hybrids || []).map(t => {
+      const tot = t.yards.reduce((a, b) => a + b, 0);
+      return `<option value="${t.key}">${t.label} &middot; ${tot} yd</option>`;
+    }).join('');
+    teeSelect.innerHTML =
+      '<option value="">— select —</option>' +
+      '<optgroup label="Standard tees">' + stdOpts + '</optgroup>' +
+      (hybridOpts ? '<optgroup label="Hybrid combos">' + hybridOpts + '</optgroup>' : '');
 
     /* HOLES PLAYED — Front 9 / Back 9 / 18. Single source of truth used by
        render, recalc, submit, and auto-save. */
@@ -554,7 +612,7 @@
     // (F/L/R/X), first putt distance, total putts, scramble difficulty
     // (S/T, relevant only on missed greens), commitment grade (C/W), penalties.
     function renderHoles() {
-      const tee = course.tees.find(t => t.key === teeSelect.value);
+      const tee = findTee(teeSelect.value);
       ['front', 'back'].forEach((half, halfIdx) => {
         const tbody = document.querySelector('#sc-' + half + ' tbody');
         const start = halfIdx * 9;
@@ -582,6 +640,12 @@
               <td class="h-par">${par}</td>
               <td class="h-si">${si}</td>
               <td class="h-yd">${yd}</td>
+              <td class="h-closed">
+                <label class="closed-toggle" title="Hole closed / out of play">
+                  <input type="checkbox" class="closed-chk" data-hole="${hole}" onchange="scToggleClosed(${hole})">
+                  <span>Out</span>
+                </label>
+              </td>
               <td><input type="number" min="1" max="15" class="score-in" data-hole="${hole}" oninput="scRecalc()"></td>
               <td>${teeCell}</td>
               <td>
@@ -644,6 +708,7 @@
             <td class="h-par h-in-out">${parSub}</td>
             <td></td>
             <td class="h-yd h-in-out">${ydSub}</td>
+            <td></td>
             <td class="h-in-out" id="sc-${half}-score">—</td>
             <td></td>
             <td></td>
@@ -673,7 +738,7 @@
 
     // Show rating / slope under the tee picker
     function updateTeeInfo() {
-      const tee = course.tees.find(t => t.key === teeSelect.value);
+      const tee = findTee(teeSelect.value);
       const box = document.getElementById('sc-tee-info');
       if (!tee) {
         box.innerHTML = '<span>Pick your tees to see yardage and course rating.</span>';
@@ -700,6 +765,37 @@
       saveDraft();   // also persist the change immediately
     });
 
+    /* CLOSED-HOLE toggle. When a hole is marked Closed/Out:
+       - the row gets the .row-closed CSS class (greyed out, line-through hole #)
+       - all per-hole inputs are visually disabled
+       - scRecalc skips the hole entirely (totals, GIR, FIR, SG, par-type avgs)
+       - submit excludes it from holesPlayed and the hole_detail.rows payload
+       Players can toggle off to put the hole back in play. The state survives
+       tee changes via the input snapshot, and survives reload via the draft. */
+    window.scToggleClosed = function(hole) {
+      const row = document.querySelector('tr[data-hole="' + hole + '"]');
+      if (!row) return;
+      const chk = row.querySelector('.closed-chk');
+      const isClosed = !!(chk && chk.checked);
+      row.classList.toggle('row-closed', isClosed);
+      // When closing: clear all inputs in the row so stale data doesn't
+      // sneak into the rollups if the player toggles back open later. The
+      // user explicitly asked for this — they had to type fake bogeys for
+      // closed holes before this feature existed.
+      if (isClosed) {
+        row.querySelectorAll('input:not(.closed-chk), select').forEach(el => {
+          if (el.type === 'checkbox') el.checked = false;
+          else el.value = '';
+        });
+      }
+      if (typeof scRecalc === 'function') scRecalc();
+      if (typeof saveDraft === 'function') saveDraft();
+    };
+    function isHoleClosed(h) {
+      const chk = document.querySelector('.closed-chk[data-hole="' + h + '"]');
+      return !!(chk && chk.checked);
+    }
+
     // =========== LIVE RECALC ===========
     /* Called on every keystroke. Honors the active range (Front 9 / Back 9 / 18). */
     window.scRecalc = function() {
@@ -724,6 +820,7 @@
       let firstScore = null, firstPar = null;
 
       for (let h = range.start; h <= range.end; h++) {
+        if (isHoleClosed(h)) continue;     // closed/out-of-play hole — skip in all rollups
         const scoreIn     = document.querySelector('.score-in[data-hole="' + h + '"]');
         const puttsIn     = document.querySelector('.putts-in[data-hole="' + h + '"]');
         const penIn       = document.querySelector('.pen-in[data-hole="' + h + '"]');
@@ -891,9 +988,16 @@
           if (el.type === 'checkbox') return el.checked;
           return el.value;
         };
+        // Also include second-shot (was missing before, leaving par-5 second-shot
+        // distance vulnerable on tee change) and the new closed flag.
+        const get2nd = () => {
+          const el = document.querySelector(`.second-shot-in[data-hole="${h}"]`);
+          return el ? el.value : null;
+        };
         out[h] = {
           score:      get('score-in'),
           tee:        get('tee-in'),
+          secondShot: get2nd(),
           approach:   get('approach-in'),
           firstPutt:  get('firstputt-in'),
           putts:      get('putts-in'),
@@ -901,6 +1005,7 @@
           commit:     get('commit-in'),
           sc:         get('scoringclub-chk'),
           pen:        get('pen-in'),
+          closed:     get('closed-chk'),
         };
       }
       return out;
@@ -919,6 +1024,7 @@
         };
         set('score-in',        row.score);
         set('tee-in',          row.tee);
+        set('second-shot-in',  row.secondShot);
         set('approach-in',     row.approach);
         set('firstputt-in',    row.firstPutt);
         set('putts-in',        row.putts);
@@ -926,6 +1032,12 @@
         set('commit-in',       row.commit);
         set('scoringclub-chk', row.sc);
         set('pen-in',          row.pen);
+        set('closed-chk',      row.closed);
+        // Re-apply the row-closed visual state if needed
+        if (row.closed) {
+          const tr = document.querySelector('tr[data-hole="' + h + '"]');
+          if (tr) tr.classList.add('row-closed');
+        }
       }
       // Re-run derived totals after restoring
       if (typeof window.scRecalc === 'function') window.scRecalc();
@@ -1029,8 +1141,28 @@
     /* =================================================================
        SUBMIT
        ================================================================= */
-    const errBox = document.getElementById('sc-form-error');
+    const errBox    = document.getElementById('sc-form-error');
+    const errTop    = document.getElementById('sc-top-error');
     const submitBtn = document.getElementById('sc-submit-btn');
+
+    /* Show the same error in BOTH the inline box (next to Submit) AND a
+       sticky banner at the top of the viewport. Per the user feedback:
+       the inline error was easy to miss when the user was scrolled to the
+       bottom of the form, so submit "did nothing". The sticky banner
+       follows them up the page until they fix it. */
+    function showError(msg) {
+      errBox.textContent = msg;
+      errBox.style.display = 'block';
+      errTop.textContent = msg;
+      errTop.classList.add('show');
+      // Scroll the sticky banner into view rather than the page top so the
+      // form data stays visible while the player corrects the issue.
+      errTop.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    function hideError() {
+      errBox.style.display = 'none';
+      errTop.classList.remove('show');
+    }
 
     // Prevent Enter (including the number-pad Enter) from submitting the
     // round mid-entry. CT lost a round on hole 16 because Enter fired
@@ -1043,16 +1175,13 @@
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      errBox.style.display = 'none';
+      hideError();
 
-      const tee = course.tees.find(t => t.key === teeSelect.value);
+      const tee = findTee(teeSelect.value);
       if (!tee) {
-        // Important: do NOT lose data here. The error box is right above the
-        // submit button — scroll IT into view, not the top of the page. The
-        // user picks a tee, hits submit again, and everything is intact.
-        errBox.textContent = 'Pick a tee at the top of the page before submitting. Your data is safe and auto-saved.';
-        errBox.style.display = 'block';
-        errBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Both inline + sticky banner. The sticky banner is what unblocks
+        // the user when they're scrolled to the bottom of the form.
+        showError('Pick a tee at the top of the page before submitting. Your data is safe and auto-saved.');
         // Also flash the tee selector so they see where to look
         teeSelect.focus();
         teeSelect.style.outline = '2px solid var(--gold)';
@@ -1072,10 +1201,18 @@
       const pByType = { 3: { n: 0, sum: 0 }, 4: { n: 0, sum: 0 }, 5: { n: 0, sum: 0 } };
       let firstScore = null, firstPar = null;
 
-      // Submit only iterates the active range
+      // Submit only iterates the active range, and skips closed holes.
+      // holesPlayed is the count of non-closed holes in the active range —
+      // SG normalization, GIR/FIR ratios, and the dashboard chart all
+      // treat closed holes as if they don't exist.
       const submitRange = activeRange();
-      const holesPlayed = submitRange.end - submitRange.start + 1;
+      let closedCount = 0;
       for (let h = submitRange.start; h <= submitRange.end; h++) {
+        if (isHoleClosed(h)) closedCount++;
+      }
+      const holesPlayed = (submitRange.end - submitRange.start + 1) - closedCount;
+      for (let h = submitRange.start; h <= submitRange.end; h++) {
+        if (isHoleClosed(h)) continue;     // skip — hole was out of play
         const scoreIn     = document.querySelector('.score-in[data-hole="' + h + '"]');
         const puttsIn     = document.querySelector('.putts-in[data-hole="' + h + '"]');
         const penIn       = document.querySelector('.pen-in[data-hole="' + h + '"]');
@@ -1096,7 +1233,14 @@
         const commit = commitIn && commitIn.value !== '' ? commitIn.value : null;
         const scoringClub = !!(scClubChk && scClubChk.checked);
         const approachDist = approachIn && approachIn.value !== '' ? approachIn.value : null;
-        const secondShotIn = tr.querySelector('.second-shot-in');
+        // BUG FIX (May 2026): this used `tr.querySelector(...)` but `tr` is
+        // not defined in this scope — it was a leftover from renderHoles()
+        // and threw ReferenceError on every submit attempt. The catch block
+        // displayed the error but the inline error box was easy to miss when
+        // the user was scrolled to the bottom of the form, so the round
+        // appeared to silently fail. Now uses the same document.querySelector
+        // pattern as the other inputs in this loop.
+        const secondShotIn = document.querySelector('.second-shot-in[data-hole="' + h + '"]');
         const secondShotDist = secondShotIn && secondShotIn.value !== '' ? secondShotIn.value : null;
 
         holeRows.push({
@@ -1147,8 +1291,9 @@
       }
 
       if (!total) {
-        errBox.textContent = 'Enter at least some hole scores before submitting.';
-        errBox.style.display = 'block';
+        showError('Enter at least some hole scores before submitting.');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit round →';
         return;
       }
 
@@ -1284,8 +1429,10 @@
           location.replace('history.html?new=1');
         }
       } catch (err) {
-        errBox.textContent = 'Could not submit: ' + (err.message || err);
-        errBox.style.display = 'block';
+        // Surface the error in BOTH places — the user MUST see this.
+        const msg = 'Could not submit your round: ' + (err && err.message ? err.message : err);
+        console.error('[scorecard] submit failed', err);
+        showError(msg);
         submitBtn.disabled = false;
         submitBtn.textContent = 'Submit round →';
       }
