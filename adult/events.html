@@ -6,7 +6,7 @@
 <base href="/adult/">
 <title>Events — RR Golf Performance</title>
 <meta name="description" content="Ryan’s curated events at Mad River — Thursday Night Experiences and the Ladies Golf Academy. Book via Acuity.">
-<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/styles.css?v=20260507c">
 <style>
   /* =============================================================
      RYAN'S EVENTS — standalone events catalog. Two series, each with
@@ -149,6 +149,7 @@
   }
   .events-close p { color: var(--navy-mid); line-height: 1.6; margin: 0 0 8px; }
 </style>
+<script>window.addEventListener("pageshow",function(e){if(e.persisted)location.reload();});</script>
 </head>
 <body>
 
@@ -379,9 +380,9 @@
 <div id="footer-mount"></div>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="assets/supabase-config.js"></script>
-<script src="assets/data.js"></script>
-<script src="assets/app.js"></script>
+<script src="assets/supabase-config.js?v=20260507c"></script>
+<script src="assets/data.js?v=20260507c"></script>
+<script src="assets/app.js?v=20260507c"></script>
 <script>
   (async () => { await RRG.mount('events'); })();
 </script>

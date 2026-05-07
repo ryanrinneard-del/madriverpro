@@ -6,7 +6,7 @@
 <base href="/adult/">
 <title>On-Course Lesson — RR Golf Performance</title>
 <meta name="description" content="Mobile coach view for on-course lessons. Player context, live notes, tap-to-tag root cause, one-tap save plan update.">
-<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/styles.css?v=20260507c">
 <style>
   /* ============================================================
      ON-COURSE LESSON VIEW
@@ -207,6 +207,7 @@
     font-size: 14px; color: var(--navy); line-height: 1.5;
   }
 </style>
+<script>window.addEventListener("pageshow",function(e){if(e.persisted)location.reload();});</script>
 </head>
 <body>
 
@@ -216,9 +217,9 @@
 </div>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="assets/supabase-config.js"></script>
-<script src="assets/data.js"></script>
-<script src="assets/app.js"></script>
+<script src="assets/supabase-config.js?v=20260507c"></script>
+<script src="assets/data.js?v=20260507c"></script>
+<script src="assets/app.js?v=20260507c"></script>
 <script>
   (async () => {
     // Auth + coach-only gate. This view is for Ryan during lessons, not

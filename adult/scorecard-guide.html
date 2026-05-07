@@ -6,7 +6,7 @@
 <base href="/adult/">
 <title>How to Track Your Round — Mad River Scorecard Guide</title>
 <meta name="description" content="A pencil-and-paper guide to tracking seven stats per hole on the Mad River scorecard. No phone during play — transcribe into the portal after.">
-<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/styles.css?v=20260507c">
 <style>
   .guide-hero {
     background: linear-gradient(180deg, var(--navy) 0%, #162E54 100%);
@@ -125,6 +125,7 @@
     .sample-hole .sh-row { grid-template-columns: 50px 1fr; gap: 8px; }
   }
 </style>
+<script>window.addEventListener("pageshow",function(e){if(e.persisted)location.reload();});</script>
 </head>
 <body>
 
@@ -293,8 +294,8 @@
 <div id="footer-mount"></div>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="assets/supabase-config.js"></script>
-<script src="assets/app.js"></script>
+<script src="assets/supabase-config.js?v=20260507c"></script>
+<script src="assets/app.js?v=20260507c"></script>
 <script>
   (async () => { await RRG.mount(''); })();
 </script>

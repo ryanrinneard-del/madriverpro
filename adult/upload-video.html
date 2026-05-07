@@ -6,7 +6,7 @@
 <base href="/adult/">
 <title>Upload Video — RR Golf Performance Adult Coaching</title>
 <meta name="description" content="Upload a swing video for Ryan to review between sessions.">
-<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/styles.css?v=20260507c">
 <style>
   .dropzone {
     border: 2px dashed var(--gold); border-radius: 12px; padding: 48px 24px;
@@ -21,6 +21,7 @@
   .preview-card { background: var(--white); border-radius: 8px; padding: 18px; border-top: 2px solid var(--gold); margin-top: 20px; }
   .preview-card video { width: 100%; max-height: 400px; border-radius: 6px; background: var(--navy); }
 </style>
+<script>window.addEventListener("pageshow",function(e){if(e.persisted)location.reload();});</script>
 </head>
 <body>
 
@@ -99,9 +100,9 @@
 <div id="footer-mount"></div>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="assets/supabase-config.js"></script>
-<script src="assets/data.js"></script>
-<script src="assets/app.js"></script>
+<script src="assets/supabase-config.js?v=20260507c"></script>
+<script src="assets/data.js?v=20260507c"></script>
+<script src="assets/app.js?v=20260507c"></script>
 <script>
   (async () => {
     const user = await RRG.mount('videos');

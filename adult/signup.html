@@ -6,7 +6,7 @@
 <base href="/adult/">
 <title>Activate — RR Golf Performance Adult Coaching</title>
 <meta name="description" content="Activate your RR Golf Performance Adult Coaching portal with your invite code from Ryan.">
-<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/styles.css?v=20260507c">
 <style>
   .package-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:6px; }
   .package-card {
@@ -20,6 +20,7 @@
   .package-card .pkg-sub { color:var(--mid-grey); font-size:11px; margin-top:2px; }
   .package-card .pkg-rec { position:absolute; top:-8px; right:10px; background:var(--gold); color:var(--navy); font-size:9px; font-weight:700; letter-spacing:1px; padding:2px 8px; border-radius:3px; }
 </style>
+<script>window.addEventListener("pageshow",function(e){if(e.persisted)location.reload();});</script>
 </head>
 <body>
 
@@ -100,9 +101,9 @@
 </div>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="assets/supabase-config.js"></script>
-<script src="assets/data.js"></script>
-<script src="assets/app.js"></script>
+<script src="assets/supabase-config.js?v=20260507c"></script>
+<script src="assets/data.js?v=20260507c"></script>
+<script src="assets/app.js?v=20260507c"></script>
 <script>
   (async () => {
     if (await RRG.auth.isLoggedIn()) { location.replace('dashboard.html'); return; }

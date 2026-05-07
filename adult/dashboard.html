@@ -6,7 +6,7 @@
 <base href="/adult/">
 <title>Dashboard — RR Golf Performance Adult Coaching</title>
 <meta name="description" content="Your personal RR Golf Performance coaching portal. Today’s Plan, your top error patterns, and quick actions.">
-<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/styles.css?v=20260507c">
 <style>
   .progress-bar { background: var(--rule); border-radius: 999px; height: 8px; overflow: hidden; }
   .progress-bar > div { height: 100%; background: var(--gold); transition: width 0.3s ease; }
@@ -287,6 +287,7 @@
     .quick-actions { grid-template-columns: 1fr; }
   }
 </style>
+<script>window.addEventListener("pageshow",function(e){if(e.persisted)location.reload();});</script>
 </head>
 <body>
 
@@ -391,9 +392,9 @@
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
-<script src="assets/supabase-config.js"></script>
-<script src="assets/data.js"></script>
-<script src="assets/app.js"></script>
+<script src="assets/supabase-config.js?v=20260507c"></script>
+<script src="assets/data.js?v=20260507c"></script>
+<script src="assets/app.js?v=20260507c"></script>
 <script>
   (async () => {
     const user = await RRG.mount('dashboard');

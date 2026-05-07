@@ -6,7 +6,7 @@
 <base href="/portal/">
 <title>Scorecard — Junior Elite — RR Golf Performance</title>
 <meta name="description" content="Hole-by-hole scorecard for junior Elite players. Enter course rating and slope and the round counts toward your portal handicap index.">
-<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/styles.css?v=20260507c">
 <style>
   /* ============================================================
      AWAY SCORECARD — generic hole-by-hole entry for any course.
@@ -214,6 +214,7 @@
     border-top: 1px solid var(--rule);
   }
 </style>
+<script>window.addEventListener("pageshow",function(e){if(e.persisted)location.reload();});</script>
 </head>
 <body>
 
@@ -476,9 +477,9 @@
 <div id="footer-mount"></div>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="assets/supabase-config.js"></script>
-<script src="assets/data.js"></script>
-<script src="assets/app.js"></script>
+<script src="assets/supabase-config.js?v=20260507c"></script>
+<script src="assets/data.js?v=20260507c"></script>
+<script src="assets/app.js?v=20260507c"></script>
 <script>
   (async () => {
     const user = await RRG.mount('scorecard-away');

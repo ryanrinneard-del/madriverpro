@@ -6,7 +6,7 @@
 <base href="/adult/">
 <title>My Lessons — RR Golf Performance</title>
 <meta name="description" content="Every coaching session you’ve had with Ryan, logged and searchable — upcoming first, then your history.">
-<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/styles.css?v=20260507c">
 <style>
   .lesson-row {
     display: grid;
@@ -51,6 +51,7 @@
     .lesson-row > :nth-child(4) { grid-column: 3; grid-row: 1 / span 2; }
   }
 </style>
+<script>window.addEventListener("pageshow",function(e){if(e.persisted)location.reload();});</script>
 </head>
 <body>
 
@@ -79,9 +80,9 @@
 <div id="footer-mount"></div>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="assets/supabase-config.js"></script>
-<script src="assets/data.js"></script>
-<script src="assets/app.js"></script>
+<script src="assets/supabase-config.js?v=20260507c"></script>
+<script src="assets/data.js?v=20260507c"></script>
+<script src="assets/app.js?v=20260507c"></script>
 <script>
   (async () => {
     const user = await RRG.mount('lessons');

@@ -6,7 +6,7 @@
 <base href="/adult/">
 <title>Handicap Index — RR Golf Performance</title>
 <meta name="description" content="Your portal-computed handicap index, calculated from every round you've logged. Not an official Golf Canada index — a personal tracker built from your scorecard data.">
-<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/styles.css?v=20260507c">
 <style>
   .hcp-card {
     background: var(--white);
@@ -29,6 +29,7 @@
   }
   .hcp-method-list li { margin-bottom: 4px; }
 </style>
+<script>window.addEventListener("pageshow",function(e){if(e.persisted)location.reload();});</script>
 </head>
 <body>
 
@@ -68,9 +69,9 @@
 <div id="footer-mount"></div>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="assets/supabase-config.js"></script>
-<script src="assets/data.js"></script>
-<script src="assets/app.js"></script>
+<script src="assets/supabase-config.js?v=20260507c"></script>
+<script src="assets/data.js?v=20260507c"></script>
+<script src="assets/app.js?v=20260507c"></script>
 <script>
   (async () => {
     const user = await RRG.mount('handicap');
