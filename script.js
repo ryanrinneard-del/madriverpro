@@ -32,21 +32,47 @@ navToggle.addEventListener('click', () => {
     navToggle.classList.toggle('active');
 });
 
-// Close mobile menu on link click
+// Close mobile menu on link click — but NOT when the link is a dropdown
+// parent (e.g. "Player Portal", "Book Now"). Those don't navigate; they
+// expand a sub-menu, and we want the menu to stay open while that happens.
 navLinks.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => {
+        if (link.parentElement.classList.contains('nav-book-dropdown')) return;
         navLinks.classList.remove('active');
         navToggle.classList.remove('active');
     });
 });
 
-// Mobile dropdown toggles
+// Dropdown parent toggle — works on every viewport.
+//
+// Bug history: this used to only `preventDefault()` when innerWidth <= 768,
+// which left iPad / iOS Safari at landscape widths navigating to the parent
+// link's href. The "Player Portal" parent had href="/adult/" so iOS users
+// got dropped on the Adult sign-in page instead of seeing the Juniors /
+// Adult dropdown choice — which they read as "kicked back to login" or
+// "options don't show at all". Both anchors now have href="#" and we
+// preventDefault unconditionally so the dropdown can do its job.
 document.querySelectorAll('.nav-book-dropdown > a').forEach(link => {
     link.addEventListener('click', (e) => {
-        if (window.innerWidth <= 768) {
-            e.preventDefault();
-            link.parentElement.classList.toggle('open');
-        }
+        e.preventDefault();
+        const parent = link.parentElement;
+        // Close any other open dropdowns at the same time (single-open UX).
+        document.querySelectorAll('.nav-book-dropdown.open').forEach(other => {
+            if (other !== parent) other.classList.remove('open');
+        });
+        parent.classList.toggle('open');
+        link.setAttribute('aria-expanded', parent.classList.contains('open') ? 'true' : 'false');
+    });
+});
+
+// Tapping outside any dropdown closes them — important on iOS where the
+// dropdown stays "open" until something tells it to collapse.
+document.addEventListener('click', (e) => {
+    if (e.target.closest('.nav-book-dropdown')) return;
+    document.querySelectorAll('.nav-book-dropdown.open').forEach(dd => {
+        dd.classList.remove('open');
+        const parentLink = dd.querySelector(':scope > a');
+        if (parentLink) parentLink.setAttribute('aria-expanded', 'false');
     });
 });
 

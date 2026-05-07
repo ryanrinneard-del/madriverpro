@@ -116,7 +116,9 @@ ul { list-style: none; }
 /* Nav Book Dropdown */
 .nav-book-dropdown { position: relative; }
 .dropdown-menu { position: absolute; top: 100%; left: 50%; transform: translateX(-50%) translateY(8px); background: var(--white); border-radius: 12px; box-shadow: 0 4px 30px rgba(0,0,0,0.1); padding: 8px; min-width: 220px; opacity: 0; visibility: hidden; transition: all 0.2s var(--ease); }
-.nav-book-dropdown:hover .dropdown-menu { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+.nav-book-dropdown:hover .dropdown-menu,
+.nav-book-dropdown.open .dropdown-menu,
+.nav-book-dropdown:focus-within .dropdown-menu { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
 .dropdown-menu li a { display: block; padding: 10px 16px; border-radius: 8px; font-size: 14px; transition: background 0.15s var(--ease); }
 .dropdown-menu li a:hover { background: var(--gray-50); }
 
