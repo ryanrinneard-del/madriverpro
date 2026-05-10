@@ -525,6 +525,101 @@ RRG.subs = {
     const all = await this.forUser(userId);
     return all.filter(s => Number(s.week) === Number(weekN));
   },
+
+  /* ============================================================
+     LOCAL → SUPABASE SILENT RECOVERY
+     ============================================================
+     Up until commit 02d1ed5 (May 2026), RRG.subs.create wrote to
+     localStorage under 'rrg_submissions_v1' and never reached the
+     database. Junior players who submitted rounds in that window
+     have orphaned rows in their browser's local storage that the
+     coach can't see.
+
+     This function runs on every page load (cheap if there's nothing
+     to do). If it finds local rows it never migrated for THIS user,
+     it inserts them into the rounds table, then marks the migration
+     done so it never runs twice. The user notices nothing — except
+     that their lost rounds quietly start appearing in history.
+
+     Designed to be safe to call on EVERY page in the portal:
+       - no-op if localStorage is empty
+       - no-op if already migrated for this user
+       - silent on failure (logs only, never throws)
+       - never deletes local rows until the insert confirms
+   */
+  async migrateLocal(userId) {
+    if (!userId) return { migrated: 0 };
+    const FLAG = 'rrg_subs_migrated_v1_' + userId;
+    if (localStorage.getItem(FLAG) === 'done') return { migrated: 0, skipped: 'already-migrated' };
+    let raw;
+    try { raw = JSON.parse(localStorage.getItem('rrg_submissions_v1') || '[]'); }
+    catch { return { migrated: 0, skipped: 'parse-error' }; }
+    if (!raw.length) {
+      localStorage.setItem(FLAG, 'done');
+      return { migrated: 0, skipped: 'empty' };
+    }
+    // Filter to THIS user's rounds (the localStorage was shared per device,
+    // so the array could include other accounts on a shared phone).
+    const mine = raw.filter(r => (r.userId === userId) || (r.user_id === userId));
+    if (!mine.length) {
+      localStorage.setItem(FLAG, 'done');
+      return { migrated: 0, skipped: 'no-rows-for-user' };
+    }
+    await RRG._sbReady;
+    if (!RRG.sb) return { migrated: 0, skipped: 'no-supabase' };
+    // Adapt each local row to Supabase rounds-table schema.
+    const adapted = mine.map(r => {
+      const out = {};
+      for (const [k, v] of Object.entries(r)) {
+        if (v === null || v === undefined || v === '') continue;
+        // camelCase → snake_case for the columns we actually have
+        const map = {
+          userId: 'user_id', userName: 'user_name',
+          weekTitle: 'week_title', tiger5Total: 'tiger5_total',
+          createdAt: 'created_at', roundDate: 'round_date',
+          threePutts: 'three_putts', upDown: 'up_down',
+          lostBalls: 'lost_balls', sandSaves: 'sand_saves',
+          driveDist: 'drive_dist', routineScore: 'routine_score',
+          reflectionGood: 'reflection_good', reflectionBad: 'reflection_bad',
+          oneThing: 'one_thing', badMisses: 'bad_misses',
+          doublesPlus: 'doubles_plus', holeDetail: 'hole_detail',
+          strokesGained: 'strokes_gained', approachData: 'approach_data',
+        };
+        out[map[k] || k] = v;
+      }
+      // Ensure user_id is set (defensive — some local rows may have used userId)
+      if (!out.user_id) out.user_id = userId;
+      // The local id (s_xxxx) collides with Supabase uuid PK — drop it.
+      delete out.id;
+      return out;
+    });
+    let inserted = 0;
+    const failures = [];
+    // Insert one at a time so a single bad row doesn't kill the whole batch.
+    for (const row of adapted) {
+      try {
+        const { error } = await RRG.sb.from('rounds').insert(row);
+        if (error) { failures.push({ row: row.round_date || row.created_at, error: error.message }); }
+        else inserted++;
+      } catch (e) { failures.push({ row: row.round_date || row.created_at, error: e.message }); }
+    }
+    if (inserted > 0) {
+      console.log('[RRG.subs.migrateLocal] recovered', inserted, 'of', adapted.length, 'rounds for user', userId);
+    }
+    if (failures.length) {
+      console.warn('[RRG.subs.migrateLocal] failures:', failures);
+    }
+    // Mark done if ALL rows migrated successfully — otherwise leave the flag
+    // unset so a future page load can retry the failed ones.
+    if (inserted === adapted.length) {
+      localStorage.setItem(FLAG, 'done');
+      // Optional cleanup: remove migrated rows from the local array but keep
+      // any that belonged to other users (shared device).
+      const remaining = raw.filter(r => (r.userId !== userId) && (r.user_id !== userId));
+      try { localStorage.setItem('rrg_submissions_v1', JSON.stringify(remaining)); } catch {}
+    }
+    return { migrated: inserted, attempted: adapted.length, failures: failures.length };
+  },
 };
 
 RRG.lessons = {
@@ -1179,6 +1274,15 @@ RRG.mount = async function(activeNav = '') {
   if (navMount) navMount.outerHTML = RRG.renderNav(user, activeNav);
   const footMount = document.getElementById('footer-mount');
   if (footMount) footMount.outerHTML = RRG.renderFooter();
+  // Silent recovery: if this player has rounds stranded in localStorage from
+  // before the May 2026 Supabase fix, migrate them now. Fire-and-forget — we
+  // don't block page render on it; toast appears when (and only when) rows
+  // actually move. See RRG.subs.migrateLocal for details.
+  RRG.subs.migrateLocal(user.id).then(res => {
+    if (res && res.migrated > 0 && typeof RRG.toast === 'function') {
+      RRG.toast('Recovered ' + res.migrated + ' round' + (res.migrated === 1 ? '' : 's') + ' you logged previously.');
+    }
+  }).catch(e => console.warn('[RRG.subs.migrateLocal] error', e));
   return user;
 };
 
