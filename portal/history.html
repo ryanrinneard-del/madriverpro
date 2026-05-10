@@ -6,7 +6,7 @@
 <base href="/portal/">
 <title>My Rounds — RR Golf Performance</title>
 <meta name="description" content="Every round you’ve logged during your 15-week Junior Elite season.">
-<link rel="stylesheet" href="assets/styles.css?v=20260507g">
+<link rel="stylesheet" href="assets/styles.css?v=20260507h">
 <script>window.addEventListener("pageshow",function(e){if(e.persisted)location.reload();});</script>
 </head>
 <body>
@@ -44,9 +44,9 @@
 <div id="footer-mount"></div>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="assets/supabase-config.js?v=20260507g"></script>
-<script src="assets/data.js?v=20260507g"></script>
-<script src="assets/app.js?v=20260507g"></script>
+<script src="assets/supabase-config.js?v=20260507h"></script>
+<script src="assets/data.js?v=20260507h"></script>
+<script src="assets/app.js?v=20260507h"></script>
 <script>
   (async () => {
     const user = await RRG.mount('history');
@@ -54,15 +54,17 @@
 
   if (RRG.qs('new')) document.getElementById('new-banner').style.display = 'block';
 
-  const subs = RRG.subs.forUser(user.id);
+  // RRG.subs is async (Supabase) since the May 2026 fix.
+  const subs = await RRG.subs.forUser(user.id);
 
-  // Summary stats
+  // Summary stats — accept either snake_case (Supabase) or camelCase (legacy
+  // localStorage rows that were just migrated up).
   const total = subs.length;
   const scores = subs.map(s => +s.score).filter(n => !isNaN(n));
   const avg = scores.length ? (scores.reduce((a,b)=>a+b,0) / scores.length).toFixed(1) : '—';
   const best = scores.length ? Math.min(...scores) : '—';
   const avgT5 = total
-    ? (subs.reduce((a,s) => a + (+s.tiger5Total || 0), 0) / total).toFixed(1)
+    ? (subs.reduce((a,s) => a + (+s.tiger5_total || +s.tiger5Total || 0), 0) / total).toFixed(1)
     : '—';
   document.getElementById('summary').innerHTML = `
     <div class="stat-cell"><div class="val">${total}</div><div class="lbl">Rounds</div></div>
@@ -92,9 +94,12 @@
           </tr>
         </thead>
         <tbody>
-          ${subs.map((s, i) => `
+          ${subs.map((s, i) => {
+            // Schema-compatible: snake_case (Supabase) OR camelCase (legacy)
+            const t5 = +(s.tiger5_total || s.tiger5Total || 0);
+            return `
             <tr>
-              <td>${RRG.fmtDate(s.roundDate || s.createdAt)}</td>
+              <td>${RRG.fmtDate(s.round_date || s.roundDate || s.created_at || s.createdAt)}</td>
               <td>${s.week ? 'W' + s.week : '—'}</td>
               <td>${RRG.esc(s.course || '')}</td>
               <td><b>${RRG.esc(s.score || '')}</b></td>
@@ -102,13 +107,13 @@
               <td>${RRG.esc(s.gir || '')}</td>
               <td>${RRG.esc(s.putts || '')}</td>
               <td>
-                <span class="badge ${+s.tiger5Total <= 2 ? 'badge-green' : +s.tiger5Total <= 4 ? 'badge-amber' : 'badge-navy'}">
-                  ${RRG.esc(s.tiger5Total || '0')}
+                <span class="badge ${t5 <= 2 ? 'badge-green' : t5 <= 4 ? 'badge-amber' : 'badge-navy'}">
+                  ${t5}
                 </span>
               </td>
               <td><a href="#" onclick="showDetail('${s.id}'); return false;" class="small">View →</a></td>
             </tr>
-          `).join('')}
+          `;}).join('')}
         </tbody>
       </table>
     `;
