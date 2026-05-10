@@ -460,24 +460,70 @@ RRG.invites = {
    already cross-device, which was the critical fix. A follow-up
    commit moves these to Postgres tables (schema already in place).
    ============================================================ */
+/* RRG.subs — Supabase-backed rounds API.
+   ===========================================================
+   CRITICAL FIX (May 2026): this object used to be localStorage-only
+   ('rrg_submissions_v1' KEY). That meant every junior elite player who
+   submitted a round saw the success summary, but the row NEVER reached
+   the database. history.html showed "0 rounds" and the coach view was
+   blind. This is the actual root cause of "submit silently failed".
+
+   Now mirrors the /adult/ implementation — all methods are async and
+   read/write the public.rounds table directly. The same RLS policies
+   apply: each player sees only their own rows; coaches see all.
+
+   Every caller in /portal/* must `await` these methods. The audit that
+   found this bug also updated week.html, dashboard.html, coach.html,
+   and submit-round.html to await consistently. */
 RRG.subs = {
-  KEY: 'rrg_submissions_v1',
-  all() { try { return JSON.parse(localStorage.getItem(this.KEY) || '[]'); } catch { return []; } },
-  save(list) { localStorage.setItem(this.KEY, JSON.stringify(list)); },
-  create(sub) {
-    const entry = { id: 's_' + Date.now().toString(36), ...sub, createdAt: new Date().toISOString() };
-    const list = this.all(); list.push(entry); this.save(list);
-    return entry;
+  async forUser(userId) {
+    await RRG._sbReady;
+    if (!RRG.sb) return [];
+    const { data, error } = await RRG.sb.from('rounds')
+      .select('*')
+      .eq('user_id', userId)
+      .order('round_date', { ascending: false, nullsFirst: false });
+    if (error) { console.warn('rounds fetch', error); return []; }
+    return data || [];
   },
-  forUser(userId) {
-    return this.all().filter(s => s.userId === userId)
-      .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+  /* Coach-only — RLS restricts non-coaches to their own rows. */
+  async all() {
+    await RRG._sbReady;
+    if (!RRG.sb) return [];
+    const { data, error } = await RRG.sb.from('rounds')
+      .select('*')
+      .order('round_date', { ascending: false, nullsFirst: false });
+    if (error) { console.warn('rounds all fetch', error); return []; }
+    return data || [];
   },
-  /* Called by portal/dashboard.html (week grid) and portal/week.html
-     (submissions-this-week list). Was referenced but undefined before;
-     this fixes the silent failure. */
-  forUserWeek(userId, weekN) {
-    return this.forUser(userId).filter(s => Number(s.week) === Number(weekN));
+  async get(id) {
+    await RRG._sbReady;
+    const { data, error } = await RRG.sb.from('rounds').select('*').eq('id', id).maybeSingle();
+    if (error) throw error;
+    return data;
+  },
+  async create(round) {
+    await RRG._sbReady;
+    const { data, error } = await RRG.sb.from('rounds').insert(round).select().single();
+    if (error) throw error;
+    return data;
+  },
+  async update(id, patch) {
+    await RRG._sbReady;
+    const { data, error } = await RRG.sb.from('rounds').update(patch).eq('id', id).select().single();
+    if (error) throw error;
+    return data;
+  },
+  async remove(id) {
+    await RRG._sbReady;
+    const { error } = await RRG.sb.from('rounds').delete().eq('id', id);
+    if (error) throw error;
+  },
+  /* Called by portal/dashboard.html (week grid) and portal/week.html.
+     Filters the user's rounds by the metadata.week field on the round. */
+  async forUserWeek(userId, weekN) {
+    const all = await this.forUser(userId);
+    return all.filter(s => Number(s.week) === Number(weekN));
   },
 };
 

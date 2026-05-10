@@ -6,7 +6,7 @@
 <base href="/portal/">
 <title>Dashboard — RR Golf Performance</title>
 <meta name="description" content="Your RR Golf Performance Junior Elite portal. Today’s plan, your top patterns, and quick actions.">
-<link rel="stylesheet" href="assets/styles.css?v=20260507e">
+<link rel="stylesheet" href="assets/styles.css?v=20260507f">
 <script>window.addEventListener("pageshow",function(e){if(e.persisted)location.reload();});</script>
 </head>
 <body>
@@ -139,9 +139,9 @@
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
-<script src="assets/supabase-config.js?v=20260507e"></script>
-<script src="assets/data.js?v=20260507e"></script>
-<script src="assets/app.js?v=20260507e"></script>
+<script src="assets/supabase-config.js?v=20260507f"></script>
+<script src="assets/data.js?v=20260507f"></script>
+<script src="assets/app.js?v=20260507f"></script>
 <script>
   (async () => {
     const user = await RRG.mount('dashboard');
@@ -203,23 +203,17 @@
     }
 
     if (isBeginner && RRG.milestones) {
-      // Use the same rounds-table feed. If RRG.subs.forUser returns localStorage
-      // rounds only, milestones still work — they just look at score/date/holes.
-      let rounds = [];
-      try {
-        // Prefer Supabase rounds (async) — fall back to local submissions
-        if (RRG.subs && RRG.subs.forUser) {
-          const r = RRG.subs.forUser(user.id);
-          rounds = (r && typeof r.then === 'function') ? await r : (r || []);
-        }
-      } catch (_) {}
+      const rounds = await RRG.subs.forUser(user.id);
       const mount = document.getElementById('progress-mount');
-      if (mount) mount.innerHTML = RRG.milestones.renderWidget({ user, rounds, variant: 'compact' });
+      if (mount) mount.innerHTML = RRG.milestones.renderWidget({ user, rounds: rounds || [], variant: 'compact' });
     }
   } catch (err) { console.warn('milestones widget failed', err); }
 
-  // Stat strip — computed from submissions
-  const subs = RRG.subs.forUser(user.id);
+  // Stat strip — computed from submissions. Single async fetch, reused below
+  // for the per-week grid (no N+1 calls). Critical fix May 2026: was calling
+  // RRG.subs.forUser/forUserWeek synchronously on a now-async API, getting
+  // Promise objects back instead of arrays — produced 0 rounds in every tile.
+  const subs = await RRG.subs.forUser(user.id);
   const weeksDone = new Set(subs.map(s => s.week)).size;
   const roundsSubmitted = subs.length;
   const avgScore = subs.length
@@ -253,10 +247,15 @@
     </div>
   `;
 
-  // Week grid
+  // Week grid — index subs by week once (avoids N+1 fetches)
+  const subsByWeek = subs.reduce((m, s) => {
+    const k = Number(s.week);
+    if (!Number.isNaN(k)) (m[k] ||= []).push(s);
+    return m;
+  }, {});
   const grid = document.getElementById('week-grid');
   grid.innerHTML = RRG.WEEKS.map(w => {
-    const subsForWeek = RRG.subs.forUserWeek(user.id, w.n);
+    const subsForWeek = subsByWeek[w.n] || [];
     let status = 'pending';
     if (subsForWeek.length > 0) status = 'complete';
     else if (w.n === currentWeek.n) status = 'current';
@@ -289,14 +288,8 @@
     </tr>
   `).join('');
 
-  // SG card + Approach spider chart — load both off the same rounds fetch.
-  let approachRounds = [];
-  try {
-    if (RRG.subs && RRG.subs.forUser) {
-      const r = RRG.subs.forUser(user.id);
-      approachRounds = (r && typeof r.then === 'function') ? await r : (r || []);
-    }
-  } catch (_) {}
+  // SG card + Approach spider chart — reuse the subs already fetched above.
+  let approachRounds = subs;
 
   // Strokes Gained card — 4-category breakdown + top leak + prescription
   try {

@@ -6,7 +6,7 @@
 <base href="/portal/">
 <title>Submit Round — RR Golf Performance</title>
 <meta name="description" content="Log a round during your Junior Elite season — score, 5-error tally, and a reflection.">
-<link rel="stylesheet" href="assets/styles.css?v=20260507e">
+<link rel="stylesheet" href="assets/styles.css?v=20260507f">
 <script>window.addEventListener("pageshow",function(e){if(e.persisted)location.reload();});</script>
 </head>
 <body>
@@ -148,9 +148,9 @@
 <div id="footer-mount"></div>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="assets/supabase-config.js?v=20260507e"></script>
-<script src="assets/data.js?v=20260507e"></script>
-<script src="assets/app.js?v=20260507e"></script>
+<script src="assets/supabase-config.js?v=20260507f"></script>
+<script src="assets/data.js?v=20260507f"></script>
+<script src="assets/app.js?v=20260507f"></script>
 <script>
   (async () => {
     const user = await RRG.mount('dashboard');
@@ -247,24 +247,35 @@
     }
   });
 
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     errBox.style.display = 'none';
-    const data = Object.fromEntries(new FormData(form).entries());
-    const total = Object.values(t5State).reduce((a,b) => a+b, 0);
-    const entry = RRG.subs.create({
-      userId: user.id,
-      userName: user.name,
-      week: week?.n ?? null,
-      weekTitle: week?.title ?? null,
-      ...data,
-      tiger5: { ...t5State },
-      tiger5Total: total,
-    });
-    // Round saved — wipe the live tally so the next round starts fresh
-    localStorage.removeItem(TALLY_KEY);
-    RRG.toast('Round submitted — Performance Doc will be ready before next session.');
-    setTimeout(() => { location.href = 'history.html?new=' + entry.id; }, 1200);
+    const submitBtn = form.querySelector('button[type="submit"]');
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Submitting…'; }
+    try {
+      const data = Object.fromEntries(new FormData(form).entries());
+      const total = Object.values(t5State).reduce((a,b) => a+b, 0);
+      // Adapt to Supabase rounds-table column names. user_id (snake_case) is
+      // the Supabase RLS key; tiger5_total matches the adult schema. The
+      // payload also keeps userName/week metadata for the dashboard widgets.
+      const entry = await RRG.subs.create({
+        user_id: user.id,
+        user_name: user.name,
+        week: week?.n ?? null,
+        week_title: week?.title ?? null,
+        ...data,
+        tiger5: { ...t5State },
+        tiger5_total: total,
+      });
+      localStorage.removeItem(TALLY_KEY);
+      RRG.toast('Round submitted — Performance Doc will be ready before next session.');
+      setTimeout(() => { location.href = 'history.html?new=' + entry.id; }, 1200);
+    } catch (err) {
+      console.error('[submit-round] create failed', err);
+      errBox.textContent = 'Could not submit your round: ' + (err.message || err) + '. Your work is safe — try again in a moment.';
+      errBox.style.display = 'block';
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Submit round →'; }
+    }
   });
 
   })();

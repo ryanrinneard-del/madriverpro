@@ -6,7 +6,7 @@
 <base href="/portal/">
 <title>Week — RR Golf Performance</title>
 <meta name="description" content="This week in your 15-week Junior Elite season — focus, drills, and resources.">
-<link rel="stylesheet" href="assets/styles.css?v=20260507e">
+<link rel="stylesheet" href="assets/styles.css?v=20260507f">
 </head>
 <body>
 
@@ -19,9 +19,9 @@
 <div id="footer-mount"></div>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="assets/supabase-config.js?v=20260507e"></script>
-<script src="assets/data.js?v=20260507e"></script>
-<script src="assets/app.js?v=20260507e"></script>
+<script src="assets/supabase-config.js?v=20260507f"></script>
+<script src="assets/data.js?v=20260507f"></script>
+<script src="assets/app.js?v=20260507f"></script>
 <script>
   (async () => {
     const user = await RRG.mount('dashboard');
@@ -36,7 +36,7 @@
     const phaseLabel = week.phase === 'P1' ? 'PHASE ONE · SATURDAYS' : 'PHASE TWO · TUE / THU 10 AM';
     const prev = RRG.WEEKS.find(w => w.n === n - 1);
     const next = RRG.WEEKS.find(w => w.n === n + 1);
-    const subs = RRG.subs.forUserWeek(user.id, n);
+    const subs = await RRG.subs.forUserWeek(user.id, n);
     const codes = week.codes.map(c => RRG.CODES.find(x => x.n === c)).filter(Boolean);
 
     main.innerHTML = `

@@ -6,7 +6,7 @@
 <base href="/portal/">
 <title>Coach View — RR Golf Performance</title>
 <meta name="description" content="Coach view for the Junior Elite program — roster, weekly submissions, and player progress.">
-<link rel="stylesheet" href="assets/styles.css?v=20260507e">
+<link rel="stylesheet" href="assets/styles.css?v=20260507f">
 </head>
 <body>
 
@@ -73,9 +73,9 @@
 <div id="footer-mount"></div>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="assets/supabase-config.js?v=20260507e"></script>
-<script src="assets/data.js?v=20260507e"></script>
-<script src="assets/app.js?v=20260507e"></script>
+<script src="assets/supabase-config.js?v=20260507f"></script>
+<script src="assets/data.js?v=20260507f"></script>
+<script src="assets/app.js?v=20260507f"></script>
 <script>
   (async () => {
     const user = await RRG.mount('coach');
@@ -91,11 +91,18 @@
   }
 
   const players = RRG.users.all().filter(u => u.role === 'player');
-  const allSubs = RRG.subs.all();
+  // RRG.subs is now Supabase-backed and async (May 2026 fix). Pull ALL rounds
+  // once, then bucket per-player below to avoid N+1 queries.
+  const allSubs = await RRG.subs.all();
+  const subsByUser = allSubs.reduce((m, s) => {
+    const k = s.user_id || s.userId;
+    (m[k] ||= []).push(s);
+    return m;
+  }, {});
 
   const completedProfiles = players.filter(p => p.profile && p.profile._status === 'complete').length;
   const thisWeekSubs = allSubs.filter(s => {
-    const d = new Date(s.createdAt); const now = new Date();
+    const d = new Date(s.created_at || s.createdAt); const now = new Date();
     return (now - d) < 7 * 24 * 60 * 60 * 1000;
   }).length;
 
@@ -130,10 +137,10 @@
         </thead>
         <tbody>
           ${players.map(p => {
-            const subs = RRG.subs.forUser(p.id);
+            const subs = subsByUser[p.id] || [];
             const scores = subs.map(s => +s.score).filter(n => !isNaN(n));
             const avg = scores.length ? (scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1) : '—';
-            const avgT5 = subs.length ? (subs.reduce((a,s)=>a+(+s.tiger5Total||0),0)/subs.length).toFixed(1) : '—';
+            const avgT5 = subs.length ? (subs.reduce((a,s)=>a+(+s.tiger5_total||+s.tiger5Total||0),0)/subs.length).toFixed(1) : '—';
             const profileStatus = p.profile?._status === 'complete'
               ? '<span class="badge badge-green">COMPLETE</span>'
               : p.profile?._status === 'draft'
