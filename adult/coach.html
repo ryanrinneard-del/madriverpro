@@ -829,6 +829,11 @@
               <button class="btn btn-ghost btn-sm" onclick="openApproachFor('${p.id}')" title="Where this player is losing strokes by distance — spider chart from on-course approach data">Approach</button>
               <button class="btn btn-ghost btn-sm" onclick="openLessonUpdateFor('${p.id}')">Plan Update</button>
               <button class="btn btn-ghost btn-sm" onclick="openSnapshotFor('${p.id}')">Snapshot</button>
+              <button class="btn btn-ghost btn-sm" onclick="deletePlayer('${p.id}')"
+                style="color:var(--red-risk); border-color:var(--red-risk);"
+                title="Permanently delete this player and ALL their rounds, lessons, and profile data.">
+                🗑 Delete
+              </button>
             </div>
           </td>
         </tr>
@@ -1105,6 +1110,49 @@
         renderJuniorRoster();
         renderRounds();
         openRoundsFor(userId); // refresh modal contents
+      } catch (err) {
+        showError('Could not delete: ' + (err.message || err));
+      }
+    };
+
+    // Hard-delete a player: rounds + lessons + profile. Requires typing
+    // their first name to confirm — easy enough for cleanup of test profiles
+    // but virtually impossible to fat-finger on a real client.
+    window.deletePlayer = async function (userId) {
+      const p = playersList.find(pp => pp.id === userId);
+      if (!p) return;
+      const fullName = p.name || p.email;
+      const firstName = (p.name || '').split(' ')[0].trim() || p.email;
+      const roundsCount = (roundsMap[userId] || []).length;
+      const lessonsCount = (lessonsMap[userId] || []).length;
+
+      const proceed = confirm(
+        `Permanently delete ${fullName}?\n\n` +
+        `This will wipe:\n` +
+        `  • ${roundsCount} round${roundsCount === 1 ? '' : 's'}\n` +
+        `  • ${lessonsCount} lesson${lessonsCount === 1 ? '' : 's'}\n` +
+        `  • Their profile\n\n` +
+        `This cannot be undone.`
+      );
+      if (!proceed) return;
+
+      const typed = prompt(`Type ${firstName} to confirm deletion:`);
+      if (!typed || typed.trim().toLowerCase() !== firstName.toLowerCase()) {
+        RRG.toast('Cancelled — name did not match.');
+        return;
+      }
+
+      try {
+        await RRG.users.remove(userId);
+        // Strip from all in-memory caches
+        playersList = playersList.filter(pp => pp.id !== userId);
+        delete roundsMap[userId];
+        delete lessonsMap[userId];
+        allRounds = allRounds.filter(r => r.user_id !== userId);
+        RRG.toast(`Deleted ${fullName}.`);
+        renderAdultRoster();
+        renderJuniorRoster();
+        renderRounds();
       } catch (err) {
         showError('Could not delete: ' + (err.message || err));
       }

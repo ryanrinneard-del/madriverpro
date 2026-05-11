@@ -274,6 +274,37 @@ RRG.users = {
     RRG.auth._profileCache = null; // force refresh on next currentUser()
     return data;
   },
+
+  // Coach-only: hard-delete a player. Removes rounds, lessons, releases any
+  // invite codes that pointed at them, and finally deletes the profile row.
+  // The auth.users row stays orphaned (Supabase service-role required for that
+  // — clean it up later in the dashboard if you care). Once the profile is
+  // gone the orphan can no longer access anything via RLS.
+  async remove(userId) {
+    await RRG._sbReady;
+    if (!RRG.sb) throw new Error('Not signed in.');
+
+    // 1) rounds
+    {
+      const { error } = await RRG.sb.from('rounds').delete().eq('user_id', userId);
+      if (error) throw new Error('rounds: ' + error.message);
+    }
+    // 2) lessons
+    {
+      const { error } = await RRG.sb.from('lessons').delete().eq('user_id', userId);
+      if (error) throw new Error('lessons: ' + error.message);
+    }
+    // 3) release invites (null out used_by so the code becomes available again)
+    {
+      const { error } = await RRG.sb.from('invites').update({ used_by: null }).eq('used_by', userId);
+      if (error) console.warn('invites release', error); // non-fatal
+    }
+    // 4) profile
+    {
+      const { error } = await RRG.sb.from('profiles').delete().eq('id', userId);
+      if (error) throw new Error('profile: ' + error.message);
+    }
+  },
 };
 
 /* ============================================================
