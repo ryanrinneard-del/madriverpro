@@ -181,6 +181,12 @@
     <h2 class="page-title" style="font-size:20px;">Your Adult Players</h2>
     <hr class="gold-rule">
   </div>
+  <div class="flex gap-2" style="margin: 0 0 14px; align-items:center; flex-wrap:wrap;">
+    <input id="adult-search" type="search" placeholder="🔍 Search adult players by name or email…"
+      autocomplete="off" spellcheck="false"
+      style="flex:1; min-width:220px; padding:10px 14px; border:1px solid var(--rule); border-radius:8px; font-size:14px; background:var(--white);">
+    <span id="adult-search-count" class="small muted"></span>
+  </div>
   <div id="adult-roster-wrap"></div>
 
   <!-- Roster — Junior Players -->
@@ -188,6 +194,12 @@
     <div class="page-label">ROSTER</div>
     <h2 class="page-title" style="font-size:20px;">Your Junior Players</h2>
     <hr class="gold-rule">
+  </div>
+  <div class="flex gap-2" style="margin: 0 0 14px; align-items:center; flex-wrap:wrap;">
+    <input id="junior-search" type="search" placeholder="🔍 Search junior players by name or email…"
+      autocomplete="off" spellcheck="false"
+      style="flex:1; min-width:220px; padding:10px 14px; border:1px solid var(--rule); border-radius:8px; font-size:14px; background:var(--white);">
+    <span id="junior-search-count" class="small muted"></span>
   </div>
   <div id="junior-roster-wrap"></div>
 
@@ -798,6 +810,7 @@
           <td style="text-align:right;">
             <div style="display:flex; gap:6px; justify-content:flex-end; flex-wrap:wrap;">
               <a class="btn btn-primary btn-sm" href="on-course.html?userId=${p.id}" style="text-decoration:none; background: var(--gold); color: var(--navy);">On Course &rarr;</a>
+              <button class="btn btn-ghost btn-sm" onclick="openRoundsFor('${p.id}')" title="See every scorecard this player has submitted">Rounds</button>
               <a class="btn btn-ghost btn-sm" href="my-plan.html?userId=${p.id}" style="text-decoration:none;">View Plan</a>
               <button class="btn btn-primary btn-sm" onclick="openNewLessonFor('${p.id}')">+ Log Lesson</button>
               <a class="btn btn-ghost btn-sm" href="profile.html?userId=${p.id}" style="text-decoration:none;" title="Fill profile, bag, or wedge matrix on their behalf — great for VIP onboarding">&#128081; VIP Onboard</a>
@@ -831,33 +844,67 @@
       `;
     }
 
+    // Match against name OR email, case-insensitive.
+    function matchesSearch(p, q) {
+      if (!q) return true;
+      const ql = q.toLowerCase();
+      return ((p.name || '').toLowerCase().includes(ql))
+          || ((p.email || '').toLowerCase().includes(ql));
+    }
+
     function renderAdultRoster() {
-      const wrap = document.getElementById('adult-roster-wrap');
+      const wrap  = document.getElementById('adult-roster-wrap');
+      const count = document.getElementById('adult-search-count');
+      const q = (document.getElementById('adult-search')?.value || '').trim();
       const adults = playersList.filter(p => p.cohort === 'adult_coaching_2026');
+      const filtered = adults.filter(p => matchesSearch(p, q));
       if (adults.length === 0) {
         wrap.innerHTML = `
           <div class="history-empty">
             <h3 class="navy">No adult players yet.</h3>
             <p class="muted mt-2">Text <code>RRA-ADULT-2026</code> to your first client to get started.</p>
           </div>`;
+        if (count) count.textContent = '';
         return;
       }
-      wrap.innerHTML = rosterTableHtml(adults.map(rosterRowHtml));
+      if (filtered.length === 0) {
+        wrap.innerHTML = `<div class="history-empty"><p class="muted">No players match "${RRG.esc(q)}".</p></div>`;
+      } else {
+        wrap.innerHTML = rosterTableHtml(filtered.map(rosterRowHtml));
+      }
+      if (count) count.textContent = q
+        ? `${filtered.length} of ${adults.length} shown`
+        : `${adults.length} total`;
     }
 
     function renderJuniorRoster() {
-      const wrap = document.getElementById('junior-roster-wrap');
+      const wrap  = document.getElementById('junior-roster-wrap');
+      const count = document.getElementById('junior-search-count');
+      const q = (document.getElementById('junior-search')?.value || '').trim();
       const juniors = playersList.filter(p => p.cohort === 'junior_elite_2026');
+      const filtered = juniors.filter(p => matchesSearch(p, q));
       if (juniors.length === 0) {
         wrap.innerHTML = `
           <div class="history-empty">
             <h3 class="navy">No junior players signed up yet.</h3>
             <p class="muted mt-2">Text <code>RRG-JR-FLEX-2026</code> or <code>RRG-JR-FULL-2026</code> to a junior to get them in.</p>
           </div>`;
+        if (count) count.textContent = '';
         return;
       }
-      wrap.innerHTML = rosterTableHtml(juniors.map(rosterRowHtml));
+      if (filtered.length === 0) {
+        wrap.innerHTML = `<div class="history-empty"><p class="muted">No players match "${RRG.esc(q)}".</p></div>`;
+      } else {
+        wrap.innerHTML = rosterTableHtml(filtered.map(rosterRowHtml));
+      }
+      if (count) count.textContent = q
+        ? `${filtered.length} of ${juniors.length} shown`
+        : `${juniors.length} total`;
     }
+
+    // Live-filter on type. Debounce isn't needed at this scale.
+    document.getElementById('adult-search')?.addEventListener('input', renderAdultRoster);
+    document.getElementById('junior-search')?.addEventListener('input', renderJuniorRoster);
 
     function renderPendingSubmissions() {
       const wrap = document.getElementById('pending-submissions-wrap');
@@ -945,6 +992,85 @@
       } catch (err) {
         showError('Could not dismiss: ' + (err.message || err));
       }
+    };
+
+    // Show every round a single player has submitted, newest first.
+    // Each row links into the existing openRoundDetail() modal for full
+    // hole-by-hole / reflection detail. Powered by roundsMap which is
+    // already loaded at page-load time, so this is instant.
+    window.openRoundsFor = function (userId) {
+      const p = playersList.find(pp => pp.id === userId);
+      const name = p ? (p.name || p.email) : 'Player';
+      const rounds = (roundsMap[userId] || []).slice().sort((a, b) => {
+        const da = a.round_date || a.created_at || '';
+        const db = b.round_date || b.created_at || '';
+        return db.localeCompare(da);
+      });
+
+      document.getElementById('round-modal-title').textContent = `${name} · Every Round`;
+      const body = document.getElementById('round-modal-body');
+
+      if (rounds.length === 0) {
+        body.innerHTML = `
+          <p class="muted small" style="margin:0;">No rounds submitted yet.
+          ${p ? "Once " + RRG.esc((p.name || p.email).split(' ')[0]) + " logs a round it'll appear here." : ''}</p>`;
+      } else {
+        const totals = rounds.reduce((acc, r) => {
+          const s = +r.score;
+          if (!isNaN(s) && s > 0) { acc.scores.push(s); }
+          const t5 = t5CountsFor(r);
+          [1,2,3,4,5].forEach(n => acc.t5sum += (t5[n] || 0));
+          return acc;
+        }, { scores: [], t5sum: 0 });
+        const avg = totals.scores.length
+          ? (totals.scores.reduce((a,b)=>a+b,0) / totals.scores.length).toFixed(1) : '—';
+        const best = totals.scores.length ? Math.min(...totals.scores) : '—';
+        const avgT5 = rounds.length ? (totals.t5sum / rounds.length).toFixed(1) : '—';
+
+        const headerStats = `
+          <div class="grid grid-4" style="gap:8px; margin-bottom:14px;">
+            <div class="stat-cell" style="padding:8px;"><div class="val" style="font-size:18px;">${rounds.length}</div><div class="lbl" style="font-size:10px;">Rounds</div></div>
+            <div class="stat-cell" style="padding:8px;"><div class="val" style="font-size:18px;">${avg}</div><div class="lbl" style="font-size:10px;">Avg</div></div>
+            <div class="stat-cell" style="padding:8px;"><div class="val" style="font-size:18px;">${best}</div><div class="lbl" style="font-size:10px;">Best</div></div>
+            <div class="stat-cell" style="padding:8px;"><div class="val" style="font-size:18px;">${avgT5}</div><div class="lbl" style="font-size:10px;">Avg 5 Err</div></div>
+          </div>`;
+
+        const rows = rounds.map(r => {
+          const dateStr = r.round_date ? RRG.fmtDate(r.round_date)
+                                       : (r.created_at ? RRG.fmtDate(r.created_at) : '—');
+          const courseStr = r.course ? RRG.esc(r.course) : '—';
+          const score = r.score != null && r.score !== '' ? r.score : '—';
+          const t5 = t5CountsFor(r);
+          const t5total = [1,2,3,4,5].reduce((a,n) => a + (t5[n] || 0), 0);
+          const badgeColor = t5total <= 2 ? 'badge-green' : t5total <= 4 ? 'badge-amber' : 'badge-navy';
+          return `
+            <tr style="border-bottom:1px solid var(--rule);">
+              <td style="padding:8px 6px;" class="small">${dateStr}</td>
+              <td style="padding:8px 6px;" class="small">${courseStr}</td>
+              <td style="padding:8px 6px;"><b>${score}</b></td>
+              <td style="padding:8px 6px;"><span class="badge ${badgeColor}">${t5total}</span></td>
+              <td style="padding:8px 6px; text-align:right;">
+                <button class="btn btn-ghost btn-sm" onclick="openRoundDetail('${r.id}')">Open</button>
+              </td>
+            </tr>`;
+        }).join('');
+
+        body.innerHTML = `
+          ${headerStats}
+          <table style="border-collapse:collapse;width:100%;font-size:13px;">
+            <thead>
+              <tr style="border-bottom:2px solid var(--rule); text-align:left;">
+                <th style="padding:6px;">Date</th>
+                <th style="padding:6px;">Course</th>
+                <th style="padding:6px;">Score</th>
+                <th style="padding:6px;">5 Err</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>`;
+      }
+      document.getElementById('round-modal').style.display = 'flex';
     };
 
     function renderRounds() {
