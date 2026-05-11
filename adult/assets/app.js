@@ -2101,18 +2101,18 @@ RRG.renderNav = function(user, active = '') {
           <li><a href="events.html" class="${active==='events'?'active':''}"><strong>All Events &amp; Descriptions</strong></a></li>
 
           <li class="nav-sublabel">Friday Mornings</li>
-          <li><a href="https://madriverpro.as.me/Ladies-Fridays" target="_blank" rel="noopener">Mad River Ladies Series</a></li>
+          <li><a href="https://rrgolfperformance.as.me/Ladies-Fridays" target="_blank" rel="noopener">Mad River Ladies Series</a></li>
 
           <li class="nav-sublabel">Thursday Evenings</li>
-          <li><a href="https://madriverpro.as.me/ladiesnight" target="_blank" rel="noopener">Ladies Night Series</a></li>
-          <li><a href="https://madriverpro.as.me/wineandwedges" target="_blank" rel="noopener">Wine &amp; Wedges</a></li>
-          <li><a href="https://madriverpro.as.me/scotchandshortgame" target="_blank" rel="noopener">Scotch &amp; Short Game</a></li>
-          <li><a href="https://madriverpro.as.me/5anddine" target="_blank" rel="noopener">9 &amp; Dine</a></li>
-          <li><a href="https://madriverpro.as.me/steaknguinness" target="_blank" rel="noopener">Links Night &mdash; Steak &amp; Guinness</a></li>
-          <li><a href="https://madriverpro.as.me/pilatesandperformance" target="_blank" rel="noopener">Pilates &amp; Performance</a></li>
+          <li><a href="https://rrgolfperformance.as.me/ladiesnight" target="_blank" rel="noopener">Ladies Night Series</a></li>
+          <li><a href="https://rrgolfperformance.as.me/wineandwedges" target="_blank" rel="noopener">Wine &amp; Wedges</a></li>
+          <li><a href="https://rrgolfperformance.as.me/scotchandshortgame" target="_blank" rel="noopener">Scotch &amp; Short Game</a></li>
+          <li><a href="https://rrgolfperformance.as.me/5anddine" target="_blank" rel="noopener">9 &amp; Dine</a></li>
+          <li><a href="https://rrgolfperformance.as.me/steaknguinness" target="_blank" rel="noopener">Links Night &mdash; Steak &amp; Guinness</a></li>
+          <li><a href="https://rrgolfperformance.as.me/pilatesandperformance" target="_blank" rel="noopener">Pilates &amp; Performance</a></li>
 
           <li class="nav-sublabel">Summer Intensive</li>
-          <li><a href="https://madriverpro.as.me/short-game-school" target="_blank" rel="noopener">Half Day Short Game School</a></li>
+          <li><a href="https://rrgolfperformance.as.me/short-game-school" target="_blank" rel="noopener">Half Day Short Game School</a></li>
 
           <li class="nav-sublabel">Seasonal</li>
           <li><a href="/mothers-day.html">Mother's Day Special</a></li>

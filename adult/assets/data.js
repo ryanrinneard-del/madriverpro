@@ -19,7 +19,7 @@ RRG.ACUITY = {
   // Buy packages (5 / 10 / 20 lessons, Season Starters) from the catalog
   catalog: 'https://app.acuityscheduling.com/catalog.php?owner=25734550',
   // Book an individual adult private lesson slot (1 hr / 2 hr / 1/2 day)
-  bookAdultPrivate: 'https://madriverpro.as.me/?appointmentType=category:Adult%20Private%20Lessons',
+  bookAdultPrivate: 'https://rrgolfperformance.as.me/?appointmentType=category:Adult%20Private%20Lessons',
 };
 
 /* ---------- Lesson packages (CAD pricing pulled from Ryan's Acuity catalog) ---------- */
