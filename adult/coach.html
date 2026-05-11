@@ -181,10 +181,15 @@
     <h2 class="page-title" style="font-size:20px;">Your Adult Players</h2>
     <hr class="gold-rule">
   </div>
-  <div class="flex gap-2" style="margin: 0 0 14px; align-items:center; flex-wrap:wrap;">
-    <input id="adult-search" type="search" placeholder="🔍 Search adult players by name or email…"
+  <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+              margin:0 0 16px; padding:12px 14px;
+              background: #FAF7EF; border: 2px solid var(--gold); border-radius: 10px;">
+    <label for="adult-search" style="font-weight:700; color:var(--navy); font-size:14px; white-space:nowrap;">
+      🔍 Search:
+    </label>
+    <input id="adult-search" type="search" placeholder="Type a name or email…"
       autocomplete="off" spellcheck="false"
-      style="flex:1; min-width:220px; padding:10px 14px; border:1px solid var(--rule); border-radius:8px; font-size:14px; background:var(--white);">
+      style="flex:1; min-width:220px; padding:10px 14px; border:1px solid var(--rule); border-radius:8px; font-size:15px; background:var(--white);">
     <span id="adult-search-count" class="small muted"></span>
   </div>
   <div id="adult-roster-wrap"></div>
@@ -195,10 +200,15 @@
     <h2 class="page-title" style="font-size:20px;">Your Junior Players</h2>
     <hr class="gold-rule">
   </div>
-  <div class="flex gap-2" style="margin: 0 0 14px; align-items:center; flex-wrap:wrap;">
-    <input id="junior-search" type="search" placeholder="🔍 Search junior players by name or email…"
+  <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+              margin:0 0 16px; padding:12px 14px;
+              background: #FAF7EF; border: 2px solid var(--gold); border-radius: 10px;">
+    <label for="junior-search" style="font-weight:700; color:var(--navy); font-size:14px; white-space:nowrap;">
+      🔍 Search:
+    </label>
+    <input id="junior-search" type="search" placeholder="Type a name or email…"
       autocomplete="off" spellcheck="false"
-      style="flex:1; min-width:220px; padding:10px 14px; border:1px solid var(--rule); border-radius:8px; font-size:14px; background:var(--white);">
+      style="flex:1; min-width:220px; padding:10px 14px; border:1px solid var(--rule); border-radius:8px; font-size:15px; background:var(--white);">
     <span id="junior-search-count" class="small muted"></span>
   </div>
   <div id="junior-roster-wrap"></div>
@@ -1033,6 +1043,12 @@
             <div class="stat-cell" style="padding:8px;"><div class="val" style="font-size:18px;">${avg}</div><div class="lbl" style="font-size:10px;">Avg</div></div>
             <div class="stat-cell" style="padding:8px;"><div class="val" style="font-size:18px;">${best}</div><div class="lbl" style="font-size:10px;">Best</div></div>
             <div class="stat-cell" style="padding:8px;"><div class="val" style="font-size:18px;">${avgT5}</div><div class="lbl" style="font-size:10px;">Avg 5 Err</div></div>
+          </div>
+          <div style="display:flex; justify-content:flex-end; margin-bottom:10px;">
+            <button class="btn btn-ghost btn-sm" onclick="deleteAllRoundsFor('${userId}')"
+              style="color:var(--red-risk);" title="Wipe every round for this player — useful for test data.">
+              🗑 Delete ALL ${rounds.length} rounds
+            </button>
           </div>`;
 
         const rows = rounds.map(r => {
@@ -1044,13 +1060,15 @@
           const t5total = [1,2,3,4,5].reduce((a,n) => a + (t5[n] || 0), 0);
           const badgeColor = t5total <= 2 ? 'badge-green' : t5total <= 4 ? 'badge-amber' : 'badge-navy';
           return `
-            <tr style="border-bottom:1px solid var(--rule);">
+            <tr style="border-bottom:1px solid var(--rule);" data-round-row="${r.id}">
               <td style="padding:8px 6px;" class="small">${dateStr}</td>
               <td style="padding:8px 6px;" class="small">${courseStr}</td>
               <td style="padding:8px 6px;"><b>${score}</b></td>
               <td style="padding:8px 6px;"><span class="badge ${badgeColor}">${t5total}</span></td>
-              <td style="padding:8px 6px; text-align:right;">
+              <td style="padding:8px 6px; text-align:right; white-space:nowrap;">
                 <button class="btn btn-ghost btn-sm" onclick="openRoundDetail('${r.id}')">Open</button>
+                <button class="btn btn-ghost btn-sm" onclick="deleteSingleRound('${r.id}','${userId}')"
+                  style="color:var(--red-risk);" title="Delete this round only">🗑</button>
               </td>
             </tr>`;
         }).join('');
@@ -1071,6 +1089,52 @@
           </table>`;
       }
       document.getElementById('round-modal').style.display = 'flex';
+    };
+
+    // Wipe a single round. Updates the in-memory caches AND re-renders
+    // the open Rounds modal + the affected roster row so the page reflects
+    // the change immediately (no full reload needed).
+    window.deleteSingleRound = async function (roundId, userId) {
+      if (!confirm('Delete this round? This cannot be undone.')) return;
+      try {
+        await RRG.subs.remove(roundId);
+        allRounds = allRounds.filter(r => r.id !== roundId);
+        roundsMap[userId] = (roundsMap[userId] || []).filter(r => r.id !== roundId);
+        RRG.toast('Round deleted.');
+        renderAdultRoster();
+        renderJuniorRoster();
+        renderRounds();
+        openRoundsFor(userId); // refresh modal contents
+      } catch (err) {
+        showError('Could not delete: ' + (err.message || err));
+      }
+    };
+
+    // Wipe every round for a player. Two-step confirm to prevent oops.
+    // Designed for clearing test data (e.g., Colin Tyler).
+    window.deleteAllRoundsFor = async function (userId) {
+      const p = playersList.find(pp => pp.id === userId);
+      const name = p ? (p.name || p.email) : 'this player';
+      const rounds = roundsMap[userId] || [];
+      if (rounds.length === 0) { RRG.toast('No rounds to delete.'); return; }
+      if (!confirm(`Delete ALL ${rounds.length} rounds for ${name}?\n\nThis cannot be undone.`)) return;
+      if (!confirm(`Are you sure? Type-equivalent confirm: deleting ${rounds.length} rounds for ${name}.`)) return;
+      try {
+        // Sequential to keep the error path simple; volume is tiny.
+        for (const r of rounds) {
+          await RRG.subs.remove(r.id);
+        }
+        const ids = new Set(rounds.map(r => r.id));
+        allRounds = allRounds.filter(r => !ids.has(r.id));
+        roundsMap[userId] = [];
+        RRG.toast(`Deleted ${rounds.length} rounds for ${name.split(' ')[0]}.`);
+        renderAdultRoster();
+        renderJuniorRoster();
+        renderRounds();
+        document.getElementById('round-modal').style.display = 'none';
+      } catch (err) {
+        showError('Could not delete all: ' + (err.message || err));
+      }
     };
 
     function renderRounds() {
