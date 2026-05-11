@@ -6,7 +6,7 @@
 <base href="/adult/">
 <title>Away Scorecard — RR Golf Performance</title>
 <meta name="description" content="Hole-by-hole scorecard for any course. Enter course rating and slope and the round counts toward your portal handicap index.">
-<link rel="stylesheet" href="assets/styles.css?v=20260507g">
+<link rel="stylesheet" href="assets/styles.css?v=20260507i">
 <style>
   /* ============================================================
      AWAY SCORECARD — generic hole-by-hole entry for any course.
@@ -482,9 +482,9 @@
 <div id="footer-mount"></div>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="assets/supabase-config.js?v=20260507g"></script>
-<script src="assets/data.js?v=20260507g"></script>
-<script src="assets/app.js?v=20260507g"></script>
+<script src="assets/supabase-config.js?v=20260507i"></script>
+<script src="assets/data.js?v=20260507i"></script>
+<script src="assets/app.js?v=20260507i"></script>
 <script>
   (async () => {
     const user = await RRG.mount('history');
@@ -1170,6 +1170,7 @@
             await wait(1000 * Math.pow(2, attempt - 2));
           }
           await RRG.subs.create(payload);
+          try { RRG.subs.notifyCoach(payload, user); } catch (e) { console.warn(e); }
           submitted = true;
           break;
         } catch (err) {

@@ -526,6 +526,40 @@ RRG.subs = {
     return all.filter(s => Number(s.week) === Number(weekN));
   },
 
+  /* Fire-and-forget POST to /api/notify-round so Ryan gets an email any
+     time a player submits a round. Tolerant of partial input — every field
+     is optional except player + score. Never throws. Caller does NOT need
+     to await this. */
+  notifyCoach(round, user) {
+    try {
+      const payload = {
+        id:       round?.id,
+        player:   user?.name || round?.user_name || user?.email || 'Someone',
+        email:    user?.email,
+        cohort:   user?.cohort,
+        course:   round?.course,
+        tees:     round?.tees,
+        date:     round?.round_date,
+        score:    round?.score,
+        holes:    round?.holes,
+        top_leak: round?.strokes_gained?.top_leak?.category,
+        top_leak_strokes: round?.strokes_gained?.total,
+        summary: {
+          fir:   round?.fir,
+          gir:   round?.gir,
+          putts: round?.putts,
+          t5:    round?.tiger5_total,
+        },
+      };
+      fetch('/api/notify-round', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(payload),
+        keepalive: true,           // survive page unload
+      }).catch(e => console.warn('[notifyCoach]', e));
+    } catch (e) { console.warn('[notifyCoach] payload error', e); }
+  },
+
   /* ============================================================
      LOCAL → SUPABASE SILENT RECOVERY
      ============================================================

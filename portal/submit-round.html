@@ -6,7 +6,7 @@
 <base href="/portal/">
 <title>Submit Round — RR Golf Performance</title>
 <meta name="description" content="Log a round during your Junior Elite season — score, 5-error tally, and a reflection.">
-<link rel="stylesheet" href="assets/styles.css?v=20260507g">
+<link rel="stylesheet" href="assets/styles.css?v=20260507i">
 <script>window.addEventListener("pageshow",function(e){if(e.persisted)location.reload();});</script>
 </head>
 <body>
@@ -148,9 +148,9 @@
 <div id="footer-mount"></div>
 
 <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script src="assets/supabase-config.js?v=20260507g"></script>
-<script src="assets/data.js?v=20260507g"></script>
-<script src="assets/app.js?v=20260507g"></script>
+<script src="assets/supabase-config.js?v=20260507i"></script>
+<script src="assets/data.js?v=20260507i"></script>
+<script src="assets/app.js?v=20260507i"></script>
 <script>
   (async () => {
     const user = await RRG.mount('dashboard');
@@ -267,6 +267,7 @@
         tiger5: { ...t5State },
         tiger5_total: total,
       });
+      try { RRG.subs.notifyCoach(entry, user); } catch (e) { console.warn(e); }
       localStorage.removeItem(TALLY_KEY);
       RRG.toast('Round submitted — Performance Doc will be ready before next session.');
       setTimeout(() => { location.href = 'history.html?new=' + entry.id; }, 1200);

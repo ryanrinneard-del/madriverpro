@@ -670,6 +670,37 @@ RRG.subs = {
     const { error } = await RRG.sb.from('rounds').delete().eq('id', id);
     if (error) throw error;
   },
+  /* Fire-and-forget email to Ryan when a player submits. Mirror of the
+     junior portal helper. Never throws — caller doesn't need to await. */
+  notifyCoach(round, user) {
+    try {
+      const payload = {
+        id:       round?.id,
+        player:   user?.name || round?.user_name || user?.email || 'Someone',
+        email:    user?.email,
+        cohort:   user?.cohort,
+        course:   round?.course,
+        tees:     round?.tees,
+        date:     round?.round_date,
+        score:    round?.score,
+        holes:    round?.holes,
+        top_leak: round?.strokes_gained?.top_leak?.category,
+        top_leak_strokes: round?.strokes_gained?.total,
+        summary: {
+          fir:   round?.fir,
+          gir:   round?.gir,
+          putts: round?.putts,
+          t5:    round?.tiger5_total,
+        },
+      };
+      fetch('/api/notify-round', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(payload),
+        keepalive: true,
+      }).catch(e => console.warn('[notifyCoach]', e));
+    } catch (e) { console.warn('[notifyCoach] payload error', e); }
+  },
 };
 
 /* Lessons — Supabase-backed. Source of truth for "Every Session, Logged".
