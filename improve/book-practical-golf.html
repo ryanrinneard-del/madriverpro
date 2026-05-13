@@ -1,0 +1,1414 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Practical Golf — The Bookshelf</title>
+<meta name="description" content="A primer on John Jacobs' Practical Golf — the most important golf instruction book of the 20th century. Ball flight, cause-and-effect diagnosis, and the grip as the foundation of the swing.">
+<meta property="og:title" content="Practical Golf · RR Golf Performance">
+<meta property="og:description" content="John Jacobs' Practical Golf, translated for the recreational player. Ball flight as diagnosis, the six impact essentials, and why the grip is everything.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://rrgolfperformance.com/improve/book-practical-golf.html">
+<meta property="og:image" content="https://madriverpro.com/images/rr-logo.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Practical Golf · RR Golf Performance">
+<meta name="twitter:description" content="John Jacobs' Practical Golf, translated for the recreational player.">
+<meta name="twitter:image" content="https://madriverpro.com/images/rr-logo.png">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  /* Matches Volume 02/03 styling — same hero, coach note, TOC, chapter
+     cards, callouts, glossary. This is Volume 04 of the Bookshelf. */
+
+  .book-hero {
+    background: linear-gradient(180deg, var(--navy) 0%, #162E54 100%);
+    color: #fff; border-radius: 14px;
+    padding: 56px 44px 48px; margin-bottom: 36px;
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .book-hero::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--gold);
+  }
+  .book-hero::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent 0%, var(--gold) 30%, var(--gold) 70%, transparent 100%);
+    opacity: 0.4;
+  }
+  .book-hero .vol {
+    display: inline-block;
+    font-size: 11px; letter-spacing: 0.24em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase;
+    padding: 5px 16px; border: 1px solid var(--gold);
+    border-radius: 999px; margin-bottom: 20px;
+  }
+  .book-hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(44px, 7vw, 68px);
+    font-weight: 600; color: #fff;
+    margin: 0; line-height: 1.05; letter-spacing: -0.01em;
+  }
+  .book-hero .subtitle {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; font-size: 20px;
+    color: rgba(255,255,255,0.78);
+    margin: 14px auto 22px; max-width: 620px;
+  }
+  .book-hero .gold-dash {
+    width: 60px; height: 2px; background: var(--gold);
+    margin: 0 auto 22px;
+  }
+  .book-hero .attrib {
+    font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(255,255,255,0.55); font-weight: 500;
+  }
+
+  .primer-disclaimer {
+    background: #FDF6F4;
+    border: 1px solid #E5D0CB;
+    border-left: 4px solid #C76757;
+    border-radius: 10px;
+    padding: 22px 28px;
+    margin: 0 0 28px;
+  }
+  .primer-disclaimer .pd-label {
+    font-size: 11px; letter-spacing: 0.22em; color: #9A3D2F;
+    font-weight: 700; text-transform: uppercase; margin-bottom: 10px;
+  }
+  .primer-disclaimer p {
+    font-size: 14px; line-height: 1.6; color: var(--navy-mid);
+    margin: 0 0 10px;
+  }
+  .primer-disclaimer p:last-child { margin-bottom: 0; }
+  .primer-disclaimer p strong { color: var(--navy); }
+  .primer-disclaimer a {
+    color: var(--gold); font-weight: 700;
+    text-decoration: underline; text-underline-offset: 3px;
+  }
+  .primer-disclaimer a:hover { color: var(--navy); }
+
+  .coach-note {
+    background: #F7F2E8;
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--gold);
+    border-radius: 10px;
+    padding: 28px 32px;
+    margin: 0 0 36px;
+  }
+  .coach-note .cn-label {
+    font-size: 11px; letter-spacing: 0.2em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 10px;
+  }
+  .coach-note p {
+    font-size: 15.5px; line-height: 1.7; color: var(--navy-mid);
+    margin: 0 0 12px;
+  }
+  .coach-note p:last-child { margin-bottom: 0; }
+  .coach-note p strong { color: var(--navy); }
+  .coach-note .sign-off {
+    margin-top: 14px;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; color: var(--navy); font-size: 16px;
+  }
+
+  .book-toc {
+    background: var(--white); border: 1px solid var(--rule);
+    border-top: 3px solid var(--gold); border-radius: 12px;
+    padding: 28px 32px; margin-bottom: 36px;
+  }
+  .book-toc h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px; color: var(--navy); margin: 0 0 16px; font-weight: 600;
+  }
+  .book-toc ol { list-style: none; margin: 0; padding: 0; }
+  .book-toc li {
+    display: grid; grid-template-columns: 60px 1fr auto;
+    align-items: baseline; gap: 16px;
+    padding: 12px 0; border-bottom: 1px solid var(--rule);
+  }
+  .book-toc li:last-child { border-bottom: none; }
+  .book-toc .ch-num {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; font-size: 20px; color: var(--gold); font-weight: 400;
+  }
+  .book-toc .ch-title { font-size: 15px; color: var(--navy); font-weight: 600; }
+  .book-toc .ch-title small {
+    display: block; font-size: 12px; color: var(--mid-grey);
+    font-weight: 400; margin-top: 2px; font-style: italic;
+  }
+  .book-toc a.ch-jump {
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--gold); font-weight: 700; text-decoration: none;
+  }
+  .book-toc a.ch-jump:hover { color: var(--navy); }
+
+  .chapter-stack { display: grid; gap: 16px; margin-bottom: 40px; }
+  .chapter {
+    background: var(--white); border: 1px solid var(--rule);
+    border-left: 4px solid var(--gold); border-radius: 12px;
+    overflow: hidden; transition: box-shadow .2s ease;
+  }
+  .chapter[open] { box-shadow: 0 14px 34px rgba(13,31,60,0.09); }
+  .chapter summary {
+    display: grid; grid-template-columns: 74px 1fr 28px;
+    gap: 18px; align-items: center; padding: 22px 26px;
+    cursor: pointer; list-style: none; user-select: none;
+  }
+  .chapter summary::-webkit-details-marker { display: none; }
+  .chapter .num {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 48px; color: var(--gold); font-weight: 700;
+    line-height: 1; text-align: center;
+    border-right: 1px solid var(--rule); padding-right: 18px;
+  }
+  .chapter .title-stack .ch-kicker {
+    font-size: 10px; letter-spacing: 0.22em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .chapter .title-stack h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px; color: var(--navy); font-weight: 600;
+    margin: 0 0 4px; line-height: 1.2;
+  }
+  .chapter .title-stack .ch-teaser {
+    font-size: 13px; color: var(--navy-mid); line-height: 1.5;
+  }
+  .chapter .chev {
+    color: var(--mid-grey); font-size: 22px; line-height: 1;
+    transition: transform .2s ease; text-align: center; justify-self: center;
+  }
+  .chapter[open] .chev { transform: rotate(90deg); color: var(--gold); }
+  .chapter .body {
+    padding: 0 26px 28px calc(26px + 74px + 18px);
+    color: var(--navy-mid); line-height: 1.7; font-size: 15px;
+  }
+  .chapter .body p { margin: 0 0 12px; }
+  .chapter .body p strong { color: var(--navy); }
+  .chapter .body ul { margin: 8px 0 14px 20px; padding: 0; }
+  .chapter .body ul li { margin-bottom: 6px; }
+  .chapter .body h4 {
+    font-size: 11px; letter-spacing: 0.18em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase;
+    margin: 22px 0 8px;
+  }
+
+  .key-idea {
+    background: #F7F2E8; border-left: 3px solid var(--gold);
+    padding: 14px 18px; border-radius: 4px;
+    margin: 16px 0; font-size: 15px; line-height: 1.6;
+  }
+  .key-idea b { color: var(--navy); }
+  .feel-pull {
+    border-left: 3px solid var(--gold);
+    padding: 6px 0 6px 18px; margin: 16px 0;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; font-size: 19px; line-height: 1.45; color: var(--navy);
+  }
+  .mistake-box {
+    background: #FDF6F4; border-left: 3px solid #C76757;
+    padding: 14px 18px; border-radius: 4px; margin: 16px 0;
+  }
+  .mistake-box .mb-title {
+    color: #9A3D2F; font-weight: 700; font-size: 12px;
+    letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 6px;
+  }
+  .mistake-box ul { margin: 6px 0 0 18px; padding: 0; }
+  .mistake-box li { color: var(--navy-mid); margin-bottom: 4px; }
+  .drill-box {
+    background: #F2F6EE; border-left: 3px solid #6B8B4E;
+    padding: 14px 18px; border-radius: 4px; margin: 16px 0;
+  }
+  .drill-box .db-title {
+    color: #4C6B30; font-weight: 700; font-size: 12px;
+    letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 6px;
+  }
+  .verify-box {
+    background: #F4F1FA; border-left: 3px solid #7A6BA8;
+    padding: 12px 16px; border-radius: 4px; margin: 14px 0;
+    font-size: 13.5px; line-height: 1.55;
+  }
+  .verify-box .vb-title {
+    color: #4F4380; font-weight: 700; font-size: 11px;
+    letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .bridge {
+    margin-top: 20px; padding-top: 16px;
+    border-top: 1px dashed var(--rule);
+    font-style: italic; font-size: 14px; color: var(--mid-grey);
+  }
+  @media (max-width: 620px) {
+    .chapter summary {
+      grid-template-columns: 54px 1fr 24px; gap: 12px; padding: 18px 18px;
+    }
+    .chapter .num { font-size: 36px; padding-right: 12px; }
+    .chapter .title-stack h3 { font-size: 18px; }
+    .chapter .body { padding: 0 18px 20px 18px; }
+    .book-toc li { grid-template-columns: 38px 1fr; }
+    .book-toc a.ch-jump { grid-column: 2; margin-top: 4px; }
+  }
+
+  .next-steps {
+    background: var(--navy); color: #fff;
+    border-radius: 12px; padding: 32px 34px;
+    margin: 40px 0 28px;
+  }
+  .next-steps h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 26px; color: #fff; margin: 0 0 10px; font-weight: 600;
+  }
+  .next-steps p {
+    font-size: 15px; line-height: 1.7; color: rgba(255,255,255,0.88);
+    margin: 0 0 12px;
+  }
+  .next-steps p strong { color: var(--gold); }
+  .next-steps ol {
+    margin: 8px 0 12px 22px; padding: 0;
+    color: rgba(255,255,255,0.92);
+  }
+  .next-steps ol li {
+    margin-bottom: 8px; font-size: 15px; line-height: 1.55;
+  }
+
+  .attribution {
+    background: #F7F2E8; border: 1px solid var(--rule);
+    border-radius: 10px; padding: 22px 26px; margin: 28px 0;
+  }
+  .attribution h3 {
+    font-size: 12px; letter-spacing: 0.2em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin: 0 0 10px;
+  }
+  .attribution p {
+    font-size: 14px; line-height: 1.65; color: var(--navy-mid);
+    margin: 0 0 10px;
+  }
+  .attribution p strong { color: var(--navy); }
+
+  .glossary {
+    background: var(--white); border: 1px solid var(--rule);
+    border-radius: 10px; padding: 28px 30px; margin: 28px 0;
+  }
+  .glossary h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px; color: var(--navy); margin: 0 0 14px; font-weight: 600;
+  }
+  .glossary dl {
+    display: grid; grid-template-columns: minmax(160px, 1fr) 2fr;
+    gap: 10px 22px;
+  }
+  .glossary dt { font-weight: 700; color: var(--navy); font-size: 14px; }
+  .glossary dd {
+    margin: 0; color: var(--navy-mid); font-size: 14px; line-height: 1.5;
+  }
+  @media (max-width: 620px) {
+    .glossary dl { grid-template-columns: 1fr; gap: 4px 0; }
+    .glossary dd { margin-bottom: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container">
+
+  <div class="breadcrumb">
+    <a href="index.html">Library</a><span>›</span><a href="bookshelf.html">Bookshelf</a><span>›</span>Practical Golf
+  </div>
+
+  <!-- ===================== BOOK HERO ===================== -->
+  <div class="book-hero">
+    <span class="vol">Teaching Library · Volume 04 · Primer</span>
+    <h1>Practical Golf: The Book That Built Modern Teaching.</h1>
+    <div class="subtitle">Ball flight tells the truth. Everything else is theory.</div>
+    <div class="gold-dash"></div>
+    <div class="attrib">Inspired by John Jacobs' <em>Practical Golf</em></div>
+  </div>
+
+  <!-- ===================== DISCLAIMER ===================== -->
+  <div class="primer-disclaimer">
+    <div class="pd-label">Independent Interpretation</div>
+    <p>
+      This primer is Ryan Rinneard's independent educational summary of the
+      principles John Jacobs laid down in his 1972 book <em>Practical Golf</em>.
+      It is <strong>not an official Jacobs publication</strong>, nor authorized
+      by his estate. Concepts below are described in Ryan's own words; the
+      original work is attributed to Jacobs throughout.
+    </p>
+    <p>
+      <strong>If you only ever buy one golf book, buy this one.</strong> The
+      full text covers nuance and detail this primer can't reproduce, and
+      Jacobs' own writing has a clarity that nothing has matched in the fifty
+      years since.
+      <a href="https://www.amazon.com/s?k=Practical+Golf+John+Jacobs" target="_blank" rel="noopener">Find it on Amazon &rarr;</a>
+    </p>
+  </div>
+
+  <!-- ===================== COACH NOTE ===================== -->
+  <div class="coach-note">
+    <div class="cn-label">From the coach</div>
+    <p>
+      If you ask any serious golf teacher in the world to name the most
+      important book ever written on instruction, you'll get one of two
+      answers: <em>Five Lessons</em> by Ben Hogan, or <em>Practical Golf</em>
+      by John Jacobs. Hogan's book is about how <strong>he</strong> played.
+      Jacobs' book is about how <strong>you</strong> can be helped &mdash;
+      and that distinction is why Jacobs sits, for me, at the very top of
+      the shelf.
+    </p>
+    <p>
+      Jacobs was a Ryder Cup player and captain, but he became famous as a
+      diagnostician. He could stand on the back of the range, watch a golfer
+      hit three balls, and tell them exactly what their clubface and path
+      were doing at impact without ever seeing the swing in slow motion.
+      He did this because he understood, before anyone else did, that
+      <strong>the ball is the truth.</strong> Whatever the ball does is the
+      consequence of what the club did. And whatever the club did is a
+      consequence of how the swing was set up to deliver it.
+    </p>
+    <p>
+      Everything modern teaching is built on &mdash; ball flight laws,
+      D-Plane, TrackMan numbers, the &ldquo;new&rdquo; understanding that
+      face dominates direction &mdash; Jacobs was teaching, with no
+      technology and no high-speed cameras, in 1972.
+    </p>
+    <p>
+      <strong>This primer is for the recreational player</strong> who's heard
+      Jacobs' name in passing, or seen the book referenced in a lesson, and
+      wants the core ideas before sitting down with the original. Eight
+      chapters: his big idea, the diagnostic system he invented, the impact
+      conditions he insisted matter, the setup he refused to compromise on,
+      the grip he said was non-negotiable, and how to diagnose your own
+      game from the only piece of evidence that doesn't lie &mdash; what
+      the ball just did.
+    </p>
+    <p>
+      Read it straight through. Then go to the range with one shot per ball
+      and watch where it goes. Jacobs would tell you that's where the lesson
+      actually starts.
+    </p>
+    <div class="sign-off">&mdash; Ryan</div>
+  </div>
+
+  <!-- ===================== TOC ===================== -->
+  <div class="book-toc">
+    <h2>Table of contents</h2>
+    <ol>
+      <li>
+        <div class="ch-num">01</div>
+        <div><div class="ch-title">Why Practical Golf still matters
+          <small>The book that gave teachers a language. And why every modern system traces back here.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch1">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">02</div>
+        <div><div class="ch-title">The ball is the truth
+          <small>Why Jacobs taught what came out, not what went in. The diagnostic mindset.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch2">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">03</div>
+        <div><div class="ch-title">The nine ball flights
+          <small>Three start directions, three curves. Every shot you'll ever hit lives in this grid.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch3">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">04</div>
+        <div><div class="ch-title">The six things that must be true at impact
+          <small>Face, path, angle, low point, sweet spot, speed. Everything else is decoration.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch4">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">05</div>
+        <div><div class="ch-title">Setup is half the swing
+          <small>Grip, stance, posture, alignment, ball position. Get these and the swing has a chance.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch5">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">06</div>
+        <div><div class="ch-title">The grip — Jacobs' non-negotiable
+          <small>Why every diagnostic conversation ended the same way: &ldquo;Let me see your hands on the club.&rdquo;</small>
+        </div></div>
+        <a class="ch-jump" href="#ch6">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">07</div>
+        <div><div class="ch-title">Diagnose yourself
+          <small>How to read your own ball flight and know what your club did. The Jacobs method, step by step.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch7">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">08</div>
+        <div><div class="ch-title">Where this fits in modern golf
+          <small>Jacobs, TrackMan, D-Plane, and why the technology proved him right.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch8">Read &rarr;</a>
+      </li>
+    </ol>
+  </div>
+
+  <!-- ===================== CHAPTERS ===================== -->
+  <div class="chapter-stack">
+
+    <!-- ========== CHAPTER 1 ========== -->
+    <details class="chapter" id="ch1">
+      <summary>
+        <div class="num">1</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter One</div>
+          <h3>Why Practical Golf still matters</h3>
+          <div class="ch-teaser">The book that gave teachers a language. And why every modern system traces back here.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          Before Jacobs, golf instruction was mostly anecdote and method.
+          A great player would write a book about how <em>they</em> swung,
+          and recreational golfers would try, with varying success, to copy
+          it. There was no shared vocabulary. There was no diagnostic
+          framework. If your shot was slicing, the cure was whatever the
+          last teacher you saw happened to believe.
+        </p>
+
+        <div class="key-idea">
+          <b>The key idea.</b> Jacobs separated <em>method</em> from
+          <em>function</em>. He didn't care how you got there &mdash; he
+          cared what the club was doing at the moment it met the ball.
+          That single move &mdash; teaching the function instead of the
+          form &mdash; is what turned golf instruction into something
+          you could repeat, scale, and trust.
+        </div>
+
+        <h4>What was new in 1972</h4>
+        <p>
+          When <em>Practical Golf</em> came out, Jacobs put three things on
+          paper that no one had organized into a single system before:
+        </p>
+        <ul>
+          <li><strong>Ball flight laws</strong> &mdash; the relationship
+            between clubface, club path, and what the ball does. He framed
+            it as cause and effect, in a way any player could understand.</li>
+          <li><strong>The impact essentials</strong> &mdash; the small set
+            of geometric facts that must be true when the club meets the
+            ball. If you've ever heard a teacher say &ldquo;impact is
+            everything,&rdquo; this is where that line came from.</li>
+          <li><strong>The setup hierarchy</strong> &mdash; the idea that
+            faults in setup multiply through the swing, and that fixing
+            setup first solves most problems before they need a swing
+            change.</li>
+        </ul>
+
+        <p>
+          All three ideas are now considered obvious. They weren't in 1972.
+          And the reason they feel obvious today is that <em>every</em>
+          subsequent teaching system &mdash; Leadbetter, Harmon, Pelz,
+          McLean, Plummer &amp; Bennett, Vision54, TrackMan University,
+          modern TPI &mdash; is built on the foundation Jacobs laid.
+        </p>
+
+        <h4>Why &ldquo;practical&rdquo; was the right word</h4>
+        <p>
+          Jacobs called the book <em>Practical Golf</em> because that's
+          what it is. It's not a theory book. It's not a swing-method
+          book. It's a working teacher's manual. Every page asks: what
+          does this look like on the course? What does the recreational
+          player actually need to know? What's the smallest change that
+          fixes the largest number of shots?
+        </p>
+
+        <div class="feel-pull">
+          &ldquo;There is no swing that is right for everybody, but there
+          is impact that is right for everybody.&rdquo;
+        </div>
+
+        <p>
+          That's the line. It's the entire book in fifteen words. Whatever
+          your swing looks like, whatever your handicap, whatever you do
+          with the rest of your life &mdash; if you can deliver the club
+          to the ball with the face square to your target, on a path that
+          travels toward the target, with the low point of your swing just
+          ahead of the ball, with center-face contact at appropriate
+          speed, you will hit good golf shots. The job of the swing is
+          to produce that impact. The job of teaching is to find the
+          shortest path from where you are to that impact.
+        </p>
+
+        <div class="bridge">
+          Next: the diagnostic mindset that made Jacobs famous. Why he
+          watched the ball, not the swing &mdash; and why that's still the
+          best lesson he ever taught.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 2 ========== -->
+    <details class="chapter" id="ch2">
+      <summary>
+        <div class="num">2</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Two</div>
+          <h3>The ball is the truth</h3>
+          <div class="ch-teaser">Why Jacobs taught what came out, not what went in. The diagnostic mindset.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          Jacobs would stand behind a player, watch a few balls fly, and
+          start the lesson by describing exactly what their club had done
+          at the moment of impact. The face was a fraction open. The path
+          was traveling slightly to the left. The angle of attack was
+          steeper than ideal. The strike was towards the heel. He could
+          tell you these things <em>without seeing the swing</em>, because
+          the ball flight he'd watched had already told him.
+        </p>
+
+        <div class="key-idea">
+          <b>The key idea.</b> The golf ball doesn't care about your
+          backswing, your weight shift, your &ldquo;feel,&rdquo; or your
+          mental model. It only responds to what the clubhead was doing
+          for the half-thousandth of a second it was in contact with it.
+          Read the ball, and you read the truth.
+        </div>
+
+        <h4>Why this was revolutionary</h4>
+        <p>
+          Pre-Jacobs, most teaching looked at the swing and tried to
+          decide if it was &ldquo;correct.&rdquo; If your backswing was
+          flat, you were told to make it more upright. If your hips slid,
+          you were told to turn. The teacher had a model of the perfect
+          swing, and your job was to copy it.
+        </p>
+        <p>
+          Jacobs flipped the order. Instead of starting with the swing,
+          he started with the result. The ball did something. What did
+          the club have to be doing at impact to make the ball do that?
+          And what does the swing need to look like to produce that
+          impact condition?
+        </p>
+        <p>
+          <strong>This is reverse-engineering instead of pattern matching.</strong>
+          It's the difference between a doctor who treats your symptoms
+          and a doctor who diagnoses the cause. Jacobs was the first golf
+          teacher to systematically diagnose causes, and once you've
+          learned to think this way, you can never go back.
+        </p>
+
+        <h4>What this means for your range time</h4>
+        <p>
+          If you take only one idea from this primer to your next practice
+          session, take this one: <strong>watch where every ball goes.</strong>
+          Not in a general &ldquo;that was fine&rdquo; way. Specifically.
+          Did it start left, center, or right of your target line? Did it
+          curve left, right, or stay straight? Each of those answers tells
+          you something concrete about what the club did, and what the
+          club did is something you can change.
+        </p>
+
+        <div class="drill-box">
+          <div class="db-title">Drill — One Ball, One Note</div>
+          <p style="margin:0;">
+            Hit ten balls. For each one, write a quick note: where it
+            started (L/C/R) and how it curved (left/straight/right).
+            At the end you'll have a clear pattern &mdash; eight pull-cuts,
+            seven push-draws, whatever it is &mdash; and that pattern is
+            the conversation you need to have with your swing. Most amateurs
+            <em>think</em> their misses are random. They're almost never
+            random. They're a pattern you haven't been looking at.
+          </p>
+        </div>
+
+        <div class="mistake-box">
+          <div class="mb-title">The trap to avoid</div>
+          <ul>
+            <li>Caring about what the swing felt like instead of what the
+              ball did. Feel is unreliable. Ball flight is data.</li>
+            <li>Hitting twenty balls in a row to &ldquo;groove a feeling&rdquo;
+              without watching where any of them went. You can groove the
+              wrong impact for an hour and your handicap won't move.</li>
+            <li>Assuming that because one good shot felt like X, all your
+              good shots will feel like X. Different days, different bodies,
+              different feels. Same impact conditions.</li>
+          </ul>
+        </div>
+
+        <div class="bridge">
+          Next: the diagnostic grid Jacobs built. Nine ball flights. Three
+          starts, three curves. Every shot you'll ever hit lives in here.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 3 ========== -->
+    <details class="chapter" id="ch3">
+      <summary>
+        <div class="num">3</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Three</div>
+          <h3>The nine ball flights</h3>
+          <div class="ch-teaser">Three start directions, three curves. Every shot you'll ever hit lives in this grid.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          Jacobs catalogued every shot you can hit into nine patterns. He
+          didn't invent the patterns &mdash; players had been hitting them
+          forever &mdash; but he was the first to organize them into a
+          teaching grid and explain what caused each one.
+        </p>
+
+        <div class="key-idea">
+          <b>The key idea.</b> A golf ball does two things in the air:
+          it starts somewhere, and it curves somewhere. The combinations
+          of starting direction (left, center, right) and curve (left,
+          straight, right) give you exactly nine possible flights. Every
+          golf shot ever hit lives in this 3 &times; 3 grid.
+        </div>
+
+        <h4>The three starting directions</h4>
+        <p>
+          Where the ball starts is, for an iron shot, determined almost
+          entirely by where the clubface is pointing at impact &mdash;
+          relative to the target. Square-to-target, the ball starts at
+          the target. Open, it starts right. Closed, it starts left.
+        </p>
+        <p>
+          Modern launch monitor data has refined this slightly: the start
+          direction is roughly 85% face, 15% path for irons, and slightly
+          less face-dominant for driver. But Jacobs' principle was right
+          in 1972 and is still right today. <strong>The face starts the
+          ball.</strong>
+        </p>
+
+        <h4>The three curves</h4>
+        <p>
+          Where the ball curves is determined by the relationship between
+          face and path. If the face is pointing where the path is
+          traveling, the ball goes straight. If the face is closed
+          <em>relative to the path</em>, it curves left. If it's open
+          relative to the path, it curves right.
+        </p>
+        <p>
+          This is the key insight every recreational golfer misses:
+          <strong>curve is not about face direction in space.</strong>
+          It's about face direction <em>compared to path direction</em>.
+          You can have an open face that draws (if the path is even more
+          out-to-in), or a closed face that fades (if the path is even more
+          in-to-out). Slices and hooks live in the gap between face and
+          path, not in either one alone.
+        </p>
+
+        <h4>The nine combinations</h4>
+        <p>Walk through them yourself:</p>
+        <ul>
+          <li><strong>Push-slice:</strong> starts right, curves further right.
+            Face open to target, path even more right (in-to-out), face open
+            to path.</li>
+          <li><strong>Push:</strong> starts right, stays straight. Face and
+            path both pointing right of target, face square to path.</li>
+          <li><strong>Push-hook:</strong> starts right, curves back to or
+            past target. Face open to target but closed to path.</li>
+          <li><strong>Slice:</strong> starts square, curves right. Face square
+            to target, path left of target, face open to path.</li>
+          <li><strong>Straight:</strong> starts square, stays square. Face,
+            path, and target all aligned.</li>
+          <li><strong>Hook:</strong> starts square, curves left. Face square,
+            path right of target, face closed to path.</li>
+          <li><strong>Pull-slice:</strong> starts left, curves back to or
+            past target. Face closed to target but open to path (the
+            classic mid-handicap pattern).</li>
+          <li><strong>Pull:</strong> starts left, stays left. Face and path
+            both left, face square to path.</li>
+          <li><strong>Pull-hook:</strong> starts left, curves further left.
+            Both face and path left, face closed to path.</li>
+        </ul>
+
+        <div class="verify-box">
+          <div class="vb-title">Verify</div>
+          Stand behind the line on your next range session. Hit three balls
+          and put each one into one of the nine boxes above. By the third
+          ball you'll have your pattern. <em>That pattern is what your
+          lesson should be about.</em> Trying to fix a slice with a hook
+          drill, or a pull-cut with a closed-face drill, is the difference
+          between making progress and going in circles.
+        </div>
+
+        <div class="bridge">
+          Next: the six things that must be true at impact. Once you know
+          the pattern, you know what to change.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 4 ========== -->
+    <details class="chapter" id="ch4">
+      <summary>
+        <div class="num">4</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Four</div>
+          <h3>The six things that must be true at impact</h3>
+          <div class="ch-teaser">Face, path, angle, low point, sweet spot, speed. Everything else is decoration.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          Jacobs argued that the entire golf swing exists to produce one
+          half-thousandth of a second &mdash; the moment the clubhead
+          touches the ball. Everything before that moment is just the
+          delivery mechanism. The swing is the means; impact is the end.
+        </p>
+
+        <div class="key-idea">
+          <b>The key idea.</b> There are six geometric facts that determine
+          what a golf shot does. They are not opinions. They are not
+          stylistic. They are physics. Get them right, and the ball goes
+          where you want. Get any one of them wrong, and the ball doesn't.
+        </div>
+
+        <h4>The six essentials</h4>
+        <p>
+          Jacobs listed them in different orders in different writings,
+          but the canonical six are:
+        </p>
+        <ol>
+          <li><strong>Clubface direction</strong> at impact, relative to the
+            target.</li>
+          <li><strong>Club path</strong> at impact, relative to the target
+            (and the face).</li>
+          <li><strong>Angle of attack</strong> &mdash; whether the club is
+            descending, level, or ascending at impact.</li>
+          <li><strong>Low point</strong> of the swing arc &mdash; where the
+            club bottoms out relative to the ball.</li>
+          <li><strong>Sweet spot</strong> contact &mdash; whether the ball
+            is struck on the center of the face, the heel, the toe, or off
+            the grooves.</li>
+          <li><strong>Clubhead speed</strong> at impact.</li>
+        </ol>
+
+        <h4>What each one does</h4>
+        <p>
+          <strong>Face direction</strong> mostly determines starting line.
+          It's responsible for about 85% of where the ball starts for irons.
+          If your shots are starting in the wrong direction, your face is
+          pointing in the wrong direction at impact.
+        </p>
+        <p>
+          <strong>Path</strong> mostly determines curve (in combination with
+          face). It also affects starting line, but secondarily. The
+          relationship between face and path is what produces draw, fade,
+          or straight flight.
+        </p>
+        <p>
+          <strong>Angle of attack</strong> affects launch and spin. With
+          irons, a slightly descending blow compresses the ball and produces
+          predictable distance and trajectory. With driver, a slightly
+          ascending blow maximizes distance. Get the angle wrong and you'll
+          either thin it, fat it, or hit it on the wrong launch window.
+        </p>
+        <p>
+          <strong>Low point</strong> is where the club reaches the bottom
+          of its swing arc. For irons hit off the ground, the low point
+          must be <em>after</em> the ball (closer to the target side). If
+          your low point is behind the ball, you'll hit it fat. If it's
+          well past, you'll thin or top it. This is the single most
+          underrated impact factor in amateur golf.
+        </p>
+        <p>
+          <strong>Sweet spot contact</strong> is roughly a 5-yard difference
+          per inch of off-center contact on a 7-iron. Heel strikes lose
+          distance and add slice spin. Toe strikes lose distance and add
+          hook spin. Center-face contact is the most boring, most repeatable
+          thing in golf and it's worth more strokes than almost any swing
+          change.
+        </p>
+        <p>
+          <strong>Speed</strong> sets the ceiling on distance. You can
+          improve everything else and still be capped if you swing too
+          slowly. Conversely, more speed without the other five is just a
+          more violent miss.
+        </p>
+
+        <div class="feel-pull">
+          &ldquo;The good player produces the impact conditions. The
+          recreational player hopes for them.&rdquo;
+        </div>
+
+        <h4>How to think about this on the course</h4>
+        <p>
+          You don't think about all six at once. Jacobs argued that for
+          most amateurs, two of them matter more than the others most of
+          the time: <strong>face direction</strong> and <strong>low point.</strong>
+          Face controls where the ball goes. Low point controls whether
+          you actually make decent contact. If you can get those two right
+          for any given shot, the others tend to fall into a workable
+          range.
+        </p>
+        <p>
+          Which is why, when Jacobs gave a lesson, he checked the grip
+          first (which controls face) and the setup ball position (which
+          influences low point). Two checks, ninety seconds, and most of
+          the diagnostic was done before the player had hit a ball.
+        </p>
+
+        <div class="bridge">
+          Next: setup. Jacobs' first-look diagnostic. Why the swing is
+          mostly determined before it ever starts.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 5 ========== -->
+    <details class="chapter" id="ch5">
+      <summary>
+        <div class="num">5</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Five</div>
+          <h3>Setup is half the swing</h3>
+          <div class="ch-teaser">Grip, stance, posture, alignment, ball position. Get these and the swing has a chance.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          Jacobs argued that more amateur golf problems are caused by setup
+          than by swing motion. The reasoning was simple: if the way you
+          stand to the ball pre-determines a certain kind of swing, no
+          amount of in-motion correction can override that geometry. The
+          swing has to compensate for what the setup made inevitable.
+        </p>
+
+        <div class="key-idea">
+          <b>The key idea.</b> Five setup elements &mdash; grip, stance,
+          posture, alignment, ball position &mdash; determine a huge
+          percentage of what your swing can possibly do. Get them right
+          and the swing has a fighting chance. Get them wrong and the
+          swing has to perform miracles to produce decent impact.
+        </div>
+
+        <h4>The five elements, in priority order</h4>
+        <p>
+          <strong>Grip</strong> is first, and it's first by a long way.
+          The grip controls the clubface, and the clubface controls
+          starting direction and most of the curve. We're giving the grip
+          its own chapter next; this one covers the other four.
+        </p>
+
+        <p>
+          <strong>Stance</strong> is the width and angle of your feet. A
+          stance roughly shoulder-width is the default for irons; slightly
+          wider for the driver. Toes turned out a touch helps the hips
+          turn through. Stance too narrow and you have no base; too wide
+          and you can't rotate. Get the width right once and you almost
+          never have to think about it again.
+        </p>
+
+        <p>
+          <strong>Posture</strong> is the way the spine angles toward the
+          ball. Jacobs taught a tall posture from the hips, bowed forward,
+          arms hanging naturally from the shoulders. Not slumped, not
+          straight up, not bent over from the lower back. The arms should
+          fall directly below the shoulder line. If you have to reach for
+          the ball or you feel crowded by it, your posture is wrong
+          before the swing has started.
+        </p>
+
+        <p>
+          <strong>Alignment</strong> is where your feet, hips, and
+          shoulders point. The classic Jacobs alignment was parallel left
+          of the target (for right-handed players) &mdash; meaning your
+          feet line is parallel to the target line, not pointing at the
+          target. Most amateurs are aimed right of where they think,
+          which forces them to swing across the line to bring the ball
+          back. The pull-slice pattern that dominates club golf is almost
+          entirely an alignment problem.
+        </p>
+
+        <p>
+          <strong>Ball position</strong> is where the ball sits relative
+          to your feet. The general Jacobs principle: longer clubs
+          slightly more forward, shorter clubs slightly more centered.
+          With a 7-iron the ball sits roughly in the middle. With a
+          driver, just inside the lead heel. Ball position controls
+          where in your arc the club meets the ball, which controls low
+          point, which controls the quality of strike.
+        </p>
+
+        <h4>How to check each one</h4>
+        <div class="drill-box">
+          <div class="db-title">Drill — The Setup Audit</div>
+          <p style="margin:0 0 6px;">
+            Two clubs on the ground. One pointing at the target. The other
+            parallel to the first, on the ground in front of your toes.
+            That's your alignment check.
+          </p>
+          <p style="margin:0 0 6px;">
+            Have a friend take a photo from down-the-line (behind you,
+            along your target line) and from face-on (perpendicular to
+            the target line, at hip height). Compare to a tour player
+            you like. You're looking for: shoulders, hips, and feet all
+            parallel to the target line; spine tilted forward from the
+            hips; arms hanging straight down; ball position correct for
+            the club.
+          </p>
+          <p style="margin:0;">
+            Two photos, ninety seconds, and you'll catch problems your
+            swing has been compensating for since you started playing.
+          </p>
+        </div>
+
+        <div class="mistake-box">
+          <div class="mb-title">The most common setup mistakes</div>
+          <ul>
+            <li><strong>Aimed right.</strong> Players line up at the target
+              with their <em>shoulders</em>, which puts their feet aimed
+              well right. Hugely common, hugely consequential.</li>
+            <li><strong>Ball too far back.</strong> Players who once played
+              with longer-shafted clubs often kept the ball position from
+              years ago. Today's clubs need the ball slightly forward of
+              old positions.</li>
+            <li><strong>Slumped posture.</strong> Bending from the lower
+              back instead of the hips. Restricts turn and shifts the
+              swing toward the heel.</li>
+            <li><strong>Arms tucked in.</strong> Arms locked against the
+              chest, no clearance for the swing. Forces a flat, inside
+              path.</li>
+          </ul>
+        </div>
+
+        <div class="bridge">
+          Next: the grip. Jacobs' diagnostic always started here, and so
+          does ours.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 6 ========== -->
+    <details class="chapter" id="ch6">
+      <summary>
+        <div class="num">6</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Six</div>
+          <h3>The grip — Jacobs' non-negotiable</h3>
+          <div class="ch-teaser">Why every diagnostic conversation ended the same way: &ldquo;Let me see your hands on the club.&rdquo;</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          If you walked onto Jacobs' range with a problem, he checked your
+          grip first. Always. It didn't matter what the problem was. Slice?
+          Grip. Hook? Grip. Distance? Grip. Inconsistent strike? Grip. The
+          reason was simple: <strong>the grip controls the clubface, and
+          the clubface controls 85% of what the ball does.</strong> Almost
+          every persistent fault in club golf comes back to hands that
+          aren't on the club the right way.
+        </p>
+
+        <div class="key-idea">
+          <b>The key idea.</b> The grip is the one and only physical
+          connection between you and the club. Every other body part
+          influences the swing through the grip. Get the grip right, and
+          the clubface returns to square at impact <em>by default</em>,
+          without conscious effort. Get the grip wrong, and your swing
+          spends its entire motion trying to compensate for a face that
+          won't behave.
+        </div>
+
+        <h4>What a sound grip actually looks like</h4>
+        <p>
+          For a right-handed player, the lead hand (left hand) goes on
+          first. The club sits diagonally across the base of the fingers
+          &mdash; not in the palm. When you close the hand, the thumb
+          rests on the top of the grip, slightly right of center. You
+          should be able to see two or three knuckles when you look down
+          (Jacobs called this &ldquo;the V&rdquo; formed by thumb and
+          forefinger pointing toward your right ear).
+        </p>
+        <p>
+          The trail hand (right hand) goes on second. The lifeline of the
+          right palm covers the left thumb. The right hand fingers wrap
+          around. The two Vs &mdash; left thumb-forefinger and right
+          thumb-forefinger &mdash; should be parallel and both pointing
+          to the same place (roughly your right shoulder/ear).
+        </p>
+        <p>
+          That's it. Two hands, fingers not palm, both Vs pointing the
+          same direction.
+        </p>
+
+        <h4>Why most amateurs get it wrong</h4>
+        <p>
+          The most common amateur fault is the lead hand sitting in the
+          <em>palm</em> instead of the fingers. This single error does
+          three bad things at once:
+        </p>
+        <ul>
+          <li>Reduces wrist hinge, which costs distance.</li>
+          <li>Forces the face open at the top of the backswing.</li>
+          <li>Makes it nearly impossible to release the club through impact.</li>
+        </ul>
+        <p>
+          The second most common fault is a grip that's too &ldquo;weak&rdquo;
+          &mdash; the hands rotated too far counter-clockwise (for a
+          right-hander), with both Vs pointing toward the chin instead
+          of the trail shoulder. This is the slice grip. Almost every
+          chronic slicer in club golf has this grip.
+        </p>
+
+        <div class="feel-pull">
+          &ldquo;Show me your hands on the club and I'll tell you what
+          your bad shot is.&rdquo;
+        </div>
+
+        <h4>The fix is one Friday morning</h4>
+        <p>
+          A bad grip feels weird when you correct it. That's the whole
+          problem. Players try a proper grip, hit two bad shots, decide
+          it doesn't work, and go back to what they had. The fix isn't
+          complicated; it's just that nobody walks them through it slowly
+          enough for the new grip to stop feeling foreign.
+        </p>
+        <p>
+          That's why <a href="../adult/events.html" style="color:var(--gold);font-weight:700;">our Friday Morning Ladies' Series</a>
+          starts with the grip. Spend one morning getting your hands on the
+          club correctly, with eyes-on coaching, in a low-pressure setting,
+          and you'll save years of trying to fix the shot that the bad
+          grip was producing.
+        </p>
+
+        <div class="drill-box">
+          <div class="db-title">Drill — The Grip Check, Every Time</div>
+          <p style="margin:0;">
+            Before every shot in practice, look at your hands. See the
+            two Vs. Confirm they're parallel and pointing to your trail
+            shoulder. Five seconds, every ball. After two weeks you'll
+            never have to think about it again. The grip is muscle
+            memory that responds to attention, and attention is just
+            looking.
+          </p>
+        </div>
+
+        <div class="bridge">
+          Next: how to diagnose your own ball flight. The Jacobs method,
+          step by step, with no teacher in the picture.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 7 ========== -->
+    <details class="chapter" id="ch7">
+      <summary>
+        <div class="num">7</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Seven</div>
+          <h3>Diagnose yourself</h3>
+          <div class="ch-teaser">How to read your own ball flight and know what your club did. The Jacobs method, step by step.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          Jacobs' real gift wasn't that he could diagnose you. It's that
+          his framework was simple enough you could diagnose yourself.
+          Once you understand the nine ball flights and the six impact
+          essentials, you can take a bucket of balls to the range,
+          observe your own pattern, and work backwards to the cause.
+        </p>
+
+        <div class="key-idea">
+          <b>The key idea.</b> Diagnosis isn't a guess. It's a series of
+          questions you can answer from the ball alone. Where did it
+          start? What did it curve? Where did it finish? Those three
+          answers give you the face and path at impact, and the face
+          and path tell you what your grip and swing are doing wrong.
+        </div>
+
+        <h4>The self-diagnostic, step by step</h4>
+        <ol>
+          <li><strong>Hit ten balls with a 7-iron, same target.</strong>
+            Don't grind. Don't change anything between shots. Just hit
+            ten shots and watch where they go.</li>
+          <li><strong>For each ball, classify the start.</strong> Did it
+            start left of the target, at the target, or right of the
+            target?</li>
+          <li><strong>For each ball, classify the curve.</strong> Did it
+            curve left, stay straight, or curve right while in flight?</li>
+          <li><strong>Find the pattern.</strong> If 8 of 10 are
+            pull-cuts (start left, curve right), that's your pattern.
+            If 7 of 10 are pushes (start right, stay straight), that's
+            your pattern.</li>
+          <li><strong>Translate the pattern to face/path.</strong> Use
+            chapter three's grid. Pull-cut means face slightly closed to
+            target at impact, path well left, face open to path.
+            Push-draw means face slightly open to target, path further
+            right, face closed to path.</li>
+          <li><strong>Translate face/path to setup/grip.</strong> Face
+            persistently closed to target usually means a grip that's
+            too strong (Vs pointing past trail shoulder), or alignment
+            aimed left. Path persistently out-to-in usually means
+            shoulders aimed left at address, or an over-the-top swing
+            motion.</li>
+        </ol>
+
+        <h4>The two most common patterns in club golf</h4>
+        <p>
+          <strong>The pull-cut</strong> &mdash; starts left, curves right,
+          finishes near target. The single most common pattern in
+          recreational golf. The cause is almost always: shoulders aimed
+          left at address, over-the-top swing path, face that gets back
+          to square late. You're hitting a slice that gets a head start.
+          Fix the alignment first; fix the grip second; the path tends
+          to follow.
+        </p>
+        <p>
+          <strong>The push-draw</strong> &mdash; starts right, curves
+          left, finishes near or past target. The pattern most low
+          handicaps eventually settle into. Cause is generally: a
+          slightly in-to-out path (good), with a face that's open to
+          target but closed to path. This is a workable miss; you can
+          control it. Don't &ldquo;fix&rdquo; this if it's consistent.
+        </p>
+
+        <div class="mistake-box">
+          <div class="mb-title">Diagnose, don't catastrophize</div>
+          <ul>
+            <li>Don't decide your swing is broken because you hit two bad
+              shots. Hit ten. Look for the pattern.</li>
+            <li>Don't try to fix three things at once. Pick the one most
+              likely to fix the pattern &mdash; usually grip or alignment
+              &mdash; and work on it alone.</li>
+            <li>Don't change anything without verifying with ten more
+              balls. If the new ball flight isn't an improvement, you
+              changed the wrong thing.</li>
+          </ul>
+        </div>
+
+        <div class="verify-box">
+          <div class="vb-title">When to ask for help</div>
+          If you've run two diagnostic sessions and you can't identify a
+          clear pattern, or you can identify the pattern but can't move
+          it, that's the moment to <a href="https://rrgolfperformance.as.me/" target="_blank" rel="noopener" style="color:#4F4380;">book a lesson</a>.
+          A good teacher will see in ten minutes what you've been
+          puzzling over for ten range sessions. That's not a failure of
+          self-diagnosis; it's the right time to use a coach.
+        </div>
+
+        <div class="bridge">
+          Next: where Jacobs sits in the modern landscape. Why
+          TrackMan, D-Plane, and every &ldquo;new&rdquo; idea proved
+          him right.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 8 ========== -->
+    <details class="chapter" id="ch8">
+      <summary>
+        <div class="num">8</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Eight</div>
+          <h3>Where this fits in modern golf</h3>
+          <div class="ch-teaser">Jacobs, TrackMan, D-Plane, and why the technology proved him right.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          For three decades after <em>Practical Golf</em>, Jacobs' ball
+          flight laws were the consensus understanding of how golf shots
+          worked. Then in the mid-2000s, launch monitor data started
+          flooding in &mdash; TrackMan, FlightScope, GCQuad &mdash; and
+          something interesting happened. The new technology refined
+          some of Jacobs' specifics. But the framework was right.
+        </p>
+
+        <div class="key-idea">
+          <b>The key idea.</b> Jacobs taught with his eyes what TrackMan
+          measures with radar. The technology has refined the percentages
+          &mdash; we now know the face is about 85% responsible for
+          starting direction with irons, not 100% &mdash; but every modern
+          teaching system is still operating inside the framework Jacobs
+          laid down: ball flight is the evidence, impact is the cause,
+          and the swing is the delivery mechanism.
+        </div>
+
+        <h4>What modern technology added to Jacobs</h4>
+        <p>
+          <strong>The 85/15 face-path split.</strong> Pre-launch-monitor,
+          most teachers thought path dominated start direction. The
+          radar data revealed it's the opposite: face dominates, by a
+          lot, especially with irons. This is a refinement of Jacobs, not
+          a contradiction. He always said the face controlled start
+          direction; the technology just put a precise number on it.
+        </p>
+        <p>
+          <strong>D-Plane.</strong> A more accurate model of how the
+          three-dimensional clubhead behaves through impact. Updates
+          Jacobs' 2D model of face and path, but doesn't replace it.
+          Useful for teachers; rarely useful for recreational players.
+        </p>
+        <p>
+          <strong>Spin axis.</strong> Modern monitors measure the actual
+          axis of ball rotation, which is a cleaner way to think about
+          curve than &ldquo;face open to path.&rdquo; Same physics, just
+          measurable now.
+        </p>
+
+        <h4>What Jacobs got exactly right</h4>
+        <p>
+          Everything that matters:
+        </p>
+        <ul>
+          <li>The ball is the evidence. Start there, work backwards.</li>
+          <li>Face dominates start direction. Path dominates curve (in
+            combination with face).</li>
+          <li>Impact is the goal. The swing is the means.</li>
+          <li>Setup determines most of what the swing can do.</li>
+          <li>The grip is the single highest-leverage setup element.</li>
+          <li>Teaching is diagnosis first, prescription second.</li>
+        </ul>
+
+        <h4>Where Jacobs fits with the other primers on this shelf</h4>
+        <p>
+          Jacobs is the foundation. <strong>Read this primer first.</strong>
+          The other primers on this shelf are different angles on the same
+          problem:
+        </p>
+        <ul>
+          <li><strong>The 8-Step Swing (McLean)</strong> &mdash; gives
+            you a position-by-position map of the swing motion that
+            delivers the impact Jacobs is asking for. Mechanical.</li>
+          <li><strong>The Golfing Machine (Kelley)</strong> &mdash; an
+            engineer's catalogue of every component that can be in a
+            swing. Useful for understanding the variations between
+            tour players. Dense.</li>
+          <li><strong>Stack &amp; Tilt (Plummer &amp; Bennett)</strong>
+            &mdash; one specific way of organizing the impact essentials
+            into a teachable system. Excellent for ball-first contact.</li>
+        </ul>
+        <p>
+          All three of those are houses built on the foundation Jacobs
+          laid. If you're going to read one book on the shelf, read
+          <em>Practical Golf</em>. If you're going to read four, read
+          this one first.
+        </p>
+
+        <div class="feel-pull">
+          &ldquo;The ball doesn't lie. The ball isn't unfair. The ball
+          is just telling you what you did.&rdquo;
+        </div>
+
+        <div class="bridge">
+          Next: putting Jacobs to work this week.
+        </div>
+      </div>
+    </details>
+
+  </div>
+
+  <!-- ===================== NEXT STEPS ===================== -->
+  <div class="next-steps">
+    <h2>Putting Jacobs to work this week</h2>
+    <p>Three concrete actions, in order:</p>
+    <ol>
+      <li><strong>Watch every ball.</strong> Next range session, classify
+        every shot as one of the nine flights. Find your pattern.</li>
+      <li><strong>Check your grip.</strong> The single highest-leverage
+        change for most amateurs. Both Vs parallel, pointing to your
+        trail shoulder/ear, fingers not palm.</li>
+      <li><strong>Photograph your setup.</strong> Down-the-line and
+        face-on. Compare to a tour player. Fix the obvious one.</li>
+    </ol>
+    <p>
+      If you want to do this with eyes-on coaching, our
+      <a href="https://rrgolfperformance.as.me/Ladies-Fridays" target="_blank" rel="noopener" style="color:var(--gold);">Ladies' Friday Morning Series</a>
+      starts with exactly this material &mdash; the grip, the setup, the
+      diagnostic. A primer can teach you the language. A morning on the
+      range can install the habit.
+    </p>
+  </div>
+
+  <!-- ===================== ATTRIBUTION ===================== -->
+  <div class="attribution">
+    <h3>About the original</h3>
+    <p>
+      <strong>Practical Golf</strong> by John Jacobs (with Ken Bowden),
+      first published 1972. Considered by most working golf teachers to
+      be the most important instructional book ever written. Jacobs
+      (1925&ndash;2017) was a Ryder Cup player, captain, and the founder
+      of the modern golf-teaching profession. He taught using ball flight
+      and cause-and-effect diagnosis decades before launch monitors
+      proved him right.
+    </p>
+    <p>
+      <strong>If you only buy one golf book in your life, buy this one.</strong>
+      Used copies are widely available. The full text covers technique,
+      strategy, the short game, and putting in a way no primer can
+      reproduce.
+    </p>
+  </div>
+
+  <!-- ===================== GLOSSARY ===================== -->
+  <div class="glossary">
+    <h2>Glossary</h2>
+    <dl>
+      <dt>Ball flight law</dt>
+      <dd>The relationship between clubface, club path, angle of attack,
+        and the resulting flight of the ball. The foundation of modern
+        golf instruction.</dd>
+
+      <dt>Clubface</dt>
+      <dd>The direction the front of the clubhead points at impact.
+        Dominates starting direction (~85% for irons).</dd>
+
+      <dt>Club path</dt>
+      <dd>The direction the clubhead is traveling through impact. In
+        combination with face, determines curve.</dd>
+
+      <dt>Angle of attack</dt>
+      <dd>The vertical angle of the club's approach to the ball at
+        impact. Descending (irons), ascending (driver), level (long
+        clubs off the tee).</dd>
+
+      <dt>Low point</dt>
+      <dd>The lowest point of the club's swing arc. For irons, must be
+        in front of the ball (target-side) for clean contact.</dd>
+
+      <dt>Sweet spot</dt>
+      <dd>The center of percussion on the clubface; the point of maximum
+        energy transfer and minimum twist on off-center contact.</dd>
+
+      <dt>D-Plane</dt>
+      <dd>A modern 3D model of clubhead behavior through impact,
+        refining Jacobs' 2D face/path framework. Mostly a tool for
+        teachers, not for players.</dd>
+
+      <dt>The Two Vs</dt>
+      <dd>The Vs formed by the thumb and forefinger of each hand on
+        the grip. Jacobs' shortcut for checking grip neutrality: both
+        Vs should be parallel and point to the same place (roughly the
+        trail shoulder).</dd>
+    </dl>
+  </div>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  RRG.mountLibrary();
+</script>
+</body>
+</html>
