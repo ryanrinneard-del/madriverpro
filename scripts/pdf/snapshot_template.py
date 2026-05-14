@@ -125,7 +125,7 @@ def styles():
             textColor=WHITE, alignment=TA_CENTER),
         'card_why': ParagraphStyle(
             'card_why', fontName='Helvetica', fontSize=9.5, leading=13.5,
-            textColor=BODY_TEXT, spaceBefore=2, spaceAfter=2),
+            textColor=BODY_TEXT, spaceBefore=3, spaceAfter=3),
         'mini_label': ParagraphStyle(
             'mini_label', fontName='Helvetica-Bold', fontSize=7, leading=9,
             textColor=GOLD),
@@ -150,6 +150,18 @@ def styles():
         'closing': ParagraphStyle(
             'closing', fontName='Helvetica-Oblique', fontSize=10, leading=15,
             textColor=DARK_TEXT),
+        'road_intro': ParagraphStyle(
+            'road_intro', fontName='Helvetica', fontSize=10, leading=14,
+            textColor=BODY_TEXT, spaceAfter=8),
+        'week_badge': ParagraphStyle(
+            'week_badge', fontName='Helvetica-Bold', fontSize=7.5, leading=10,
+            textColor=WHITE, alignment=TA_CENTER),
+        'week_theme': ParagraphStyle(
+            'week_theme', fontName='Helvetica-Bold', fontSize=10.5, leading=13,
+            textColor=NAVY),
+        'week_line': ParagraphStyle(
+            'week_line', fontName='Helvetica', fontSize=9, leading=12,
+            textColor=BODY_TEXT),
     }
 
 
@@ -249,6 +261,11 @@ def _focuses(data):
 def _probes(data):
     """Ryan's on-lesson checklist."""
     return data.get('probes') or []
+
+
+def _sessions(data):
+    """The six weekly sessions for the Road Ahead overview."""
+    return data.get('sessions') or []
 
 
 # ── Layout builders ────────────────────────────────────────────────────────
@@ -462,12 +479,12 @@ def _focus_card(st, idx, focus):
 
     return KeepTogether([
         header,
-        Spacer(1, 2),
+        Spacer(1, 3),
         why,
         cue_tbl,
-        Spacer(1, 2),
+        Spacer(1, 3),
         drill_tbl,
-        Spacer(1, 6),
+        Spacer(1, 13),
     ])
 
 
@@ -490,8 +507,8 @@ def _note_row(st, probe):
         ('VALIGN', (0, 0), (-1, -1), 'TOP'),
         ('LEFTPADDING', (0, 0), (-1, -1), 0),
         ('RIGHTPADDING', (0, 0), (-1, -1), 0),
-        ('TOPPADDING', (0, 0), (-1, -1), 2.5),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 2.5),
+        ('TOPPADDING', (0, 0), (-1, -1), 4),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
     ]))
     return row
 
@@ -509,6 +526,55 @@ def _closing_block(st, text):
         ('TOPPADDING', (1, 0), (-1, -1), 9),
         ('BOTTOMPADDING', (1, 0), (-1, -1), 9),
     ]))
+    return tbl
+
+
+def _week_badge(st, week):
+    """A small navy 'WEEK n' badge."""
+    badge = Table([[Paragraph('WEEK ' + str(week), st['week_badge'])]],
+                  colWidths=[0.74 * inch])
+    badge.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, -1), NAVY_MID),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('TOPPADDING', (0, 0), (-1, -1), 5),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 5),
+        ('LEFTPADDING', (0, 0), (-1, -1), 3),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 3),
+    ]))
+    return badge
+
+
+def _road_ahead_rows(st, sessions):
+    """The six-week overview table: week badge + theme + one-line framing."""
+    badge_w = 0.74 * inch
+    gap_w = 0.16 * inch
+    text_w = CONTENT_W - badge_w - gap_w
+    rows = []
+    for s in sessions[:6]:
+        line = s.get('subtitle') or s.get('primary') or ''
+        inner = Table([[Paragraph(s.get('theme', ''), st['week_theme'])],
+                       [Paragraph(line, st['week_line'])]],
+                      colWidths=[text_w])
+        inner.setStyle(TableStyle([
+            ('LEFTPADDING', (0, 0), (-1, -1), 0),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 0),
+            ('TOPPADDING', (0, 0), (0, 0), 0),
+            ('BOTTOMPADDING', (0, 0), (0, 0), 1),
+            ('TOPPADDING', (0, 1), (0, 1), 0),
+            ('BOTTOMPADDING', (0, 1), (0, 1), 0),
+        ]))
+        rows.append([_week_badge(st, s.get('week', '')), '', inner])
+    tbl = Table(rows, colWidths=[badge_w, gap_w, text_w])
+    style = [
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('LEFTPADDING', (0, 0), (-1, -1), 0),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 0),
+        ('TOPPADDING', (0, 0), (-1, -1), 10),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 10),
+    ]
+    for i in range(len(rows) - 1):
+        style.append(('LINEBELOW', (0, i), (-1, i), 0.6, RULE))
+    tbl.setStyle(TableStyle(style))
     return tbl
 
 
@@ -573,7 +639,22 @@ def build_pdf(output_path, data=None):
             story.append(HRFlowable(width='100%', thickness=0.5, color=RULE,
                                     spaceBefore=0, spaceAfter=0))
 
-    story.append(Spacer(1, 9))
+    # ── PAGE 3 — THE ROAD AHEAD ────────────────────────────────────────────
+    # The six-week build, so the player sees that Session 1 is the start of a
+    # structured arc — not a one-off. Skipped gracefully if no session data.
+    sessions = _sessions(data)
+    if sessions:
+        story.append(PageBreak())
+        story.append(Paragraph('THE ROAD AHEAD', st['eyebrow']))
+        story.append(Paragraph('Your Six-Week Build', st['section_title']))
+        intro = data.get('arc_intro') or (
+            'Session 1 is the start. Here is how the first six weeks build on '
+            'one another — each session sharpening what the last one set up. '
+            'The full week-by-week plan comes with your 6-Week Arc.')
+        story.append(Paragraph(intro, st['road_intro']))
+        story.append(_road_ahead_rows(st, sessions))
+
+    story.append(Spacer(1, 16))
     story.append(_closing_block(st, _closing_line(data)))
 
     doc.build(story, onFirstPage=_header_footer, onLaterPages=_header_footer)
