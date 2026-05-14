@@ -35,6 +35,24 @@ export const PDF_DATA_SCHEMA = {
             description: 'Two paragraphs for the Dossier "PLAYER IDENTITY" section.',
         },
 
+        // The three setup checkpoints read on every player, before any swing
+        // change. Optional (not in `required`) so the slim 6-week-arc schema
+        // is unaffected; the Snapshot/Session-1 PDF renders it when present.
+        setup_read: {
+            type: 'array',
+            minItems: 3, maxItems: 3,
+            description: 'Exactly 3 setup checkpoints, in order: Grip, Posture & Stance, Aim & Ball Position.',
+            items: {
+                type: 'object',
+                required: ['area', 'level', 'note'],
+                properties: {
+                    area: { type: 'string', description: 'Grip | Posture & Stance | Aim & Ball Position' },
+                    level: { enum: ['GREEN', 'AMBER', 'RED'] },
+                    note: { type: 'string', description: 'One-line plain-language read of this checkpoint.' },
+                },
+            },
+        },
+
         stat_strip: {
             type: 'array',
             minItems: 5, maxItems: 5,
@@ -278,6 +296,14 @@ export function renderMarkdown(data) {
     L.push('## Player Summary');
     L.push(data.snapshot || '(no summary provided)');
     L.push('');
+
+    if (data.setup_read?.length) {
+        L.push('## Setup Read');
+        data.setup_read.forEach((c) => {
+            L.push(`- **${c.area}** _(${c.level})_ — ${c.note}`);
+        });
+        L.push('');
+    }
 
     if (data.priorities?.length) {
         L.push('## Priority Order');
