@@ -377,8 +377,8 @@ def _status_rows(st, rows):
         ('LEFTPADDING', (0, 0), (0, -1), 6),
         ('LEFTPADDING', (1, 0), (-1, -1), 0),
         ('RIGHTPADDING', (0, 0), (-1, -1), 6),
-        ('TOPPADDING', (0, 0), (-1, -1), 9),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 9),
+        ('TOPPADDING', (0, 0), (-1, -1), 6),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
     ]
     for i in range(len(tbl_rows) - 1):
         style.append(('LINEBELOW', (0, i), (-1, i), 0.6, RULE))
@@ -403,8 +403,8 @@ def _callout(st, label, label_color, body, border_color):
         ('LEFTPADDING', (1, 0), (1, -1), 12),
         ('LEFTPADDING', (2, 0), (2, -1), 6),
         ('RIGHTPADDING', (0, 0), (-1, -1), 14),
-        ('TOPPADDING', (1, 0), (-1, -1), 11),
-        ('BOTTOMPADDING', (1, 0), (-1, -1), 11),
+        ('TOPPADDING', (1, 0), (-1, -1), 7),
+        ('BOTTOMPADDING', (1, 0), (-1, -1), 7),
     ]))
     return tbl
 
@@ -616,11 +616,11 @@ def build_pdf(output_path, data=None):
     story.append(Paragraph('Your Game at a Glance', st['section_title']))
     story.append(_status_rows(st, _glance_rows(data)))
 
-    story.append(Spacer(1, 16))
+    story.append(Spacer(1, 11))
     story.append(_callout(st, '#1 PRIORITY', GOLD, _priority(data), GOLD))
-    story.append(Spacer(1, 7))
+    story.append(Spacer(1, 5))
     story.append(_callout(st, 'YOUR STRENGTH', DOT_GREEN, _strength(data), DOT_GREEN))
-    story.append(Spacer(1, 7))
+    story.append(Spacer(1, 5))
     story.append(_callout(st, 'THE GOAL LINE', NAVY, _goal_line(data), NAVY_MID))
 
     story.append(Paragraph('SETUP READ — WE CHECK THIS FIRST, EVERY TIME',

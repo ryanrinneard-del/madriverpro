@@ -59,7 +59,7 @@ const SNAPSHOT_FIELDS_SCHEMA = {
         properties: {
           area:  { type: 'string' },
           score: { type: 'number', description: '0-10' },
-          note:  { type: 'string', description: 'One-line plain-language read of this area.' },
+          note:  { type: 'string', description: 'ONE short line — 14 words max. Plain language. This sits in a tight table row.' },
           level: { enum: ['GREEN', 'BLUE', 'AMBER', 'RED'], description: '>=8 GREEN / 6-7.9 BLUE / 4-5.9 AMBER / <4 RED' },
         },
       },
@@ -97,7 +97,7 @@ const SNAPSHOT_FIELDS_SCHEMA = {
         properties: {
           area:  { type: 'string', description: 'Grip | Posture & Stance | Aim & Ball Position' },
           level: { enum: ['GREEN', 'AMBER', 'RED'] },
-          note:  { type: 'string', description: 'One-line plain-language read.' },
+          note:  { type: 'string', description: 'ONE short line — 18 words max. Plain language. Sits in a tight table row.' },
         },
       },
     },
@@ -205,7 +205,16 @@ export default async function handler(req, res) {
   const hasSnapshotFields = structured.skill_notes && structured.focuses && structured.priorities;
 
   if (!hasSnapshotFields) {
-    const profileData = pj.kyg || pj.profile || pj.profile_data || {};
+    // Know Your Game answers may live under a sub-key OR — as the form
+    // actually saves them — as top-level s1_*..s7_* keys on profile_json.
+    let profileData = pj.kyg || pj.profile || pj.profile_data;
+    if (!profileData || !Object.keys(profileData).length) {
+      profileData = {};
+      for (const [k, v] of Object.entries(pj)) {
+        if (k.startsWith('game_plan') || k.startsWith('_') || k === 'snapshot') continue;
+        profileData[k] = v;
+      }
+    }
     const userMsg =
       formatProfileForClaude(profileData, row.name, structured) +
       '\n\n=== OUTPUT SCOPE ===\n' +
