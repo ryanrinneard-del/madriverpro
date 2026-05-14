@@ -545,32 +545,44 @@ def _week_badge(st, week):
 
 
 def _road_ahead_rows(st, sessions):
-    """The six-week overview table: week badge + theme + one-line framing."""
+    """The six-week overview table. Each week: badge + theme + the focus for
+    that week + the measurable checkpoint that says it stuck."""
     badge_w = 0.74 * inch
     gap_w = 0.16 * inch
     text_w = CONTENT_W - badge_w - gap_w
+    GOLD_DK = '#A8862C'  # darker gold — readable for small inline bold labels
     rows = []
     for s in sessions[:6]:
-        line = s.get('subtitle') or s.get('primary') or ''
-        inner = Table([[Paragraph(s.get('theme', ''), st['week_theme'])],
-                       [Paragraph(line, st['week_line'])]],
-                      colWidths=[text_w])
-        inner.setStyle(TableStyle([
-            ('LEFTPADDING', (0, 0), (-1, -1), 0),
-            ('RIGHTPADDING', (0, 0), (-1, -1), 0),
-            ('TOPPADDING', (0, 0), (0, 0), 0),
-            ('BOTTOMPADDING', (0, 0), (0, 0), 1),
-            ('TOPPADDING', (0, 1), (0, 1), 0),
-            ('BOTTOMPADDING', (0, 1), (0, 1), 0),
-        ]))
+        inner_rows = [[Paragraph(s.get('theme', ''), st['week_theme'])]]
+        focus = s.get('primary') or s.get('subtitle') or ''
+        secondary = s.get('secondary') or ''
+        if focus:
+            line = focus
+            if secondary:
+                line += ' <font color="#8A9BB0">·  then</font> ' + secondary
+            inner_rows.append([Paragraph(
+                '<font color="%s"><b>FOCUS</b></font>&nbsp;&nbsp;%s' % (GOLD_DK, line),
+                st['week_line'])])
+        check = s.get('measure') or s.get('ready_when') or ''
+        if check:
+            inner_rows.append([Paragraph(
+                '<font color="%s"><b>CHECK</b></font>&nbsp;&nbsp;%s' % (GOLD_DK, check),
+                st['week_line'])])
+        inner = Table(inner_rows, colWidths=[text_w])
+        ts = [('LEFTPADDING', (0, 0), (-1, -1), 0),
+              ('RIGHTPADDING', (0, 0), (-1, -1), 0)]
+        for ri in range(len(inner_rows)):
+            ts.append(('TOPPADDING', (0, ri), (0, ri), 0 if ri == 0 else 3))
+            ts.append(('BOTTOMPADDING', (0, ri), (0, ri), 1))
+        inner.setStyle(TableStyle(ts))
         rows.append([_week_badge(st, s.get('week', '')), '', inner])
     tbl = Table(rows, colWidths=[badge_w, gap_w, text_w])
     style = [
-        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
         ('LEFTPADDING', (0, 0), (-1, -1), 0),
         ('RIGHTPADDING', (0, 0), (-1, -1), 0),
-        ('TOPPADDING', (0, 0), (-1, -1), 10),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 10),
+        ('TOPPADDING', (0, 0), (-1, -1), 9),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 9),
     ]
     for i in range(len(rows) - 1):
         style.append(('LINEBELOW', (0, i), (-1, i), 0.6, RULE))
