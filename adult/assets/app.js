@@ -2137,6 +2137,7 @@ RRG.renderNav = function(user, active = '') {
           <li><a href="/improve/module-02-practice-design.html">Module 02 &middot; Practice Design</a></li>
           <li><a href="/improve/module-03-short-game.html">Module 03 &middot; Short Game</a></li>
           <li class="nav-sublabel">Primers on the books that shaped it</li>
+          <li><a href="/improve/book-practical-golf.html">Practical Golf &middot; Jacobs</a></li>
           <li><a href="/improve/book-8-step-swing.html">8-Position Swing Map &middot; McLean</a></li>
           <li><a href="/improve/book-golfing-machine.html">Component Model &middot; Kelley</a></li>
           <li><a href="/improve/book-stack-and-tilt.html">Ball-First Swing &middot; Plummer &amp; Bennett</a></li>
