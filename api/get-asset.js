@@ -8,7 +8,7 @@
 // kind → pathname mapping:
 //   analysis   → profiles/{id}/analysis.md
 //   submission → profiles/{id}/submission.json
-//   session1   → profiles/{id}/session1_plan.pdf
+//   game_plan  → profiles/{id}/game_plan.pdf
 //   arc        → profiles/{id}/arc.pdf
 //   dossier    → profiles/{id}/dossier.pdf
 //   pdfs       → profiles/{id}/pdfs.json
@@ -19,7 +19,7 @@ import { isAdminRequest, requireEnv } from './_lib/storage.js';
 const KIND_MAP = {
     analysis:   { file: 'analysis.md',        type: 'text/markdown; charset=utf-8',      inline: true  },
     submission: { file: 'submission.json',    type: 'application/json; charset=utf-8',   inline: true  },
-    session1:   { file: 'session1_plan.pdf',  type: 'application/pdf',                   inline: true  },
+    game_plan:  { file: 'game_plan.pdf',      type: 'application/pdf',                   inline: true  },
     arc:        { file: 'arc.pdf',            type: 'application/pdf',                   inline: true  },
     dossier:    { file: 'dossier.pdf',        type: 'application/pdf',                   inline: true  },
     pdfs:       { file: 'pdfs.json',          type: 'application/json; charset=utf-8',   inline: true  },

@@ -112,9 +112,14 @@ class handler(BaseHTTPRequestHandler):
             if not data:
                 return self._json(404, {'error': f'{analysis_path} not found'})
 
+            # game_plan.pdf  — the Snapshot-style player report (replaces the
+            #                  old session1_plan.pdf). Player-facing.
+            # arc.pdf        — the 6-Week Arc. Player-facing.
+            # dossier.pdf    — the full diagnostic. Coach-eyes-only; generated
+            #                  here but only ever attached to the coach email.
             results = {}
             for module_name, out_name in (
-                ('session1_plan_template', 'session1_plan.pdf'),
+                ('snapshot_template', 'game_plan.pdf'),
                 ('arc_template', 'arc.pdf'),
                 ('dossier_template', 'dossier.pdf'),
             ):

@@ -107,6 +107,10 @@ fabricate drill instructions or invent drill names.
   playing, stated goal, and what the player is really after from coaching.
 - \`setup_read\`: exactly 3 — Grip, Posture & Stance, Aim & Ball Position — each a plain
   one-liner with a status level.
+- \`snapshot_callouts\`: four authored one-liners for the Snapshot page — \`priority\`
+  (the #1 thing this season), \`strength\` (what we build around), \`goal_line\` (the
+  honest link between the work and the player's goal), \`closing_line\` (one warm
+  closing sentence). Crisp, plain, no jargon.
 - \`priorities\`: ranked by what costs the most strokes. Name the leak, not the drill.
 - \`focuses\`: Session 1 focus areas — keep it tight, ideally 3, never more than the
   schema allows. Each has why / drill / cue / tag.

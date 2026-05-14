@@ -53,6 +53,19 @@ export const PDF_DATA_SCHEMA = {
             },
         },
 
+        // Authored one-liners for the player-facing Snapshot page. Optional —
+        // the Snapshot template falls back to deriving these from priorities,
+        // skill_notes, and session1_closing when absent.
+        snapshot_callouts: {
+            type: 'object',
+            properties: {
+                priority: { type: 'string', description: 'The #1 priority this season — one or two crisp sentences. Lead with a short bold phrase.' },
+                strength: { type: 'string', description: 'The player\'s biggest strength and why we build around it. Lead with a short bold phrase.' },
+                goal_line: { type: 'string', description: 'The honest line connecting the work to the player\'s stated goal.' },
+                closing_line: { type: 'string', description: 'One-sentence closing note for the bottom of the plan.' },
+            },
+        },
+
         stat_strip: {
             type: 'array',
             minItems: 5, maxItems: 5,

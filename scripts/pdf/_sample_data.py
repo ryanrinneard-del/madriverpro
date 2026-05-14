@@ -23,6 +23,39 @@ SAMPLE_DATA = {
     "date_label": "April 2026",
     "arc_date_label": "April – May 2026",
 
+    "setup_read": [
+        {
+            "area": "Grip",
+            "level": "AMBER",
+            "note": "Hands sit a touch weak — likely feeding the left iron miss. We verify "
+                    "the V's and the finger placement first.",
+        },
+        {
+            "area": "Posture & Stance",
+            "level": "GREEN",
+            "note": "No flags from your answers — we'll confirm spine angle and balance on "
+                    "the tee and move on.",
+        },
+        {
+            "area": "Aim & Ball Position",
+            "level": "AMBER",
+            "note": "Worth a hard look — ball position drifting forward with the driver is a "
+                    "common cause of the accuracy you're chasing.",
+        },
+    ],
+
+    "snapshot_callouts": {
+        "priority": "<b>Driver accuracy.</b> Hitting 30–50% of fairways is the single "
+                    "biggest leak — it forces a recovery before the hole has really started.",
+        "strength": "<b>Iron play and short game.</b> Reliable contact and a sharp short "
+                    "game are the assets we build the scratch run around.",
+        "goal_line": "Scratch isn't a swing overhaul — it's closing the 3–5 avoidable "
+                     "errors a round. Fix the driver and lock the routine and the rest is "
+                     "already in place.",
+        "closing_line": "Scratch is closer than it feels — you already own the ball-striking "
+                        "and the mindset. Session 1 is about the driver and the routine.",
+    },
+
     "snapshot": (
         "Sunny is a 30–45 year old player sitting at an 8 handicap after just 3–5 years in the game — "
         "rare for his time on the course. His foundation is real: consistent iron play, solid short "

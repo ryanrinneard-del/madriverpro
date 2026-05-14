@@ -12,7 +12,7 @@ import { list } from '@vercel/blob';
 const FILE_TO_ASSET = {
     'analysis.md':       { kind: 'analysis',   field: 'analysis'      },
     'submission.json':   { kind: 'submission', field: 'submission'    },
-    'session1_plan.pdf': { kind: 'session1',   field: 'session1_plan' },
+    'game_plan.pdf':     { kind: 'game_plan',  field: 'game_plan'     },
     'arc.pdf':           { kind: 'arc',        field: 'arc'           },
     'dossier.pdf':       { kind: 'dossier',    field: 'dossier'       },
 };
@@ -44,7 +44,7 @@ export default async function handler(req, res) {
                 const assets = {
                     analysis:      null,
                     submission:    null,
-                    session1_plan: null,
+                    game_plan:     null,
                     arc:           null,
                     dossier:       null,
                 };

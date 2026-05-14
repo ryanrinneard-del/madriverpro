@@ -111,7 +111,7 @@ function renderList(submissions) {
   root.innerHTML = '';
   for (const s of submissions) {
     const a = s.assets || {};
-    const allPdfs = a.session1_plan && a.arc && a.dossier;
+    const allPdfs = a.game_plan && a.arc && a.dossier;
     const canApprove = allPdfs && s.status !== 'approved';
 
     const el = document.createElement('div');
@@ -130,7 +130,7 @@ function renderList(submissions) {
       </div>
       <div class="assets">
         <a href="${a.analysis || '#'}" target="_blank" rel="noopener" aria-disabled="${!a.analysis}">Analysis (.md)</a>
-        <a href="${a.session1_plan || '#'}" target="_blank" rel="noopener" aria-disabled="${!a.session1_plan}">Session 1 Plan (.pdf)</a>
+        <a href="${a.game_plan || '#'}" target="_blank" rel="noopener" aria-disabled="${!a.game_plan}">Game Plan (.pdf)</a>
         <a href="${a.arc || '#'}" target="_blank" rel="noopener" aria-disabled="${!a.arc}">6-Week Arc (.pdf)</a>
         <a href="${a.dossier || '#'}" target="_blank" rel="noopener" aria-disabled="${!a.dossier}">Dossier (.pdf)</a>
         <a href="${a.submission || '#'}" target="_blank" rel="noopener" aria-disabled="${!a.submission}">Raw submission (.json)</a>

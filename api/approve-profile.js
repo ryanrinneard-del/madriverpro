@@ -45,13 +45,17 @@ export default async function handler(req, res) {
     if (!submission) return res.status(404).json({ error: 'Submission not found.' });
     if (!submission.studentEmail) return res.status(400).json({ error: 'Submission has no student email.' });
 
-    // Confirm the three PDFs exist under profiles/{id}/ before emailing.
+    // Confirm the PDFs exist under profiles/{id}/ before emailing.
+    //   game_plan.pdf / arc.pdf  — player-facing, attached to both emails
+    //   dossier.pdf              — coach-eyes-only, attached to the coach email
     const token = process.env.BLOB_READ_WRITE_TOKEN;
     const blobs = await list({ prefix: `profiles/${id}/`, token });
     const present = new Set(
         blobs.blobs.map((b) => b.pathname.split('/').pop())
     );
-    const required = ['session1_plan.pdf', 'arc.pdf', 'dossier.pdf'];
+    const playerFiles = ['game_plan.pdf', 'arc.pdf'];
+    const coachOnlyFiles = ['dossier.pdf'];
+    const required = [...playerFiles, ...coachOnlyFiles];
     const missing = required.filter((n) => !present.has(n));
     if (missing.length) {
         return res.status(409).json({
@@ -59,11 +63,18 @@ export default async function handler(req, res) {
         });
     }
 
-    let attachments;
+    let playerAttachments, coachAttachments;
     try {
-        attachments = await Promise.all(
-            required.map((n) => fetchPdfAsAttachment(`profiles/${id}/${n}`, n))
+        const fetched = Object.fromEntries(
+            await Promise.all(
+                required.map(async (n) => [
+                    n, await fetchPdfAsAttachment(`profiles/${id}/${n}`, n),
+                ])
+            )
         );
+        // Player gets the Game Plan + 6-Week Arc. The Dossier is coach-only.
+        playerAttachments = playerFiles.map((n) => fetched[n]);
+        coachAttachments = required.map((n) => fetched[n]);
     } catch (err) {
         console.error('Attachment fetch error:', err);
         return res.status(500).json({ error: 'Failed to load PDFs for email.' });
@@ -71,14 +82,13 @@ export default async function handler(req, res) {
 
     const resend = new Resend(resendKey);
 
-    const studentSubject = 'Your Coaching Roadmap — Ryan Rinneard Golf Academy';
+    const studentSubject = 'Your Game Plan — Ryan Rinneard Golf Academy';
     const studentHtml = `
 <p>Hi ${submission.studentName.split(' ')[0] || 'there'},</p>
-<p>Thanks for taking the time to fill out the Know Your Game profile. Three documents are attached:</p>
+<p>Thanks for taking the time to fill out the Know Your Game profile. Two documents are attached:</p>
 <ul>
-  <li><strong>Session 1 Plan</strong> — what we'll work on the first time we meet</li>
+  <li><strong>Your Game Plan</strong> — a snapshot of your game and what we'll work on the first time we meet</li>
   <li><strong>6-Week Arc</strong> — how the first six sessions build on each other</li>
-  <li><strong>Player Dossier</strong> — the full diagnostic and plan for your records</li>
 </ul>
 <p>Have a read through before our first session. Any questions, just reply to this email.</p>
 <p>— Ryan<br/>Mad River Golf Club</p>`;
@@ -89,7 +99,7 @@ export default async function handler(req, res) {
 <p><strong>Student:</strong> ${submission.studentName}<br/>
 <strong>Submitted:</strong> ${submission.submittedAt}<br/>
 <strong>ID:</strong> ${id}</p>
-<p>All three PDFs attached for your records.</p>`;
+<p>The player received the Game Plan + 6-Week Arc. The full Dossier (coach-eyes-only) is attached here for your records.</p>`;
 
     try {
         const [studentRes, coachRes] = await Promise.all([
@@ -98,7 +108,7 @@ export default async function handler(req, res) {
                 to: submission.studentEmail,
                 subject: studentSubject,
                 html: studentHtml,
-                attachments,
+                attachments: playerAttachments,
                 replyTo: RYAN_EMAIL,
             }),
             resend.emails.send({
@@ -106,7 +116,7 @@ export default async function handler(req, res) {
                 to: RYAN_EMAIL,
                 subject: coachSubject,
                 html: coachHtml,
-                attachments,
+                attachments: coachAttachments,
             }),
         ]);
 
