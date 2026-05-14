@@ -102,27 +102,39 @@ class handler(BaseHTTPRequestHandler):
             if expected and expected != supplied:
                 return self._json(401, {'error': 'unauthorized'})
 
-            # Load the structured analysis produced by /api/process-profile.
-            analysis_path = f'profiles/{submission_id}/analysis.json'
-            try:
-                data = _blob_get_json(analysis_path)
-            except Exception as e:
-                traceback.print_exc()
-                return self._json(500, {'error': f'Failed to load analysis.json: {e}'})
+            # Two ways to supply the structured plan data:
+            #   1. body.data  — the caller passes the structured payload inline
+            #      (used by generate-game-plan.js / adjust-game-plan.js, which
+            #      already hold the player's live plan from Supabase).
+            #   2. body.id only — fall back to loading the analysis.json blob
+            #      (the original admin pipeline path).
+            data = body.get('data')
             if not data:
-                return self._json(404, {'error': f'{analysis_path} not found'})
+                analysis_path = f'profiles/{submission_id}/analysis.json'
+                try:
+                    data = _blob_get_json(analysis_path)
+                except Exception as e:
+                    traceback.print_exc()
+                    return self._json(500, {'error': f'Failed to load analysis.json: {e}'})
+                if not data:
+                    return self._json(404, {'error': f'{analysis_path} not found'})
 
             # game_plan.pdf  — the Snapshot-style player report (replaces the
             #                  old session1_plan.pdf). Player-facing.
             # arc.pdf        — the 6-Week Arc. Player-facing.
-            # dossier.pdf    — the full diagnostic. Coach-eyes-only; generated
-            #                  here but only ever attached to the coach email.
-            results = {}
-            for module_name, out_name in (
+            # dossier.pdf    — the full diagnostic. Coach-eyes-only. Only
+            #                  rendered when the payload carries dossier-level
+            #                  fields — the live player plan (Snapshot + Arc)
+            #                  doesn't, so it's skipped in that path.
+            targets = [
                 ('snapshot_template', 'game_plan.pdf'),
                 ('arc_template', 'arc.pdf'),
-                ('dossier_template', 'dossier.pdf'),
-            ):
+            ]
+            if data.get('diagnostic_sections') or data.get('prescriptions'):
+                targets.append(('dossier_template', 'dossier.pdf'))
+
+            results = {}
+            for module_name, out_name in targets:
                 try:
                     pdf_bytes = _build_pdf_to_bytes(module_name, data)
                     url = _blob_put(
