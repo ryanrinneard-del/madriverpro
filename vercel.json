@@ -67,6 +67,14 @@
   ],
   "redirects": [
     {
+      "source": "/coaching/juniors-weekly.html",
+      "destination": "/coaching/juniors.html"
+    },
+    {
+      "source": "/coaching/groups-non-member.html",
+      "destination": "/coaching/groups.html"
+    },
+    {
       "source": "/Articles/:path*",
       "destination": "/articles/:path*",
       "permanent": true
