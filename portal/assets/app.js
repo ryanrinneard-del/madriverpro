@@ -1223,6 +1223,7 @@ RRG.renderNav = function(user, active = '') {
           <li><a href="/improve/sg-lob.html">The Lob Shot</a></li>
           <li class="nav-sublabel">Primers on the books that shaped Ryan's teaching</li>
           <li><a href="/improve/book-practical-golf.html">Practical Golf &middot; Jacobs</a></li>
+          <li><a href="/improve/book-hogan-five-lessons.html">Five Lessons &middot; Hogan</a></li>
           <li><a href="/improve/book-8-step-swing.html">8-Position Map &middot; McLean</a></li>
           <li><a href="/improve/book-golfing-machine.html">Component Model &middot; Kelley</a></li>
           <li><a href="/improve/book-stack-and-tilt.html">Ball-First Swing &middot; P&amp;B</a></li>

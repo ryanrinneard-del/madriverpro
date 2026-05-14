@@ -1,0 +1,1358 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Five Lessons — The Bookshelf</title>
+<meta name="description" content="A primer on Ben Hogan's Five Lessons: The Modern Fundamentals of Golf. The grip, stance and posture, the plane, and the two-part swing — translated for the recreational player.">
+<meta property="og:title" content="Five Lessons · RR Golf Performance">
+<meta property="og:description" content="Ben Hogan's Five Lessons, translated for the recreational player. The grip, the plane, and the repeating swing Hogan said any golfer could build.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://rrgolfperformance.com/improve/book-hogan-five-lessons.html">
+<meta property="og:image" content="https://madriverpro.com/images/rr-logo.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Five Lessons · RR Golf Performance">
+<meta name="twitter:description" content="Ben Hogan's Five Lessons, translated for the recreational player.">
+<meta name="twitter:image" content="https://madriverpro.com/images/rr-logo.png">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  /* Matches Volume 01-05 styling — same hero, coach note, TOC, chapter
+     cards, callouts, glossary. This is Volume 02 of the Bookshelf. */
+
+  .book-hero {
+    background: linear-gradient(180deg, var(--navy) 0%, #162E54 100%);
+    color: #fff; border-radius: 14px;
+    padding: 56px 44px 48px; margin-bottom: 36px;
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .book-hero::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--gold);
+  }
+  .book-hero::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent 0%, var(--gold) 30%, var(--gold) 70%, transparent 100%);
+    opacity: 0.4;
+  }
+  .book-hero .vol {
+    display: inline-block;
+    font-size: 11px; letter-spacing: 0.24em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase;
+    padding: 5px 16px; border: 1px solid var(--gold);
+    border-radius: 999px; margin-bottom: 20px;
+  }
+  .book-hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(44px, 7vw, 68px);
+    font-weight: 600; color: #fff;
+    margin: 0; line-height: 1.05; letter-spacing: -0.01em;
+  }
+  .book-hero .subtitle {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; font-size: 20px;
+    color: rgba(255,255,255,0.78);
+    margin: 14px auto 22px; max-width: 620px;
+  }
+  .book-hero .gold-dash {
+    width: 60px; height: 2px; background: var(--gold);
+    margin: 0 auto 22px;
+  }
+  .book-hero .attrib {
+    font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(255,255,255,0.55); font-weight: 500;
+  }
+
+  .primer-disclaimer {
+    background: #FDF6F4;
+    border: 1px solid #E5D0CB;
+    border-left: 4px solid #C76757;
+    border-radius: 10px;
+    padding: 22px 28px;
+    margin: 0 0 28px;
+  }
+  .primer-disclaimer .pd-label {
+    font-size: 11px; letter-spacing: 0.22em; color: #9A3D2F;
+    font-weight: 700; text-transform: uppercase; margin-bottom: 10px;
+  }
+  .primer-disclaimer p {
+    font-size: 14px; line-height: 1.6; color: var(--navy-mid);
+    margin: 0 0 10px;
+  }
+  .primer-disclaimer p:last-child { margin-bottom: 0; }
+  .primer-disclaimer p strong { color: var(--navy); }
+  .primer-disclaimer a {
+    color: var(--gold); font-weight: 700;
+    text-decoration: underline; text-underline-offset: 3px;
+  }
+  .primer-disclaimer a:hover { color: var(--navy); }
+
+  .coach-note {
+    background: #F7F2E8;
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--gold);
+    border-radius: 10px;
+    padding: 28px 32px;
+    margin: 0 0 36px;
+  }
+  .coach-note .cn-label {
+    font-size: 11px; letter-spacing: 0.2em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 10px;
+  }
+  .coach-note p {
+    font-size: 15.5px; line-height: 1.7; color: var(--navy-mid);
+    margin: 0 0 12px;
+  }
+  .coach-note p:last-child { margin-bottom: 0; }
+  .coach-note p strong { color: var(--navy); }
+  .coach-note .sign-off {
+    margin-top: 14px;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; color: var(--navy); font-size: 16px;
+  }
+
+  .book-toc {
+    background: var(--white); border: 1px solid var(--rule);
+    border-top: 3px solid var(--gold); border-radius: 12px;
+    padding: 28px 32px; margin-bottom: 36px;
+  }
+  .book-toc h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px; color: var(--navy); margin: 0 0 16px; font-weight: 600;
+  }
+  .book-toc ol { list-style: none; margin: 0; padding: 0; }
+  .book-toc li {
+    display: grid; grid-template-columns: 60px 1fr auto;
+    align-items: baseline; gap: 16px;
+    padding: 12px 0; border-bottom: 1px solid var(--rule);
+  }
+  .book-toc li:last-child { border-bottom: none; }
+  .book-toc .ch-num {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; font-size: 20px; color: var(--gold); font-weight: 400;
+  }
+  .book-toc .ch-title { font-size: 15px; color: var(--navy); font-weight: 600; }
+  .book-toc .ch-title small {
+    display: block; font-size: 12px; color: var(--mid-grey);
+    font-weight: 400; margin-top: 2px; font-style: italic;
+  }
+  .book-toc a.ch-jump {
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--gold); font-weight: 700; text-decoration: none;
+  }
+  .book-toc a.ch-jump:hover { color: var(--navy); }
+
+  .chapter-stack { display: grid; gap: 16px; margin-bottom: 40px; }
+  .chapter {
+    background: var(--white); border: 1px solid var(--rule);
+    border-left: 4px solid var(--gold); border-radius: 12px;
+    overflow: hidden; transition: box-shadow .2s ease;
+  }
+  .chapter[open] { box-shadow: 0 14px 34px rgba(13,31,60,0.09); }
+  .chapter summary {
+    display: grid; grid-template-columns: 74px 1fr 28px;
+    gap: 18px; align-items: center; padding: 22px 26px;
+    cursor: pointer; list-style: none; user-select: none;
+  }
+  .chapter summary::-webkit-details-marker { display: none; }
+  .chapter .num {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 48px; color: var(--gold); font-weight: 700;
+    line-height: 1; text-align: center;
+    border-right: 1px solid var(--rule); padding-right: 18px;
+  }
+  .chapter .title-stack .ch-kicker {
+    font-size: 10px; letter-spacing: 0.22em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .chapter .title-stack h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px; color: var(--navy); font-weight: 600;
+    margin: 0 0 4px; line-height: 1.2;
+  }
+  .chapter .title-stack .ch-teaser {
+    font-size: 13px; color: var(--navy-mid); line-height: 1.5;
+  }
+  .chapter .chev {
+    color: var(--mid-grey); font-size: 22px; line-height: 1;
+    transition: transform .2s ease; text-align: center; justify-self: center;
+  }
+  .chapter[open] .chev { transform: rotate(90deg); color: var(--gold); }
+  .chapter .body {
+    padding: 0 26px 28px calc(26px + 74px + 18px);
+    color: var(--navy-mid); line-height: 1.7; font-size: 15px;
+  }
+  .chapter .body p { margin: 0 0 12px; }
+  .chapter .body p strong { color: var(--navy); }
+  .chapter .body ul { margin: 8px 0 14px 20px; padding: 0; }
+  .chapter .body ul li { margin-bottom: 6px; }
+  .chapter .body ol { margin: 8px 0 14px 22px; padding: 0; }
+  .chapter .body ol li { margin-bottom: 6px; }
+  .chapter .body h4 {
+    font-size: 11px; letter-spacing: 0.18em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase;
+    margin: 22px 0 8px;
+  }
+
+  .key-idea {
+    background: #F7F2E8; border-left: 3px solid var(--gold);
+    padding: 14px 18px; border-radius: 4px;
+    margin: 16px 0; font-size: 15px; line-height: 1.6;
+  }
+  .key-idea b { color: var(--navy); }
+  .feel-pull {
+    border-left: 3px solid var(--gold);
+    padding: 6px 0 6px 18px; margin: 16px 0;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; font-size: 19px; line-height: 1.45; color: var(--navy);
+  }
+  .mistake-box {
+    background: #FDF6F4; border-left: 3px solid #C76757;
+    padding: 14px 18px; border-radius: 4px; margin: 16px 0;
+  }
+  .mistake-box .mb-title {
+    color: #9A3D2F; font-weight: 700; font-size: 12px;
+    letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 6px;
+  }
+  .mistake-box ul { margin: 6px 0 0 18px; padding: 0; }
+  .mistake-box li { color: var(--navy-mid); margin-bottom: 4px; }
+  .drill-box {
+    background: #F2F6EE; border-left: 3px solid #6B8B4E;
+    padding: 14px 18px; border-radius: 4px; margin: 16px 0;
+  }
+  .drill-box .db-title {
+    color: #4C6B30; font-weight: 700; font-size: 12px;
+    letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 6px;
+  }
+  .verify-box {
+    background: #F4F1FA; border-left: 3px solid #7A6BA8;
+    padding: 12px 16px; border-radius: 4px; margin: 14px 0;
+    font-size: 13.5px; line-height: 1.55;
+  }
+  .verify-box .vb-title {
+    color: #4F4380; font-weight: 700; font-size: 11px;
+    letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .bridge {
+    margin-top: 20px; padding-top: 16px;
+    border-top: 1px dashed var(--rule);
+    font-style: italic; font-size: 14px; color: var(--mid-grey);
+  }
+  @media (max-width: 620px) {
+    .chapter summary {
+      grid-template-columns: 54px 1fr 24px; gap: 12px; padding: 18px 18px;
+    }
+    .chapter .num { font-size: 36px; padding-right: 12px; }
+    .chapter .title-stack h3 { font-size: 18px; }
+    .chapter .body { padding: 0 18px 20px 18px; }
+    .book-toc li { grid-template-columns: 38px 1fr; }
+    .book-toc a.ch-jump { grid-column: 2; margin-top: 4px; }
+  }
+
+  .next-steps {
+    background: var(--navy); color: #fff;
+    border-radius: 12px; padding: 32px 34px;
+    margin: 40px 0 28px;
+  }
+  .next-steps h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 26px; color: #fff; margin: 0 0 10px; font-weight: 600;
+  }
+  .next-steps p {
+    font-size: 15px; line-height: 1.7; color: rgba(255,255,255,0.88);
+    margin: 0 0 12px;
+  }
+  .next-steps p strong { color: var(--gold); }
+  .next-steps ol {
+    margin: 8px 0 12px 22px; padding: 0;
+    color: rgba(255,255,255,0.92);
+  }
+  .next-steps ol li {
+    margin-bottom: 8px; font-size: 15px; line-height: 1.55;
+  }
+
+  .attribution {
+    background: #F7F2E8; border: 1px solid var(--rule);
+    border-radius: 10px; padding: 22px 26px; margin: 28px 0;
+  }
+  .attribution h3 {
+    font-size: 12px; letter-spacing: 0.2em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin: 0 0 10px;
+  }
+  .attribution p {
+    font-size: 14px; line-height: 1.65; color: var(--navy-mid);
+    margin: 0 0 10px;
+  }
+  .attribution p strong { color: var(--navy); }
+
+  .glossary {
+    background: var(--white); border: 1px solid var(--rule);
+    border-radius: 10px; padding: 28px 30px; margin: 28px 0;
+  }
+  .glossary h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px; color: var(--navy); margin: 0 0 14px; font-weight: 600;
+  }
+  .glossary dl {
+    display: grid; grid-template-columns: minmax(160px, 1fr) 2fr;
+    gap: 10px 22px;
+  }
+  .glossary dt { font-weight: 700; color: var(--navy); font-size: 14px; }
+  .glossary dd {
+    margin: 0; color: var(--navy-mid); font-size: 14px; line-height: 1.5;
+  }
+  @media (max-width: 620px) {
+    .glossary dl { grid-template-columns: 1fr; gap: 4px 0; }
+    .glossary dd { margin-bottom: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container">
+
+  <div class="breadcrumb">
+    <a href="index.html">Library</a><span>›</span><a href="bookshelf.html">Bookshelf</a><span>›</span>Five Lessons
+  </div>
+
+  <!-- ===================== BOOK HERO ===================== -->
+  <div class="book-hero">
+    <span class="vol">Teaching Library · Volume 02 · Primer</span>
+    <h1>Five Lessons: The Fundamentals That Repeat.</h1>
+    <div class="subtitle">Grip, stance, plane, and the two-part swing — the book that said any golfer could build a repeating swing.</div>
+    <div class="gold-dash"></div>
+    <div class="attrib">Inspired by Ben Hogan's <em>Five Lessons: The Modern Fundamentals of Golf</em></div>
+  </div>
+
+  <!-- ===================== DISCLAIMER ===================== -->
+  <div class="primer-disclaimer">
+    <div class="pd-label">Independent Interpretation</div>
+    <p>
+      This primer is Ryan Rinneard's independent educational summary of the
+      fundamentals Ben Hogan laid out (with Herbert Warren Wind) in the 1957
+      book <em>Five Lessons: The Modern Fundamentals of Golf</em>. It is
+      <strong>not an official Hogan publication</strong>, nor authorized by
+      his estate. Concepts below are described in Ryan's own words; the
+      original work is attributed to Hogan throughout.
+    </p>
+    <p>
+      <strong>Buy the original.</strong> Five Lessons is a short book with
+      famous Anthony Ravielli illustrations that no summary can reproduce.
+      It belongs on every golfer's shelf next to Jacobs.
+      <a href="https://www.amazon.com/s?k=Five+Lessons+Modern+Fundamentals+of+Golf+Ben+Hogan" target="_blank" rel="noopener">Find it on Amazon &rarr;</a>
+    </p>
+  </div>
+
+  <!-- ===================== COACH NOTE ===================== -->
+  <div class="coach-note">
+    <div class="cn-label">From the coach</div>
+    <p>
+      In the <a href="book-practical-golf.html" style="color:var(--gold);font-weight:700;">Practical Golf primer</a>
+      I said that if you ask any serious golf teacher to name the most
+      important instruction book ever written, you get one of two answers:
+      Jacobs, or Hogan. This is the Hogan.
+    </p>
+    <p>
+      <em>Five Lessons</em> is a different kind of book from
+      <em>Practical Golf</em>. Jacobs taught you how to <strong>diagnose</strong> &mdash;
+      read the ball, find the cause. Hogan taught you what to <strong>build</strong> &mdash;
+      a specific, repeatable swing assembled from four fundamentals he
+      insisted any golfer could learn. Jacobs is the doctor. Hogan is the
+      architect. You need both.
+    </p>
+    <p>
+      What makes <em>Five Lessons</em> remarkable is the claim Hogan opened
+      with: that the average golfer, applying these fundamentals, was
+      &ldquo;entirely capable&rdquo; of breaking 80. Coming from the most
+      famously obsessive ball-striker who ever lived &mdash; a man who
+      reportedly &ldquo;dug his swing out of the dirt&rdquo; over years of
+      relentless practice &mdash; that was a generous, almost radical thing
+      to say. He believed the fundamentals were <em>teachable</em>. Not
+      magic. Not talent. Learnable positions, learnable in order.
+    </p>
+    <p>
+      <strong>This primer is for the recreational player</strong> who owns
+      the book, or has heard about the famous &ldquo;pane of glass&rdquo;
+      image, and wants the four fundamentals in plain modern English before
+      sitting with Hogan's own words. Eight chapters: why the book still
+      matters, the grip (Hogan's obsession &mdash; and ours), stance and
+      posture, the plane, the two parts of the swing, the much-misunderstood
+      idea of supination, and where Hogan sits in modern teaching.
+    </p>
+    <p>
+      One honest note up front: a few of Hogan's specific feels &mdash;
+      especially around the hands and the idea of &ldquo;pronation&rdquo;
+      and &ldquo;supination&rdquo; &mdash; have been refined or
+      reinterpreted in the seventy years since. I'll flag those clearly.
+      The <em>fundamentals</em>, though &mdash; grip, plane, sequence
+      &mdash; are as true today as they were in 1957.
+    </p>
+    <div class="sign-off">&mdash; Ryan</div>
+  </div>
+
+  <!-- ===================== TOC ===================== -->
+  <div class="book-toc">
+    <h2>Table of contents</h2>
+    <ol>
+      <li>
+        <div class="ch-num">01</div>
+        <div><div class="ch-title">Why Five Lessons still matters
+          <small>Hogan's claim: the fundamentals are teachable, and any golfer can build a repeating swing.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch1">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">02</div>
+        <div><div class="ch-title">The Grip
+          <small>Hogan's obsession. The most detailed grip instruction ever written — and why he started here.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch2">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">03</div>
+        <div><div class="ch-title">Stance and Posture
+          <small>The address position Hogan built everything on. Width, ball position, the bend from the hips.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch3">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">04</div>
+        <div><div class="ch-title">The Plane
+          <small>The pane of glass. The single most famous teaching image in the history of golf.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch4">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">05</div>
+        <div><div class="ch-title">The First Part of the Swing
+          <small>The waggle, the one-piece takeaway, and the backswing that stays on plane.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch5">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">06</div>
+        <div><div class="ch-title">The Second Part of the Swing
+          <small>The downswing sequence. Hips first — the move that separates good ball-strikers from everyone else.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch6">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">07</div>
+        <div><div class="ch-title">Supination — the misunderstood chapter
+          <small>What Hogan actually meant about the hands through impact, and what modern teaching says now.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch7">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">08</div>
+        <div><div class="ch-title">Where Hogan fits — and how to use both books
+          <small>Hogan and Jacobs together: build with one, diagnose with the other.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch8">Read &rarr;</a>
+      </li>
+    </ol>
+  </div>
+
+  <!-- ===================== CHAPTERS ===================== -->
+  <div class="chapter-stack">
+
+    <!-- ========== CHAPTER 1 ========== -->
+    <details class="chapter" id="ch1">
+      <summary>
+        <div class="num">1</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter One</div>
+          <h3>Why Five Lessons still matters</h3>
+          <div class="ch-teaser">Hogan's claim: the fundamentals are teachable, and any golfer can build a repeating swing.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          Ben Hogan is famous for two things: being one of the greatest
+          ball-strikers in the history of the game, and being famously
+          private about how he did it. There was a long-running idea that
+          Hogan had a &ldquo;secret&rdquo; he never fully shared. Whether
+          or not that's true, <em>Five Lessons</em> is the closest thing
+          to Hogan opening the hood &mdash; and what he chose to share
+          wasn't a secret at all. It was four fundamentals, taught in
+          order, that he believed anyone could learn.
+        </p>
+
+        <div class="key-idea">
+          <b>The key idea.</b> Hogan's central claim was almost shocking
+          coming from him: the average golfer, applying these
+          fundamentals, is &ldquo;entirely capable of building a repeating
+          swing and breaking 80.&rdquo; He didn't think great ball-striking
+          required rare talent. He thought it required correct fundamentals,
+          built in the right sequence, and practiced with understanding.
+        </div>
+
+        <h4>What &ldquo;modern fundamentals&rdquo; meant in 1957</h4>
+        <p>
+          The full title is <em>Five Lessons: The Modern Fundamentals of
+          Golf</em>. The word &ldquo;modern&rdquo; mattered. Hogan was
+          arguing against an older school of teaching that treated the
+          swing as a mysterious, individual, feel-based thing &mdash;
+          something you either had or you didn't. He wanted to replace
+          mystery with structure: here are the positions, here is the
+          order, here is what each one does.
+        </p>
+        <p>
+          The book is built around four fundamentals, which the title
+          counts as &ldquo;five lessons&rdquo; because the swing itself is
+          split into two parts:
+        </p>
+        <ol>
+          <li><strong>The Grip</strong></li>
+          <li><strong>Stance and Posture</strong></li>
+          <li><strong>The First Part of the Swing</strong> (the waggle and
+            backswing)</li>
+          <li><strong>The Second Part of the Swing</strong> (the downswing)</li>
+        </ol>
+        <p>
+          And running underneath all four is the concept Hogan made famous
+          &mdash; the <strong>plane</strong>, the imaginary pane of glass
+          that the swing travels on. We give it its own chapter because
+          it's the idea most people remember from the book, and the one
+          most people half-understand.
+        </p>
+
+        <h4>Why the order matters</h4>
+        <p>
+          Hogan was deliberate about sequence. He started with the grip
+          because nothing downstream can be correct if the grip is wrong.
+          Then stance and posture, because the swing has to start from a
+          sound platform. Then the backswing, then the downswing &mdash;
+          because you can't practice the second half of a motion until
+          the first half is repeatable.
+        </p>
+        <p>
+          This is the same logic behind how we teach at the academy, and
+          the same logic behind why the <a href="https://rrgolfperformance.as.me/Ladies-Fridays" target="_blank" rel="noopener" style="color:var(--gold);font-weight:700;">Friday Morning Series</a>
+          starts with the grip. Hogan would have approved entirely.
+        </p>
+
+        <div class="feel-pull">
+          &ldquo;Good golf begins with a good grip.&rdquo;
+        </div>
+
+        <p>
+          That's not a throwaway line. It's the organizing principle of
+          the entire book. Hogan spent more pages on the grip than on
+          any other single topic, and the next chapter is going to do
+          the same.
+        </p>
+
+        <div class="bridge">
+          Next: the grip. Hogan's obsession &mdash; and the fundamental
+          we put first too.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 2 ========== -->
+    <details class="chapter" id="ch2">
+      <summary>
+        <div class="num">2</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Two</div>
+          <h3>The Grip</h3>
+          <div class="ch-teaser">Hogan's obsession. The most detailed grip instruction ever written — and why he started here.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          No one in the history of golf instruction has written about the
+          grip with the obsessive precision Hogan brought to it. He
+          described where each finger sits, the pressure points, the
+          angles, the way the two hands must work as one connected unit.
+          To a casual reader it can feel like overkill. It isn't. Hogan
+          understood that the grip is the only thing connecting the golfer
+          to the club, and that everything the swing produces is filtered
+          through it.
+        </p>
+
+        <div class="key-idea">
+          <b>The key idea.</b> The two hands must function as a single
+          unit, not two independent hands fighting each other. A correct
+          grip makes the clubface behave through impact <em>without
+          conscious manipulation</em>. A poor grip forces the rest of the
+          swing to spend its entire effort compensating for a clubface
+          that won't square up on its own.
+        </div>
+
+        <h4>The lead hand (left hand, for a right-handed player)</h4>
+        <p>
+          Hogan placed the club in the lead hand so it ran from the base
+          of the little finger across to the middle of the index finger
+          &mdash; <strong>more in the fingers than the palm</strong>. When
+          the hand closes over the top, the club is held mostly by the
+          last three fingers. The thumb sits on top, slightly to the
+          trail side of center. Looking down, you should see roughly two
+          knuckles.
+        </p>
+        <p>
+          Hogan was emphatic that the lead hand's last three fingers
+          provide the primary grip pressure. The pad at the heel of the
+          hand sits on top of the grip and acts almost like a lid. This
+          combination &mdash; fingers holding, heel pad on top &mdash;
+          is what lets the wrist hinge correctly and keeps the club
+          secure at the top of the backswing.
+        </p>
+
+        <h4>The trail hand (right hand)</h4>
+        <p>
+          The trail hand goes on so that its lifeline nestles over the
+          lead thumb &mdash; the two hands lock together. Hogan favored
+          the overlapping (Vardon) grip, with the trail-hand little
+          finger riding on top of, or interlocked with, the lead-hand
+          index finger. The trail hand's pressure comes mostly from the
+          middle two fingers. The thumb and forefinger stay relatively
+          light &mdash; Hogan worried that an active trail thumb and
+          forefinger would take over the swing and throw the club from
+          the top.
+        </p>
+
+        <h4>The Vs, and grip &ldquo;strength&rdquo;</h4>
+        <p>
+          The V formed by thumb and forefinger on each hand should point
+          roughly toward the trail shoulder/chin area. Hogan's grip is
+          often described as slightly &ldquo;weaker&rdquo; (more rotated
+          toward the target) than what many players use today &mdash;
+          partly because Hogan, early in his career, fought a hook, and
+          his grip was one of the tools he used to tame it.
+        </p>
+        <p>
+          <strong>This is one place to take Hogan as principle, not
+          gospel.</strong> The exact rotation of the grip that's right
+          for <em>you</em> depends on what your clubface does. A chronic
+          slicer and a chronic hooker should not have identical grips.
+          What's universal in Hogan's teaching is the structure &mdash;
+          fingers not palm, two hands as one unit, light trail thumb and
+          forefinger. The precise rotation is the dial you adjust to your
+          own ball flight (which is exactly the Jacobs diagnostic from
+          Volume 01).
+        </p>
+
+        <div class="mistake-box">
+          <div class="mb-title">The grip mistakes Hogan was fighting</div>
+          <ul>
+            <li><strong>Club in the palm of the lead hand.</strong> Kills
+              wrist hinge, opens the face at the top, makes release
+              impossible.</li>
+            <li><strong>The two hands working against each other.</strong>
+              A lead hand set one way and a trail hand set another &mdash;
+              they fight through impact instead of cooperating.</li>
+            <li><strong>An overactive trail hand.</strong> Thumb and
+              forefinger gripping hard, taking over the downswing and
+              throwing the clubhead early.</li>
+            <li><strong>Grip pressure too tight everywhere.</strong> Hogan
+              wanted firm pressure in specific fingers, not a white-knuckle
+              clench across both hands.</li>
+          </ul>
+        </div>
+
+        <div class="feel-pull">
+          &ldquo;The hands swing the clubhead. The grip is how you give
+          them something honest to swing.&rdquo;
+        </div>
+
+        <div class="drill-box">
+          <div class="db-title">Drill — Build It in the Mirror, Not on the Range</div>
+          <p style="margin:0;">
+            Hogan's grip chapter is best practiced indoors, slowly, with
+            no ball and no swing. Stand at a mirror. Place the lead hand
+            &mdash; check the fingers, the heel pad, the two knuckles.
+            Add the trail hand &mdash; lifeline over lead thumb, light
+            thumb and forefinger. Take the hands off. Do it again. Ten
+            times a night for two weeks and the correct grip stops feeling
+            foreign. <strong>This is the single highest-return fifteen
+            minutes in golf, and it costs nothing.</strong>
+          </p>
+        </div>
+
+        <div class="verify-box">
+          <div class="vb-title">If it feels wrong, that's expected</div>
+          A corrected grip <em>always</em> feels strange at first &mdash;
+          that's not a sign it's wrong, it's a sign your old grip was
+          wrong long enough to feel normal. Give a new grip two weeks of
+          honest reps before you judge it. This is exactly why our
+          Friday Morning Series spends a full session on it: eyes-on
+          coaching gets you past the &ldquo;this feels weird&rdquo; wall
+          that makes most players quit and revert.
+        </div>
+
+        <div class="bridge">
+          Next: stance and posture. The platform the swing is built on.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 3 ========== -->
+    <details class="chapter" id="ch3">
+      <summary>
+        <div class="num">3</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Three</div>
+          <h3>Stance and Posture</h3>
+          <div class="ch-teaser">The address position Hogan built everything on. Width, ball position, the bend from the hips.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          Hogan treated the address position as part of the swing, not a
+          preamble to it. The way you stand to the ball pre-loads what
+          the swing can do. Get it right and the motion has a chance; get
+          it wrong and the motion spends itself compensating.
+        </p>
+
+        <div class="key-idea">
+          <b>The key idea.</b> A sound address position is athletic,
+          balanced, and built to <em>turn</em>. Hogan wanted a player who
+          could rotate fully both ways from a stable base &mdash; not
+          reach for the ball, not crowd it, not lock up.
+        </div>
+
+        <h4>Stance width</h4>
+        <p>
+          Hogan tied stance width to the club. For the driver, the insides
+          of the heels were roughly shoulder-width apart. For the shorter
+          irons, the stance narrowed progressively. The logic: longer
+          clubs need a wider base for a bigger turn and more speed; shorter
+          clubs need a narrower base for control and a steeper, more
+          precise strike.
+        </p>
+
+        <h4>Posture — the bend from the hips</h4>
+        <p>
+          Hogan's posture was a bend forward <strong>from the hip joints</strong>,
+          not a slump of the spine. The back stays relatively straight.
+          The knees are flexed slightly &mdash; enough to be athletic, not
+          so much that you're sitting. The arms hang down naturally from
+          the shoulders. The chin is up off the chest so the lead shoulder
+          has room to turn under it.
+        </p>
+        <p>
+          A useful Hogan image: you should feel <em>ready</em> &mdash;
+          the same athletic readiness as a shortstop waiting for the ball,
+          or a player about to return a serve. Weight balanced, not on the
+          toes, not on the heels.
+        </p>
+
+        <h4>Ball position and alignment</h4>
+        <p>
+          Hogan played the ball forward in the stance for longer clubs and
+          progressively back toward center for shorter clubs &mdash; the
+          same principle Jacobs taught for controlling where the club's
+          low point meets the ball. For alignment, the body lines &mdash;
+          feet, knees, hips, shoulders &mdash; should run parallel to the
+          target line, not aimed directly at the target. A player aimed
+          with the body at the target is actually aimed well right (for a
+          right-hander), and the swing has to come across the line to
+          rescue it.
+        </p>
+
+        <div class="mistake-box">
+          <div class="mb-title">Common posture faults Hogan was correcting</div>
+          <ul>
+            <li><strong>Slumping from the lower back</strong> instead of
+              bending from the hips. Restricts the turn and pushes the
+              swing toward the heel.</li>
+            <li><strong>Chin buried on the chest</strong> &mdash; the lead
+              shoulder has nowhere to turn.</li>
+            <li><strong>Reaching for the ball</strong> &mdash; arms not
+              hanging naturally, which flattens the swing and ruins
+              balance.</li>
+            <li><strong>Too much knee flex</strong> &mdash; &ldquo;sitting
+              down&rdquo; to the ball kills rotation and power.</li>
+          </ul>
+        </div>
+
+        <div class="drill-box">
+          <div class="db-title">Drill — The Two-Photo Posture Check</div>
+          <p style="margin:0;">
+            Have someone photograph you at address from two angles:
+            down-the-line (behind you, along the target line) and face-on.
+            You're checking: spine bent forward from the hips with a
+            relatively straight back, slight knee flex, arms hanging
+            straight down under the shoulders, chin up, body lines
+            parallel to the target. Compare to Hogan's own address photos
+            &mdash; they're widely available and still the gold standard.
+          </p>
+        </div>
+
+        <div class="bridge">
+          Next: the plane. The pane of glass. The image everyone remembers
+          and most people half-understand.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 4 ========== -->
+    <details class="chapter" id="ch4">
+      <summary>
+        <div class="num">4</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Four</div>
+          <h3>The Plane</h3>
+          <div class="ch-teaser">The pane of glass. The single most famous teaching image in the history of golf.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          If you know one thing about <em>Five Lessons</em>, you know the
+          pane of glass. Hogan asked you to imagine a sheet of glass
+          resting on the golfer's shoulders and sloping down to the ball,
+          with the player's head poking through a hole in it. The
+          backswing, he said, should travel just below the underside of
+          that glass &mdash; on the plane &mdash; without ever bumping or
+          breaking it.
+        </p>
+
+        <div class="key-idea">
+          <b>The key idea.</b> The swing plane is the angle the club
+          travels on, set at address by the shaft's lean and the player's
+          posture. A swing that stays &ldquo;on plane&rdquo; delivers the
+          club to the ball consistently and repeatably. A swing that
+          breaks the plane &mdash; goes too steep or too flat &mdash; has
+          to make a compensating move on the way down to rescue it.
+        </p>
+
+        <h4>Why the image is so powerful</h4>
+        <p>
+          Before Hogan, &ldquo;plane&rdquo; was a vague idea. Hogan gave
+          it a shape you could hold in your head. The glass image does
+          three things at once:
+        </p>
+        <ul>
+          <li>It defines a <strong>reference</strong> &mdash; there's now
+            a surface the swing relates to.</li>
+          <li>It defines a <strong>fault</strong> &mdash; &ldquo;breaking
+            the glass&rdquo; (too steep) and &ldquo;dropping under it&rdquo;
+            (too flat) become things you can picture and feel.</li>
+          <li>It connects <strong>setup to motion</strong> &mdash; the
+            glass is set by your posture and the shaft angle at address,
+            which is why a bad setup makes an on-plane swing nearly
+            impossible.</li>
+        </ul>
+
+        <h4>The honest modern footnote</h4>
+        <p>
+          Modern analysis has refined the picture. We now understand the
+          golf swing actually operates on <em>more than one plane</em>
+          &mdash; the backswing plane and downswing plane are not
+          identical for most good players, and the club &ldquo;shifts
+          planes&rdquo; in transition in a way Hogan's single-glass image
+          simplifies. Some elite players are visibly more &ldquo;up and
+          down&rdquo; than the pure single-plane picture.
+        </p>
+        <p>
+          <strong>But the teaching value of the image survives all of
+          that.</strong> For a recreational player, the single most
+          common, most damaging plane fault is being far <em>too steep</em>
+          coming down &mdash; over the top, swinging across the ball.
+          Hogan's pane of glass is still the cleanest mental tool ever
+          invented for feeling that fault and getting the club to deliver
+          from a shallower, more inside path. Use it as a feel, not as
+          physics.
+        </p>
+
+        <div class="feel-pull">
+          &ldquo;The plane isn't a rule. It's a picture &mdash; and the
+          picture fixes more swings than the rule ever could.&rdquo;
+        </div>
+
+        <div class="drill-box">
+          <div class="db-title">Drill — Trace the Glass</div>
+          <p style="margin:0;">
+            In slow motion, with no ball: take the club back and feel the
+            shaft stay just under the imaginary glass &mdash; not lifting
+            up through it, not dropping under it. Pause at the top. Then
+            feel the downswing return <em>under</em> the glass, shallower
+            rather than steeper. Ten slow reps. You're not building the
+            full swing here &mdash; you're building the feel of the
+            reference surface so your fast swing has something to relate
+            to.
+          </p>
+        </div>
+
+        <div class="bridge">
+          Next: the first part of the swing. The waggle, the takeaway,
+          and the backswing that stays under the glass.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 5 ========== -->
+    <details class="chapter" id="ch5">
+      <summary>
+        <div class="num">5</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Five</div>
+          <h3>The First Part of the Swing</h3>
+          <div class="ch-teaser">The waggle, the one-piece takeaway, and the backswing that stays on plane.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          Hogan split the swing into two parts &mdash; backswing and
+          downswing &mdash; and treated them as separate lessons because
+          they have separate jobs. The first part has one purpose: to get
+          the club to the top of the backswing in a position from which a
+          correct downswing is <em>possible</em>. Nothing more glamorous
+          than that. The backswing doesn't hit the ball. It just sets the
+          table.
+        </p>
+
+        <div class="key-idea">
+          <b>The key idea.</b> The backswing is a coordinated turn, not a
+          lift. The body, arms, and club move away together &mdash;
+          &ldquo;one piece&rdquo; &mdash; staying under the plane, winding
+          the big muscles, and arriving at a top position that's balanced
+          and on-plane. A good backswing makes a good downswing easy. A
+          bad one makes it impossible.
+        </p>
+
+        <h4>The waggle</h4>
+        <p>
+          Hogan devoted real attention to the waggle &mdash; the small
+          back-and-forth motion of the clubhead before the swing starts.
+          To most amateurs the waggle looks like a nervous tic. To Hogan
+          it was a rehearsal and a tension-release: a miniature preview of
+          the takeaway path, a way to keep the hands and forearms free
+          rather than frozen, and a trigger that flowed the player into
+          the swing instead of starting it from a dead stop.
+        </p>
+        <p>
+          The practical takeaway: don't stand frozen over the ball. A
+          small, repeatable waggle keeps you athletic and gives the swing
+          a running start.
+        </p>
+
+        <h4>The one-piece takeaway</h4>
+        <p>
+          Hogan wanted the club, hands, arms, and shoulders to start back
+          <em>together</em>. The big muscles &mdash; the shoulders and the
+          torso &mdash; control the early move. The hands don't snatch the
+          club inside; the arms don't lift it straight up. Everything moves
+          as a connected unit for the first stretch of the backswing,
+          which keeps the club on plane from the very start.
+        </p>
+
+        <h4>The turn, and the top</h4>
+        <p>
+          From there, the backswing is a <strong>turn</strong> &mdash; the
+          shoulders rotate, the torso winds against the resistance of the
+          lower body, the lead arm stays comfortably extended, the wrists
+          hinge naturally because the grip allows them to. At the top, the
+          club is on plane, the player is balanced, and the big muscles are
+          coiled. Hogan was not chasing a huge, loose, over-rotated
+          backswing. He wanted a <em>controlled</em> wind-up that could be
+          delivered.
+        </p>
+
+        <div class="mistake-box">
+          <div class="mb-title">Backswing faults this chapter targets</div>
+          <ul>
+            <li><strong>Snatching the club inside with the hands</strong>
+              on the takeaway &mdash; off plane immediately.</li>
+            <li><strong>Lifting the club with the arms</strong> instead of
+              turning the body &mdash; too steep, no coil.</li>
+            <li><strong>Over-swinging</strong> &mdash; a backswing so long
+              and loose the player can't control the delivery.</li>
+            <li><strong>Standing frozen</strong> with no waggle, then
+              starting the swing from total tension.</li>
+          </ul>
+        </div>
+
+        <div class="bridge">
+          Next: the second part. The downswing &mdash; and the one move
+          that separates real ball-strikers from everyone else.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 6 ========== -->
+    <details class="chapter" id="ch6">
+      <summary>
+        <div class="num">6</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Six</div>
+          <h3>The Second Part of the Swing</h3>
+          <div class="ch-teaser">The downswing sequence. Hips first — the move that separates good ball-strikers from everyone else.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          This is the chapter that mattered most to Hogan, and the one
+          most amateurs get most wrong. If the backswing sets the table,
+          the downswing is the meal &mdash; and Hogan was insistent about
+          the order in which it unfolds.
+        </p>
+
+        <div class="key-idea">
+          <b>The key idea.</b> The downswing starts from the ground up.
+          The <strong>hips lead</strong> &mdash; they begin to unwind
+          toward the target first &mdash; followed by the torso, then the
+          shoulders, then the arms, then the hands and clubhead last. This
+          sequence is what stores and then releases speed at the bottom.
+          Reverse the order &mdash; start with the hands and shoulders
+          &mdash; and you've thrown the club away from the top.
+        </p>
+
+        <h4>Why &ldquo;hips first&rdquo; is the whole ballgame</h4>
+        <p>
+          When the hips start the downswing, two good things happen at
+          once. First, the club is <em>dropped</em> into a shallower,
+          more-from-the-inside delivery path &mdash; back under Hogan's
+          pane of glass. Second, the body creates a stretch between the
+          fast-moving lower half and the still-coiled upper half, and that
+          stretch is the engine. The arms and club get <em>pulled</em>
+          through by the body's rotation rather than <em>pushed</em> by
+          the hands.
+        </p>
+        <p>
+          The amateur disaster is the opposite: from the top, the
+          shoulders and hands fire first. The club is thrown outward and
+          steep &mdash; over the top &mdash; and the path cuts across the
+          ball. That single sequencing error produces the most common
+          ball flight in recreational golf: the pull-slice. (Cross-
+          reference the nine ball flights in the
+          <a href="book-practical-golf.html" style="color:var(--gold);font-weight:700;">Jacobs primer</a>
+          &mdash; the pull-slice <em>is</em> an over-the-top swing wearing
+          a disguise.)
+        </p>
+
+        <h4>The feeling Hogan was after</h4>
+        <p>
+          Hogan described the downswing as turning the hips back to the
+          left (for a right-hander) as the very first move down &mdash;
+          a feeling of clearing the lead hip out of the way so the arms
+          and club have room to swing past. The hands stay passive longer
+          than feels natural. The clubhead is the <em>last</em> thing to
+          arrive, which is exactly why it's moving fastest when it does.
+        </p>
+
+        <div class="feel-pull">
+          &ldquo;From the top, the first move is the hips. If your hands
+          go first, the swing is already over.&rdquo;
+        </div>
+
+        <div class="drill-box">
+          <div class="db-title">Drill — Pump the Transition</div>
+          <p style="margin:0;">
+            Swing to the top and stop. From there, make three slow
+            &ldquo;pumps&rdquo; of the transition: feel the hips start,
+            feel the arms drop while the hands stay quiet, feel the club
+            shallow under the plane. Stop. Reset. After the third pump,
+            let the swing go through to a balanced finish. You're
+            training the <em>order</em> of the downswing at a speed slow
+            enough to actually feel it.
+          </p>
+        </div>
+
+        <div class="verify-box">
+          <div class="vb-title">How to know you've got it</div>
+          Two checks. First: a balanced finish &mdash; full weight on the
+          lead foot, chest facing the target, held for three seconds. If
+          you can't hold the finish, the sequence was off. Second: ball
+          flight &mdash; if your pull-slice starts becoming a straighter,
+          slightly-drawing flight, the club is finally coming from the
+          inside because the hips finally went first.
+        </div>
+
+        <div class="bridge">
+          Next: supination. The most quoted, most misunderstood passage in
+          the entire book.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 7 ========== -->
+    <details class="chapter" id="ch7">
+      <summary>
+        <div class="num">7</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Seven</div>
+          <h3>Supination — the misunderstood chapter</h3>
+          <div class="ch-teaser">What Hogan actually meant about the hands through impact, and what modern teaching says now.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          <em>Five Lessons</em> contains a famous passage about the lead
+          wrist &ldquo;supinating&rdquo; through impact &mdash; and it is
+          probably the single most argued-over paragraph in golf
+          instruction. It's worth understanding both what Hogan meant and
+          why modern teaching treats it carefully.
+        </p>
+
+        <div class="key-idea">
+          <b>The key idea.</b> Hogan used &ldquo;supination&rdquo; to
+          describe the lead forearm and wrist rotating so that, through
+          impact, the back of the lead hand faces the target and the
+          wrist is firm &mdash; not flipping, not breaking down, not
+          scooping. The intent behind the word is sound. The word itself
+          has caused decades of confusion.
+        </p>
+
+        <h4>What Hogan was trying to prevent</h4>
+        <p>
+          Strip away the anatomical term and Hogan's concern is one every
+          teacher still shares: <strong>the lead wrist breaking down
+          through impact.</strong> The classic amateur fault is the lead
+          wrist cupping or flipping at the ball &mdash; the hands trying
+          to &ldquo;help&rdquo; the ball into the air. It adds loft,
+          throws away speed, and makes contact a lottery. Hogan wanted
+          the lead wrist <em>firm and slightly bowed</em> through impact,
+          the hands leading the clubhead, loft delivered as designed.
+        </p>
+        <p>
+          Modern data &mdash; from launch monitors and 3D motion capture
+          &mdash; confirms the principle completely. The best ball-
+          strikers have a flat-to-bowed lead wrist at impact and the
+          hands ahead of the ball. That part of Hogan was exactly right.
+        </p>
+
+        <h4>Where the confusion came from</h4>
+        <p>
+          The trouble is that &ldquo;supination&rdquo; describes a
+          <em>rotation</em>, and a lot of readers took it as an
+          instruction to actively <em>roll</em> or <em>twist</em> the
+          lead forearm hard through impact. Done as a conscious, aggressive
+          manipulation, that's a great way to produce a snap hook or
+          wildly inconsistent contact.
+        </p>
+        <p>
+          <strong>The reconciliation:</strong> the firm, slightly-bowed
+          lead wrist at impact is the <em>result</em> of a correct grip
+          and a correct downswing sequence &mdash; not a thing you
+          manufacture with an independent hand action. If your grip is
+          sound (Chapter 2) and your hips lead the downswing (Chapter 6),
+          the lead wrist tends to arrive in the right place on its own.
+          Hogan, who had the most grooved hands in the history of the
+          game, may have underestimated how literally a recreational
+          player would try to copy a feel that, for him, was automatic.
+        </p>
+
+        <div class="mistake-box">
+          <div class="mb-title">Reading this chapter safely</div>
+          <ul>
+            <li>Don't try to actively twist or roll your lead forearm at
+              the ball. That's not the lesson.</li>
+            <li>Do understand the <em>goal</em>: a firm, flat-to-bowed
+              lead wrist at impact, hands ahead of the clubhead.</li>
+            <li>Get there through the grip and the sequence, not through
+              an independent hand manipulation.</li>
+            <li>If you want this checked properly, it's a great thing to
+              put in front of a coach &mdash; it's hard to self-diagnose.</li>
+          </ul>
+        </div>
+
+        <div class="feel-pull">
+          &ldquo;Hogan wasn't wrong about the destination. He just had a
+          car most of us don't.&rdquo;
+        </div>
+
+        <div class="bridge">
+          Next: where Hogan fits in modern golf &mdash; and how to use
+          Five Lessons and Practical Golf together.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 8 ========== -->
+    <details class="chapter" id="ch8">
+      <summary>
+        <div class="num">8</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Eight</div>
+          <h3>Where Hogan fits — and how to use both books</h3>
+          <div class="ch-teaser">Hogan and Jacobs together: build with one, diagnose with the other.</div>
+        </div>
+        <div class="chev">›</div>
+      </summary>
+      <div class="body">
+        <p>
+          <em>Five Lessons</em> and <em>Practical Golf</em> are the two
+          books every teacher names &mdash; and they're not competitors.
+          They're two halves of the same job.
+        </p>
+
+        <div class="key-idea">
+          <b>The key idea.</b> Jacobs gave you a way to <strong>diagnose</strong>
+          &mdash; read the ball, find the cause at impact, trace it back
+          to the swing. Hogan gave you a way to <strong>build</strong>
+          &mdash; a specific, sequenced set of fundamentals to construct a
+          repeating swing. Diagnosis without a build leaves you knowing
+          what's wrong but not what to do. A build without diagnosis leaves
+          you grinding on positions that may not be your actual problem.
+          You need both.
+        </p>
+
+        <h4>What Hogan got exactly right</h4>
+        <ul>
+          <li>The grip is the foundation. Start there. Spend real time
+            there.</li>
+          <li>Address position is part of the swing, not a preamble.</li>
+          <li>The swing has a plane, and a clear mental picture of it
+            fixes more amateur swings than any rule.</li>
+          <li>The downswing sequences from the ground up &mdash; hips
+            lead. This is still the single biggest separator between
+            good and poor ball-strikers.</li>
+          <li>The fundamentals are <em>teachable</em>. You don't need rare
+            talent. You need correct positions, in order, practiced with
+            understanding.</li>
+        </ul>
+
+        <h4>What modern teaching has refined</h4>
+        <ul>
+          <li><strong>The single plane</strong> &mdash; the swing actually
+            uses more than one plane; the glass image is best used as a
+            feel, not as literal physics.</li>
+          <li><strong>Supination</strong> &mdash; the destination (firm,
+            bowed lead wrist) is right; the idea of actively rolling the
+            forearm to get there is a trap for recreational players.</li>
+          <li><strong>Grip &ldquo;strength&rdquo;</strong> &mdash; Hogan's
+            slightly weaker grip suited a man fighting a hook. Yours
+            should be dialed to <em>your</em> ball flight (back to the
+            Jacobs diagnostic).</li>
+        </ul>
+
+        <h4>How to use the shelf</h4>
+        <p>
+          Here's the order I'd actually recommend:
+        </p>
+        <ol>
+          <li><strong>Read the <a href="book-practical-golf.html" style="color:var(--gold);font-weight:700;">Jacobs primer</a> first.</strong>
+            Learn to diagnose. Find your pattern. Know what your ball is
+            telling you.</li>
+          <li><strong>Read this Hogan primer second.</strong> Now you have
+            the build &mdash; the fundamentals to construct the swing that
+            produces better impact.</li>
+          <li><strong>Then the others &mdash; McLean, Kelley, Plummer &amp;
+            Bennett</strong> &mdash; are different, more specific
+            organizations of the same material. Useful once the
+            foundation from Jacobs and Hogan is in place.</li>
+        </ol>
+        <p>
+          Diagnose with Jacobs. Build with Hogan. That's the whole shelf
+          in one sentence.
+        </p>
+
+        <div class="feel-pull">
+          &ldquo;Hogan said the average golfer could break 80. He meant
+          it. The fundamentals are the path &mdash; and they're learnable.&rdquo;
+        </div>
+
+        <div class="bridge">
+          Next: putting Hogan to work this week.
+        </div>
+      </div>
+    </details>
+
+  </div>
+
+  <!-- ===================== NEXT STEPS ===================== -->
+  <div class="next-steps">
+    <h2>Putting Hogan to work this week</h2>
+    <p>Three concrete actions, in order:</p>
+    <ol>
+      <li><strong>Build the grip in the mirror.</strong> Ten minutes a
+        night, no club swing — just placing the hands correctly until
+        the new grip stops feeling foreign.</li>
+      <li><strong>Photograph your address.</strong> Down-the-line and
+        face-on. Check posture against Hogan's own address photos.</li>
+      <li><strong>Pump the transition.</strong> Swing to the top, then
+        three slow pumps feeling the hips lead and the club shallow,
+        before letting one go to a held, balanced finish.</li>
+    </ol>
+    <p>
+      If you want to do this with eyes-on coaching &mdash; especially the
+      grip, which is the hardest one to install solo &mdash; our
+      <a href="https://rrgolfperformance.as.me/Ladies-Fridays" target="_blank" rel="noopener" style="color:var(--gold);">Ladies' Friday Morning Series</a>
+      starts with exactly this fundamental. Hogan built his whole book on
+      the grip; so does our curriculum.
+    </p>
+  </div>
+
+  <!-- ===================== ATTRIBUTION ===================== -->
+  <div class="attribution">
+    <h3>About the original</h3>
+    <p>
+      <strong>Five Lessons: The Modern Fundamentals of Golf</strong> by
+      Ben Hogan, with Herbert Warren Wind, illustrated by Anthony Ravielli.
+      First serialized in <em>Sports Illustrated</em> and published as a
+      book in 1957. Alongside John Jacobs' <em>Practical Golf</em>, it is
+      considered one of the two most important instruction books ever
+      written. Hogan (1912&ndash;1997) won nine major championships and
+      is regarded as one of the finest ball-strikers in the history of
+      the game.
+    </p>
+    <p>
+      <strong>Buy the original.</strong> It's a short, beautifully
+      illustrated book, and Ravielli's drawings communicate things no
+      summary can. It belongs on the shelf next to Jacobs.
+    </p>
+  </div>
+
+  <!-- ===================== GLOSSARY ===================== -->
+  <div class="glossary">
+    <h2>Glossary</h2>
+    <dl>
+      <dt>The plane / pane of glass</dt>
+      <dd>Hogan's image of an imaginary sheet of glass sloping from the
+        shoulders down to the ball, defining the angle the swing should
+        travel on.</dd>
+
+      <dt>One-piece takeaway</dt>
+      <dd>Starting the backswing with the club, hands, arms, and shoulders
+        moving away together as a connected unit, controlled by the big
+        muscles.</dd>
+
+      <dt>The waggle</dt>
+      <dd>A small rehearsal motion of the clubhead before the swing
+        starts. Releases tension and previews the takeaway path.</dd>
+
+      <dt>Downswing sequence</dt>
+      <dd>The ground-up order of the downswing: hips, then torso, then
+        shoulders, then arms, then hands and clubhead last.</dd>
+
+      <dt>Supination</dt>
+      <dd>Hogan's term for the lead forearm/wrist rotation through impact.
+        The intended result — a firm, flat-to-bowed lead wrist with the
+        hands ahead of the clubhead — is correct; the idea of actively
+        rolling the forearm to get there is a common misreading.</dd>
+
+      <dt>Pronation</dt>
+      <dd>The opposite forearm rotation; in Hogan's framework, the
+        rotation occurring on the backswing as the club is taken back.</dd>
+
+      <dt>Address position</dt>
+      <dd>The setup: grip, stance width, posture, ball position, and
+        alignment. Hogan treated it as part of the swing, not a preamble.</dd>
+    </dl>
+  </div>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  RRG.mountLibrary();
+</script>
+</body>
+</html>
