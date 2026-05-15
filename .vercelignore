@@ -1,0 +1,7 @@
+# Temporarily excluded to keep this deployment under Vercel Hobby's
+# 12 Serverless Function limit (api/ currently has 13 functions).
+# api/process-arc.js has no callers anywhere in this repo — no frontend
+# page invokes it and no other api/ function imports it.
+# Re-include this file after upgrading to Vercel Pro or merging an endpoint.
+# Added 2026-05-15.
+api/process-arc.js
