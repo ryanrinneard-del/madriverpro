@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ladies' Golf — RR Golf Performance</title>
+<meta name="description" content="Ladies' golf at RR Golf Performance — the Friday Series, weekly clinics, and a growing archive of every clinic recap. Coached by Ryan Rinneard, CPGA Class A.">
+<link rel="canonical" href="https://rrgolfperformance.com/ladies">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Ladies' Golf — RR Golf Performance">
+<meta property="og:description" content="The Friday Series, weekly clinics, and a growing library of everything we cover — so nothing from a session ever gets lost.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://rrgolfperformance.com/ladies">
+<meta property="og:image" content="https://madriverpro.com/images/rr-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1B365D;
+    --navy-deep: #122444;
+    --navy-soft: #2A4A77;
+    --gold: #D4AF37;
+    --gold-soft: #E8C968;
+    --bone: #FAF8F4;
+    --paper: #FFFFFF;
+    --ink: #1A1A1A;
+    --muted: #6B7280;
+    --line: rgba(27, 54, 93, 0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Manrope', -apple-system, sans-serif;
+    background: var(--bone);
+    color: var(--ink);
+    line-height: 1.6;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  .container {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+  .container--narrow { max-width: 760px; }
+
+  /* ============ NAV ============ */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    padding: 20px 32px;
+    background: rgba(250, 248, 244, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 100;
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .logo {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 19px;
+    color: var(--navy);
+    letter-spacing: -0.01em;
+    text-decoration: none;
+  }
+  .logo span { color: var(--gold); font-style: italic; }
+  .nav-links { display: flex; align-items: center; gap: 32px; }
+  .nav-link {
+    font-size: 14px;
+    color: var(--navy);
+    text-decoration: none;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    transition: opacity 0.2s;
+  }
+  .nav-link:hover { opacity: 0.6; }
+  .nav-btn {
+    display: inline-block;
+    background: var(--navy);
+    color: var(--paper);
+    padding: 11px 22px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    transition: all 0.25s ease;
+  }
+  .nav-btn:hover { background: var(--gold); color: var(--navy-deep); }
+  @media (max-width: 600px) {
+    .nav-links { gap: 16px; }
+    .nav-link { display: none; }
+    .nav-btn { padding: 10px 16px; font-size: 12px; }
+  }
+
+  /* ============ HERO ============ */
+  .hero {
+    padding: 180px 0 110px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 100px;
+    right: -100px;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.08), transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 28px;
+  }
+  .eyebrow::before {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: var(--gold);
+  }
+  .hero h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(44px, 7vw, 78px);
+    font-weight: 400;
+    line-height: 1.04;
+    color: var(--navy);
+    letter-spacing: -0.025em;
+    margin-bottom: 32px;
+    max-width: 900px;
+  }
+  .hero h1 em { font-style: italic; font-weight: 400; color: var(--gold); }
+  .hero-lede {
+    font-size: 20px;
+    color: var(--navy-soft);
+    max-width: 620px;
+    line-height: 1.55;
+  }
+
+  /* ============ SERIES (navy feature) ============ */
+  .series {
+    padding: 90px 0;
+    background: var(--navy);
+    color: var(--paper);
+    position: relative;
+    overflow: hidden;
+  }
+  .series::before {
+    content: '';
+    position: absolute;
+    bottom: -200px; right: -150px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.1), transparent 60%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .series-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+  .series-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(30px, 4.4vw, 46px);
+    font-weight: 400;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    margin-bottom: 22px;
+    max-width: 680px;
+  }
+  .series-title em { font-style: italic; color: var(--gold-soft); }
+  .series-text {
+    font-size: 17.5px;
+    color: rgba(255, 255, 255, 0.78);
+    max-width: 560px;
+    line-height: 1.65;
+    margin-bottom: 36px;
+  }
+  .series-text strong { color: var(--paper); font-weight: 600; }
+  .btn-gold {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--navy-deep);
+    padding: 16px 36px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+  }
+  .btn-gold:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 40px rgba(212, 175, 55, 0.25);
+  }
+
+  /* ============ SECTION BASE ============ */
+  section.content { padding: 100px 0; }
+  .content.clinics-section { background: var(--paper); }
+  .section-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+  .section-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(34px, 5vw, 52px);
+    font-weight: 400;
+    color: var(--navy);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+  .section-title em { font-style: italic; color: var(--gold); }
+  .section-intro {
+    font-size: 18px;
+    color: var(--navy-soft);
+    max-width: 640px;
+    line-height: 1.6;
+    margin-bottom: 56px;
+  }
+
+  /* ============ PAST CLINICS ARCHIVE ============ */
+  .clinic-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .clinic-entry {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    padding: 36px 40px;
+    background: var(--bone);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--gold);
+    border-radius: 4px;
+    text-decoration: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+  }
+  .clinic-entry:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 44px rgba(27, 54, 93, 0.09);
+    background: var(--paper);
+  }
+  .clinic-meta {
+    flex-shrink: 0;
+    width: 116px;
+    border-right: 1px solid var(--line);
+    padding-right: 28px;
+  }
+  .clinic-week {
+    display: block;
+    font-family: 'Fraunces', serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--gold);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .clinic-date {
+    display: block;
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.02em;
+  }
+  .clinic-main { flex: 1; }
+  .clinic-title {
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--navy);
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    margin-bottom: 8px;
+  }
+  .clinic-desc {
+    font-size: 15.5px;
+    color: var(--navy-soft);
+    line-height: 1.6;
+    max-width: 560px;
+  }
+  .clinic-arrow {
+    flex-shrink: 0;
+    font-family: 'Fraunces', serif;
+    font-size: 26px;
+    color: var(--gold);
+    transition: transform 0.3s ease;
+  }
+  .clinic-entry:hover .clinic-arrow { transform: translateX(6px); }
+
+  .clinics-note {
+    margin-top: 40px;
+    font-size: 14.5px;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  /* ============ CTA ============ */
+  .cta-section {
+    background: var(--navy-deep);
+    color: var(--paper);
+    padding: 120px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    top: -200px; left: 50%;
+    transform: translateX(-50%);
+    width: 800px; height: 800px;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.1), transparent 60%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .cta-eyebrow {
+    color: var(--gold);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-weight: 600;
+    margin-bottom: 24px;
+  }
+  .cta-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    max-width: 760px;
+    margin: 0 auto 24px;
+    position: relative;
+  }
+  .cta-title em { font-style: italic; color: var(--gold); }
+  .cta-text {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.75);
+    max-width: 520px;
+    margin: 0 auto 48px;
+    line-height: 1.6;
+    position: relative;
+  }
+  .btn-primary {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--navy-deep);
+    padding: 18px 42px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 40px rgba(212, 175, 55, 0.3);
+  }
+
+  /* ============ SIGNATURE ============ */
+  .signature {
+    padding: 80px 0 60px;
+    background: var(--bone);
+    text-align: center;
+  }
+  .signature-mark {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 36px;
+    color: var(--navy);
+    font-weight: 400;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .signature-title {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  /* ============ FOOTER ============ */
+  footer {
+    padding: 32px 0;
+    background: var(--bone);
+    border-top: 1px solid var(--line);
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  footer a { color: var(--navy); text-decoration: none; font-weight: 500; }
+
+  /* ============ MOBILE ============ */
+  @media (max-width: 768px) {
+    .container { padding: 0 24px; }
+    nav { padding: 16px 24px; }
+    .hero { padding: 140px 0 70px; }
+    .series { padding: 64px 0; }
+    section.content { padding: 70px 0; }
+    .clinic-entry {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 18px;
+      padding: 28px 26px;
+    }
+    .clinic-meta {
+      width: 100%;
+      border-right: none;
+      border-bottom: 1px solid var(--line);
+      padding-right: 0;
+      padding-bottom: 14px;
+      display: flex;
+      gap: 14px;
+      align-items: baseline;
+    }
+    .clinic-meta .clinic-week { margin-bottom: 0; }
+    .clinic-arrow { align-self: flex-end; margin-top: -44px; }
+    .cta-section { padding: 80px 0; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .hero h1, .hero-lede, .eyebrow { animation: fadeUp 0.8s ease-out forwards; }
+  .eyebrow { animation-delay: 0.05s; opacity: 0; }
+  .hero h1 { animation-delay: 0.15s; opacity: 0; }
+  .hero-lede { animation-delay: 0.3s; opacity: 0; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="https://rrgolfperformance.com" class="logo">RR Golf <span>Performance</span></a>
+    <div class="nav-links">
+      <a href="https://rrgolfperformance.com" class="nav-link">Home</a>
+      <a href="https://rrgolfperformance.as.me" class="nav-btn">Book a Lesson</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="eyebrow">Ladies' Golf</div>
+    <h1>Every week, the game gets a little more <em>yours</em>.</h1>
+    <p class="hero-lede">The Ladies' program at RR Golf Performance — the Friday Series, the clinics, and a growing library of everything we cover. So nothing from a session ever gets lost.</p>
+  </div>
+</section>
+
+<!-- THE FRIDAY SERIES -->
+<section class="series">
+  <div class="container">
+    <div class="series-label">The Friday Series</div>
+    <h2 class="series-title">Same group. Same hour. <em>Every Friday.</em></h2>
+    <p class="series-text">It starts <strong>May 15</strong> — a standing weekly session for the women of RR Golf. Each Friday we take on one piece of the game and work it properly. Come for one, come for all of them — the work builds week to week, and so does the group.</p>
+    <a href="https://rrgolfperformance.as.me" class="btn-gold">Book the Friday Series</a>
+  </div>
+</section>
+
+<!-- PAST CLINICS ARCHIVE -->
+<section class="content clinics-section">
+  <div class="container">
+    <div class="section-label">The Archive</div>
+    <h2 class="section-title">Past <em>clinics</em>.</h2>
+    <p class="section-intro">Every clinic, kept. Each week we work one piece of the game — and the recap lives here for good, so you can always come back to what we covered.</p>
+
+    <div class="clinic-list">
+
+      <!-- To add a clinic each week: copy one .clinic-entry block, update the week number, date, title, description, and href. Keep the newest entry at the top. -->
+      <a href="/ladies/the-grip" class="clinic-entry">
+        <div class="clinic-meta">
+          <span class="clinic-week">Week 01</span>
+          <span class="clinic-date">May 15, 2026</span>
+        </div>
+        <div class="clinic-main">
+          <h3 class="clinic-title">The Grip</h3>
+          <p class="clinic-desc">The only thing actually touching the club — three checkpoints, and finding the grip pressure that's yours.</p>
+        </div>
+        <div class="clinic-arrow">&rarr;</div>
+      </a>
+
+    </div>
+
+    <p class="clinics-note">More clinics added every week through the season.</p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container container--narrow">
+    <div class="cta-eyebrow">One-on-one</div>
+    <h2 class="cta-title">Want to go <em>deeper</em> on your own game?</h2>
+    <p class="cta-text">The clinics build the foundation. A private lesson is where we make it yours — your tendencies, your goals, a real plan.</p>
+    <a href="https://rrgolfperformance.as.me" class="btn-primary">Book a Private Lesson</a>
+  </div>
+</section>
+
+<!-- SIGNATURE -->
+<section class="signature">
+  <div class="container container--narrow">
+    <div class="signature-mark">— Ryan Rinneard</div>
+    <div class="signature-title">CPGA Class A · Director of Instruction</div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <a href="https://rrgolfperformance.com">rrgolfperformance.com</a> &nbsp;·&nbsp; RR Golf Performance &nbsp;·&nbsp; Collingwood, Ontario
+  </div>
+</footer>
+
+</body>
+</html>
