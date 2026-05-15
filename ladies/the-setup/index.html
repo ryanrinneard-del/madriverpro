@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Setup Clinic — RR Golf Performance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1B365D;
+    --navy-deep: #122444;
+    --navy-soft: #2A4A77;
+    --gold: #D4AF37;
+    --gold-soft: #E8C968;
+    --bone: #FAF8F4;
+    --paper: #FFFFFF;
+    --ink: #1A1A1A;
+    --muted: #6B7280;
+    --line: rgba(27, 54, 93, 0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Manrope', -apple-system, sans-serif;
+    background: var(--bone);
+    color: var(--ink);
+    line-height: 1.6;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  .container {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  .container--narrow {
+    max-width: 760px;
+  }
+
+  /* ============ NAV ============ */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    padding: 20px 32px;
+    background: rgba(250, 248, 244, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 100;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .nav-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 19px;
+    color: var(--navy);
+    letter-spacing: -0.01em;
+    text-decoration: none;
+  }
+
+  .logo span {
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .nav-link {
+    font-size: 14px;
+    color: var(--navy);
+    text-decoration: none;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    transition: opacity 0.2s;
+  }
+
+  .nav-link:hover { opacity: 0.6; }
+
+  .nav-btn {
+    display: inline-block;
+    background: var(--navy);
+    color: var(--paper);
+    padding: 11px 22px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    transition: all 0.25s ease;
+  }
+
+  .nav-btn:hover {
+    background: var(--gold);
+    color: var(--navy-deep);
+  }
+
+  @media (max-width: 600px) {
+    .nav-links { gap: 16px; }
+    .nav-link { display: none; }
+    .nav-btn { padding: 10px 16px; font-size: 12px; }
+  }
+
+  /* ============ HERO ============ */
+  .hero {
+    padding: 180px 0 120px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 100px;
+    right: -100px;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.08), transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 28px;
+  }
+
+  .eyebrow::before {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .hero h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(44px, 7vw, 78px);
+    font-weight: 400;
+    line-height: 1.04;
+    color: var(--navy);
+    letter-spacing: -0.025em;
+    margin-bottom: 32px;
+    max-width: 900px;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--gold);
+  }
+
+  .hero-lede {
+    font-size: 20px;
+    color: var(--navy-soft);
+    max-width: 620px;
+    line-height: 1.55;
+    font-weight: 400;
+  }
+
+  /* ============ THROUGHLINE ============ */
+  .throughline {
+    padding: 80px 0;
+    background: var(--navy);
+    color: var(--paper);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .throughline::before {
+    content: '"';
+    position: absolute;
+    top: -40px;
+    left: 40px;
+    font-family: 'Fraunces', serif;
+    font-size: 300px;
+    color: var(--gold);
+    opacity: 0.15;
+    font-style: italic;
+    line-height: 1;
+  }
+
+  .throughline-quote {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 300;
+    line-height: 1.3;
+    text-align: center;
+    max-width: 880px;
+    margin: 0 auto;
+    letter-spacing: -0.015em;
+    position: relative;
+    z-index: 1;
+  }
+
+  .throughline-quote em {
+    color: var(--gold-soft);
+    font-style: italic;
+  }
+
+  .throughline-attr {
+    text-align: center;
+    margin-top: 32px;
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  /* ============ SECTION BASE ============ */
+  section.content {
+    padding: 100px 0;
+  }
+
+  .section-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+
+  .section-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(34px, 5vw, 52px);
+    font-weight: 400;
+    color: var(--navy);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+
+  .section-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .section-intro {
+    font-size: 18px;
+    color: var(--navy-soft);
+    max-width: 640px;
+    line-height: 1.6;
+    margin-bottom: 64px;
+  }
+
+  /* ============ THREE CHECKPOINTS ============ */
+  .checkpoints {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    margin-top: 48px;
+  }
+
+  .checkpoint {
+    background: var(--paper);
+    padding: 48px 36px;
+    border-radius: 4px;
+    position: relative;
+    border-top: 3px solid var(--gold);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .checkpoint:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 50px rgba(27, 54, 93, 0.08);
+  }
+
+  .checkpoint-num {
+    font-family: 'Fraunces', serif;
+    font-size: 14px;
+    color: var(--gold);
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+
+  .checkpoint-title {
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    color: var(--navy);
+    font-weight: 500;
+    line-height: 1.15;
+    margin-bottom: 20px;
+    letter-spacing: -0.01em;
+  }
+
+  .checkpoint-body {
+    color: var(--navy-soft);
+    font-size: 15.5px;
+    line-height: 1.65;
+  }
+
+  .checkpoint-body strong {
+    color: var(--navy);
+    font-weight: 600;
+  }
+
+  /* ============ PRESSURE SCALE ============ */
+  .pressure-section {
+    background: var(--paper);
+  }
+
+  .pressure-visual {
+    margin-top: 56px;
+    background: var(--bone);
+    padding: 56px 48px;
+    border-radius: 4px;
+    border: 1px solid var(--line);
+  }
+
+  .pressure-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    position: relative;
+  }
+
+  .pressure-step {
+    position: relative;
+    padding: 8px 0;
+  }
+
+  .pressure-step-num {
+    font-family: 'Fraunces', serif;
+    font-size: 13px;
+    color: var(--gold);
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    margin-bottom: 14px;
+  }
+
+  .pressure-step-title {
+    font-family: 'Fraunces', serif;
+    font-size: 32px;
+    color: var(--navy);
+    font-weight: 400;
+    font-style: italic;
+    margin-bottom: 14px;
+    letter-spacing: -0.015em;
+    line-height: 1;
+  }
+
+  .pressure-step-body {
+    color: var(--navy-soft);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .pressure-step-body strong {
+    color: var(--navy);
+    font-weight: 600;
+  }
+
+  .pressure-step-body em {
+    font-style: italic;
+    color: var(--navy);
+  }
+
+  .pressure-callout {
+    background: var(--navy);
+    color: var(--paper);
+    padding: 48px 40px;
+    margin-top: 48px;
+    text-align: center;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pressure-callout-mark {
+    font-family: 'Fraunces', serif;
+    font-size: 140px;
+    color: var(--gold);
+    opacity: 0.2;
+    font-style: italic;
+    line-height: 0.4;
+    position: absolute;
+    top: 30px;
+    left: 30px;
+  }
+
+  .pressure-callout-quote {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(20px, 2.6vw, 26px);
+    font-weight: 300;
+    line-height: 1.4;
+    max-width: 640px;
+    margin: 0 auto;
+    letter-spacing: -0.005em;
+    position: relative;
+  }
+
+  .pressure-callout-quote em {
+    color: var(--gold-soft);
+    font-style: italic;
+  }
+
+  /* ============ TIMELINE ============ */
+  .timeline-section {
+    background: var(--bone);
+  }
+
+  .timeline {
+    margin-top: 48px;
+    border-left: 1px solid var(--line);
+    padding-left: 40px;
+    margin-left: 16px;
+  }
+
+  .timeline-item {
+    position: relative;
+    padding-bottom: 40px;
+  }
+
+  .timeline-item:last-child {
+    padding-bottom: 0;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -47px;
+    top: 8px;
+    width: 13px;
+    height: 13px;
+    background: var(--paper);
+    border: 2px solid var(--gold);
+    border-radius: 50%;
+  }
+
+  .timeline-time {
+    font-family: 'Fraunces', serif;
+    font-size: 13px;
+    color: var(--gold);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .timeline-title {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    color: var(--navy);
+    font-weight: 500;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+
+  .timeline-body {
+    color: var(--navy-soft);
+    font-size: 15.5px;
+    line-height: 1.65;
+    max-width: 580px;
+  }
+
+  /* ============ HOMEWORK ============ */
+  .homework-section {
+    background: var(--paper);
+  }
+
+  .homework-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-top: 48px;
+  }
+
+  .homework-card {
+    padding: 36px 32px;
+    background: var(--bone);
+    border-radius: 4px;
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+  }
+
+  .homework-icon {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    border: 1.5px solid var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fraunces', serif;
+    color: var(--gold);
+    font-style: italic;
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  .homework-title {
+    font-family: 'Fraunces', serif;
+    font-size: 19px;
+    color: var(--navy);
+    font-weight: 600;
+    margin-bottom: 6px;
+    letter-spacing: -0.005em;
+  }
+
+  .homework-body {
+    color: var(--navy-soft);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* ============ CTA ============ */
+  .cta-section {
+    background: var(--navy-deep);
+    color: var(--paper);
+    padding: 120px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    top: -200px; left: 50%;
+    transform: translateX(-50%);
+    width: 800px; height: 800px;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.1), transparent 60%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .cta-eyebrow {
+    color: var(--gold);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-weight: 600;
+    margin-bottom: 24px;
+  }
+
+  .cta-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    max-width: 760px;
+    margin: 0 auto 24px;
+    position: relative;
+  }
+
+  .cta-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .cta-text {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.75);
+    max-width: 520px;
+    margin: 0 auto 48px;
+    line-height: 1.6;
+    position: relative;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--navy-deep);
+    padding: 18px 42px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 40px rgba(212, 175, 55, 0.3);
+  }
+
+  /* ============ SIGNATURE ============ */
+  .signature {
+    padding: 80px 0 60px;
+    background: var(--bone);
+    text-align: center;
+  }
+
+  .signature-mark {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 36px;
+    color: var(--navy);
+    font-weight: 400;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+
+  .signature-title {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  /* ============ FOOTER ============ */
+  footer {
+    padding: 32px 0;
+    background: var(--bone);
+    border-top: 1px solid var(--line);
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  footer a {
+    color: var(--navy);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  /* ============ MOBILE ============ */
+  @media (max-width: 768px) {
+    .container { padding: 0 24px; }
+    nav { padding: 16px 24px; }
+    .hero { padding: 140px 0 80px; }
+    section.content { padding: 70px 0; }
+    .checkpoints { grid-template-columns: 1fr; gap: 20px; }
+    .homework-grid { grid-template-columns: 1fr; }
+    .pressure-visual { padding: 36px 24px; }
+    .pressure-steps { grid-template-columns: 1fr; gap: 32px; }
+    .pressure-callout { padding: 36px 24px; }
+    .pressure-callout-mark { font-size: 100px; top: 20px; left: 16px; }
+    .timeline { padding-left: 28px; }
+    .timeline-item::before { left: -35px; }
+    .throughline::before { font-size: 200px; top: -20px; }
+    .cta-section { padding: 80px 0; }
+  }
+
+  /* Subtle entrance animation */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero h1, .hero-lede, .eyebrow {
+    animation: fadeUp 0.8s ease-out forwards;
+  }
+
+  .eyebrow { animation-delay: 0.05s; opacity: 0; }
+  .hero h1 { animation-delay: 0.15s; opacity: 0; }
+  .hero-lede { animation-delay: 0.3s; opacity: 0; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="https://rrgolfperformance.com" class="logo">RR Golf <span>Performance</span></a>
+    <div class="nav-links">
+      <a href="https://rrgolfperformance.com" class="nav-link">Home</a>
+      <a href="https://rrgolfperformance.as.me" class="nav-btn">Book a Lesson</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="eyebrow">The Setup Clinic · Ladies' Session</div>
+    <h1>Most of the shot is decided <em>before</em> you move.</h1>
+    <p class="hero-lede">Welcome back. Everything we covered today, in one place — so you can take it to the range tomorrow with confidence.</p>
+  </div>
+</section>
+
+<!-- THROUGHLINE -->
+<section class="throughline">
+  <div class="container container--narrow">
+    <p class="throughline-quote">How you stand to the ball is the half of the swing you can build on purpose — no athleticism required. <em>Get this right</em> and the swing has somewhere good to start.</p>
+    <div class="throughline-attr">Today's Throughline</div>
+  </div>
+</section>
+
+<!-- THE THREE CHECKPOINTS -->
+<section class="content">
+  <div class="container">
+    <div class="section-label">Part One</div>
+    <h2 class="section-title">The three <em>checkpoints</em>.</h2>
+    <p class="section-intro">A good setup isn't a dozen things to remember. There are three that matter — and these are the three I want you checking every time you stand to a ball.</p>
+
+    <div class="checkpoints">
+
+      <div class="checkpoint">
+        <div class="checkpoint-num">01 · Posture</div>
+        <h3 class="checkpoint-title">Tilt from the hips, not the waist.</h3>
+        <p class="checkpoint-body">Stand tall, then <strong>hinge forward from your hip joints</strong> — let your seat move back like you're about to sit on a tall stool. Soft knees, <strong>arms hanging straight down</strong> under your shoulders, chin up off your chest. Athletic, balanced, ready to move.</p>
+      </div>
+
+      <div class="checkpoint">
+        <div class="checkpoint-num">02 · Ball Position &amp; Width</div>
+        <h3 class="checkpoint-title">Stance the width of your shoulders.</h3>
+        <p class="checkpoint-body">Feet roughly <strong>shoulder-width</strong> for a full swing, narrower as the club gets shorter. Ball position moves with the club — <strong>forward for the driver</strong>, drifting back toward centre for your wedges. Weight even, centred over the middle of your feet.</p>
+      </div>
+
+      <div class="checkpoint">
+        <div class="checkpoint-num">03 · Alignment</div>
+        <h3 class="checkpoint-title">Clubface first. Body second.</h3>
+        <p class="checkpoint-body">Aim the <strong>clubface at your target first</strong>, then build your body to it — feet, knees, hips and shoulders all <strong>parallel to the target line</strong>, like railroad tracks. Pick a spot a foot in front of the ball to aim over. Your body lines run left of the target, not at it.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ROUTINE -->
+<section class="content pressure-section">
+  <div class="container">
+    <div class="section-label">Part Two</div>
+    <h2 class="section-title">Build it the <em>same way</em>, every time.</h2>
+    <p class="section-intro">A great setup you do once is luck. A great setup you do every time is a routine. Here's the order we ran today — the same way, every shot, until it builds itself.</p>
+
+    <div class="pressure-visual">
+      <div class="pressure-steps">
+
+        <div class="pressure-step">
+          <div class="pressure-step-num">01</div>
+          <div class="pressure-step-title">Aim</div>
+          <div class="pressure-step-body">From <em>behind the ball</em>, pick your target line and a spot a foot in front of the ball to aim over. Set the <strong>clubface on it first</strong> — before your feet move.</div>
+        </div>
+
+        <div class="pressure-step">
+          <div class="pressure-step-num">02</div>
+          <div class="pressure-step-title">Build</div>
+          <div class="pressure-step-body">Step in. Feet to <strong>width</strong>, ball into <strong>position</strong>, then match your body lines to the face you already aimed. Build to the club — don't drag the club to you.</div>
+        </div>
+
+        <div class="pressure-step">
+          <div class="pressure-step-num">03</div>
+          <div class="pressure-step-title">Settle</div>
+          <div class="pressure-step-body">Tilt into your posture, soften the knees, <strong>one look</strong> at the target — and go. A setup you trust doesn't need a fourth look.</div>
+        </div>
+
+      </div>
+
+      <div class="pressure-callout">
+        <div class="pressure-callout-mark">"</div>
+        <div class="pressure-callout-quote">The same setup, every single time. <em>That's</em> what turns a swing into a shot you can count on.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT WE DID -->
+<section class="content timeline-section">
+  <div class="container container--narrow">
+    <div class="section-label">Part Three</div>
+    <h2 class="section-title">What we did <em>today</em>.</h2>
+    <p class="section-intro">A recap of the hour, in order — so you can mentally rewalk it on the range and remind yourself what each piece felt like.</p>
+
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <div class="timeline-time">The Why</div>
+        <h3 class="timeline-title">Same swing, two setups, two results.</h3>
+        <p class="timeline-body">You saw it for yourself — change nothing but how you stand to the ball, and the strike and the start line change with it. That's the lesson. Everything else is detail.</p>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-time">The Build</div>
+        <h3 class="timeline-title">Posture. Stance. Alignment.</h3>
+        <p class="timeline-body">Three checkpoints, in order. We hinged from the hips, set the feet and the ball, then matched the body to the target line — and felt what "ready" actually feels like.</p>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-time">The Mirror</div>
+        <h3 class="timeline-title">Seeing it, not just feeling it.</h3>
+        <p class="timeline-body">Feel lies. We used a mirror and a phone so your eyes could confirm what your body was doing — because "this feels strange" almost always means "this is finally right."</p>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-time">The Sticks</div>
+        <h3 class="timeline-title">Alignment rods on the ground.</h3>
+        <p class="timeline-body">We laid the rails down and you hit shots inside them — clubface to the target first, body parallel — until aiming stopped being a guess.</p>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-time">The Send-Off</div>
+        <h3 class="timeline-title">Full swings from a setup you trust.</h3>
+        <p class="timeline-body">We took it to a real shot — the routine, the build, the one look — and let the swing start from somewhere good.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- HOMEWORK -->
+<section class="content homework-section">
+  <div class="container">
+    <div class="section-label">This Week</div>
+    <h2 class="section-title">Your <em>homework</em>.</h2>
+    <p class="section-intro">Four small things between now and your next round. Do these and your setup becomes automatic — not something you have to think about anymore.</p>
+
+    <div class="homework-grid">
+
+      <div class="homework-card">
+        <div class="homework-icon">i</div>
+        <div>
+          <h3 class="homework-title">Posture in the mirror.</h3>
+          <p class="homework-body">Once a day, set up in front of a mirror — face-on and down-the-line. Hinge from the hips, arms hanging. Ten seconds. Let your eyes learn the shape.</p>
+        </div>
+      </div>
+
+      <div class="homework-card">
+        <div class="homework-icon">ii</div>
+        <div>
+          <h3 class="homework-title">Lay down the rails.</h3>
+          <p class="homework-body">Every range session, start with an alignment stick on the ground. First ten shots — clubface to target, feet parallel. Aiming should never be a guess.</p>
+        </div>
+      </div>
+
+      <div class="homework-card">
+        <div class="homework-icon">iii</div>
+        <div>
+          <h3 class="homework-title">Run the routine.</h3>
+          <p class="homework-body">Aim, build, settle. Every shot, every time — even chips and putts. The routine is what makes the setup repeatable when it matters.</p>
+        </div>
+      </div>
+
+      <div class="homework-card">
+        <div class="homework-icon">iv</div>
+        <div>
+          <h3 class="homework-title">Check your ball position.</h3>
+          <p class="homework-body">Before each club, glance down: forward for the longer clubs, centre for the wedges. Small drifts here are hiding behind a lot of mishits.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="book">
+  <div class="container container--narrow">
+    <div class="cta-eyebrow">Ready for what's next?</div>
+    <h2 class="cta-title">Let's <em>build</em> on what you started today.</h2>
+    <p class="cta-text">A private lesson is where this all comes together. We'll lock in your setup, find your tendencies, and build a real plan for your game.</p>
+    <a href="https://rrgolfperformance.as.me" class="btn-primary">Book a Private Lesson</a>
+  </div>
+</section>
+
+<!-- SIGNATURE -->
+<section class="signature">
+  <div class="container container--narrow">
+    <div class="signature-mark">— Ryan Rinneard</div>
+    <div class="signature-title">CPGA Class A · Director of Instruction</div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <a href="https://rrgolfperformance.com">rrgolfperformance.com</a> &nbsp;·&nbsp; RR Golf Performance &nbsp;·&nbsp; Collingwood, Ontario
+  </div>
+</footer>
+
+</body>
+</html>
