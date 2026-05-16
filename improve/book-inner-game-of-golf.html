@@ -1,0 +1,997 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Inner Game of Golf — The Bookshelf</title>
+<meta name="description" content="A primer on W. Timothy Gallwey's The Inner Game of Golf. Self 1 and Self 2, awareness over instruction, and how to deliver the swing you already have.">
+<meta property="og:title" content="Inner Game of Golf · RR Golf Performance">
+<meta property="og:description" content="Gallwey's mental-game classic, translated for the recreational player. Quiet the critic, trust the athlete.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://rrgolfperformance.com/improve/book-inner-game-of-golf.html">
+<meta property="og:image" content="https://madriverpro.com/images/rr-logo.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Inner Game of Golf · RR Golf Performance">
+<meta name="twitter:description" content="Gallwey's mental-game classic, translated for the recreational player.">
+<meta name="twitter:image" content="https://madriverpro.com/images/rr-logo.png">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  /* Matches Volume 01-05 styling — same hero, coach note, TOC, chapter
+     cards, callouts, glossary. This is Volume 02 of the Bookshelf. */
+
+  .book-hero {
+    background: linear-gradient(180deg, var(--navy) 0%, #162E54 100%);
+    color: #fff; border-radius: 14px;
+    padding: 56px 44px 48px; margin-bottom: 36px;
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .book-hero::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--gold);
+  }
+  .book-hero::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent 0%, var(--gold) 30%, var(--gold) 70%, transparent 100%);
+    opacity: 0.4;
+  }
+  .book-hero .vol {
+    display: inline-block;
+    font-size: 11px; letter-spacing: 0.24em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase;
+    padding: 5px 16px; border: 1px solid var(--gold);
+    border-radius: 999px; margin-bottom: 20px;
+  }
+  .book-hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(44px, 7vw, 68px);
+    font-weight: 600; color: #fff;
+    margin: 0; line-height: 1.05; letter-spacing: -0.01em;
+  }
+  .book-hero .subtitle {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; font-size: 20px;
+    color: rgba(255,255,255,0.78);
+    margin: 14px auto 22px; max-width: 620px;
+  }
+  .book-hero .gold-dash {
+    width: 60px; height: 2px; background: var(--gold);
+    margin: 0 auto 22px;
+  }
+  .book-hero .attrib {
+    font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(255,255,255,0.55); font-weight: 500;
+  }
+
+  .primer-disclaimer {
+    background: #FDF6F4;
+    border: 1px solid #E5D0CB;
+    border-left: 4px solid #C76757;
+    border-radius: 10px;
+    padding: 22px 28px;
+    margin: 0 0 28px;
+  }
+  .primer-disclaimer .pd-label {
+    font-size: 11px; letter-spacing: 0.22em; color: #9A3D2F;
+    font-weight: 700; text-transform: uppercase; margin-bottom: 10px;
+  }
+  .primer-disclaimer p {
+    font-size: 14px; line-height: 1.6; color: var(--navy-mid);
+    margin: 0 0 10px;
+  }
+  .primer-disclaimer p:last-child { margin-bottom: 0; }
+  .primer-disclaimer p strong { color: var(--navy); }
+  .primer-disclaimer a {
+    color: var(--gold); font-weight: 700;
+    text-decoration: underline; text-underline-offset: 3px;
+  }
+  .primer-disclaimer a:hover { color: var(--navy); }
+
+  .coach-note {
+    background: #F7F2E8;
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--gold);
+    border-radius: 10px;
+    padding: 28px 32px;
+    margin: 0 0 36px;
+  }
+  .coach-note .cn-label {
+    font-size: 11px; letter-spacing: 0.2em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 10px;
+  }
+  .coach-note p {
+    font-size: 15.5px; line-height: 1.7; color: var(--navy-mid);
+    margin: 0 0 12px;
+  }
+  .coach-note p:last-child { margin-bottom: 0; }
+  .coach-note p strong { color: var(--navy); }
+  .coach-note .sign-off {
+    margin-top: 14px;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; color: var(--navy); font-size: 16px;
+  }
+
+  .book-toc {
+    background: var(--white); border: 1px solid var(--rule);
+    border-top: 3px solid var(--gold); border-radius: 12px;
+    padding: 28px 32px; margin-bottom: 36px;
+  }
+  .book-toc h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px; color: var(--navy); margin: 0 0 16px; font-weight: 600;
+  }
+  .book-toc ol { list-style: none; margin: 0; padding: 0; }
+  .book-toc li {
+    display: grid; grid-template-columns: 60px 1fr auto;
+    align-items: baseline; gap: 16px;
+    padding: 12px 0; border-bottom: 1px solid var(--rule);
+  }
+  .book-toc li:last-child { border-bottom: none; }
+  .book-toc .ch-num {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; font-size: 20px; color: var(--gold); font-weight: 400;
+  }
+  .book-toc .ch-title { font-size: 15px; color: var(--navy); font-weight: 600; }
+  .book-toc .ch-title small {
+    display: block; font-size: 12px; color: var(--mid-grey);
+    font-weight: 400; margin-top: 2px; font-style: italic;
+  }
+  .book-toc a.ch-jump {
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--gold); font-weight: 700; text-decoration: none;
+  }
+  .book-toc a.ch-jump:hover { color: var(--navy); }
+
+  .chapter-stack { display: grid; gap: 16px; margin-bottom: 40px; }
+  .chapter {
+    background: var(--white); border: 1px solid var(--rule);
+    border-left: 4px solid var(--gold); border-radius: 12px;
+    overflow: hidden; transition: box-shadow .2s ease;
+  }
+  .chapter[open] { box-shadow: 0 14px 34px rgba(13,31,60,0.09); }
+  .chapter summary {
+    display: grid; grid-template-columns: 74px 1fr 28px;
+    gap: 18px; align-items: center; padding: 22px 26px;
+    cursor: pointer; list-style: none; user-select: none;
+  }
+  .chapter summary::-webkit-details-marker { display: none; }
+  .chapter .num {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 48px; color: var(--gold); font-weight: 700;
+    line-height: 1; text-align: center;
+    border-right: 1px solid var(--rule); padding-right: 18px;
+  }
+  .chapter .title-stack .ch-kicker {
+    font-size: 10px; letter-spacing: 0.22em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .chapter .title-stack h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px; color: var(--navy); font-weight: 600;
+    margin: 0 0 4px; line-height: 1.2;
+  }
+  .chapter .title-stack .ch-teaser {
+    font-size: 13px; color: var(--navy-mid); line-height: 1.5;
+  }
+  .chapter .chev {
+    color: var(--mid-grey); font-size: 22px; line-height: 1;
+    transition: transform .2s ease; text-align: center; justify-self: center;
+  }
+  .chapter[open] .chev { transform: rotate(90deg); color: var(--gold); }
+  .chapter .body {
+    padding: 0 26px 28px calc(26px + 74px + 18px);
+    color: var(--navy-mid); line-height: 1.7; font-size: 15px;
+  }
+  .chapter .body p { margin: 0 0 12px; }
+  .chapter .body p strong { color: var(--navy); }
+  .chapter .body ul { margin: 8px 0 14px 20px; padding: 0; }
+  .chapter .body ul li { margin-bottom: 6px; }
+  .chapter .body ol { margin: 8px 0 14px 22px; padding: 0; }
+  .chapter .body ol li { margin-bottom: 6px; }
+  .chapter .body h4 {
+    font-size: 11px; letter-spacing: 0.18em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase;
+    margin: 22px 0 8px;
+  }
+
+  .key-idea {
+    background: #F7F2E8; border-left: 3px solid var(--gold);
+    padding: 14px 18px; border-radius: 4px;
+    margin: 16px 0; font-size: 15px; line-height: 1.6;
+  }
+  .key-idea b { color: var(--navy); }
+  .feel-pull {
+    border-left: 3px solid var(--gold);
+    padding: 6px 0 6px 18px; margin: 16px 0;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; font-size: 19px; line-height: 1.45; color: var(--navy);
+  }
+  .mistake-box {
+    background: #FDF6F4; border-left: 3px solid #C76757;
+    padding: 14px 18px; border-radius: 4px; margin: 16px 0;
+  }
+  .mistake-box .mb-title {
+    color: #9A3D2F; font-weight: 700; font-size: 12px;
+    letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 6px;
+  }
+  .mistake-box ul { margin: 6px 0 0 18px; padding: 0; }
+  .mistake-box li { color: var(--navy-mid); margin-bottom: 4px; }
+  .drill-box {
+    background: #F2F6EE; border-left: 3px solid #6B8B4E;
+    padding: 14px 18px; border-radius: 4px; margin: 16px 0;
+  }
+  .drill-box .db-title {
+    color: #4C6B30; font-weight: 700; font-size: 12px;
+    letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 6px;
+  }
+  .verify-box {
+    background: #F4F1FA; border-left: 3px solid #7A6BA8;
+    padding: 12px 16px; border-radius: 4px; margin: 14px 0;
+    font-size: 13.5px; line-height: 1.55;
+  }
+  .verify-box .vb-title {
+    color: #4F4380; font-weight: 700; font-size: 11px;
+    letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .bridge {
+    margin-top: 20px; padding-top: 16px;
+    border-top: 1px dashed var(--rule);
+    font-style: italic; font-size: 14px; color: var(--mid-grey);
+  }
+  @media (max-width: 620px) {
+    .chapter summary {
+      grid-template-columns: 54px 1fr 24px; gap: 12px; padding: 18px 18px;
+    }
+    .chapter .num { font-size: 36px; padding-right: 12px; }
+    .chapter .title-stack h3 { font-size: 18px; }
+    .chapter .body { padding: 0 18px 20px 18px; }
+    .book-toc li { grid-template-columns: 38px 1fr; }
+    .book-toc a.ch-jump { grid-column: 2; margin-top: 4px; }
+  }
+
+  .next-steps {
+    background: var(--navy); color: #fff;
+    border-radius: 12px; padding: 32px 34px;
+    margin: 40px 0 28px;
+  }
+  .next-steps h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 26px; color: #fff; margin: 0 0 10px; font-weight: 600;
+  }
+  .next-steps p {
+    font-size: 15px; line-height: 1.7; color: rgba(255,255,255,0.88);
+    margin: 0 0 12px;
+  }
+  .next-steps p strong { color: var(--gold); }
+  .next-steps ol {
+    margin: 8px 0 12px 22px; padding: 0;
+    color: rgba(255,255,255,0.92);
+  }
+  .next-steps ol li {
+    margin-bottom: 8px; font-size: 15px; line-height: 1.55;
+  }
+
+  .attribution {
+    background: #F7F2E8; border: 1px solid var(--rule);
+    border-radius: 10px; padding: 22px 26px; margin: 28px 0;
+  }
+  .attribution h3 {
+    font-size: 12px; letter-spacing: 0.2em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin: 0 0 10px;
+  }
+  .attribution p {
+    font-size: 14px; line-height: 1.65; color: var(--navy-mid);
+    margin: 0 0 10px;
+  }
+  .attribution p strong { color: var(--navy); }
+
+  .glossary {
+    background: var(--white); border: 1px solid var(--rule);
+    border-radius: 10px; padding: 28px 30px; margin: 28px 0;
+  }
+  .glossary h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px; color: var(--navy); margin: 0 0 14px; font-weight: 600;
+  }
+  .glossary dl {
+    display: grid; grid-template-columns: minmax(160px, 1fr) 2fr;
+    gap: 10px 22px;
+  }
+  .glossary dt { font-weight: 700; color: var(--navy); font-size: 14px; }
+  .glossary dd {
+    margin: 0; color: var(--navy-mid); font-size: 14px; line-height: 1.5;
+  }
+  @media (max-width: 620px) {
+    .glossary dl { grid-template-columns: 1fr; gap: 4px 0; }
+    .glossary dd { margin-bottom: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container">
+
+  <div class="breadcrumb">
+    <a href="index.html">Library</a><span>›</span><a href="bookshelf.html">Bookshelf</a><span>›</span>Five Lessons
+  </div>
+
+  <!-- ===================== BOOK HERO ===================== -->
+  <div class="book-hero">
+    <span class="vol">Teaching Library · Volume 06 · Primer</span>
+    <h1>The Inner Game of Golf: Letting the Real Swing Out.</h1>
+    <div class="subtitle">Quiet the critical voice. Trust the athlete. Why awareness beats instruction once the ball's in front of you.</div>
+    <div class="gold-dash"></div>
+    <div class="attrib">Inspired by W. Timothy Gallwey's <em>The Inner Game of Golf</em></div>
+  </div>
+
+  <!-- ===================== DISCLAIMER ===================== -->
+  <div class="primer-disclaimer">
+    <div class="pd-label">Independent Interpretation</div>
+    <p>
+      This primer is Ryan Rinneard's independent educational summary of
+      W. Timothy Gallwey's 1981 book <em>The Inner Game of Golf</em>. It
+      is <strong>not an official Gallwey publication</strong>, nor
+      authorized by the author. Concepts below are described in Ryan's
+      own words; the original work is attributed to Gallwey throughout.
+    </p>
+    <p>
+      <strong>Buy the original.</strong> Gallwey's book is short, witty,
+      and genuinely changes how you think about practice. It belongs on
+      every player's shelf next to the technical primers.
+      <a href="https://www.amazon.com/s?k=Inner+Game+of+Golf+Gallwey" target="_blank" rel="noopener">Find it on Amazon &rarr;</a>
+    </p>
+  </div>
+
+  <!-- ===================== COACH NOTE ===================== -->
+  <div class="coach-note">
+    <div class="cn-label">From the coach</div>
+    <p>
+      Jacobs taught you how to <strong>diagnose</strong>. Hogan taught you
+      what to <strong>build</strong>. Tim Gallwey taught you how to
+      <strong>get out of your own way</strong> so the diagnosis and the
+      build can actually show up on the course.
+    </p>
+    <p>
+      Gallwey wasn't a golf pro. He was a tennis coach, and what he
+      noticed on the tennis court was that his students already knew how
+      to hit the ball &mdash; until he started instructing them. The
+      more &ldquo;help&rdquo; he gave, the worse they played. The minute
+      he shut up and gave them something to <em>notice</em> instead of
+      something to <em>do</em>, they got better. <em>The Inner Game of
+      Golf</em> is that lesson, brought to the hardest sport for the
+      thinking mind.
+    </p>
+    <p>
+      The central idea is simple: there are two of you out there.
+      <strong>Self 1</strong>, the loud one &mdash; the one telling you
+      to keep your head down, to swing slower, to not duff this one in
+      front of the group. And <strong>Self 2</strong>, the quiet one
+      &mdash; the body, the athlete, the part of you that has actually
+      learned to swing a golf club. Self 1 thinks it's helping. It isn't.
+    </p>
+    <p>
+      <strong>This primer is for the player</strong> who's had a great
+      range session and then walked to the first tee and watched the
+      same swing fall apart. The technique didn't disappear in the 200
+      yards between the mat and the tee &mdash; Self 1 just got loud.
+      Eight chapters on how to turn the volume down.
+    </p>
+    <p>
+      One thing up front: this isn't a &ldquo;positive thinking&rdquo;
+      book. Gallwey isn't asking you to feel good or visualize success.
+      He's asking you to <em>pay attention</em> &mdash; to specific,
+      neutral, observable things. Awareness, not affirmation. There's
+      a real difference, and it matters.
+    </p>
+    <div class="sign-off">&mdash; Ryan</div>
+  </div>
+
+  <!-- ===================== TOC ===================== -->
+  <div class="book-toc">
+    <h2>Table of contents</h2>
+    <ol>
+      <li>
+        <div class="ch-num">01</div>
+        <div><div class="ch-title">Why the Inner Game still matters
+          <small>Why the same swing breaks down on the tee &mdash; and why instruction alone won't fix it.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch1">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">02</div>
+        <div><div class="ch-title">Self 1 and Self 2
+          <small>The critic and the athlete. Who's actually swinging the club, and who's interfering.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch2">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">03</div>
+        <div><div class="ch-title">The real swing is already in there
+          <small>Gallwey's bet: your body has learned more than your mind knows. Let it out.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch3">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">04</div>
+        <div><div class="ch-title">Awareness, not instruction
+          <small>The single trade that changes everything &mdash; and why &ldquo;watch the ball&rdquo; isn't what you think.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch4">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">05</div>
+        <div><div class="ch-title">Back-hit &mdash; Gallwey's most famous tool
+          <small>Two words. Said at the right two moments. Trust this one before you mock it.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch5">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">06</div>
+        <div><div class="ch-title">The concentration test
+          <small>Why your mind wanders mid-swing &mdash; and the small experiment that gives you focus back.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch6">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">07</div>
+        <div><div class="ch-title">Trust and letting go
+          <small>The freedom great players seem to have, and where Gallwey says it actually comes from.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch7">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">08</div>
+        <div><div class="ch-title">Where the Inner Game fits &mdash; with the technical primers
+          <small>How to read Gallwey alongside Jacobs and Hogan without contradicting either.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch8">Read &rarr;</a>
+      </li>
+    </ol>
+  </div>
+
+  <!-- ===================== CHAPTERS ===================== -->
+  <div class="chapter-stack">
+
+    <!-- ========== CHAPTER 1 ========== -->
+    <details class="chapter" id="ch1">
+      <summary>
+        <div class="num">1</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter One</div>
+          <h3>Why the Inner Game still matters</h3>
+          <div class="ch-teaser">Why the same swing breaks down on the tee &mdash; and why instruction alone won't fix it.</div>
+        </div>
+        <div class="chev">&rsaquo;</div>
+      </summary>
+      <div class="body">
+        <p>
+          Every golfer has had this experience: you hit a beautiful
+          eight-iron on the range, the contact is pure, the ball does
+          what you wanted &mdash; and ten minutes later, standing over
+          the same shot on the course, you turn the swing into something
+          you don't recognize. The technique didn't leave you. Something
+          else got in the way.
+        </p>
+        <div class="key-idea">
+          <b>The key idea.</b> Gallwey wrote <em>The Inner Game of
+          Golf</em> because he kept watching this happen &mdash; to
+          himself, to his students, to professionals. The body had
+          learned the skill. The mind was interfering with its delivery.
+          Most golf instruction ignores this problem and tries to fix
+          the swing instead. Gallwey said: that won't work, because the
+          swing isn't broken. The channel between mind and body is.
+        </div>
+        <h4>What Inner Game is, and isn't</h4>
+        <p>
+          This is not a mental-toughness book. It's not about willpower
+          or positive thinking. Gallwey was skeptical of both &mdash; he
+          thought they were just Self 1 putting on a different costume.
+          What he proposed was something more practical: a different
+          <em>kind</em> of attention. Less telling yourself what to do,
+          more noticing what's actually happening.
+        </p>
+        <p>
+          That sounds like a small distinction. It isn't. Once you start
+          practicing it, you realize how much of what your mind does
+          during a golf swing is commentary &mdash; and how much better
+          you can play when the commentary turns off.
+        </p>
+        <div class="feel-pull">
+          &ldquo;The opponent within one's own head is more formidable
+          than the one across the net.&rdquo;
+        </div>
+        <p>
+          Gallwey wrote that about tennis first. He adapted it to golf
+          because golf is, in his words, the cruelest sport for the
+          thinking mind &mdash; a slow game with a stationary ball and
+          far too much time between shots to talk yourself into trouble.
+        </p>
+        <div class="bridge">
+          Next: meet Self 1 and Self 2 &mdash; the two voices inside
+          every golfer, and the one you've been listening to too much.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 2 ========== -->
+    <details class="chapter" id="ch2">
+      <summary>
+        <div class="num">2</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Two</div>
+          <h3>Self 1 and Self 2</h3>
+          <div class="ch-teaser">The critic and the athlete. Who's actually swinging the club, and who's interfering.</div>
+        </div>
+        <div class="chev">&rsaquo;</div>
+      </summary>
+      <div class="body">
+        <p>
+          Gallwey's central image is that every golfer is two people. He
+          called them Self 1 and Self 2, and the names are deliberately
+          plain &mdash; he didn't want them to sound mystical.
+        </p>
+        <p>
+          <strong>Self 1</strong> is the verbal, judging, instructing
+          voice. The one that says &ldquo;don't lift your head&rdquo; on
+          the backswing and &ldquo;hit it solid&rdquo; on the way down.
+          The one that praises you (briefly) when a shot is good and
+          criticizes you (at length) when it isn't.
+        </p>
+        <p>
+          <strong>Self 2</strong> is everything else. The body, the
+          nervous system, the unconscious motor system that has, over
+          many thousands of swings, actually <em>learned</em> how to
+          swing a golf club. Self 2 is the part of you that can balance,
+          walk, drive a car, throw a stone at a target without computing
+          trajectories. It doesn't need instructions in words. It needs
+          a clear target and permission.
+        </p>
+        <div class="key-idea">
+          <b>The key idea.</b> Self 1 is not your friend. It thinks it's
+          helping &mdash; that's why it's so loud. But the cost of its
+          help is interference: it tightens muscles, distracts attention,
+          replaces motor patterns with verbal cues that the body has to
+          translate back into movement. Every word from Self 1 during a
+          swing is friction Self 2 has to push through.
+        </div>
+        <h4>You've felt Self 2 already</h4>
+        <p>
+          Think of your best round. Or your best stretch of holes. There
+          was almost certainly a quietness to it. You weren't thinking
+          much. The ball was just going where you looked. That wasn't
+          luck. That was Self 2 with the channel open. Gallwey's whole
+          project is making that state available on purpose.
+        </p>
+        <div class="feel-pull">
+          &ldquo;Don't fight Self 1. Just give Self 2 something better
+          to pay attention to.&rdquo;
+        </div>
+        <div class="bridge">
+          Next: the real swing &mdash; the one your body already knows
+          &mdash; and why your job is to let it out, not build a new one.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 3 ========== -->
+    <details class="chapter" id="ch3">
+      <summary>
+        <div class="num">3</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Three</div>
+          <h3>The real swing is already in there</h3>
+          <div class="ch-teaser">Gallwey's bet: your body has learned more than your mind knows. Let it out.</div>
+        </div>
+        <div class="chev">&rsaquo;</div>
+      </summary>
+      <div class="body">
+        <p>
+          The most provocative claim in Inner Game is this: you already
+          have a swing. Not the perfect swing. Not Hogan's. <em>Your</em>
+          swing &mdash; the one your body has assembled from every range
+          ball and every round you've ever played. It's in there. The
+          question is whether Self 1 will let it out.
+        </p>
+        <div class="key-idea">
+          <b>The key idea.</b> Improvement in golf isn't only about
+          adding new technique. A huge part of it is removing the
+          <em>interference</em> that keeps your existing technique from
+          showing up. Gallwey calls this the performance equation:
+          performance = potential &minus; interference. Most golfers
+          spend all their time on potential and none on interference.
+          The math punishes that.
+        </div>
+        <h4>Practice differently</h4>
+        <p>
+          This doesn't mean stop taking lessons or stop drilling. It
+          means: when you're <em>playing</em>, treat the technical work
+          as already done. The range is where you build potential. The
+          course is where you reduce interference. Doing technical work
+          mid-round is the most reliable way to play worse than your
+          actual ability.
+        </p>
+        <h4>The toss-the-club experiment</h4>
+        <p>
+          Gallwey describes an exercise that Fred Shoemaker (whose
+          <em>Extraordinary Golf</em> is the next volume on this shelf)
+          made famous: ask a golfer to <em>throw</em> a club, underhand,
+          toward a target. They do it gracefully, with no thought. Then
+          ask them to swing one. Suddenly it's a mechanical event. Same
+          body, same target &mdash; different relationship to the task.
+          That gap is the Inner Game in one image.
+        </p>
+        <div class="feel-pull">
+          &ldquo;You can't make a flower grow by pulling on it.&rdquo;
+        </div>
+        <div class="bridge">
+          Next: the practical trade. Stop instructing Self 2. Give it
+          something to be aware of instead.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 4 ========== -->
+    <details class="chapter" id="ch4">
+      <summary>
+        <div class="num">4</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Four</div>
+          <h3>Awareness, not instruction</h3>
+          <div class="ch-teaser">The single trade that changes everything &mdash; and why &ldquo;watch the ball&rdquo; isn't what you think.</div>
+        </div>
+        <div class="chev">&rsaquo;</div>
+      </summary>
+      <div class="body">
+        <p>
+          This is the practical heart of the book. If Self 1 needs
+          something to do, give it something to <em>notice</em> rather
+          than something to <em>command</em>. Awareness, not instruction.
+        </p>
+        <div class="key-idea">
+          <b>The key idea.</b> A neutral observation &mdash; &ldquo;my
+          grip pressure feels like a 7 out of 10&rdquo; &mdash; is
+          fundamentally different from a command &mdash; &ldquo;grip it
+          lighter.&rdquo; The command activates Self 1's controlling
+          impulse and creates tension. The observation engages curiosity,
+          which is one of the few mental states that doesn't interfere
+          with Self 2.
+        </div>
+        <h4>What to notice (instead of what to do)</h4>
+        <p>
+          Gallwey gives plenty of examples; three that travel well to a
+          Friday lesson:
+        </p>
+        <ul>
+          <li><strong>Grip pressure</strong> on a 1&ndash;10 scale, shot
+            to shot. No judgment about the number &mdash; just notice it.</li>
+          <li><strong>Tempo</strong>, by mentally humming or counting
+            during the swing. Same backswing-to-downswing ratio every
+            shot, no matter the club or the pressure.</li>
+          <li><strong>Where balance ends up</strong> after the finish.
+            Toes? Heels? Outside of the back foot? Just observe.</li>
+        </ul>
+        <p>
+          You'll notice none of these are instructions. They're
+          invitations to look. After enough shots, Self 2 &mdash; who's
+          been paying attention all along &mdash; quietly adjusts. The
+          shot pattern improves without your trying to improve it.
+          That's the whole game.
+        </p>
+        <div class="feel-pull">
+          &ldquo;Awareness is curative.&rdquo;
+        </div>
+        <div class="bridge">
+          Next: the most famous Inner Game cue in any sport. Two words.
+          Said at two moments.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 5 ========== -->
+    <details class="chapter" id="ch5">
+      <summary>
+        <div class="num">5</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Five</div>
+          <h3>Back-hit &mdash; Gallwey's most famous tool</h3>
+          <div class="ch-teaser">Two words. Said at the right two moments. Trust this one before you mock it.</div>
+        </div>
+        <div class="chev">&rsaquo;</div>
+      </summary>
+      <div class="body">
+        <p>
+          The simplest Inner Game tool &mdash; and somehow the most
+          frequently dismissed &mdash; is the back-hit cue. As your club
+          reaches the top of its backswing, you say (or think) the word
+          <strong>&ldquo;back.&rdquo;</strong> As the clubhead strikes
+          the ball, you say <strong>&ldquo;hit.&rdquo;</strong> That's it.
+        </p>
+        <div class="key-idea">
+          <b>The key idea.</b> Back-hit works because it gives Self 1 a
+          tiny job &mdash; saying two words at exactly the right two
+          moments &mdash; that fully occupies it without telling Self 2
+          anything. Self 1 can't be saying &ldquo;don't slice&rdquo; if
+          it's busy listening for the top of the backswing.
+        </div>
+        <h4>It's a focus device, not a swing thought</h4>
+        <p>
+          The trap is to turn back-hit into a command &mdash; to push
+          the backswing back, or jab at &ldquo;hit.&rdquo; That's just
+          Self 1 in a costume. The cue is observational: notice the
+          moment the club has finished going back; notice the moment it
+          meets the ball. Don't make them happen. Watch them happen.
+        </p>
+        <h4>When to use it</h4>
+        <p>
+          Anywhere Self 1 is getting in the way. Approach shots over
+          water. The first tee. A long putt with people watching. Three
+          or four back-hit reps on the range every session, and you
+          start to feel how much of your tension was Self 1 looking for
+          something to do.
+        </p>
+        <div class="feel-pull">
+          &ldquo;Don't try to play better. Try to be more aware.&rdquo;
+        </div>
+        <div class="bridge">
+          Next: when your concentration breaks mid-swing, here's the
+          experiment Gallwey says will give it back.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 6 ========== -->
+    <details class="chapter" id="ch6">
+      <summary>
+        <div class="num">6</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Six</div>
+          <h3>The concentration test</h3>
+          <div class="ch-teaser">Why your mind wanders mid-swing &mdash; and the small experiment that gives you focus back.</div>
+        </div>
+        <div class="chev">&rsaquo;</div>
+      </summary>
+      <div class="body">
+        <p>
+          Concentration in golf is famously hard, not because the task
+          is mentally demanding but because the gaps are long. There's
+          nothing to do between shots except think. And Self 1, given
+          time and a stationary ball, gets creative.
+        </p>
+        <div class="key-idea">
+          <b>The key idea.</b> Concentration isn't grim effort. It's
+          interest. Self 1 wanders because it's bored. The job isn't to
+          force focus &mdash; it's to find something Self 2 actually
+          finds <em>interesting</em> to notice. Curiosity, not discipline.
+        </div>
+        <h4>A small experiment</h4>
+        <p>
+          Pick something specific to track for one round. Just one.
+          Examples:
+        </p>
+        <ul>
+          <li>How does the grass feel under your feet at every address
+            &mdash; firm, soft, sloped, level?</li>
+          <li>What does the air sound like at the top of your backswing?
+            (You'll discover it sounds different than at address.)</li>
+          <li>What does the ball look like in the second between when
+            you finish your routine and the moment you start the club
+            back?</li>
+        </ul>
+        <p>
+          The point isn't the answer. The point is the looking. After
+          nine holes of doing this, you'll notice you're playing better
+          &mdash; and you'll struggle to explain why. The why is that
+          Self 1 had something to do that wasn't sabotaging Self 2.
+        </p>
+        <div class="feel-pull">
+          &ldquo;Focus is interest, sustained.&rdquo;
+        </div>
+        <div class="bridge">
+          Next: trust. The thing every great player seems to have, and
+          where Gallwey says it actually comes from.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 7 ========== -->
+    <details class="chapter" id="ch7">
+      <summary>
+        <div class="num">7</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Seven</div>
+          <h3>Trust and letting go</h3>
+          <div class="ch-teaser">The freedom great players seem to have, and where Gallwey says it actually comes from.</div>
+        </div>
+        <div class="chev">&rsaquo;</div>
+      </summary>
+      <div class="body">
+        <p>
+          Watch a tour pro between shots &mdash; the actual swing, not
+          the pre-shot routine. There's a kind of looseness. A casualness,
+          almost. Gallwey would say what you're watching is trust &mdash;
+          Self 1 stepped aside, and Self 2 was given permission to do
+          the thing it already knows how to do.
+        </p>
+        <div class="key-idea">
+          <b>The key idea.</b> Trust isn't blind belief that the shot
+          will be perfect. It's a working agreement: I've done the
+          technical work; this swing is the best I have today; I'm going
+          to commit to it and let it play. The opposite of trust isn't
+          doubt &mdash; it's interference. And the antidote isn't more
+          confidence. It's less commentary.
+        </div>
+        <h4>How trust gets built</h4>
+        <p>
+          Not by trying to feel more confident. By accumulating evidence
+          that Self 2 can do the job. Every shot where you stayed aware
+          rather than instructive &mdash; where back-hit or grip pressure
+          or tempo was your only focus &mdash; is a deposit in the trust
+          account. Trust is a record of letting go and surviving.
+        </p>
+        <h4>The freedom on the other side</h4>
+        <p>
+          Gallwey's promise &mdash; and it's not a small one &mdash; is
+          that with enough of this practice, golf starts to feel
+          different. Less effortful. The ball goes where you look. Bad
+          shots become information instead of indictments. You don't
+          play better every round, but you stop adding misery to the
+          rounds that aren't your best.
+        </p>
+        <div class="feel-pull">
+          &ldquo;The harder you try to make it happen, the less it
+          happens.&rdquo;
+        </div>
+        <div class="bridge">
+          Next: where Inner Game sits on this bookshelf. How to read
+          Gallwey alongside Jacobs and Hogan without contradicting either.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 8 ========== -->
+    <details class="chapter" id="ch8">
+      <summary>
+        <div class="num">8</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Eight</div>
+          <h3>Where the Inner Game fits &mdash; with the technical primers</h3>
+          <div class="ch-teaser">How to read Gallwey alongside Jacobs and Hogan without contradicting either.</div>
+        </div>
+        <div class="chev">&rsaquo;</div>
+      </summary>
+      <div class="body">
+        <p>
+          People sometimes treat the mental game and the technical game
+          as rivals. That's a mistake. Jacobs, Hogan, and Gallwey are
+          three chapters of the same book.
+        </p>
+        <ul>
+          <li><strong>Jacobs (Vol. 01)</strong> teaches you to
+            <em>diagnose</em> &mdash; read the ball, find the cause.</li>
+          <li><strong>Hogan (Vol. 02)</strong> teaches you what to
+            <em>build</em> &mdash; the fundamentals, in order.</li>
+          <li><strong>Gallwey (Vol. 06)</strong> teaches you how to
+            <em>deliver</em> what you've built, under pressure, on the
+            course.</li>
+        </ul>
+        <div class="key-idea">
+          <b>The key idea.</b> You need all three. Build with Hogan,
+          diagnose with Jacobs, deliver with Gallwey. The player who
+          ignores any one of those chapters is fighting the game from
+          a weaker position.
+        </div>
+        <h4>How to read this book</h4>
+        <p>
+          Don't read it on the practice tee. Read it the night before a
+          round. Or in bed during the off-season. It's a book to think
+          with, not a book to drill with. Then pick one cue &mdash;
+          back-hit, grip pressure on a 1&ndash;10, tempo by humming
+          &mdash; and take it to the range for a week.
+        </p>
+        <p>
+          If you'd like to talk through how to apply this to your own
+          game, the <a href="https://rrgolfperformance.as.me" target="_blank" rel="noopener" style="color:var(--gold);font-weight:700;">private lesson</a>
+          is where we'd build the Inner-Game-meets-fundamentals plan
+          that's actually yours.
+        </p>
+        <div class="feel-pull">
+          &ldquo;Awareness, not instruction.&rdquo;
+        </div>
+      </div>
+    </details>
+
+  </div>
+
+  <!-- ===================== NEXT STEPS ===================== -->
+  <div class="next-steps">
+    <div class="ns-label">Where to go from here</div>
+    <h2>Three things to take to the range this week.</h2>
+    <ol>
+      <li><strong>Back-hit, ten shots.</strong> Start every range session
+        with ten shots using back-hit as your only focus. Notice what
+        happens to tempo and tension without your asking.</li>
+      <li><strong>Grip pressure on a 1&ndash;10.</strong> Pick a shot
+        type and report your grip pressure number to yourself, shot by
+        shot. Do not try to change the number. Just notice it. Self 2
+        will adjust once it's been told the score.</li>
+      <li><strong>Read one chapter the night before each round.</strong>
+        Pick the chapter that matches what got in your way last time.
+        Sleep on it. Don't bring the book to the course.</li>
+    </ol>
+  </div>
+
+  <!-- ===================== ATTRIBUTION ===================== -->
+  <div class="attribution-block">
+    <h2>Attribution</h2>
+    <p>
+      Every concept above &mdash; Self 1 and Self 2, awareness over
+      instruction, back-hit, the performance equation, the role of trust
+      &mdash; belongs to W. Timothy Gallwey. This primer is Ryan
+      Rinneard's independent educational summary, written in his own
+      words. It is not authorized by Gallwey or his publishers, and it
+      does not reproduce the book's text. The full work is much richer
+      than any summary; among other things, Gallwey is a witty and
+      generous writer whose voice this primer cannot capture.
+    </p>
+    <p>
+      <strong>Buy the original.</strong> It's a short, paperback-thin
+      book that you'll go back to for years. It belongs on the shelf
+      next to the technical primers.
+      <a href="https://www.amazon.com/s?k=Inner+Game+of+Golf+Gallwey" target="_blank" rel="noopener">Find it on Amazon &rarr;</a>
+    </p>
+  </div>
+
+  <!-- ===================== GLOSSARY ===================== -->
+  <div class="glossary">
+    <h2>Glossary</h2>
+    <dl>
+      <dt>Self 1</dt>
+      <dd>The verbal, judging, instructing voice in a golfer's head.
+        Usually well-intentioned, almost always interfering.</dd>
+
+      <dt>Self 2</dt>
+      <dd>The body and nervous system &mdash; the part of you that has
+        actually learned to swing. Doesn't speak in words. Learns by
+        feel and observation.</dd>
+
+      <dt>The performance equation</dt>
+      <dd>Performance = Potential &minus; Interference. Gallwey's central
+        formula: most improvement comes from reducing interference,
+        not adding potential.</dd>
+
+      <dt>Awareness</dt>
+      <dd>Neutral, curious noticing of something specific (grip pressure,
+        tempo, balance). Distinct from instruction or judgment.</dd>
+
+      <dt>Back-hit</dt>
+      <dd>A focus cue: say &ldquo;back&rdquo; at the top of the backswing
+        and &ldquo;hit&rdquo; at impact. Occupies Self 1; leaves Self 2
+        free to swing.</dd>
+
+      <dt>Trust</dt>
+      <dd>An accumulated willingness to let Self 2 deliver the swing
+        without Self 1's running commentary. Built through repeated
+        practice of letting go.</dd>
+
+      <dt>Interference</dt>
+      <dd>Anything Self 1 contributes during a swing &mdash; instructions,
+        self-criticism, anxiety. Pure friction between potential and
+        performance.</dd>
+    </dl>
+  </div>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  RRG.mountLibrary();
+</script>
+</body>
+</html>

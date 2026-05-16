@@ -1,0 +1,985 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Be a Player — The Bookshelf</title>
+<meta name="description" content="A primer on Marriott & Nilsson's Be a Player and the VISION54 framework. Think Box, Play Box, the 8 Essentials, and the performance state on demand.">
+<meta property="og:title" content="Be a Player · RR Golf Performance">
+<meta property="og:description" content="Marriott and Nilsson's VISION54 blueprint for on-course performance. Think Box, Play Box, the 8 Essentials.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://rrgolfperformance.com/improve/book-be-a-player.html">
+<meta property="og:image" content="https://madriverpro.com/images/rr-logo.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Be a Player · RR Golf Performance">
+<meta name="twitter:description" content="VISION54's on-course performance blueprint.">
+<meta name="twitter:image" content="https://madriverpro.com/images/rr-logo.png">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  /* Matches Volume 01-05 styling — same hero, coach note, TOC, chapter
+     cards, callouts, glossary. This is Volume 02 of the Bookshelf. */
+
+  .book-hero {
+    background: linear-gradient(180deg, var(--navy) 0%, #162E54 100%);
+    color: #fff; border-radius: 14px;
+    padding: 56px 44px 48px; margin-bottom: 36px;
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .book-hero::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--gold);
+  }
+  .book-hero::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent 0%, var(--gold) 30%, var(--gold) 70%, transparent 100%);
+    opacity: 0.4;
+  }
+  .book-hero .vol {
+    display: inline-block;
+    font-size: 11px; letter-spacing: 0.24em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase;
+    padding: 5px 16px; border: 1px solid var(--gold);
+    border-radius: 999px; margin-bottom: 20px;
+  }
+  .book-hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(44px, 7vw, 68px);
+    font-weight: 600; color: #fff;
+    margin: 0; line-height: 1.05; letter-spacing: -0.01em;
+  }
+  .book-hero .subtitle {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; font-size: 20px;
+    color: rgba(255,255,255,0.78);
+    margin: 14px auto 22px; max-width: 620px;
+  }
+  .book-hero .gold-dash {
+    width: 60px; height: 2px; background: var(--gold);
+    margin: 0 auto 22px;
+  }
+  .book-hero .attrib {
+    font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(255,255,255,0.55); font-weight: 500;
+  }
+
+  .primer-disclaimer {
+    background: #FDF6F4;
+    border: 1px solid #E5D0CB;
+    border-left: 4px solid #C76757;
+    border-radius: 10px;
+    padding: 22px 28px;
+    margin: 0 0 28px;
+  }
+  .primer-disclaimer .pd-label {
+    font-size: 11px; letter-spacing: 0.22em; color: #9A3D2F;
+    font-weight: 700; text-transform: uppercase; margin-bottom: 10px;
+  }
+  .primer-disclaimer p {
+    font-size: 14px; line-height: 1.6; color: var(--navy-mid);
+    margin: 0 0 10px;
+  }
+  .primer-disclaimer p:last-child { margin-bottom: 0; }
+  .primer-disclaimer p strong { color: var(--navy); }
+  .primer-disclaimer a {
+    color: var(--gold); font-weight: 700;
+    text-decoration: underline; text-underline-offset: 3px;
+  }
+  .primer-disclaimer a:hover { color: var(--navy); }
+
+  .coach-note {
+    background: #F7F2E8;
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--gold);
+    border-radius: 10px;
+    padding: 28px 32px;
+    margin: 0 0 36px;
+  }
+  .coach-note .cn-label {
+    font-size: 11px; letter-spacing: 0.2em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 10px;
+  }
+  .coach-note p {
+    font-size: 15.5px; line-height: 1.7; color: var(--navy-mid);
+    margin: 0 0 12px;
+  }
+  .coach-note p:last-child { margin-bottom: 0; }
+  .coach-note p strong { color: var(--navy); }
+  .coach-note .sign-off {
+    margin-top: 14px;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; color: var(--navy); font-size: 16px;
+  }
+
+  .book-toc {
+    background: var(--white); border: 1px solid var(--rule);
+    border-top: 3px solid var(--gold); border-radius: 12px;
+    padding: 28px 32px; margin-bottom: 36px;
+  }
+  .book-toc h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px; color: var(--navy); margin: 0 0 16px; font-weight: 600;
+  }
+  .book-toc ol { list-style: none; margin: 0; padding: 0; }
+  .book-toc li {
+    display: grid; grid-template-columns: 60px 1fr auto;
+    align-items: baseline; gap: 16px;
+    padding: 12px 0; border-bottom: 1px solid var(--rule);
+  }
+  .book-toc li:last-child { border-bottom: none; }
+  .book-toc .ch-num {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; font-size: 20px; color: var(--gold); font-weight: 400;
+  }
+  .book-toc .ch-title { font-size: 15px; color: var(--navy); font-weight: 600; }
+  .book-toc .ch-title small {
+    display: block; font-size: 12px; color: var(--mid-grey);
+    font-weight: 400; margin-top: 2px; font-style: italic;
+  }
+  .book-toc a.ch-jump {
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--gold); font-weight: 700; text-decoration: none;
+  }
+  .book-toc a.ch-jump:hover { color: var(--navy); }
+
+  .chapter-stack { display: grid; gap: 16px; margin-bottom: 40px; }
+  .chapter {
+    background: var(--white); border: 1px solid var(--rule);
+    border-left: 4px solid var(--gold); border-radius: 12px;
+    overflow: hidden; transition: box-shadow .2s ease;
+  }
+  .chapter[open] { box-shadow: 0 14px 34px rgba(13,31,60,0.09); }
+  .chapter summary {
+    display: grid; grid-template-columns: 74px 1fr 28px;
+    gap: 18px; align-items: center; padding: 22px 26px;
+    cursor: pointer; list-style: none; user-select: none;
+  }
+  .chapter summary::-webkit-details-marker { display: none; }
+  .chapter .num {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 48px; color: var(--gold); font-weight: 700;
+    line-height: 1; text-align: center;
+    border-right: 1px solid var(--rule); padding-right: 18px;
+  }
+  .chapter .title-stack .ch-kicker {
+    font-size: 10px; letter-spacing: 0.22em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .chapter .title-stack h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px; color: var(--navy); font-weight: 600;
+    margin: 0 0 4px; line-height: 1.2;
+  }
+  .chapter .title-stack .ch-teaser {
+    font-size: 13px; color: var(--navy-mid); line-height: 1.5;
+  }
+  .chapter .chev {
+    color: var(--mid-grey); font-size: 22px; line-height: 1;
+    transition: transform .2s ease; text-align: center; justify-self: center;
+  }
+  .chapter[open] .chev { transform: rotate(90deg); color: var(--gold); }
+  .chapter .body {
+    padding: 0 26px 28px calc(26px + 74px + 18px);
+    color: var(--navy-mid); line-height: 1.7; font-size: 15px;
+  }
+  .chapter .body p { margin: 0 0 12px; }
+  .chapter .body p strong { color: var(--navy); }
+  .chapter .body ul { margin: 8px 0 14px 20px; padding: 0; }
+  .chapter .body ul li { margin-bottom: 6px; }
+  .chapter .body ol { margin: 8px 0 14px 22px; padding: 0; }
+  .chapter .body ol li { margin-bottom: 6px; }
+  .chapter .body h4 {
+    font-size: 11px; letter-spacing: 0.18em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase;
+    margin: 22px 0 8px;
+  }
+
+  .key-idea {
+    background: #F7F2E8; border-left: 3px solid var(--gold);
+    padding: 14px 18px; border-radius: 4px;
+    margin: 16px 0; font-size: 15px; line-height: 1.6;
+  }
+  .key-idea b { color: var(--navy); }
+  .feel-pull {
+    border-left: 3px solid var(--gold);
+    padding: 6px 0 6px 18px; margin: 16px 0;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; font-size: 19px; line-height: 1.45; color: var(--navy);
+  }
+  .mistake-box {
+    background: #FDF6F4; border-left: 3px solid #C76757;
+    padding: 14px 18px; border-radius: 4px; margin: 16px 0;
+  }
+  .mistake-box .mb-title {
+    color: #9A3D2F; font-weight: 700; font-size: 12px;
+    letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 6px;
+  }
+  .mistake-box ul { margin: 6px 0 0 18px; padding: 0; }
+  .mistake-box li { color: var(--navy-mid); margin-bottom: 4px; }
+  .drill-box {
+    background: #F2F6EE; border-left: 3px solid #6B8B4E;
+    padding: 14px 18px; border-radius: 4px; margin: 16px 0;
+  }
+  .drill-box .db-title {
+    color: #4C6B30; font-weight: 700; font-size: 12px;
+    letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 6px;
+  }
+  .verify-box {
+    background: #F4F1FA; border-left: 3px solid #7A6BA8;
+    padding: 12px 16px; border-radius: 4px; margin: 14px 0;
+    font-size: 13.5px; line-height: 1.55;
+  }
+  .verify-box .vb-title {
+    color: #4F4380; font-weight: 700; font-size: 11px;
+    letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .bridge {
+    margin-top: 20px; padding-top: 16px;
+    border-top: 1px dashed var(--rule);
+    font-style: italic; font-size: 14px; color: var(--mid-grey);
+  }
+  @media (max-width: 620px) {
+    .chapter summary {
+      grid-template-columns: 54px 1fr 24px; gap: 12px; padding: 18px 18px;
+    }
+    .chapter .num { font-size: 36px; padding-right: 12px; }
+    .chapter .title-stack h3 { font-size: 18px; }
+    .chapter .body { padding: 0 18px 20px 18px; }
+    .book-toc li { grid-template-columns: 38px 1fr; }
+    .book-toc a.ch-jump { grid-column: 2; margin-top: 4px; }
+  }
+
+  .next-steps {
+    background: var(--navy); color: #fff;
+    border-radius: 12px; padding: 32px 34px;
+    margin: 40px 0 28px;
+  }
+  .next-steps h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 26px; color: #fff; margin: 0 0 10px; font-weight: 600;
+  }
+  .next-steps p {
+    font-size: 15px; line-height: 1.7; color: rgba(255,255,255,0.88);
+    margin: 0 0 12px;
+  }
+  .next-steps p strong { color: var(--gold); }
+  .next-steps ol {
+    margin: 8px 0 12px 22px; padding: 0;
+    color: rgba(255,255,255,0.92);
+  }
+  .next-steps ol li {
+    margin-bottom: 8px; font-size: 15px; line-height: 1.55;
+  }
+
+  .attribution {
+    background: #F7F2E8; border: 1px solid var(--rule);
+    border-radius: 10px; padding: 22px 26px; margin: 28px 0;
+  }
+  .attribution h3 {
+    font-size: 12px; letter-spacing: 0.2em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin: 0 0 10px;
+  }
+  .attribution p {
+    font-size: 14px; line-height: 1.65; color: var(--navy-mid);
+    margin: 0 0 10px;
+  }
+  .attribution p strong { color: var(--navy); }
+
+  .glossary {
+    background: var(--white); border: 1px solid var(--rule);
+    border-radius: 10px; padding: 28px 30px; margin: 28px 0;
+  }
+  .glossary h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px; color: var(--navy); margin: 0 0 14px; font-weight: 600;
+  }
+  .glossary dl {
+    display: grid; grid-template-columns: minmax(160px, 1fr) 2fr;
+    gap: 10px 22px;
+  }
+  .glossary dt { font-weight: 700; color: var(--navy); font-size: 14px; }
+  .glossary dd {
+    margin: 0; color: var(--navy-mid); font-size: 14px; line-height: 1.5;
+  }
+  @media (max-width: 620px) {
+    .glossary dl { grid-template-columns: 1fr; gap: 4px 0; }
+    .glossary dd { margin-bottom: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container">
+
+  <div class="breadcrumb">
+    <a href="index.html">Library</a><span>›</span><a href="bookshelf.html">Bookshelf</a><span>›</span>Five Lessons
+  </div>
+
+  <!-- ===================== BOOK HERO ===================== -->
+  <div class="book-hero">
+    <span class="vol">Teaching Library · Volume 08 · Primer</span>
+    <h1>Be a Player: The Performance State on Demand.</h1>
+    <div class="subtitle">Marriott and Nilsson on what separates someone who hits good shots from someone who plays good golf. The VISION54 blueprint.</div>
+    <div class="gold-dash"></div>
+    <div class="attrib">Inspired by Lynn Marriott &amp; Pia Nilsson's <em>Be a Player</em></div>
+  </div>
+
+  <!-- ===================== DISCLAIMER ===================== -->
+  <div class="primer-disclaimer">
+    <div class="pd-label">Independent Interpretation</div>
+    <p>
+      This primer is Ryan Rinneard's independent educational summary of
+      Lynn Marriott and Pia Nilsson's book <em>Be a Player</em> (and the
+      broader VISION54 framework they teach). It is <strong>not an
+      official VISION54 publication</strong>, nor authorized by Marriott,
+      Nilsson, or their publishers. Concepts below are described in
+      Ryan's own words; all credit for the original work goes to the
+      authors throughout.
+    </p>
+    <p>
+      <strong>Buy the original.</strong> If you've read Gallwey and
+      Shoemaker, <em>Be a Player</em> is the structured, on-the-course
+      blueprint you've been waiting for. It deserves a spot next to the
+      technical primers.
+      <a href="https://www.amazon.com/s?k=Be+a+Player+Pia+Nilsson+Lynn+Marriott" target="_blank" rel="noopener">Find it on Amazon &rarr;</a>
+    </p>
+  </div>
+
+  <!-- ===================== COACH NOTE ===================== -->
+  <div class="coach-note">
+    <div class="cn-label">From the coach</div>
+    <p>
+      Lynn Marriott and Pia Nilsson are the founders of VISION54
+      &mdash; the school whose name comes from a simple, audacious
+      idea: par is just the starting line. Eighteen birdies is 54.
+      What if that's the actual ceiling, and the work of golf is just
+      removing what stops it from happening?
+    </p>
+    <p>
+      They've coached Annika Sorenstam, Ariya Jutanugarn, Suzann
+      Pettersen, and a long list of touring professionals. If you've
+      read interviews with any of those players about what they think
+      about during a round, you've heard pieces of this book in their
+      own words: Think Box, Play Box, Decide and Commit, the eight
+      essentials. <em>Be a Player</em> is the structured presentation
+      of all of it.
+    </p>
+    <p>
+      Where Gallwey gave us the <em>concept</em> (Self 1, Self 2,
+      awareness) and Shoemaker gave us the <em>practice protocol</em>
+      (toss the club, awareness-based range work), Marriott and Nilsson
+      give us the <em>on-course system</em>. The central tool is the
+      <strong>Think Box / Play Box</strong> distinction: a literal line
+      on the ground that separates planning from execution. On one side
+      of the line you analyze. On the other side, you commit and play.
+      Crossing the line on purpose is most of the skill.
+    </p>
+    <p>
+      <strong>This primer is for the player</strong> who wants the
+      mental game with structure &mdash; not vibes or affirmations, but
+      a set of repeatable on-course routines. Eight chapters: the gap
+      between hitting and playing, the three Boxes (Think, Play,
+      Memory), how to actually commit, the eight essentials, awareness
+      in body and mind, and how Marriott and Nilsson sit alongside the
+      other voices on this shelf.
+    </p>
+    <p>
+      One thing up front: this is the book on the shelf with the most
+      direct, do-this-on-Sunday practicality. The Think Box / Play Box
+      line is, in my experience, the single most useful concept any
+      amateur golfer can learn. If you take nothing else from the
+      primer, take that.
+    </p>
+    <div class="sign-off">&mdash; Ryan</div>
+  </div>
+
+  <!-- ===================== TOC ===================== -->
+  <div class="book-toc">
+    <h2>Table of contents</h2>
+    <ol>
+      <li>
+        <div class="ch-num">01</div>
+        <div><div class="ch-title">Why Be a Player still matters
+          <small>The gap between hitting good shots and playing good golf. Why the second one is what the scorecard measures.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch1">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">02</div>
+        <div><div class="ch-title">Think Box, Play Box, Memory Box
+          <small>The three states of every golf shot. Knowing which one you're in is half the work.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch2">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">03</div>
+        <div><div class="ch-title">The line
+          <small>Where planning ends and playing begins. The most useful invisible line in golf.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch3">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">04</div>
+        <div><div class="ch-title">Decide and commit
+          <small>What separates a Play Box that works from one that doesn't.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch4">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">05</div>
+        <div><div class="ch-title">The 8 Essentials of being a Player
+          <small>VISION54's framework. What every player does &mdash; physical, mental, emotional, technical &mdash; and how to build each one.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch5">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">06</div>
+        <div><div class="ch-title">Awareness in your body
+          <small>Tension, breath, balance. Three readings you can take in two seconds, and what each one tells you.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch6">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">07</div>
+        <div><div class="ch-title">Awareness in your mind
+          <small>Your default thinking patterns. The four most common, and how to catch them before they catch you.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch7">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">08</div>
+        <div><div class="ch-title">Where Be a Player fits &mdash; the capstone
+          <small>How Marriott and Nilsson sit alongside Gallwey, Shoemaker, Jacobs, and Hogan.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch8">Read &rarr;</a>
+      </li>
+    </ol>
+  </div>
+
+  <!-- ===================== CHAPTERS ===================== -->
+  <div class="chapter-stack">
+
+    <!-- ========== CHAPTER 1 ========== -->
+    <details class="chapter" id="ch1">
+      <summary>
+        <div class="num">1</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter One</div>
+          <h3>Why Be a Player still matters</h3>
+          <div class="ch-teaser">The gap between hitting good shots and playing good golf. Why the second one is what the scorecard measures.</div>
+        </div>
+        <div class="chev">&rsaquo;</div>
+      </summary>
+      <div class="body">
+        <p>
+          Every range has a player who hits the ball beautifully and
+          can't break 90. Every club has the opposite &mdash; a
+          short-hitting, slightly awkward swinger who somehow shoots
+          75 every week. What's the difference?
+        </p>
+        <div class="key-idea">
+          <b>The key idea.</b> Marriott and Nilsson would say the
+          second person is a <em>Player</em>. The first one is a
+          ball-striker. Players have built specific, repeatable
+          routines for the parts of golf that aren't the swing &mdash;
+          decision-making, commitment, recovery, attention. The
+          scorecard measures Players, not swings.
+        </div>
+        <h4>What this book is, and isn't</h4>
+        <p>
+          This isn't a mental-toughness book in the &ldquo;get tougher,
+          want it more&rdquo; sense. Marriott and Nilsson are
+          uninterested in willpower. They're interested in <em>repeatable
+          process</em> &mdash; the things you can do, in order, before
+          and after every shot, that produce a performance state on
+          demand. The book is built around eight of those things and
+          one central tool, the Think Box / Play Box line, that holds
+          them together.
+        </p>
+        <div class="feel-pull">
+          &ldquo;You don't rise to the level of your swing. You fall
+          to the level of your routines.&rdquo;
+        </div>
+        <div class="bridge">
+          Next: the three Boxes. Knowing which one you're in is most
+          of the work.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 2 ========== -->
+    <details class="chapter" id="ch2">
+      <summary>
+        <div class="num">2</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Two</div>
+          <h3>Think Box, Play Box, Memory Box</h3>
+          <div class="ch-teaser">The three states of every golf shot. Knowing which one you're in is half the work.</div>
+        </div>
+        <div class="chev">&rsaquo;</div>
+      </summary>
+      <div class="body">
+        <p>
+          Every shot in golf has three phases. Marriott and Nilsson
+          give each one a name and a rule.
+        </p>
+        <ul>
+          <li><strong>Think Box</strong> &mdash; before the shot. This
+            is where the analysis lives: yardage, wind, lie, club,
+            shape, target. All judgment is welcome here. Take as long
+            as you need; this is the planning phase.</li>
+          <li><strong>Play Box</strong> &mdash; during the shot. This
+            is where you commit and execute. <em>No analysis allowed.</em>
+            One feel, one focus, one target. Anything that sounds like
+            a decision means you should still be in the Think Box.</li>
+          <li><strong>Memory Box</strong> &mdash; after the shot. This
+            is where you choose what to take with you. A good shot:
+            savor it for a beat. A bad shot: extract information, then
+            release. By the time you reach the ball, you should be
+            empty.</li>
+        </ul>
+        <div class="key-idea">
+          <b>The key idea.</b> Bad shots are almost always one of two
+          things: deciding in the Play Box, or carrying the previous
+          shot into this one. Both are Box errors, not swing errors.
+          The fix isn't a swing change. The fix is staying in the right
+          Box at the right time.
+        </div>
+        <div class="feel-pull">
+          &ldquo;Which Box are you in right now?&rdquo;
+        </div>
+        <div class="bridge">
+          Next: the line. The literal, drawn-on-the-ground, do-not-cross
+          line between Think and Play.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 3 ========== -->
+    <details class="chapter" id="ch3">
+      <summary>
+        <div class="num">3</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Three</div>
+          <h3>The line</h3>
+          <div class="ch-teaser">Where planning ends and playing begins. The most useful invisible line in golf.</div>
+        </div>
+        <div class="chev">&rsaquo;</div>
+      </summary>
+      <div class="body">
+        <p>
+          Marriott and Nilsson teach this with a literal line drawn on
+          the practice green. On one side: Think Box. On the other:
+          Play Box. You stand on the Think side as long as you need.
+          The moment you step across, all thinking is done. You commit,
+          you swing, you walk after the ball.
+        </p>
+        <div class="key-idea">
+          <b>The key idea.</b> The act of <em>crossing the line</em>
+          is a physical, on-purpose moment. It's not a vibe or a
+          feeling. It's a step. That stepping motion tells your body
+          what state to be in. The brain takes its cues from the body
+          more than the other way around.
+        </div>
+        <h4>Find your line</h4>
+        <p>
+          On a real course, draw the line in your head, but pick a
+          physical trigger. Common ones:
+        </p>
+        <ul>
+          <li>The moment your trail foot lifts off the ground to step
+            into the shot.</li>
+          <li>The waggle &mdash; one slow rehearsal motion that
+            announces the Play Box has begun.</li>
+          <li>The breath out as you settle into address.</li>
+        </ul>
+        <p>
+          Pick one. Use the same one every shot. Over time, the
+          trigger itself produces the state.
+        </p>
+        <div class="feel-pull">
+          &ldquo;Step across the line, or back off.&rdquo;
+        </div>
+        <div class="bridge">
+          Next: what makes a Play Box actually work. Decide, then
+          commit.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 4 ========== -->
+    <details class="chapter" id="ch4">
+      <summary>
+        <div class="num">4</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Four</div>
+          <h3>Decide and commit</h3>
+          <div class="ch-teaser">What separates a Play Box that works from one that doesn't.</div>
+        </div>
+        <div class="chev">&rsaquo;</div>
+      </summary>
+      <div class="body">
+        <p>
+          Marriott and Nilsson watch professionals miss-hit shots all
+          the time. The signature pre-shot tell of a bad shot, in
+          their data, is hesitation in the Play Box. The shot wasn't
+          decided before the body crossed the line.
+        </p>
+        <div class="key-idea">
+          <b>The key idea.</b> A Play Box that works has exactly two
+          properties: a <strong>decision</strong> is made (shape,
+          target, feel) and a <strong>commitment</strong> follows
+          (you swing the swing you decided on, even if you don't love
+          it). Half-commitment is the most common error in golf.
+        </div>
+        <h4>The amateur escape clause</h4>
+        <p>
+          What separates a Player from a ball-striker is the
+          willingness to <em>back off</em>. Backing off doesn't make
+          you weak; it shows you respected the line. If a thought
+          arrives mid-Play Box, step back to the Think side, re-decide,
+          and re-cross. Three backs-offs in a round is normal. Three
+          Play Box decisions is not.
+        </p>
+        <div class="feel-pull">
+          &ldquo;Conviction is better than correctness.&rdquo;
+        </div>
+        <div class="bridge">
+          Next: the 8 essentials. The framework that holds the rest of
+          the book together.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 5 ========== -->
+    <details class="chapter" id="ch5">
+      <summary>
+        <div class="num">5</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Five</div>
+          <h3>The 8 Essentials of being a Player</h3>
+          <div class="ch-teaser">VISION54's framework. What every Player does &mdash; physical, mental, emotional, technical &mdash; and how to build each one.</div>
+        </div>
+        <div class="chev">&rsaquo;</div>
+      </summary>
+      <div class="body">
+        <p>
+          The 8 Essentials are how Marriott and Nilsson categorize
+          everything a Player can work on. The list looks simple. Living
+          inside it for a season changes how you practice forever.
+        </p>
+        <div class="key-idea">
+          <b>The key idea.</b> Most golfers work on one essential
+          &mdash; the technical &mdash; and ignore the other seven. A
+          Player audits all eight, knows which ones are their strengths,
+          knows which one to work on next, and builds routines for each.
+        </div>
+        <h4>The list (paraphrased)</h4>
+        <ol>
+          <li><strong>Physical</strong> &mdash; tension, breath,
+            balance, energy. Is your body ready to swing this shot?</li>
+          <li><strong>Technical</strong> &mdash; the swing itself.
+            Grip, posture, mechanics. This is what the rest of the
+            shelf covers.</li>
+          <li><strong>Mental</strong> &mdash; default thoughts, focus,
+            self-talk. Awareness in the Gallwey sense.</li>
+          <li><strong>Emotional</strong> &mdash; how you respond to
+            results. Do you stay level, or do good shots and bad shots
+            both move you?</li>
+          <li><strong>Social</strong> &mdash; who you play with and
+            how they affect you. Some partners help. Some don't.</li>
+          <li><strong>Tactical</strong> &mdash; course management. The
+            decisions you make in the Think Box.</li>
+          <li><strong>Practice</strong> &mdash; how you train. Are you
+            building skill or just grooving habit?</li>
+          <li><strong>Self-coaching</strong> &mdash; what you do when
+            something isn't working mid-round.</li>
+        </ol>
+        <p>
+          Take one essential per off-season. Build a real routine for
+          it. After three or four off-seasons, you're a different
+          golfer in ways that have nothing to do with your swing.
+        </p>
+        <div class="feel-pull">
+          &ldquo;A Player works the whole player, not just the
+          swing.&rdquo;
+        </div>
+        <div class="bridge">
+          Next: awareness in the body. Three readings, two seconds
+          each.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 6 ========== -->
+    <details class="chapter" id="ch6">
+      <summary>
+        <div class="num">6</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Six</div>
+          <h3>Awareness in your body</h3>
+          <div class="ch-teaser">Tension, breath, balance. Three readings you can take in two seconds, and what each one tells you.</div>
+        </div>
+        <div class="chev">&rsaquo;</div>
+      </summary>
+      <div class="body">
+        <p>
+          Marriott and Nilsson teach a quick body-scan as part of the
+          Think Box. Three readings. Two seconds. Done.
+        </p>
+        <div class="key-idea">
+          <b>The key idea.</b> Your body is constantly producing data
+          you can use, if you remember to read it. Tension level, breath
+          quality, balance &mdash; each one tells you something specific
+          about whether you're swing-ready for this shot.
+        </div>
+        <h4>The three readings</h4>
+        <ul>
+          <li><strong>Tension</strong> &mdash; rate it 1 to 10. Above a
+            6, do a quick reset: shake the hands, big breath out, soft
+            knees. You can't swing freely from a 7.</li>
+          <li><strong>Breath</strong> &mdash; is it shallow or full?
+            Shallow breath is fight-or-flight. One long exhale moves
+            you back to performance state. Free.</li>
+          <li><strong>Balance</strong> &mdash; weight even in both
+            feet? Forward on the toes? Sitting back on the heels? Toes
+            and heels both correlate with tense, controlled swings.
+            Even is the goal.</li>
+        </ul>
+        <p>
+          You don't need to fix all three. Just notice them. The
+          noticing itself usually neutralizes the worst one.
+        </p>
+        <div class="feel-pull">
+          &ldquo;The body reports. Read the report before you swing.&rdquo;
+        </div>
+        <div class="bridge">
+          Next: awareness in the mind. The default thinking patterns
+          that keep showing up &mdash; and how to catch them.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 7 ========== -->
+    <details class="chapter" id="ch7">
+      <summary>
+        <div class="num">7</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Seven</div>
+          <h3>Awareness in your mind</h3>
+          <div class="ch-teaser">Your default thinking patterns. The four most common, and how to catch them before they catch you.</div>
+        </div>
+        <div class="chev">&rsaquo;</div>
+      </summary>
+      <div class="body">
+        <p>
+          Every golfer has a small handful of mental patterns that show
+          up under pressure. Marriott and Nilsson's contribution is
+          making you <em>name</em> yours, so you can spot them in real
+          time.
+        </p>
+        <div class="key-idea">
+          <b>The key idea.</b> You can't change a pattern you haven't
+          identified. The first job is just labeling. The second is
+          replacement &mdash; not banishment. You don't get rid of
+          patterns; you swap them for ones that produce a Play-Box-ready
+          state.
+        </div>
+        <h4>Four common patterns</h4>
+        <ul>
+          <li><strong>The Predictor.</strong> &ldquo;I'm going to top
+            it.&rdquo; &ldquo;Don't go in the water.&rdquo; (Shoemaker's
+            prediction problem, named.)</li>
+          <li><strong>The Reviewer.</strong> Carrying the last shot
+            into this one. &ldquo;If I hadn't three-putted on 4, I'd
+            be even.&rdquo;</li>
+          <li><strong>The Forecaster.</strong> Scoring the round before
+            it's played. &ldquo;If I birdie the next two, I can shoot
+            76.&rdquo;</li>
+          <li><strong>The Comparer.</strong> Measuring against playing
+            partners. &ldquo;He outdrove me by 30. I need to swing
+            harder.&rdquo;</li>
+        </ul>
+        <p>
+          Three or four rounds of just <em>naming</em> these as they
+          appear &mdash; not fixing them, just noticing &mdash; is
+          enough to weaken their grip noticeably.
+        </p>
+        <div class="feel-pull">
+          &ldquo;Name the pattern. The pattern loses power.&rdquo;
+        </div>
+        <div class="bridge">
+          Next: where Be a Player sits on the shelf, and how it
+          pulls the other four books together.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 8 ========== -->
+    <details class="chapter" id="ch8">
+      <summary>
+        <div class="num">8</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Eight</div>
+          <h3>Where Be a Player fits &mdash; the capstone</h3>
+          <div class="ch-teaser">How Marriott and Nilsson sit alongside Gallwey, Shoemaker, Jacobs, and Hogan.</div>
+        </div>
+        <div class="chev">&rsaquo;</div>
+      </summary>
+      <div class="body">
+        <p>
+          If you think of this shelf as a curriculum, <em>Be a Player</em>
+          is the capstone &mdash; the book that puts a structured
+          framework around everything the others taught.
+        </p>
+        <ul>
+          <li><strong>Jacobs (Vol. 01)</strong> taught you to
+            <em>diagnose</em>.</li>
+          <li><strong>Hogan (Vol. 02)</strong> taught you to
+            <em>build</em>.</li>
+          <li><strong>Gallwey (Vol. 06)</strong> taught you to
+            <em>quiet Self 1</em>.</li>
+          <li><strong>Shoemaker (Vol. 07)</strong> taught you to
+            <em>practice with awareness</em>.</li>
+          <li><strong>Marriott &amp; Nilsson (Vol. 08)</strong> teach
+            you to organize all of it into <em>repeatable on-course
+            routines</em>.</li>
+        </ul>
+        <div class="key-idea">
+          <b>The key idea.</b> The 8 Essentials, the three Boxes, and
+          the Think/Play line give you somewhere to put every concept
+          from the other books. Jacobs's ball-flight diagnosis lives in
+          the Think Box. Gallwey's awareness lives in the Play Box.
+          Hogan's fundamentals live in your technical essential.
+          Shoemaker's practice routines live in your practice essential.
+          You don't have to choose between the voices. They were always
+          chapters of the same book.
+        </div>
+        <h4>How to use this book</h4>
+        <p>
+          Read <em>Be a Player</em> twice. The first time, just for
+          the ideas. The second time, with a notebook &mdash; rate
+          yourself on each of the 8 Essentials, identify the one
+          you're weakest at, and build a single routine for it. That
+          routine is the project for the season. Next season, pick
+          another.
+        </p>
+        <p>
+          If you'd like help building Player routines for your own
+          game &mdash; especially the Think Box / Play Box and the
+          body-awareness scan &mdash; that's exactly the kind of work
+          a <a href="https://rrgolfperformance.as.me" target="_blank" rel="noopener" style="color:var(--gold);font-weight:700;">private lesson</a>
+          is built for. We'll pick one Essential and build the routine.
+        </p>
+        <div class="feel-pull">
+          &ldquo;Be a Player. Not a ball-striker.&rdquo;
+        </div>
+      </div>
+    </details>
+
+  </div>
+
+  <!-- ===================== NEXT STEPS ===================== -->
+  <div class="next-steps">
+    <div class="ns-label">Where to go from here</div>
+    <h2>Three things to take to the next round.</h2>
+    <ol>
+      <li><strong>Draw your line.</strong> Pick a physical trigger
+        (waggle, foot lift, breath out) that marks the moment you
+        cross from Think Box to Play Box. Use the same trigger every
+        shot. Notice when you swing without using it.</li>
+      <li><strong>Rate one Essential per nine.</strong> On the front
+        nine, rate yourself on Physical (tension, breath, balance).
+        On the back nine, pick a different Essential. Don't try to
+        fix &mdash; just rate.</li>
+      <li><strong>Name your pattern.</strong> Predictor, Reviewer,
+        Forecaster, Comparer &mdash; or one of your own. When you
+        catch yourself in it, name it under your breath. Move on. The
+        naming is the work.</li>
+    </ol>
+  </div>
+
+  <!-- ===================== ATTRIBUTION ===================== -->
+  <div class="attribution-block">
+    <h2>Attribution</h2>
+    <p>
+      Every concept above &mdash; Think Box / Play Box / Memory Box,
+      the 8 Essentials, the line, the Decide-and-Commit framework,
+      the body and mind awareness scans, the VISION54 premise &mdash;
+      belongs to Lynn Marriott and Pia Nilsson and the VISION54 school.
+      This primer is Ryan Rinneard's independent educational summary,
+      written in his own words. It is not authorized by Marriott,
+      Nilsson, or their publishers, and it does not reproduce the
+      book's text. The full work goes much deeper, with examples from
+      tour players the primer cannot reproduce.
+    </p>
+    <p>
+      <strong>Buy the original.</strong> Among the mental-game books,
+      this is the one most directly translatable to a Sunday round.
+      Worth having on the shelf.
+      <a href="https://www.amazon.com/s?k=Be+a+Player+Pia+Nilsson+Lynn+Marriott" target="_blank" rel="noopener">Find it on Amazon &rarr;</a>
+    </p>
+  </div>
+
+  <!-- ===================== GLOSSARY ===================== -->
+  <div class="glossary">
+    <h2>Glossary</h2>
+    <dl>
+      <dt>VISION54</dt>
+      <dd>The school founded by Marriott and Nilsson. The name comes
+        from the audacious premise that 18 birdies = 54 is theoretically
+        possible &mdash; and asking why you don't is more useful than
+        accepting par as a ceiling.</dd>
+
+      <dt>Think Box</dt>
+      <dd>The pre-shot state. All analysis lives here: yardage, wind,
+        lie, club, shape, target. Take as long as you need. No swing
+        yet.</dd>
+
+      <dt>Play Box</dt>
+      <dd>The execution state. No analysis. One feel, one focus, one
+        target. Anything that sounds like a decision means you should
+        still be in the Think Box.</dd>
+
+      <dt>Memory Box</dt>
+      <dd>The post-shot state. Choose what to take with you. Extract
+        the information, release the emotion, arrive at the next ball
+        empty.</dd>
+
+      <dt>The line</dt>
+      <dd>The invisible boundary between Think and Play Box. Crossing
+        it on purpose, with a physical trigger, is one of the most
+        useful skills in amateur golf.</dd>
+
+      <dt>The 8 Essentials</dt>
+      <dd>VISION54's framework for what a Player works on: Physical,
+        Technical, Mental, Emotional, Social, Tactical, Practice,
+        Self-coaching. Audit all eight; build routines for each.</dd>
+
+      <dt>Decide and Commit</dt>
+      <dd>The two requirements of a working Play Box. The decision
+        is made on the Think side. The commitment follows it across
+        the line. Half-commitment is the most common error in
+        amateur golf.</dd>
+
+      <dt>Backing off</dt>
+      <dd>Stepping back from the Play Box to the Think Box if a
+        thought arrives mid-execution. A sign of skill, not weakness.</dd>
+    </dl>
+  </div>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  RRG.mountLibrary();
+</script>
+</body>
+</html>

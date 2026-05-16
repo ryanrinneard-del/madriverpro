@@ -1,0 +1,992 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Extraordinary Golf — The Bookshelf</title>
+<meta name="description" content="A primer on Fred Shoemaker's Extraordinary Golf. Playing the game, not the swing. The toss-the-club exercise, possibility vs prediction, awareness-based practice.">
+<meta property="og:title" content="Extraordinary Golf · RR Golf Performance">
+<meta property="og:description" content="Shoemaker on practicing with awareness and playing the target, not the technique.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://rrgolfperformance.com/improve/book-extraordinary-golf.html">
+<meta property="og:image" content="https://madriverpro.com/images/rr-logo.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Extraordinary Golf · RR Golf Performance">
+<meta name="twitter:description" content="Shoemaker on practicing with awareness, not repetition.">
+<meta name="twitter:image" content="https://madriverpro.com/images/rr-logo.png">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+  /* Matches Volume 01-05 styling — same hero, coach note, TOC, chapter
+     cards, callouts, glossary. This is Volume 02 of the Bookshelf. */
+
+  .book-hero {
+    background: linear-gradient(180deg, var(--navy) 0%, #162E54 100%);
+    color: #fff; border-radius: 14px;
+    padding: 56px 44px 48px; margin-bottom: 36px;
+    text-align: center; position: relative; overflow: hidden;
+  }
+  .book-hero::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--gold);
+  }
+  .book-hero::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent 0%, var(--gold) 30%, var(--gold) 70%, transparent 100%);
+    opacity: 0.4;
+  }
+  .book-hero .vol {
+    display: inline-block;
+    font-size: 11px; letter-spacing: 0.24em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase;
+    padding: 5px 16px; border: 1px solid var(--gold);
+    border-radius: 999px; margin-bottom: 20px;
+  }
+  .book-hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(44px, 7vw, 68px);
+    font-weight: 600; color: #fff;
+    margin: 0; line-height: 1.05; letter-spacing: -0.01em;
+  }
+  .book-hero .subtitle {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; font-size: 20px;
+    color: rgba(255,255,255,0.78);
+    margin: 14px auto 22px; max-width: 620px;
+  }
+  .book-hero .gold-dash {
+    width: 60px; height: 2px; background: var(--gold);
+    margin: 0 auto 22px;
+  }
+  .book-hero .attrib {
+    font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(255,255,255,0.55); font-weight: 500;
+  }
+
+  .primer-disclaimer {
+    background: #FDF6F4;
+    border: 1px solid #E5D0CB;
+    border-left: 4px solid #C76757;
+    border-radius: 10px;
+    padding: 22px 28px;
+    margin: 0 0 28px;
+  }
+  .primer-disclaimer .pd-label {
+    font-size: 11px; letter-spacing: 0.22em; color: #9A3D2F;
+    font-weight: 700; text-transform: uppercase; margin-bottom: 10px;
+  }
+  .primer-disclaimer p {
+    font-size: 14px; line-height: 1.6; color: var(--navy-mid);
+    margin: 0 0 10px;
+  }
+  .primer-disclaimer p:last-child { margin-bottom: 0; }
+  .primer-disclaimer p strong { color: var(--navy); }
+  .primer-disclaimer a {
+    color: var(--gold); font-weight: 700;
+    text-decoration: underline; text-underline-offset: 3px;
+  }
+  .primer-disclaimer a:hover { color: var(--navy); }
+
+  .coach-note {
+    background: #F7F2E8;
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--gold);
+    border-radius: 10px;
+    padding: 28px 32px;
+    margin: 0 0 36px;
+  }
+  .coach-note .cn-label {
+    font-size: 11px; letter-spacing: 0.2em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 10px;
+  }
+  .coach-note p {
+    font-size: 15.5px; line-height: 1.7; color: var(--navy-mid);
+    margin: 0 0 12px;
+  }
+  .coach-note p:last-child { margin-bottom: 0; }
+  .coach-note p strong { color: var(--navy); }
+  .coach-note .sign-off {
+    margin-top: 14px;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; color: var(--navy); font-size: 16px;
+  }
+
+  .book-toc {
+    background: var(--white); border: 1px solid var(--rule);
+    border-top: 3px solid var(--gold); border-radius: 12px;
+    padding: 28px 32px; margin-bottom: 36px;
+  }
+  .book-toc h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px; color: var(--navy); margin: 0 0 16px; font-weight: 600;
+  }
+  .book-toc ol { list-style: none; margin: 0; padding: 0; }
+  .book-toc li {
+    display: grid; grid-template-columns: 60px 1fr auto;
+    align-items: baseline; gap: 16px;
+    padding: 12px 0; border-bottom: 1px solid var(--rule);
+  }
+  .book-toc li:last-child { border-bottom: none; }
+  .book-toc .ch-num {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; font-size: 20px; color: var(--gold); font-weight: 400;
+  }
+  .book-toc .ch-title { font-size: 15px; color: var(--navy); font-weight: 600; }
+  .book-toc .ch-title small {
+    display: block; font-size: 12px; color: var(--mid-grey);
+    font-weight: 400; margin-top: 2px; font-style: italic;
+  }
+  .book-toc a.ch-jump {
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--gold); font-weight: 700; text-decoration: none;
+  }
+  .book-toc a.ch-jump:hover { color: var(--navy); }
+
+  .chapter-stack { display: grid; gap: 16px; margin-bottom: 40px; }
+  .chapter {
+    background: var(--white); border: 1px solid var(--rule);
+    border-left: 4px solid var(--gold); border-radius: 12px;
+    overflow: hidden; transition: box-shadow .2s ease;
+  }
+  .chapter[open] { box-shadow: 0 14px 34px rgba(13,31,60,0.09); }
+  .chapter summary {
+    display: grid; grid-template-columns: 74px 1fr 28px;
+    gap: 18px; align-items: center; padding: 22px 26px;
+    cursor: pointer; list-style: none; user-select: none;
+  }
+  .chapter summary::-webkit-details-marker { display: none; }
+  .chapter .num {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 48px; color: var(--gold); font-weight: 700;
+    line-height: 1; text-align: center;
+    border-right: 1px solid var(--rule); padding-right: 18px;
+  }
+  .chapter .title-stack .ch-kicker {
+    font-size: 10px; letter-spacing: 0.22em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .chapter .title-stack h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px; color: var(--navy); font-weight: 600;
+    margin: 0 0 4px; line-height: 1.2;
+  }
+  .chapter .title-stack .ch-teaser {
+    font-size: 13px; color: var(--navy-mid); line-height: 1.5;
+  }
+  .chapter .chev {
+    color: var(--mid-grey); font-size: 22px; line-height: 1;
+    transition: transform .2s ease; text-align: center; justify-self: center;
+  }
+  .chapter[open] .chev { transform: rotate(90deg); color: var(--gold); }
+  .chapter .body {
+    padding: 0 26px 28px calc(26px + 74px + 18px);
+    color: var(--navy-mid); line-height: 1.7; font-size: 15px;
+  }
+  .chapter .body p { margin: 0 0 12px; }
+  .chapter .body p strong { color: var(--navy); }
+  .chapter .body ul { margin: 8px 0 14px 20px; padding: 0; }
+  .chapter .body ul li { margin-bottom: 6px; }
+  .chapter .body ol { margin: 8px 0 14px 22px; padding: 0; }
+  .chapter .body ol li { margin-bottom: 6px; }
+  .chapter .body h4 {
+    font-size: 11px; letter-spacing: 0.18em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase;
+    margin: 22px 0 8px;
+  }
+
+  .key-idea {
+    background: #F7F2E8; border-left: 3px solid var(--gold);
+    padding: 14px 18px; border-radius: 4px;
+    margin: 16px 0; font-size: 15px; line-height: 1.6;
+  }
+  .key-idea b { color: var(--navy); }
+  .feel-pull {
+    border-left: 3px solid var(--gold);
+    padding: 6px 0 6px 18px; margin: 16px 0;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic; font-size: 19px; line-height: 1.45; color: var(--navy);
+  }
+  .mistake-box {
+    background: #FDF6F4; border-left: 3px solid #C76757;
+    padding: 14px 18px; border-radius: 4px; margin: 16px 0;
+  }
+  .mistake-box .mb-title {
+    color: #9A3D2F; font-weight: 700; font-size: 12px;
+    letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 6px;
+  }
+  .mistake-box ul { margin: 6px 0 0 18px; padding: 0; }
+  .mistake-box li { color: var(--navy-mid); margin-bottom: 4px; }
+  .drill-box {
+    background: #F2F6EE; border-left: 3px solid #6B8B4E;
+    padding: 14px 18px; border-radius: 4px; margin: 16px 0;
+  }
+  .drill-box .db-title {
+    color: #4C6B30; font-weight: 700; font-size: 12px;
+    letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 6px;
+  }
+  .verify-box {
+    background: #F4F1FA; border-left: 3px solid #7A6BA8;
+    padding: 12px 16px; border-radius: 4px; margin: 14px 0;
+    font-size: 13.5px; line-height: 1.55;
+  }
+  .verify-box .vb-title {
+    color: #4F4380; font-weight: 700; font-size: 11px;
+    letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .bridge {
+    margin-top: 20px; padding-top: 16px;
+    border-top: 1px dashed var(--rule);
+    font-style: italic; font-size: 14px; color: var(--mid-grey);
+  }
+  @media (max-width: 620px) {
+    .chapter summary {
+      grid-template-columns: 54px 1fr 24px; gap: 12px; padding: 18px 18px;
+    }
+    .chapter .num { font-size: 36px; padding-right: 12px; }
+    .chapter .title-stack h3 { font-size: 18px; }
+    .chapter .body { padding: 0 18px 20px 18px; }
+    .book-toc li { grid-template-columns: 38px 1fr; }
+    .book-toc a.ch-jump { grid-column: 2; margin-top: 4px; }
+  }
+
+  .next-steps {
+    background: var(--navy); color: #fff;
+    border-radius: 12px; padding: 32px 34px;
+    margin: 40px 0 28px;
+  }
+  .next-steps h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 26px; color: #fff; margin: 0 0 10px; font-weight: 600;
+  }
+  .next-steps p {
+    font-size: 15px; line-height: 1.7; color: rgba(255,255,255,0.88);
+    margin: 0 0 12px;
+  }
+  .next-steps p strong { color: var(--gold); }
+  .next-steps ol {
+    margin: 8px 0 12px 22px; padding: 0;
+    color: rgba(255,255,255,0.92);
+  }
+  .next-steps ol li {
+    margin-bottom: 8px; font-size: 15px; line-height: 1.55;
+  }
+
+  .attribution {
+    background: #F7F2E8; border: 1px solid var(--rule);
+    border-radius: 10px; padding: 22px 26px; margin: 28px 0;
+  }
+  .attribution h3 {
+    font-size: 12px; letter-spacing: 0.2em; color: var(--gold);
+    font-weight: 700; text-transform: uppercase; margin: 0 0 10px;
+  }
+  .attribution p {
+    font-size: 14px; line-height: 1.65; color: var(--navy-mid);
+    margin: 0 0 10px;
+  }
+  .attribution p strong { color: var(--navy); }
+
+  .glossary {
+    background: var(--white); border: 1px solid var(--rule);
+    border-radius: 10px; padding: 28px 30px; margin: 28px 0;
+  }
+  .glossary h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px; color: var(--navy); margin: 0 0 14px; font-weight: 600;
+  }
+  .glossary dl {
+    display: grid; grid-template-columns: minmax(160px, 1fr) 2fr;
+    gap: 10px 22px;
+  }
+  .glossary dt { font-weight: 700; color: var(--navy); font-size: 14px; }
+  .glossary dd {
+    margin: 0; color: var(--navy-mid); font-size: 14px; line-height: 1.5;
+  }
+  @media (max-width: 620px) {
+    .glossary dl { grid-template-columns: 1fr; gap: 4px 0; }
+    .glossary dd { margin-bottom: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="nav-mount"></div>
+
+<main class="container">
+
+  <div class="breadcrumb">
+    <a href="index.html">Library</a><span>›</span><a href="bookshelf.html">Bookshelf</a><span>›</span>Five Lessons
+  </div>
+
+  <!-- ===================== BOOK HERO ===================== -->
+  <div class="book-hero">
+    <span class="vol">Teaching Library · Volume 07 · Primer</span>
+    <h1>Extraordinary Golf: Playing the Game, Not the Swing.</h1>
+    <div class="subtitle">Shoemaker's quiet revolution &mdash; practice with awareness, not repetition. The book that asked: what would golf be if it were actually fun?</div>
+    <div class="gold-dash"></div>
+    <div class="attrib">Inspired by Fred Shoemaker's <em>Extraordinary Golf</em></div>
+  </div>
+
+  <!-- ===================== DISCLAIMER ===================== -->
+  <div class="primer-disclaimer">
+    <div class="pd-label">Independent Interpretation</div>
+    <p>
+      This primer is Ryan Rinneard's independent educational summary of
+      Fred Shoemaker's 1996 book <em>Extraordinary Golf: The Art of the
+      Possible</em>. It is <strong>not an official Shoemaker
+      publication</strong>, nor authorized by Coach for Coaches /
+      Extraordinary Golf. Concepts below are described in Ryan's own
+      words; the original work is attributed to Shoemaker throughout.
+    </p>
+    <p>
+      <strong>Buy the original.</strong> Shoemaker's book is one of the
+      most quietly influential golf books ever written, and the
+      &ldquo;toss the club&rdquo; story alone is worth the cover price.
+      <a href="https://www.amazon.com/s?k=Extraordinary+Golf+Fred+Shoemaker" target="_blank" rel="noopener">Find it on Amazon &rarr;</a>
+    </p>
+  </div>
+
+  <!-- ===================== COACH NOTE ===================== -->
+  <div class="coach-note">
+    <div class="cn-label">From the coach</div>
+    <p>
+      If <a href="book-inner-game-of-golf.html" style="color:var(--gold);font-weight:700;">Gallwey</a>
+      told you Self 1 was loud, Fred Shoemaker told you what to
+      <em>do</em> about it on the practice tee. <em>Extraordinary
+      Golf</em> is the book about practice that I've recommended more
+      times than any other.
+    </p>
+    <p>
+      Shoemaker started something called the School for Extraordinary
+      Golf in 1991, and the first thing he asked students to do was
+      throw a club. Underhand. Toward a target. Every one of them did
+      it gracefully &mdash; no instruction, no swing thoughts, just an
+      athletic motion toward something they wanted to hit. Then he'd
+      ask them to swing the club at a ball. And the same body, the same
+      target, would turn into a mechanical, judgmental, anxious event.
+      That gap &mdash; between the natural athletic motion and the
+      &ldquo;golf swing&rdquo; &mdash; is the entire premise of the book.
+    </p>
+    <p>
+      The central distinction is this: most golfers are
+      <strong>playing golf swing</strong>, not <strong>playing
+      golf</strong>. They're trying to execute a series of mechanical
+      checkpoints. Shoemaker's claim is that golf is a target sport, and
+      target sports get easier when the brain orients to the target
+      instead of to the motion. The body already knows how to move; it
+      just needs the right job.
+    </p>
+    <p>
+      <strong>This primer is for the player</strong> who's frustrated by
+      practice &mdash; who hits hundreds of range balls and isn't sure
+      what they're getting out of it. Eight chapters: the toss-the-club
+      story, what changes when the ball stops being a problem to solve,
+      possibility vs prediction, how to practice with awareness instead
+      of repetition, and what a &ldquo;committed swing&rdquo; actually
+      means.
+    </p>
+    <p>
+      Shoemaker doesn't disagree with the technical books. He just
+      points out that they're describing the destination, not the way
+      there. The way there, he says, is awareness, possibility, and
+      commitment &mdash; practiced in that order, every range session.
+    </p>
+    <div class="sign-off">&mdash; Ryan</div>
+  </div>
+
+  <!-- ===================== TOC ===================== -->
+  <div class="book-toc">
+    <h2>Table of contents</h2>
+    <ol>
+      <li>
+        <div class="ch-num">01</div>
+        <div><div class="ch-title">Why Extraordinary Golf still matters
+          <small>The difference between playing golf and playing &ldquo;golf swing.&rdquo;</small>
+        </div></div>
+        <a class="ch-jump" href="#ch1">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">02</div>
+        <div><div class="ch-title">Toss the club
+          <small>Shoemaker's most famous exercise. What it shows about the swing you already have.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch2">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">03</div>
+        <div><div class="ch-title">The ball is not the problem
+          <small>What happens when you stop trying to hit it and start trying to play with it.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch3">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">04</div>
+        <div><div class="ch-title">Possibility vs prediction
+          <small>Playing for what could happen versus avoiding what might. The orientation that changes everything.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch4">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">05</div>
+        <div><div class="ch-title">Practice with awareness
+          <small>Replace &ldquo;drill until perfect&rdquo; with &ldquo;drill until informed.&rdquo;</small>
+        </div></div>
+        <a class="ch-jump" href="#ch5">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">06</div>
+        <div><div class="ch-title">The committed swing
+          <small>A swing made on purpose, not in hope. The one decision before every shot.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch6">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">07</div>
+        <div><div class="ch-title">Coaching yourself on the course
+          <small>What to do when you can't take a lesson mid-round and the wheels are coming off.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch7">Read &rarr;</a>
+      </li>
+      <li>
+        <div class="ch-num">08</div>
+        <div><div class="ch-title">Where Extraordinary fits
+          <small>With Gallwey for the mind, Jacobs and Hogan for the swing &mdash; here's the seat at the table.</small>
+        </div></div>
+        <a class="ch-jump" href="#ch8">Read &rarr;</a>
+      </li>
+    </ol>
+  </div>
+
+  <!-- ===================== CHAPTERS ===================== -->
+  <div class="chapter-stack">
+
+    <!-- ========== CHAPTER 1 ========== -->
+    <details class="chapter" id="ch1">
+      <summary>
+        <div class="num">1</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter One</div>
+          <h3>Why Extraordinary Golf still matters</h3>
+          <div class="ch-teaser">The difference between playing golf and playing &ldquo;golf swing.&rdquo;</div>
+        </div>
+        <div class="chev">&rsaquo;</div>
+      </summary>
+      <div class="body">
+        <p>
+          Walk down a driving range. Watch what golfers are actually
+          doing. Most of them aren't aiming at anything. They're hitting
+          balls. They're working on a swing thought. They're trying
+          to feel something that someone told them to feel. The target
+          is incidental &mdash; sometimes a flag, sometimes just &ldquo;out
+          there.&rdquo;
+        </p>
+        <div class="key-idea">
+          <b>The key idea.</b> Shoemaker says this is the core problem:
+          we've separated the act of swinging from the act of playing
+          golf. Golf is a target sport. The brain is wired beautifully
+          for target sports. But when you make the swing itself the
+          target &mdash; positions to hit, feels to achieve &mdash; you
+          shut off the very system that would make you good at the
+          actual sport.
+        </div>
+        <h4>Playing golf vs playing golf-swing</h4>
+        <p>
+          A player who's <em>playing golf</em> is oriented to the target.
+          They see the shot they want, they commit to a swing that fits
+          it, they pull the trigger, they walk after the ball. A player
+          who's <em>playing golf-swing</em> is oriented to the motion.
+          They're thinking about positions before, during, and after
+          the shot &mdash; the target is just where the ball happens to
+          go when the swing was &ldquo;right.&rdquo;
+        </p>
+        <div class="feel-pull">
+          &ldquo;Most golfers are practicing the wrong sport.&rdquo;
+        </div>
+        <p>
+          That's not Shoemaker quoting Shoemaker. That's how he tends
+          to describe it. The whole book is about how to practice the
+          right one.
+        </p>
+        <div class="bridge">
+          Next: the most famous Extraordinary Golf exercise. A club
+          thrown underhand. What it tells you about the swing you
+          already have.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 2 ========== -->
+    <details class="chapter" id="ch2">
+      <summary>
+        <div class="num">2</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Two</div>
+          <h3>Toss the club</h3>
+          <div class="ch-teaser">Shoemaker's most famous exercise. What it shows about the swing you already have.</div>
+        </div>
+        <div class="chev">&rsaquo;</div>
+      </summary>
+      <div class="body">
+        <p>
+          Pick up a club. Hold it by the grip. Now toss it, underhand,
+          out toward a target ten yards away. Try to land it near the
+          target.
+        </p>
+        <p>
+          Almost every golfer does this gracefully on the first attempt.
+          The body finds the rhythm, the weight transfer, the release.
+          No instruction. No swing thoughts. No checkpoints. Just an
+          athletic motion toward something you wanted to hit.
+        </p>
+        <div class="key-idea">
+          <b>The key idea.</b> The swing you produce when you toss a
+          club is the swing your body has actually learned. It is
+          target-oriented, weight-shifted, rhythmic, and committed.
+          Then someone puts a ball in front of you, and that swing
+          disappears &mdash; replaced by a careful, controlled, anxious
+          version that's trying not to fail. The toss is the proof:
+          the good swing is in there.
+        </div>
+        <h4>Why this exercise matters</h4>
+        <p>
+          Shoemaker isn't suggesting you start tossing clubs on the
+          range (though you can, and should, occasionally). The exercise
+          is a <em>reference point</em>. When your swing starts to feel
+          mechanical, when you've lost rhythm, the toss is the closest
+          thing to a reset button golf has. It tells your body:
+          remember this. It's the same motion. Trust it.
+        </p>
+        <h4>How to use it at home</h4>
+        <ul>
+          <li>Pick a soft target ten yards away in the yard or driveway.</li>
+          <li>Toss a club underhand at it. Land it close.</li>
+          <li>Now pick the club up and make a normal swing in the air
+            with the same intention &mdash; toward the same target,
+            with the same feel.</li>
+          <li>Repeat ten times. That's the warm-up your body actually
+            wants.</li>
+        </ul>
+        <div class="feel-pull">
+          &ldquo;The ball isn't the problem. The story you tell yourself
+          about the ball is the problem.&rdquo;
+        </div>
+        <div class="bridge">
+          Next: what happens when you stop treating the ball as a
+          problem to solve.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 3 ========== -->
+    <details class="chapter" id="ch3">
+      <summary>
+        <div class="num">3</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Three</div>
+          <h3>The ball is not the problem</h3>
+          <div class="ch-teaser">What happens when you stop trying to hit it and start trying to play with it.</div>
+        </div>
+        <div class="chev">&rsaquo;</div>
+      </summary>
+      <div class="body">
+        <p>
+          Notice the language we use. We say we're going to &ldquo;hit
+          some balls.&rdquo; Watch where your eyes go before a shot:
+          straight to the ball, sitting there, daring you. The ball is
+          the object of attention &mdash; and frequently the object of
+          frustration.
+        </p>
+        <div class="key-idea">
+          <b>The key idea.</b> Shoemaker says the ball isn't the
+          problem. The ball is a beautiful, neutral, perfectly still
+          piece of equipment that does exactly what the clubface tells
+          it to do. Treating it as an adversary &mdash; something you
+          must defeat by hitting it &mdash; is what creates the tension
+          and the over-control. Treat it as a <em>partner</em>: a
+          stationary marker that lets you see whether your swing went
+          to the target.
+        </div>
+        <h4>The mental shift</h4>
+        <p>
+          Try this on the next shot: don't think about hitting the ball.
+          Think about <em>swinging the club at the target</em>. The ball
+          happens to be in the way of where the club has to go. That's
+          all. The ball will go to the target because the club went to
+          the target. You don't have to make it happen.
+        </p>
+        <p>
+          This sounds like word games. It isn't. Your body responds
+          completely differently to &ldquo;hit it&rdquo; than it does
+          to &ldquo;swing to the target.&rdquo; One contracts. The
+          other extends.
+        </p>
+        <div class="feel-pull">
+          &ldquo;The ball is a target indicator, not a target.&rdquo;
+        </div>
+        <div class="bridge">
+          Next: the orientation that changes how the whole round feels.
+          Possibility vs prediction.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 4 ========== -->
+    <details class="chapter" id="ch4">
+      <summary>
+        <div class="num">4</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Four</div>
+          <h3>Possibility vs prediction</h3>
+          <div class="ch-teaser">Playing for what could happen versus avoiding what might. The orientation that changes everything.</div>
+        </div>
+        <div class="chev">&rsaquo;</div>
+      </summary>
+      <div class="body">
+        <p>
+          Stand on a tee with water down the right side. Two thoughts
+          are available. <em>Don't go in the water.</em> Or: <em>I want
+          to start the ball over the left edge of the fairway and let
+          it draw back to the middle.</em>
+        </p>
+        <div class="key-idea">
+          <b>The key idea.</b> Shoemaker calls the first one
+          <strong>prediction</strong> &mdash; you're predicting what
+          might go wrong and trying to avoid it. The second one is
+          <strong>possibility</strong> &mdash; you're describing what
+          you want. Both are accurate descriptions of the situation.
+          Only one helps you swing.
+        </div>
+        <h4>Why your body believes the possibility</h4>
+        <p>
+          Self 2 doesn't process negatives well. &ldquo;Don't slice
+          into the water&rdquo; gets received as &ldquo;slice into the
+          water&rdquo; with a confusing label on it. &ldquo;Draw over
+          the bunker&rdquo; is a clean, executable instruction. Shoemaker's
+          practice is: spend the pre-shot routine constructing the
+          possibility, in detail &mdash; ball flight, landing area,
+          rollout &mdash; and let prediction die on the vine.
+        </p>
+        <h4>The mid-shot tell</h4>
+        <p>
+          If you find yourself thinking the word &ldquo;don't&rdquo; at
+          any point in your pre-shot routine, you're predicting. Back
+          off. Re-construct the shot as a possibility. Then commit.
+        </p>
+        <div class="feel-pull">
+          &ldquo;You can't aim at &lsquo;not in the water.&rsquo;&rdquo;
+        </div>
+        <div class="bridge">
+          Next: how to make every range ball count by practicing with
+          awareness, not repetition.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 5 ========== -->
+    <details class="chapter" id="ch5">
+      <summary>
+        <div class="num">5</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Five</div>
+          <h3>Practice with awareness</h3>
+          <div class="ch-teaser">Replace &ldquo;drill until perfect&rdquo; with &ldquo;drill until informed.&rdquo;</div>
+        </div>
+        <div class="chev">&rsaquo;</div>
+      </summary>
+      <div class="body">
+        <p>
+          Mindless reps build callouses, not skill. Shoemaker's whole
+          alternative is awareness-based practice: every ball is an
+          experiment, and the goal isn't to repeat a motion but to
+          gather information.
+        </p>
+        <div class="key-idea">
+          <b>The key idea.</b> A range session has three good questions:
+          what am I noticing, what is the ball telling me, and what do
+          I want to change for the next shot? When those three questions
+          drive the session, fifty balls is plenty. When they don't,
+          three hundred is wasted.
+        </div>
+        <h4>The Shoemaker range session</h4>
+        <ul>
+          <li><strong>Warm up</strong> with the toss exercise or a few
+            slow rhythmic swings &mdash; reconnect to the natural motion.</li>
+          <li><strong>Pick an awareness target.</strong> One thing to
+            notice for the next ten balls: tempo, grip pressure, balance,
+            where the divot points.</li>
+          <li><strong>Hit ten balls.</strong> Report what you noticed
+            after each one. Don't try to fix anything.</li>
+          <li><strong>Decide</strong> whether to keep that awareness
+            target or switch. Switch deliberately.</li>
+          <li><strong>End with five &ldquo;play&rdquo; balls.</strong>
+            Random clubs, random targets, full routine, full commitment.
+            No awareness target. Just play.</li>
+        </ul>
+        <p>
+          That's a complete session. Forty-five balls. More information
+          than two hundred mindless ones.
+        </p>
+        <div class="feel-pull">
+          &ldquo;A range ball is a piece of information, or it's
+          nothing.&rdquo;
+        </div>
+        <div class="bridge">
+          Next: the most underrated skill in golf. The committed swing.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 6 ========== -->
+    <details class="chapter" id="ch6">
+      <summary>
+        <div class="num">6</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Six</div>
+          <h3>The committed swing</h3>
+          <div class="ch-teaser">A swing made on purpose, not in hope. The one decision before every shot.</div>
+        </div>
+        <div class="chev">&rsaquo;</div>
+      </summary>
+      <div class="body">
+        <p>
+          Watch an amateur over a shot they're not sure about. Two
+          waggles. Three looks. A small backswing pause. A hopeful
+          decelerating hit. That swing was never decided. It was a
+          guess executed slowly.
+        </p>
+        <div class="key-idea">
+          <b>The key idea.</b> A committed swing is a swing whose
+          decision is fully made before it starts. The shot shape, the
+          target, the club, the tempo &mdash; all settled. The only
+          thing left is the doing. Commitment is what makes the body
+          free; uncertainty is what makes the body tight.
+        </div>
+        <h4>How to commit</h4>
+        <p>
+          Shoemaker's rule is simple: don't begin the swing until
+          you've fully described the shot to yourself. If you can't
+          describe it &mdash; what shape, what flight, what landing
+          spot &mdash; you don't get to swing yet. Back off, re-pick,
+          re-describe.
+        </p>
+        <h4>The cost of half-committing</h4>
+        <p>
+          A half-committed swing is the worst swing in golf. It has the
+          tension of trying and the timing of not-quite-going. You'd
+          rather commit to the wrong shot than half-commit to the right
+          one. The wrong shot, fully committed, often comes out fine.
+          The right shot, half-committed, almost never does.
+        </p>
+        <div class="feel-pull">
+          &ldquo;Decide the shot, then swing the swing.&rdquo;
+        </div>
+        <div class="bridge">
+          Next: what to do when the round goes sideways and you can't
+          take a lesson mid-back-nine.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 7 ========== -->
+    <details class="chapter" id="ch7">
+      <summary>
+        <div class="num">7</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Seven</div>
+          <h3>Coaching yourself on the course</h3>
+          <div class="ch-teaser">What to do when you can't take a lesson mid-round and the wheels are coming off.</div>
+        </div>
+        <div class="chev">&rsaquo;</div>
+      </summary>
+      <div class="body">
+        <p>
+          You're playing a round. Somewhere around hole 5, the swing
+          quietly walks off. Now what? Most players try to mid-round
+          fix it &mdash; a new swing thought, a different grip pressure,
+          a shorter takeaway. By hole 12 they've tried five things and
+          none of them stuck.
+        </p>
+        <div class="key-idea">
+          <b>The key idea.</b> On the course, you can't change technique.
+          You can only change <em>awareness</em>. Shoemaker's coaching
+          rule for mid-round: stop trying to fix the swing. Pick one
+          neutral thing to notice. Tempo, balance, grip pressure, the
+          target. Let Self 2 sort it out while Self 1 has a job.
+        </div>
+        <h4>The three-step recovery</h4>
+        <ol>
+          <li><strong>Notice you're spiraling.</strong> Tightness in the
+            hands, &ldquo;don't&rdquo; thoughts, fast pre-shot routines.
+            Name it without judging it.</li>
+          <li><strong>Pick one awareness.</strong> Tempo is usually the
+            best one in distress, because tempo is the first thing to
+            go and the easiest to feel.</li>
+          <li><strong>Commit to a target.</strong> Conservative if
+            needed. Possibility, not prediction. Swing.</li>
+        </ol>
+        <p>
+          You won't fix the round. You'll stabilize it. And that's a
+          skill that pays off for thirty years.
+        </p>
+        <div class="feel-pull">
+          &ldquo;The way out of a bad stretch is awareness, not
+          fixes.&rdquo;
+        </div>
+        <div class="bridge">
+          Next: where Extraordinary sits with Gallwey and the technical
+          primers.
+        </div>
+      </div>
+    </details>
+
+    <!-- ========== CHAPTER 8 ========== -->
+    <details class="chapter" id="ch8">
+      <summary>
+        <div class="num">8</div>
+        <div class="title-stack">
+          <div class="ch-kicker">Chapter Eight</div>
+          <h3>Where Extraordinary Golf fits</h3>
+          <div class="ch-teaser">With Gallwey for the mind, Jacobs and Hogan for the swing &mdash; here's the seat at the table.</div>
+        </div>
+        <div class="chev">&rsaquo;</div>
+      </summary>
+      <div class="body">
+        <p>
+          Think of this shelf as a small library of complementary
+          voices. Each one teaches a different piece of what it actually
+          takes to play.
+        </p>
+        <ul>
+          <li><strong>Jacobs (Vol. 01)</strong> &mdash; diagnose the
+            shot from the ball flight.</li>
+          <li><strong>Hogan (Vol. 02)</strong> &mdash; build the
+            fundamentals in order.</li>
+          <li><strong>Gallwey (Vol. 06)</strong> &mdash; quiet Self 1
+            so Self 2 can deliver.</li>
+          <li><strong>Shoemaker (Vol. 07)</strong> &mdash; <em>practice</em>
+            in a way that builds real skill instead of grooved tension.</li>
+        </ul>
+        <div class="key-idea">
+          <b>The key idea.</b> Where Gallwey gave you the <em>concepts</em>
+          (Self 1, Self 2, awareness), Shoemaker gave you the
+          <em>protocols</em> &mdash; how to actually structure a range
+          session, how to commit to a shot, how to coach yourself when
+          the round turns. Gallwey teaches you to see. Shoemaker teaches
+          you to practice.
+        </div>
+        <h4>How to use this book</h4>
+        <p>
+          Read it once cover to cover, then keep it near the practice
+          bag. The chapter on awareness-based practice is one to revisit
+          every spring as you reset your range routine for the season.
+        </p>
+        <p>
+          If you'd like to build a practice plan that uses both
+          Shoemaker's awareness model and the technical fundamentals,
+          that's exactly what a <a href="https://rrgolfperformance.as.me" target="_blank" rel="noopener" style="color:var(--gold);font-weight:700;">private lesson</a>
+          is for.
+        </p>
+        <div class="feel-pull">
+          &ldquo;Practice on purpose. Play on purpose. The rest is
+          golf.&rdquo;
+        </div>
+      </div>
+    </details>
+
+  </div>
+
+  <!-- ===================== NEXT STEPS ===================== -->
+  <div class="next-steps">
+    <div class="ns-label">Where to go from here</div>
+    <h2>Three things to take to the range this week.</h2>
+    <ol>
+      <li><strong>Toss the club, three times.</strong> Before you hit
+        a single ball, toss a club underhand at a target. Three tosses.
+        Then make three swings with the same intention. Now you can
+        start the session.</li>
+      <li><strong>Pick one awareness target, ten balls.</strong> Tempo,
+        grip pressure, balance, or where the divot points. One. For
+        ten balls. Don't try to fix anything. Just notice.</li>
+      <li><strong>End with five &ldquo;play&rdquo; balls.</strong>
+        Random clubs, random targets, full routine, full commitment.
+        No awareness target. Just play. This is the bridge from range
+        to course.</li>
+    </ol>
+  </div>
+
+  <!-- ===================== ATTRIBUTION ===================== -->
+  <div class="attribution-block">
+    <h2>Attribution</h2>
+    <p>
+      Every concept above &mdash; the toss-the-club exercise, playing
+      golf vs playing golf-swing, possibility vs prediction,
+      awareness-based practice, the committed swing &mdash; belongs to
+      Fred Shoemaker and the School for Extraordinary Golf. This primer
+      is Ryan Rinneard's independent educational summary, written in
+      his own words. It is not authorized by Shoemaker or his
+      publishers, and it does not reproduce the book's text. The full
+      work is much richer than any summary; Shoemaker is a generous,
+      thoughtful writer whose voice this primer cannot fully capture.
+    </p>
+    <p>
+      <strong>Buy the original.</strong> It's a book that quietly
+      changes how you practice, and worth having on the shelf next to
+      the technical primers.
+      <a href="https://www.amazon.com/s?k=Extraordinary+Golf+Fred+Shoemaker" target="_blank" rel="noopener">Find it on Amazon &rarr;</a>
+    </p>
+  </div>
+
+  <!-- ===================== GLOSSARY ===================== -->
+  <div class="glossary">
+    <h2>Glossary</h2>
+    <dl>
+      <dt>Playing golf vs playing golf-swing</dt>
+      <dd>Shoemaker's central distinction. Target-oriented play
+        (&ldquo;swing the club at the target&rdquo;) vs
+        motion-oriented play (&ldquo;hit the positions&rdquo;).</dd>
+
+      <dt>Toss the club</dt>
+      <dd>Shoemaker's signature warm-up. Tossing a club underhand at
+        a target reveals the natural, target-oriented athletic motion
+        every golfer already has.</dd>
+
+      <dt>The committed swing</dt>
+      <dd>A swing whose decision &mdash; shape, target, club, tempo
+        &mdash; is fully made before motion starts. The opposite of a
+        half-committed, hopeful swing.</dd>
+
+      <dt>Possibility vs prediction</dt>
+      <dd>Possibility describes what you want to happen
+        (&ldquo;draw to the centre&rdquo;). Prediction describes what
+        you're avoiding (&ldquo;don't go in the water&rdquo;).
+        Possibility plays; prediction tightens.</dd>
+
+      <dt>Awareness-based practice</dt>
+      <dd>Practice driven by what you're noticing (tempo, grip
+        pressure, balance) rather than by repetition of a fixed motion.
+        Information per ball, not balls per hour.</dd>
+
+      <dt>Range session structure</dt>
+      <dd>Shoemaker's pattern: warm-up (toss/rhythmic), awareness
+        block (ten balls with one focus), play block (five real shots
+        with full commitment).</dd>
+
+      <dt>Self 2 (carried from Gallwey)</dt>
+      <dd>The athletic, non-verbal part of you that already knows how
+        to swing. Shoemaker's exercises are designed to give Self 2
+        room to work.</dd>
+    </dl>
+  </div>
+
+</main>
+
+<div id="footer-mount"></div>
+
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<script src="assets/supabase-config.js"></script>
+<script src="assets/app.js"></script>
+<script>
+  RRG.mountLibrary();
+</script>
+</body>
+</html>
