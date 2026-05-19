@@ -21,143 +21,64 @@
     {
       "source": "/admin/(.*)",
       "headers": [
-        {
-          "key": "X-Robots-Tag",
-          "value": "noindex, nofollow"
-        },
-        {
-          "key": "Cache-Control",
-          "value": "no-store"
-        }
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" },
+        { "key": "Cache-Control", "value": "no-store" }
       ]
     },
     {
       "source": "/(.*\\.html)",
       "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache, no-store, must-revalidate"
-        }
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
       ]
     },
     {
       "source": "/",
       "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache, no-store, must-revalidate"
-        }
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
       ]
     },
     {
       "source": "/(adult|portal|improve|coaching|articles)(/?)",
       "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache, no-store, must-revalidate"
-        }
+        { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
       ]
     },
     {
       "source": "/(.*\\.js)",
       "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache, must-revalidate"
-        }
+        { "key": "Cache-Control", "value": "no-cache, must-revalidate" }
       ]
     },
     {
       "source": "/(.*\\.css)",
       "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "no-cache, must-revalidate"
-        }
+        { "key": "Cache-Control", "value": "no-cache, must-revalidate" }
       ]
     },
     {
       "source": "/(.*)",
       "headers": [
-        {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
-        },
-        {
-          "key": "X-Frame-Options",
-          "value": "DENY"
-        },
-        {
-          "key": "X-XSS-Protection",
-          "value": "1; mode=block"
-        },
-        {
-          "key": "Referrer-Policy",
-          "value": "strict-origin-when-cross-origin"
-        },
-        {
-          "key": "Permissions-Policy",
-          "value": "camera=(), microphone=(), geolocation=(self)"
-        },
-        {
-          "key": "Strict-Transport-Security",
-          "value": "max-age=63072000; includeSubDomains; preload"
-        },
-        {
-          "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://www.google-analytics.com https://*.public.blob.vercel-storage.com https://*.supabase.co wss://*.supabase.co https://api.open-meteo.com; frame-ancestors 'none'"
-        }
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "X-XSS-Protection", "value": "1; mode=block" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=(self)" },
+        { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" },
+        { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://www.google-analytics.com https://*.public.blob.vercel-storage.com https://*.supabase.co wss://*.supabase.co https://api.open-meteo.com; frame-ancestors 'none'" }
       ]
     }
   ],
   "redirects": [
-    {
-      "source": "/coaching/juniors-weekly.html",
-      "destination": "/coaching/juniors.html"
-    },
-    {
-      "source": "/coaching/groups-non-member.html",
-      "destination": "/coaching/groups.html"
-    },
-    {
-      "source": "/Articles/:path*",
-      "destination": "/articles/:path*",
-      "permanent": true
-    },
-    {
-      "source": "/portal",
-      "destination": "/portal/",
-      "permanent": true
-    },
-    {
-      "source": "/adult",
-      "destination": "/adult/",
-      "permanent": true
-    },
-    {
-      "source": "/improve",
-      "destination": "/improve/",
-      "permanent": true
-    },
-    {
-      "source": "/portal/scorecard.html",
-      "destination": "/portal/scorecard-v3.html",
-      "permanent": false
-    },
-    {
-      "source": "/portal/scorecard-away.html",
-      "destination": "/portal/scorecard-away-v3.html",
-      "permanent": false
-    },
-    {
-      "source": "/adult/scorecard.html",
-      "destination": "/adult/scorecard-v3.html",
-      "permanent": false
-    },
-    {
-      "source": "/adult/scorecard-away.html",
-      "destination": "/adult/scorecard-away-v3.html",
-      "permanent": false
-    }
+    { "source": "/coaching/experiences", "destination": "/coaching/experiences.html", "permanent": false },
+    { "source": "/coaching/juniors-weekly.html", "destination": "/coaching/juniors.html" },
+    { "source": "/coaching/groups-non-member.html", "destination": "/coaching/groups.html" },
+    { "source": "/Articles/:path*", "destination": "/articles/:path*", "permanent": true },
+    { "source": "/portal", "destination": "/portal/", "permanent": true },
+    { "source": "/adult", "destination": "/adult/", "permanent": true },
+    { "source": "/improve", "destination": "/improve/", "permanent": true },
+    { "source": "/portal/scorecard.html", "destination": "/portal/scorecard-v3.html", "permanent": false },
+    { "source": "/portal/scorecard-away.html", "destination": "/portal/scorecard-away-v3.html", "permanent": false },
+    { "source": "/adult/scorecard.html", "destination": "/adult/scorecard-v3.html", "permanent": false },
+    { "source": "/adult/scorecard-away.html", "destination": "/adult/scorecard-away-v3.html", "permanent": false }
   ]
 }
