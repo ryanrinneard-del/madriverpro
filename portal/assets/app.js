@@ -1142,7 +1142,8 @@ RRG.renderNav = function(user, active = '') {
   const initials = (user.name || user.email || 'RR')
     .split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
   const coachItem = user.role === 'coach'
-    ? `<li class="nav-coach"><a href="coach.html" class="${active==='coach'?'active':''}">Coach View</a></li>` : '';
+    ? `<li class="nav-coach"><a href="coach.html" class="${active==='coach'?'active':''}">Coach View</a></li>
+       <li class="nav-coach"><a href="/adult/coach.html">Adult Portal &rarr;</a></li>` : '';
 
   // Elite-tier check — pulls from the profile cache populated by
   // RRG.auth.completeSignupIfNeeded(). Coaches always see the Elite items.
