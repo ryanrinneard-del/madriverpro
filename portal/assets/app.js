@@ -14,6 +14,17 @@ window.RRG = window.RRG || {};
 /* ---------- Cohort this portal represents ---------- */
 RRG.COHORT = 'junior_elite_2026';
 
+/* ---------- Coach allowlist ----------
+   Emails listed here are always treated as role='coach', regardless of
+   what the profiles table says. This is what lets Ryan move freely
+   between /portal/ and /adult/ on a single sign-in. To add or remove
+   a coach, edit this array in BOTH /portal/assets/app.js and
+   /adult/assets/app.js — keep them in sync. */
+RRG.COACH_EMAILS = [
+  'ryanrinneard@gmail.com',
+  'rrinneard@madriver.ca',
+];
+
 /* ---------- helpers ---------- */
 RRG.$ = (sel, ctx = document) => ctx.querySelector(sel);
 RRG.$$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
@@ -80,7 +91,15 @@ RRG.auth = {
     const { data, error } = await RRG.sb
       .from('profiles').select('*').eq('id', sess.user.id).maybeSingle();
     if (error) { console.warn('profile fetch', error); return null; }
-    RRG.auth._profileCache = data || null;
+    let profile = data || null;
+    // Coach allowlist override: emails in RRG.COACH_EMAILS are always
+    // treated as role='coach' so they can move between portals on one login.
+    const sessEmail = (sess.user && sess.user.email || '').toLowerCase();
+    const coachEmails = (RRG.COACH_EMAILS || []).map(e => String(e).toLowerCase());
+    if (sessEmail && coachEmails.includes(sessEmail)) {
+      profile = { ...(profile || { id: sess.user.id }), role: 'coach' };
+    }
+    RRG.auth._profileCache = profile;
     return RRG.auth._profileCache;
   },
 
