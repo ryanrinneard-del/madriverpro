@@ -675,6 +675,7 @@
     let roundsMap  = {};   // user_id -> round[]
     let allRounds  = [];   // flat list across all players, most-recent first
     let pendingSubmissions = [];   // public Know Your Game form fills not yet signed up
+    let coachIntakesMap = {};   // user_id -> coach_intakes row (coach-only RLS)
 
     /* Tiger 5 taxonomy (mirrors RRG.TIGER5 for short display). Keyed by number
        because the rounds.tiger5 JSONB column is stored as {1..5: count}. */
@@ -722,11 +723,14 @@
         // Coach view shows BOTH cohorts (adult + junior) plus pending public-form submissions.
         const players = await RRG.users.allCohorts();
         playersList = players.filter(u => u.role === 'player');
-        // Fetch lessons, rounds, and pending submissions in parallel.
-        const [lessonArrays, roundsFlat, pending] = await Promise.all([
+        // Fetch lessons, rounds, pending submissions, AND coach intakes in parallel.
+        // coach_intakes is RLS-locked to the coach role — players cannot read this
+        // table at all, which is why the data lives here instead of profile_json.
+        const [lessonArrays, roundsFlat, pending, intakesResp] = await Promise.all([
           Promise.all(playersList.map(p => RRG.lessons.forUser(p.id))),
           RRG.subs.all(),
           RRG.submissions.pending().catch(() => []),
+          RRG.sb.from('coach_intakes').select('*'),
         ]);
         lessonsMap = {};
         playersList.forEach((p, i) => { lessonsMap[p.id] = lessonArrays[i] || []; });
@@ -737,6 +741,15 @@
         });
         allRounds = roundsFlat || [];
         pendingSubmissions = pending || [];
+        coachIntakesMap = {};
+        // intakesResp.error is non-null if the table doesn't exist yet (migration
+        // not run). Swallow that quietly — the badges will all show EMPTY and the
+        // coach can still operate, they just can't save until the table exists.
+        if (intakesResp && !intakesResp.error) {
+          (intakesResp.data || []).forEach(row => { coachIntakesMap[row.user_id] = row; });
+        } else if (intakesResp && intakesResp.error) {
+          console.warn('[coach intake] could not load — has the 2026-05-24 migration been run?', intakesResp.error.message);
+        }
       } catch (err) {
         showError('Could not load coach data: ' + (err.message || err));
         throw err;
@@ -872,9 +885,9 @@
       const t5agg = t5Totals(pRounds);
       const hasT5 = Object.values(t5agg).some(v => v > 0);
 
-      // Coach-only intake (4 fields the coach-plan-builder skill consumes)
-      const pjForCi = p.profile_json || {};
-      const ci = pjForCi.coach_intake || {};
+      // Coach-only intake (4 fields the coach-plan-builder skill consumes).
+      // Stored in the coach_intakes table — coach-only RLS. Never in profile_json.
+      const ci = coachIntakesMap[p.id] || {};
       const ciFilled = !!(ci.ecosystem || ci.horizon_short || ci.horizon_mid || ci.horizon_long || ci.why || ci.observation_notes);
       const ciBadge = ciFilled
         ? '<span class="badge badge-green" title="All 4 intake fields have content">FILLED</span>'
@@ -1288,9 +1301,10 @@
     };
 
     /* Coach-only intake panel — toggle inline expansion of the 4-field
-       form under a player row. Data is stored in profile_json.coach_intake
-       and is the input the coach-plan-builder skill consumes. Never shown
-       to the player or parents. */
+       form under a player row. Data is stored in the coach_intakes Supabase
+       table, which has RLS that ONLY the coach role can read/write. Players
+       cannot see this data via the API, DevTools, or any other route — the
+       privacy boundary is enforced at the database, not just hidden in the UI. */
     window.toggleCoachIntake = (userId) => {
       const row = document.getElementById('ci-row-' + userId);
       if (!row) return;
@@ -1301,26 +1315,36 @@
       const p = playersList.find(pp => pp.id === userId);
       if (!p) return;
       const getVal = (id) => (document.getElementById(id)?.value || '').trim();
-      const ci = {
-        ecosystem:         getVal('ci-eco-'     + userId),
-        horizon_short:     getVal('ci-h-short-' + userId),
-        horizon_mid:       getVal('ci-h-mid-'   + userId),
-        horizon_long:      getVal('ci-h-long-'  + userId),
-        why:               getVal('ci-why-'     + userId),
-        observation_notes: getVal('ci-obs-'     + userId),
+      // Empty strings → null so the row stays clean
+      const blank = (v) => v === '' ? null : v;
+      const payload = {
+        user_id:           userId,
+        ecosystem:         blank(getVal('ci-eco-'     + userId)),
+        horizon_short:     blank(getVal('ci-h-short-' + userId)),
+        horizon_mid:       blank(getVal('ci-h-mid-'   + userId)),
+        horizon_long:      blank(getVal('ci-h-long-'  + userId)),
+        why:               blank(getVal('ci-why-'     + userId)),
+        observation_notes: blank(getVal('ci-obs-'     + userId)),
         updated_at:        new Date().toISOString(),
+        updated_by:        user.id,
       };
       try {
-        const pj = { ...(p.profile_json || {}) };
-        pj.coach_intake = ci;
-        await RRG.users.update(userId, { profile_json: pj });
+        const { error } = await RRG.sb
+          .from('coach_intakes')
+          .upsert(payload, { onConflict: 'user_id' });
+        if (error) throw error;
         // Patch in-memory so the badge updates without a full reload
-        p.profile_json = pj;
+        coachIntakesMap[userId] = payload;
         RRG.toast(`Coach intake saved for ${(p.name || '').split(' ')[0] || p.email}.`);
         renderAdultRoster();
         renderJuniorRoster();
       } catch (err) {
-        RRG.toast('Could not save intake: ' + (err.message || ''));
+        const msg = (err && err.message) || String(err);
+        if (msg.toLowerCase().includes('coach_intakes')) {
+          RRG.toast('Save failed — the coach_intakes table may not exist yet. Run the 2026-05-24 migration in Supabase Studio first.', 8000);
+        } else {
+          RRG.toast('Could not save intake: ' + msg);
+        }
       }
     };
 
