@@ -133,6 +133,7 @@
             <th>Player</th><th>Email</th><th>Handicap</th><th>Home Club</th>
             <th>Profile / Tier</th><th>Rounds</th><th>Avg Score</th><th>Avg 5 Errors</th>
             <th>Elite</th>
+            <th title="Coach-only intake — ecosystem map, three-horizon goals, the &quot;why,&quot; and early observation notes. Required input for the coach-plan-builder skill.">Coach Intake</th>
           </tr>
         </thead>
         <tbody>
@@ -159,6 +160,13 @@
             const eliteBtn = eliteAccepted
               ? `<button class="btn btn-ghost btn-sm" onclick="rrgRevokeElite('${p.id}')" style="color:var(--red-risk);">Revoke Elite</button>`
               : `<button class="btn btn-primary btn-sm" onclick="rrgPromoteElite('${p.id}')" style="background: var(--gold); color: var(--navy);">Promote to Elite &rarr;</button>`;
+            // Coach-only intake (4 fields the coach-plan-builder skill needs)
+            const ci = pj.coach_intake || {};
+            const ciFilled = !!(ci.ecosystem || ci.horizon_short || ci.horizon_mid || ci.horizon_long || ci.why || ci.observation_notes);
+            const ciBadge = ciFilled
+              ? '<span class="badge badge-green" title="All 4 intake fields have content">FILLED</span>'
+              : '<span class="badge badge-navy" title="Intake not yet captured">EMPTY</span>';
+            const ciBtn = `<button class="btn btn-ghost btn-sm" onclick="toggleCoachIntake('${p.id}')">${ciFilled ? 'Edit' : 'Open'}</button>`;
             return `
               <tr>
                 <td><b>${RRG.esc(p.name)}</b></td>
@@ -170,6 +178,50 @@
                 <td>${avg}</td>
                 <td>${avgT5}</td>
                 <td>${eliteBtn}</td>
+                <td>${ciBadge} ${ciBtn}</td>
+              </tr>
+              <tr id="ci-row-${p.id}" style="display:none;">
+                <td colspan="10" style="background:#FCF9F2; padding:18px 22px; border-bottom:2px solid var(--gold);">
+                  <div style="margin-bottom:10px;">
+                    <div class="page-label" style="font-size:10px; letter-spacing:0.18em; color:var(--gold);">COACH-ONLY INTAKE</div>
+                    <div style="font-family:'Playfair Display',Georgia,serif; font-size:18px; color:var(--navy); margin-top:2px;">${RRG.esc(p.name)}</div>
+                    <div class="muted small" style="margin-top:4px;">These 4 fields feed the <b>coach-plan-builder</b> skill. Never shared with the player.</div>
+                  </div>
+
+                  <div style="margin-top:14px;">
+                    <label style="font-size:11px; letter-spacing:0.1em; color:var(--navy); font-weight:700; text-transform:uppercase;">1. Ecosystem map</label>
+                    <div class="muted small" style="margin:2px 0 4px;">Who else is in this kid's golf life? Parents, HS coach, club pro, regular playing partners, strength coach, sports psych, siblings, extended family.</div>
+                    <textarea id="ci-eco-${p.id}" rows="3" style="width:100%; padding:8px; border:1px solid var(--rule); border-radius:6px; font-family:inherit; font-size:13px;">${RRG.esc(ci.ecosystem || '')}</textarea>
+                  </div>
+
+                  <div style="margin-top:14px;">
+                    <label style="font-size:11px; letter-spacing:0.1em; color:var(--navy); font-weight:700; text-transform:uppercase;">2. Three-horizon goals</label>
+                    <div class="muted small" style="margin:2px 0 6px;">Short = next 4–6 weeks · Mid = this season / 6–12 months · Long = 2+ years</div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;">
+                      <textarea id="ci-h-short-${p.id}" rows="2" placeholder="Short (4–6 weeks)" style="padding:8px; border:1px solid var(--rule); border-radius:6px; font-family:inherit; font-size:13px;">${RRG.esc(ci.horizon_short || '')}</textarea>
+                      <textarea id="ci-h-mid-${p.id}" rows="2" placeholder="Mid (this season)" style="padding:8px; border:1px solid var(--rule); border-radius:6px; font-family:inherit; font-size:13px;">${RRG.esc(ci.horizon_mid || '')}</textarea>
+                      <textarea id="ci-h-long-${p.id}" rows="2" placeholder="Long (2+ years)" style="padding:8px; border:1px solid var(--rule); border-radius:6px; font-family:inherit; font-size:13px;">${RRG.esc(ci.horizon_long || '')}</textarea>
+                    </div>
+                  </div>
+
+                  <div style="margin-top:14px;">
+                    <label style="font-size:11px; letter-spacing:0.1em; color:var(--navy); font-weight:700; text-transform:uppercase;">3. The "why"</label>
+                    <div class="muted small" style="margin:2px 0 4px;">Why does this kid actually want to do this work? Prove something to himself / play in college / be the best on HS team / reach a milestone / love of the game.</div>
+                    <textarea id="ci-why-${p.id}" rows="2" style="width:100%; padding:8px; border:1px solid var(--rule); border-radius:6px; font-family:inherit; font-size:13px;">${RRG.esc(ci.why || '')}</textarea>
+                  </div>
+
+                  <div style="margin-top:14px;">
+                    <label style="font-size:11px; letter-spacing:0.1em; color:var(--navy); font-weight:700; text-transform:uppercase;">4. Early observation notes</label>
+                    <div class="muted small" style="margin:2px 0 4px;">What you've personally observed in the first 1–3 sessions — body language, focus, response to instruction, reaction to bad shots, etc.</div>
+                    <textarea id="ci-obs-${p.id}" rows="4" style="width:100%; padding:8px; border:1px solid var(--rule); border-radius:6px; font-family:inherit; font-size:13px;">${RRG.esc(ci.observation_notes || '')}</textarea>
+                  </div>
+
+                  <div style="margin-top:18px; display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                    <button class="btn btn-primary btn-sm" onclick="saveCoachIntake('${p.id}')">Save intake</button>
+                    <button class="btn btn-ghost btn-sm" onclick="toggleCoachIntake('${p.id}')">Close</button>
+                    ${ci.updated_at ? `<span class="muted small">Last saved ${new Date(ci.updated_at).toLocaleString()}</span>` : '<span class="muted small">Not saved yet</span>'}
+                  </div>
+                </td>
               </tr>
             `;
           }).join('')}
@@ -261,6 +313,39 @@
       setTimeout(() => location.reload(), 800);
     } catch (err) {
       RRG.toast('Could not promote: ' + (err.message || ''));
+    }
+  };
+
+  /* Coach-only intake panel — toggle inline expansion of the 4-field form
+     under a player row. Data is stored in profile_json.coach_intake and fed
+     into the coach-plan-builder skill. Never shown to the player or parents. */
+  window.toggleCoachIntake = (userId) => {
+    const row = document.getElementById('ci-row-' + userId);
+    if (!row) return;
+    row.style.display = row.style.display === 'none' ? '' : 'none';
+  };
+
+  window.saveCoachIntake = async (userId) => {
+    const p = players.find(pp => pp.id === userId);
+    if (!p) return;
+    const getVal = (id) => (document.getElementById(id)?.value || '').trim();
+    const ci = {
+      ecosystem:         getVal('ci-eco-' + userId),
+      horizon_short:     getVal('ci-h-short-' + userId),
+      horizon_mid:       getVal('ci-h-mid-' + userId),
+      horizon_long:      getVal('ci-h-long-' + userId),
+      why:               getVal('ci-why-' + userId),
+      observation_notes: getVal('ci-obs-' + userId),
+      updated_at:        new Date().toISOString(),
+    };
+    try {
+      const pj = { ...(p.profile_json || p.profile || {}) };
+      pj.coach_intake = ci;
+      await RRG.users.update(userId, { profile_json: pj });
+      RRG.toast(`Coach intake saved for ${p.name.split(' ')[0]}.`);
+      setTimeout(() => location.reload(), 800);
+    } catch (err) {
+      RRG.toast('Could not save intake: ' + (err.message || ''));
     }
   };
 
