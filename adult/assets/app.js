@@ -2071,8 +2071,8 @@ RRG.renderNav = function(user, active = '') {
     .split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase();
   const coachItem = user.role === 'coach'
     ? `<li class="nav-coach"><a href="coach.html" class="${active==='coach'?'active':''}">Coach View</a></li>
-       <li class="nav-coach"><a href="tour.html" class="${active==='tour'?'active':''}">Portal Tour</a></li>
-       <li class="nav-coach"><a href="/portal/coach.html">Junior Portal &rarr;</a></li>` : '';
+       <li class="nav-coach"><a href="tour.html" class="${active==='tour'?'active':''}">Portal Tour</a></li>` : '';
+       // Old "Junior Portal →" link removed 2026-05-24 — junior view consolidated into /adult/coach.html
 
   const group = (label, key, items) => `
     <li class="nav-group" data-group="${key}">

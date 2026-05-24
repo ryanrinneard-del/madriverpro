@@ -77,14 +77,11 @@ export default async function handler(req, res) {
     body.top_leak ? `Top leak:  ${body.top_leak}${body.top_leak_strokes ? ' (' + body.top_leak_strokes + ' strokes)' : ''}` : '',
     '',
     'View in coach portal:',
-    body.cohort === 'adult_coaching_2026'
-      ? 'https://rrgolfperformance.com/adult/coach.html'
-      : 'https://rrgolfperformance.com/portal/coach.html',
+    // Both cohorts now route to the consolidated coach view (2026-05-24).
+    'https://rrgolfperformance.com/adult/coach.html',
   ].filter(Boolean);
 
-  const coachUrl = body.cohort === 'adult_coaching_2026'
-    ? 'https://rrgolfperformance.com/adult/coach.html'
-    : 'https://rrgolfperformance.com/portal/coach.html';
+  const coachUrl = 'https://rrgolfperformance.com/adult/coach.html';
 
   const html = `<!doctype html><html><body style="font-family:system-ui,sans-serif; color:#1B2A41; max-width:560px; margin:0 auto; padding:24px;">
     <div style="border-left:4px solid #C9A84C; padding-left:14px; margin-bottom:18px;">

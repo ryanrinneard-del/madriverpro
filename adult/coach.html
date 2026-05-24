@@ -6,6 +6,13 @@
 <base href="/adult/">
 <title>Coach View — RR Golf Performance</title>
 <meta name="description" content="Coach administration: roster, lessons, rounds, 5-error patterns, and every player’s 6-Week Plan.">
+<!-- Cache-busting: this page mutates coach-only data + reads the locked
+     coach_intakes table. A stale cached copy in iOS Safari can serve the
+     OLD saveCoachIntake function that wrote to profile_json — caused a
+     privacy near-miss on 2026-05-24. Don't remove these without thinking. -->
+<meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="expires" content="0">
 <link rel="stylesheet" href="assets/styles.css?v=20260522b">
 <style>
   /* -------- Stats strip -------- */
