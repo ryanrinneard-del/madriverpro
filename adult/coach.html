@@ -930,7 +930,8 @@
                   <button onclick="openPathFor('${p.id}')" title="Path-to-goal gap analysis">Path</button>
                   <a href="trackman.html?userId=${p.id}">TrackMan</a>
                   <button onclick="openApproachFor('${p.id}')" title="Spider chart of approach-distance leaks">Approach</button>
-                  <button onclick="buildGamePlanPdf('${p.id}')" title="Build Game Plan + 6-Week Arc PDFs">Game Plan PDF</button>
+                  <button onclick="buildGamePlanPdf('${p.id}')" title="Build Game Plan + 6-Week Arc PDFs (preview only, doesn't email)">Game Plan PDF</button>
+                  <button onclick="emailGamePlanToPlayer('${p.id}')" title="Rebuild Game Plan + 6-Week Arc PDFs and email them to the player on-brand. Includes the latest lesson update note if present.">&#128231; Email Plan to Player</button>
                   <button onclick="openSnapshotFor('${p.id}')" title="3 dashboard metrics for the player">Snapshot</button>
                 </div>
               </details>
@@ -1923,6 +1924,55 @@
       } finally {
         saveBtn.disabled = false; regenBtn.disabled = false;
         regenBtn.textContent = 'Save + AI regen';
+      }
+    };
+
+    /* Rebuild the player's Game Plan + 6-Week Arc PDFs from their CURRENT plan,
+       then email them to the player on-brand. Uses the latest lesson_update on
+       profile_json (if present) to surface "what we worked on" + "focus this
+       week" in the email body. Standard post-lesson loop closer:
+         (1) Save Plan Update (with or without AI regen)
+         (2) Click Email Plan to Player — fresh PDFs hit their inbox.
+       Two-step confirm to prevent accidental sends. */
+    window.emailGamePlanToPlayer = async (userId) => {
+      const p = playersList.find(pp => pp.id === userId);
+      if (!p) return;
+      const firstName = (p.name || '').split(' ')[0] || 'this player';
+      if (!p.email) {
+        RRG.toast(`${firstName} has no email on file.`, 5000);
+        return;
+      }
+      // Compose a confirm message that names the most recent lesson update if
+      // one exists, so Ryan knows exactly what will go in the email body.
+      const updates = (p.profile_json && Array.isArray(p.profile_json.lesson_updates))
+        ? p.profile_json.lesson_updates : [];
+      const latest = updates.length
+        ? updates.slice().sort((a, b) =>
+            (b.updated_at || b.date || '').localeCompare(a.updated_at || a.date || '')
+          )[0] : null;
+      const updateHint = latest
+        ? `\n\nThe email will reference your last update (${latest.date || 'no date'}): "${(latest.focus_this_week || latest.what_we_worked_on || '').slice(0, 80)}${(latest.focus_this_week || latest.what_we_worked_on || '').length > 80 ? '…' : ''}"`
+        : `\n\nNo lesson updates on file — the email will be the standard "here's your plan" template.`;
+      const ok = confirm(
+        `Email ${firstName}'s refreshed Game Plan to ${p.email}?\n\n` +
+        `This rebuilds the Game Plan + 6-Week Arc PDFs from the current plan, ` +
+        `then sends them on-brand to the player.` +
+        updateHint
+      );
+      if (!ok) return;
+
+      RRG.toast(`Building ${firstName}'s PDFs and sending… up to ~60s.`, 9000);
+      try {
+        const resp = await fetch('/api/email-game-plan', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_id: userId }),
+        });
+        const data = await resp.json();
+        if (!resp.ok || !data.ok) throw new Error(data.error || 'Email send failed');
+        RRG.toast(`✓ Game Plan emailed to ${firstName} at ${p.email}.`, 6000);
+      } catch (err) {
+        RRG.toast('Could not send: ' + (err.message || err), 8000);
       }
     };
 
