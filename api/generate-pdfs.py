@@ -108,6 +108,12 @@ class handler(BaseHTTPRequestHandler):
             #      already hold the player's live plan from Supabase).
             #   2. body.id only — fall back to loading the analysis.json blob
             #      (the original admin pipeline path).
+            # When return_bytes is set, render the PDFs and hand the bytes back
+            # (base64) instead of uploading from Python. The caller then uploads
+            # via the current @vercel/blob Node SDK — Python's raw Blob PUT uses
+            # an outdated API version that now returns HTTP 400.
+            return_bytes = bool(body.get('return_bytes'))
+
             data = body.get('data')
             if not data:
                 analysis_path = f'profiles/{submission_id}/analysis.json'
@@ -137,33 +143,43 @@ class handler(BaseHTTPRequestHandler):
             for module_name, out_name in targets:
                 try:
                     pdf_bytes = _build_pdf_to_bytes(module_name, data)
-                    url = _blob_put(
-                        f'profiles/{submission_id}/{out_name}',
-                        pdf_bytes,
-                        'application/pdf',
-                    )
-                    results[out_name] = {'ok': True, 'url': url, 'bytes': len(pdf_bytes)}
+                    if return_bytes:
+                        import base64
+                        results[out_name] = {
+                            'ok': True,
+                            'b64': base64.b64encode(pdf_bytes).decode('ascii'),
+                            'bytes': len(pdf_bytes),
+                        }
+                    else:
+                        url = _blob_put(
+                            f'profiles/{submission_id}/{out_name}',
+                            pdf_bytes,
+                            'application/pdf',
+                        )
+                        results[out_name] = {'ok': True, 'url': url, 'bytes': len(pdf_bytes)}
                 except Exception as e:
                     results[out_name] = {'ok': False, 'error': f'{type(e).__name__}: {e}'}
                     traceback.print_exc()
 
             # Best-effort index update — invoke the Node helper by writing a
-            # "status marker" blob the admin endpoint can read.
-            marker = {
-                'id': submission_id,
-                'pdfs': results,
-                'completedAt': None,
-            }
-            from datetime import datetime, timezone
-            marker['completedAt'] = datetime.now(timezone.utc).isoformat()
-            try:
-                _blob_put(
-                    f'profiles/{submission_id}/pdfs.json',
-                    json.dumps(marker, indent=2).encode('utf-8'),
-                    'application/json',
-                )
-            except Exception as e:
-                traceback.print_exc()
+            # "status marker" blob the admin endpoint can read. Skipped in the
+            # return_bytes path (the caller owns uploads there).
+            if not return_bytes:
+                marker = {
+                    'id': submission_id,
+                    'pdfs': results,
+                    'completedAt': None,
+                }
+                from datetime import datetime, timezone
+                marker['completedAt'] = datetime.now(timezone.utc).isoformat()
+                try:
+                    _blob_put(
+                        f'profiles/{submission_id}/pdfs.json',
+                        json.dumps(marker, indent=2).encode('utf-8'),
+                        'application/json',
+                    )
+                except Exception as e:
+                    traceback.print_exc()
 
             all_ok = all(r.get('ok') for r in results.values())
             return self._json(200 if all_ok else 500, {

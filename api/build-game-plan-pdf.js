@@ -23,7 +23,7 @@ import { createClient } from '@supabase/supabase-js';
 import { Resend } from 'resend';
 import { list } from '@vercel/blob';
 import { GOLFER_PROFILE_SYSTEM_PROMPT } from './_lib/systemPrompt.js';
-import { isAdminRequest, fetchBlob } from './_lib/storage.js';
+import { isAdminRequest, fetchBlob, putBinary } from './_lib/storage.js';
 
 export const config = { maxDuration: 60 };
 
@@ -380,7 +380,7 @@ export default async function handler(req, res) {
     const r = await fetch(`${base}/api/generate-pdfs`, {
       method: 'POST',
       headers,
-      body: JSON.stringify({ id: user_id, data: merged }),
+      body: JSON.stringify({ id: user_id, data: merged, return_bytes: true }),
     });
     pdfResults = await r.json();
     if (!r.ok || !pdfResults.success) {
@@ -396,6 +396,20 @@ export default async function handler(req, res) {
   } catch (err) {
     console.error('generate-pdfs call failed:', err);
     return res.status(502).json({ error: 'PDF rendering failed — ' + (err.message || 'unknown') });
+  }
+
+  // Python rendered the PDFs and returned the bytes; upload them to Blob here
+  // via the current @vercel/blob SDK (Python's raw Blob PUT uses a stale API
+  // that 400s). Stored at the same private paths /api/get-asset serves from.
+  try {
+    for (const [name, info] of Object.entries(pdfResults.results || {})) {
+      if (info && info.ok && info.b64) {
+        await putBinary(`profiles/${user_id}/${name}`, Buffer.from(info.b64, 'base64'), 'application/pdf');
+      }
+    }
+  } catch (err) {
+    console.error('blob upload (node) failed:', err);
+    return res.status(502).json({ error: 'PDF upload failed — ' + (err.message || 'unknown') });
   }
 
   // Store coach-openable proxy URLs (the blob store is private, so the coach
