@@ -674,6 +674,20 @@
       throw new Error('not coach');
     }
 
+    // Bridge the Supabase coach session into the admin cookie the API
+    // endpoints expect (build-game-plan-pdf, get-asset, email, etc.), so the
+    // dashboard works on a single sign-in — no separate admin-password login.
+    try {
+      const { data: { session } } = await RRG.sb.auth.getSession();
+      if (session?.access_token) {
+        await fetch('/api/admin-auth', {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + session.access_token },
+          credentials: 'same-origin',
+        });
+      }
+    } catch (e) { /* non-fatal — the password login still works as a fallback */ }
+
     // ------------------------------------------------------------------
     // State
     // ------------------------------------------------------------------

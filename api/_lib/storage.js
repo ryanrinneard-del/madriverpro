@@ -138,7 +138,7 @@ export async function deleteBlob(urlOrKey) {
 // ---------- Admin auth (cookie-based, HMAC-signed) ----------
 
 const COOKIE_NAME = 'rr_admin';
-const COOKIE_MAX_AGE = 60 * 60 * 8; // 8 hours
+const COOKIE_MAX_AGE = 60 * 60 * 24 * 30; // 30 days (was 8h — kept logging Ryan out mid-day)
 
 function sessionSecret() {
     // Prefer a dedicated secret; fall back to ADMIN_PASSWORD so the project
