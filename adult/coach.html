@@ -1996,6 +1996,14 @@
     window.buildGamePlanPdf = async (userId) => {
       const p = playersList.find(pp => pp.id === userId);
       const firstName = (p?.name || '').split(' ')[0] || 'this player';
+      // Open the tab NOW, on the click itself, so the browser treats it as
+      // user-initiated. If we wait until after the fetch (await), Safari/Chrome
+      // block it as a popup and "nothing happens". We point it at the PDF when
+      // the build finishes, and close it on error.
+      const win = window.open('about:blank', '_blank');
+      if (win) {
+        try { win.document.write('<p style="font-family:system-ui,sans-serif;padding:28px;color:#1B365D;">Building ' + firstName + '’s Game Plan PDF… up to ~45 seconds. This tab will open it automatically.</p>'); } catch (e) {}
+      }
       RRG.toast(`Building ${firstName}'s Game Plan PDF… this can take up to ~45s.`, 8000);
       try {
         const resp = await fetch('/api/build-game-plan-pdf', {
@@ -2005,12 +2013,16 @@
         });
         const data = await resp.json();
         if (!resp.ok || !data.success) throw new Error(data.error || 'Build failed');
-        RRG.toast('Game Plan PDF ready — opening it now.', 4000);
+        RRG.toast('Game Plan PDF ready.', 4000);
         if (data.pdfs && data.pdfs.game_plan) {
-          window.open(data.pdfs.game_plan, '_blank', 'noopener');
+          if (win) { win.location.href = data.pdfs.game_plan; }
+          else { window.location.href = data.pdfs.game_plan; }
+        } else if (win) {
+          win.close();
         }
       } catch (err) {
-        RRG.toast('Could not build the PDF: ' + (err.message || ''), 6000);
+        if (win) { try { win.close(); } catch (e) {} }
+        RRG.toast('Could not build the PDF: ' + (err.message || ''), 7000);
       }
     };
 
