@@ -6,11 +6,9 @@
 # Added 2026-05-15.
 api/process-arc.js
 
-# Temporarily excluded 2026-05-29 to stay at the 12-function Hobby cap.
-# The "Email Plan" commit added this 13th function and broke the production
-# build. Its only caller is the new adult/coach.html email button (not yet
-# live), so parking it here keeps every existing feature working while the
-# Ladies pages deploy. To bring the post-lesson email live: upgrade to Vercel
-# Pro, or merge email-game-plan.js into an existing endpoint, then delete
-# this line.
+# Dead code as of 2026-05-29: the email-the-Game-Plan logic was MERGED into
+# api/build-game-plan-pdf.js (call it with { email: true }). This file is no
+# longer referenced by anything and is excluded so it doesn't count toward the
+# 12-function Hobby cap. Safe to git-delete the file entirely whenever; until
+# then this keeps the deploy at 12 functions.
 api/email-game-plan.js

@@ -20,13 +20,115 @@
 
 import Anthropic from '@anthropic-ai/sdk';
 import { createClient } from '@supabase/supabase-js';
+import { Resend } from 'resend';
+import { list } from '@vercel/blob';
 import { GOLFER_PROFILE_SYSTEM_PROMPT } from './_lib/systemPrompt.js';
-import { isAdminRequest } from './_lib/storage.js';
+import { isAdminRequest, fetchBlob } from './_lib/storage.js';
 
 export const config = { maxDuration: 60 };
 
 const MODEL = 'claude-sonnet-4-20250514';
 const MAX_TOKENS = 3072;
+
+// ---------------------------------------------------------------------------
+// Email support (merged in from the former /api/email-game-plan endpoint, so
+// the post-lesson "email the Game Plan" feature lives here behind { email:true }
+// instead of being a separate serverless function). Triggered only when the
+// coach dashboard posts email:true; the plain build path is untouched.
+// ---------------------------------------------------------------------------
+const RYAN_EMAIL = 'ryan@rrgolfperformance.com';
+
+const BRAND = {
+  navy:        '#0E2A47',
+  navyText:    '#1B2A41',
+  gold:        '#C9A84C',
+  goldTintBg:  '#FDF6E3',
+  midGrey:     '#8A8A8A',
+  rule:        '#E5E5E5',
+  white:       '#FFFFFF',
+};
+
+const ESC = (s) => String(s == null ? '' : s)
+  .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+async function fetchPdfAttachment(pathname, filename) {
+  const r = await fetchBlob(pathname);
+  if (!r.ok) throw new Error(`Could not fetch ${filename} (${r.status})`);
+  const ab = await r.arrayBuffer();
+  return { filename, content: Buffer.from(ab) };
+}
+
+function buildEmailHtml({ firstName, latestUpdate }) {
+  const updateBlock = latestUpdate ? `
+    <div style="margin:22px 0 0; padding:14px 16px; background:${BRAND.goldTintBg}; border-left:3px solid ${BRAND.gold}; border-radius:4px; font-size:14px; line-height:1.55;">
+      <div style="font-size:10px; letter-spacing:0.16em; color:${BRAND.gold}; font-weight:700; text-transform:uppercase;">From our last session</div>
+      ${latestUpdate.what_we_worked_on ? `<div style="margin-top:8px;"><b style="color:${BRAND.navy};">What we worked on:</b> ${ESC(latestUpdate.what_we_worked_on)}</div>` : ''}
+      ${latestUpdate.focus_this_week ? `<div style="margin-top:8px;"><b style="color:${BRAND.navy};">Focus this week:</b> ${ESC(latestUpdate.focus_this_week)}</div>` : ''}
+    </div>` : '';
+
+  const greeting = firstName ? `Hi ${ESC(firstName)},` : 'Hi,';
+
+  return `<!doctype html><html><body style="margin:0; padding:0; background:${BRAND.white};">
+  <div style="font-family:Georgia,serif; color:${BRAND.navyText}; max-width:560px; margin:0 auto; padding:28px 24px;">
+
+    <!-- Brand kicker -->
+    <div style="border-left:4px solid ${BRAND.gold}; padding-left:14px; margin-bottom:22px;">
+      <div style="font-family:system-ui,sans-serif; font-size:11px; letter-spacing:0.18em; color:${BRAND.gold}; font-weight:700; text-transform:uppercase;">Ryan Rinneard Golf Performance</div>
+      <h1 style="margin:6px 0 0; font-family:Georgia,serif; font-size:24px; color:${BRAND.navy}; font-weight:600; line-height:1.2;">Your refreshed Game Plan</h1>
+    </div>
+
+    <p style="font-family:system-ui,sans-serif; font-size:15px; line-height:1.6; color:${BRAND.navyText}; margin:0 0 14px;">
+      ${greeting}
+    </p>
+    <p style="font-family:system-ui,sans-serif; font-size:15px; line-height:1.6; color:${BRAND.navyText}; margin:0 0 14px;">
+      Two documents are attached:
+    </p>
+
+    <ul style="font-family:system-ui,sans-serif; font-size:15px; line-height:1.7; color:${BRAND.navyText}; padding-left:22px; margin:0 0 18px;">
+      <li><b style="color:${BRAND.navy};">Game Plan</b> &mdash; a snapshot of your game and what we&rsquo;re working on</li>
+      <li><b style="color:${BRAND.navy};">6-Week Arc</b> &mdash; how the next six sessions build on each other</li>
+    </ul>
+
+    ${updateBlock}
+
+    <p style="font-family:system-ui,sans-serif; font-size:14px; line-height:1.6; color:${BRAND.navyText}; margin:24px 0 14px;">
+      Have a read through before our next session. Any questions, just reply to this email.
+    </p>
+
+    <p style="font-family:Georgia,serif; font-size:16px; color:${BRAND.navy}; margin:24px 0 0;">
+      &mdash; Ryan
+    </p>
+    <p style="font-family:system-ui,sans-serif; font-size:12px; color:${BRAND.midGrey}; margin:4px 0 0;">
+      CPGA Class A &middot; Director of Instruction, Mad River Golf Club
+    </p>
+
+    <!-- Footer -->
+    <div style="margin-top:32px; padding-top:18px; border-top:1px solid ${BRAND.rule}; font-family:system-ui,sans-serif; font-size:11px; color:${BRAND.midGrey}; line-height:1.6;">
+      You&rsquo;re receiving this because you&rsquo;re a player in the RR Golf Performance portal.
+      Reply directly to this email to reach Ryan.
+    </div>
+  </div>
+</body></html>`;
+}
+
+function buildPlainText({ firstName, latestUpdate }) {
+  const greeting = firstName ? `Hi ${firstName},` : 'Hi,';
+  return [
+    greeting,
+    '',
+    'Two documents are attached:',
+    '  • Game Plan — a snapshot of your game and what we\'re working on',
+    '  • 6-Week Arc — how the next six sessions build on each other',
+    '',
+    latestUpdate?.what_we_worked_on ? `From our last session — what we worked on: ${latestUpdate.what_we_worked_on}` : '',
+    latestUpdate?.focus_this_week   ? `Focus this week: ${latestUpdate.focus_this_week}` : '',
+    '',
+    'Have a read through before our next session. Any questions, just reply to this email.',
+    '',
+    '— Ryan',
+    'CPGA Class A · Director of Instruction, Mad River Golf Club',
+  ].filter(Boolean).join('\n');
+}
 
 // The Snapshot-page fields the slim 6-week-arc plan doesn't already carry.
 const SNAPSHOT_FIELDS_SCHEMA = {
@@ -170,6 +272,7 @@ export default async function handler(req, res) {
   if (!isAdminRequest(req)) return res.status(401).json({ error: 'Not authenticated.' });
 
   const { user_id } = req.body || {};
+  const wantEmail = !!(req.body && req.body.email);
   if (!user_id) return res.status(400).json({ error: 'user_id is required' });
 
   const ANTHROPIC_API_KEY    = process.env.ANTHROPIC_API_KEY;
@@ -190,6 +293,12 @@ export default async function handler(req, res) {
     .eq('id', user_id)
     .maybeSingle();
   if (readErr || !row) return res.status(404).json({ error: 'Player not found.' });
+
+  // Email-path preconditions — fail fast before doing the (slow) PDF build.
+  if (wantEmail) {
+    if (!process.env.RESEND_API_KEY) return res.status(500).json({ error: 'RESEND_API_KEY not set' });
+    if (!row.email) return res.status(400).json({ error: 'Player has no email on file' });
+  }
 
   const pj = row.profile_json || {};
   let plan = pj.game_plan || {};
@@ -290,9 +399,90 @@ export default async function handler(req, res) {
     arc:       `/api/get-asset?id=${encodeURIComponent(user_id)}&kind=arc`,
     built_at:  builtAt,
   };
-  await patchProfile(supabase, user_id, {
-    game_plan: { ...plan, structured: merged, pdfs },
-  });
+  const finalGamePlan = { ...plan, structured: merged, pdfs };
+  await patchProfile(supabase, user_id, { game_plan: finalGamePlan });
+
+  // ---- Email path: send the freshly-built PDFs to the player on-brand. ----
+  if (wantEmail) {
+    const fromEmail = process.env.RESEND_FROM_EMAIL
+      || 'Ryan Rinneard <ryan@rrgolfperformance.com>';
+    const firstName = (row.name || '').split(' ')[0] || '';
+    const updates = Array.isArray(pj.lesson_updates) ? pj.lesson_updates : [];
+    const latestUpdate = updates.length
+      ? updates.slice().sort((a, b) =>
+          (b.updated_at || b.date || '').localeCompare(a.updated_at || a.date || '')
+        )[0]
+      : null;
+
+    // Confirm both PDFs exist in blob, then load them as attachments.
+    let attachments;
+    try {
+      const token = process.env.BLOB_READ_WRITE_TOKEN;
+      const blobs = await list({ prefix: `profiles/${user_id}/`, token });
+      const present = new Set(blobs.blobs.map(b => b.pathname.split('/').pop()));
+      const required = ['game_plan.pdf', 'arc.pdf'];
+      const missing = required.filter(n => !present.has(n));
+      if (missing.length) {
+        return res.status(409).json({ error: `PDF missing after build: ${missing.join(', ')}` });
+      }
+      attachments = await Promise.all(required.map(n =>
+        fetchPdfAttachment(`profiles/${user_id}/${n}`, n)
+      ));
+    } catch (err) {
+      console.error('[build-game-plan-pdf:email] attachment fetch failed', err);
+      return res.status(500).json({ error: 'Failed to load PDFs for email' });
+    }
+
+    const html = buildEmailHtml({ firstName, latestUpdate });
+    const text = buildPlainText({ firstName, latestUpdate });
+    const subject = latestUpdate
+      ? 'Your refreshed Game Plan — Ryan Rinneard Golf Performance'
+      : 'Your Game Plan — Ryan Rinneard Golf Performance';
+
+    try {
+      const resend = new Resend(process.env.RESEND_API_KEY);
+      const { data, error } = await resend.emails.send({
+        from: fromEmail,
+        to: [row.email],
+        replyTo: RYAN_EMAIL,
+        subject,
+        html,
+        text,
+        attachments,
+      });
+      if (error) {
+        console.error('[build-game-plan-pdf:email] Resend error', error);
+        return res.status(502).json({ error: error.message || 'Resend failed' });
+      }
+
+      // Stamp audit metadata (non-fatal — the email already shipped).
+      try {
+        await patchProfile(supabase, user_id, {
+          game_plan: {
+            ...finalGamePlan,
+            last_emailed_at: new Date().toISOString(),
+            last_emailed_id: data?.id || null,
+            last_emailed_to: row.email,
+          },
+        });
+      } catch (err) {
+        console.warn('[build-game-plan-pdf:email] could not stamp last_emailed_at', err);
+      }
+
+      return res.status(200).json({
+        success: true,
+        ok: true,
+        emailed: true,
+        id: data?.id,
+        pdf_built: true,
+        pdfs,
+        generated_snapshot_fields: !hasSnapshotFields,
+      });
+    } catch (err) {
+      console.error('[build-game-plan-pdf:email] unexpected', err);
+      return res.status(500).json({ error: err.message || 'Send failed' });
+    }
+  }
 
   return res.status(200).json({
     success: true,

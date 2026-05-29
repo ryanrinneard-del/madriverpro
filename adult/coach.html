@@ -1963,10 +1963,10 @@
 
       RRG.toast(`Building ${firstName}'s PDFs and sending… up to ~60s.`, 9000);
       try {
-        const resp = await fetch('/api/email-game-plan', {
+        const resp = await fetch('/api/build-game-plan-pdf', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ user_id: userId }),
+          body: JSON.stringify({ user_id: userId, email: true }),
         });
         const data = await resp.json();
         if (!resp.ok || !data.ok) throw new Error(data.error || 'Email send failed');
