@@ -66,7 +66,12 @@ export default async function handler(req, res) {
 
     let upstream;
     try {
-        upstream = await fetch(signedUrl, { cache: 'no-store' });
+        // Private Blob store: the object URL isn't publicly readable — it must
+        // be fetched with the read-write token (Authorization: Bearer <token>).
+        upstream = await fetch(signedUrl, {
+            cache: 'no-store',
+            headers: { Authorization: `Bearer ${token}` },
+        });
     } catch (err) {
         console.error('get-asset fetch error:', err);
         return res.status(502).json({ error: 'Upstream fetch failed.' });

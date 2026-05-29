@@ -121,7 +121,8 @@ export async function fetchBlob(urlOrKey) {
     }
     const token = requireEnv('BLOB_READ_WRITE_TOKEN');
     const h = await head(urlOrKey, { token });
-    const res = await fetch(h.url, { cache: 'no-store' });
+    // Private Blob store: authorize the read with the token.
+    const res = await fetch(h.url, { cache: 'no-store', headers: { Authorization: `Bearer ${token}` } });
     if (!res.ok) throw new Error(`fetchBlob failed: ${res.status}`);
     return res;
 }
