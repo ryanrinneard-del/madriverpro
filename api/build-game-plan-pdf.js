@@ -384,11 +384,18 @@ export default async function handler(req, res) {
     });
     pdfResults = await r.json();
     if (!r.ok || !pdfResults.success) {
-      throw new Error(pdfResults?.error || `generate-pdfs responded ${r.status}`);
+      let detail = pdfResults?.error;
+      if (!detail && pdfResults?.results) {
+        detail = Object.entries(pdfResults.results)
+          .filter(([, v]) => v && v.ok === false)
+          .map(([k, v]) => `${k} → ${v.error}`)
+          .join('; ');
+      }
+      throw new Error(detail || `generate-pdfs responded ${r.status}`);
     }
   } catch (err) {
     console.error('generate-pdfs call failed:', err);
-    return res.status(502).json({ error: 'PDF rendering failed. Try again in a moment.' });
+    return res.status(502).json({ error: 'PDF rendering failed — ' + (err.message || 'unknown') });
   }
 
   // Store coach-openable proxy URLs (the blob store is private, so the coach
