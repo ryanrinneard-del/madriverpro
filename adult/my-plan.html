@@ -430,7 +430,16 @@
       const sessions = Array.isArray(s.sessions)   ? s.sessions   : [];
       const closing  = s.arc_closing || '';
 
+      // Branded PDF downloads — shown once the coach has built the PDFs.
+      const pdfs = plan.pdfs || {};
+      const dlBar = pdfs.game_plan ? `
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin:2px 0 18px;">
+          <button type="button" class="btn btn-primary btn-sm" onclick="downloadPlanPdf('game_plan')">Download Game Plan (PDF)</button>
+          <button type="button" class="btn btn-ghost btn-sm" onclick="downloadPlanPdf('arc')">Download 6-Week Arc (PDF)</button>
+        </div>` : '';
+
       const body = `
+        ${dlBar}
         ${intro ? `<p style="margin-top:8px; font-size:15px; line-height:1.65; color:var(--navy-mid);">${RRG.esc(intro)}</p>` : ''}
 
         ${themes.length ? `
@@ -547,6 +556,34 @@
        header; primary/secondary focus + trimmed practice bullets +
        measure revealed on expand. Designed for fast pre-lesson review.
        ================================================================= */
+    // Download a branded PDF (game_plan | arc) for the profile in view. Fetches
+    // with the player's Supabase token so they can pull their own; the coach's
+    // admin cookie covers the coach-view case. Saved with a branded filename.
+    window.downloadPlanPdf = async function (kind) {
+      const labels = { game_plan: 'Game Plan', arc: '6-Week Arc' };
+      const files  = { game_plan: 'RR-Golf-Game-Plan.pdf', arc: 'RR-Golf-6-Week-Arc.pdf' };
+      try {
+        RRG.toast('Preparing your ' + (labels[kind] || 'PDF') + '…', 4000);
+        const headers = {};
+        try {
+          const { data: { session } } = await RRG.sb.auth.getSession();
+          if (session && session.access_token) headers.Authorization = 'Bearer ' + session.access_token;
+        } catch (e) {}
+        const resp = await fetch('/api/get-asset?id=' + encodeURIComponent(prof.id) + '&kind=' + kind + '&download=1', {
+          headers, credentials: 'same-origin',
+        });
+        if (!resp.ok) { RRG.toast('That PDF isn’t ready yet — check back shortly.', 5000); return; }
+        const blob = await resp.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = files[kind] || 'RR-Golf.pdf';
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 5000);
+      } catch (err) {
+        RRG.toast('Download failed: ' + (err.message || ''), 6000);
+      }
+    };
+
     function renderSynopsis(plan) {
       const wrap = document.getElementById('plan-synopsis-wrap');
       if (!wrap) return;

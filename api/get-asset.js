@@ -14,6 +14,7 @@
 //   pdfs       → profiles/{id}/pdfs.json
 
 import { head } from '@vercel/blob';
+import { createClient } from '@supabase/supabase-js';
 import { isAdminRequest, requireEnv } from './_lib/storage.js';
 
 const KIND_MAP = {
@@ -28,12 +29,40 @@ const KIND_MAP = {
 // Guard the id to simple URL-safe characters so callers can't inject `../`.
 const ID_RE = /^[A-Za-z0-9_-]+$/;
 
+// Kinds a player may download for THEIR OWN id (coach-only kinds — dossier,
+// analysis, submission, pdfs — stay admin-only).
+const PLAYER_KINDS = new Set(['game_plan', 'arc']);
+
+// Branded download filenames (used when ?download=1).
+const DOWNLOAD_NAMES = {
+    game_plan: 'RR-Golf-Game-Plan.pdf',
+    arc:       'RR-Golf-6-Week-Arc.pdf',
+    dossier:   'RR-Golf-Coach-Dossier.pdf',
+};
+
+// Verify a Supabase access token (Authorization: Bearer) and confirm it belongs
+// to the player whose id is being requested — so a signed-in player can pull
+// only their own assets.
+async function isOwner(req, id) {
+    const url = process.env.SUPABASE_URL;
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (!url || !key) return false;
+    const authz = req.headers.authorization || '';
+    const tok = authz.startsWith('Bearer ') ? authz.slice(7).trim() : '';
+    if (!tok) return false;
+    try {
+        const sb = createClient(url, key, { auth: { autoRefreshToken: false, persistSession: false } });
+        const { data, error } = await sb.auth.getUser(tok);
+        if (error || !data?.user) return false;
+        return data.user.id === id;
+    } catch {
+        return false;
+    }
+}
+
 export default async function handler(req, res) {
     if (req.method !== 'GET') {
         return res.status(405).json({ error: 'Method not allowed' });
-    }
-    if (!isAdminRequest(req)) {
-        return res.status(401).json({ error: 'Not authenticated.' });
     }
 
     const { id, kind } = req.query || {};
@@ -43,6 +72,16 @@ export default async function handler(req, res) {
     const spec = KIND_MAP[String(kind)];
     if (!spec) {
         return res.status(400).json({ error: 'Invalid kind' });
+    }
+
+    // Authorize: the coach (admin cookie) can read anything; a signed-in player
+    // can read only their OWN game_plan / arc.
+    let authed = isAdminRequest(req);
+    if (!authed && PLAYER_KINDS.has(String(kind))) {
+        authed = await isOwner(req, String(id));
+    }
+    if (!authed) {
+        return res.status(401).json({ error: 'Not authenticated.' });
     }
 
     let token;
@@ -80,9 +119,12 @@ export default async function handler(req, res) {
         return res.status(upstream.status).json({ error: `Upstream responded ${upstream.status}` });
     }
 
-    const disposition = spec.inline
-        ? `inline; filename="${spec.file}"`
-        : `attachment; filename="${spec.file}"`;
+    // ?download=1 forces a download with a branded filename; otherwise inline.
+    const wantDownload = ['1', 'true'].includes(String(req.query.download || ''));
+    const dlName = DOWNLOAD_NAMES[String(kind)] || spec.file;
+    const disposition = (wantDownload || !spec.inline)
+        ? `attachment; filename="${dlName}"`
+        : `inline; filename="${spec.file}"`;
     res.setHeader('Content-Type', spec.type);
     res.setHeader('Content-Disposition', disposition);
     res.setHeader('Cache-Control', 'private, no-store');
