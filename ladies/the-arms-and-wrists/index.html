@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Arms &amp; Wrists Clinic — RR Golf Performance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1B365D;
+    --navy-deep: #122444;
+    --navy-soft: #2A4A77;
+    --gold: #D4AF37;
+    --gold-soft: #E8C968;
+    --bone: #FAF8F4;
+    --paper: #FFFFFF;
+    --ink: #1A1A1A;
+    --muted: #6B7280;
+    --line: rgba(27, 54, 93, 0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Manrope', -apple-system, sans-serif;
+    background: var(--bone);
+    color: var(--ink);
+    line-height: 1.6;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  .container {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  .container--narrow {
+    max-width: 760px;
+  }
+
+  /* ============ NAV ============ */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    padding: 20px 32px;
+    background: rgba(250, 248, 244, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 100;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .nav-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 19px;
+    color: var(--navy);
+    letter-spacing: -0.01em;
+    text-decoration: none;
+  }
+
+  .logo span {
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .nav-link {
+    font-size: 14px;
+    color: var(--navy);
+    text-decoration: none;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    transition: opacity 0.2s;
+  }
+
+  .nav-link:hover { opacity: 0.6; }
+
+  .nav-btn {
+    display: inline-block;
+    background: var(--navy);
+    color: var(--paper);
+    padding: 11px 22px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    transition: all 0.25s ease;
+  }
+
+  .nav-btn:hover {
+    background: var(--gold);
+    color: var(--navy-deep);
+  }
+
+  @media (max-width: 600px) {
+    .nav-links { gap: 16px; }
+    .nav-link { display: none; }
+    .nav-btn { padding: 10px 16px; font-size: 12px; }
+  }
+
+  /* ============ HERO ============ */
+  .hero {
+    padding: 180px 0 120px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 100px;
+    right: -100px;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.08), transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 28px;
+  }
+
+  .eyebrow::before {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .hero h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(44px, 7vw, 78px);
+    font-weight: 400;
+    line-height: 1.04;
+    color: var(--navy);
+    letter-spacing: -0.025em;
+    margin-bottom: 32px;
+    max-width: 900px;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--gold);
+  }
+
+  .hero-lede {
+    font-size: 20px;
+    color: var(--navy-soft);
+    max-width: 620px;
+    line-height: 1.55;
+    font-weight: 400;
+  }
+
+  /* ============ THROUGHLINE ============ */
+  .throughline {
+    padding: 80px 0;
+    background: var(--navy);
+    color: var(--paper);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .throughline::before {
+    content: '"';
+    position: absolute;
+    top: -40px;
+    left: 40px;
+    font-family: 'Fraunces', serif;
+    font-size: 300px;
+    color: var(--gold);
+    opacity: 0.15;
+    font-style: italic;
+    line-height: 1;
+  }
+
+  .throughline-quote {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 300;
+    line-height: 1.3;
+    text-align: center;
+    max-width: 880px;
+    margin: 0 auto;
+    letter-spacing: -0.015em;
+    position: relative;
+    z-index: 1;
+  }
+
+  .throughline-quote em {
+    color: var(--gold-soft);
+    font-style: italic;
+  }
+
+  .throughline-attr {
+    text-align: center;
+    margin-top: 32px;
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  /* ============ SECTION BASE ============ */
+  section.content {
+    padding: 100px 0;
+  }
+
+  .section-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+
+  .section-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(34px, 5vw, 52px);
+    font-weight: 400;
+    color: var(--navy);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+
+  .section-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .section-intro {
+    font-size: 18px;
+    color: var(--navy-soft);
+    max-width: 640px;
+    line-height: 1.6;
+    margin-bottom: 64px;
+  }
+
+  /* ============ THREE CHECKPOINTS ============ */
+  .checkpoints {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    margin-top: 48px;
+  }
+
+  .checkpoint {
+    background: var(--paper);
+    padding: 48px 36px;
+    border-radius: 4px;
+    position: relative;
+    border-top: 3px solid var(--gold);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .checkpoint:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 50px rgba(27, 54, 93, 0.08);
+  }
+
+  .checkpoint-num {
+    font-family: 'Fraunces', serif;
+    font-size: 14px;
+    color: var(--gold);
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+
+  .checkpoint-title {
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    color: var(--navy);
+    font-weight: 500;
+    line-height: 1.15;
+    margin-bottom: 20px;
+    letter-spacing: -0.01em;
+  }
+
+  .checkpoint-body {
+    color: var(--navy-soft);
+    font-size: 15.5px;
+    line-height: 1.65;
+  }
+
+  .checkpoint-body strong {
+    color: var(--navy);
+    font-weight: 600;
+  }
+
+  /* ============ PRESSURE SCALE ============ */
+  .pressure-section {
+    background: var(--paper);
+  }
+
+  .pressure-visual {
+    margin-top: 56px;
+    background: var(--bone);
+    padding: 56px 48px;
+    border-radius: 4px;
+    border: 1px solid var(--line);
+  }
+
+  .pressure-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    position: relative;
+  }
+
+  .pressure-step {
+    position: relative;
+    padding: 8px 0;
+  }
+
+  .pressure-step-num {
+    font-family: 'Fraunces', serif;
+    font-size: 13px;
+    color: var(--gold);
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    margin-bottom: 14px;
+  }
+
+  .pressure-step-title {
+    font-family: 'Fraunces', serif;
+    font-size: 32px;
+    color: var(--navy);
+    font-weight: 400;
+    font-style: italic;
+    margin-bottom: 14px;
+    letter-spacing: -0.015em;
+    line-height: 1;
+  }
+
+  .pressure-step-body {
+    color: var(--navy-soft);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .pressure-step-body strong {
+    color: var(--navy);
+    font-weight: 600;
+  }
+
+  .pressure-step-body em {
+    font-style: italic;
+    color: var(--navy);
+  }
+
+  .pressure-callout {
+    background: var(--navy);
+    color: var(--paper);
+    padding: 48px 40px;
+    margin-top: 48px;
+    text-align: center;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pressure-callout-mark {
+    font-family: 'Fraunces', serif;
+    font-size: 140px;
+    color: var(--gold);
+    opacity: 0.2;
+    font-style: italic;
+    line-height: 0.4;
+    position: absolute;
+    top: 30px;
+    left: 30px;
+  }
+
+  .pressure-callout-quote {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(20px, 2.6vw, 26px);
+    font-weight: 300;
+    line-height: 1.4;
+    max-width: 640px;
+    margin: 0 auto;
+    letter-spacing: -0.005em;
+    position: relative;
+  }
+
+  .pressure-callout-quote em {
+    color: var(--gold-soft);
+    font-style: italic;
+  }
+
+  /* ============ TIMELINE ============ */
+  .timeline-section {
+    background: var(--bone);
+  }
+
+  .timeline {
+    margin-top: 48px;
+    border-left: 1px solid var(--line);
+    padding-left: 40px;
+    margin-left: 16px;
+  }
+
+  .timeline-item {
+    position: relative;
+    padding-bottom: 40px;
+  }
+
+  .timeline-item:last-child {
+    padding-bottom: 0;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -47px;
+    top: 8px;
+    width: 13px;
+    height: 13px;
+    background: var(--paper);
+    border: 2px solid var(--gold);
+    border-radius: 50%;
+  }
+
+  .timeline-time {
+    font-family: 'Fraunces', serif;
+    font-size: 13px;
+    color: var(--gold);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .timeline-title {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    color: var(--navy);
+    font-weight: 500;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+
+  .timeline-body {
+    color: var(--navy-soft);
+    font-size: 15.5px;
+    line-height: 1.65;
+    max-width: 580px;
+  }
+
+  /* ============ HOMEWORK ============ */
+  .homework-section {
+    background: var(--paper);
+  }
+
+  .homework-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-top: 48px;
+  }
+
+  .homework-card {
+    padding: 36px 32px;
+    background: var(--bone);
+    border-radius: 4px;
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+  }
+
+  .homework-icon {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    border: 1.5px solid var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fraunces', serif;
+    color: var(--gold);
+    font-style: italic;
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  .homework-title {
+    font-family: 'Fraunces', serif;
+    font-size: 19px;
+    color: var(--navy);
+    font-weight: 600;
+    margin-bottom: 6px;
+    letter-spacing: -0.005em;
+  }
+
+  .homework-body {
+    color: var(--navy-soft);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* ============ CTA ============ */
+  .cta-section {
+    background: var(--navy-deep);
+    color: var(--paper);
+    padding: 120px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    top: -200px; left: 50%;
+    transform: translateX(-50%);
+    width: 800px; height: 800px;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.1), transparent 60%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .cta-eyebrow {
+    color: var(--gold);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-weight: 600;
+    margin-bottom: 24px;
+  }
+
+  .cta-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    max-width: 760px;
+    margin: 0 auto 24px;
+    position: relative;
+  }
+
+  .cta-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .cta-text {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.75);
+    max-width: 520px;
+    margin: 0 auto 48px;
+    line-height: 1.6;
+    position: relative;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--navy-deep);
+    padding: 18px 42px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 40px rgba(212, 175, 55, 0.3);
+  }
+
+  /* ============ SIGNATURE ============ */
+  .signature {
+    padding: 80px 0 60px;
+    background: var(--bone);
+    text-align: center;
+  }
+
+  .signature-mark {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 36px;
+    color: var(--navy);
+    font-weight: 400;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+
+  .signature-title {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  /* ============ FOOTER ============ */
+  footer {
+    padding: 32px 0;
+    background: var(--bone);
+    border-top: 1px solid var(--line);
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  footer a {
+    color: var(--navy);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  /* ============ MOBILE ============ */
+  @media (max-width: 768px) {
+    .container { padding: 0 24px; }
+    nav { padding: 16px 24px; }
+    .hero { padding: 140px 0 80px; }
+    section.content { padding: 70px 0; }
+    .checkpoints { grid-template-columns: 1fr; gap: 20px; }
+    .homework-grid { grid-template-columns: 1fr; }
+    .pressure-visual { padding: 36px 24px; }
+    .pressure-steps { grid-template-columns: 1fr; gap: 32px; }
+    .pressure-callout { padding: 36px 24px; }
+    .pressure-callout-mark { font-size: 100px; top: 20px; left: 16px; }
+    .timeline { padding-left: 28px; }
+    .timeline-item::before { left: -35px; }
+    .throughline::before { font-size: 200px; top: -20px; }
+    .cta-section { padding: 80px 0; }
+  }
+
+  /* Subtle entrance animation */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero h1, .hero-lede, .eyebrow {
+    animation: fadeUp 0.8s ease-out forwards;
+  }
+
+  .eyebrow { animation-delay: 0.05s; opacity: 0; }
+  .hero h1 { animation-delay: 0.15s; opacity: 0; }
+  .hero-lede { animation-delay: 0.3s; opacity: 0; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="https://rrgolfperformance.com" class="logo">RR Golf <span>Performance</span></a>
+    <div class="nav-links">
+      <a href="https://rrgolfperformance.com" class="nav-link">Home</a>
+      <a href="https://rrgolfperformance.as.me" class="nav-btn">Book a Lesson</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="eyebrow">The Arms &amp; Wrists Clinic · Ladies' Session</div>
+    <h1>Your hands don't power the swing. They <em>deliver</em> it.</h1>
+    <p class="hero-lede">Welcome back. Everything we covered today, in one place — so you can take it to the range tomorrow and let your hands do their real job instead of fighting the club.</p>
+  </div>
+</section>
+
+<!-- THROUGHLINE -->
+<section class="throughline">
+  <div class="container container--narrow">
+    <p class="throughline-quote">Your body builds the speed. Your arms carry it out to the club, and your wrists time when it arrives. The hands are the most precise part of your swing — but they're <em>transmitters, not engines</em>.</p>
+    <div class="throughline-attr">Today's Throughline</div>
+  </div>
+</section>
+
+<!-- THE THREE CHECKPOINTS -->
+<section class="content">
+  <div class="container">
+    <div class="section-label">Part One</div>
+    <h2 class="section-title">The three <em>jobs</em> of the wrists.</h2>
+    <p class="section-intro">The wrist is a small joint asked to do a lot — and it does it in three ways. Almost everything that happens to the clubface comes back to one of these. Feel them separately and you stop guessing.</p>
+
+    <div class="checkpoints">
+
+      <div class="checkpoint">
+        <div class="checkpoint-num">01 · The Hinge</div>
+        <h3 class="checkpoint-title">Set the lever.</h3>
+        <p class="checkpoint-body">Going back, the wrists <strong>hinge upward</strong> — thumbs cocking toward your forearms. That creates the angle between your lead arm and the club, and that angle is <strong>free speed</strong> you don't have to swing hard for. Set it, and the club has somewhere to fall from.</p>
+      </div>
+
+      <div class="checkpoint">
+        <div class="checkpoint-num">02 · The Face</div>
+        <h3 class="checkpoint-title">Flat, not scooping.</h3>
+        <p class="checkpoint-body">At impact your lead wrist wants to be <strong>flat to slightly bowed</strong> — not cupped and scooping under the ball. Cupping adds loft and weakens the strike. <strong>Quiet hands are honest hands</strong> — keep that lead wrist firm and the contact cleans up.</p>
+      </div>
+
+      <div class="checkpoint">
+        <div class="checkpoint-num">03 · The Release</div>
+        <h3 class="checkpoint-title">Let the turn square it.</h3>
+        <p class="checkpoint-body">Through the ball the forearms rotate and the face squares. Here's the secret: that release is <strong>driven by your body turning</strong>, not by flipping your hands. Trained, it happens on its own. Forced, it ruins the strike. So you turn — and let it fire.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- THE SEQUENCE -->
+<section class="content pressure-section">
+  <div class="container">
+    <div class="section-label">Part Two</div>
+    <h2 class="section-title">Set. Store. <em>Deliver.</em></h2>
+    <p class="section-intro">One motion, three feelings — in order. This is the rhythm we drilled today, and it's what stops the hands from grabbing at the ball and lets them simply deliver the speed your body made.</p>
+
+    <div class="pressure-visual">
+      <div class="pressure-steps">
+
+        <div class="pressure-step">
+          <div class="pressure-step-num">01</div>
+          <div class="pressure-step-title">Set</div>
+          <div class="pressure-step-body">As you turn back, let the wrists <strong>hinge and load</strong>. Soft arms, no grabbing — the lever sets itself when you stop trying to lift the club.</div>
+        </div>
+
+        <div class="pressure-step">
+          <div class="pressure-step-num">02</div>
+          <div class="pressure-step-title">Store</div>
+          <div class="pressure-step-body">Start down with your <em>body, not your hands</em>. That tiny head start keeps the angle a moment longer — what we call <strong>lag</strong>. The arms feel like they drop into place rather than throw out.</div>
+        </div>
+
+        <div class="pressure-step">
+          <div class="pressure-step-num">03</div>
+          <div class="pressure-step-title">Deliver</div>
+          <div class="pressure-step-body">Keep turning through and <strong>let the speed arrive at the ball</strong>. You don't hit with the hands — you let them deliver what the body built, then release to a full, balanced finish.</div>
+        </div>
+
+      </div>
+
+      <div class="pressure-callout">
+        <div class="pressure-callout-mark">"</div>
+        <div class="pressure-callout-quote">Set the wrists, store the angle, deliver with the turn. <em>That's</em> the whole job of the hands — everything else is just trying too hard.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT WE DID -->
+<section class="content timeline-section">
+  <div class="container container--narrow">
+    <div class="section-label">Part Three</div>
+    <h2 class="section-title">What we did <em>today</em>.</h2>
+    <p class="section-intro">A recap of the hour, in order — so you can mentally rewalk it on the range and remember what each piece felt like.</p>
+
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <div class="timeline-time">The Why</div>
+        <h3 class="timeline-title">Hit with the hands, then deliver with the body.</h3>
+        <p class="timeline-body">You felt it both ways — grabbing and snapping at the ball with the hands, then the same swing where the body built the speed and the hands just delivered it. The contact got easier and the effort dropped. That's the whole point.</p>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-time">The Hinge</div>
+        <h3 class="timeline-title">Setting the lever.</h3>
+        <p class="timeline-body">Slow waist-high rehearsals, feeling the wrists <strong>hinge up</strong> so the club and lead arm formed an L. No power yet — just learning where the free speed is stored.</p>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-time">The Face</div>
+        <h3 class="timeline-title">A flat lead wrist into the bag.</h3>
+        <p class="timeline-body">Into the impact bag, arriving with the hands a touch ahead and the <strong>lead wrist flat and firm</strong>. You felt the difference between compressing the ball and scooping at it — and how much more solid flat feels.</p>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-time">The Connection</div>
+        <h3 class="timeline-title">A towel under the arms.</h3>
+        <p class="timeline-body">A towel tucked under both arms, keeping them <strong>working with your chest</strong> instead of running off on their own. When it stayed put, you were turning as one unit — and the club stayed in front of you.</p>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-time">The Send-Off</div>
+        <h3 class="timeline-title">Full swings — set, store, deliver.</h3>
+        <p class="timeline-body">We put it together on real shots — set the wrists, let the body lead, and deliver to a tall, balanced finish. When you trusted it instead of steering it, the strike took care of itself.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- HOMEWORK -->
+<section class="content homework-section">
+  <div class="container">
+    <div class="section-label">This Week</div>
+    <h2 class="section-title">Your <em>homework</em>.</h2>
+    <p class="section-intro">Four small things between now and your next round. Do these and the hands stop being something you fight — they just start delivering the swing your body makes.</p>
+
+    <div class="homework-grid">
+
+      <div class="homework-card">
+        <div class="homework-icon">i</div>
+        <div>
+          <h3 class="homework-title">Set-the-lever rehearsals.</h3>
+          <p class="homework-body">No ball. Take the club to waist height and feel the wrists hinge so the club and lead arm form an L. Ten a day in the mirror — that's where your easy speed lives.</p>
+        </div>
+      </div>
+
+      <div class="homework-card">
+        <div class="homework-icon">ii</div>
+        <div>
+          <h3 class="homework-title">Flat-wrist bumps.</h3>
+          <p class="homework-body">An impact bag, a couch cushion, or a closed door. Arrive slowly with the hands ahead and the lead wrist flat and firm. Feel solid, not scoopy — fifteen a day.</p>
+        </div>
+      </div>
+
+      <div class="homework-card">
+        <div class="homework-icon">iii</div>
+        <div>
+          <h3 class="homework-title">Towel under the arms.</h3>
+          <p class="homework-body">First ten range balls each session with a towel tucked under both arms. Small, smooth swings — if it stays put, your arms and body are working together.</p>
+        </div>
+      </div>
+
+      <div class="homework-card">
+        <div class="homework-icon">iv</div>
+        <div>
+          <h3 class="homework-title">Trust it — don't steer it.</h3>
+          <p class="homework-body">On the course, stop trying to square the face with your hands at the last second. Set it up, turn through, and let the club fire. Commitment beats control every time.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="book">
+  <div class="container container--narrow">
+    <div class="cta-eyebrow">Ready for what's next?</div>
+    <h2 class="cta-title">Let's <em>build</em> on what you started today.</h2>
+    <p class="cta-text">A private lesson is where this all comes together. We'll quiet the hands, groove your release, and build a real plan for your game.</p>
+    <a href="https://rrgolfperformance.as.me" class="btn-primary">Book a Private Lesson</a>
+  </div>
+</section>
+
+<!-- SIGNATURE -->
+<section class="signature">
+  <div class="container container--narrow">
+    <div class="signature-mark">— Ryan Rinneard</div>
+    <div class="signature-title">CPGA Class A · Director of Instruction</div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <a href="https://rrgolfperformance.com">rrgolfperformance.com</a> &nbsp;·&nbsp; RR Golf Performance &nbsp;·&nbsp; Collingwood, Ontario
+  </div>
+</footer>
+
+</body>
+</html>
