@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Drills — Putting · RR Golf Performance</title>
+<meta name="description" content="The Drills — Putting: games and drills for short, medium and lag putts from the world's best putting coaches, plus 15- and 30-minute practice plans you can take to the green. Ladies' program, RR Golf Performance.">
+<link rel="canonical" href="https://rrgolfperformance.com/ladies/the-drills-putting">
+<meta property="og:title" content="The Drills — Putting · RR Golf Performance">
+<meta property="og:description" content="Games and drills for short, medium and lag putts, plus 15- and 30-minute practice plans you can take to the green.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://rrgolfperformance.com/ladies/the-drills-putting">
+<meta property="og:image" content="https://madriverpro.com/images/rr-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1B365D;
+    --navy-deep: #122444;
+    --navy-soft: #2A4A77;
+    --gold: #D4AF37;
+    --gold-soft: #E8C968;
+    --bone: #FAF8F4;
+    --paper: #FFFFFF;
+    --ink: #1A1A1A;
+    --muted: #6B7280;
+    --line: rgba(27, 54, 93, 0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Manrope', -apple-system, sans-serif;
+    background: var(--bone);
+    color: var(--ink);
+    line-height: 1.6;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  .container { max-width: 1120px; margin: 0 auto; padding: 0 32px; }
+  .container--narrow { max-width: 760px; }
+
+  /* ============ NAV ============ */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    padding: 20px 32px;
+    background: rgba(250, 248, 244, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 100;
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner { max-width: 1120px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+  .logo { font-family: 'Fraunces', serif; font-weight: 500; font-size: 19px; color: var(--navy); letter-spacing: -0.01em; text-decoration: none; }
+  .logo span { color: var(--gold); font-style: italic; }
+  .nav-links { display: flex; align-items: center; gap: 32px; }
+  .nav-link { font-size: 14px; color: var(--navy); text-decoration: none; font-weight: 500; letter-spacing: 0.02em; transition: opacity 0.2s; }
+  .nav-link:hover { opacity: 0.6; }
+  .nav-btn { display: inline-block; background: var(--navy); color: var(--paper); padding: 11px 22px; text-decoration: none; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; border-radius: 2px; transition: all 0.25s ease; }
+  .nav-btn:hover { background: var(--gold); color: var(--navy-deep); }
+  @media (max-width: 600px) { .nav-links { gap: 16px; } .nav-link { display: none; } .nav-btn { padding: 10px 16px; font-size: 12px; } }
+
+  /* ============ HERO ============ */
+  .hero { padding: 180px 0 100px; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: 100px; right: -100px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(212, 175, 55, 0.08), transparent 70%); border-radius: 50%; pointer-events: none; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 10px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.18em; color: var(--gold); font-weight: 600; margin-bottom: 28px; }
+  .eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--gold); }
+  .hero h1 { font-family: 'Fraunces', serif; font-size: clamp(44px, 7vw, 78px); font-weight: 400; line-height: 1.04; color: var(--navy); letter-spacing: -0.025em; margin-bottom: 32px; max-width: 900px; }
+  .hero h1 em { font-style: italic; font-weight: 400; color: var(--gold); }
+  .hero-lede { font-size: 20px; color: var(--navy-soft); max-width: 640px; line-height: 1.55; }
+  .hero-actions { margin-top: 38px; display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+
+  /* ============ THROUGHLINE ============ */
+  .throughline { padding: 80px 0; background: var(--navy); color: var(--paper); position: relative; overflow: hidden; }
+  .throughline::before { content: '"'; position: absolute; top: -40px; left: 40px; font-family: 'Fraunces', serif; font-size: 300px; color: var(--gold); opacity: 0.15; font-style: italic; line-height: 1; }
+  .throughline-quote { font-family: 'Fraunces', serif; font-size: clamp(26px, 3.6vw, 40px); font-weight: 300; line-height: 1.3; text-align: center; max-width: 900px; margin: 0 auto; letter-spacing: -0.015em; position: relative; z-index: 1; }
+  .throughline-quote em { color: var(--gold-soft); font-style: italic; }
+  .throughline-attr { text-align: center; margin-top: 32px; font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); font-weight: 600; }
+
+  /* ============ SECTION BASE ============ */
+  section.content { padding: 96px 0; }
+  .alt { background: var(--paper); }
+  .section-label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--gold); font-weight: 700; margin-bottom: 20px; }
+  .section-title { font-family: 'Fraunces', serif; font-size: clamp(32px, 5vw, 50px); font-weight: 400; color: var(--navy); line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 22px; }
+  .section-title em { font-style: italic; color: var(--gold); }
+  .section-intro { font-size: 18px; color: var(--navy-soft); max-width: 660px; line-height: 1.6; margin-bottom: 8px; }
+
+  /* ============ PRINCIPLES ============ */
+  .checkpoints { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin-top: 48px; }
+  .checkpoint { background: var(--paper); padding: 40px 32px; border-radius: 4px; border-top: 3px solid var(--gold); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+  .alt .checkpoint { background: var(--bone); }
+  .checkpoint:hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(27, 54, 93, 0.08); }
+  .checkpoint-num { font-family: 'Fraunces', serif; font-size: 13px; color: var(--gold); font-weight: 600; letter-spacing: 0.15em; margin-bottom: 14px; text-transform: uppercase; }
+  .checkpoint-title { font-family: 'Fraunces', serif; font-size: 25px; color: var(--navy); font-weight: 500; line-height: 1.15; margin-bottom: 16px; letter-spacing: -0.01em; }
+  .checkpoint-body { color: var(--navy-soft); font-size: 15.5px; line-height: 1.65; }
+  .checkpoint-body strong { color: var(--navy); font-weight: 600; }
+
+  .kit { margin-top: 40px; display: flex; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 14px; }
+  .kit-label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); font-weight: 700; }
+  .kit span.pill { background: var(--paper); border: 1px solid var(--line); border-radius: 999px; padding: 7px 16px; color: var(--navy); font-weight: 500; }
+  .alt .kit span.pill { background: var(--bone); }
+
+  /* ============ ZONE HEADER ============ */
+  .zone-head { display: flex; align-items: baseline; gap: 18px; flex-wrap: wrap; margin-bottom: 6px; }
+  .zone-range { font-family: 'Fraunces', serif; font-style: italic; font-size: 17px; color: var(--gold); }
+
+  /* ============ DRILL CARDS ============ */
+  .drills { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-top: 44px; }
+  .drill { background: var(--paper); border: 1px solid var(--line); border-radius: 4px; padding: 32px 30px; display: flex; flex-direction: column; }
+  .alt .drill { background: var(--bone); }
+  .drill-tag { font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); font-weight: 700; margin-bottom: 12px; }
+  .drill-name { font-family: 'Fraunces', serif; font-size: 24px; color: var(--navy); font-weight: 500; line-height: 1.12; letter-spacing: -0.01em; margin-bottom: 6px; }
+  .drill-src { font-family: 'Fraunces', serif; font-style: italic; font-size: 15px; color: var(--navy-soft); margin-bottom: 18px; }
+  .drill ol, .drill ul { margin: 0 0 4px 0; padding-left: 20px; }
+  .drill li { color: var(--navy-soft); font-size: 15px; line-height: 1.55; margin-bottom: 8px; }
+  .drill p { color: var(--navy-soft); font-size: 15px; line-height: 1.6; }
+  .cue { margin-top: 18px; background: rgba(212,175,55,0.1); border-left: 3px solid var(--gold); padding: 12px 16px; border-radius: 0 3px 3px 0; font-size: 14.5px; color: var(--navy); line-height: 1.55; }
+  .cue strong { color: var(--navy); font-weight: 700; }
+
+  /* ============ PLANS ============ */
+  .plans { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; margin-top: 48px; }
+  .plan { background: var(--paper); border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
+  .plan-head { background: var(--navy); color: var(--paper); padding: 26px 30px; }
+  .plan-head .sub { font-size: 12px; text-transform: uppercase; letter-spacing: 0.16em; color: var(--gold-soft); font-weight: 600; }
+  .plan-head .mins { font-family: 'Fraunces', serif; font-size: 34px; font-weight: 400; line-height: 1.1; margin-top: 4px; }
+  .plan-row { display: flex; gap: 22px; padding: 18px 30px; border-bottom: 1px solid var(--line); }
+  .plan-row:last-child { border-bottom: none; }
+  .plan-time { flex-shrink: 0; width: 58px; font-family: 'Fraunces', serif; font-weight: 600; font-size: 16px; color: var(--gold); }
+  .plan-what { font-size: 15px; color: var(--navy-soft); line-height: 1.55; }
+  .plan-what strong { color: var(--navy); font-weight: 600; }
+
+  /* ============ COACHES NOTE ============ */
+  .coaches { margin-top: 8px; }
+  .coaches p { font-size: 15px; color: var(--navy-soft); max-width: 720px; line-height: 1.7; }
+  .coaches strong { color: var(--navy); font-weight: 600; }
+
+  /* ============ CTA ============ */
+  .cta-section { background: var(--navy-deep); color: var(--paper); padding: 110px 0; text-align: center; position: relative; overflow: hidden; }
+  .cta-section::before { content: ''; position: absolute; top: -200px; left: 50%; transform: translateX(-50%); width: 800px; height: 800px; background: radial-gradient(circle, rgba(212, 175, 55, 0.1), transparent 60%); border-radius: 50%; pointer-events: none; }
+  .cta-eyebrow { color: var(--gold); font-size: 12px; text-transform: uppercase; letter-spacing: 0.2em; font-weight: 600; margin-bottom: 24px; }
+  .cta-title { font-family: 'Fraunces', serif; font-size: clamp(34px, 5vw, 54px); font-weight: 400; line-height: 1.1; letter-spacing: -0.02em; max-width: 760px; margin: 0 auto 24px; position: relative; }
+  .cta-title em { font-style: italic; color: var(--gold); }
+  .cta-text { font-size: 18px; color: rgba(255, 255, 255, 0.75); max-width: 540px; margin: 0 auto 48px; line-height: 1.6; position: relative; }
+  .btn-primary { display: inline-block; background: var(--gold); color: var(--navy-deep); padding: 18px 42px; text-decoration: none; font-weight: 600; font-size: 15px; letter-spacing: 0.04em; text-transform: uppercase; border-radius: 2px; transition: all 0.3s ease; position: relative; }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(212, 175, 55, 0.3); }
+  .btn-outline { display: inline-block; background: transparent; color: var(--navy); border: 1.5px solid var(--navy); padding: 16px 32px; text-decoration: none; font-weight: 600; font-size: 14px; letter-spacing: 0.04em; text-transform: uppercase; border-radius: 2px; transition: all 0.25s ease; }
+  .btn-outline:hover { background: var(--navy); color: var(--paper); }
+
+  /* ============ SIGNATURE / FOOTER ============ */
+  .signature { padding: 80px 0 60px; background: var(--bone); text-align: center; }
+  .signature-mark { font-family: 'Fraunces', serif; font-style: italic; font-size: 36px; color: var(--navy); font-weight: 400; margin-bottom: 8px; letter-spacing: -0.01em; }
+  .signature-title { font-size: 12px; text-transform: uppercase; letter-spacing: 0.18em; color: var(--gold); font-weight: 600; }
+  footer { padding: 32px 0; background: var(--bone); border-top: 1px solid var(--line); text-align: center; font-size: 13px; color: var(--muted); }
+  footer a { color: var(--navy); text-decoration: none; font-weight: 500; }
+  .back-link { display: inline-block; margin-bottom: 0; font-size: 13px; color: var(--muted); }
+  .back-link a { color: var(--navy); text-decoration: none; font-weight: 500; }
+
+  /* ============ MOBILE ============ */
+  @media (max-width: 768px) {
+    .container { padding: 0 24px; }
+    nav { padding: 16px 24px; }
+    .hero { padding: 140px 0 70px; }
+    section.content { padding: 64px 0; }
+    .checkpoints { grid-template-columns: 1fr; gap: 18px; }
+    .drills { grid-template-columns: 1fr; }
+    .plans { grid-template-columns: 1fr; }
+    .throughline::before { font-size: 200px; top: -20px; }
+    .cta-section { padding: 76px 0; }
+  }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .hero h1, .hero-lede, .eyebrow, .hero-actions { animation: fadeUp 0.8s ease-out forwards; }
+  .eyebrow { animation-delay: 0.05s; opacity: 0; }
+  .hero h1 { animation-delay: 0.15s; opacity: 0; }
+  .hero-lede { animation-delay: 0.3s; opacity: 0; }
+  .hero-actions { animation-delay: 0.42s; opacity: 0; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="https://rrgolfperformance.com" class="logo">RR Golf <span>Performance</span></a>
+    <div class="nav-links">
+      <a href="/ladies" class="nav-link">Ladies</a>
+      <a href="https://rrgolfperformance.as.me" class="nav-btn">Book a Lesson</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="eyebrow">The Drills · Putting</div>
+    <h1>Take the practice green and <em>own it</em>.</h1>
+    <p class="hero-lede">The shortest swing decides the scorecard. This is your green-side guide — games and drills for short, medium and lag putts, borrowed from the best putting coaches in the world, plus two ready-to-run plans you can take to the green any day of the week.</p>
+    <div class="hero-actions">
+      <a href="/ladies/the-drills-putting/putting-practice-plans.pdf" class="btn-outline">Print the One-Page Plan</a>
+    </div>
+  </div>
+</section>
+
+<!-- THROUGHLINE -->
+<section class="throughline">
+  <div class="container container--narrow">
+    <p class="throughline-quote">Speed before line. Inside six feet, <em>make them</em>. And always finish on a putt that drops — so the last thing you feel walking off is the ball going in.</p>
+    <div class="throughline-attr">The Three Rules</div>
+  </div>
+</section>
+
+<!-- BEFORE YOU START -->
+<section class="content">
+  <div class="container">
+    <div class="section-label">Before you start</div>
+    <h2 class="section-title">Three things that <em>actually</em> lower scores.</h2>
+    <p class="section-intro">Putting is the most forgiving part of golf when you keep it simple. Keep these three in mind through every drill below.</p>
+
+    <div class="checkpoints">
+      <div class="checkpoint">
+        <div class="checkpoint-num">01 · Speed</div>
+        <h3 class="checkpoint-title">Distance control is king.</h3>
+        <p class="checkpoint-body">Most three-putts come from poor <strong>speed</strong>, not poor aim. Practise pace first, every single time — it's the fastest way to shave strokes.</p>
+      </div>
+      <div class="checkpoint">
+        <div class="checkpoint-num">02 · Confidence</div>
+        <h3 class="checkpoint-title">Inside six feet, make them.</h3>
+        <p class="checkpoint-body">This is where confidence lives. A reliable short stroke saves more shots than any long putt you'll ever hole — so we drill the short ones under a little <strong>pressure</strong>.</p>
+      </div>
+      <div class="checkpoint">
+        <div class="checkpoint-num">03 · Belief</div>
+        <h3 class="checkpoint-title">Always finish on a make.</h3>
+        <p class="checkpoint-body">End every session by holing a few easy ones, so your last memory is <strong>the ball dropping</strong>. You carry that feeling to the first green.</p>
+      </div>
+    </div>
+
+    <div class="kit">
+      <span class="kit-label">All you need</span>
+      <span class="pill">Your putter</span>
+      <span class="pill">A handful of tees</span>
+      <span class="pill">One alignment stick</span>
+      <span class="pill">No gadgets required</span>
+    </div>
+  </div>
+</section>
+
+<!-- ZONE 1: SHORT -->
+<section class="content alt">
+  <div class="container">
+    <div class="section-label">Zone One</div>
+    <div class="zone-head">
+      <h2 class="section-title">Short putts &mdash; <em>the ones you must make.</em></h2>
+    </div>
+    <span class="zone-range">Inside 6 feet</span>
+    <p class="section-intro" style="margin-top:18px;">A square face and a pure start line, putt after putt, under a little pressure. Make these automatic and your scorecard changes overnight.</p>
+
+    <div class="drills">
+      <div class="drill">
+        <div class="drill-tag">Drill</div>
+        <h3 class="drill-name">The Tee Gate</h3>
+        <p class="drill-src">A Tiger Woods staple — for a square face and a true start line.</p>
+        <ol>
+          <li>Pick a straight putt 3–4 feet from the hole.</li>
+          <li>Push two tees into the green just wider than your putter head — a "gate" the putter must swing through.</li>
+          <li>For an extra test, add a second narrow gate of two tees just wider than the ball, a few inches ahead, that it must roll through.</li>
+          <li>Make 10 in a row without clipping a tee.</li>
+        </ol>
+        <div class="cue"><strong>Feel:</strong> let the putter swing through the gate; don't steer it. Clipping the back tees means the face is twisting at impact.</div>
+      </div>
+
+      <div class="drill">
+        <div class="drill-tag">Game</div>
+        <h3 class="drill-name">The Circle of Trust</h3>
+        <p class="drill-src">Dave Pelz — pressure-proofing your short stroke.</p>
+        <ol>
+          <li>Ring the hole with 6 tees, evenly spaced, a putter-length (about 3 feet) out.</li>
+          <li>Putt from each tee, working around the circle.</li>
+          <li>Miss one and you start the whole circle over.</li>
+          <li>Goal: two full laps in a row. Tour players live above 95% from here — chase that.</li>
+        </ol>
+        <div class="cue"><strong>Why it works:</strong> the "start over" rule adds the nervous flutter you feel on the course, so you practise the make <em>and</em> the pressure.</div>
+      </div>
+
+      <div class="drill">
+        <div class="drill-tag">Drill</div>
+        <h3 class="drill-name">The N-S-E-W Clock</h3>
+        <p class="drill-src">The classic "around the clock" — for break from every side.</p>
+        <ol>
+          <li>Place four tees North, South, East and West of one hole at 3 feet.</li>
+          <li>Hole all four, then move the set out to 4 feet, then 5, then 6.</li>
+          <li>Each direction breaks differently, so you learn uphill, downhill and both side-slopes from the same cup.</li>
+        </ol>
+        <div class="cue"><strong>Coaching note:</strong> read every one — even the 3-footers. Reading short putts here builds the habit for the course.</div>
+      </div>
+
+      <div class="drill">
+        <div class="drill-tag">Routine</div>
+        <h3 class="drill-name">Faxon's Four</h3>
+        <p class="drill-src">Brad Faxon — process over outcome.</p>
+        <p>Set four easy putts around a hole. The job isn't to make them — it's to run your full routine perfectly on each: read, look at the target, react, roll. Score your <em>routine</em>, not the result. This is how the best putters quiet their minds.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ZONE 2: MEDIUM -->
+<section class="content">
+  <div class="container">
+    <div class="section-label">Zone Two</div>
+    <div class="zone-head">
+      <h2 class="section-title">Medium putts &mdash; <em>make some, two-putt the rest.</em></h2>
+    </div>
+    <span class="zone-range">10 to 25 feet</span>
+    <p class="section-intro" style="margin-top:18px;">The scoring-chance zone. You won't hole them all, so aim for a good start line with great speed — sneak a few in, and never leave a knee-knocker coming back.</p>
+
+    <div class="drills">
+      <div class="drill">
+        <div class="drill-tag">Game</div>
+        <h3 class="drill-name">Around the World</h3>
+        <p class="drill-src">The tour-room favourite — confidence from makeable range.</p>
+        <ol>
+          <li>Ring a hole with 6–8 tees in a circle, 4–6 feet out — pick a spot with a little break.</li>
+          <li>Make your way around: one putt from each tee, all in a row.</li>
+          <li>Miss and you go back to the first tee. Make the full lap and step the circle out a foot.</li>
+        </ol>
+        <div class="cue"><strong>Build it:</strong> start on a flat circle, then move to one with break so every putt is a slider. That's where real greens live.</div>
+      </div>
+
+      <div class="drill">
+        <div class="drill-tag">Drill</div>
+        <h3 class="drill-name">The Zone Ladder</h3>
+        <p class="drill-src">Phil Kenyon — speed control with a margin for error.</p>
+        <ol>
+          <li>Behind one hole, lay three tees down 1, 2 and 3 feet past the cup, marking three "zones."</li>
+          <li>From 10 feet, roll putts that finish inside Zone 1 (0–1 ft past). Then deliberately into Zone 2, then Zone 3.</li>
+          <li>Dialling speed to a target zone — not just "hard" or "soft" — is what kills the comeback three-footer.</li>
+        </ol>
+        <div class="cue"><strong>Rule of thumb:</strong> a good putt dies just past the hole. Short never goes in.</div>
+      </div>
+
+      <div class="drill">
+        <div class="drill-tag">Game</div>
+        <h3 class="drill-name">Par 18</h3>
+        <p class="drill-src">A nine-"hole" scoring game — solo or as a group.</p>
+        <ol>
+          <li>Pick 9 different putts of varying length and break (mostly 10–25 ft).</li>
+          <li>Two putts = par. One putt = birdie. Three = bogey.</li>
+          <li>Play all nine, total your score against par 18. Write it down and beat it next week.</li>
+        </ol>
+        <div class="cue"><strong>Make it social:</strong> brilliant as a friendly match in the group — closest score to par 18 wins.</div>
+      </div>
+
+      <div class="drill">
+        <div class="drill-tag">Why it matters</div>
+        <h3 class="drill-name">The two-putt mindset</h3>
+        <p class="drill-src">From this range, a guaranteed two beats a risky one.</p>
+        <p>Pick your line, commit to a confident pace that finishes a foot past, and let the make take care of itself. Chase the hole with your speed and the worst result is a tap-in — the three-putt simply disappears.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ZONE 3: LAG -->
+<section class="content alt">
+  <div class="container">
+    <div class="section-label">Zone Three</div>
+    <div class="zone-head">
+      <h2 class="section-title">Lag putts &mdash; <em>never three-putt again.</em></h2>
+    </div>
+    <span class="zone-range">30 feet and beyond</span>
+    <p class="section-intro" style="margin-top:18px;">From here you're not trying to hole it — you're trying to leave a tap-in. Every drill in this zone is about one thing: distance control.</p>
+
+    <div class="drills">
+      <div class="drill">
+        <div class="drill-tag">Drill</div>
+        <h3 class="drill-name">The Pelz Ladder</h3>
+        <p class="drill-src">Dave Pelz — the gold standard for lag distance control.</p>
+        <ol>
+          <li>Place tees at 10, 20, 30, 40 and 50 feet in a straight line from a starting spot.</li>
+          <li>Roll a putt that finishes <em>just past</em> the first tee. Next ball just past the second. And so on up the ladder.</li>
+          <li>Every putt must finish past its tee but within 3 feet of it — aggressive, but close enough to two-putt.</li>
+        </ol>
+        <div class="cue"><strong>Goal:</strong> climb the whole ladder without coming up short of a tee or sailing more than 3 feet past.</div>
+      </div>
+
+      <div class="drill">
+        <div class="drill-tag">Drill</div>
+        <h3 class="drill-name">The Safe Zone</h3>
+        <p class="drill-src">Dave Pelz — proving you can two-putt from anywhere.</p>
+        <ol>
+          <li>Imagine a circle one putter-length (about 34 inches) around the hole — your "safe zone."</li>
+          <li>From 30 feet, lag balls until three in a row finish inside the safe zone.</li>
+          <li>Back up to 40 feet, then 50, repeating the three-in-a-row goal at each.</li>
+        </ol>
+        <div class="cue"><strong>Why three in a row:</strong> one good lag is luck; three is a skill you can trust on the course.</div>
+      </div>
+
+      <div class="drill">
+        <div class="drill-tag">Game</div>
+        <h3 class="drill-name">Leapfrog</h3>
+        <p class="drill-src">A feel game for touch — and quietly addictive.</p>
+        <ol>
+          <li>Roll your first ball out to about 20 feet.</li>
+          <li>Every following putt must finish <em>just past</em> the one before — never short, never crashing way by.</li>
+          <li>See how many you can stack in a row, each creeping a few inches further.</li>
+        </ol>
+        <div class="cue"><strong>Feel:</strong> this trains touch better than anything — your hands learn what "a little more" feels like.</div>
+      </div>
+
+      <div class="drill">
+        <div class="drill-tag">Drill</div>
+        <h3 class="drill-name">Eyes on the Hole</h3>
+        <p class="drill-src">Dave Stockton &amp; Stan Utley — putt by feel, not mechanics.</p>
+        <p>From 30–40 feet, take your setup, then look at the <em>hole</em> — not the ball — and roll it while your eyes stay on the target. Do a handful this way. It frees your natural sense of distance, the same way you'd toss a ball underhand to a friend without measuring. Trust what you feel.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRACTICE PLANS -->
+<section class="content">
+  <div class="container">
+    <div class="section-label">Take it to the green</div>
+    <h2 class="section-title">Two plans — <em>just press play.</em></h2>
+    <p class="section-intro">Short on time or settling in for a proper session, here's exactly how to spend it. Both work long-to-short on purpose: build your feel first, then finish on the confidence putts.</p>
+
+    <div class="plans">
+      <div class="plan">
+        <div class="plan-head">
+          <div class="sub">Quick Tune-Up</div>
+          <div class="mins">15 Minutes</div>
+        </div>
+        <div class="plan-row"><div class="plan-time">2 min</div><div class="plan-what"><strong>Warm up.</strong> 8–10 long putts looking at the hole — just find your feel.</div></div>
+        <div class="plan-row"><div class="plan-time">4 min</div><div class="plan-what"><strong>Lag.</strong> Leapfrog, then one climb of the Pelz Ladder (10–50 ft).</div></div>
+        <div class="plan-row"><div class="plan-time">4 min</div><div class="plan-what"><strong>Medium.</strong> One lap of Around the World on a 5-ft circle with a little break.</div></div>
+        <div class="plan-row"><div class="plan-time">5 min</div><div class="plan-what"><strong>Short.</strong> Tee Gate from 3 ft, then the Circle of Trust. Walk off on a make.</div></div>
+      </div>
+
+      <div class="plan">
+        <div class="plan-head">
+          <div class="sub">Full Session</div>
+          <div class="mins">30 Minutes</div>
+        </div>
+        <div class="plan-row"><div class="plan-time">4 min</div><div class="plan-what"><strong>Warm up.</strong> Eyes on the Hole from 30–40 ft, then a slow Leapfrog to settle speed.</div></div>
+        <div class="plan-row"><div class="plan-time">7 min</div><div class="plan-what"><strong>Lag.</strong> The Pelz Ladder, then the Safe Zone — 3 in a row from 30, 40 and 50 ft.</div></div>
+        <div class="plan-row"><div class="plan-time">7 min</div><div class="plan-what"><strong>Medium.</strong> The Zone Ladder for speed, then a full lap of Around the World (breaking).</div></div>
+        <div class="plan-row"><div class="plan-time">8 min</div><div class="plan-what"><strong>Short.</strong> Tee Gate, the N-S-E-W Clock (3-4-5-6), then Faxon's Four for routine.</div></div>
+        <div class="plan-row"><div class="plan-time">4 min</div><div class="plan-what"><strong>Pressure finish.</strong> Play Par 18, or make 5 from 4 ft in a row to "win." Miss and start again. End on the make.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COACHES NOTE -->
+<section class="content alt">
+  <div class="container container--narrow coaches">
+    <div class="section-label">Where these come from</div>
+    <h2 class="section-title">The world's best, <em>in your bag.</em></h2>
+    <p>Every drill here is drawn from the coaches who shaped modern putting: <strong>Dave Pelz</strong> (the 3-foot circle, the ladder and safe-zone lag work), <strong>Phil Kenyon</strong> (zone-based speed control), <strong>Brad Faxon</strong> (routine over results), and <strong>Dave Stockton</strong> &amp; <strong>Stan Utley</strong> (feel and seeing the line). None of it needs a gadget — just your putter, a few tees, and the ten minutes that win you the round.</p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container container--narrow">
+    <div class="cta-eyebrow">Ready for what's next?</div>
+    <h2 class="cta-title">Let's make it <em>your</em> stroke.</h2>
+    <p class="cta-text">The clinics build the foundation. A private lesson is where we read your stroke, your speed and your tendencies — and build a real plan around them.</p>
+    <a href="https://rrgolfperformance.as.me" class="btn-primary">Book a Private Lesson</a>
+  </div>
+</section>
+
+<!-- SIGNATURE -->
+<section class="signature">
+  <div class="container container--narrow">
+    <div class="signature-mark">— Ryan Rinneard</div>
+    <div class="signature-title">CPGA Class A · Director of Instruction</div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p class="back-link"><a href="/ladies">&larr; Back to the Ladies' archive</a></p>
+    <br>
+    <a href="https://rrgolfperformance.com">rrgolfperformance.com</a> &nbsp;·&nbsp; RR Golf Performance &nbsp;·&nbsp; Collingwood, Ontario
+  </div>
+</footer>
+
+</body>
+</html>
