@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ben's Game Plan — Weekly Blueprint | RR Golf Performance</title>
+<meta name="description" content="Ben's weekly training blueprint from RR Golf Performance — putting, short game, wedges, and full-round work, day by day.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1a2744;
+    --navy-light: #243352;
+    --navy-dark: #111c33;
+    --white: #ffffff;
+    --off-white: #f8f9fa;
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-500: #6b7280;
+    --gray-700: #374151;
+    --gold: #c9a96e;
+    --gold-light: #dbc49a;
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  body { font-family: var(--font); color: var(--gray-700); background: var(--off-white); line-height: 1.6; }
+  a { color: inherit; }
+  img { max-width: 100%; display: block; }
+
+  /* Top bar */
+  .top-bar { background: var(--navy-dark); padding: 14px 24px; }
+  .top-bar-inner { max-width: 860px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .top-logo { height: 28px; width: auto; }
+  .top-bar-label { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.6); }
+  .print-link { font-size: 12px; font-weight: 600; color: var(--gold-light); background: none; border: 1px solid rgba(201,169,110,0.4); padding: 6px 14px; border-radius: 980px; cursor: pointer; letter-spacing: 0.02em; transition: all 0.2s; }
+  .print-link:hover { background: rgba(201,169,110,0.12); }
+
+  /* Hero */
+  .hero { background: linear-gradient(160deg, var(--navy) 0%, var(--navy-dark) 100%); padding: 56px 24px 48px; text-align: center; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: -60px; right: -60px; width: 220px; height: 220px; border-radius: 50%; border: 44px solid rgba(201,169,110,0.10); }
+  .hero-inner { max-width: 860px; margin: 0 auto; position: relative; }
+  .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold-light); margin-bottom: 14px; }
+  .hero h1 { font-size: clamp(32px, 6vw, 46px); font-weight: 800; color: var(--white); letter-spacing: -0.02em; margin-bottom: 8px; }
+  .hero-sub { font-size: 17px; font-weight: 500; color: rgba(255,255,255,0.75); margin-bottom: 4px; }
+  .hero-scope { font-size: 14px; color: var(--gold-light); font-style: italic; margin-top: 10px; }
+
+  .wrap { max-width: 860px; margin: 0 auto; padding: 40px 20px 20px; }
+
+  /* Overview */
+  .overview-card { background: var(--white); border-radius: 14px; box-shadow: 0 4px 24px rgba(26,39,68,0.08); padding: 28px 28px 24px; margin-bottom: 36px; border-top: 4px solid var(--gold); }
+  .overview-title { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--navy); margin-bottom: 18px; }
+  .overview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; }
+  .overview-item { display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; background: var(--gray-50); border-radius: 8px; }
+  .overview-check { width: 20px; height: 20px; border-radius: 50%; background: var(--navy); color: var(--gold-light); font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .overview-item span.txt { font-size: 13px; color: var(--navy); font-weight: 600; line-height: 1.4; }
+
+  /* Section label */
+  .section-label { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--navy); margin: 44px 0 16px; padding-bottom: 10px; border-bottom: 2px solid var(--gray-200); }
+
+  /* Day cards */
+  .day-card { background: var(--white); border-radius: 14px; box-shadow: 0 4px 24px rgba(26,39,68,0.07); margin-bottom: 20px; overflow: hidden; }
+  .day-head { background: var(--navy); padding: 18px 24px; display: flex; align-items: center; gap: 14px; }
+  .day-head.rest { background: var(--navy-light); }
+  .day-badge { width: 44px; height: 44px; border-radius: 10px; background: rgba(201,169,110,0.15); border: 1.5px solid var(--gold); color: var(--gold-light); font-size: 12px; font-weight: 800; letter-spacing: 0.02em; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .day-head-text h2 { font-size: 17px; font-weight: 700; color: var(--white); letter-spacing: 0.02em; margin-bottom: 3px; }
+  .day-head-text p { font-size: 13px; color: rgba(255,255,255,0.65); font-style: italic; }
+  .day-body { padding: 20px 24px 22px; display: grid; gap: 12px; }
+  .day-body.grid-2 { grid-template-columns: 1fr; }
+  @media (min-width: 620px) { .day-body.grid-2 { grid-template-columns: 1fr 1fr; } }
+
+  .drill { background: var(--gray-50); border-left: 3px solid var(--gold); border-radius: 8px; padding: 14px 16px; }
+  .drill-title { font-size: 13.5px; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+  .drill-desc { font-size: 12.5px; color: var(--gray-500); line-height: 1.6; margin-bottom: 10px; }
+  .drill-target { display: inline-flex; align-items: center; gap: 6px; background: var(--navy); color: var(--gold-light); font-size: 11px; font-weight: 700; letter-spacing: 0.02em; padding: 5px 12px; border-radius: 980px; }
+
+  .rest-note { background: var(--gray-50); border-left: 3px solid var(--gray-300); border-radius: 8px; padding: 14px 16px; }
+  .rest-note .drill-title { color: var(--navy); }
+  .rest-note .drill-desc { margin-bottom: 0; }
+
+  /* Callouts */
+  .callout { border-radius: 14px; padding: 26px 28px; margin: 36px 0; }
+  .callout-goals { background: var(--gray-50); border-left: 4px solid var(--navy); }
+  .callout-title { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--navy); margin-bottom: 16px; }
+  .goal-list { display: grid; gap: 10px; }
+  .goal-item { display: flex; align-items: flex-start; gap: 10px; font-size: 13.5px; color: var(--gray-700); }
+  .goal-item .tick { color: var(--navy); font-weight: 800; flex-shrink: 0; }
+
+  .callout-report { background: var(--navy); color: var(--white); }
+  .callout-report .callout-title { color: var(--gold-light); }
+  .report-list { display: grid; gap: 14px; }
+  .report-item { display: flex; gap: 14px; align-items: flex-start; }
+  .report-num { width: 26px; height: 26px; border-radius: 50%; background: var(--gold); color: var(--navy-dark); font-size: 12px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .report-item p { font-size: 13.5px; line-height: 1.6; color: rgba(255,255,255,0.9); }
+  .report-item strong { color: var(--white); }
+
+  .checklist-card { background: var(--white); border: 2px solid var(--navy); border-radius: 14px; padding: 24px 28px; margin: 36px 0; text-align: center; }
+  .checklist-title { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--navy); margin-bottom: 16px; }
+  .checklist-grid { display: grid; gap: 10px; max-width: 420px; margin: 0 auto; text-align: left; }
+  .checklist-grid div { font-size: 13.5px; color: var(--gray-700); display: flex; align-items: center; gap: 10px; }
+  .checklist-grid div::before { content: ''; width: 16px; height: 16px; border: 1.5px solid var(--gray-300); border-radius: 4px; flex-shrink: 0; }
+
+  .callout-tournament { background: var(--off-white); border: 1.5px dashed var(--gray-300); }
+  .tournament-line { display: flex; align-items: center; gap: 10px; font-size: 13.5px; color: var(--gray-500); margin-bottom: 14px; }
+  .tournament-line .fill { flex: 1; border-bottom: 1.5px solid var(--gray-300); height: 20px; }
+
+  .closing-band { background: var(--navy); color: var(--white); text-align: center; padding: 40px 28px; border-radius: 14px; margin: 40px 0; font-size: 16px; font-weight: 600; line-height: 1.7; }
+  .closing-band span { color: var(--gold-light); }
+
+  /* Footer */
+  .footer { text-align: center; padding: 40px 20px 50px; color: var(--gray-500); font-size: 12.5px; }
+  .footer strong { display: block; color: var(--navy); font-size: 14px; margin-bottom: 4px; }
+  .footer .foot-meta { margin-top: 10px; }
+  .footer a { color: var(--gray-500); }
+
+  @media print {
+    .top-bar, .print-link { display: none; }
+    body { background: var(--white); }
+    .day-card, .overview-card, .checklist-card { box-shadow: none; border: 1px solid var(--gray-200); }
+  }
+</style>
+</head>
+<body>
+
+  <header class="top-bar">
+    <div class="top-bar-inner">
+      <img src="images/rr-logo.png" alt="RR Golf Performance" class="top-logo">
+      <button class="print-link" onclick="window.print()">Print / Save PDF</button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">RR Golf Performance · Junior Elite Academy</p>
+      <h1>Ben's Game Plan</h1>
+      <p class="hero-sub">Weekly Training Blueprint</p>
+      <p class="hero-scope">Putting to driver — every part of your game, every day this week.</p>
+    </div>
+  </section>
+
+  <main class="wrap">
+
+    <section class="overview-card">
+      <div class="overview-title">This Week</div>
+      <div class="overview-grid">
+        <div class="overview-item"><span class="overview-check">✓</span><span class="txt">6 training days (Mon–Sat)</span></div>
+        <div class="overview-item"><span class="overview-check">✓</span><span class="txt">1 rest day (Sun)</span></div>
+        <div class="overview-item"><span class="overview-check">✓</span><span class="txt">Putting drills every day</span></div>
+        <div class="overview-item"><span class="overview-check">✓</span><span class="txt">Distance wedge work every day</span></div>
+        <div class="overview-item"><span class="overview-check">✓</span><span class="txt">Pre-shot routine on every single shot</span></div>
+      </div>
+    </section>
+
+    <div class="section-label">The Week, Day by Day</div>
+
+    <!-- MONDAY -->
+    <article class="day-card">
+      <div class="day-head">
+        <div class="day-badge">MON</div>
+        <div class="day-head-text"><h2>Monday</h2><p>Putting baseline + short game foundation</p></div>
+      </div>
+      <div class="day-body grid-2">
+        <div class="drill">
+          <div class="drill-title">4-Foot Putting Baseline</div>
+          <div class="drill-desc">Make as many 4-foot putts in a row as you can (chalk line). Use your pre-shot routine on every putt. Record the number.</div>
+          <div class="drill-target">Target: 20+ in a row</div>
+        </div>
+        <div class="drill">
+          <div class="drill-title">Chipping Ladder</div>
+          <div class="drill-desc">Chips from three distances: 10 yards (5 chips), 15 yards (5 chips), 20 yards (5 chips). Pre-shot routine every chip.</div>
+          <div class="drill-target">Target: 9+ of 15 within 3 ft</div>
+        </div>
+        <div class="drill">
+          <div class="drill-title">Distance Wedges</div>
+          <div class="drill-desc">40, 60, 80 yards — 10 balls each. Feel where the club needs to go in your backswing before you swing. No scraping and hitting.</div>
+          <div class="drill-target">Target: 27+ of 30 solid</div>
+        </div>
+        <div class="drill">
+          <div class="drill-title">9-Hole Play</div>
+          <div class="drill-desc">Play 9 holes. Pre-shot routine on every single shot. No score pressure — just focus on execution.</div>
+          <div class="drill-target">Target: 4+ greens hit</div>
+        </div>
+      </div>
+    </article>
+
+    <!-- TUESDAY -->
+    <article class="day-card">
+      <div class="day-head">
+        <div class="day-badge">TUE</div>
+        <div class="day-head-text"><h2>Tuesday</h2><p>Long putt control + distance wedge refinement</p></div>
+      </div>
+      <div class="day-body grid-2">
+        <div class="drill">
+          <div class="drill-title">Lag Putting</div>
+          <div class="drill-desc">Putts from 18, 24, 32, 40 feet. Pre-shot routine on every putt. Every putt should finish within 3 feet of the hole.</div>
+          <div class="drill-target">Target: 28+ of 40 in safe zone</div>
+        </div>
+        <div class="drill">
+          <div class="drill-title">Distance Wedges</div>
+          <div class="drill-desc">40, 60, 80 yards — 10 balls each. Feel your backswing before you swing. Pre-shot routine every shot.</div>
+          <div class="drill-target">Target: 27+ of 30</div>
+        </div>
+        <div class="drill">
+          <div class="drill-title">Driver Work</div>
+          <div class="drill-desc">30 drivers. Pre-shot routine on every driver. Centered contact — TrackMan smash factor 1.46+ if available.</div>
+          <div class="drill-target">Target: 28+ centered</div>
+        </div>
+        <div class="drill">
+          <div class="drill-title">9-Hole Play</div>
+          <div class="drill-desc">Play 9 holes. Keep score. Pre-shot routine every shot.</div>
+          <div class="drill-target">Target: 4+ greens hit</div>
+        </div>
+      </div>
+    </article>
+
+    <!-- WEDNESDAY -->
+    <article class="day-card">
+      <div class="day-head">
+        <div class="day-badge">WED</div>
+        <div class="day-head-text"><h2>Wednesday</h2><p>Full 18-hole practice</p></div>
+      </div>
+      <div class="day-body grid-2">
+        <div class="drill">
+          <div class="drill-title">18-Hole Round</div>
+          <div class="drill-desc">Play 18 holes. Keep score. Pre-shot routine on every single shot — treat this as a practice tournament.</div>
+          <div class="drill-target">Target: 9+ greens hit (50%)</div>
+        </div>
+      </div>
+    </article>
+
+    <!-- THURSDAY -->
+    <article class="day-card">
+      <div class="day-head">
+        <div class="day-badge">THU</div>
+        <div class="day-head-text"><h2>Thursday</h2><p>Pressure &amp; mental toughness</p></div>
+      </div>
+      <div class="day-body grid-2">
+        <div class="drill">
+          <div class="drill-title">Short Putting (Pressure)</div>
+          <div class="drill-desc">20 putts from 3–6 feet. Pre-shot routine on every putt. Treat the last 10 as tournament pressure.</div>
+          <div class="drill-target">Target: 16+ makes (80%+)</div>
+        </div>
+        <div class="drill">
+          <div class="drill-title">Lag Putting</div>
+          <div class="drill-desc">30 lag putts (18–40 feet). Pre-shot routine every putt. All balls should finish in the 3-foot safe zone.</div>
+          <div class="drill-target">Target: 24+ in safe zone</div>
+        </div>
+        <div class="drill">
+          <div class="drill-title">Distance Wedges (Pressure)</div>
+          <div class="drill-desc">40, 60, 80 yards — 10 balls each. Feel your backswing. Simulate tournament pressure on every shot.</div>
+          <div class="drill-target">Target: 27+ of 30</div>
+        </div>
+        <div class="drill">
+          <div class="drill-title">9-Hole Play</div>
+          <div class="drill-desc">Play 9 holes. Keep score. Focus: the final 3 holes matter most.</div>
+          <div class="drill-target">Target: last 3 ≥ first 6</div>
+        </div>
+      </div>
+    </article>
+
+    <!-- FRIDAY -->
+    <article class="day-card">
+      <div class="day-head">
+        <div class="day-badge">FRI</div>
+        <div class="day-head-text"><h2>Friday</h2><p>Distance wedge mastery + putting work</p></div>
+      </div>
+      <div class="day-body grid-2">
+        <div class="drill">
+          <div class="drill-title">Distance Wedges (All Ranges)</div>
+          <div class="drill-desc">40, 60, 80, 100 yards — 10 balls each. Feel your backswing and commit to it. Pre-shot routine every shot.</div>
+          <div class="drill-target">Target: 38+ of 40</div>
+        </div>
+        <div class="drill">
+          <div class="drill-title">Short Putting</div>
+          <div class="drill-desc">20 putts from 3–6 feet. Pre-shot routine every putt. Make as many as possible.</div>
+          <div class="drill-target">Target: 16+ makes</div>
+        </div>
+        <div class="drill">
+          <div class="drill-title">Lag Putting</div>
+          <div class="drill-desc">30 lag putts (18–40 feet). Pre-shot routine on every putt. All balls in the 3-foot safe zone.</div>
+          <div class="drill-target">Target: 24+ in safe zone</div>
+        </div>
+        <div class="drill">
+          <div class="drill-title">9-Hole Play</div>
+          <div class="drill-desc">Play 9 holes. Keep score. Pre-shot routine every shot — apply everything from this week.</div>
+          <div class="drill-target">Target: 5+ greens hit</div>
+        </div>
+      </div>
+    </article>
+
+    <!-- SATURDAY -->
+    <article class="day-card">
+      <div class="day-head">
+        <div class="day-badge">SAT</div>
+        <div class="day-head-text"><h2>Saturday</h2><p>Reset &amp; measure improvement</p></div>
+      </div>
+      <div class="day-body grid-2">
+        <div class="drill">
+          <div class="drill-title">4-Foot Putting (Week Repeat)</div>
+          <div class="drill-desc">Same drill as Monday. Record the number, pre-shot routine on every putt, and compare to Monday.</div>
+          <div class="drill-target">Target: beat Monday's number</div>
+        </div>
+        <div class="drill">
+          <div class="drill-title">Chipping Ladder (Week Repeat)</div>
+          <div class="drill-desc">Same drill as Monday (10/15/20 yard chips). Pre-shot routine every chip. Record accuracy.</div>
+          <div class="drill-target">Target: beat Monday's accuracy</div>
+        </div>
+        <div class="drill">
+          <div class="drill-title">Driver Work</div>
+          <div class="drill-desc">30 drivers. Pre-shot routine on every driver. Centered contact — 1.46+ smash factor if available.</div>
+          <div class="drill-target">Target: 28+ centered</div>
+        </div>
+        <div class="drill">
+          <div class="drill-title">9-Hole Play</div>
+          <div class="drill-desc">Play 9 holes. Keep score. Pre-shot routine every shot — apply what you learned this week.</div>
+          <div class="drill-target">Target: 5+ greens hit</div>
+        </div>
+      </div>
+    </article>
+
+    <!-- SUNDAY -->
+    <article class="day-card">
+      <div class="day-head rest">
+        <div class="day-badge">SUN</div>
+        <div class="day-head-text"><h2>Sunday</h2><p>Rest &amp; recovery</p></div>
+      </div>
+      <div class="day-body grid-2">
+        <div class="rest-note">
+          <div class="drill-title">No Golf Practice</div>
+          <div class="drill-desc">Take the day off from golf. Conditioning or mobility work is fine if you want it.</div>
+        </div>
+        <div class="rest-note">
+          <div class="drill-title">Week Review</div>
+          <div class="drill-desc">Look back on the week — did you improve? What needs work? What went well?</div>
+        </div>
+        <div class="rest-note">
+          <div class="drill-title">Plan Next Week</div>
+          <div class="drill-desc">What tournaments are coming up? When will you train next week?</div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Weekly goals -->
+    <div class="callout callout-goals">
+      <div class="callout-title">Your Weekly Goals</div>
+      <div class="goal-list">
+        <div class="goal-item"><span class="tick">✓</span><span>Pre-shot routine on every single shot — no exceptions.</span></div>
+        <div class="goal-item"><span class="tick">✓</span><span>Feel your backswing before you swing on every wedge shot.</span></div>
+        <div class="goal-item"><span class="tick">✓</span><span>4-foot putting: start at your baseline Monday, finish better Saturday.</span></div>
+        <div class="goal-item"><span class="tick">✓</span><span>Distance wedges: solid contact 95%+.</span></div>
+        <div class="goal-item"><span class="tick">✓</span><span>GIR 50%+ by end of week.</span></div>
+      </div>
+    </div>
+
+    <!-- Send me these 5 things -->
+    <div class="callout callout-report">
+      <div class="callout-title">Send Me These 5 Things Every Week</div>
+      <div class="report-list">
+        <div class="report-item"><div class="report-num">1</div><p><strong>Daily Training Summary</strong> — what you did, your targets, what you hit.</p></div>
+        <div class="report-item"><div class="report-num">2</div><p><strong>Tuesday &amp; Thursday Scorecards</strong> — photo of your 9-hole rounds, score + GIR count.</p></div>
+        <div class="report-item"><div class="report-num">3</div><p><strong>Wednesday &amp; Friday Scorecards</strong> — photo of your 18-hole round, score + GIR count.</p></div>
+        <div class="report-item"><div class="report-num">4</div><p><strong>Saturday Comparison</strong> — Monday baseline vs. Saturday baseline.</p></div>
+        <div class="report-item"><div class="report-num">5</div><p><strong>Sunday Check-In</strong> — what improved, what needs work next week.</p></div>
+      </div>
+    </div>
+
+    <!-- Daily checklist -->
+    <div class="checklist-card">
+      <div class="checklist-title">Daily Checklist</div>
+      <div class="checklist-grid">
+        <div>Pre-shot routine on EVERY shot</div>
+        <div>No scraping and hitting</div>
+        <div>Feel your backswing (wedge work)</div>
+        <div>Record your targets</div>
+        <div>Compare Monday vs. Saturday</div>
+      </div>
+    </div>
+
+    <!-- Tournament schedule -->
+    <div class="callout callout-tournament">
+      <div class="callout-title">Your Tournament Schedule</div>
+      <div class="tournament-line"><span>Event:</span><span class="fill"></span></div>
+      <div class="tournament-line"><span>Date(s):</span><span class="fill"></span></div>
+      <div class="tournament-line"><span>Notes for me:</span><span class="fill"></span></div>
+      <div class="tournament-line" style="margin-bottom:0;"><span>Keep this updated so I know what to expect from your week.</span></div>
+    </div>
+
+    <!-- Closing -->
+    <div class="closing-band">
+      Your consistency this week shows up in your tournaments.<br>
+      <span>Pre-shot routine on every shot. Every single shot.</span>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <strong>Ryan Rinneard</strong>
+    PGA of Canada, Class A · Director of Instruction
+    <div class="foot-meta">RR Golf Performance · Mad River Golf Club, Creemore &amp; Ace Track Golf, Collingwood<br>
+    <a href="tel:7056074653">(705) 607-4653</a> · <a href="mailto:rrinneard@madriver.ca">rrinneard@madriver.ca</a></div>
+  </footer>
+
+</body>
+</html>
