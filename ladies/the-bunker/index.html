@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Bunker Clinic — RR Golf Performance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1B365D;
+    --navy-deep: #122444;
+    --navy-soft: #2A4A77;
+    --gold: #D4AF37;
+    --gold-soft: #E8C968;
+    --bone: #FAF8F4;
+    --paper: #FFFFFF;
+    --ink: #1A1A1A;
+    --muted: #6B7280;
+    --line: rgba(27, 54, 93, 0.12);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Manrope', -apple-system, sans-serif;
+    background: var(--bone); color: var(--ink); line-height: 1.6;
+    font-weight: 400; -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  }
+  .container { max-width: 1120px; margin: 0 auto; padding: 0 32px; }
+  .container--narrow { max-width: 760px; }
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; padding: 20px 32px;
+    background: rgba(250, 248, 244, 0.85);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    z-index: 100; border-bottom: 1px solid var(--line);
+  }
+  .nav-inner { max-width: 1120px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+  .logo { font-family: 'Fraunces', serif; font-weight: 500; font-size: 19px; color: var(--navy); letter-spacing: -0.01em; text-decoration: none; }
+  .logo span { color: var(--gold); font-style: italic; }
+  .nav-links { display: flex; align-items: center; gap: 32px; }
+  .nav-link { font-size: 14px; color: var(--navy); text-decoration: none; font-weight: 500; letter-spacing: 0.02em; transition: opacity 0.2s; }
+  .nav-link:hover { opacity: 0.6; }
+  .nav-btn { display: inline-block; background: var(--navy); color: var(--paper); padding: 11px 22px; text-decoration: none; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; border-radius: 2px; transition: all 0.25s ease; }
+  .nav-btn:hover { background: var(--gold); color: var(--navy-deep); }
+  @media (max-width: 600px) { .nav-links { gap: 16px; } .nav-link { display: none; } .nav-btn { padding: 10px 16px; font-size: 12px; } }
+  .hero { padding: 180px 0 120px; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: 100px; right: -100px; width: 500px; height: 500px; background: radial-gradient(circle, rgba(212, 175, 55, 0.08), transparent 70%); border-radius: 50%; pointer-events: none; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 10px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.18em; color: var(--gold); font-weight: 600; margin-bottom: 28px; }
+  .eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--gold); }
+  .hero h1 { font-family: 'Fraunces', serif; font-size: clamp(44px, 7vw, 78px); font-weight: 400; line-height: 1.04; color: var(--navy); letter-spacing: -0.025em; margin-bottom: 32px; max-width: 900px; }
+  .hero h1 em { font-style: italic; font-weight: 400; color: var(--gold); }
+  .hero-lede { font-size: 20px; color: var(--navy-soft); max-width: 620px; line-height: 1.55; font-weight: 400; }
+  .throughline { padding: 80px 0; background: var(--navy); color: var(--paper); position: relative; overflow: hidden; }
+  .throughline::before { content: '"'; position: absolute; top: -40px; left: 40px; font-family: 'Fraunces', serif; font-size: 300px; color: var(--gold); opacity: 0.15; font-style: italic; line-height: 1; }
+  .throughline-quote { font-family: 'Fraunces', serif; font-size: clamp(28px, 4vw, 42px); font-weight: 300; line-height: 1.3; text-align: center; max-width: 880px; margin: 0 auto; letter-spacing: -0.015em; position: relative; z-index: 1; }
+  .throughline-quote em { color: var(--gold-soft); font-style: italic; }
+  .throughline-attr { text-align: center; margin-top: 32px; font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); font-weight: 600; }
+  section.content { padding: 100px 0; }
+  .section-label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--gold); font-weight: 700; margin-bottom: 20px; }
+  .section-title { font-family: 'Fraunces', serif; font-size: clamp(34px, 5vw, 52px); font-weight: 400; color: var(--navy); line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 24px; }
+  .section-title em { font-style: italic; color: var(--gold); }
+  .section-intro { font-size: 18px; color: var(--navy-soft); max-width: 640px; line-height: 1.6; margin-bottom: 64px; }
+  .checkpoints { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 48px; }
+  .checkpoint { background: var(--paper); padding: 48px 36px; border-radius: 4px; position: relative; border-top: 3px solid var(--gold); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+  .checkpoint:hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(27, 54, 93, 0.08); }
+  .checkpoint-num { font-family: 'Fraunces', serif; font-size: 14px; color: var(--gold); font-weight: 600; letter-spacing: 0.15em; margin-bottom: 16px; text-transform: uppercase; }
+  .checkpoint-title { font-family: 'Fraunces', serif; font-size: 28px; color: var(--navy); font-weight: 500; line-height: 1.15; margin-bottom: 20px; letter-spacing: -0.01em; }
+  .checkpoint-body { color: var(--navy-soft); font-size: 15.5px; line-height: 1.65; }
+  .checkpoint-body strong { color: var(--navy); font-weight: 600; }
+  .game-tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 18px; }
+  .game-tag { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--navy); background: rgba(212, 175, 55, 0.16); border: 1px solid rgba(212, 175, 55, 0.4); padding: 5px 11px; border-radius: 2px; }
+  .pressure-section { background: var(--paper); }
+  .pressure-visual { margin-top: 56px; background: var(--bone); padding: 56px 48px; border-radius: 4px; border: 1px solid var(--line); }
+  .pressure-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; position: relative; }
+  .pressure-step { position: relative; padding: 8px 0; }
+  .pressure-step-num { font-family: 'Fraunces', serif; font-size: 13px; color: var(--gold); font-weight: 600; letter-spacing: 0.18em; margin-bottom: 14px; }
+  .pressure-step-title { font-family: 'Fraunces', serif; font-size: 32px; color: var(--navy); font-weight: 400; font-style: italic; margin-bottom: 14px; letter-spacing: -0.015em; line-height: 1; }
+  .pressure-step-body { color: var(--navy-soft); font-size: 15px; line-height: 1.6; }
+  .pressure-step-body strong { color: var(--navy); font-weight: 600; }
+  .pressure-step-body em { font-style: italic; color: var(--navy); }
+  .pressure-callout { background: var(--navy); color: var(--paper); padding: 48px 40px; margin-top: 48px; text-align: center; border-radius: 4px; position: relative; overflow: hidden; }
+  .pressure-callout-mark { font-family: 'Fraunces', serif; font-size: 140px; color: var(--gold); opacity: 0.2; font-style: italic; line-height: 0.4; position: absolute; top: 30px; left: 30px; }
+  .pressure-callout-quote { font-family: 'Fraunces', serif; font-size: clamp(20px, 2.6vw, 26px); font-weight: 300; line-height: 1.4; max-width: 640px; margin: 0 auto; letter-spacing: -0.005em; position: relative; }
+  .pressure-callout-quote em { color: var(--gold-soft); font-style: italic; }
+  .timeline-section { background: var(--bone); }
+  .cta-section { background: var(--navy-deep); color: var(--paper); padding: 120px 0; text-align: center; position: relative; overflow: hidden; }
+  .cta-section::before { content: ''; position: absolute; top: -200px; left: 50%; transform: translateX(-50%); width: 800px; height: 800px; background: radial-gradient(circle, rgba(212, 175, 55, 0.1), transparent 60%); border-radius: 50%; pointer-events: none; }
+  .cta-eyebrow { color: var(--gold); font-size: 12px; text-transform: uppercase; letter-spacing: 0.2em; font-weight: 600; margin-bottom: 24px; }
+  .cta-title { font-family: 'Fraunces', serif; font-size: clamp(36px, 5vw, 56px); font-weight: 400; line-height: 1.1; letter-spacing: -0.02em; max-width: 760px; margin: 0 auto 24px; position: relative; }
+  .cta-title em { font-style: italic; color: var(--gold); }
+  .cta-text { font-size: 18px; color: rgba(255, 255, 255, 0.75); max-width: 520px; margin: 0 auto 48px; line-height: 1.6; position: relative; }
+  .btn-primary { display: inline-block; background: var(--gold); color: var(--navy-deep); padding: 18px 42px; text-decoration: none; font-weight: 600; font-size: 15px; letter-spacing: 0.04em; text-transform: uppercase; border-radius: 2px; transition: all 0.3s ease; position: relative; }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(212, 175, 55, 0.3); }
+  .signature { padding: 80px 0 60px; background: var(--bone); text-align: center; }
+  .signature-mark { font-family: 'Fraunces', serif; font-style: italic; font-size: 36px; color: var(--navy); font-weight: 400; margin-bottom: 8px; letter-spacing: -0.01em; }
+  .signature-title { font-size: 12px; text-transform: uppercase; letter-spacing: 0.18em; color: var(--gold); font-weight: 600; }
+  footer { padding: 32px 0; background: var(--bone); border-top: 1px solid var(--line); text-align: center; font-size: 13px; color: var(--muted); }
+  footer a { color: var(--navy); text-decoration: none; font-weight: 500; }
+  @media (max-width: 768px) {
+    .container { padding: 0 24px; } nav { padding: 16px 24px; }
+    .hero { padding: 140px 0 80px; } section.content { padding: 70px 0; }
+    .checkpoints { grid-template-columns: 1fr; gap: 20px; }
+    .pressure-visual { padding: 36px 24px; } .pressure-steps { grid-template-columns: 1fr; gap: 32px; }
+    .pressure-callout { padding: 36px 24px; } .pressure-callout-mark { font-size: 100px; top: 20px; left: 16px; }
+    .throughline::before { font-size: 200px; top: -20px; } .cta-section { padding: 80px 0; }
+  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .hero h1, .hero-lede, .eyebrow { animation: fadeUp 0.8s ease-out forwards; }
+  .eyebrow { animation-delay: 0.05s; opacity: 0; }
+  .hero h1 { animation-delay: 0.15s; opacity: 0; }
+  .hero-lede { animation-delay: 0.3s; opacity: 0; }
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <a href="https://rrgolfperformance.com" class="logo">RR Golf <span>Performance</span></a>
+    <div class="nav-links">
+      <a href="https://rrgolfperformance.com" class="nav-link">Home</a>
+      <a href="https://rrgolfperformance.as.me" class="nav-btn">Book a Lesson</a>
+    </div>
+  </div>
+</nav>
+<section class="hero">
+  <div class="container">
+    <div class="eyebrow">The Bunker Clinic &middot; Ladies&rsquo; Session</div>
+    <h1>Make the sand do the <em>work</em>.</h1>
+    <p class="hero-lede">Welcome back. Everything we worked on today, in one place &mdash; so the bunker stops being the shot you dread and becomes one you know how to play.</p>
+  </div>
+</section>
+<section class="throughline">
+  <div class="container container--narrow">
+    <p class="throughline-quote">You don&rsquo;t hit the ball out of a bunker. You hit the <em>sand</em> &mdash; and the sand throws the ball out.</p>
+    <div class="throughline-attr">Today&rsquo;s Throughline</div>
+  </div>
+</section>
+<section class="content">
+  <div class="container">
+    <div class="section-label">Part One</div>
+    <h2 class="section-title">Set up to <em>escape</em>.</h2>
+    <p class="section-intro">Half the shot is won before you swing. Build a base you can&rsquo;t be knocked off, and aim at the right thing.</p>
+    <div class="checkpoints">
+      <div class="checkpoint">
+        <div class="checkpoint-num">01 &middot; Setup</div>
+        <h3 class="checkpoint-title">Dig in, and open the face.</h3>
+        <p class="checkpoint-body">Work your feet into the sand for a <strong>stable base</strong>, stand a touch wider than normal, and lay the clubface <strong>slightly open</strong> so it slides through the sand instead of digging in. <em>Stable base, open face.</em></p>
+      </div>
+      <div class="checkpoint">
+        <div class="checkpoint-num">02 &middot; Base</div>
+        <h3 class="checkpoint-title">Quiet legs &mdash; no sway.</h3>
+        <p class="checkpoint-body">Your lower body stays <strong>calm and stable the whole way</strong> &mdash; no sliding side to side. Turn around a steady centre; the moment you sway, the bottom of your swing moves with you and you catch it fat or thin. <em>Turn around a steady centre.</em></p>
+      </div>
+      <div class="checkpoint">
+        <div class="checkpoint-num">03 &middot; Target</div>
+        <h3 class="checkpoint-title">Aim at the sand, not the ball.</h3>
+        <p class="checkpoint-body">Pick a spot <strong>a couple of inches behind</strong> the ball &mdash; that&rsquo;s what your club actually hits, and the ball rides out on the sand. Keep your <strong>eyes on that spot</strong> the whole swing. <em>Hit the sand behind it.</em></p>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="content pressure-section">
+  <div class="container">
+    <div class="section-label">Part Two</div>
+    <h2 class="section-title">The swing, <em>top to finish</em>.</h2>
+    <p class="section-intro">Three moves, in order &mdash; swing up steep, splash through the bottom, and finish facing the target.</p>
+    <div class="pressure-visual">
+      <div class="pressure-steps">
+        <div class="pressure-step">
+          <div class="pressure-step-num">01 &middot; Up</div>
+          <div class="pressure-step-title">Set it up steep</div>
+          <div class="pressure-step-body"><strong>Set (hinge) your wrists early</strong> so the club swings <strong>up steep and upright</strong>, not low and around your body. That steeper shape lets the club drop down into the sand behind the ball. <em>Set the wrists, swing it up.</em></div>
+        </div>
+        <div class="pressure-step">
+          <div class="pressure-step-num">02 &middot; Bottom</div>
+          <div class="pressure-step-title">Splash under it</div>
+          <div class="pressure-step-body"><strong>Slide the club through the sand under the ball</strong>, keeping the face open and looking up at the sky. Take a thin, shallow slice and keep accelerating &mdash; the bounce does the lifting. <em>Slide it under, face to the sky.</em></div>
+        </div>
+        <div class="pressure-step">
+          <div class="pressure-step-num">03 &middot; Finish</div>
+          <div class="pressure-step-title">Belt to target</div>
+          <div class="pressure-step-body">Rotate all the way to a <strong>tall, balanced finish with your belt buckle at the target</strong>. Quitting at the ball is the number-one reason it stays in &mdash; so finish every one. <em>Belt buckle to the target.</em></div>
+        </div>
+      </div>
+      <div class="pressure-callout">
+        <div class="pressure-callout-mark">"</div>
+        <div class="pressure-callout-quote">If the club splashes through the <em>same slice of sand every time</em>, the ball has no choice but to ride out on it.</div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="content timeline-section">
+  <div class="container">
+    <div class="section-label">Part Three</div>
+    <h2 class="section-title">Take it to the <em>practice bunker</em>.</h2>
+    <p class="section-intro">Two drills to groove the splash, and one game to melt the fear for good.</p>
+    <div class="checkpoints">
+      <div class="checkpoint">
+        <div class="checkpoint-num">Drill 01</div>
+        <h3 class="checkpoint-title">Draw the Line</h3>
+        <p class="checkpoint-body">No ball. Draw a line in the sand, then make swings that enter <strong>behind</strong> the line and exit <strong>in front</strong> of it, splashing sand to a full finish. Pure low-point training, no pressure.</p>
+      </div>
+      <div class="checkpoint">
+        <div class="checkpoint-num">Drill 02</div>
+        <h3 class="checkpoint-title">Dollar Bill</h3>
+        <p class="checkpoint-body">Imagine a dollar bill lying under the ball and splash out the <strong>entire bill</strong> &mdash; not a coin, not a crater. This grooves the shallow, even slice of sand that floats the ball up softly.</p>
+      </div>
+      <div class="checkpoint">
+        <div class="checkpoint-num">The Game</div>
+        <h3 class="checkpoint-title">Bunker Confidence Drill</h3>
+        <div class="game-tags">
+          <span class="game-tag">1+ Player</span>
+          <span class="game-tag">Sand Only</span>
+          <span class="game-tag">Practice Bunker</span>
+        </div>
+        <p class="checkpoint-body">Drop <strong>10 balls</strong> in the practice bunker. Your only goal: <strong>get 5 of them out and onto the green</strong> &mdash; just out and up, no target yet. Count how many balls it takes, then play again and <strong>beat your number</strong>. Confidence comes from reps, not perfection.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="content homework-section" style="text-align:center;">
+  <div class="container container--narrow">
+    <div class="section-label" style="text-align:center;">Take This Home</div>
+    <h2 class="section-title" style="text-align:center;">Today&rsquo;s <em>one-pager</em>.</h2>
+    <p class="section-intro" style="margin:0 auto 40px;">The setup, the swing top to finish, and the drills on a single printable page for your golf bag &mdash; set it up steep, splash under, finish tall.</p>
+    <a href="the-bunker.pdf" class="btn-primary" download>Download the PDF</a>
+  </div>
+</section>
+<section class="cta-section" id="book">
+  <div class="container container--narrow">
+    <div class="cta-eyebrow">Ready for what&rsquo;s next?</div>
+    <h2 class="cta-title">Beat the bunker for <em>good</em>.</h2>
+    <p class="cta-text">One-on-one, we&rsquo;ll build your sand technique until getting out is automatic &mdash; not a gamble. Your lie, your swing, a real plan.</p>
+    <a href="https://rrgolfperformance.as.me" class="btn-primary">Book a Private Lesson</a>
+  </div>
+</section>
+<section class="signature">
+  <div class="container container--narrow">
+    <div class="signature-mark">&mdash; Ryan Rinneard</div>
+    <div class="signature-title">CPGA Class A &middot; Director of Instruction</div>
+  </div>
+</section>
+<footer>
+  <div class="container">
+    <a href="https://rrgolfperformance.com">rrgolfperformance.com</a> &nbsp;&middot;&nbsp; RR Golf Performance &nbsp;&middot;&nbsp; Collingwood, Ontario
+  </div>
+</footer>
+</body>
+</html>
