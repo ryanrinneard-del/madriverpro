@@ -176,3 +176,21 @@ footer a:hover{color:var(--ink)}
 .teachers li{padding:10px 0;border-bottom:1px solid var(--rule)}
 @media (max-width:520px){.teachers{grid-template-columns:1fr}}
 @media (max-width:350px){.nav-links li.hide-sm{display:none}}
+
+/* Events */
+.ev-group + .ev-group{margin-top:clamp(64px,8vw,96px)}
+.ev-group > h2{font-size:clamp(28px,3.4vw,38px)}
+.ev-group > p.lede{margin-top:12px;font-size:17px}
+.ev-list{margin-top:28px;list-style:none;border-top:1px solid var(--rule)}
+.ev{display:grid;grid-template-columns:1fr 150px 90px 110px;gap:24px;align-items:center;padding:22px 0;border-bottom:1px solid var(--rule)}
+.ev h3{font-family:var(--sans);font-size:17px;font-weight:600;letter-spacing:0;line-height:1.4}
+.ev p{font-size:15px;color:var(--slate);margin-top:4px;max-width:34em}
+.ev .meta{font-size:14px;color:var(--slate)}
+.ev .cost{font-family:var(--serif);font-size:24px}
+.ev .btn{padding:9px 20px;font-size:14px;justify-self:end}
+@media (max-width:760px){
+  .ev{grid-template-columns:1fr auto;gap:6px 16px}
+  .ev .meta{grid-column:1}
+  .ev .cost{grid-row:1;grid-column:2;text-align:right}
+  .ev .btn{grid-column:2;grid-row:2 / span 2;align-self:end}
+}
