@@ -80,7 +80,7 @@ def on_page(canvas, doc):
     canvas.drawString(margin, H - 0.34*inch, 'RR GOLF')
     canvas.setFont('Helvetica', 8)
     canvas.setFillColor(MID_GREY)
-    canvas.drawRightString(W - margin, H - 0.34*inch, 'madriverpro.com')
+    canvas.drawRightString(W - margin, H - 0.34*inch, 'rrgolfperformance.com')
     canvas.setStrokeColor(GOLD)
     canvas.setLineWidth(1.5)
     canvas.line(0, H - 0.55*inch, W, H - 0.55*inch)

@@ -190,7 +190,7 @@ def _make_page_callbacks(student, date_label):
         canvas.setFillColor(WHITE); canvas.setFont('Helvetica-Bold', 12)
         canvas.drawString(LM, PH - 0.46*inch, 'RR GOLF')
         canvas.setFillColor(MID_GREY); canvas.setFont('Helvetica', 9)
-        canvas.drawRightString(PW - RM, PH - 0.46*inch, 'madriverpro.com')
+        canvas.drawRightString(PW - RM, PH - 0.46*inch, 'rrgolfperformance.com')
         canvas.setFillColor(GOLD); canvas.setFont('Helvetica-Bold', 8)
         canvas.drawString(LM, PH - 1.2*inch, 'PLAYER DOSSIER')
         canvas.setStrokeColor(GOLD); canvas.setLineWidth(1.5)

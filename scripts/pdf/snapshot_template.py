@@ -284,7 +284,7 @@ def _header_footer(canvas, doc):
     canvas.setFillColor(colors.HexColor('#9FB0C4'))
     canvas.setFont('Helvetica', 9)
     canvas.drawRightString(PAGE_W - MARGIN_R, PAGE_H - band_h + 0.16 * inch,
-                           'madriverpro.com')
+                           'rrgolfperformance.com')
     # Footer band
     foot_h = 0.42 * inch
     canvas.setFillColor(colors.HexColor('#EEF1F5'))
